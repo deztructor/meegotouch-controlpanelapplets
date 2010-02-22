@@ -16,48 +16,56 @@ Description: Engineering English translations for system-ui packages.
 Package: duicontrolpanel-usbapplet
 Section: misc
 Architecture: any
-Depends:  duicontrolpanel, libduicontrolpanel, systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, duicontrolpanel,
+         systemui-applets-l10n-engineering-english
 Description: USB applet for the control panel application
 
 Package: duicontrolpanel-batteryapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, system-ui, libduicontrolpanel, systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, ${misc:Depends}, system-ui, libduicontrolpanel,
+         systemui-applets-l10n-engineering-english
 Description: Battery settings applet.
 
 Package: duistatusindicatormenu-batteryplugin
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duistatusindicatormenu, systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, ${misc:Depends}, duistatusindicatormenu,
+         system-ui, systemui-applets-l10n-engineering-english
 Description: Battery status indicator menu plugin.
 
 Package: duistatusindicatormenu-volumeplugin
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duistatusindicatormenu, systemui-applets-l10n-engineering-english, libpulse0
+Depends: ${shlibs:Depends}, ${misc:Depends}, duistatusindicatormenu, 
+         systemui-applets-l10n-engineering-english, libpulse0
 Description: Volume status indicator plugin
 
 Package: duicontrolpanel-displayapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
+         system-ui, systemui-applets-l10n-engineering-english
 Description: Display settings applet.
 
 Package: duicontrolpanel-profileapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
+         systemui-applets-l10n-engineering-english
 Description: Profiles settings applet.
 
 Package: duistatusindicatormenu-profileplugin
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duistatusindicatormenu, systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, ${misc:Depends}, duistatusindicatormenu,
+         systemui-applets-l10n-engineering-english
 Description: Profile status indicator menu plugin.
 
 Package: duicontrolpanel-ledapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, system-ui,
+         systemui-applets-l10n-engineering-english
 Description: LED settings applet.
 

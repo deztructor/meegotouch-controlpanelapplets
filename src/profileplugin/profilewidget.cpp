@@ -21,7 +21,6 @@
 #undef DEBUG
 #include "../debug.h"
 
-#include <QDebug>
 #include <DuiButton>
 #include <DuiButtonGroup>
 #include <DuiApplication>
@@ -35,7 +34,7 @@
 
 #include <QGraphicsLinearLayout>
 
-#define SYSTEMUI_TRANSLATION "duicontrolpanel-systemui"
+#define SYSTEMUI_TRANSLATION "systemui-applets"
 
 ProfileWidget::ProfileWidget (
     DuiStatusIndicatorMenuInterface &statusIndicatorMenu,

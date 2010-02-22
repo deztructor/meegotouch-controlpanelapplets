@@ -3,7 +3,7 @@ Type=DUIApplet
 Name=LED light
 X-logical-id=qtn_prof_led
 # ?? qtn_sett_main_profile
-X-translation-catalog=duicontrolpanel-systemui
+X-translation-catalog=systemui-applets
 Icon=
 Exec=
 

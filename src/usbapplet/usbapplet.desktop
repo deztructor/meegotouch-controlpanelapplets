@@ -2,7 +2,7 @@
 Type=DUIApplet
 Name=USB
 X-logical-id=qtn_usb_title
-X-translation-catalog=duicontrolpanel-systemui
+X-translation-catalog=systemui-applets
 
 Icon=
 Exec=

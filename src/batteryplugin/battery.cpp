@@ -18,9 +18,8 @@
 #include <DuiTheme>
 
 #include <QGraphicsLinearLayout>
-#include <QDebug>
 
-#define SYSTEMUI_TRANSLATION "duicontrolpanel-systemui"
+#define SYSTEMUI_TRANSLATION "systemui-applets"
 
 const QString cssDir = "/usr/share/duistatusindicatormenu/themes/style/";
 
