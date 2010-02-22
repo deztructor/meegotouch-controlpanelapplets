@@ -1,9 +1,9 @@
 # ####################################################################
-# System-UI main projectfile
+# System-UI applets main projectfile
 # ####################################################################
 
 TEMPLATE = subdirs
-SUBDIRS = components \
+SUBDIRS = src \
           tests \
           translations
 

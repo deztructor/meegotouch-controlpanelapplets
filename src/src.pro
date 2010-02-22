@@ -1,6 +1,5 @@
 TEMPLATE = subdirs
-SUBDIRS = sysuid        \
-          batteryapplet \
+SUBDIRS = batteryapplet \
           batteryplugin \ 
           displayapplet \
           profileapplet \
