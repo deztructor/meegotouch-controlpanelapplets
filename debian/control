@@ -1,4 +1,4 @@
-Source: system-ui
+Source: systemui-applets
 Section: devel
 Priority: optional
 Maintainer: David Kedves <dkedves@blumsoft.eu>
@@ -7,26 +7,6 @@ Build-Depends: debhelper (>= 5), libduicontrolpanel-dev,
                libprofile-qt-dev (>= 0.13), duistatusindicatormenu-dev,
                libpulse-dev (>= 0.9.15)
 Standards-Version: 3.7.3
-
-Package: system-ui
-Replaces: cellular-ui
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, systemui-l10n-engineering-english, hal, sudo
-Description: Various system user interfaces.
-  System user interface package contains various user interfaces, e.g:
-  - battery notifications
-  - screenlock
-  - shutdown dialog
-  - usb mode selection dialog
-
-Package: system-ui-tests
-Section: tests
-Priority: optional
-Architecture: any
-Depends: ${shlibs:Depends}, testrunner, ci-testing
-XB-Maemo-CI-Packages: system-ui
-XB-Maemo-CI-Stage: fast, staging
-Description: Test package for system-ui
 
 Package: duicontrolpanel-usbapplet
 Section: misc
@@ -64,7 +44,7 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duistatusindicatormenu, systemui-l10n-engineering-english
 Description: Profile status indicator menu plugin.
 
-Package: systemui-l10n-engineering-english
+Package: systemui-applets-l10n-engineering-english
 Section: devel
 Architecture: all
 Description: Engineering English translations for system-ui packages.
@@ -73,3 +53,4 @@ Package: duicontrolpanel-ledapplet
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, systemui-l10n-engineering-english
 Description: LED settings applet.
+

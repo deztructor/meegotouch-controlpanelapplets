@@ -1,6 +1,0 @@
-usr/bin/sysuid
-usr/bin/pcsuite-enable.sh
-usr/share/sysuid/themes/svg/*.svg
-usr/share/sysuid/themes/style/*.css
-etc/sudoers.d/usb.sudoers
-
