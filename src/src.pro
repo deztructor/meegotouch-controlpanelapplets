@@ -7,4 +7,3 @@ SUBDIRS = batteryapplet \
           profileplugin \
           usbapplet     \
           volumebarplugin
-
