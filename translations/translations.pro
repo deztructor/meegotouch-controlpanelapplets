@@ -1,8 +1,6 @@
-# empty, means to build only engineering English
 LANGUAGES =
-CATALOGNAME = duicontrolpanel-systemui
-SOURCEDIR = $$PWD/../components/sysuid \
-            $$PWD/../components/displayapplet \
+CATALOGNAME = systemui-applets
+SOURCEDIR = $$PWD/../components/displayapplet \
             $$PWD/../components/batteryapplet \
             $$PWD/../components/batteryplugin \
             $$PWD/../components/profileapplet \
