@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 # Uncomment this to turn on verbose mode.
-export DH_VERBOSE=1
+# export DH_VERBOSE=1
 
 DEBDIR = ..
 CFLAGS = -Wall -Werror -g
@@ -40,7 +40,7 @@ configure: configure-stamp
 configure-stamp:
 	dh_testdir
 
-	qmake $(QMAKE_OPTIONS)
+	@qmake $(QMAKE_OPTIONS) > /dev/null
 
 	touch configure-stamp
 
@@ -111,3 +111,4 @@ binary-arch: build install
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install configure
+

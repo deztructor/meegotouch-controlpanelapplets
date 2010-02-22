@@ -32,6 +32,7 @@ void
 LedDBusInterface::DBusMessagingFailure (
 		QDBusError error)
 {
+    Q_UNUSED(error);
     SYS_WARNING ("%s: %s", SYS_STR (error.name()), SYS_STR (error.message()));
 }
 

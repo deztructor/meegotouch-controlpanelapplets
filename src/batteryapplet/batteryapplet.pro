@@ -9,8 +9,7 @@ CONFIG += plugin \
 LIBS += -lduicontrolpanel 
 
 INCLUDEPATH += /usr/include/qt4/dui \
-    /usr/include/duicontrolpanel 
-
+               /usr/include/duicontrolpanel 
 
 QT += dbus
 contains(cov, true) { 
@@ -50,8 +49,9 @@ css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/dui/duicontrolpanel/style
 message("The plugin will be installed to: " $$target.path)
 message("CSS path will be: " $$css.path)
 INSTALLS += target \
-    css \
-    desktop
+            css \
+            desktop
+
 OTHER_FILES += batteryapplet.css \
-    battery.desktop
+               battery.desktop
 

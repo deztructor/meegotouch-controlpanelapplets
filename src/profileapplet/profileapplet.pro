@@ -43,5 +43,5 @@ css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/dui/duicontrolpanel/style
 message("The plugin will be installed to: " $$target.path)
 message("CSS path will be: " $$css.path)
 INSTALLS += target \
-    css \
-    desktop
+            css \
+            desktop
