@@ -1,8 +1,8 @@
-systemui-applets (0.12.2~unreleased) harmattan; urgency=low
+systemui-applets (0.12.2) harmattan; urgency=low
 
   * Split system-ui -> system-ui / systemui-applets
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 22 Feb 2010 15:13:00 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 23 Feb 2010 09:42:38 +0100
 
 system-ui (0.12.1-2) harmattan; urgency=low
 
