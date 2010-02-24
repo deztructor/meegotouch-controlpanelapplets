@@ -9,7 +9,7 @@ Build-Depends: debhelper (>= 5), libduicontrolpanel-dev,
 Standards-Version: 3.7.3
 
 Package: systemui-applets-tests
-Section: tests
+Section: devel
 Priority: optional
 Architecture: any
 Depends: ${shlibs:Depends}, testrunner, ci-testing
