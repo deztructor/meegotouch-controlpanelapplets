@@ -1,3 +1,5 @@
+/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
+/* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 #include "volumebarlogic.h"
 
 #include <QString>
@@ -187,6 +189,8 @@ server_info_cb (
     const pa_server_info *i,
     void                 *userdata)
 {
+    Q_UNUSED (c);
+
     NsvVolume   *m_priv = (NsvVolume *) userdata;
     SYS_DEBUG ("%s", i->default_sink_name);
 
@@ -208,6 +212,9 @@ sink_info_cb (
     int                  eol,
     void                *userdata)
 {
+    Q_UNUSED (c);
+    Q_UNUSED (eol);
+
     NsvVolume   *m_priv = (NsvVolume *) userdata;
 
     if (i == 0)
