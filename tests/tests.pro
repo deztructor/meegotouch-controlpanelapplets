@@ -1,8 +1,6 @@
 TEMPLATE = subdirs
-#SUBDIRS = \
-#    ut_unlockslider \
-#    ut_batterybusinesslogic \
-#    ut_lowbatterynotifier
+SUBDIRS = \
+     ut_template
 
 QMAKE_STRIP = echo
 #include(shell.pri)
