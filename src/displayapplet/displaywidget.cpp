@@ -117,6 +117,7 @@ void DisplayWidget::initWidget()
         new DuiLinearLayoutPolicy (blankInhibitLayout, Qt::Horizontal);
 
     m_OnOffLabel = new DuiLabel;
+    m_OnOffLabel->setObjectName("BlankInhibitStateLabel");
 
     blankInhibitLayoutPolicy->addItem (m_OnOffLabel, Qt::AlignLeft);
     blankInhibitLayoutPolicy->addItem (blankInhibitButton,
