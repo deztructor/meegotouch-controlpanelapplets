@@ -134,6 +134,7 @@ void DisplayWidget::initWidget()
              this, SLOT (update_onoff_label (bool)));
 
     blankInhibitButton->setChecked (m_logic->blankInhibitValue());
+    update_onoff_label(m_logic->blankInhibitValue());
 
     policy->addItem(m_blankInhibitContainer, Qt::AlignLeft);
 }
