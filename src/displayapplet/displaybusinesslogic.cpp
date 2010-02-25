@@ -49,7 +49,9 @@ DisplayBusinessLogic::brightnessValues ()
     int max = display->getMaxDisplayBrightnessValue();
     max = (max > 0 ? max : 5);
 
-    for (int i = 0; i <= max; ++i)
+    // QmDisplayState::setDisplayBrightnessValue accepts values 
+    // between 1 and getMaxDisplayBrightnessValue()
+    for (int i = 1; i <= max; ++i)
         values << i;
 
     return values;
