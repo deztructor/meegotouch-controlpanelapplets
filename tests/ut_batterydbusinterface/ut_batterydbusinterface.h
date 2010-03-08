@@ -7,6 +7,35 @@
 #include <QtTest/QtTest>
 #include <QObject>
 
+class QString;
+class QStringList;
+class BatteryDBusInterface;
+
+class Ut_BatteryDbusInterfacePrivate : public QObject {
+Q_OBJECT
+
+public:
+    Ut_BatteryDbusInterfacePrivate ();
+    
+public slots:
+    void PSMValueReceived (bool PSMValue);
+    void PSMAutoValueReceived (bool PSMAutoValue);
+    void PSMThresholdValueReceived (QString);
+    void PSMThresholdValuesReceived (QStringList ThresholdValues);
+
+public:
+    bool m_PSMValueArrived;
+    bool m_PSMValue;
+    
+    bool m_PSMAutoValueArrived;
+    bool m_PSMAutoValue;
+    
+    bool m_ThresholdValueArrived;
+    QString m_ThresholdValue;
+
+    bool m_ThresholdValuesArrived;
+    QStringList m_ThresholdValues;
+};
 
 class Ut_BatteryDbusInterface : public QObject
 {
@@ -17,6 +46,18 @@ private slots:
     void cleanup();
     void initTestCase();
     void cleanupTestCase();
+
+    void testGetPSMValue ();
+    void testGetPSMAutoValue ();
+    void testGetThresholdValue ();
+    void testGetThresholdValues ();
+
+private:
+    bool waitforit (const QString &name, bool *what);
+
+private:
+    Ut_BatteryDbusInterfacePrivate *m_priv;
+    BatteryDBusInterface *m_BatteryDBusInterface;
 };
 
 #endif
