@@ -25,7 +25,8 @@ protected:
 
 private slots:
     void PSMButtonReleased();
-    void updateNotChargingImage(int level);
+    // is this a lefover declaration? it is not implemented!
+    //void updateNotChargingImage(int level);
     void updatePSMButton(bool toggle);
     void remainingTimeValuesReceived(const QStringList &timeValues);
 

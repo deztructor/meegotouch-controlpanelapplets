@@ -37,7 +37,8 @@ public slots:
 
 public slots:
     void DBusMessagingFailure (QDBusError error);
-    void valueSet ();
+    // is this a lefover declaration? it is not implemented!
+    //void valueSet ();
     void querySent ();
 
 signals:

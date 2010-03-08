@@ -1,14 +1,18 @@
 TEMPLATE = subdirs
-SUBDIRS = \
-     ut_template
-
+SUBDIRS = $$system(ls -1d ut_*/ ft_*/)
 QMAKE_STRIP = echo
-#include(shell.pri)
-#include(runtests.pri)
 
-QMAKE_CLEAN += **/*.log.xml ./coverage.log.xml
+check.target = check
+check.CONFIG = recursive
+QMAKE_EXTRA_TARGETS += check
 
-tests_xml.path = /usr/share/systemui-applets-tests
-tests_xml.files = tests.xml
+check-xml.target = check-xml
+check-xml.CONFIG = recursive
+QMAKE_EXTRA_TARGETS += check-xml
 
-INSTALLS += tests_xml
+coverage.target = coverage
+coverage.depends = clean
+coverage.CONFIG = recursive
+QMAKE_EXTRA_TARGETS += coverage
+
+QMAKE_CLEAN += **/*.log.xml **/*.log coverage.out
