@@ -1,2 +1,4 @@
 profileapplet:
     Implement retranslateUi()
+tests/ft_dcpapplets:
+    Find a way to test retranslateUi()
