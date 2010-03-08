@@ -18,7 +18,8 @@ Ut_BatteryDbusInterfacePrivate::Ut_BatteryDbusInterfacePrivate () :
     m_PSMValueArrived (false),
     m_PSMAutoValueArrived (false),
     m_ThresholdValueArrived (false),
-    m_ThresholdValuesArrived (false)
+    m_ThresholdValuesArrived (false),
+    m_RemainingTimeValuesArrived (false)
 {
 }
 
@@ -52,6 +53,22 @@ Ut_BatteryDbusInterfacePrivate::PSMThresholdValuesReceived (
 {
     m_ThresholdValuesArrived = true;
     m_ThresholdValues = ThresholdValues;
+}
+
+void
+Ut_BatteryDbusInterfacePrivate::remainingTimeValuesReceived (
+        QStringList RemainingTimeValues)
+{
+    m_RemainingTimeValuesArrived = true;
+    m_RemainingTimeValues = RemainingTimeValues;
+}
+
+void
+Ut_BatteryDbusInterfacePrivate::batteryBarValueReceived (
+        int batteryBarValue)
+{
+    m_batteryBarValueReceived = true;
+    m_batteryBarValue = batteryBarValue;
 }
 
 /******************************************************************************
@@ -95,10 +112,18 @@ Ut_BatteryDbusInterface::initTestCase()
     connect (m_BatteryDBusInterface, SIGNAL (PSMThresholdValuesReceived(QStringList)),
         m_priv, SLOT(PSMThresholdValuesReceived (QStringList)));
 
+    connect (m_BatteryDBusInterface, SIGNAL (remainingTimeValuesReceived(QStringList)),
+        m_priv, SLOT(remainingTimeValuesReceived (QStringList)));
+
+    connect (m_BatteryDBusInterface, SIGNAL (batteryBarValueReceived (int)),
+        m_priv, SLOT(batteryBarValueReceived (int)));
+
     m_BatteryDBusInterface->PSMValueRequired();
     m_BatteryDBusInterface->PSMAutoValueRequired();
     m_BatteryDBusInterface->PSMThresholdValuesRequired();
     m_BatteryDBusInterface->PSMThresholdValueRequired();
+    m_BatteryDBusInterface->remainingTimeValuesRequired();
+    m_BatteryDBusInterface->batteryBarValueRequired();
 }
 
 void 
@@ -163,6 +188,34 @@ Ut_BatteryDbusInterface::testGetThresholdValues ()
         qDebug () << "*** m_ThresholdValues [" << n << "] = "<< value;
         ++n;
     }
+}
+
+void 
+Ut_BatteryDbusInterface::testGetRemainingTimeValues ()
+{
+    bool success;
+    int  n = 0;
+
+    success = waitforit ("m_RemainingTimeValuesArrived", 
+            &m_priv->m_RemainingTimeValuesArrived);
+    QVERIFY (success);
+
+    foreach (QString value, m_priv->m_RemainingTimeValues) {
+        qDebug () << "*** m_RemainingTimeValues [" << n << "] = "<< value;
+        ++n;
+    }
+}
+
+void 
+Ut_BatteryDbusInterface::testGetBatteryBarValue ()
+{
+    bool success;
+
+    success = waitforit ("m_batteryBarValueReceived", 
+            &m_priv->m_batteryBarValueReceived);
+    QVERIFY (success);
+
+    qDebug() << "*** m_batteryBarValue = " << m_priv->m_batteryBarValue;
 }
 
 /*

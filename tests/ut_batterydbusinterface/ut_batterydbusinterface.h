@@ -22,6 +22,8 @@ public slots:
     void PSMAutoValueReceived (bool PSMAutoValue);
     void PSMThresholdValueReceived (QString);
     void PSMThresholdValuesReceived (QStringList ThresholdValues);
+    void remainingTimeValuesReceived (QStringList RemainingTimeValues);
+    void batteryBarValueReceived (int batteryBarValue);
 
 public:
     bool m_PSMValueArrived;
@@ -35,6 +37,12 @@ public:
 
     bool m_ThresholdValuesArrived;
     QStringList m_ThresholdValues;
+
+    bool m_RemainingTimeValuesArrived;
+    QStringList m_RemainingTimeValues;
+
+    bool m_batteryBarValueReceived;
+    int m_batteryBarValue;
 };
 
 class Ut_BatteryDbusInterface : public QObject
@@ -51,6 +59,8 @@ private slots:
     void testGetPSMAutoValue ();
     void testGetThresholdValue ();
     void testGetThresholdValues ();
+    void testGetRemainingTimeValues ();
+    void testGetBatteryBarValue ();
 
 private:
     bool waitforit (const QString &name, bool *what);
