@@ -1,8 +1,3 @@
-# SRC_PREFIX = ../../src
-# STUB_PREFIX = ../stubs
-# INCLUDEPATH += $$SRC_PREFIX \
-#               $$STUB_PREFIX
-
 QT += testlib
 TEMPLATE = app
 DEFINES += UNIT_TEST
