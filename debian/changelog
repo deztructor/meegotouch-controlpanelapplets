@@ -1,8 +1,8 @@
 systemui-applets (0.12.3~unreleased) harmattan; urgency=low
 
-  * FILLME
+  * Fixes: NB#156759 - Battery applet UI not as specified
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 23 Feb 2010 09:46:10 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 09 Mar 2010 13:52:45 +0100
 
 systemui-applets (0.12.2) harmattan; urgency=low
 
