@@ -4,8 +4,6 @@
 #include <QObject>
 #include <QtTest/QtTest>
 // From DuiControlPanel
-#include <dcpappletloader.h>
-// From libDUI
 #include <duiapplication.h>
 
 class Ft_AppletLoader : public QObject
