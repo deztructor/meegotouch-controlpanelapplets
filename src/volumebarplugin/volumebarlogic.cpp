@@ -41,6 +41,7 @@ VolumeBarLogic::VolumeBarLogic () :
     m_priv = new NsvVolume;
 
     m_priv->default_sink = 0;
+    m_priv->context = 0;
 
     m_priv->mainloop = pa_threaded_mainloop_new ();
 
@@ -112,6 +113,8 @@ VolumeBarLogic::VolumeBarLogic () :
 
 VolumeBarLogic::~VolumeBarLogic ()
 {
+    SYS_DEBUG ("");
+
     m_initialized = false;
 
     if (m_priv->mainloop)

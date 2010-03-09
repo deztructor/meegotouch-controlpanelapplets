@@ -33,7 +33,8 @@ Ft_PluginLoader::initTestCase ()
 void
 Ft_PluginLoader::cleanupTestCase ()
 {
-    delete m_smstub;
+// FIXME: This causes crash: 'free(): invalid pointer: 0x09b4e43c'
+//    delete m_smstub;
 
     delete m_app;
 }
