@@ -1,14 +1,13 @@
-#include <duistatusindicatormenuplugininterface.h>
-#include "pluginloader.h"
+#include "StatusIndicatorMenuStub.h"
 
 void
-DuiStatusIndicatorMenuInterface::showStatusIndicatorMenu ()
+StatusIndicatorMenuStub::showStatusIndicatorMenu ()
 {
     // no-op
 }
 
 void
-DuiStatusIndicatorMenuInterface::hideStatusIndicatorMenu ()
+StatusIndicatorMenuStub::hideStatusIndicatorMenu ()
 {
     // no-op
 }

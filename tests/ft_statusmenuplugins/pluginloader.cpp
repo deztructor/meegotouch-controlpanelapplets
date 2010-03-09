@@ -1,7 +1,9 @@
-#include "appletloader.h"
+#include "pluginloader.h"
 #include <QTest>
 #include <DuiWidget>
-#include <DuiStatusIndicatorMenuPluginInterface>
+#include "StatusIndicatorMenuStub.h"
+
+using namespace QTest;
 
 #define LIBDIR "/usr/lib/duistatusindicatormenu/plugins/"
 
@@ -25,30 +27,34 @@ Ft_PluginLoader::initTestCase ()
     char* app_name = (char*) "./ft_statusmenuplugins";
 
     m_app = new DuiApplication (argc, &app_name);
+    m_smstub = new StatusIndicatorMenuStub;
 }
 
 void
 Ft_PluginLoader::cleanupTestCase ()
 {
+    delete m_smstub;
+
     delete m_app;
 }
 
 void
-Ft_PluginLoader::DoAppletTest (const QString &soname)
+Ft_PluginLoader::DoPluginTest (const QString &soname)
 {
     QPluginLoader  loader (QString (LIBDIR) + soname);
     QObject       *object = loader.instance ();
-    DuiWidget     *widget = 0;
-
-    DuiStatusIndicatorMenuInterface StatusMenuStub;
 
     DuiStatusIndicatorMenuPluginInterface* plugin =
         qobject_cast<DuiStatusIndicatorMenuPluginInterface *> (object);
 
     QVERIFY(plugin);
 
-    QVERIFY2(plugin->constructWidget (StatusMenuStub),
+    qWait (150);
+
+    QVERIFY2(plugin->constructWidget (*m_smstub),
              "Error at plugin widget construction");
+
+    qWait (150);
 
     delete object;
 }

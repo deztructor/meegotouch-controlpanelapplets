@@ -1,16 +1,20 @@
 TEMPLATE = app
 QT += testlib
 
-CONFIG += dui duistatusindicatormenu silent
+CONFIG += \
+    dui \
+    duistatusindicatormenu \
+    silent
 
 TARGET = ft_statusmenuplugins
 target.path = /usr/lib/systemui-applets-tests
 
 SOURCES += \
-    appletloader.cpp \
+    pluginloader.cpp \
     StatusIndicatorMenuStub.cpp
 
 HEADERS += \
-    appletloader.h
+    pluginloader.h \
+    StatusIndicatorMenuStub.h
 
 INSTALLS += target

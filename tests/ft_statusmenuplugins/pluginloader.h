@@ -6,6 +6,9 @@
 #include <QtTest/QtTest>
 // From libDUI
 #include <duiapplication.h>
+// From Dui Status Indicator Menu (system-ui)
+#include <duistatusindicatormenuplugininterface.h>
+
 
 class Ft_PluginLoader : public QObject
 {
@@ -22,7 +25,8 @@ private slots:
     void testvolumeplugin ();
 
 private:
-    DuiApplication      *m_app;
+    DuiApplication                      *m_app;
+    DuiStatusIndicatorMenuInterface     *m_smstub;
 
     void    DoPluginTest (const QString &soname);
 };
