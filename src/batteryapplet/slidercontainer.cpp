@@ -76,17 +76,19 @@ SliderContainer::initSlider (
         const QStringList &values)
 {
     SYS_DEBUG ("*** sliderValue = %d", sliderValue);
-    sliderValues = QStringList (values);
+    sliderValues = values;
 
-    if (PSMSlider == 0)
-        return;
-
-    PSMSlider->setRange (0, sliderValues.size () - 1);
-    PSMSlider->setOrientation (Qt::Horizontal);
-    PSMSlider->setHandleLabelVisible (true);
+    if (PSMSlider)
+        PSMSlider->setRange (0, sliderValues.size () - 1);
 }
 
-void SliderContainer::updateSlider (const QString &value)
+/*!
+ * This slot is called when the backend returns the PSM value so we have to set
+ * the slider accordingly.
+ */
+void 
+SliderContainer::updateSlider (
+        const QString &value)
 {
     SYS_DEBUG ("value = %s", SYS_STR (value));
 
@@ -99,18 +101,25 @@ void SliderContainer::updateSlider (const QString &value)
         return;
 
     PSMSlider->setValue (sliderValue);
-    //^ in case this is the first call, we need to set the value
-    PSMSlider->setHandleLabel (QString ("%1%").arg (value));
 }
 
-void SliderContainer::sliderValueChanged (int value)
+/*!
+ * This function is called when the user drags the slider and when the slider
+ * value has been changed by the applet to show the value that came from the
+ * backend.
+ */
+void 
+SliderContainer::sliderValueChanged (
+        int value)
 {
     SYS_DEBUG ("*** slider = %p", PSMSlider);
-
-    sliderValue = value;
     SYS_DEBUG ("*** value  = %d", value);
 
-    updateSlider (sliderValues.at (value));
+    sliderValue = value;
+
+    //updateSlider (sliderValues.at (value));
+    PSMSlider->setHandleLabel (QString ("%1%").arg (sliderValues[value]));
+
     emit PSMThresholdValueChanged (sliderValues.at (value));
 }
 
@@ -121,10 +130,15 @@ void SliderContainer::toggleSliderExistence (bool toggle)
         if ((layout_policy->count () < 2) && (PSMSlider == 0)) {
             PSMSlider = new DuiSlider;
             SYS_DEBUG ("Connecting %p->valueChanged", PSMSlider);
-            initSlider (sliderValues);
-            PSMSlider->setValue (sliderValue);
+            
+            PSMSlider->setOrientation (Qt::Horizontal);
+            PSMSlider->setHandleLabelVisible (true);
+            PSMSlider->setRange (0, sliderValues.size () - 1);
+
             connect (PSMSlider, SIGNAL (valueChanged (int)),
                     this, SLOT (sliderValueChanged (int)));
+            PSMSlider->setValue (sliderValue);
+
             layout_policy->addItem (PSMSlider);
         }
     } else {
