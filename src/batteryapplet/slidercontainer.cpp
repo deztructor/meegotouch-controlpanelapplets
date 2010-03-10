@@ -8,7 +8,7 @@
 #include <DuiLayout>
 #include <DuiSlider>
 
-#undef DEBUG 
+#define DEBUG 
 #include "../debug.h"
 
 SliderContainer::SliderContainer (DuiWidget *parent) :
@@ -84,12 +84,6 @@ SliderContainer::initSlider (
     PSMSlider->setRange (0, sliderValues.size () - 1);
     PSMSlider->setOrientation (Qt::Horizontal);
     PSMSlider->setHandleLabelVisible (true);
-
-    if (sliderValue > 0)
-        sliderValueChanged (sliderValue);
-
-    connect (PSMSlider, SIGNAL (valueChanged (int)),
-             this, SLOT (sliderValueChanged (int)));
 }
 
 void SliderContainer::updateSlider (const QString &value)
@@ -111,9 +105,11 @@ void SliderContainer::updateSlider (const QString &value)
 
 void SliderContainer::sliderValueChanged (int value)
 {
-    SYS_DEBUG ("");
+    SYS_DEBUG ("*** slider = %p", PSMSlider);
 
     sliderValue = value;
+    SYS_DEBUG ("*** value  = %d", value);
+
     updateSlider (sliderValues.at (value));
     emit PSMThresholdValueChanged (sliderValues.at (value));
 }
@@ -122,15 +118,16 @@ void SliderContainer::toggleSliderExistence (bool toggle)
 {
     SYS_DEBUG ("");
     if (toggle) {
-        if ((layout_policy->count () < 2) && (PSMSlider == 0))
-        {
+        if ((layout_policy->count () < 2) && (PSMSlider == 0)) {
             PSMSlider = new DuiSlider;
+            SYS_DEBUG ("Connecting %p->valueChanged", PSMSlider);
             initSlider (sliderValues);
+            connect (PSMSlider, SIGNAL (valueChanged (int)),
+                    this, SLOT (sliderValueChanged (int)));
             layout_policy->addItem (PSMSlider);
         }
     } else {
-        if ((PSMSlider) && (layout_policy->count () > 1))
-        {
+        if ((PSMSlider) && (layout_policy->count () > 1)) {
             layout_policy->removeItem (PSMSlider);
             delete PSMSlider;
             PSMSlider = 0;
