@@ -75,7 +75,7 @@ void
 SliderContainer::initSlider (
         const QStringList &values)
 {
-    SYS_DEBUG ("");
+    SYS_DEBUG ("*** sliderValue = %d", sliderValue);
     sliderValues = QStringList (values);
 
     if (PSMSlider == 0)
@@ -122,6 +122,7 @@ void SliderContainer::toggleSliderExistence (bool toggle)
             PSMSlider = new DuiSlider;
             SYS_DEBUG ("Connecting %p->valueChanged", PSMSlider);
             initSlider (sliderValues);
+            PSMSlider->setValue (sliderValue);
             connect (PSMSlider, SIGNAL (valueChanged (int)),
                     this, SLOT (sliderValueChanged (int)));
             layout_policy->addItem (PSMSlider);
@@ -129,7 +130,7 @@ void SliderContainer::toggleSliderExistence (bool toggle)
     } else {
         if ((PSMSlider) && (layout_policy->count () > 1)) {
             layout_policy->removeItem (PSMSlider);
-            delete PSMSlider;
+            PSMSlider->deleteLater();
             PSMSlider = 0;
         }
     }
