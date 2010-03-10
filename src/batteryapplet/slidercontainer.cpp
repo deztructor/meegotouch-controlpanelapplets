@@ -71,6 +71,10 @@ void SliderContainer::setLayout()
     centralWidget ()->setLayout (layout);
 }
 
+/*!
+ * This is in fact not an initialization function, the backend calls it to set
+ * the slider values.
+ */
 void 
 SliderContainer::initSlider (
         const QStringList &values)
@@ -150,17 +154,28 @@ void SliderContainer::toggleSliderExistence (bool toggle)
     }
 }
 
-void SliderContainer::initPSMAutoButton (bool toggle)
+/*!
+ * This function is called when the dackend decides if the automatic power save
+ * mode is enabled or disabled, so we can toggle the switch widget. Everything
+ * else is following the switch widget change.
+ */
+void
+SliderContainer::initPSMAutoButton (
+        bool toggle)
 {
+    SYS_DEBUG ("toggle = %s", SYS_BOOL (toggle));
+
     PSMAutoButton->setChecked (toggle);
-    toggleSliderExistence (toggle);
 }
 
+/*
+ * Now I wonder why do we need this.
+ */
 void SliderContainer::PSMAutoDisabled ()
 {
     SYS_DEBUG ("");
     PSMAutoButton->blockSignals (true);
-    initPSMAutoButton (false);
+    PSMAutoButton->setChecked (false);
     PSMAutoButton->blockSignals (false);
 }
 
