@@ -10,7 +10,9 @@ CONFIG += plugin \
 
 QT += dbus
 INCLUDEPATH += ../batteryapplet \
-               /usr/include/duicontrolpanel
+               /usr/include/duicontrolpanel \
+               /usr/include/duistatusindicatormenu
+
 HEADERS = batteryplugin.h \
           battery.h \
           ../batteryapplet/batterydbusinterface.h \

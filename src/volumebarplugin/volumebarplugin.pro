@@ -11,6 +11,9 @@ CONFIG += plugin \
 
 QT += dbus
 
+INCLUDEPATH += \
+    /usr/include/duistatusindicatormenu
+
 HEADERS = volumebarplugin.h \
           volumebarlogic.h \
           volumebar.h \

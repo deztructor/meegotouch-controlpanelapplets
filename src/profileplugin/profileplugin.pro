@@ -8,7 +8,8 @@ TEMPLATE      = lib
 CONFIG       += plugin gui dui duistatusindicatormenu silent
 INCLUDEPATH  += ../profileapplet \
                 /usr/include/profile-qt \
-                /usr/include/duicontrolpanel
+                /usr/include/duicontrolpanel \
+                /usr/include/duistatusindicatormenu
 
 HEADERS = profileplugin.h \
           profilewidget.h \
