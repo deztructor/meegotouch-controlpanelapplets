@@ -14,8 +14,8 @@
 SliderContainer::SliderContainer (DuiWidget *parent) :
         DuiContainer (parent),
         m_PSMAutoButton (0),
-        PSMSlider (0),
-        sliderValue (-1)
+        m_PSMSlider (0),
+        m_SliderValue (-1)
 {
     SYS_DEBUG ("");
 
@@ -34,7 +34,7 @@ SliderContainer::retranslate ()
 {
     SYS_DEBUG ("");
     //% "Auto activate power save"
-    textLabel->setText (qtTrId ("qtn_ener_autops"));
+    m_TextLabel->setText (qtTrId ("qtn_ener_autops"));
 }
 
 void SliderContainer::setLayout()
@@ -42,7 +42,7 @@ void SliderContainer::setLayout()
     SYS_DEBUG ("");
 
     DuiLayout *layout = new DuiLayout;
-    layout_policy =
+    m_LayoutPolicy =
         new DuiLinearLayoutPolicy (layout, Qt::Vertical);
 
     DuiLayout *hlayout = new DuiLayout;
@@ -50,11 +50,11 @@ void SliderContainer::setLayout()
         new DuiLinearLayoutPolicy (hlayout, Qt::Horizontal);
 
     // battery label
-    textLabel = new DuiLabel;
-    textLabel->setObjectName ("batteryLabel");
+    m_TextLabel = new DuiLabel;
+    m_TextLabel->setObjectName ("batteryLabel");
     retranslate ();
 
-    hpolicy->addItem (textLabel, Qt::AlignLeft);
+    hpolicy->addItem (m_TextLabel, Qt::AlignLeft);
 
     // m_PSMAutoButton
     m_PSMAutoButton = new DuiButton;
@@ -66,7 +66,7 @@ void SliderContainer::setLayout()
 
     hpolicy->addItem (m_PSMAutoButton, Qt::AlignRight);
 
-    layout_policy->addItem (hlayout);
+    m_LayoutPolicy->addItem (hlayout);
 
     centralWidget ()->setLayout (layout);
 }
@@ -79,11 +79,11 @@ void
 SliderContainer::initSlider (
         const QStringList &values)
 {
-    SYS_DEBUG ("*** sliderValue = %d", sliderValue);
-    sliderValues = values;
+    SYS_DEBUG ("*** m_SliderValue = %d", m_SliderValue);
+    m_SliderValues = values;
 
-    if (PSMSlider)
-        PSMSlider->setRange (0, sliderValues.size () - 1);
+    if (m_PSMSlider)
+        m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
 }
 
 /*!
@@ -98,13 +98,13 @@ SliderContainer::updateSlider (
 
     // Store the actual value for later
     // (eg for the case when slider isn't ready yet...)
-    sliderValue = sliderValues.indexOf (value);
+    m_SliderValue = m_SliderValues.indexOf (value);
 
     // Slider not yet created:
-    if (PSMSlider == 0)
+    if (m_PSMSlider == 0)
         return;
 
-    PSMSlider->setValue (sliderValue);
+    m_PSMSlider->setValue (m_SliderValue);
 }
 
 /*!
@@ -116,40 +116,40 @@ void
 SliderContainer::sliderValueChanged (
         int value)
 {
-    SYS_DEBUG ("*** slider = %p", PSMSlider);
+    SYS_DEBUG ("*** slider = %p", m_PSMSlider);
     SYS_DEBUG ("*** value  = %d", value);
 
-    sliderValue = value;
+    m_SliderValue = value;
 
-    //updateSlider (sliderValues.at (value));
-    PSMSlider->setHandleLabel (QString ("%1%").arg (sliderValues[value]));
+    //updateSlider (m_SliderValues.at (value));
+    m_PSMSlider->setHandleLabel (QString ("%1%").arg (m_SliderValues[value]));
 
-    emit PSMThresholdValueChanged (sliderValues.at (value));
+    emit PSMThresholdValueChanged (m_SliderValues.at (value));
 }
 
 void SliderContainer::toggleSliderExistence (bool toggle)
 {
     SYS_DEBUG ("");
     if (toggle) {
-        if ((layout_policy->count () < 2) && (PSMSlider == 0)) {
-            PSMSlider = new DuiSlider;
-            SYS_DEBUG ("Connecting %p->valueChanged", PSMSlider);
+        if ((m_LayoutPolicy->count () < 2) && (m_PSMSlider == 0)) {
+            m_PSMSlider = new DuiSlider;
+            SYS_DEBUG ("Connecting %p->valueChanged", m_PSMSlider);
             
-            PSMSlider->setOrientation (Qt::Horizontal);
-            PSMSlider->setHandleLabelVisible (true);
-            PSMSlider->setRange (0, sliderValues.size () - 1);
+            m_PSMSlider->setOrientation (Qt::Horizontal);
+            m_PSMSlider->setHandleLabelVisible (true);
+            m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
 
-            connect (PSMSlider, SIGNAL (valueChanged (int)),
+            connect (m_PSMSlider, SIGNAL (valueChanged (int)),
                     this, SLOT (sliderValueChanged (int)));
-            PSMSlider->setValue (sliderValue);
+            m_PSMSlider->setValue (m_SliderValue);
 
-            layout_policy->addItem (PSMSlider);
+            m_LayoutPolicy->addItem (m_PSMSlider);
         }
     } else {
-        if ((PSMSlider) && (layout_policy->count () > 1)) {
-            layout_policy->removeItem (PSMSlider);
-            PSMSlider->deleteLater();
-            PSMSlider = 0;
+        if ((m_PSMSlider) && (m_LayoutPolicy->count () > 1)) {
+            m_LayoutPolicy->removeItem (m_PSMSlider);
+            m_PSMSlider->deleteLater();
+            m_PSMSlider = 0;
         }
     }
 }
