@@ -66,6 +66,7 @@ ProfileContainer::ProfileContainer (
     m_VibrationLabel = new DuiLabel (qtTrId ("qtn_prof_vibration"));
 
     m_OnOffLabel = new DuiLabel ();
+    m_OnOffLabel->setObjectName ("OnOffLabel");
 
     m_VibrationSwitch = new DuiButton;
     m_VibrationSwitch->setCheckable (true);
