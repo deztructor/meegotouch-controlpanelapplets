@@ -27,6 +27,10 @@ void
 DisplayApplet::init()
 {
     SYS_DEBUG ("");
+    /*
+     * FIXME: The style sheet is currently empty, as it should be. Maybe we
+     * could simply remove it?
+     */
     DuiTheme::loadCSS (cssDir + "displayapplet.css");
 }
 
@@ -38,9 +42,9 @@ DcpWidget* DisplayApplet::constructWidget(int widgetId)
 
 DcpWidget* DisplayApplet::pageMain()
 {
-    if (main == NULL)
-        main = new DisplayWidget();
-    return main;
+    if (m_MainWidget == NULL)
+        m_MainWidget = new DisplayWidget();
+    return m_MainWidget;
 }
 
 QString DisplayApplet::title() const
