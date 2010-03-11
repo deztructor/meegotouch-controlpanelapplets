@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QDBusInterface>
 
-class VolumeBarLogic
+class VolumeBarLogic : public QObject
 {
     Q_OBJECT
 

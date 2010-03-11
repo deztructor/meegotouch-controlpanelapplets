@@ -10,13 +10,13 @@
 #include "../debug.h"
 
 VolumeBarLogic::VolumeBarLogic () :
-    QObject,
+    QObject (),
     m_currentvolume (0),
     m_currentmax (0)
 {
-    m_if = QDBusInterface ("com.Nokia.MainVolume1",
-                           "/com/nokia/mainvolume1",
-                           "com.Nokia.MainVolume1");
+    m_if = new QDBusInterface ("com.Nokia.MainVolume1",
+                               "/com/nokia/mainvolume1",
+                               "com.Nokia.MainVolume1");
 
     SYS_DEBUG ("com.Nokia.MainVolume interface revision: %d",
                m_if->property ("InterfaceRevision").toInt ());

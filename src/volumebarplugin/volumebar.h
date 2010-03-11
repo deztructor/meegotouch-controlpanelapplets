@@ -14,11 +14,12 @@ class VolumeBar : public DuiWidget
 
 public:
     VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
-               QGraphicsItem *parent = NULL);
-    virtual ~VolumeBar ();
+               QGraphicsItem *parent = 0);
+    ~VolumeBar ();
 
 private slots:
-    void volumeChanged (int val);
+    void sliderChanged (int val);
+    void volumeChanged (int val, int max);
 
 private:
     DuiSlider       *m_bar;
