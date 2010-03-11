@@ -21,21 +21,58 @@ Ut_ProfileDataInterface::cleanup()
 {
 }
 
-DuiApplication *app;
 
 void 
 Ut_ProfileDataInterface::initTestCase()
 {
-
     int argc = 1;
     char* app_name = (char*) "./Ut_ProfileDataInterface";
-    app = new DuiApplication(argc, &app_name);
+
+    m_App = new DuiApplication (argc, &app_name);
+    m_Api = new ProfileDataInterface;
 }
 
 void 
 Ut_ProfileDataInterface::cleanupTestCase()
 {
-    delete app;
+    delete m_App;
+    delete m_Api;
+}
+
+void 
+Ut_ProfileDataInterface::testGetCurrentProfileName ()
+{
+    QString prof = m_Api->getCurrentProfileName ();
+
+    qDebug() << "*** CurrentProfileName = " << prof;
+    QVERIFY(!prof.isEmpty());
+}
+
+void 
+Ut_ProfileDataInterface::testGetProfilesData ()
+{
+    QList<ProfileDataInterface::ProfileData> list = 
+        m_Api->getProfilesData ();
+    int n = 0;
+
+    foreach (ProfileDataInterface::ProfileData item, list) {
+        qDebug() << "----------------------------------------------";
+        qDebug() << "profile[" << n << "].name        = " <<
+            item.profileName;
+        qDebug() << "profile[" << n << "].id          = " <<
+            item.profileId;
+        qDebug() << "profile[" << n << "].volumeLevel = " <<
+            item.volumeLevel;
+        qDebug() << "profile[" << n << "].vibrationEnabled = " <<
+            (item.vibrationEnabled ? "yes" : "no");
+
+        ++n;
+    }
+
+    /*
+     * We have to get at least one profile. We actually should get 4 of them?
+     */
+    QVERIFY (n > 0);
 }
 
 QTEST_APPLESS_MAIN(Ut_ProfileDataInterface)

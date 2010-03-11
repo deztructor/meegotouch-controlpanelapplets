@@ -7,15 +7,25 @@
 #include <QtTest/QtTest>
 #include <QObject>
 
+class DuiApplication;
+class ProfileDataInterface;
+
 class Ut_ProfileDataInterface : public QObject 
 {
 Q_OBJECT
 
 private slots:
-    void init();
-    void cleanup();
-    void initTestCase();
-    void cleanupTestCase();
+    void init ();
+    void cleanup ();
+    void initTestCase ();
+    void cleanupTestCase ();
+
+    void testGetCurrentProfileName ();
+    void testGetProfilesData ();
+
+private:
+    DuiApplication       *m_App;
+    ProfileDataInterface *m_Api;
 };
 
 #endif
