@@ -139,6 +139,15 @@ Ut_BatteryDbusInterface::cleanupTestCase()
 }
 
 void 
+Ut_BatteryDbusInterface::testSysuidRunning ()
+{
+    qDebug() << "--- What about the sysuid? Is it running? ------";
+    system ("ps axu | grep sysuid");
+    qDebug() << "------------------------------------------------";
+}
+
+
+void 
 Ut_BatteryDbusInterface::testGetPSMValue ()
 {
     bool success;

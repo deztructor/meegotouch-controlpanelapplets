@@ -56,6 +56,7 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
+    void testSysuidRunning ();
     void testGetPSMValue ();
     void testGetPSMAutoValue ();
     void testGetThresholdValue ();
