@@ -43,7 +43,6 @@ private:
 
     void    setLayout();
     void    toggleSliderExistence (bool toggle);
-
 };
 
 #endif // SLIDERCONTAINER_H

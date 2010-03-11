@@ -169,14 +169,16 @@ SliderContainer::initPSMAutoButton (
 }
 
 /*
- * Now I wonder why do we need this.
+ * Now I wonder why do we need this. I think however we need to emit the signal,
+ * so the slider will be removed when the PSM is activated so the automatic PSM
+ * is disabled...
  */
 void SliderContainer::PSMAutoDisabled ()
 {
     SYS_DEBUG ("");
-    m_PSMAutoButton->blockSignals (true);
+    //m_PSMAutoButton->blockSignals (true);
     m_PSMAutoButton->setChecked (false);
-    m_PSMAutoButton->blockSignals (false);
+    //m_PSMAutoButton->blockSignals (false);
 }
 
 void SliderContainer::PSMAutoButtonToggled (bool toggle)
