@@ -13,7 +13,7 @@
 
 SliderContainer::SliderContainer (DuiWidget *parent) :
         DuiContainer (parent),
-        PSMAutoButton (NULL),
+        m_PSMAutoButton (0),
         PSMSlider (0),
         sliderValue (-1)
 {
@@ -56,15 +56,15 @@ void SliderContainer::setLayout()
 
     hpolicy->addItem (textLabel, Qt::AlignLeft);
 
-    // PSMAutoButton
-    PSMAutoButton = new DuiButton;
-    connect (PSMAutoButton, SIGNAL (toggled (bool)),
+    // m_PSMAutoButton
+    m_PSMAutoButton = new DuiButton;
+    connect (m_PSMAutoButton, SIGNAL (toggled (bool)),
              this, SLOT (PSMAutoButtonToggled (bool)));
-    PSMAutoButton->setCheckable (true);
-    PSMAutoButton->setViewType (DuiButton::switchType);
-    // PSMAutoButton->setObjectName ("PSMAutoButton");
+    m_PSMAutoButton->setCheckable (true);
+    m_PSMAutoButton->setViewType (DuiButton::switchType);
+    // m_PSMAutoButton->setObjectName ("PSMAutoButton");
 
-    hpolicy->addItem (PSMAutoButton, Qt::AlignRight);
+    hpolicy->addItem (m_PSMAutoButton, Qt::AlignRight);
 
     layout_policy->addItem (hlayout);
 
@@ -165,7 +165,7 @@ SliderContainer::initPSMAutoButton (
 {
     SYS_DEBUG ("toggle = %s", SYS_BOOL (toggle));
 
-    PSMAutoButton->setChecked (toggle);
+    m_PSMAutoButton->setChecked (toggle);
 }
 
 /*
@@ -174,9 +174,9 @@ SliderContainer::initPSMAutoButton (
 void SliderContainer::PSMAutoDisabled ()
 {
     SYS_DEBUG ("");
-    PSMAutoButton->blockSignals (true);
-    PSMAutoButton->setChecked (false);
-    PSMAutoButton->blockSignals (false);
+    m_PSMAutoButton->blockSignals (true);
+    m_PSMAutoButton->setChecked (false);
+    m_PSMAutoButton->blockSignals (false);
 }
 
 void SliderContainer::PSMAutoButtonToggled (bool toggle)

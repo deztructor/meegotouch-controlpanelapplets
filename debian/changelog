@@ -1,6 +1,7 @@
 systemui-applets (0.12.3~unreleased) harmattan; urgency=low
 
   * Fixes: NB#156759 - Battery applet UI not as specified
+  * Fixes: NB#160053 - Duicontrolpanel crash
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 10 Mar 2010 14:33:09 +0100
 

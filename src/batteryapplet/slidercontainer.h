@@ -34,7 +34,7 @@ signals:
     void PSMThresholdValueChanged (QString);
 
 private:
-    DuiButton               *PSMAutoButton;
+    DuiButton               *m_PSMAutoButton;
     DuiSlider               *PSMSlider;
     DuiLabel                *textLabel;
     QStringList              sliderValues;
