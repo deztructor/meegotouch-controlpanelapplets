@@ -25,7 +25,7 @@ public:
     virtual DcpBrief* constructBrief(int partId);
 
 private:
-    QPointer<DisplayWidget> main;
+    QPointer<DisplayWidget> m_MainWidget;
 
 };
 #endif // DISPLAYAPPLET_H

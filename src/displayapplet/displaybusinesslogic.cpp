@@ -20,14 +20,14 @@ static int TIMEGAP = 5; // time gap between blanking and dimming
 DisplayBusinessLogic::DisplayBusinessLogic (
         QObject* parent) :
     QObject (parent),
-    display (new QmDisplayState())
+    m_Display (new QmDisplayState())
 {
 }
 
 DisplayBusinessLogic::~DisplayBusinessLogic()
 {
-    delete display;
-    display = NULL;
+    delete m_Display;
+    m_Display = 0;
 }
 
 void
@@ -38,7 +38,7 @@ DisplayBusinessLogic::toggleDisplay (
     QmDisplayState::DisplayState state = 
         (toggle ? QmDisplayState::On : QmDisplayState::Off);
 
-    display->set (state);
+    m_Display->set (state);
 }
 
 QList<int> 
@@ -46,7 +46,7 @@ DisplayBusinessLogic::brightnessValues ()
 {
     QList<int> values;
 
-    int max = display->getMaxDisplayBrightnessValue();
+    int max = m_Display->getMaxDisplayBrightnessValue();
     max = (max > 0 ? max : 5);
 
     // QmDisplayState::setDisplayBrightnessValue accepts values 
@@ -62,7 +62,7 @@ DisplayBusinessLogic::selectedBrightnessValue ()
 {
     QList<int> values = brightnessValues();
 
-    int index = values.indexOf(display->getDisplayBrightnessValue());
+    int index = values.indexOf(m_Display->getDisplayBrightnessValue());
     if (index < 0) {
         index = values.size() / 2;
         setBrightnessValue (values.at(index));
@@ -82,7 +82,7 @@ int
 DisplayBusinessLogic::selectedScreenLightsValue ()
 {
     QList<int> values = screenLightsValues();
-    int index = values.indexOf(display->getDisplayDimTimeout());
+    int index = values.indexOf(m_Display->getDisplayDimTimeout());
     if (index < 0) {
         index = values.size() / 2;
         setScreenLightTimeouts (index);
@@ -97,7 +97,7 @@ DisplayBusinessLogic::blankInhibitValue ()
     /*
      * Actually the UI string is a negative.
      */
-    return !display->getBlankingWhenCharging();
+    return !m_Display->getBlankingWhenCharging();
 }
 
 void 
@@ -105,7 +105,7 @@ DisplayBusinessLogic::setBrightnessValue (
         int value)
 {
     SYS_DEBUG ("*** value = %d", value);
-    display->setDisplayBrightnessValue(value);
+    m_Display->setDisplayBrightnessValue(value);
 }
 
 /*!
@@ -126,12 +126,12 @@ DisplayBusinessLogic::setScreenLightTimeouts (
     SYS_DEBUG ("*** index   = %d", index);
     SYS_DEBUG ("*** seconds = %d", seconds);
 
-    display->setDisplayDimTimeout (seconds);
+    m_Display->setDisplayDimTimeout (seconds);
     /*
      * Originally it was seconds + TIMEGAP here, but as I see the blank timeout
      * is relative to the dim timeout value.
      */
-    display->setDisplayBlankTimeout (TIMEGAP);
+    m_Display->setDisplayBlankTimeout (TIMEGAP);
 }
 
 void 
@@ -143,6 +143,6 @@ DisplayBusinessLogic::setBlankInhibitValue (
      */
     value = !value;
     SYS_DEBUG ("*** blanking when charging = %s", value ? "true" : "false");
-    display->setBlankingWhenCharging(value);
+    m_Display->setBlankingWhenCharging(value);
 }
 

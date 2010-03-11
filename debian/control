@@ -12,7 +12,11 @@ Package: systemui-applets-tests
 Section: devel
 Priority: optional
 Architecture: any
-Depends: ${shlibs:Depends}, testrunner, ci-testing
+Depends: ${shlibs:Depends}, testrunner, ci-testing, duicontrolpanel-usbapplet,
+         duicontrolpanel-batteryapplet, duistatusindicatormenu-batteryplugin,
+         duistatusindicatormenu-volumeplugin, duicontrolpanel-displayapplet,
+         duicontrolpanel-profileapplet, duistatusindicatormenu-profileplugin,
+         duicontrolpanel-ledapplet
 XB-Maemo-CI-Packages: system-ui
 XB-Maemo-CI-Stage: fast, staging
 Description: Test package for system-ui applets

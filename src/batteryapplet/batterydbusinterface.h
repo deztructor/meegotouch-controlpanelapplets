@@ -5,9 +5,9 @@
 
 #include <QObject>
 #include <QStringList>
+#include <QDBusError>
 
 class QDBusInterface;
-#include <QDBusError>
 
 /*!
  * Implements a DBus connection to the battery & power save mode API implemented
@@ -37,8 +37,6 @@ public slots:
 
 public slots:
     void DBusMessagingFailure (QDBusError error);
-    // is this a lefover declaration? it is not implemented!
-    //void valueSet ();
     void querySent ();
 
 signals:
@@ -53,7 +51,7 @@ signals:
     void batteryBarValueReceived (int);
 
 private:
-    QDBusInterface *dbusIf;
+    QDBusInterface *m_DbusIf;
 };
 
 #endif // BATTERYDBUSINTERFACE_H

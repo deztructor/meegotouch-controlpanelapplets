@@ -7,6 +7,44 @@
 #include <QtTest/QtTest>
 #include <QObject>
 
+class QString;
+class QStringList;
+class BatteryDBusInterface;
+
+class Ut_BatteryDbusInterfacePrivate : public QObject 
+{
+Q_OBJECT
+
+public:
+    Ut_BatteryDbusInterfacePrivate ();
+    
+public slots:
+    void PSMValueReceived (bool PSMValue);
+    void PSMAutoValueReceived (bool PSMAutoValue);
+    void PSMThresholdValueReceived (QString);
+    void PSMThresholdValuesReceived (QStringList ThresholdValues);
+    void remainingTimeValuesReceived (QStringList RemainingTimeValues);
+    void batteryBarValueReceived (int batteryBarValue);
+
+public:
+    bool m_PSMValueArrived;
+    bool m_PSMValue;
+    
+    bool m_PSMAutoValueArrived;
+    bool m_PSMAutoValue;
+    
+    bool m_ThresholdValueArrived;
+    QString m_ThresholdValue;
+
+    bool m_ThresholdValuesArrived;
+    QStringList m_ThresholdValues;
+
+    bool m_RemainingTimeValuesArrived;
+    QStringList m_RemainingTimeValues;
+
+    bool m_batteryBarValueReceived;
+    int m_batteryBarValue;
+};
 
 class Ut_BatteryDbusInterface : public QObject
 {
@@ -17,6 +55,21 @@ private slots:
     void cleanup();
     void initTestCase();
     void cleanupTestCase();
+
+    void testSysuidRunning ();
+    void testGetPSMValue ();
+    void testGetPSMAutoValue ();
+    void testGetThresholdValue ();
+    void testGetThresholdValues ();
+    void testGetRemainingTimeValues ();
+    void testGetBatteryBarValue ();
+
+private:
+    bool waitforit (const QString &name, bool *what);
+
+private:
+    Ut_BatteryDbusInterfacePrivate *m_priv;
+    BatteryDBusInterface *m_BatteryDBusInterface;
 };
 
 #endif

@@ -3,7 +3,6 @@
 
 #include <QDebug>
 #include <DuiAction>
-#include <DuiTheme>
 #include <DcpWidget>
 #include <DuiLocale>
 
@@ -13,13 +12,9 @@
 
 Q_EXPORT_PLUGIN2(usbapplet, UsbApplet)
 
-const QString cssDir = "/usr/share/themes/base/dui/duicontrolpanel/style/";
-
 void 
 UsbApplet::init (void)
 {
-    DuiTheme::loadCSS (cssDir + "usbapplet.css");
-
     m_Brief = NULL;
 }
 

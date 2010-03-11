@@ -1,3 +1,5 @@
+/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
+/* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 #ifndef TIMECONTAINER_H
 #define TIMECONTAINER_H
 
@@ -25,10 +27,9 @@ private:
     void setLayout();
 
 private:
-    DuiImageWidget *image;
-    DuiLabel *textLabel;
-    DuiLabel *timeLabel;
-
+    DuiImageWidget  *m_Image;
+    DuiLabel        *m_TextLabel;
+    DuiLabel        *m_TimeLabel;
 };
 
 #endif // STANDBYTIMECONTAINER_H

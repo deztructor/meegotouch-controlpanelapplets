@@ -8,14 +8,14 @@
 #include <DuiLayout>
 #include <DuiSlider>
 
-#undef DEBUG 
+#define DEBUG 
 #include "../debug.h"
 
 SliderContainer::SliderContainer (DuiWidget *parent) :
         DuiContainer (parent),
-        PSMAutoButton (NULL),
-        PSMSlider (0),
-        sliderValue (-1)
+        m_PSMAutoButton (0),
+        m_PSMSlider (0),
+        m_SliderValue (-1)
 {
     SYS_DEBUG ("");
 
@@ -34,7 +34,7 @@ SliderContainer::retranslate ()
 {
     SYS_DEBUG ("");
     //% "Auto activate power save"
-    textLabel->setText (qtTrId ("qtn_ener_autops"));
+    m_TextLabel->setText (qtTrId ("qtn_ener_autops"));
 }
 
 void SliderContainer::setLayout()
@@ -42,7 +42,7 @@ void SliderContainer::setLayout()
     SYS_DEBUG ("");
 
     DuiLayout *layout = new DuiLayout;
-    layout_policy =
+    m_LayoutPolicy =
         new DuiLinearLayoutPolicy (layout, Qt::Vertical);
 
     DuiLayout *hlayout = new DuiLayout;
@@ -50,106 +50,135 @@ void SliderContainer::setLayout()
         new DuiLinearLayoutPolicy (hlayout, Qt::Horizontal);
 
     // battery label
-    textLabel = new DuiLabel;
-    textLabel->setObjectName ("batteryLabel");
+    m_TextLabel = new DuiLabel;
+    m_TextLabel->setObjectName ("batteryLabel");
     retranslate ();
 
-    hpolicy->addItem (textLabel, Qt::AlignLeft);
+    hpolicy->addItem (m_TextLabel, Qt::AlignLeft);
 
-    // PSMAutoButton
-    PSMAutoButton = new DuiButton;
-    connect (PSMAutoButton, SIGNAL (toggled (bool)),
+    // m_PSMAutoButton
+    m_PSMAutoButton = new DuiButton;
+    connect (m_PSMAutoButton, SIGNAL (toggled (bool)),
              this, SLOT (PSMAutoButtonToggled (bool)));
-    PSMAutoButton->setCheckable (true);
-    PSMAutoButton->setViewType (DuiButton::switchType);
-    // PSMAutoButton->setObjectName ("PSMAutoButton");
+    m_PSMAutoButton->setCheckable (true);
+    m_PSMAutoButton->setViewType (DuiButton::switchType);
+    // m_PSMAutoButton->setObjectName ("PSMAutoButton");
 
-    hpolicy->addItem (PSMAutoButton, Qt::AlignRight);
+    hpolicy->addItem (m_PSMAutoButton, Qt::AlignRight);
 
-    layout_policy->addItem (hlayout);
+    m_LayoutPolicy->addItem (hlayout);
 
     centralWidget ()->setLayout (layout);
 }
 
+/*!
+ * This is in fact not an initialization function, the backend calls it to set
+ * the slider values.
+ */
 void 
 SliderContainer::initSlider (
         const QStringList &values)
 {
-    SYS_DEBUG ("");
-    sliderValues = QStringList (values);
+    SYS_DEBUG ("*** m_SliderValue = %d", m_SliderValue);
+    m_SliderValues = values;
 
-    if (PSMSlider == 0)
-        return;
-
-    PSMSlider->setRange (0, sliderValues.size () - 1);
-    PSMSlider->setOrientation (Qt::Horizontal);
-    PSMSlider->setHandleLabelVisible (true);
-
-    if (sliderValue > 0)
-        sliderValueChanged (sliderValue);
-
-    connect (PSMSlider, SIGNAL (valueChanged (int)),
-             this, SLOT (sliderValueChanged (int)));
+    if (m_PSMSlider)
+        m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
 }
 
-void SliderContainer::updateSlider (const QString &value)
+/*!
+ * This slot is called when the backend returns the PSM value so we have to set
+ * the slider accordingly.
+ */
+void 
+SliderContainer::updateSlider (
+        const QString &value)
 {
     SYS_DEBUG ("value = %s", SYS_STR (value));
 
     // Store the actual value for later
     // (eg for the case when slider isn't ready yet...)
-    sliderValue = sliderValues.indexOf (value);
+    m_SliderValue = m_SliderValues.indexOf (value);
 
     // Slider not yet created:
-    if (PSMSlider == 0)
+    if (m_PSMSlider == 0)
         return;
 
-    PSMSlider->setValue (sliderValue);
-    //^ in case this is the first call, we need to set the value
-    PSMSlider->setHandleLabel (QString ("%1%").arg (value));
+    m_PSMSlider->setValue (m_SliderValue);
 }
 
-void SliderContainer::sliderValueChanged (int value)
+/*!
+ * This function is called when the user drags the slider and when the slider
+ * value has been changed by the applet to show the value that came from the
+ * backend.
+ */
+void 
+SliderContainer::sliderValueChanged (
+        int value)
 {
-    SYS_DEBUG ("");
+    SYS_DEBUG ("*** slider = %p", m_PSMSlider);
+    SYS_DEBUG ("*** value  = %d", value);
 
-    sliderValue = value;
-    updateSlider (sliderValues.at (value));
-    emit PSMThresholdValueChanged (sliderValues.at (value));
+    m_SliderValue = value;
+
+    //updateSlider (m_SliderValues.at (value));
+    m_PSMSlider->setHandleLabel (QString ("%1%").arg (m_SliderValues[value]));
+
+    emit PSMThresholdValueChanged (m_SliderValues.at (value));
 }
 
 void SliderContainer::toggleSliderExistence (bool toggle)
 {
     SYS_DEBUG ("");
     if (toggle) {
-        if ((layout_policy->count () < 2) && (PSMSlider == 0))
-        {
-            PSMSlider = new DuiSlider;
-            initSlider (sliderValues);
-            layout_policy->addItem (PSMSlider);
+        if ((m_LayoutPolicy->count () < 2) && (m_PSMSlider == 0)) {
+            m_PSMSlider = new DuiSlider;
+            SYS_DEBUG ("Connecting %p->valueChanged", m_PSMSlider);
+            
+            m_PSMSlider->setOrientation (Qt::Horizontal);
+            m_PSMSlider->setHandleLabelVisible (true);
+            m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
+
+            connect (m_PSMSlider, SIGNAL (valueChanged (int)),
+                    this, SLOT (sliderValueChanged (int)));
+            m_PSMSlider->setValue (m_SliderValue);
+
+            m_LayoutPolicy->addItem (m_PSMSlider);
         }
     } else {
-        if ((PSMSlider) && (layout_policy->count () > 1))
-        {
-            layout_policy->removeItem (PSMSlider);
-            delete PSMSlider;
-            PSMSlider = 0;
+        if ((m_PSMSlider) && (m_LayoutPolicy->count () > 1)) {
+            m_LayoutPolicy->removeItem (m_PSMSlider);
+            m_PSMSlider->deleteLater();
+            m_PSMSlider = 0;
         }
     }
 }
 
-void SliderContainer::initPSMAutoButton (bool toggle)
+/*!
+ * This function is called when the dackend decides if the automatic power save
+ * mode is enabled or disabled, so we can toggle the switch widget. Everything
+ * else is following the switch widget change.
+ */
+void
+SliderContainer::initPSMAutoButton (
+        bool toggle)
 {
-    PSMAutoButton->setChecked (toggle);
-    toggleSliderExistence (toggle);
+    SYS_DEBUG ("toggle = %s", SYS_BOOL (toggle));
+
+    m_PSMAutoButton->setChecked (toggle);
 }
 
+/*
+ * Now I wonder why do we need this. I think however we need to emit the signal,
+ * so the slider will be removed when the PSM is activated so the automatic PSM
+ * is disabled...
+ */
 void SliderContainer::PSMAutoDisabled ()
 {
     SYS_DEBUG ("");
-    PSMAutoButton->blockSignals (true);
-    initPSMAutoButton (false);
-    PSMAutoButton->blockSignals (false);
+    //m_PSMAutoButton->blockSignals (true);
+    m_PSMAutoButton->setChecked (false);
+    //m_PSMAutoButton->blockSignals (false);
 }
 
 void SliderContainer::PSMAutoButtonToggled (bool toggle)

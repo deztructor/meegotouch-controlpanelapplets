@@ -34,16 +34,15 @@ signals:
     void PSMThresholdValueChanged (QString);
 
 private:
-    DuiButton               *PSMAutoButton;
-    DuiSlider               *PSMSlider;
-    DuiLabel                *textLabel;
-    QStringList              sliderValues;
-    int                      sliderValue;
-    DuiLinearLayoutPolicy   *layout_policy;
+    DuiButton               *m_PSMAutoButton;
+    DuiSlider               *m_PSMSlider;
+    DuiLabel                *m_TextLabel;
+    QStringList              m_SliderValues;
+    int                      m_SliderValue;
+    DuiLinearLayoutPolicy   *m_LayoutPolicy;
 
     void    setLayout();
     void    toggleSliderExistence (bool toggle);
-
 };
 
 #endif // SLIDERCONTAINER_H

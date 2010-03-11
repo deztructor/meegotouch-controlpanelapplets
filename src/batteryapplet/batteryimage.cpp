@@ -16,46 +16,31 @@ BatteryImage::BatteryImage (QGraphicsItem *parent) :
      * We have to show something even if we get no signals from DBus. FIXME:
      * maybe this is not the right image, but it is the only one works now.
      */
-#if 0
-    setImage ("icon-m-battery");
+    setImage ("icon-m-energy-management-battery-62");
 
     batteryImages << 
-	    QString ("icon-m-battery-verylow") << 
-	    QString ("icon-m-battery-low") << 
-	    QString ("icon-m-battery-13") << 
-	    QString ("icon-m-battery-25") << 
-	    QString ("icon-m-battery-38") << 
-	    QString ("icon-m-battery-50") << 
-	    QString ("icon-m-battery-62") << 
-	    QString ("icon-m-battery-75") << 
-	    QString ("icon-m-battery-88") << 
-	    QString ("icon-m-battery-100");
+        QString ("icon-m-energy-management-battery-verylow") << 
+        QString ("icon-m-energy-management-battery-low") << 
+        QString ("icon-m-energy-management-battery13") << 
+        QString ("icon-m-energy-management-battery25") << 
+        QString ("icon-m-energy-management-battery38") << 
+        QString ("icon-m-energy-management-battery50") << 
+        QString ("icon-m-energy-management-battery62") << 
+        QString ("icon-m-energy-management-battery75") << 
+        QString ("icon-m-energy-management-battery88") << 
+        QString ("icon-m-energy-management-battery100");
 
     batteryChargingImages << 
-	    QString ("") << 
-	    QString ("") << 
-	    QString ("icon-s-battery-13") << 
-	    QString ("icon-s-battery-25") << 
-	    QString ("icon-s-battery-38") << 
-	    QString ("icon-s-battery-50") << 
-	    QString ("icon-s-battery-62") << 
-	    QString ("icon-s-battery-75") << 
-	    QString ("icon-s-battery-88") << 
-	    QString ("icon-s-battery-100");
-#else
-    // Seems themes still not contains the proper images ^
-    setImage ("icon-s-battery-60");
-
-    batteryImages <<
-        QString ("icon-s-battery-0") <<
-        QString ("icon-s-battery-20") <<
-        QString ("icon-s-battery-40") <<
-        QString ("icon-s-battery-60") <<
-        QString ("icon-s-battery-80") <<
-        QString ("icon-s-battery-100");
-
-    batteryChargingImages = batteryImages;
-#endif
+        QString ("icon-s-battery-verylow") <<
+        QString ("icon-s-battery-low") <<
+        QString ("icon-s-battery13") << 
+        QString ("icon-s-battery25") << 
+        QString ("icon-s-battery38") << 
+        QString ("icon-s-battery50") << 
+        QString ("icon-s-battery62") << 
+        QString ("icon-s-battery75") << 
+        QString ("icon-s-battery88") << 
+        QString ("icon-s-battery100");
 }
 
 BatteryImage::~BatteryImage ()
@@ -75,8 +60,7 @@ BatteryImage::updateBatteryLevel (int level)
 }
 
 void 
-BatteryImage::updateImage (
-		bool charging)
+BatteryImage::updateImage (bool charging)
 {
 #if 0
     static int chargingImageIndex = batteryLevel;

@@ -1,3 +1,5 @@
+/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
+/* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 #include "batteryapplet.h"
 #include "batterywidget.h"
 #include "batterybrief.h"
@@ -47,6 +49,11 @@ DcpWidget*
 BatteryApplet::pageMain ()
 {
     SYS_DEBUG ("Starting on %p", this);
+    /*
+     * Please note that the m_MainWidget is a QPointer that will nullify itself
+     * when the widget is destroyed. Then we need to create a new one when we
+     * asked for it.
+     */
     if (m_MainWidget == NULL)
         m_MainWidget = new BatteryWidget();
 
