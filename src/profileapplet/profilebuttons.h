@@ -24,8 +24,9 @@ public slots:
 signals:
     void profileSelected(int id);
 
-private slots:
-    void buttonToggled(bool checked);
+// Is this a a leftover definition? It is not implemented!
+//private slots:
+//    void buttonToggled(bool checked);
 
 private:
     void addButton(QString name, int id, bool checked);

@@ -11,7 +11,8 @@ class QString;
 class QStringList;
 class BatteryDBusInterface;
 
-class Ut_BatteryDbusInterfacePrivate : public QObject {
+class Ut_BatteryDbusInterfacePrivate : public QObject 
+{
 Q_OBJECT
 
 public:

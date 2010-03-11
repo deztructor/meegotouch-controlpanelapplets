@@ -23,7 +23,9 @@ void ProfileApplet::init()
     DuiTheme::loadCSS(cssDir + "profileapplet.css");
 }
 
-DcpWidget* ProfileApplet::constructWidget(int widgetId)
+DcpWidget *
+ProfileApplet::constructWidget (
+        int widgetId)
 {
     Q_UNUSED(widgetId);
     return pageMain();
@@ -31,9 +33,9 @@ DcpWidget* ProfileApplet::constructWidget(int widgetId)
 
 DcpWidget* ProfileApplet::pageMain()
 {
-    qDebug() << Q_FUNC_INFO << (QObject*)main;
     if (main == NULL)
         main = new ProfileWidget();
+
     return main;
 }
 
