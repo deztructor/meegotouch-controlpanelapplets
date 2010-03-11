@@ -1,22 +1,29 @@
 #ifndef VOLUMEBARLOGIC_H
 #define VOLUMEBARLOGIC_H
 
-typedef struct _NsvVolume NsvVolume; 
+#include <QObject>
+#include <QDBusInterface>
 
 class VolumeBarLogic
 {
+    Q_OBJECT
+
     public:
         VolumeBarLogic ();
         ~VolumeBarLogic ();
 
-        void setVolume (double v);
-        double getVolume ();
+        void setVolume (int value);
+        int  getVolume ();
+        int  getMaxVolume ();
+
+    signals:
+        void volumeChanged (int value, int maxvalue);
 
     private:
-        NsvVolume   *m_priv;
-        bool         m_initialized;
+        QDBusInterface  *m_if;
 
-        void get_default_sink_name ();
+        int     m_currentvolume;
+        int     m_currentmax;
 };
 
 #endif
