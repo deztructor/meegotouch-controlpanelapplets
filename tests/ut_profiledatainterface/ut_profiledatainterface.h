@@ -22,6 +22,7 @@ private slots:
 
     void testGetCurrentProfileName ();
     void testGetProfilesData ();
+    void testSetGetProfile ();
 
 private:
     DuiApplication       *m_App;

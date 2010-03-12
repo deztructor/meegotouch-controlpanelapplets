@@ -75,4 +75,15 @@ Ut_ProfileDataInterface::testGetProfilesData ()
     QVERIFY (n > 0);
 }
 
+void 
+Ut_ProfileDataInterface::testSetGetProfile ()
+{
+    for (int profileId = 0; profileId <= 3; ++profileId) {
+        qDebug() << "Setting profile to " << profileId;
+        m_Api->setProfile (profileId);
+
+        QVERIFY (m_Api->getCurrentProfile() == profileId);
+    }
+}
+
 QTEST_APPLESS_MAIN(Ut_ProfileDataInterface)
