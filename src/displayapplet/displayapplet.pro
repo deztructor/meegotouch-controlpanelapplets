@@ -31,16 +31,11 @@ SOURCES = \
     displaybrief.cpp \
     displaybusinesslogic.cpp
 
-css.files = displayapplet.css
 DESTDIR = lib
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
-css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/dui/duicontrolpanel/style
 
 message("The plugin will be installed to: " $$target.path)
-message("CSS path will be: " $$css.path)
 INSTALLS += target \
-    css \
     desktop
-OTHER_FILES += displayapplet.css
