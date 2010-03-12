@@ -41,6 +41,9 @@ DisplayBusinessLogic::toggleDisplay (
     m_Display->set (state);
 }
 
+/*!
+ * Returns a list of brightness values the underlying hw system accepts.
+ */
 QList<int> 
 DisplayBusinessLogic::brightnessValues ()
 {
@@ -57,6 +60,9 @@ DisplayBusinessLogic::brightnessValues ()
     return values;
 }
 
+/*!
+ * Returns the current brighness value for the screen.
+ */
 int
 DisplayBusinessLogic::selectedBrightnessValue ()
 {
@@ -71,7 +77,12 @@ DisplayBusinessLogic::selectedBrightnessValue ()
     return index;
 }
 
-QList<int> DisplayBusinessLogic::screenLightsValues ()
+/*!
+ * Returns a list that contains the available touch screen backlight time-out 
+ * values. All the elements are measuring timeout values in seconds.
+ */
+QList<int>
+DisplayBusinessLogic::screenLightsValues ()
 {
     QList<int> values;
     values << 10 << 30 << 60 << 120 << 300;

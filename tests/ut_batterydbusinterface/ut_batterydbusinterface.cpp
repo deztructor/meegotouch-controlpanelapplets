@@ -86,6 +86,65 @@ Ut_BatteryDbusInterface::cleanup()
 
 DuiApplication *app;
 
+
+static bool
+sysuid_running ()
+{
+    FILE *pipe;
+    char  line[256];
+    int   length;
+
+    pipe = popen ("ps axu | grep sysuid | grep -v ps | grep -v grep", "r");
+    if (pipe == NULL) {
+        qDebug() << "popen() failed";
+        return false;
+    }
+
+    if (fgets(line, 255, pipe) == NULL) {
+        qDebug() << "fgets() failed";
+        return false;
+    }
+
+    qDebug() << "line is " << line;
+    pclose (pipe);
+
+    line[255] = '\0';
+
+    length = strlen (line);
+    qDebug() << "length = " << length;
+    if (length != 0)
+        return true;
+
+    return false;
+}
+
+static void 
+waitForSysuidRunning ()
+{
+    int n = 0;
+
+    while (!sysuid_running()) {
+        if (n >= 25)
+            break;
+
+        qDebug() << n << "sysuid is not running, waiting...";
+        
+        QTest::qWait (1000);
+        ++n;
+    }
+    /*
+     * If the sysuid started we still need to wait a few seconds until it
+     * initializes itself.
+     */
+    QTest::qWait (5000);
+    
+    #if 1
+    qDebug() << "--- What about the sysuid? Is it running? ------";
+    system ("ps axu | grep sysuid");
+    qDebug() << "------------------------------------------------";
+    #endif
+}
+
 void 
 Ut_BatteryDbusInterface::initTestCase()
 {
@@ -93,6 +152,8 @@ Ut_BatteryDbusInterface::initTestCase()
     int argc = 1;
     char* app_name = (char*) "./Ut_BatteryDbusInterface";
     app = new DuiApplication(argc, &app_name);
+
+    waitForSysuidRunning();
 
     m_priv = new Ut_BatteryDbusInterfacePrivate;
     m_BatteryDBusInterface = new BatteryDBusInterface;
@@ -138,15 +199,7 @@ Ut_BatteryDbusInterface::cleanupTestCase()
     delete app;
 }
 
-void 
-Ut_BatteryDbusInterface::testSysuidRunning ()
-{
-    qDebug() << "--- What about the sysuid? Is it running? ------";
-    system ("ps axu | grep sysuid");
-    qDebug() << "------------------------------------------------";
-    system ("pidof sysuid");
-    qDebug() << "------------------------------------------------";
-}
+
 
 
 void 
