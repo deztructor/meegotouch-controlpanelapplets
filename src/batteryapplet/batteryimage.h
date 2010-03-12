@@ -23,11 +23,13 @@ public slots:
 private slots:
     void updateImage (bool charging = true);
 
-private: //attributes
-    QTimer      *timer;
-    int          batteryLevel;
-    QStringList  batteryImages;
-    QStringList  batteryChargingImages;
+private:
+    QTimer                 *m_timer;
+    int                     m_batteryLevel;
+    QList<const QPixmap *>  m_Images;
+    QList<const QPixmap *>  m_ChargingImages;
+
+    void loadImages (bool charging);
 };
 
 #endif // BATTERYIMAGE_H

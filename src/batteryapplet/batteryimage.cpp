@@ -3,50 +3,87 @@
 #include "batteryimage.h"
 
 #include <QTimer>
+#include <DuiTheme>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 BatteryImage::BatteryImage (QGraphicsItem *parent) :
         DuiImageWidget (parent),
-        timer (NULL),
-        batteryLevel (0)
+        m_timer (NULL),
+        m_batteryLevel (0)
 {
     /*
      * We have to show something even if we get no signals from DBus. FIXME:
      * maybe this is not the right image, but it is the only one works now.
      */
     setImage ("icon-m-energy-management-battery-62");
+}
 
-    batteryImages << 
-        QString ("icon-m-energy-management-battery-verylow") << 
-        QString ("icon-m-energy-management-battery-low") << 
-        QString ("icon-m-energy-management-battery13") << 
-        QString ("icon-m-energy-management-battery25") << 
-        QString ("icon-m-energy-management-battery38") << 
-        QString ("icon-m-energy-management-battery50") << 
-        QString ("icon-m-energy-management-battery62") << 
-        QString ("icon-m-energy-management-battery75") << 
-        QString ("icon-m-energy-management-battery88") << 
-        QString ("icon-m-energy-management-battery100");
+void
+BatteryImage::loadImages (bool charging)
+{
+#if 0
+  // These icons are invisible :-S
 
-    batteryChargingImages << 
-        QString ("icon-s-battery-verylow") <<
-        QString ("icon-s-battery-low") <<
-        QString ("icon-s-battery13") << 
-        QString ("icon-s-battery25") << 
-        QString ("icon-s-battery38") << 
-        QString ("icon-s-battery50") << 
-        QString ("icon-s-battery62") << 
-        QString ("icon-s-battery75") << 
-        QString ("icon-s-battery88") << 
-        QString ("icon-s-battery100");
+  if (charging && m_ChargingImages.isEmpty ())
+  {
+    DuiTheme *theme = DuiTheme::instance ();
+
+    m_ChargingImages << 
+        theme->pixmap (QString ("icon-s-status-battery-verylow")) <<
+        theme->pixmap (QString ("icon-s-status-battery-low")) <<
+        theme->pixmap (QString ("icon-s-status-battery13")) << 
+        theme->pixmap (QString ("icon-s-status-battery25")) << 
+        theme->pixmap (QString ("icon-s-status-battery38")) << 
+        theme->pixmap (QString ("icon-s-status-battery50")) << 
+        theme->pixmap (QString ("icon-s-status-battery62")) << 
+        theme->pixmap (QString ("icon-s-status-battery75")) << 
+        theme->pixmap (QString ("icon-s-status-battery88")) << 
+        theme->pixmap (QString ("icon-s-status-battery100"));
+  }
+  else
+#else
+  Q_UNUSED(charging);
+#endif
+  if (m_Images.isEmpty ())
+  {
+    DuiTheme *theme = DuiTheme::instance ();
+
+    m_Images << 
+        theme->pixmap (QString ("icon-m-energy-management-battery-verylow")) << 
+        theme->pixmap (QString ("icon-m-energy-management-battery-low")) << 
+        theme->pixmap (QString ("icon-m-energy-management-battery13")) << 
+        theme->pixmap (QString ("icon-m-energy-management-battery25")) << 
+        theme->pixmap (QString ("icon-m-energy-management-battery38")) << 
+        theme->pixmap (QString ("icon-m-energy-management-battery50")) << 
+        theme->pixmap (QString ("icon-m-energy-management-battery62")) << 
+        theme->pixmap (QString ("icon-m-energy-management-battery75")) << 
+        theme->pixmap (QString ("icon-m-energy-management-battery88")) << 
+        theme->pixmap (QString ("icon-m-energy-management-battery100"));
+  }
 }
 
 BatteryImage::~BatteryImage ()
 {
-    delete timer;
-    timer = NULL;
+    delete m_timer;
+    m_timer = NULL;
+
+    if (! m_Images.isEmpty ())
+    {
+        // Release the pixmaps
+        foreach (const QPixmap *icon, m_Images)
+            DuiTheme::instance ()->releasePixmap (icon);
+        m_Images.clear ();
+    }
+#if 0
+    if (! m_ChargingImages.isEmpty ())
+    {   // Release the pixmaps
+        foreach (const QPixmap *icon, m_ChargingImages)
+            DuiTheme::instance ()->releasePixmap (icon);
+        m_ChargingImages.clear ();
+    }
+#endif
 }
 
 void 
@@ -54,30 +91,17 @@ BatteryImage::updateBatteryLevel (int level)
 {
     SYS_DEBUG ("level = %d", level);
 
-    batteryLevel = level;
-    if (timer == NULL)
+    m_batteryLevel = level;
+    if (m_timer == NULL)
         updateImage (false);
 }
 
 void 
 BatteryImage::updateImage (bool charging)
 {
-#if 0
-    static int chargingImageIndex = batteryLevel;
-    if (charging) {
-        if (chargingImageIndex >= batteryChargingImages.size ())
-            chargingImageIndex = (batteryLevel > 1 ? batteryLevel : 2);
-        SYS_DEBUG ("Charging index: %d", chargingImageIndex);
-        setImage (batteryChargingImages.at (chargingImageIndex++));
-    } else {
-        SYS_DEBUG ("Normal index: %d", batteryLevel);
-        setImage (batteryImages.at (batteryLevel));
-        chargingImageIndex = batteryLevel;
-    }
-#else
     SYS_DEBUG ("charging = %s", charging ? "true" : "false");
 
-    static int imageIndex = batteryLevel;
+    static int imageIndex = m_batteryLevel;
 
     if (charging)
     {
@@ -85,13 +109,32 @@ BatteryImage::updateImage (bool charging)
     }
     else
     {
-        imageIndex = batteryLevel;
+        imageIndex = m_batteryLevel;
     }
 
-    if (batteryImages.size () <= imageIndex)
+    loadImages (charging);
+
+    // To avoid crashes (when icons aren't available)
+    if (m_Images.isEmpty ())
+        return;
+
+#if 0
+    int imageCount = charging ?
+                     m_ChargingImages.size () :
+                     m_Images.size ();
+
+    if (imageCount <= imageIndex)
        imageIndex = 0;
 
-    setImage (batteryImages.at (imageIndex)); 
+    if (charging)
+        setPixmap (*(m_ChargingImages.at (imageIndex)));
+    else
+        setPixmap (*(m_Images.at (imageIndex)));
+#else
+    if (m_Images.size () <= imageIndex)
+        imageIndex = 0;
+
+    setPixmap (*(m_Images.at (imageIndex)));
 #endif
 }
 
@@ -102,23 +145,22 @@ BatteryImage::startCharging (
     if (rate < 0) //USB 100mA
         return;
 
-    if (timer == NULL) {
-        timer = new QTimer (this);
-        connect (timer, SIGNAL (timeout ()),
+    if (m_timer == NULL) {
+        m_timer = new QTimer (this);
+        connect (m_timer, SIGNAL (timeout ()),
                  this, SLOT (updateImage ()));
     }
 
-    timer->setInterval (rate);
-    timer->start ();
+    m_timer->start (rate);
 }
 
 void
 BatteryImage::stopCharging ()
 {
-    if (timer != NULL) {
-        timer->stop ();
-        delete timer;
-        timer = NULL;
+    if (m_timer != NULL) {
+        m_timer->stop ();
+        delete m_timer;
+        m_timer = NULL;
     }
 }
 
