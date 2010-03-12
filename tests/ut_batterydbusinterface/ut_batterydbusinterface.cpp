@@ -101,7 +101,7 @@ sysuid_running ()
     }
 
     if (fgets(line, 255, pipe) == NULL) {
-        qDebug() << "fgets() failed";
+        //qDebug() << "fgets() failed";
         return false;
     }
 
@@ -127,7 +127,7 @@ waitForSysuidRunning ()
         if (n >= 25)
             break;
 
-        qDebug() << n << "sysuid is not running, waiting...";
+        qDebug() << n << "sysuid is not running, waiting 1 sec...";
         
         QTest::qWait (1000);
         ++n;
@@ -140,7 +140,7 @@ waitForSysuidRunning ()
     
     #if 1
     qDebug() << "--- What about the sysuid? Is it running? ------";
-    system ("ps axu | grep sysuid");
+    system ("ps axu | grep sysuid | grep -v grep");
     qDebug() << "------------------------------------------------";
     #endif
 }
