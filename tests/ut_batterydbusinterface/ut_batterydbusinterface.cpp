@@ -144,6 +144,8 @@ Ut_BatteryDbusInterface::testSysuidRunning ()
     qDebug() << "--- What about the sysuid? Is it running? ------";
     system ("ps axu | grep sysuid");
     qDebug() << "------------------------------------------------";
+    system ("pidof sysuid");
+    qDebug() << "------------------------------------------------";
 }
 
 

@@ -20,9 +20,15 @@ private slots:
     void initTestCase ();
     void cleanupTestCase ();
 
+    void testGetBrightnessValues ();
+    void testLightTimeouts ();
+    void testSetBrightness ();
+    
 private:
     DuiApplication       *m_App;
     DisplayBusinessLogic *m_Api;
+    int                   m_MaxBrightness, m_MinBrightness;
+    int                   m_Maxtimeout, m_Mintimeout;
 };
 
 #endif
