@@ -31,7 +31,7 @@ DisplayApplet::init()
      * FIXME: The style sheet is currently empty, as it should be. Maybe we
      * could simply remove it?
      */
-    DuiTheme::loadCSS (cssDir + "displayapplet.css");
+    //DuiTheme::loadCSS (cssDir + "displayapplet.css");
 }
 
 DcpWidget* DisplayApplet::constructWidget(int widgetId)

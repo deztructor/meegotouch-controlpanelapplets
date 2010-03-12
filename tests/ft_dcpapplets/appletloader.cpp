@@ -6,7 +6,7 @@
 #include <dcpwidget.h>
 
 // Define this when DuiControlPanel 0.7.2 released:
-#undef DUICONTROLPANEL_0_7_2
+#define DUICONTROLPANEL_0_7_2
 
 #ifndef DUICONTROLPANEL_0_7_2
 #include <dcpappletloader.h>
