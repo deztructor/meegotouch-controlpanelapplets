@@ -67,9 +67,9 @@ VolumeBar::VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
     current_volume = (int) (100.0 * m_logic->getVolume ());
 
     if (current_volume > 0)
-        m_bar->setMinLabelIconID ("icon-m-volume");
+        m_bar->setMinLabelIconID ("icon-m-common-volume");
     else
-        m_bar->setMinLabelIconID ("icon-m-volume-off");
+        m_bar->setMinLabelIconID ("icon-m-common-volume-off");
 
     m_bar->setValue (current_volume);
 
@@ -85,9 +85,9 @@ void
 VolumeBar::volumeChanged (int val)
 {
     if (val > 0)
-        m_bar->setMinLabelIconID ("icon-m-volume");
+        m_bar->setMinLabelIconID ("icon-m-common-volume");
     else
-        m_bar->setMinLabelIconID ("icon-m-volume-off");
+        m_bar->setMinLabelIconID ("icon-m-common-volume-off");
 
     m_logic->setVolume ((double) val / 100.0);
 }
