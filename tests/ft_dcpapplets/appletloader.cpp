@@ -5,10 +5,7 @@
 #include <dcpbrief.h>
 #include <dcpwidget.h>
 
-// Define this when DuiControlPanel 0.7.2 released:
-#undef DUICONTROLPANEL_0_7_2
-
-#ifndef DUICONTROLPANEL_0_7_2
+#ifndef DCP_APPLET_LOADER_DEPRECATED
 #include <dcpappletloader.h>
 #else
 #include <dcpappletplugin.h>
@@ -49,7 +46,7 @@ Ft_AppletLoader::DoAppletTest (const char *desktopfile)
 {
     DcpAppletMetadata metadata (QString (DESKTOP_PATH) +
                                 QString (desktopfile));
-#ifndef DUICONTROLPANEL_0_7_2
+#ifndef DCP_APPLET_LOADER_DEPRECATED
     DcpAppletLoader loader (&metadata);
 #else
     DcpAppletPlugin loader (&metadata);

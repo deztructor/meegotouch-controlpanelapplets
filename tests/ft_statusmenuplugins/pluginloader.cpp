@@ -1,3 +1,5 @@
+/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
+/* vim:set et sw=4 ts=4 sts=4: */
 #include "pluginloader.h"
 #include <QTest>
 #include <DuiWidget>
@@ -42,6 +44,8 @@ Ft_PluginLoader::cleanupTestCase ()
 void
 Ft_PluginLoader::DoPluginTest (const QString &soname)
 {
+    qDebug() << "Loading applet from " << QString (LIBDIR) + soname;
+
     QPluginLoader  loader (QString (LIBDIR) + soname);
     QObject       *object = loader.instance ();
 
