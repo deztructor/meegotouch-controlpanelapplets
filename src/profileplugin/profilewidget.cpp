@@ -27,6 +27,7 @@
 #include <DuiContainer>
 #include <DuiControlPanelIf>
 #include <DuiGridLayoutPolicy>
+#include <DuiGConfItem>
 #include <DuiLayout>
 #include <DuiLinearLayoutPolicy>
 #include <DuiLocale>
@@ -116,7 +117,8 @@ ProfileWidget::loadTranslation ()
         return;
     running = true;
 
-    DuiLocale   locale;
+    DuiGConfItem    langItem ("/Dui/i18n/Language");
+    DuiLocale       locale (langItem.value ().toString ());
 
     locale.installTrCatalog (SYSTEMUI_TRANSLATION ".qm");
     locale.installTrCatalog (SYSTEMUI_TRANSLATION);

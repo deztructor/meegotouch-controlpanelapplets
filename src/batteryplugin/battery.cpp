@@ -10,6 +10,7 @@
 #include <DuiContainer>
 #include <DuiControlPanelIf>
 #include <DuiGridLayoutPolicy>
+#include <DuiGConfItem>
 #include <DuiImageWidget>
 #include <DuiLabel>
 #include <DuiLayout>
@@ -176,7 +177,8 @@ Battery::loadTranslation ()
         return;
     running = true;
 
-    DuiLocale   locale;
+    DuiGConfItem    langItem ("/Dui/i18n/Language");
+    DuiLocale       locale (langItem.value ().toString ());
 
     locale.installTrCatalog (SYSTEMUI_TRANSLATION ".qm");
     locale.installTrCatalog (SYSTEMUI_TRANSLATION);
