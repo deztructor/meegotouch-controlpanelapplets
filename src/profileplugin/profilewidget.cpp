@@ -109,13 +109,20 @@ ProfileWidget::showProfileModificationPage ()
 void
 ProfileWidget::loadTranslation ()
 {
+    static bool running = false;
     SYS_DEBUG ("");
+
+    if (running == true)
+        return;
+    running = true;
 
     DuiLocale   locale;
 
     locale.installTrCatalog (SYSTEMUI_TRANSLATION ".qm");
     locale.installTrCatalog (SYSTEMUI_TRANSLATION);
     DuiLocale::setDefault (locale);
+
+    running = false;
 }
 
 void
