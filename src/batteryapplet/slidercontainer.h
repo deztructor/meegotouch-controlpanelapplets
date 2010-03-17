@@ -37,12 +37,15 @@ private:
     DuiButton               *m_PSMAutoButton;
     DuiSlider               *m_PSMSlider;
     DuiLabel                *m_AutoPSMLabel;
+    DuiLabel                *m_PsmValueLabel;
     QStringList              m_SliderValues;
     int                      m_SliderValue;
     DuiLinearLayoutPolicy   *m_LayoutPolicy;
-
+    bool                     m_SliderExists;
+    
     void    setLayout();
     void    toggleSliderExistence (bool toggle);
+    void    updateSliderValueLabel ();
 };
 
 #endif // SLIDERCONTAINER_H

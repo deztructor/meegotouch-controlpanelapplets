@@ -15,7 +15,8 @@ SliderContainer::SliderContainer (DuiWidget *parent) :
         DuiContainer (parent),
         m_PSMAutoButton (0),
         m_PSMSlider (0),
-        m_SliderValue (-1)
+        m_SliderValue (-1),
+        m_SliderExists (false)
 {
     SYS_DEBUG ("");
 
@@ -35,25 +36,43 @@ SliderContainer::retranslate ()
     SYS_DEBUG ("");
     //% "Auto activate power save"
     m_AutoPSMLabel->setText (qtTrId ("qtn_ener_autops"));
+    updateSliderValueLabel ();
 }
 
 void SliderContainer::setLayout()
 {
+    DuiLayout              *labelLayout;
+    DuiLinearLayoutPolicy  *labelLayoutPolicy;
+
     SYS_DEBUG ("");
+
+    labelLayout = new DuiLayout;
+    labelLayoutPolicy = new DuiLinearLayoutPolicy (labelLayout, Qt::Vertical);
 
     DuiLayout *layout = new DuiLayout;
     m_LayoutPolicy = new DuiLinearLayoutPolicy (layout, Qt::Vertical);
 
     DuiLayout *hlayout = new DuiLayout;
-    DuiLinearLayoutPolicy *hpolicy =
-        new DuiLinearLayoutPolicy (hlayout, Qt::Horizontal);
+    DuiLinearLayoutPolicy *hpolicy = new DuiLinearLayoutPolicy (hlayout, Qt::Horizontal);
 
-    // "Auto activate power save" label
+    /*
+     * "Auto activate power save" label
+     */
     m_AutoPSMLabel = new DuiLabel;
     m_AutoPSMLabel->setObjectName ("batteryLabel");
-    retranslate ();
+    labelLayoutPolicy->addItem (m_AutoPSMLabel, Qt::AlignLeft);
 
-    hpolicy->addItem (m_AutoPSMLabel, Qt::AlignLeft);
+    /*
+     *
+     */
+    m_PsmValueLabel = new DuiLabel;
+    m_PsmValueLabel->setObjectName ("psmValueLabel");
+    labelLayoutPolicy->addItem (m_PsmValueLabel, Qt::AlignLeft);
+    
+    /*
+     * Adding the labels to the upper horizontal part.
+     */
+    hpolicy->addItem (labelLayout);
 
     // m_PSMAutoButton
     m_PSMAutoButton = new DuiButton;
@@ -62,12 +81,14 @@ void SliderContainer::setLayout()
     m_PSMAutoButton->setCheckable (true);
     m_PSMAutoButton->setViewType (DuiButton::switchType);
     // m_PSMAutoButton->setObjectName ("PSMAutoButton");
+    hpolicy->addItem (m_PSMAutoButton, Qt::AlignRight | Qt::AlignVCenter);
 
-    hpolicy->addItem (m_PSMAutoButton, Qt::AlignRight);
-
+   
     m_LayoutPolicy->addItem (hlayout);
 
     centralWidget ()->setLayout (layout);
+    
+    retranslate ();
 }
 
 /*!
@@ -83,6 +104,8 @@ SliderContainer::initSlider (
 
     if (m_PSMSlider)
         m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
+
+    updateSliderValueLabel ();
 }
 
 /*!
@@ -104,6 +127,8 @@ SliderContainer::updateSlider (
         return;
 
     m_PSMSlider->setValue (m_SliderValue);
+
+    updateSliderValueLabel ();
 }
 
 /*!
@@ -119,29 +144,39 @@ SliderContainer::sliderValueChanged (
     SYS_DEBUG ("*** value  = %d", value);
 
     m_SliderValue = value;
-
-    //updateSlider (m_SliderValues.at (value));
-    m_PSMSlider->setHandleLabel (QString ("%1%").arg (m_SliderValues[value]));
-
+    
+    updateSliderValueLabel ();
     emit PSMThresholdValueChanged (m_SliderValues.at (value));
 }
 
-void SliderContainer::toggleSliderExistence (bool toggle)
+void 
+SliderContainer::toggleSliderExistence (
+        bool toggle)
 {
     SYS_DEBUG ("");
+    
+    if (toggle == m_SliderExists)
+        return;
+    m_SliderExists = toggle;
+
     if (toggle) {
         if ((m_LayoutPolicy->count () < 2) && (m_PSMSlider == 0)) {
             m_PSMSlider = new DuiSlider;
             SYS_DEBUG ("Connecting %p->valueChanged", m_PSMSlider);
+            SYS_DEBUG ("m_SliderValue = %d", m_SliderValue);
             
             m_PSMSlider->setOrientation (Qt::Horizontal);
-            m_PSMSlider->setHandleLabelVisible (true);
+            m_PSMSlider->setHandleLabelVisible (false);
             m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
 
             connect (m_PSMSlider, SIGNAL (valueChanged (int)),
                     this, SLOT (sliderValueChanged (int)));
-            m_PSMSlider->setValue (m_SliderValue);
-
+            if (m_SliderValue >= 0) {
+                m_PSMSlider->setValue (m_SliderValue);
+            }
+            /*
+             *
+             */
             m_LayoutPolicy->addItem (m_PSMSlider);
         }
     } else {
@@ -151,6 +186,8 @@ void SliderContainer::toggleSliderExistence (bool toggle)
             m_PSMSlider = 0;
         }
     }
+
+    updateSliderValueLabel ();
 }
 
 /*!
@@ -188,3 +225,22 @@ void SliderContainer::PSMAutoButtonToggled (bool toggle)
     emit PSMAutoToggled (toggle);
 }
 
+/*!
+ * Updates the label that shows the auto PSM slider value or shows the 'off'
+ * string when the auto power save mode is disabled.
+ */
+void
+SliderContainer::updateSliderValueLabel ()
+{
+    if (!m_SliderExists) {
+        //% "Off"
+        m_PsmValueLabel->setText (qtTrId ("qtn_comm_off"));
+    }
+
+    if (m_SliderExists && 
+            m_SliderValue >= 0 && 
+            m_SliderValue < m_SliderValues.size()) {
+        m_PsmValueLabel->setText (QString ("%1%").arg (
+                    m_SliderValues[m_SliderValue]));
+    }
+}
