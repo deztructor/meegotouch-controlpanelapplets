@@ -75,6 +75,7 @@ VolumeBarLogic::VolumeBarLogic () :
     {
         SYS_WARNING ("Failed to connect Pulseaudio: %s",
                      pa_strerror (pa_context_errno (m_priv->context)));
+        return;
     }
 
     pa_context_set_state_callback (m_priv->context, context_state_cb, (void *) m_priv);

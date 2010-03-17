@@ -29,6 +29,8 @@ BatteryDBusInterface::BatteryDBusInterface ()
              this, SIGNAL (PSMAutoDisabled ()));
     connect (m_DbusIf, SIGNAL (remainingTimeValuesChanged (QStringList)),
              this, SIGNAL (remainingTimeValuesReceived (QStringList)));
+    connect (m_DbusIf, SIGNAL (batteryFull ()),
+             this, SIGNAL (batteryFullyCharged ()));
 }
 
 BatteryDBusInterface::~BatteryDBusInterface ()

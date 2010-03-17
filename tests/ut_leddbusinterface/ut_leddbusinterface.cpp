@@ -25,6 +25,8 @@ void
 Ut_LedDbusInterfacePrivate::ledStateReceived (
         bool state)
 {
+    Q_UNUSED (state);
+
     qDebug() << __func__ << "Signal received";
     m_ledStateReceived = true;
 }
@@ -33,6 +35,8 @@ void
 Ut_LedDbusInterfacePrivate::illuminationLedStateReceived (
         bool state)
 {
+    Q_UNUSED (state);
+
     qDebug() << __func__ << "Signal received";
     m_illuminationLedStateReceived = true;
 }
@@ -41,6 +45,8 @@ void
 Ut_LedDbusInterfacePrivate::eventsLedStateReceived (
         bool state)
 {
+    Q_UNUSED (state);
+
     qDebug() << __func__ << "Signal received";
     m_eventsLedStateReceived = true;
 }

@@ -49,6 +49,7 @@ signals:
     void PSMThresholdValueReceived (QString);
     void remainingTimeValuesReceived (QStringList);
     void batteryBarValueReceived (int);
+    void batteryFullyCharged ();
 
 private:
     QDBusInterface *m_DbusIf;
