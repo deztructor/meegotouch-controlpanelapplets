@@ -52,7 +52,7 @@ ProfileContainer::ProfileContainer (
          * with some other version of the libdui.
          */
         m_Slider->setMinLabelVisible (true);
-        m_Slider->setMinLabelIconID ("icon-m-volume");
+        m_Slider->setMinLabelIconID ("icon-m-common-volume");
         #endif
 
         setLevel (level);
@@ -109,12 +109,12 @@ ProfileContainer::setLayout ()
      * FIXME: Ok, but what happens when we change the 'mute' state?
      */
     if (m_Slider) {
-        m_Img = new DuiImageWidget ("icon-m-volume");
+        m_Img = new DuiImageWidget ("icon-m-common-volume");
         item = m_Slider;
     } else {
-        m_Img = new DuiImageWidget ("icon-m-volume-off");
+        m_Img = new DuiImageWidget ("icon-m-common-volume-off");
         //% "No ringing"
-        item = new DuiLabel (qtTrId ("qtn_prof_noringing"));
+        item = new DuiLabel (qtTrId ("qtn_prof_noring"));
     }
     m_Img->setObjectName ("speakerIcon");
 
@@ -181,9 +181,9 @@ ProfileContainer::slotVibrationSwitchToggled (
 {
     QString text = toggle ? 
         //% "On"
-        qtTrId ("qtn_comm_on") :
+        qtTrId ("qtn_comm_settings_on") :
         //% "Off"
-        qtTrId ("qtn_comm_off");
+        qtTrId ("qtn_comm_settings_off");
 
     m_OnOffLabel->setText (text);
 
@@ -203,9 +203,9 @@ ProfileContainer::slotSliderValueChanged (
         return;
 
     if (newValue == 0 && m_Level != 0) {
-        m_Img->setImage ("icon-m-volume-off");
+        m_Img->setImage ("icon-m-common-volume-off");
     } else if (newValue != 0 && m_Level == 0) {
-        m_Img->setImage ("icon-m-volume");
+        m_Img->setImage ("icon-m-common-volume");
     }
 
     m_Level = newValue;
@@ -224,9 +224,9 @@ ProfileContainer::setVibration (
     
     QString text = enabled ? 
         //% "On"
-        qtTrId ("qtn_comm_on") : 
+        qtTrId ("qtn_comm_settings_on") : 
         //% "Off"
-        qtTrId ("qtn_comm_off");
+        qtTrId ("qtn_comm_settings_off");
         
     SYS_DEBUG ("Setting on/off label to '%s'", SYS_STR(text));
     m_OnOffLabel->setText (text);
