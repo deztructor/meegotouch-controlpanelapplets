@@ -30,7 +30,7 @@ Battery::Battery (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
         batteryImage (0),
         container (0),
         PSMode (false),
-        last_values (0),
+        last_value (0),
         charging (false)
 {
     SYS_DEBUG ("");
@@ -101,7 +101,7 @@ Battery::Battery (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
 Battery::~Battery()
 {
     delete dbusIf;
-    dbusIf = NULL;
+    dbusIf = 0;
 }
 
 void
@@ -130,8 +130,7 @@ Battery::charge_stop ()
 {
     charging = false;
 
-    if (last_values != 0)
-        updateTimeLabel (*last_values);
+    timeLabel->setText (timeValue (last_value));
 }
 
 void
@@ -154,11 +153,8 @@ Battery::updateTimeLabel (const QStringList &times)
 {
     SYS_DEBUG ("");
 
-    // to avoid segfaults when we call this function with last_values parameter
-    QStringList *tmp = new QStringList (times);
-    if (last_values != 0)
-        delete last_values;
-    last_values = tmp;
+    if (times.count () > 0 && times.at (1).toInt () != 0)
+        last_value = times.at (1).toInt ();
 
     // Charging text should be there, not the time...
     if (charging == true)
@@ -218,10 +214,15 @@ Battery::retranslateUi ()
     if (modeLabel != 0)
         updateModeLabel (PSMode);
 
-    if ((last_values != 0) && (timeLabel != 0))
-        updateTimeLabel (*last_values);
-
     if (container)
         container->setTitle (qtTrId ("qtn_ener_battery"));
+
+    if (timeLabel == 0)
+        return;
+
+    if (charging == true)
+        charge_start (0);
+    else
+        timeLabel->setText (timeValue (last_value));
 }
 

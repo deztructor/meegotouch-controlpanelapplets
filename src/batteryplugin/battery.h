@@ -40,7 +40,7 @@ private: //attributes
     BatteryImage                    *batteryImage;
     DuiContainer                    *container;
     bool                             PSMode;
-    QStringList                     *last_values;
+    int                              last_value;
     bool                             charging;
 };
 

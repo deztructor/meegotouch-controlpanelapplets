@@ -17,7 +17,7 @@ BatteryImage::BatteryImage (QGraphicsItem *parent) :
      * We have to show something even if we get no signals from DBus. FIXME:
      * maybe this is not the right image, but it is the only one works now.
      */
-    setImage ("icon-m-energy-management-battery-62");
+    setImage ("icon-m-energy-management-battery62");
 }
 
 void
