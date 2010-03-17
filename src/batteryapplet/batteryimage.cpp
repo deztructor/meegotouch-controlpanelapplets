@@ -162,5 +162,7 @@ BatteryImage::stopCharging ()
         delete m_timer;
         m_timer = NULL;
     }
+
+    updateImage (false);
 }
 

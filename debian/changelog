@@ -2,8 +2,10 @@ systemui-applets (0.12.4~unreleased) harmattan; urgency=low
 
   * Fixes: NB#159842 - Sliders handle in battery applet covers is not hiding 
     and covers the text above it
+  * Fixes: NB#159315 - Battery indicator doesn't show the battery capacity
+    correctly
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 16 Mar 2010 11:57:00 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 17 Mar 2010 13:02:41 +0100
 
 systemui-applets (0.12.3-1) harmattan; urgency=low
 

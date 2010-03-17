@@ -2,7 +2,7 @@
 #include "batterydbusinterface.h"
 #include "batteryimage.h"
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 #include <DuiContainer>
