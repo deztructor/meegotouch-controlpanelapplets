@@ -36,7 +36,7 @@ signals:
 private:
     DuiButton               *m_PSMAutoButton;
     DuiSlider               *m_PSMSlider;
-    DuiLabel                *m_TextLabel;
+    DuiLabel                *m_AutoPSMLabel;
     QStringList              m_SliderValues;
     int                      m_SliderValue;
     DuiLinearLayoutPolicy   *m_LayoutPolicy;

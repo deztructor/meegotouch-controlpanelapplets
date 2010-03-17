@@ -34,7 +34,7 @@ SliderContainer::retranslate ()
 {
     SYS_DEBUG ("");
     //% "Auto activate power save"
-    m_TextLabel->setText (qtTrId ("qtn_ener_autops"));
+    m_AutoPSMLabel->setText (qtTrId ("qtn_ener_autops"));
 }
 
 void SliderContainer::setLayout()
@@ -42,19 +42,18 @@ void SliderContainer::setLayout()
     SYS_DEBUG ("");
 
     DuiLayout *layout = new DuiLayout;
-    m_LayoutPolicy =
-        new DuiLinearLayoutPolicy (layout, Qt::Vertical);
+    m_LayoutPolicy = new DuiLinearLayoutPolicy (layout, Qt::Vertical);
 
     DuiLayout *hlayout = new DuiLayout;
     DuiLinearLayoutPolicy *hpolicy =
         new DuiLinearLayoutPolicy (hlayout, Qt::Horizontal);
 
-    // battery label
-    m_TextLabel = new DuiLabel;
-    m_TextLabel->setObjectName ("batteryLabel");
+    // "Auto activate power save" label
+    m_AutoPSMLabel = new DuiLabel;
+    m_AutoPSMLabel->setObjectName ("batteryLabel");
     retranslate ();
 
-    hpolicy->addItem (m_TextLabel, Qt::AlignLeft);
+    hpolicy->addItem (m_AutoPSMLabel, Qt::AlignLeft);
 
     // m_PSMAutoButton
     m_PSMAutoButton = new DuiButton;
