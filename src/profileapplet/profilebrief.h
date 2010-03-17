@@ -3,16 +3,24 @@
 #ifndef PROFILEBRIEF_H
 #define PROFILEBRIEF_H
 
+#include <QPointer>
 #include "dcpbrief.h"
+
+class ProfileDataInterface;
 
 class ProfileBrief: public DcpBrief
 {
     Q_OBJECT
 
 public:
-    ProfileBrief();
+    ProfileBrief (ProfileDataInterface *profileDataInterfac);
     virtual QString valueText() const;
 
+public slots:
+    void currentProfileChanged (int id);
+
+private:
+    QPointer<ProfileDataInterface> m_Api;
 };
 
-#endif // PROFILEBRIEF
+#endif 

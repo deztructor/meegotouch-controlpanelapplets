@@ -5,6 +5,8 @@
 
 #include "dcpappletif.h"
 #include <QObject>
+
+class ProfileDataInterface;
 class ProfileWidget;
 class DuiAction;
 class ProfileBrief;
@@ -15,6 +17,9 @@ class ProfileApplet : public QObject, public DcpAppletIf
     Q_INTERFACES(DcpAppletIf)
 
 public:
+    ProfileApplet();
+    ~ProfileApplet();
+    
     virtual void init();
     virtual DcpWidget* constructWidget(int widgetId);
     virtual DcpWidget* pageMain();
@@ -24,5 +29,6 @@ public:
 
 private:
     QPointer<ProfileWidget> main;
+    QPointer<ProfileDataInterface> m_Api;
 };
 #endif // PROFILEAPPLET_H

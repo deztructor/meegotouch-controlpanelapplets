@@ -4,6 +4,7 @@
 #ifndef PROFILEWIDGET_H
 #define PROFILEWIDGET_H
 
+#include <QPointer>
 #include "dcpwidget.h"
 #include "profilebuttons.h"
 #include "profiledatainterface.h"
@@ -16,7 +17,9 @@ class ProfileWidget : public DcpWidget
     Q_OBJECT
 
 public:
-    ProfileWidget (QGraphicsWidget *parent = 0);
+    ProfileWidget (
+            ProfileDataInterface *api,
+            QGraphicsWidget *parent = 0);
     virtual ~ProfileWidget();
 
     QString currentProfile();
@@ -38,8 +41,8 @@ private:
     DuiContainer* createContainer();
 
 private:
+    QPointer<ProfileDataInterface>   m_ProfileIf;
     ProfileButtons                  *m_ProfileButtons;
-    ProfileDataInterface            *m_ProfileIf;
     QHash<int, ProfileContainer*>    m_Containers;
 };
 #endif
