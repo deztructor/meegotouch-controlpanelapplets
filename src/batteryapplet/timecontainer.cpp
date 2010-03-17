@@ -36,34 +36,35 @@ TimeContainer::setText (
 
 void TimeContainer::updateTimeLabel (const QString &value)
 {
-    //% "%a hours %b minutes"
-    const QString TimeValueText = qtTrId ("qtn_ener_remtime");
-
     if (m_TimeLabel == NULL)
         return;
 
-    if (value.toInt() == 0) {// a text, not minute value
-        m_TimeLabel->setText(value);
+    if (value.toInt() == 0) { // a text, not minute value
+        m_TimeLabel->setText (value);
         return;
     }
-    int minutes = value.toInt();
 
-    const QString minutesPrefix =
-        TimeValueText.section("%b", 1, 1).trimmed();
-    const QString hoursPrefix =
-        (TimeValueText.section("%b", 0, 0)).section("%a", 1, 1).trimmed();
+    int minutes = value.toInt();
 
     QString time;
 
-    if (minutes < 60)
-        time = QString("%1 %2").arg(minutes).arg(minutesPrefix);
-    else {
-        QVariant minsVar = minutes % 60;
-        minsVar = (minsVar.toInt() == 0) ? "00" : minsVar;
-        time = QString("%1:%2 %3").arg(minutes / 60).arg(minsVar.toString()).arg(hoursPrefix);
+    if (minutes < 15)
+    {
+        //% "Less than 15 minutes"
+        time = qtTrId ("qtn_ener_stest_15min");
+    }
+    else if (minutes < 60)
+    {
+        //% "Less than an hour"
+        time = qtTrId ("qtn_ener_stest_1h");
+    }
+    else
+    {
+        //% "%1 hours"
+        time = qtTrId ("qtn_ener_stest_hours").arg (minutes / 60);
     }
     
-    m_TimeLabel->setText(time);
+    m_TimeLabel->setText (time);
 }
 
 void TimeContainer::setLayout()
