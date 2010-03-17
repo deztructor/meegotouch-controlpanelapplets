@@ -3,6 +3,7 @@
 #include "profileapplet.h"
 #include "profilewidget.h"
 #include "profilebrief.h"
+#include "profiledatainterface.h"
 
 #include "dcpprofile.h"
 #include "dcpwidget.h"
@@ -17,8 +18,19 @@ Q_EXPORT_PLUGIN2(profileapplet, ProfileApplet)
 
 const QString cssDir = "/usr/share/themes/base/dui/duicontrolpanel/style/";
 
+ProfileApplet::ProfileApplet() :
+    m_Api (new ProfileDataInterface)
+{
+}
 
-void ProfileApplet::init()
+ProfileApplet::~ProfileApplet() 
+{
+    delete m_Api;
+}
+
+
+void 
+ProfileApplet::init()
 {
     DuiTheme::loadCSS(cssDir + "profileapplet.css");
 }
@@ -34,7 +46,7 @@ ProfileApplet::constructWidget (
 DcpWidget* ProfileApplet::pageMain()
 {
     if (main == NULL)
-        main = new ProfileWidget();
+        main = new ProfileWidget(m_Api);
 
     return main;
 }
@@ -55,8 +67,10 @@ QVector<DuiAction*> ProfileApplet::viewMenuItems()
     return vector;
 }
 
-DcpBrief* ProfileApplet::constructBrief(int partId)
+DcpBrief *
+ProfileApplet::constructBrief (
+        int partId)
 {
-    Q_UNUSED(partId);
-    return new ProfileBrief();
+    Q_UNUSED (partId);
+    return new ProfileBrief (m_Api);
 }

@@ -20,10 +20,12 @@
 #define DEBUG
 #include "../debug.h"
 
-ProfileWidget::ProfileWidget(QGraphicsWidget *parent) :
+ProfileWidget::ProfileWidget (
+        ProfileDataInterface *api,
+        QGraphicsWidget      *parent) :
     DcpWidget (parent),
-    m_ProfileButtons (0),
-    m_ProfileIf (0)
+    m_ProfileIf (api),
+    m_ProfileButtons (0)
 {
     SYS_DEBUG ("");
     initWidget ();
@@ -31,17 +33,12 @@ ProfileWidget::ProfileWidget(QGraphicsWidget *parent) :
 
 ProfileWidget::~ProfileWidget ()
 {
-    delete m_ProfileIf;
-    m_ProfileIf = NULL;
 }
 
 
 void 
 ProfileWidget::initWidget ()
 {
-    //create dbus if
-    m_ProfileIf = new ProfileDataInterface();
-
     // catch profile If actions
     connect (m_ProfileIf, SIGNAL(currentProfile(int)), 
             this, SLOT(setProfile(int)));

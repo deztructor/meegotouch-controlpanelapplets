@@ -4,14 +4,29 @@
 #include "dcpwidgettypes.h"
 #include "profiledatainterface.h"
 
-ProfileBrief::ProfileBrief()
+#define DEBUG
+#include "../debug.h"
+
+ProfileBrief::ProfileBrief (
+        ProfileDataInterface *profileDataInterface) :
+    m_Api (profileDataInterface)
 {
+    connect (m_Api, SIGNAL(currentProfile(int)),
+            this, SLOT(currentProfileChanged(int)));
 }
 
-QString ProfileBrief::valueText() const
+void 
+ProfileBrief::currentProfileChanged (
+        int id)
 {
-    ProfileDataInterface profileIf;
-    return profileIf.getCurrentProfileName();
+    SYS_DEBUG ("Emitting valuesChanged()");
+    emit valuesChanged ();
+}
+
+QString 
+ProfileBrief::valueText() const
+{
+    return m_Api->getCurrentProfileName();
 }
 
 
