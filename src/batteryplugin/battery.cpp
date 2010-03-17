@@ -34,7 +34,8 @@ Battery::Battery (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
         batteryImage (NULL),
         container (NULL),
         PSMode (false),
-        last_values (0)
+        last_values (0),
+        charging (false)
 {
     DuiApplication  *App = DuiApplication::instance ();
 
@@ -106,6 +107,22 @@ Battery::~Battery()
 }
 
 void
+Battery::charge_start (int rate)
+{
+    charging = true;
+
+    // FIXME: TODO set time label text to charging
+}
+
+void
+Battery::charge_stop ()
+{
+    charging = false;
+
+    // FIXME: TODO update time label
+}
+
+void
 Battery::updateModeLabel (bool toggle)
 {
     PSMode = toggle;
@@ -145,14 +162,22 @@ Battery::timeValue (int minutes)
 
     QString time;
 
-    if (minutes < 60)
-        time = QString ("%1%2").arg (minutes).arg (minutesPrefix);
-    else {
-        QVariant minsVar = minutes % 60;
-        minsVar = (minsVar.toInt() == 0) ? "00" : minsVar;
-        time = QString ("%1:%2%3").arg (minutes / 60).arg (
-                        minsVar.toString ()).arg (hoursPrefix);
+    if (minutes < 15)
+    {
+        //% "Battery low"
+        time = qtTrId ("qtn_ener_battlow");
     }
+    else if (minutes < 60)
+    {
+        //% "Less than an hour"
+        time = qtTrId ("qtn_ener_stest_1h");
+    }
+    else
+    {
+        //% "%1 hours"
+        time = qtTrId ("qtn_ener_stest_hours").arg (minutes / 60);
+    }
+
     return time;
 }
 

@@ -25,6 +25,9 @@ private slots:
     void showBatteryModificationPage ();
     void loadTranslation ();
 
+    void charge_start (int rate);
+    void charge_stop  ();
+
 private: //methods
     QString timeValue (int minutes);
 
@@ -38,6 +41,7 @@ private: //attributes
     DuiContainer                    *container;
     bool                             PSMode;
     QStringList                     *last_values;
+    bool                             charging;
 };
 
 #endif // BATTERY_H

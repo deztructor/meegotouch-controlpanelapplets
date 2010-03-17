@@ -144,9 +144,9 @@ DisplayWidget::update_onoff_label (bool value)
 {
     QString text = value ?
         //% "On"
-        qtTrId ("qtn_comm_on") :
+        qtTrId ("qtn_comm_settings_on") :
         //% "Off"
-        qtTrId ("qtn_comm_off");
+        qtTrId ("qtn_comm_settings_off");
 
     m_OnOffLabel->setText (text);
 }
