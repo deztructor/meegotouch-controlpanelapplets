@@ -1,3 +1,9 @@
+systemui-applets (0.12.5~unreleased) harmattan; urgency=low
+
+  * PREPARE
+
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 18 Mar 2010 09:38:27 +0100
+
 systemui-applets (0.12.4) harmattan; urgency=low
 
   * Fixes: NB#159842 - Sliders handle in battery applet covers is not hiding 
