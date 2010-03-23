@@ -139,3 +139,19 @@ ProfileButtons::setLayout ()
 
     centralWidget()->setLayout (layout);
 }
+
+void
+ProfileButtons::retranslate (QMap<int, QString> data)
+{
+    if (m_Buttons == 0)
+        return;
+
+    QList<int> ids = data.keys();
+
+    for (int i = 0; i < data.count(); ++i)
+    {
+        int id = ids.at (i);
+        m_Buttons->button (id)->setText (data.value (id));
+    }
+}
+

@@ -236,6 +236,8 @@ ProfileWidget::setVibration (
 void
 ProfileWidget::retranslateUi ()
 {
+    SYS_DEBUG ("");
+
     if (m_currentHeader != 0)
     {
         //% "Current profile"
@@ -247,5 +249,21 @@ ProfileWidget::retranslateUi ()
         //% "Profile Settings"
         m_settingsHeader->setText (qtTrId ("qtn_prof_settings"));
     }
+
+    QMap<int, QString> map;
+    // Re-load the profiles-data [with the new translations]
+    QList<ProfileDataInterface::ProfileData> l = m_ProfileIf->getProfilesData();
+
+    for (int i = 0; i < l.count(); ++i) {
+        ProfileDataInterface::ProfileData d = l.at (i);
+
+        // Update the containers title field
+        m_Containers.value (d.profileId)->setTitle (d.profileName);
+
+        map.insert(d.profileId, d.profileName);
+    }
+
+    // Re-translate the profile buttons
+    m_ProfileButtons->retranslate (map);
 }
 

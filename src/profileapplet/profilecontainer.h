@@ -31,6 +31,7 @@ public:
     void setLevel (int value);
     void setVibration (bool enabled);
     int id ();
+    void retranslateUi ();
 
 signals:
     void sliderValueChanged (int newValue);
@@ -48,6 +49,7 @@ private:
     DuiButton         *m_VibrationSwitch;
     DuiLabel          *m_VibrationLabel;
     DuiLabel          *m_OnOffLabel;
+    DuiLabel          *m_NoRingLabel;
     DuiImageWidget    *m_Img;
     int                m_Level;
     const int          m_ProfileId;
