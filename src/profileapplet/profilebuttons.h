@@ -18,15 +18,13 @@ public:
     void init (QMap<int, QString> data, int currentId);
     QString selectedProfileName();
 
+    void retranslate (QMap<int, QString> data);
+
 public slots:
     bool selectProfile(int id);
 
 signals:
     void profileSelected(int id);
-
-// Is this a a leftover definition? It is not implemented!
-//private slots:
-//    void buttonToggled(bool checked);
 
 private:
     void addButton(QString name, int id, bool checked);

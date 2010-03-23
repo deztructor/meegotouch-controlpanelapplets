@@ -15,7 +15,7 @@
 #include <DuiSeparator>
 #include <QDebug>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 namespace ProfileApplet
@@ -32,6 +32,7 @@ ProfileContainer::ProfileContainer (
         DuiWidget     *parent) :
     DuiContainer (title, parent),
     m_Slider (0),
+    m_NoRingLabel (0),
     m_Img (0),
     m_Level (-2),
     m_ProfileId (id)
@@ -114,7 +115,7 @@ ProfileContainer::setLayout ()
     } else {
         m_Img = new DuiImageWidget ("icon-m-common-volume-off");
         //% "No ringing"
-        item = new DuiLabel (qtTrId ("qtn_prof_noring"));
+        item = m_NoRingLabel = new DuiLabel (qtTrId ("qtn_prof_noring"));
     }
     m_Img->setObjectName ("speakerIcon");
 
@@ -237,3 +238,22 @@ ProfileContainer::id ()
 {
     return m_ProfileId;
 }
+
+void
+ProfileContainer::retranslateUi ()
+{
+    SYS_DEBUG ("");
+
+    // This reloads the on/off label translation
+    setVibration (m_VibrationSwitch->isChecked ());
+
+    //% "Vibration"
+    m_VibrationLabel->setText (qtTrId ("qtn_prof_vibration"));
+
+    if (m_NoRingLabel) // Its an optional item
+    {
+        //% "No ringing"
+        m_NoRingLabel->setText (qtTrId ("qtn_prof_noring"));
+    }
+}
+

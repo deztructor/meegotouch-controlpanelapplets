@@ -8,7 +8,7 @@
 #include <QStringList>
 #include <QList>
 
-//#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 //#define USE_TEST_DATA
