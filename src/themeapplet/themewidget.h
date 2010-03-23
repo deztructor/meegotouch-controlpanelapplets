@@ -7,6 +7,8 @@
 #include "dcpwidget.h"
 #include "themebusinesslogic.h"
 
+class DuiContainer;
+
 class ThemeWidget : public DcpWidget
 {
     Q_OBJECT
@@ -17,8 +19,20 @@ public:
             QGraphicsWidget    *parent = 0);
     ~ThemeWidget ();
 
+    void retranslateUi ();
+
+    typedef enum {
+        ThemeLocal,
+        ThemeOvi
+    } ThemeCategoryId;
+
 private:
-    QPointer<ThemeBusinessLogic> m_ThemeBusinessLogic;
+    void createWidgets ();
+    DuiContainer *createContainer (ThemeWidget::ThemeCategoryId category);
+    
+    QPointer<ThemeBusinessLogic>  m_ThemeBusinessLogic;
+    DuiContainer                 *m_LocalContainer;
+    DuiContainer                 *m_OviContainer;
 };
 
 #endif
