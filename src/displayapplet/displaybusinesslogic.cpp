@@ -1,15 +1,14 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 #include "displaybusinesslogic.h"
+#include <DuiGConfItem>
 
-#include <QDebug>
-
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 /*
     TODO:
-    1) Make sure the screen lights values and default index are correct
+    1) Make sure the screen light default index are correct
 
 */
 
@@ -17,17 +16,24 @@ using namespace Maemo;
 
 static int TIMEGAP = 5; // time gap between blanking and dimming
 
+#define POSSIBLE_DIM_TIMEOUTS \
+    "/system/osso/dsm/display/possible_display_dim_timeouts"
+
 DisplayBusinessLogic::DisplayBusinessLogic (
         QObject* parent) :
     QObject (parent),
-    m_Display (new QmDisplayState())
+    m_Display (new QmDisplayState()),
+    m_possibleDimValues (0)
 {
+    m_possibleDimValues = new DuiGConfItem (POSSIBLE_DIM_TIMEOUTS);
 }
 
-DisplayBusinessLogic::~DisplayBusinessLogic()
+DisplayBusinessLogic::~DisplayBusinessLogic ()
 {
     delete m_Display;
     m_Display = 0;
+    delete m_possibleDimValues;
+    m_possibleDimValues = 0;
 }
 
 void
@@ -85,7 +91,26 @@ QList<int>
 DisplayBusinessLogic::screenLightsValues ()
 {
     QList<int> values;
-    values << 10 << 30 << 60 << 120 << 300;
+
+    QList<QVariant> gconf_values =
+        m_possibleDimValues->value().toList ();
+
+    if (gconf_values.isEmpty ())
+    {
+        values << 10 << 30 << 60 << 120 << 300;
+        SYS_DEBUG ("GConf doesn't have possible dim "
+                   "values, using the default list");
+    }
+    else
+    {
+        SYS_DEBUG ("Possible dim values from GConf:");
+        foreach (QVariant i, gconf_values)
+        {
+            values << i.toInt ();
+            SYS_DEBUG ("%d", i.toInt ());
+        }
+    }
+
     return values;
 }
 

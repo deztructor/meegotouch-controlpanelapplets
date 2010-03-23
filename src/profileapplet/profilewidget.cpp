@@ -6,7 +6,6 @@
 #include "dcpprofile.h"
 #include "profilebuttons.h"
 
-#include <QDebug>
 #include <QGraphicsLinearLayout>
 
 #include <DuiButton>
@@ -25,7 +24,9 @@ ProfileWidget::ProfileWidget (
         QGraphicsWidget      *parent) :
     DcpWidget (parent),
     m_ProfileIf (api),
-    m_ProfileButtons (0)
+    m_ProfileButtons (0),
+    m_currentHeader (0),
+    m_settingsHeader (0)
 {
     SYS_DEBUG ("");
     initWidget ();
@@ -103,25 +104,25 @@ ProfileWidget::createContainer ()
     DuiLayout *layout = new DuiLayout();
 
     //% "Current profile"
-    DuiLabel* currentHeader = new DuiLabel (qtTrId ("qtn_prof_currprof"));
+    m_currentHeader = new DuiLabel (qtTrId ("qtn_prof_currprof"));
     //% "Profile Settings"
-    DuiLabel* settingsHeader = new DuiLabel (qtTrId ("qtn_prof_settings"));
+    m_settingsHeader = new DuiLabel (qtTrId ("qtn_prof_settings"));
 
     DuiLinearLayoutPolicy *portraitPolicy = 
         new DuiLinearLayoutPolicy(layout, Qt::Vertical);
-    portraitPolicy->addItem (currentHeader, Qt::AlignLeft);
+    portraitPolicy->addItem (m_currentHeader, Qt::AlignLeft);
     portraitPolicy->addItem (m_ProfileButtons, Qt::AlignCenter);
-    portraitPolicy->addItem (settingsHeader, Qt::AlignLeft);
+    portraitPolicy->addItem (m_settingsHeader, Qt::AlignLeft);
 
     DuiGridLayoutPolicy *landscapePolicy = new DuiGridLayoutPolicy (layout);
-    landscapePolicy->addItem(currentHeader, 0, 0, 1, 2);
+    landscapePolicy->addItem(m_currentHeader, 0, 0, 1, 2);
     landscapePolicy->addItem(m_ProfileButtons, 1, 0, 1, 2, Qt::AlignCenter);
-    landscapePolicy->addItem(settingsHeader, 2, 0, 1, 2);
+    landscapePolicy->addItem(m_settingsHeader, 2, 0, 1, 2);
 
     int row = 3;
     int col = 0;
     for (int i = 0; i < m_Containers.count(); ++i) {
-        qDebug() << Q_FUNC_INFO << "row:" << row << "col:" << col;
+        SYS_DEBUG ("row: %d, col: %d", row, col);
         ProfileContainer* cont = m_Containers.value(i);
         portraitPolicy->addItem(cont);
         landscapePolicy->addItem(cont, row, col);
@@ -146,10 +147,13 @@ void
 ProfileWidget::sliderValueChanged (
         int index)
 {
-    ProfileContainer* profile = static_cast<ProfileContainer*>(this->sender());
-    qDebug() << Q_FUNC_INFO << "for" << profile->title() << ":" << index;
+    ProfileContainer *profile =
+        static_cast<ProfileContainer*> (this->sender ());
 
-    m_ProfileIf->setVolumeLevel (profile->id(), index);
+    SYS_DEBUG ("valuechanged for %s: %d",
+               SYS_STR (profile->title ()), index);
+
+    m_ProfileIf->setVolumeLevel (profile->id (), index);
 }
 
 void 
@@ -158,10 +162,13 @@ ProfileWidget::vibrationChanged (
 {
     //NOTE: DuiButton->isChecked() method returns the state before the 
     // press at this point
-    ProfileContainer* profile = static_cast<ProfileContainer*>(this->sender());
-    qDebug() << Q_FUNC_INFO << "for" << profile->title() << ":" << enabled;
+    ProfileContainer *profile =
+        static_cast<ProfileContainer*> (this->sender ());
 
-    m_ProfileIf->setVibration (profile->id(), enabled);
+    SYS_DEBUG ("valuechanged for %s: %d",
+               SYS_STR (profile->title ()), index);
+
+    m_ProfileIf->setVibration (profile->id (), enabled);
 }
 
 QString 
@@ -182,7 +189,7 @@ void
 ProfileWidget::profileSelected (
         int id)
 {
-    qDebug() << Q_FUNC_INFO << ":" << id;
+    SYS_DEBUG ("id = %d", id);
 
     m_ProfileIf->setProfile (id);
 }
@@ -191,7 +198,7 @@ void
 ProfileWidget::setProfile (
         int profileId)
 {
-    qDebug() << Q_FUNC_INFO << ":" << profileId;
+    SYS_DEBUG ("profileId = %d", profileId);
 
     m_ProfileButtons->selectProfile (profileId);
 }
@@ -201,12 +208,14 @@ ProfileWidget::setVolume (
         int profileId, 
         int level)
 {
-    qDebug() << Q_FUNC_INFO << "for profile" << profileId << ":" << level;
+    SYS_DEBUG ("set volume for profile: %d, level = %d",
+               profileId, level);
 
     ProfileContainer *cont = m_Containers.value (profileId);
-    if (cont) {
-        cont->setLevel(level);
-    }
+
+    if (cont)
+        cont->setLevel (level);
+
 }
 
 void 
@@ -214,11 +223,29 @@ ProfileWidget::setVibration (
         int profileId, 
         bool enabled)
 {
-    qDebug() << Q_FUNC_INFO << "for profile" << profileId << ":" << enabled;
+    SYS_DEBUG ("set vibration for profile: %d, enabled: %s",
+               profileId, SYS_BOOL (enabled));
 
-    ProfileContainer *cont = m_Containers.value(profileId);
-    if (cont) {
+    ProfileContainer *cont = m_Containers.value (profileId);
+
+    if (cont)
         cont->setVibration (enabled);
+
+}
+
+void
+ProfileWidget::retranslateUi ()
+{
+    if (m_currentHeader != 0)
+    {
+        //% "Current profile"
+        m_currentHeader->setText (qtTrId ("qtn_prof_currprof"));
+    }
+
+    if (m_settingsHeader != 0)
+    {
+        //% "Profile Settings"
+        m_settingsHeader->setText (qtTrId ("qtn_prof_settings"));
     }
 }
 
