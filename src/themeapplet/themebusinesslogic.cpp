@@ -40,7 +40,8 @@ ThemeBusinessLogic::availableThemes () const
 
     QStringList retval = theme->findAvailableThemes();
     #ifdef USE_TEST_DATA
-    retval << 
+    retval <<
+        "devel" <<
         "Test theme 1" <<
         "Test theme 2" <<
         "Test theme 3" <<
@@ -60,6 +61,8 @@ ThemeBusinessLogic::changeTheme (
     Q_ASSERT (theme != 0);
 
     theme->changeTheme(themeId);
+
+    emit themeChanged (themeId);
 }
 
 

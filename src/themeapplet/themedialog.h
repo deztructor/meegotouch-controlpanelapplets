@@ -3,6 +3,7 @@
 #ifndef THEMEDIALOG_H
 #define THEMEDIALOG_H
 
+#include <QObject>
 #include <DuiDialog>
 #include <QPointer>
 
@@ -18,6 +19,11 @@ public:
             ThemeBusinessLogic *themeBusinessLogic,
             const QString      &themeName);
     void showDialog ();
+
+private slots:
+    void acceptClicked ();
+    void cancelClicked ();
+    void themeChanged (QString themeId);
 
 private:
     QPointer<ThemeBusinessLogic> m_ThemeBusinessLogic;
