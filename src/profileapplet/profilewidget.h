@@ -9,6 +9,7 @@
 #include "profilebuttons.h"
 #include "profiledatainterface.h"
 
+class DuiLabel;
 class DuiContainer;
 class ProfileContainer;
 
@@ -22,6 +23,7 @@ public:
             QGraphicsWidget *parent = 0);
     virtual ~ProfileWidget();
 
+    void retranslateUi ();
     QString currentProfile();
 
 protected:
@@ -44,5 +46,7 @@ private:
     QPointer<ProfileDataInterface>   m_ProfileIf;
     ProfileButtons                  *m_ProfileButtons;
     QHash<int, ProfileContainer*>    m_Containers;
+    DuiLabel                        *m_currentHeader;
+    DuiLabel                        *m_settingsHeader;
 };
 #endif

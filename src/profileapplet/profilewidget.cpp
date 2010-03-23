@@ -25,7 +25,9 @@ ProfileWidget::ProfileWidget (
         QGraphicsWidget      *parent) :
     DcpWidget (parent),
     m_ProfileIf (api),
-    m_ProfileButtons (0)
+    m_ProfileButtons (0),
+    m_currentHeader (0),
+    m_settingsHeader (0)
 {
     SYS_DEBUG ("");
     initWidget ();
@@ -103,20 +105,20 @@ ProfileWidget::createContainer ()
     DuiLayout *layout = new DuiLayout();
 
     //% "Current profile"
-    DuiLabel* currentHeader = new DuiLabel (qtTrId ("qtn_prof_currprof"));
+    m_currentHeader = new DuiLabel (qtTrId ("qtn_prof_currprof"));
     //% "Profile Settings"
-    DuiLabel* settingsHeader = new DuiLabel (qtTrId ("qtn_prof_settings"));
+    m_settingsHeader = new DuiLabel (qtTrId ("qtn_prof_settings"));
 
     DuiLinearLayoutPolicy *portraitPolicy = 
         new DuiLinearLayoutPolicy(layout, Qt::Vertical);
-    portraitPolicy->addItem (currentHeader, Qt::AlignLeft);
+    portraitPolicy->addItem (m_currentHeader, Qt::AlignLeft);
     portraitPolicy->addItem (m_ProfileButtons, Qt::AlignCenter);
-    portraitPolicy->addItem (settingsHeader, Qt::AlignLeft);
+    portraitPolicy->addItem (m_settingsHeader, Qt::AlignLeft);
 
     DuiGridLayoutPolicy *landscapePolicy = new DuiGridLayoutPolicy (layout);
-    landscapePolicy->addItem(currentHeader, 0, 0, 1, 2);
+    landscapePolicy->addItem(m_currentHeader, 0, 0, 1, 2);
     landscapePolicy->addItem(m_ProfileButtons, 1, 0, 1, 2, Qt::AlignCenter);
-    landscapePolicy->addItem(settingsHeader, 2, 0, 1, 2);
+    landscapePolicy->addItem(m_settingsHeader, 2, 0, 1, 2);
 
     int row = 3;
     int col = 0;
@@ -219,6 +221,22 @@ ProfileWidget::setVibration (
     ProfileContainer *cont = m_Containers.value(profileId);
     if (cont) {
         cont->setVibration (enabled);
+    }
+}
+
+void
+ProfileWidget::retranslateUi ()
+{
+    if (m_currentHeader != 0)
+    {
+        //% "Current profile"
+        m_currentHeader->setText (qtTrId ("qtn_prof_currprof"));
+    }
+
+    if (m_settingsHeader != 0)
+    {
+        //% "Profile Settings"
+        m_settingsHeader->setText (qtTrId ("qtn_prof_settings"));
     }
 }
 
