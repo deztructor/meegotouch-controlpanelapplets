@@ -6,8 +6,7 @@ CONFIG += plugin \
           gui \
           dui \
           duistatusindicatormenu \
-          silent \
-          link_pkgconfig
+          silent
 
 QT += dbus
 
@@ -24,14 +23,9 @@ SOURCES = volumebarplugin.cpp \
           volumebar.cpp \
           ../debug.cpp
 
-PKGCONFIG = libpulse
-
 TARGET = $$qtLibraryTarget(volume)
 DESTDIR = lib
 target.path += /usr/lib/duistatusindicatormenu/plugins
 
-css.files = volumebarplugin.css
-css.path += /usr/share/duistatusindicatormenu/themes/style/
+INSTALLS += target
 
-INSTALLS += target \
-            css
