@@ -6,6 +6,7 @@
 #include <QObject>
 
 class QString;
+class QStringList;
 
 class ThemeBusinessLogic : public QObject
 {
@@ -13,6 +14,9 @@ class ThemeBusinessLogic : public QObject
 
 public:
     QString currentThemeName () const;
+    QStringList availableThemes () const;
+    void changeTheme (const QString &themeId);
+
 };
 
 #endif
