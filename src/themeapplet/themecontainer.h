@@ -3,17 +3,18 @@
 #ifndef THEMECONTAINER_H
 #define THEMECONTAINER_H
 
-#include <DuiLayout>
+#include <DuiWidget>
 #include <QObject>
 
 class QString;
 class DuiWidget;
 class DuiLabel;
+class QGraphicsSceneMouseEvent;
 
 /*!
  * A simple layout type widget that represents one theme.
  */
-class ThemeContainer: public QObject, public DuiLayout
+class ThemeContainer: public DuiWidget 
 {
     Q_OBJECT
 
@@ -22,6 +23,17 @@ public:
             const QString &themeName,
             DuiWidget     *parent = 0);
     ~ThemeContainer ();
+
+    virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
+    virtual void mouseReleaseEvent (QGraphicsSceneMouseEvent *event);
+
+signals:
+    /*!
+     * \param themeName The name of the represented theme.
+     *
+     * Emitted when the user clicks on the widget.
+     */
+    void activated (QString themeName);
 
 private:
     void createWidgets ();
