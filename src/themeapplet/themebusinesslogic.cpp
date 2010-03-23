@@ -52,11 +52,14 @@ ThemeBusinessLogic::availableThemes () const
 
 void
 ThemeBusinessLogic::changeTheme (
-        const QString &themeId)
+        QString themeId)
 {
+    SYS_DEBUG ("Activating theme '%s'", SYS_STR(themeId));
     DuiTheme *theme = DuiTheme::instance();
 
     Q_ASSERT (theme != 0);
 
     theme->changeTheme(themeId);
 }
+
+

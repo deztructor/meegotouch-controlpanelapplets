@@ -12,12 +12,20 @@ class ThemeBusinessLogic : public QObject
 {
     Q_OBJECT
 
+public slots:
+    /*!
+     * Sets the current theme to the theme with the given id.
+     */
+    void changeTheme (QString themeId);
+
+signals:
+    void themeChanged (QString themeId);
+
 public:
     ThemeBusinessLogic ();
     ~ThemeBusinessLogic ();
     QString currentThemeName () const;
     QStringList availableThemes () const;
-    void changeTheme (const QString &themeId);
 };
 
 #endif

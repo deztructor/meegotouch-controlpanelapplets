@@ -3,6 +3,8 @@
 
 #include "themewidget.h"
 #include "themecontainer.h"
+#include "themedialog.h"
+
 #include <QGraphicsLinearLayout>
 #include <DuiLayout>
 #include <DuiGridLayoutPolicy>
@@ -106,6 +108,24 @@ ThemeWidget::readLocalThemes ()
         SYS_DEBUG ("Theme name[%d] = %s", n, SYS_STR(themeName));
         themeContainer = new ThemeContainer (themeName);
         m_LocalLayoutPolicy->addItem (themeContainer, x, y);
+
+        /*
+         * FIXME: This should be some pre-select so we can show the dialog.
+         */
+        connect (themeContainer, SIGNAL(activated(QString)),
+                this, SLOT(themeActivated(QString)));
         ++n;
     }
 }
+
+void 
+ThemeWidget::themeActivated (
+        QString themeName)
+{
+    ThemeDialog *dialog;
+    SYS_DEBUG ("Theme '%s' activated", SYS_STR(themeName));
+
+    dialog = new ThemeDialog (m_ThemeBusinessLogic, themeName);
+    dialog->showDialog ();
+}
+
