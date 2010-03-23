@@ -26,7 +26,7 @@ public:
     void PSMAutoValueRequired ();
     void batteryChargingStateRequired ();
     void PSMThresholdValuesRequired ();
-    void setPSMValue (bool toggle);
+    void setPSMValue (bool psmValue);
 
 public slots:
     void remainingTimeValuesRequired ();

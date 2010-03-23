@@ -117,13 +117,17 @@ BatteryDBusInterface::setPSMThresholdValue (const QString &value)
     m_DbusIf->call (QDBus::NoBlock, QString ("setPSMThresholdValue"), value);
 }
 
+/*!
+ * Calls the sysuid through the DBus to turn on/off the power save mode. The
+ * sysuid will notify us through the DBus about the PSM activation/deactivation.
+ */
 void
 BatteryDBusInterface::setPSMValue (
-        bool toggle)
+        bool psmValue)
 {
-    SYS_DEBUG ("");
+    SYS_DEBUG ("*** PSMvalue = %s", psmValue ? "true" : "false");
 
-    m_DbusIf->call (QDBus::NoBlock, QString ("setPSMValue"), toggle);
+    m_DbusIf->call (QDBus::NoBlock, QString ("setPSMValue"), psmValue);
 
     QDBusError error = m_DbusIf->lastError();
     if (error.isValid()) {
