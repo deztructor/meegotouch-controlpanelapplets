@@ -10,6 +10,8 @@
 #define DEBUG
 #include "../debug.h"
 
+#define USE_TEST_DATA
+
 ThemeBusinessLogic::ThemeBusinessLogic ()
 {
 }
@@ -36,7 +38,16 @@ ThemeBusinessLogic::availableThemes () const
 
     Q_ASSERT (theme != 0);
 
-    return theme->findAvailableThemes();
+    QStringList retval = theme->findAvailableThemes();
+    #ifdef USE_TEST_DATA
+    retval << 
+        "Test theme 1" <<
+        "Test theme 2" <<
+        "Test theme 3" <<
+        "Test theme 4";
+    #endif
+
+    return retval;
 }
 
 void

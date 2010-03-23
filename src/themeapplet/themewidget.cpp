@@ -2,6 +2,7 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 
 #include "themewidget.h"
+#include "themecontainer.h"
 #include <QGraphicsLinearLayout>
 #include <DuiLayout>
 #include <DuiGridLayoutPolicy>
@@ -9,6 +10,8 @@
 
 #define DEBUG
 #include "../debug.h"
+
+static const int MaxColumns = 2;
 
 ThemeWidget::ThemeWidget (
         ThemeBusinessLogic *themeBusinessLogic, 
@@ -18,6 +21,7 @@ ThemeWidget::ThemeWidget (
 {
     createWidgets ();
     retranslateUi ();
+    readLocalThemes ();
 }
 
 ThemeWidget::~ThemeWidget ()
@@ -45,14 +49,23 @@ DuiContainer *
 ThemeWidget::createContainer (
         ThemeWidget::ThemeCategoryId category)
 {
-    Q_UNUSED (category);
+    DuiGridLayoutPolicy *policy;
     DuiLayout *layout = new DuiLayout();
     
-    DuiGridLayoutPolicy *policy = new DuiGridLayoutPolicy (layout);
+    policy = new DuiGridLayoutPolicy (layout);
     layout->setPolicy (policy);
     
     DuiContainer *container = new DuiContainer ();
     container->centralWidget()->setLayout (layout);
+
+    switch (category) {
+        case ThemeWidget::ThemeLocal:
+            m_LocalLayoutPolicy = policy;
+            break;
+
+        case ThemeWidget::ThemeOvi:
+            m_OviLayoutPolicy = policy;
+    }
 
     return container;
 }
@@ -74,5 +87,25 @@ ThemeWidget::retranslateUi ()
          */
         //% "Ovi"
         m_OviContainer->setTitle (qtTrId ("qtn_themes_ovi"));
+    }
+}
+
+void
+ThemeWidget::readLocalThemes ()
+{
+    Q_ASSERT (m_ThemeBusinessLogic != 0);
+    Q_ASSERT (m_LocalLayoutPolicy != 0);
+
+    QStringList themeNameList = m_ThemeBusinessLogic->availableThemes ();
+    int n = 0;
+    foreach (QString themeName, themeNameList) {
+        ThemeContainer *themeContainer;
+        int x = n / MaxColumns;
+        int y = n % MaxColumns;
+
+        SYS_DEBUG ("Theme name[%d] = %s", n, SYS_STR(themeName));
+        themeContainer = new ThemeContainer (themeName);
+        m_LocalLayoutPolicy->addItem (themeContainer, x, y);
+        ++n;
     }
 }

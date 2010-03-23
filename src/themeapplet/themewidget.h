@@ -8,6 +8,7 @@
 #include "themebusinesslogic.h"
 
 class DuiContainer;
+class DuiGridLayoutPolicy;
 
 class ThemeWidget : public DcpWidget
 {
@@ -29,10 +30,13 @@ public:
 private:
     void createWidgets ();
     DuiContainer *createContainer (ThemeWidget::ThemeCategoryId category);
-    
+    void readLocalThemes ();
+
     QPointer<ThemeBusinessLogic>  m_ThemeBusinessLogic;
     DuiContainer                 *m_LocalContainer;
+    DuiGridLayoutPolicy          *m_LocalLayoutPolicy;
     DuiContainer                 *m_OviContainer;
+    DuiGridLayoutPolicy          *m_OviLayoutPolicy;
 };
 
 #endif
