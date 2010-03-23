@@ -23,10 +23,10 @@ private slots:
     void updateModeLabel (bool toggle);
     void updateTimeLabel (const QStringList &times);
     void showBatteryModificationPage ();
-    void loadTranslation ();
 
     void charge_start (int rate);
-    void charge_stop  ();
+    void charge_done (); // fully charged
+    void charge_stop ();
 
 private: //methods
     QString timeValue (int minutes);
@@ -40,7 +40,7 @@ private: //attributes
     BatteryImage                    *batteryImage;
     DuiContainer                    *container;
     bool                             PSMode;
-    QStringList                     *last_values;
+    int                              last_value;
     bool                             charging;
 };
 

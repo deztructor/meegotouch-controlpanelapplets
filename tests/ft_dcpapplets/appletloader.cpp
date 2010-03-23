@@ -7,6 +7,8 @@
 #include <dcpbrief.h>
 #include <dcpwidget.h>
 
+#define DCP_APPLET_LOADER_DEPRECATED
+
 #ifndef DCP_APPLET_LOADER_DEPRECATED
 #include <dcpappletloader.h>
 #else
@@ -75,7 +77,8 @@ Ft_AppletLoader::DoAppletTest (const char *desktopfile)
     /*
      * Checking if the applet brief is constructed.
      */
-    QVERIFY2(applet->constructBrief (), 
+    DcpBrief *brief = applet->constructBrief ();
+    QVERIFY2(brief, 
 		    "Error when creating brief widget");
 
     /*
@@ -83,8 +86,12 @@ Ft_AppletLoader::DoAppletTest (const char *desktopfile)
      * We should call the getMainWidgetId here, but I'm not sure how it is done
      * after the refactoring.
      */
-    QVERIFY2(applet->constructWidget (0), 
+    DuiWidget *widget = applet->constructWidget (0);
+    QVERIFY2(widget, 
 		    "Error when creating applet's main widget");
+
+    delete widget;
+    delete brief;
 }
 
 void

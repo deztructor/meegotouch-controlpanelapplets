@@ -19,6 +19,8 @@ void
 ProfileBrief::currentProfileChanged (
         int id)
 {
+    Q_UNUSED (id);
+
     SYS_DEBUG ("Emitting valuesChanged()");
     emit valuesChanged ();
 }

@@ -5,8 +5,6 @@
 #undef DEBUG
 #include "../debug.h"
 
-#include <DuiApplication>
-#include <DuiApplicationIfProxy>
 #include <DuiContainer>
 #include <DuiControlPanelIf>
 #include <DuiGridLayoutPolicy>
@@ -20,34 +18,28 @@
 
 #include <QGraphicsLinearLayout>
 
-#define SYSTEMUI_TRANSLATION "systemui-applets"
-
 const QString cssDir = "/usr/share/duistatusindicatormenu/themes/style/";
 
 Battery::Battery (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
                   QGraphicsItem *parent) :
         DuiWidget (parent),
-        dbusIf (NULL),
+        dbusIf (0),
         statusIndicatorMenu (statusIndicatorMenu),
-        modeLabel (NULL),
-        timeLabel (NULL),
-        batteryImage (NULL),
-        container (NULL),
+        modeLabel (0),
+        timeLabel (0),
+        batteryImage (0),
+        container (0),
         PSMode (false),
-        last_values (0),
+        last_value (0),
         charging (false)
 {
-    DuiApplication  *App = DuiApplication::instance ();
+    SYS_DEBUG ("");
 
     DuiTheme::loadCSS (cssDir + "batteryplugin.css");
 
     QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
     setLayout (mainLayout);
     mainLayout->setContentsMargins (0, 0, 0, 0);
-
-    connect (App, SIGNAL (localeSettingsChanged ()),
-             this, SLOT (loadTranslation ()));
-    loadTranslation ();
 
     // init widgets
     modeLabel = new DuiLabel;
@@ -75,18 +67,14 @@ Battery::Battery (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
     layoutPolicy->addItem(timeLabel, 0, 1, 1, 2);
     layoutPolicy->addItem(batteryImage, 1, 0, 1, 2);
 
-#ifdef DEBUG
-    // set some default values (for testing...)
-    updateModeLabel (false);
-    batteryImage->startCharging (50);
-#endif
-
     // get widget values
     dbusIf = new BatteryDBusInterface;
+
     connect (dbusIf, SIGNAL (PSMValueReceived (bool)),
             this, SLOT (updateModeLabel (bool)));
     connect (dbusIf, SIGNAL (remainingTimeValuesReceived (QStringList)),
             this, SLOT (updateTimeLabel (QStringList)));
+
     connect (dbusIf, SIGNAL (batteryBarValueReceived (int)),
              batteryImage, SLOT (updateBatteryLevel (int)));
     connect (dbusIf, SIGNAL (batteryCharging (int)),
@@ -94,24 +82,47 @@ Battery::Battery (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
     connect (dbusIf, SIGNAL (batteryNotCharging ()),
              batteryImage, SLOT (stopCharging ()));
 
+    connect (dbusIf, SIGNAL (batteryCharging (int)),
+             this, SLOT (charge_start (int)));
+    connect (dbusIf, SIGNAL (batteryNotCharging ()),
+             this, SLOT (charge_stop ()));
+    connect (dbusIf, SIGNAL (batteryFullyCharged ()),
+             this, SLOT (charge_done ()));
+
+
     dbusIf->PSMValueRequired ();
     dbusIf->remainingTimeValuesRequired ();
     dbusIf->batteryBarValueRequired ();
     dbusIf->batteryChargingStateRequired ();
+
+    SYS_DEBUG ("");
 }
 
 Battery::~Battery()
 {
     delete dbusIf;
-    dbusIf = NULL;
+    dbusIf = 0;
 }
 
 void
 Battery::charge_start (int rate)
 {
+    Q_UNUSED (rate);
+
     charging = true;
 
-    // FIXME: TODO set time label text to charging
+    //% "Charging"
+    timeLabel->setText (qtTrId ("qtn_ener_charging"));
+}
+
+void
+Battery::charge_done ()
+{
+    if (charging == true)
+    {
+        //% "Fully charged"
+        timeLabel->setText (qtTrId ("qtn_ener_fullchar"));
+    }
 }
 
 void
@@ -119,12 +130,14 @@ Battery::charge_stop ()
 {
     charging = false;
 
-    // FIXME: TODO update time label
+    timeLabel->setText (timeValue (last_value));
 }
 
 void
 Battery::updateModeLabel (bool toggle)
 {
+    SYS_DEBUG ("");
+
     PSMode = toggle;
 
     modeLabel->setText ((toggle ?
@@ -138,9 +151,14 @@ Battery::updateModeLabel (bool toggle)
 void
 Battery::updateTimeLabel (const QStringList &times)
 {
-    if (last_values != 0)
-        delete last_values;
-    last_values = new QStringList (times);
+    SYS_DEBUG ("");
+
+    if (times.count () > 0 && times.at (1).toInt () != 0)
+        last_value = times.at (1).toInt ();
+
+    // Charging text should be there, not the time...
+    if (charging == true)
+        return;
 
     if (times.size () != 2)
         return;
@@ -154,11 +172,7 @@ Battery::updateTimeLabel (const QStringList &times)
 QString
 Battery::timeValue (int minutes)
 {
-    //% "%a hours %b minutes"
-    const QString TimeValueText = qtTrId ("qtn_ener_remtime");
-    const QString minutesPrefix = TimeValueText.section ("%b", 1, 1).trimmed ();
-    const QString hoursPrefix =
-        (TimeValueText.section ("%b", 0, 0)).section ("%a", 1, 1).trimmed ();
+    SYS_DEBUG ("minutes = %d", minutes);
 
     QString time;
 
@@ -193,34 +207,22 @@ Battery::showBatteryModificationPage ()
 }
 
 void
-Battery::loadTranslation ()
-{
-    static bool running = false;
-    SYS_DEBUG ("");
-
-    if (running == true)
-        return;
-    running = true;
-
-    DuiGConfItem    langItem ("/Dui/i18n/Language");
-    DuiLocale       locale (langItem.value ().toString ());
-
-    locale.installTrCatalog (SYSTEMUI_TRANSLATION ".qm");
-    locale.installTrCatalog (SYSTEMUI_TRANSLATION);
-    DuiLocale::setDefault (locale);
-
-    running = false;
-}
-
-void
 Battery::retranslateUi ()
 {
     SYS_DEBUG ("");
 
-    updateModeLabel (PSMode);
-    if (last_values != 0)
-        updateTimeLabel (*last_values);
+    if (modeLabel != 0)
+        updateModeLabel (PSMode);
 
-    container->setTitle (qtTrId ("qtn_ener_battery"));
+    if (container)
+        container->setTitle (qtTrId ("qtn_ener_battery"));
+
+    if (timeLabel == 0)
+        return;
+
+    if (charging == true)
+        charge_start (0);
+    else
+        timeLabel->setText (timeValue (last_value));
 }
 
