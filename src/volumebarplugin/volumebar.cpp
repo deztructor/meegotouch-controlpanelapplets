@@ -17,8 +17,6 @@
 
 #define SYSTEMUI_TRANSLATION "systemui-applets"
 
-// const QString cssDir = "/usr/share/duistatusindicatormenu/themes/style/";
-
 VolumeBar::VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
                       QGraphicsItem *parent) :
         DuiWidget (parent),
@@ -26,9 +24,6 @@ VolumeBar::VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
         m_logic (0)
 {
     Q_UNUSED(statusIndicatorMenu)
-
-// Comment out when its needed (and .css to debian/*volume*.install file)
-//    DuiTheme::loadCSS (cssDir + "volumebarplugin.css");
 
     m_logic = new VolumeBarLogic;
 
@@ -52,7 +47,6 @@ VolumeBar::VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
 
     m_bar = new DuiSlider;
     m_bar->setMinLabelVisible (true);
-    m_bar->setRange (0, 100);
 
     hbox->addItem (label, Qt::AlignLeft);
     hbox->addItem (m_bar, Qt::AlignRight);
@@ -60,19 +54,16 @@ VolumeBar::VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
     mainLayout->addItem (container);
 
     connect (m_bar, SIGNAL (valueChanged (int)),
-             this, SLOT (volumeChanged (int)));
+             this, SLOT (sliderChanged (int)));
 
-    int current_volume;
-
-    current_volume = (int) (100.0 * m_logic->getVolume ());
-
+    int current_volume = m_logic->getVolume ();
     if (current_volume > 0)
         m_bar->setMinLabelIconID ("icon-m-common-volume");
     else
         m_bar->setMinLabelIconID ("icon-m-common-volume-off");
 
+    m_bar->setRange (0, m_logic->getMaxVolume ());
     m_bar->setValue (current_volume);
-
 }
 
 VolumeBar::~VolumeBar ()
@@ -82,14 +73,30 @@ VolumeBar::~VolumeBar ()
 }
 
 void
-VolumeBar::volumeChanged (int val)
+VolumeBar::sliderChanged (int val)
 {
+    m_logic->setVolume (val);
+
     if (val > 0)
         m_bar->setMinLabelIconID ("icon-m-common-volume");
     else
         m_bar->setMinLabelIconID ("icon-m-common-volume-off");
-
-    m_logic->setVolume ((double) val / 100.0);
 }
 
+void
+VolumeBar::volumeChanged (int val, int max)
+{
+    SYS_DEBUG ("val = %d, max = %d", val, max);
+
+    if (val > m_bar->maximum ())
+    {
+        m_bar->setRange (0, max - 1);
+        m_bar->setValue (val);
+    }
+    else
+    {
+        m_bar->setValue (val);
+        m_bar->setRange (0, max - 1);
+    }
+}
 

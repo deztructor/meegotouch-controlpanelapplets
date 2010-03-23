@@ -4,8 +4,7 @@ Priority: optional
 Maintainer: David Kedves <dkedves@blumsoft.eu>
 Build-Depends: debhelper (>= 5), libduicontrolpanel-dev,
                libdui-dev (>= 0.18), libqmsystem-dev,
-               libprofile-qt-dev (>= 0.13), duistatusindicatormenu-dev,
-               libpulse-dev (>= 0.9.15)
+               libprofile-qt-dev (>= 0.13), duistatusindicatormenu-dev
 Standards-Version: 3.7.3
 
 Package: systemui-applets-tests
@@ -51,7 +50,7 @@ Package: duistatusindicatormenu-volumeplugin
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duistatusindicatormenu, 
-         systemui-applets-l10n-engineering-english, libpulse0
+         systemui-applets-l10n-engineering-english
 Description: Volume status indicator plugin
 
 Package: duicontrolpanel-displayapplet
