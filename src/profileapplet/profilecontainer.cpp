@@ -15,7 +15,7 @@
 #include <DuiSeparator>
 #include <QDebug>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 namespace ProfileApplet

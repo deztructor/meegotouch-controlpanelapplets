@@ -16,7 +16,7 @@
 #include <DuiLinearLayoutPolicy>
 #include <QDebug>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 ProfileWidget::ProfileWidget (

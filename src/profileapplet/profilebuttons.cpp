@@ -10,7 +10,7 @@
 #include <DuiGridLayoutPolicy>
 #include <QDebug>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 static const int nButtonColumns = 2;
