@@ -1,0 +1,20 @@
+[Desktop Entry]
+Type=DUIApplet
+Name=Theme
+# It is not official
+X-logical-id=qtn_theme_theme
+# ?? qtn_sett_main_profile
+X-translation-catalog=systemui-applets
+Icon=
+Exec=
+
+[DUI]
+X-DUIApplet-Applet=libthemeapplet.so
+X-DUIApplet-ImageLandscape=Widget_landscape_NOT_DEFINED.png
+X-DUIApplet-ImagePortrait=Widget_portrait_NOT_DEFINED.png
+
+[DCP]
+Category= qtn_sett_main_look
+Order=2
+WidgetType= DcpLabel2
+Text2= Not found

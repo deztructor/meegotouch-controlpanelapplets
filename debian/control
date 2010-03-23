@@ -68,6 +68,13 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
          systemui-applets-l10n-engineering-english
 Description: Profiles settings applet.
 
+Package: duicontrolpanel-themeapplet
+Section: misc
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
+         systemui-applets-l10n-engineering-english
+Description: Theme changing applet.
+
 Package: duistatusindicatormenu-profileplugin
 Section: misc
 Architecture: any
