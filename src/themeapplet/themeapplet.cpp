@@ -11,7 +11,8 @@ Q_EXPORT_PLUGIN2(themeapplet, ThemeApplet)
 
 const QString cssDir = "/usr/share/themes/base/dui/duicontrolpanel/style/";
 
-ThemeApplet::ThemeApplet() 
+ThemeApplet::ThemeApplet() :
+    m_ThemeBusinessLogic (new ThemeBusinessLogic)
 {
 }
 
@@ -69,5 +70,5 @@ ThemeApplet::constructBrief (
         int partId)
 {
     Q_UNUSED (partId);
-    return new ThemeBrief;
+    return new ThemeBrief (m_ThemeBusinessLogic);
 }

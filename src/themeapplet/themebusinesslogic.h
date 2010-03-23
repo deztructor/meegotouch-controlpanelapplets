@@ -3,4 +3,16 @@
 #ifndef THEMEBUSINESSLOGIC_H
 #define THEMEBUSINESSLOGIC_H
 
+#include <QObject>
+
+class QString;
+
+class ThemeBusinessLogic : public QObject
+{
+    Q_OBJECT
+
+public:
+    QString currentThemeName () const;
+};
+
 #endif

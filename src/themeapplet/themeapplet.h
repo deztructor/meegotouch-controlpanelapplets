@@ -5,6 +5,8 @@
 
 #include "dcpappletif.h"
 #include "themewidget.h"
+#include "themebusinesslogic.h"
+
 #include <QObject>
 #include <DcpAppletIf>
 
@@ -26,5 +28,6 @@ public:
 
 private:
     QPointer<ThemeWidget> m_MainWidget;
+    QPointer<ThemeBusinessLogic> m_ThemeBusinessLogic;
 };
 #endif
