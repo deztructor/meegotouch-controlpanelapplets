@@ -3,5 +3,49 @@
 
 #include "themebusinesslogic.h"
 
+#include <QString>
+#include <QStringList>
+#include <DuiTheme>
+
 #define DEBUG
 #include "../debug.h"
+
+ThemeBusinessLogic::ThemeBusinessLogic ()
+{
+}
+
+ThemeBusinessLogic::~ThemeBusinessLogic ()
+{
+}
+
+
+QString
+ThemeBusinessLogic::currentThemeName () const
+{
+    DuiTheme *theme = DuiTheme::instance();
+
+    Q_ASSERT (theme != 0);
+
+    return theme->currentTheme();
+}
+
+QStringList
+ThemeBusinessLogic::availableThemes () const
+{
+    DuiTheme *theme = DuiTheme::instance();
+
+    Q_ASSERT (theme != 0);
+
+    return theme->findAvailableThemes();
+}
+
+void
+ThemeBusinessLogic::changeTheme (
+        const QString &themeId)
+{
+    DuiTheme *theme = DuiTheme::instance();
+
+    Q_ASSERT (theme != 0);
+
+    theme->changeTheme(themeId);
+}

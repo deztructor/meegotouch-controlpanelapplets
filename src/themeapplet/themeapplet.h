@@ -5,7 +5,10 @@
 
 #include "dcpappletif.h"
 #include "themewidget.h"
+#include "themebusinesslogic.h"
+
 #include <QObject>
+#include <QPointer>
 #include <DcpAppletIf>
 
 class ThemeApplet : public QObject, public DcpAppletIf
@@ -18,13 +21,14 @@ public:
     ~ThemeApplet ();
 
     virtual void init();
-    virtual DcpWidget* constructWidget(int widgetId);
-    virtual DcpWidget* pageMain();
+    virtual DcpWidget *constructWidget (int widgetId);
+    virtual DcpWidget *pageMain ();
     virtual QString title() const;
     virtual QVector<DuiAction *> viewMenuItems();
     virtual DcpBrief* constructBrief(int partId);
 
 private:
     QPointer<ThemeWidget> m_MainWidget;
+    QPointer<ThemeBusinessLogic> m_ThemeBusinessLogic;
 };
 #endif

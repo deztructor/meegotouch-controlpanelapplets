@@ -6,13 +6,16 @@
 #define DEBUG
 #include "../debug.h"
 
-ThemeBrief::ThemeBrief ()
+ThemeBrief::ThemeBrief (
+        ThemeBusinessLogic *businessLogic) :
+    m_ThemeBusinessLogic (businessLogic)
 {
 }
 
 QString 
 ThemeBrief::valueText() const
 {
-    return "Not Implemented Yet";
+    Q_ASSERT (m_ThemeBusinessLogic != 0);
+    return m_ThemeBusinessLogic->currentThemeName ();
 }
 

@@ -3,15 +3,22 @@
 #ifndef THEMEBRIEF_H
 #define THEMEBRIEF_H
 
+#include <QPointer>
 #include "dcpbrief.h"
+
+#include "themebusinesslogic.h"
+
 
 class ThemeBrief: public DcpBrief
 {
     Q_OBJECT
 
 public:
-    ThemeBrief ();
+    ThemeBrief (ThemeBusinessLogic *businessLogic);
     virtual QString valueText() const;
+
+private:
+    QPointer<ThemeBusinessLogic> m_ThemeBusinessLogic;
 };
 
 #endif

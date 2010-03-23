@@ -7,7 +7,9 @@
 #include "../debug.h"
 
 ThemeWidget::ThemeWidget (
+        ThemeBusinessLogic *themeBusinessLogic, 
         QGraphicsWidget    *parent) :
+    m_ThemeBusinessLogic (themeBusinessLogic),
     DcpWidget (parent)
 {
 }

@@ -5,15 +5,20 @@
 
 #include <QPointer>
 #include "dcpwidget.h"
+#include "themebusinesslogic.h"
 
 class ThemeWidget : public DcpWidget
 {
     Q_OBJECT
 
 public:
-    ThemeWidget (QGraphicsWidget *parent = 0);
+    ThemeWidget (
+            ThemeBusinessLogic *themeBusinessLogic, 
+            QGraphicsWidget    *parent = 0);
     ~ThemeWidget ();
 
+private:
+    QPointer<ThemeBusinessLogic> m_ThemeBusinessLogic;
 };
 
 #endif
