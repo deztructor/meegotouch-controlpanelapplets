@@ -30,7 +30,7 @@ DcpWidget *
 ThemeApplet::pageMain()
 {
     if (m_MainWidget == NULL)
-        m_MainWidget = new ThemeWidget;
+        m_MainWidget = new ThemeWidget (m_ThemeBusinessLogic);
 
     return m_MainWidget;
 }
@@ -41,7 +41,7 @@ ThemeApplet::constructWidget (
 {
     Q_UNUSED(widgetId);
 
-    return pageMain();
+    return pageMain ();
 }
 
 QString

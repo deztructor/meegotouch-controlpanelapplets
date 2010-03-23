@@ -13,10 +13,11 @@ class ThemeBusinessLogic : public QObject
     Q_OBJECT
 
 public:
+    ThemeBusinessLogic ();
+    ~ThemeBusinessLogic ();
     QString currentThemeName () const;
     QStringList availableThemes () const;
     void changeTheme (const QString &themeId);
-
 };
 
 #endif

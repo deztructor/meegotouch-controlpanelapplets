@@ -10,6 +10,15 @@
 #define DEBUG
 #include "../debug.h"
 
+ThemeBusinessLogic::ThemeBusinessLogic ()
+{
+}
+
+ThemeBusinessLogic::~ThemeBusinessLogic ()
+{
+}
+
+
 QString
 ThemeBusinessLogic::currentThemeName () const
 {

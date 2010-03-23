@@ -24,14 +24,14 @@ HEADERS = \
     themebusinesslogic.h \
     themeapplet.h \
     themewidget.h \
-    themebrief.h \
+    themebrief.h 
 
 SOURCES = \
     ../debug.cpp \
     themebusinesslogic.cpp \
     themeapplet.cpp \
     themewidget.cpp \
-    themebrief.cpp \
+    themebrief.cpp 
 
 css.files = themeapplet.css
 DESTDIR = lib
