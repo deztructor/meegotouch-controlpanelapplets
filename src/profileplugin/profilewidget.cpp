@@ -18,7 +18,7 @@
 #include "profiledatainterface.h"
 #include "profilebuttons.h"
 
-#undef DEBUG
+#define DEBUG
 #include "../debug.h"
 
 #include <DuiButton>
@@ -27,7 +27,6 @@
 #include <DuiContainer>
 #include <DuiControlPanelIf>
 #include <DuiGridLayoutPolicy>
-#include <DuiGConfItem>
 #include <DuiLayout>
 #include <DuiLinearLayoutPolicy>
 #include <DuiLocale>
@@ -117,8 +116,10 @@ ProfileWidget::loadTranslation ()
         return;
     running = true;
 
-    DuiGConfItem    langItem ("/Dui/i18n/Language");
-    DuiLocale       locale (langItem.value ().toString ());
+    DuiLocale       locale;
+
+    SYS_DEBUG ("Language changed to '%s'",
+               SYS_STR (locale.language ()));
 
     locale.installTrCatalog (SYSTEMUI_TRANSLATION ".qm");
     locale.installTrCatalog (SYSTEMUI_TRANSLATION);
