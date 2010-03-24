@@ -32,15 +32,6 @@ private slots:
     void showProfileModificationPage ();
 
     /*!
-     * \brief A slot for receiving information about profile button clicks.
-     */
-    void buttonClicked (int index);
-
-    /*!
-     * \brief A slot for receiving information about profile changes
-     */
-    void changeProfile (const QString &profileName);
-    /*!
      * \brief A slot for reloading the translations on locale-change
      */
     void loadTranslation ();

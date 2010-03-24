@@ -21,8 +21,14 @@ VolumeBarLogic::VolumeBarLogic () :
     SYS_DEBUG ("com.Nokia.MainVolume interface revision: %d",
                m_if->property ("InterfaceRevision").toInt ());
 
+#ifndef i386
     m_currentmax = m_if->property ("StepCount").toInt ();
     m_currentvolume = m_if->property ("CurrentStep").toInt ();
+#else
+    // Test values for sbox (XXX: REMOVE THIS)
+    m_currentmax = 10;
+    m_currentvolume = 3;
+#endif
 
     connect (m_if, SIGNAL (StepsUpdated (int, int)),
              this, SIGNAL (volumeChanged (int, int)));

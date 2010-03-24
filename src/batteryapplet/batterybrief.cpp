@@ -5,7 +5,7 @@
 
 #include "batterydbusinterface.h"
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 BatteryBrief::BatteryBrief () :

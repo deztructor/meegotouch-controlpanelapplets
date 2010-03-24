@@ -16,7 +16,7 @@
 #include <DuiTheme>
 #include <DuiAction>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(displayapplet, DisplayApplet)

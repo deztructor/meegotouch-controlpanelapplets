@@ -4,7 +4,6 @@
 #include "profiledatainterface.h"
 
 #include <Profile>
-#include <QDebug>
 #include <QStringList>
 #include <QList>
 
@@ -36,7 +35,7 @@ ProfileDataInterface::~ProfileDataInterface ()
 QString 
 ProfileDataInterface::getCurrentProfileName ()
 {
-    qDebug() << Q_FUNC_INFO;
+    SYS_DEBUG ("");
     QString prof = m_ProfileAPI->activeProfile();
 
     #ifdef USE_TEST_DATA
@@ -56,7 +55,7 @@ ProfileDataInterface::currentProfileNameChanged (
 int 
 ProfileDataInterface::getCurrentProfile ()
 {
-    qDebug() << Q_FUNC_INFO;
+    SYS_DEBUG ("");
 
     QString prof = m_ProfileAPI->activeProfile();
     #ifdef USE_TEST_DATA
@@ -68,7 +67,7 @@ ProfileDataInterface::getCurrentProfile ()
 QList<ProfileDataInterface::ProfileData> 
 ProfileDataInterface::getProfilesData ()
 {
-    qDebug() << Q_FUNC_INFO;
+    SYS_DEBUG ("");
     QList<ProfileData> data;
 
     // send profile <name, is> map
@@ -86,7 +85,7 @@ ProfileDataInterface::getProfilesData ()
         d.vibrationEnabled = m_ProfileAPI->isVibrationEnabled (id);
         data.append(d);
     }
-    qDebug() << Q_FUNC_INFO << "data.count():" << data.count();
+    SYS_DEBUG ("data.count () = %d", data.count ());
 
     #ifdef USE_TEST_DATA
     SYS_WARNING ("Adding test data.");
@@ -136,7 +135,7 @@ void
 ProfileDataInterface::setProfile (
         int value)
 {
-    qDebug() << Q_FUNC_INFO << "(" << value << ")";
+    SYS_DEBUG ("value = %d", value);
 
     bool success = m_ProfileAPI->setActiveProfile (mapId(value));
     if (!success) {
@@ -150,7 +149,7 @@ ProfileDataInterface::setVibration (
         int    id, 
         bool   value)
 {
-    qDebug() << Q_FUNC_INFO << "(" << id << "," << value <<  ")";
+    SYS_DEBUG ("id = %d, value = %s", id, SYS_BOOL (value));
 
     bool success = m_ProfileAPI->setVibration(mapId(id), value);
     if (!success) {
@@ -164,7 +163,7 @@ ProfileDataInterface::setVolumeLevel (
         int   id, 
         int   value)
 {
-    qDebug() << Q_FUNC_INFO << "(" << id << "," << value <<  ")";
+    SYS_DEBUG ("id = %d, value = %d", id, value);
 
     bool success = m_ProfileAPI->setVolumeLevel(mapId(id), value);
     if (!success) {

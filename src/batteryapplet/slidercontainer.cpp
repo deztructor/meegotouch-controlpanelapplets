@@ -8,7 +8,7 @@
 #include <DuiLayout>
 #include <DuiSlider>
 
-#define DEBUG 
+#undef DEBUG 
 #include "../debug.h"
 
 SliderContainer::SliderContainer (DuiWidget *parent) :

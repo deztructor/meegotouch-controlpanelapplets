@@ -4,7 +4,7 @@
 #include "dcpwidgettypes.h"
 #include "profiledatainterface.h"
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 ProfileBrief::ProfileBrief (

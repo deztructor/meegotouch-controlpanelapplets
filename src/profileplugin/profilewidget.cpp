@@ -27,7 +27,6 @@
 #include <DuiContainer>
 #include <DuiControlPanelIf>
 #include <DuiGridLayoutPolicy>
-#include <DuiGConfItem>
 #include <DuiLayout>
 #include <DuiLinearLayoutPolicy>
 #include <DuiLocale>
@@ -50,9 +49,6 @@ ProfileWidget::ProfileWidget (
     Q_UNUSED(statusIndicatorMenu);
     dataIf = new ProfileDataInterface ();
 
-    connect (dataIf, SIGNAL (currentProfileNameChanged (QString)),
-             profileButtons, SLOT (selectProfile (int)));
-
     QGraphicsLinearLayout *mainLayout =
         new QGraphicsLinearLayout (Qt::Vertical);
 
@@ -65,6 +61,9 @@ ProfileWidget::ProfileWidget (
 
     // Create a container for the profiles
     initProfileButtons ();
+
+    connect (dataIf, SIGNAL (currentProfile (int)),
+             profileButtons, SLOT (selectProfile (int)));
 
     mainLayout->addItem (profileButtons);
 }
@@ -117,8 +116,10 @@ ProfileWidget::loadTranslation ()
         return;
     running = true;
 
-    DuiGConfItem    langItem ("/Dui/i18n/Language");
-    DuiLocale       locale (langItem.value ().toString ());
+    DuiLocale       locale;
+
+    SYS_DEBUG ("Language changed to '%s'",
+               SYS_STR (locale.language ()));
 
     locale.installTrCatalog (SYSTEMUI_TRANSLATION ".qm");
     locale.installTrCatalog (SYSTEMUI_TRANSLATION);
@@ -136,5 +137,15 @@ ProfileWidget::retranslateUi ()
     SYS_DEBUG ("");
 
     profileButtons->setTitle (qtTrId ("qtn_prof_profile"));
+
+    QMap<int, QString> map;
+    QList<ProfileDataInterface::ProfileData> l = dataIf->getProfilesData ();
+
+    for (int i = 0; i < l.count (); ++i) {
+        ProfileDataInterface::ProfileData d = l.at (i);
+        map.insert (d.profileId, d.profileName);
+    }
+    // Update the profile names [dataIf will returns a localised lists]
+    profileButtons->retranslate (map);
 }
 

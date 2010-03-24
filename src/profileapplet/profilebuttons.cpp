@@ -8,7 +8,6 @@
 #include <DuiLayout>
 #include <DuiLinearLayoutPolicy>
 #include <DuiGridLayoutPolicy>
-#include <QDebug>
 
 #undef DEBUG
 #include "../debug.h"
@@ -40,7 +39,7 @@ ProfileButtons::init (
     for (int i = 0; i < data.count(); ++i) {
         int id = ids.at(i);
         addButton (data.value(id), id, (currentId == id));
-        qDebug() << Q_FUNC_INFO << id << "," << data.value(id);
+        SYS_DEBUG ("id = %d, value = %s", id, SYS_STR (data.value (id)));
     }
     setLayout();
 }
@@ -66,7 +65,7 @@ ProfileButtons::selectProfile (
 {
     bool retval = false;
 
-    qDebug() << Q_FUNC_INFO << id;
+    SYS_DEBUG ("id = %d", id);
 
     if (m_Buttons == NULL)
         return retval;
