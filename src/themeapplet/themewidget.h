@@ -27,6 +27,9 @@ public:
         ThemeOvi
     } ThemeCategoryId;
 
+private slots:
+    void themeActivated(QString themeName);
+
 private:
     void createWidgets ();
     DuiContainer *createContainer (ThemeWidget::ThemeCategoryId category);

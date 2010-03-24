@@ -25,7 +25,8 @@ HEADERS = \
     themeapplet.h \
     themewidget.h \
     themebrief.h \
-    themecontainer.h
+    themecontainer.h \
+    themedialog.h
 
 SOURCES = \
     ../debug.cpp \
@@ -33,7 +34,8 @@ SOURCES = \
     themeapplet.cpp \
     themewidget.cpp \
     themebrief.cpp \
-    themecontainer.cpp
+    themecontainer.cpp \
+    themedialog.cpp
 
 css.files = themeapplet.css
 DESTDIR = lib
