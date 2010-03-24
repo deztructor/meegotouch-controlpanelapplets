@@ -15,7 +15,7 @@
 #include <DuiLayout>
 #include <DuiLinearLayoutPolicy>
 
-#define DEBUG 
+#undef DEBUG 
 #include "../debug.h"
 
 /*

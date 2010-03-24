@@ -18,7 +18,7 @@
 #include "profiledatainterface.h"
 #include "profilebuttons.h"
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 #include <DuiButton>
@@ -49,9 +49,6 @@ ProfileWidget::ProfileWidget (
     Q_UNUSED(statusIndicatorMenu);
     dataIf = new ProfileDataInterface ();
 
-    connect (dataIf, SIGNAL (currentProfileNameChanged (QString)),
-             profileButtons, SLOT (selectProfile (int)));
-
     QGraphicsLinearLayout *mainLayout =
         new QGraphicsLinearLayout (Qt::Vertical);
 
@@ -64,6 +61,9 @@ ProfileWidget::ProfileWidget (
 
     // Create a container for the profiles
     initProfileButtons ();
+
+    connect (dataIf, SIGNAL (currentProfile (int)),
+             profileButtons, SLOT (selectProfile (int)));
 
     mainLayout->addItem (profileButtons);
 }
@@ -137,5 +137,15 @@ ProfileWidget::retranslateUi ()
     SYS_DEBUG ("");
 
     profileButtons->setTitle (qtTrId ("qtn_prof_profile"));
+
+    QMap<int, QString> map;
+    QList<ProfileDataInterface::ProfileData> l = dataIf->getProfilesData ();
+
+    for (int i = 0; i < l.count (); ++i) {
+        ProfileDataInterface::ProfileData d = l.at (i);
+        map.insert (d.profileId, d.profileName);
+    }
+    // Update the profile names [dataIf will returns a localised lists]
+    profileButtons->retranslate (map);
 }
 
