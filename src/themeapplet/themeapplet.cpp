@@ -7,6 +7,9 @@
 #include <DuiTheme>
 #include <DuiAction>
 
+#define DEBUG
+#include "../debug.h"
+
 Q_EXPORT_PLUGIN2(themeapplet, ThemeApplet)
 
 const QString cssDir = "/usr/share/themes/base/dui/duicontrolpanel/style/";
@@ -29,9 +32,16 @@ ThemeApplet::init()
 DcpWidget *
 ThemeApplet::pageMain()
 {
-    if (m_MainWidget == NULL)
-        m_MainWidget = new ThemeWidget (m_ThemeBusinessLogic);
+    static int i = 0;
 
+    SYS_DEBUG ("Entering %d", i);
+    if (m_MainWidget == NULL) {
+        m_MainWidget = new ThemeWidget (m_ThemeBusinessLogic);
+        SYS_DEBUG ("Widget created");
+    }
+
+    SYS_DEBUG ("returning m_MainWidget: %d", i);
+    ++i;
     return m_MainWidget;
 }
 
@@ -39,8 +49,11 @@ DcpWidget *
 ThemeApplet::constructWidget (
         int widgetId)
 {
+    static int i = 0;
     Q_UNUSED(widgetId);
 
+    SYS_DEBUG ("We are called: %d", i);
+    ++i;
     return pageMain ();
 }
 

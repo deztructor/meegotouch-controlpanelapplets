@@ -5,6 +5,7 @@ SUBDIRS = batteryapplet \
           profileapplet \
 	  themeapplet   \
           ledapplet     \
+	  testapplet    \
           profileplugin \
           usbapplet     \
           volumebarplugin
