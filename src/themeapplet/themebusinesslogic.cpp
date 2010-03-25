@@ -3,6 +3,8 @@
 
 #include "themebusinesslogic.h"
 
+#include <QDir>
+#include <QFile>
 #include <QString>
 #include <QStringList>
 #include <DuiTheme>
@@ -11,7 +13,7 @@
 #define DEBUG
 #include "../debug.h"
 
-#define USE_TEST_DATA
+//#define USE_TEST_DATA
 
 ThemeBusinessLogic::ThemeBusinessLogic ()
 {
@@ -32,23 +34,47 @@ ThemeBusinessLogic::currentThemeName () const
     return theme->currentTheme();
 }
 
+/*
+ * /usr/share/themes
+ */
 QStringList
 ThemeBusinessLogic::availableThemes () const
 {
+    QStringList retval;
+    
+    #if 0
+    /*
+     * This is a nice try, but it is not implemented in the libdui and I was
+     * tolt it is not going to be either.
+     */
     DuiTheme *theme = DuiTheme::instance();
-
     Q_ASSERT (theme != 0);
+    retval = theme->findAvailableThemes();
+    #endif
 
-    QStringList retval = theme->findAvailableThemes();
+    QDir themeDir ("/usr/share/themes");
+    foreach (QString themeFile, themeDir.entryList (QDir::Dirs)) {
+        if (themeFile == "." || 
+                themeFile == "..")
+            continue;
+        
+        QString indexFileName;
+
+        indexFileName = "/usr/share/themes/" + themeFile + "/index.theme";
+
+        SYS_DEBUG ("*** indexFileName = '%s'", SYS_STR(indexFileName));
+        QFile indexFile(indexFileName);
+
+        if (!indexFile.exists())
+            continue;
+
+        retval << themeFile;
+    }
+
     #ifdef USE_TEST_DATA
     retval <<
-        "base" <<
         "devel" <<
-        "plankton" <<
-        "Test theme 1" <<
-        "Test theme 2" <<
-        "Test theme 3" <<
-        "Test theme 4";
+        "plankton";
     #endif
 
     return retval;
