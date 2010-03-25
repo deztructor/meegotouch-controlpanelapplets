@@ -2,6 +2,7 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 
 #include "themebusinesslogic.h"
+#include "themedescriptor.h"
 
 #include <QDir>
 #include <QFile>
@@ -54,21 +55,18 @@ ThemeBusinessLogic::availableThemes () const
 
     QDir themeDir ("/usr/share/themes");
     foreach (QString themeFile, themeDir.entryList (QDir::Dirs)) {
+        ThemeDescriptor *descr;
+
         if (themeFile == "." || 
                 themeFile == "..")
             continue;
         
-        QString indexFileName;
+        descr = new ThemeDescriptor ("/usr/share/themes/" + themeFile);
 
-        indexFileName = "/usr/share/themes/" + themeFile + "/index.theme";
+        if (descr->isValid())
+            retval << themeFile;
 
-        SYS_DEBUG ("*** indexFileName = '%s'", SYS_STR(indexFileName));
-        QFile indexFile(indexFileName);
-
-        if (!indexFile.exists())
-            continue;
-
-        retval << themeFile;
+        delete descr;
     }
 
     #ifdef USE_TEST_DATA

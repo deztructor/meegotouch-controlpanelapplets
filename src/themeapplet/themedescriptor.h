@@ -1,0 +1,29 @@
+/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
+/* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
+#ifndef THEMEDESCRIPTOR_H
+#define THEMEDESCRIPTOR_H
+
+#include <QObject>
+
+class QString;
+
+/*!
+ * A simple class to handle all the information we need to know about one
+ * specific theme.
+ */
+class ThemeDescriptor : public QObject
+{
+    Q_OBJECT
+
+public:
+    ThemeDescriptor (const QString &directoryPath);
+
+    bool isValid () const;
+
+private:
+    bool      m_Valid;
+    QString   m_CodeName;
+    QString   m_Name;
+};
+
+#endif

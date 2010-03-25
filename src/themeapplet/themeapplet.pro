@@ -21,6 +21,7 @@ OBJECTS_DIR = .objects
 
 HEADERS = \
     ../debug.h \
+    themedescriptor.h \
     themebusinesslogic.h \
     themeapplet.h \
     themewidget.h \
@@ -30,6 +31,7 @@ HEADERS = \
 
 SOURCES = \
     ../debug.cpp \
+    themedescriptor.cpp \
     themebusinesslogic.cpp \
     themeapplet.cpp \
     themewidget.cpp \
