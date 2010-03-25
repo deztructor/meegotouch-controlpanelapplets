@@ -8,6 +8,7 @@
 #include <QPointer>
 
 class ThemeBusinessLogic;
+class ThemeDescriptor;
 class QString;
 
 class ThemeDialog: public DuiDialog
@@ -17,7 +18,7 @@ Q_OBJECT
 public:
     ThemeDialog (
             ThemeBusinessLogic *themeBusinessLogic,
-            const QString      &themeName);
+            ThemeDescriptor    *themeDesc);
     void showDialog ();
 
 private slots:
@@ -26,8 +27,8 @@ private slots:
     void themeChanged (QString themeId);
 
 private:
-    QPointer<ThemeBusinessLogic> m_ThemeBusinessLogic;
-    QString                      m_ThemeName;
+    QPointer<ThemeBusinessLogic>  m_ThemeBusinessLogic;
+    ThemeDescriptor              *m_ThemeDesc;
 };
 
 #endif

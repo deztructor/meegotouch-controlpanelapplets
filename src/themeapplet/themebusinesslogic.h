@@ -3,11 +3,11 @@
 #ifndef THEMEBUSINESSLOGIC_H
 #define THEMEBUSINESSLOGIC_H
 
-#include "themedescriptor.h"
 #include <QList>
 #include <QObject>
 
 class QString;
+class ThemeDescriptor;
 
 class ThemeBusinessLogic : public QObject
 {
@@ -17,14 +17,12 @@ public slots:
     /*!
      * Sets the current theme to the theme with the given id.
      */
-    void changeTheme (QString themeId);
+    void changeTheme (QString themeCodeName);
 
 signals:
-    void themeChanged (QString themeId);
+    void themeChanged (QString themeCodeName);
 
 public:
-    ThemeBusinessLogic ();
-    ~ThemeBusinessLogic ();
     QString currentThemeCodeName () const;
     QString currentThemeName () const;
     QList<ThemeDescriptor *> availableThemes () const;

@@ -5,7 +5,9 @@
 
 #include <QPointer>
 #include "dcpwidget.h"
+
 #include "themebusinesslogic.h"
+#include "themedescriptor.h"
 
 class DuiContainer;
 class DuiGridLayoutPolicy;
@@ -28,7 +30,7 @@ public:
     } ThemeCategoryId;
 
 private slots:
-    void themeActivated(QString themeName);
+    void themeActivated(ThemeDescriptor *themeDescr);
 
 private:
     void createWidgets ();

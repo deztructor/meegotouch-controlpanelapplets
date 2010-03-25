@@ -3,6 +3,7 @@
 
 #include "themedialog.h"
 #include "themebusinesslogic.h"
+#include "themedescriptor.h"
 
 #include <DuiButton>
 #include <QGraphicsLinearLayout>
@@ -13,10 +14,10 @@
 
 ThemeDialog::ThemeDialog (
         ThemeBusinessLogic *themeBusinessLogic,
-        const QString      &themeName):
+        ThemeDescriptor    *themeDesc):
     DuiDialog (),
     m_ThemeBusinessLogic (themeBusinessLogic),
-    m_ThemeName (themeName)
+    m_ThemeDesc (themeDesc)
 {  
     QGraphicsLinearLayout *layout;
     DuiContainer  *hbox;
@@ -47,7 +48,7 @@ ThemeDialog::ThemeDialog (
     setCentralWidget (hbox);
     setButtonBoxVisible (false);
 
-    setTitle (m_ThemeName);
+    setTitle (m_ThemeDesc->name());
 
     connect (m_ThemeBusinessLogic, SIGNAL(themeChanged(QString)),
             this, SLOT(themeChanged(QString)));
@@ -63,7 +64,7 @@ void
 ThemeDialog::acceptClicked ()
 {
     SYS_DEBUG ("");
-    m_ThemeBusinessLogic->changeTheme (m_ThemeName);
+    m_ThemeBusinessLogic->changeTheme (m_ThemeDesc->codeName());
     //deleteLater ();
 }
 

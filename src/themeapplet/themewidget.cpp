@@ -120,20 +120,20 @@ ThemeWidget::readLocalThemes ()
         /*
          * FIXME: This should be some pre-select so we can show the dialog.
          */
-        connect (themeContainer, SIGNAL(activated(QString)),
-                this, SLOT(themeActivated(QString)));
+        connect (themeContainer, SIGNAL(activated(ThemeDescriptor *)),
+                this, SLOT(themeActivated(ThemeDescriptor *)));
         ++n;
     }
 }
 
 void 
 ThemeWidget::themeActivated (
-        QString themeName)
+        ThemeDescriptor *themeDescr)
 {
     ThemeDialog *dialog;
-    SYS_DEBUG ("Theme '%s' activated", SYS_STR(themeName));
+    SYS_DEBUG ("Theme '%s' activated", SYS_STR(themeDescr->name()));
 
-    dialog = new ThemeDialog (m_ThemeBusinessLogic, themeName);
+    dialog = new ThemeDialog (m_ThemeBusinessLogic, themeDescr);
     dialog->showDialog ();
 }
 

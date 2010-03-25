@@ -82,6 +82,6 @@ ThemeContainer::mouseReleaseEvent (
     if (QRectF(QPointF(), size()).contains(event->pos())) {
         SYS_DEBUG ("Emitting activated('%s')", 
                 SYS_STR(m_ThemeDescriptor->codeName()));
-        emit activated(m_ThemeDescriptor->codeName());
+        emit activated(m_ThemeDescriptor);
     }
 }

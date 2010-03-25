@@ -35,7 +35,7 @@ signals:
      *
      * Emitted when the user clicks on the widget.
      */
-    void activated (QString themeName);
+    void activated (ThemeDescriptor *themeDesc);
 
 private:
     void createWidgets ();

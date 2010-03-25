@@ -16,15 +16,10 @@
 
 static const QString themeDirName ("/usr/share/themes");
 
-ThemeBusinessLogic::ThemeBusinessLogic ()
-{
-}
-
-ThemeBusinessLogic::~ThemeBusinessLogic ()
-{
-}
-
-
+/*!
+ * Returns the code name of the current theme. This code name can be used as a
+ * string ID to the GConf database.
+ */
 QString
 ThemeBusinessLogic::currentThemeCodeName () const
 {
@@ -35,6 +30,10 @@ ThemeBusinessLogic::currentThemeCodeName () const
     return theme->currentTheme();
 }
 
+/*!
+ * Returns the official name of the current theme. This name can be used as a UI
+ * string.
+ */
 QString
 ThemeBusinessLogic::currentThemeName () const
 {
@@ -52,25 +51,16 @@ ThemeBusinessLogic::currentThemeName () const
     return retval;
 }
 
-/*
- * 
+/*!
+ * Returns all the available themes. Please note, that some of these themes
+ * might be hidden/invisible.
  */
 QList<ThemeDescriptor *>
 ThemeBusinessLogic::availableThemes () const
 {
     QList<ThemeDescriptor *> retval;
-    
-    #if 0
-    /*
-     * This is a nice try, but it is not implemented in the libdui and I was
-     * tolt it is not going to be either.
-     */
-    DuiTheme *theme = DuiTheme::instance();
-    Q_ASSERT (theme != 0);
-    retval = theme->findAvailableThemes();
-    #endif
-
     QDir themeDir (themeDirName);
+
     foreach (QString themeFile, themeDir.entryList (QDir::Dirs)) {
         ThemeDescriptor *descr;
 
@@ -79,7 +69,7 @@ ThemeBusinessLogic::availableThemes () const
             continue;
         
         descr = new ThemeDescriptor (
-                "/usr/share/themes/" + themeFile,
+                themeDirName + "/" + themeFile,
                 themeFile);
 
         if (descr->isValid())
@@ -91,22 +81,17 @@ ThemeBusinessLogic::availableThemes () const
     return retval;
 }
 
+/*!
+ * This function can be used to change the current theme.
+ */
 void
 ThemeBusinessLogic::changeTheme (
-        QString themeId)
+        QString themeCodeName)
 {
-    SYS_DEBUG ("Activating theme '%s'", SYS_STR(themeId));
-    DuiTheme *theme = DuiTheme::instance();
-
-    Q_ASSERT (theme != 0);
-
-    #if 0
-    theme->changeTheme(themeId);
-    #else
+    SYS_DEBUG ("Activating theme '%s'", SYS_STR(themeCodeName));
+    
     DuiGConfItem  gconfItem ("/Dui/theme/name");
-    gconfItem.set (themeId);
-    #endif
-    emit themeChanged (themeId);
+    gconfItem.set (themeCodeName);
+    emit themeChanged (themeCodeName);
 }
-
 
