@@ -6,6 +6,7 @@
 #include <QString>
 #include <QStringList>
 #include <DuiTheme>
+#include <DuiGConfItem>
 
 #define DEBUG
 #include "../debug.h"
@@ -41,7 +42,9 @@ ThemeBusinessLogic::availableThemes () const
     QStringList retval = theme->findAvailableThemes();
     #ifdef USE_TEST_DATA
     retval <<
+        "base" <<
         "devel" <<
+        "plankton" <<
         "Test theme 1" <<
         "Test theme 2" <<
         "Test theme 3" <<
@@ -60,8 +63,12 @@ ThemeBusinessLogic::changeTheme (
 
     Q_ASSERT (theme != 0);
 
+    #if 0
     theme->changeTheme(themeId);
-
+    #else
+    DuiGConfItem  gconfItem ("/Dui/theme/name");
+    gconfItem.set (themeId);
+    #endif
     emit themeChanged (themeId);
 }
 
