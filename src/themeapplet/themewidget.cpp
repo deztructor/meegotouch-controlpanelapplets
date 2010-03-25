@@ -56,6 +56,8 @@ ThemeWidget::createContainer (
     DuiLayout *layout = new DuiLayout();
     
     policy = new DuiGridLayoutPolicy (layout);
+    policy->setColumnStretchFactor (0, 1);
+    policy->setColumnStretchFactor (1, 1);
     layout->setPolicy (policy);
     
     DuiContainer *container = new DuiContainer ();

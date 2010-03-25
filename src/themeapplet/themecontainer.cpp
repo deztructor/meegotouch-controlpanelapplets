@@ -47,6 +47,7 @@ ThemeContainer::createWidgets ()
     m_Icon = new DuiImageWidget (m_ThemeDescriptor->iconName());
     m_Icon->setObjectName ("ThemeIcon");
     layoutPolicy->addItem (m_Icon, Qt::AlignLeft | Qt::AlignVCenter);
+    layoutPolicy->setStretchFactor (m_Icon, 0);
 
     /*
      * A label with the name of the theme. 
@@ -54,6 +55,7 @@ ThemeContainer::createWidgets ()
     m_NameLabel = new DuiLabel (m_ThemeDescriptor->name());
     m_NameLabel->setObjectName ("ThemeNameLabel");
     layoutPolicy->addItem (m_NameLabel, Qt::AlignRight | Qt::AlignVCenter);
+    layoutPolicy->setStretchFactor (m_NameLabel, 1);
 
     this->setLayout (layout);
 }
