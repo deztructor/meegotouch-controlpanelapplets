@@ -45,6 +45,7 @@ BatteryBrief::valueText() const
 void 
 BatteryBrief::batteryCharging (int n)
 {
+    Q_UNUSED (n);
     SYS_DEBUG ("CHARGING *** n = %d", n);
     m_Charging = true;
     m_NotCharging = false;
