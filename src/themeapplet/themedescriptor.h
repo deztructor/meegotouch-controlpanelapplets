@@ -23,13 +23,17 @@ public:
     ~ThemeDescriptor ();
 
     bool isValid () const;
+    bool isVisible () const;
     QString name() const;
     QString codeName() const;
+    QString iconName() const;
     
 private:
     bool              m_Valid;
+    bool              m_Visible;
     QString           m_CodeName;
     QString           m_Name;
+    QString           m_IconName;
     DuiDesktopEntry  *m_DesktopEntry;
 };
 

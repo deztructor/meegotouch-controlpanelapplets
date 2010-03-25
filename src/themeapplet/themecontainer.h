@@ -9,6 +9,7 @@
 class QString;
 class DuiWidget;
 class DuiLabel;
+class DuiImageWidget;
 class QGraphicsSceneMouseEvent;
 class ThemeDescriptor;
 
@@ -40,6 +41,7 @@ private:
     void createWidgets ();
 
     DuiLabel         *m_NameLabel;
+    DuiImageWidget   *m_Icon;
     ThemeDescriptor  *m_ThemeDescriptor;
 };
 #endif

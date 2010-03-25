@@ -107,6 +107,10 @@ ThemeWidget::readLocalThemes ()
         int x = n / MaxColumns;
         int y = n % MaxColumns;
 
+        if (!theme->isVisible()) {
+            delete theme;
+            continue;
+        }
         //SYS_DEBUG ("Theme name[%d] = %s", n, SYS_STR(themeName));
         themeContainer = new ThemeContainer (theme);
         m_LocalLayoutPolicy->addItem (themeContainer, x, y);

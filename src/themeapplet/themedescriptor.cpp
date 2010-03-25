@@ -10,12 +10,19 @@
 #define DEBUG
 #include "../debug.h"
 
+
+static const QString requiredType = "X-DUI-Metatheme";
+static const QString typeKey = "Desktop Entry/Type";
+
 static const QString nameKey = "Desktop Entry/Name";
+static const QString iconNameKey = "X-DUI-Metatheme/X-Icon";
+static const QString visibleKey = "X-DUI-Metatheme/X-Visible";
 
 ThemeDescriptor::ThemeDescriptor (
         const QString &directoryPath,
         const QString &codeName) :
     m_Valid (false),
+    m_Visible (false),
     m_CodeName (codeName),
     m_DesktopEntry (0)
 {
@@ -29,8 +36,17 @@ ThemeDescriptor::ThemeDescriptor (
     if (!m_DesktopEntry->isValid())
         return;
 
-    m_Name = m_DesktopEntry->value (nameKey);
+    if (m_DesktopEntry->value(typeKey) != requiredType) {
+        SYS_DEBUG ("The type not right: '%s'", 
+                SYS_STR(m_DesktopEntry->value(typeKey)));
+        return;
+    }
 
+    m_Visible = m_DesktopEntry->value (visibleKey) == "true";
+    m_Name = m_DesktopEntry->value (nameKey);
+    m_IconName =  m_DesktopEntry->value (iconNameKey).
+        trimmed().remove('\"');
+    
     m_Valid = true;
 }
 
@@ -46,6 +62,12 @@ ThemeDescriptor::isValid () const
     return m_Valid;
 }
 
+bool
+ThemeDescriptor::isVisible () const
+{
+    return m_Visible;
+}
+
 QString
 ThemeDescriptor::name() const
 {
@@ -57,3 +79,12 @@ ThemeDescriptor::codeName() const
 {
     return m_CodeName;
 }
+
+QString
+ThemeDescriptor::iconName() const
+{
+    SYS_DEBUG ("Icon-name is '%s'", SYS_STR(m_IconName));
+    return m_IconName;
+}
+
+

@@ -14,6 +14,8 @@
 #define DEBUG
 #include "../debug.h"
 
+static const QString themeDirName ("/usr/share/themes");
+
 ThemeBusinessLogic::ThemeBusinessLogic ()
 {
 }
@@ -24,7 +26,7 @@ ThemeBusinessLogic::~ThemeBusinessLogic ()
 
 
 QString
-ThemeBusinessLogic::currentThemeName () const
+ThemeBusinessLogic::currentThemeCodeName () const
 {
     DuiTheme *theme = DuiTheme::instance();
 
@@ -33,8 +35,25 @@ ThemeBusinessLogic::currentThemeName () const
     return theme->currentTheme();
 }
 
+QString
+ThemeBusinessLogic::currentThemeName () const
+{
+    QString codeName = currentThemeCodeName();
+    QList<ThemeDescriptor *> list = availableThemes ();
+    QString retval;
+
+    foreach (ThemeDescriptor *descr, list) {
+        if (descr->codeName() == codeName)
+            retval = descr->name();
+
+        delete descr;
+    }
+
+    return retval;
+}
+
 /*
- * /usr/share/themes
+ * 
  */
 QList<ThemeDescriptor *>
 ThemeBusinessLogic::availableThemes () const
@@ -51,7 +70,7 @@ ThemeBusinessLogic::availableThemes () const
     retval = theme->findAvailableThemes();
     #endif
 
-    QDir themeDir ("/usr/share/themes");
+    QDir themeDir (themeDirName);
     foreach (QString themeFile, themeDir.entryList (QDir::Dirs)) {
         ThemeDescriptor *descr;
 

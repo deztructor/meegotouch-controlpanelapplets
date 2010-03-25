@@ -6,6 +6,7 @@
 
 #include <QString>
 #include <DuiLabel>
+#include <DuiImageWidget>
 #include <DuiLayout>
 #include <DuiLinearLayoutPolicy>
 #include <QGraphicsSceneMouseEvent>
@@ -38,15 +39,21 @@ ThemeContainer::createWidgets ()
 
     layout = new DuiLayout (this);
 
-    layoutPolicy = new DuiLinearLayoutPolicy (layout, Qt::Vertical);
+    layoutPolicy = new DuiLinearLayoutPolicy (layout, Qt::Horizontal);
     layout->setPolicy (layoutPolicy);
+    /*
+     * An icon representing the theme.
+     */
+    m_Icon = new DuiImageWidget (m_ThemeDescriptor->iconName());
+    m_Icon->setObjectName ("ThemeIcon");
+    layoutPolicy->addItem (m_Icon, Qt::AlignLeft | Qt::AlignVCenter);
 
     /*
      * A label with the name of the theme. 
      */
     m_NameLabel = new DuiLabel (m_ThemeDescriptor->name());
     m_NameLabel->setObjectName ("ThemeNameLabel");
-    layoutPolicy->addItem (m_NameLabel, Qt::AlignRight);
+    layoutPolicy->addItem (m_NameLabel, Qt::AlignRight | Qt::AlignVCenter);
 
     this->setLayout (layout);
 }

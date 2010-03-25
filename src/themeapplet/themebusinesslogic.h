@@ -25,6 +25,7 @@ signals:
 public:
     ThemeBusinessLogic ();
     ~ThemeBusinessLogic ();
+    QString currentThemeCodeName () const;
     QString currentThemeName () const;
     QList<ThemeDescriptor *> availableThemes () const;
 };
