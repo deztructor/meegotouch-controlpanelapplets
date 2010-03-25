@@ -10,6 +10,7 @@ class QString;
 class DuiWidget;
 class DuiLabel;
 class QGraphicsSceneMouseEvent;
+class ThemeDescriptor;
 
 /*!
  * A simple layout type widget that represents one theme.
@@ -20,8 +21,8 @@ class ThemeContainer: public DuiWidget
 
 public:
     ThemeContainer (
-            const QString &themeName,
-            DuiWidget     *parent = 0);
+            ThemeDescriptor *descr,
+            DuiWidget       *parent = 0);
     ~ThemeContainer ();
 
     virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
@@ -38,7 +39,7 @@ signals:
 private:
     void createWidgets ();
 
-    DuiLabel    *m_NameLabel;
-    QString      m_ThemeName;
+    DuiLabel         *m_NameLabel;
+    ThemeDescriptor  *m_ThemeDescriptor;
 };
 #endif

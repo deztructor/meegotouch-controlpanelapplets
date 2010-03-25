@@ -5,13 +5,19 @@
 
 #include <QString>
 #include <QFile>
+#include <DuiDesktopEntry>
 
 #define DEBUG
 #include "../debug.h"
 
+static const QString nameKey = "Desktop Entry/Name";
+
 ThemeDescriptor::ThemeDescriptor (
-        const QString &directoryPath) :
-    m_Valid (false)
+        const QString &directoryPath,
+        const QString &codeName) :
+    m_Valid (false),
+    m_CodeName (codeName),
+    m_DesktopEntry (0)
 {
     QString indexFileName (directoryPath + "/index.theme");
     QFile indexFile(indexFileName);
@@ -19,12 +25,35 @@ ThemeDescriptor::ThemeDescriptor (
     if (!indexFile.exists())
         return;
 
+    m_DesktopEntry = new DuiDesktopEntry (indexFileName);
+    if (!m_DesktopEntry->isValid())
+        return;
+
+    m_Name = m_DesktopEntry->value (nameKey);
+
     m_Valid = true;
 }
 
+ThemeDescriptor::~ThemeDescriptor ()
+{
+    if (m_DesktopEntry)
+        delete m_DesktopEntry;
+}
 
 bool
 ThemeDescriptor::isValid () const
 {
     return m_Valid;
+}
+
+QString
+ThemeDescriptor::name() const
+{
+    return m_Name;
+}
+
+QString
+ThemeDescriptor::codeName() const
+{
+    return m_CodeName;
 }

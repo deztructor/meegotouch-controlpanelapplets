@@ -3,10 +3,11 @@
 #ifndef THEMEBUSINESSLOGIC_H
 #define THEMEBUSINESSLOGIC_H
 
+#include "themedescriptor.h"
+#include <QList>
 #include <QObject>
 
 class QString;
-class QStringList;
 
 class ThemeBusinessLogic : public QObject
 {
@@ -25,7 +26,7 @@ public:
     ThemeBusinessLogic ();
     ~ThemeBusinessLogic ();
     QString currentThemeName () const;
-    QStringList availableThemes () const;
+    QList<ThemeDescriptor *> availableThemes () const;
 };
 
 #endif

@@ -2,6 +2,7 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 
 #include "themewidget.h"
+#include "themedescriptor.h"
 #include "themecontainer.h"
 #include "themedialog.h"
 
@@ -98,15 +99,16 @@ ThemeWidget::readLocalThemes ()
     Q_ASSERT (m_ThemeBusinessLogic != 0);
     Q_ASSERT (m_LocalLayoutPolicy != 0);
 
-    QStringList themeNameList = m_ThemeBusinessLogic->availableThemes ();
+    QList<ThemeDescriptor *> themeList = 
+        m_ThemeBusinessLogic->availableThemes ();
     int n = 0;
-    foreach (QString themeName, themeNameList) {
+    foreach (ThemeDescriptor *theme, themeList) {
         ThemeContainer *themeContainer;
         int x = n / MaxColumns;
         int y = n % MaxColumns;
 
-        SYS_DEBUG ("Theme name[%d] = %s", n, SYS_STR(themeName));
-        themeContainer = new ThemeContainer (themeName);
+        //SYS_DEBUG ("Theme name[%d] = %s", n, SYS_STR(themeName));
+        themeContainer = new ThemeContainer (theme);
         m_LocalLayoutPolicy->addItem (themeContainer, x, y);
 
         /*

@@ -14,8 +14,6 @@
 #define DEBUG
 #include "../debug.h"
 
-//#define USE_TEST_DATA
-
 ThemeBusinessLogic::ThemeBusinessLogic ()
 {
 }
@@ -38,10 +36,10 @@ ThemeBusinessLogic::currentThemeName () const
 /*
  * /usr/share/themes
  */
-QStringList
+QList<ThemeDescriptor *>
 ThemeBusinessLogic::availableThemes () const
 {
-    QStringList retval;
+    QList<ThemeDescriptor *> retval;
     
     #if 0
     /*
@@ -61,19 +59,15 @@ ThemeBusinessLogic::availableThemes () const
                 themeFile == "..")
             continue;
         
-        descr = new ThemeDescriptor ("/usr/share/themes/" + themeFile);
+        descr = new ThemeDescriptor (
+                "/usr/share/themes/" + themeFile,
+                themeFile);
 
         if (descr->isValid())
-            retval << themeFile;
-
-        delete descr;
+            retval << descr;
+        else
+            delete descr;
     }
-
-    #ifdef USE_TEST_DATA
-    retval <<
-        "devel" <<
-        "plankton";
-    #endif
 
     return retval;
 }

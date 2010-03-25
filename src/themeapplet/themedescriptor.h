@@ -6,6 +6,7 @@
 #include <QObject>
 
 class QString;
+class DuiDesktopEntry;
 
 /*!
  * A simple class to handle all the information we need to know about one
@@ -16,14 +17,20 @@ class ThemeDescriptor : public QObject
     Q_OBJECT
 
 public:
-    ThemeDescriptor (const QString &directoryPath);
+    ThemeDescriptor (
+            const QString &directoryPath,
+            const QString &codeName);
+    ~ThemeDescriptor ();
 
     bool isValid () const;
-
+    QString name() const;
+    QString codeName() const;
+    
 private:
-    bool      m_Valid;
-    QString   m_CodeName;
-    QString   m_Name;
+    bool              m_Valid;
+    QString           m_CodeName;
+    QString           m_Name;
+    DuiDesktopEntry  *m_DesktopEntry;
 };
 
 #endif

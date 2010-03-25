@@ -2,6 +2,7 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 
 #include "themecontainer.h"
+#include "themedescriptor.h"
 
 #include <QString>
 #include <DuiLabel>
@@ -17,10 +18,10 @@ DUI_REGISTER_WIDGET_NO_CREATE(ThemeContainer)
 
 
 ThemeContainer::ThemeContainer (
-        const QString &themeName,
-        DuiWidget     *parent) :
+        ThemeDescriptor *descr,
+        DuiWidget       *parent) :
     DuiWidget (parent),
-    m_ThemeName (themeName)
+    m_ThemeDescriptor (descr)
 {
     createWidgets ();
 }
@@ -43,7 +44,7 @@ ThemeContainer::createWidgets ()
     /*
      * A label with the name of the theme. 
      */
-    m_NameLabel = new DuiLabel (m_ThemeName);
+    m_NameLabel = new DuiLabel (m_ThemeDescriptor->name());
     m_NameLabel->setObjectName ("ThemeNameLabel");
     layoutPolicy->addItem (m_NameLabel, Qt::AlignRight);
 
@@ -70,7 +71,8 @@ ThemeContainer::mouseReleaseEvent (
     //SYS_DEBUG ("");
 
     if (QRectF(QPointF(), size()).contains(event->pos())) {
-        SYS_DEBUG ("Emitting activated('%s')", SYS_STR(m_ThemeName));
-        emit activated(m_ThemeName);
+        SYS_DEBUG ("Emitting activated('%s')", 
+                SYS_STR(m_ThemeDescriptor->codeName()));
+        emit activated(m_ThemeDescriptor->codeName());
     }
 }
