@@ -9,7 +9,7 @@
 #include <QGraphicsLinearLayout>
 #include <DuiContainer>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 ThemeDialog::ThemeDialog (

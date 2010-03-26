@@ -7,7 +7,7 @@
 #include <QFile>
 #include <DuiDesktopEntry>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 
@@ -83,7 +83,6 @@ ThemeDescriptor::codeName() const
 QString
 ThemeDescriptor::iconName() const
 {
-    SYS_DEBUG ("Icon-name is '%s'", SYS_STR(m_IconName));
     return m_IconName;
 }
 

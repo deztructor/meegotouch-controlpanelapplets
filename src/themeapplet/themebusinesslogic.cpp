@@ -11,7 +11,7 @@
 #include <DuiTheme>
 #include <DuiGConfItem>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 static const QString themeDirName ("/usr/share/themes");

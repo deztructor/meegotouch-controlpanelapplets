@@ -7,7 +7,7 @@
 #include <DuiTheme>
 #include <DuiAction>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(themeapplet, ThemeApplet)

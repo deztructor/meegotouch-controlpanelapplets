@@ -3,7 +3,7 @@
 
 #include "themebrief.h"
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 ThemeBrief::ThemeBrief (

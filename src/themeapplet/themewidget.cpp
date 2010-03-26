@@ -11,7 +11,7 @@
 #include <DuiGridLayoutPolicy>
 #include <DuiContainer>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 static const int MaxColumns = 2;
