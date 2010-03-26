@@ -21,7 +21,8 @@ private slots:
     void cleanupTestCase ();
 
     void testCurrentTheme ();
-    
+    void testAvailableThemes ();
+
 private:
     DuiApplication       *m_App;
     ThemeBusinessLogic   *m_Api;
