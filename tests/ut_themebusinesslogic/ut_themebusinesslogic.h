@@ -20,6 +20,8 @@ private slots:
     void initTestCase ();
     void cleanupTestCase ();
 
+    void testCurrentTheme ();
+    
 private:
     DuiApplication       *m_App;
     ThemeBusinessLogic   *m_Api;

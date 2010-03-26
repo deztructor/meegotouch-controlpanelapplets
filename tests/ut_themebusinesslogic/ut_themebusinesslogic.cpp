@@ -39,6 +39,19 @@ Ut_ThemeBusinessLogic::cleanupTestCase()
     delete m_Api;
 }
 
+void
+Ut_ThemeBusinessLogic::testCurrentTheme ()
+{
+    QString value;
+
+    value = m_Api->currentThemeCodeName ();
+    qDebug() << "*** currentThemeCodeName = " << value;
+    QVERIFY (!value.isEmpty());
+
+    value = m_Api->currentThemeName ();
+    qDebug() << "*** currentThemeName     = " << value;
+    QVERIFY (!value.isEmpty());
+}
 
 QTEST_APPLESS_MAIN(Ut_ThemeBusinessLogic)
 
