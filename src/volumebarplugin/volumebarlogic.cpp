@@ -3,6 +3,7 @@
 #include "volumebarlogic.h"
 
 #include <stdlib.h>
+#include <string.h>
 #include <QVariant>
 #include <QString>
 
@@ -59,8 +60,8 @@ VolumeBarLogic::VolumeBarLogic () :
             (DBusHandleMessageFunction) stepsUpdatedSignal,
             (void *) this, NULL);
     }
-    m_currentmax = 10;
-    m_currentvolume = 3;
+
+    initValues ();
 }
 
 VolumeBarLogic::~VolumeBarLogic ()
@@ -78,6 +79,33 @@ VolumeBarLogic::~VolumeBarLogic ()
     }
 }
 
+#if 0
+#define DBUS_ARG_TYPE(type) \
+          switch (type) { \
+            case DBUS_TYPE_INVALID: \
+                SYS_DEBUG ("invalid"); \
+                break; \
+            case DBUS_TYPE_STRING: \
+                SYS_DEBUG ("string"); \
+                break; \
+            case DBUS_TYPE_UINT32: \
+                SYS_DEBUG ("uint32"); \
+                break; \
+            case DBUS_TYPE_ARRAY: \
+                SYS_DEBUG ("array"); \
+                break; \
+            case DBUS_TYPE_STRUCT: \
+                SYS_DEBUG ("stuct"); \
+                break; \
+            case DBUS_TYPE_DICT_ENTRY: \
+                SYS_DEBUG ("dict_entry"); \
+                break; \
+            default: \
+                SYS_DEBUG ("type_code %d", type); \
+                break; \
+          }
+#endif
+
 void
 VolumeBarLogic::initValues ()
 {
@@ -90,9 +118,10 @@ VolumeBarLogic::initValues ()
     msg = dbus_message_new_method_call (VOLUME_SV, // "org.freedesktop.DBus",
                                         VOLUME_PATH, // "/org/freedesktop/DBus",
                                         "org.freedesktop.DBus.Properties",
-                                        "org.freedesktop.DBus.Properties.GetAll");
+                                        "GetAll");
+    const char *volume_if = VOLUME_IF;
     dbus_message_append_args (msg,
-                              DBUS_TYPE_STRING, VOLUME_IF,
+                              DBUS_TYPE_STRING, &volume_if,
                               DBUS_TYPE_INVALID);
 
     reply =
@@ -108,27 +137,45 @@ VolumeBarLogic::initValues ()
     {
         DBusMessageIter iter;        
         dbus_message_iter_init (reply, &iter);
+        // Recurse into the array [array of dicts]
         while (dbus_message_iter_get_arg_type (&iter) != DBUS_TYPE_INVALID)
         {
-            DBusMessageIter dict;
-            dbus_message_iter_recurse (&iter, &dict);
-            #if 0
-            while (dbus_message_iter_get_arg_type (&dict) != DBUS_TYPE_INVALID)
+            DBusMessageIter dict_entry;
+            dbus_message_iter_recurse (&iter, &dict_entry);
+
+            // Recurse into the dict [ dict_entry (string, variant(int)) ]
+            while (dbus_message_iter_get_arg_type (&dict_entry) != DBUS_TYPE_INVALID)
             {
-                SYS_DEBUG ("type = %d", dbus_message_iter_get_arg_type (&dict));
+                DBusMessageIter in_dict; 
+                // Recurse into the dict_entry [ string, variant(int) ]
+                dbus_message_iter_recurse (&dict_entry, &in_dict);
+                {
+                  char *prop_name;
+                  // Get the string value, "property name"
+                  dbus_message_iter_get_basic (&in_dict, &prop_name);
+
+                  dbus_message_iter_next (&in_dict);
+
+                  DBusMessageIter variant;
+                  // Recurese into the variant [ variant(int) ]
+                  dbus_message_iter_recurse (&in_dict, &variant);
+
+                  quint32 value;
+                  // Get the variant value which is uint32
+                  dbus_message_iter_get_basic (&variant, &value);
+
+                  if (prop_name &&
+                      strcmp (prop_name, "StepCount") == 0)
+                    m_currentmax = value;
+                  else if (prop_name &&
+                           strcmp (prop_name, "CurrentStep") == 0)
+                    m_currentvolume = value;
+
+                  SYS_DEBUG ("%s: %d", prop_name, value);
+                }
+
+                dbus_message_iter_next (&dict_entry);
             }
-            #else
-            char *prop_name;
-            dbus_message_iter_get_basic (&dict, &prop_name);
-
-            dbus_message_iter_next (&dict);
-
-            quint32 value;
-            dbus_message_iter_get_basic (&dict, &value);
-
-            SYS_DEBUG ("%s: %d", prop_name, value);
-            #endif
-
             dbus_message_iter_next (&iter);
         }
     }
@@ -145,11 +192,13 @@ stepsUpdatedSignal (DBusConnection *conn,
     Q_UNUSED (conn);
     Q_UNUSED (message);
     SYS_DEBUG ("");
+#if 0
     quint32 value = 0;
     quint32 maxvalue = 0;
 
     // Forward the data to the BusinessLogic 
     logic->stepsUpdated (value, maxvalue);
+#endif
 }
 
 
