@@ -6,12 +6,16 @@ CONFIG += plugin \
           gui \
           dui \
           duistatusindicatormenu \
+          link_pkgconfig \
           silent
 
-QT += dbus
+PKGCONFIG += dbus-1
+
+LIBS += -ldbus-qeventloop
 
 INCLUDEPATH += \
-    /usr/include/duistatusindicatormenu
+    /usr/include/duistatusindicatormenu \
+    /usr/include/dbus-1.0
 
 HEADERS = volumebarplugin.h \
           volumebarlogic.h \

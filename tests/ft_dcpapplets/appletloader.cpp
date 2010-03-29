@@ -7,8 +7,6 @@
 #include <dcpbrief.h>
 #include <dcpwidget.h>
 
-#define DCP_APPLET_LOADER_DEPRECATED
-
 #ifndef DCP_APPLET_LOADER_DEPRECATED
 #include <dcpappletloader.h>
 #else

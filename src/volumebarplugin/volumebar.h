@@ -19,7 +19,7 @@ public:
 
 private slots:
     void sliderChanged (int val);
-    void volumeChanged (int val, int max);
+    void volumeChanged (quint32 val, quint32 max);
 
 private:
     DuiSlider       *m_bar;

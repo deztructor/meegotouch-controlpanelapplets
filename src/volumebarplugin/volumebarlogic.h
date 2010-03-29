@@ -1,8 +1,9 @@
 #ifndef VOLUMEBARLOGIC_H
 #define VOLUMEBARLOGIC_H
 
+#include <dbus/dbus.h>
+#include <dbusconnectioneventloop.h>
 #include <QObject>
-#include <QDBusInterface>
 
 class VolumeBarLogic : public QObject
 {
@@ -12,18 +13,25 @@ class VolumeBarLogic : public QObject
         VolumeBarLogic ();
         ~VolumeBarLogic ();
 
-        void setVolume (int value);
-        int  getVolume ();
-        int  getMaxVolume ();
+        void setVolume (quint32 value);
+        quint32 getVolume ();
+        quint32 getMaxVolume ();
+
+    public slots:
+        void stepsUpdated (quint32 value, quint32 maxvalue);
 
     signals:
-        void volumeChanged (int value, int maxvalue);
+        void volumeChanged (quint32 value, quint32 maxvalue);
 
     private:
-        QDBusInterface  *m_if;
+        void initValues ();
 
-        int     m_currentvolume;
-        int     m_currentmax;
+        DBusConnection          *m_dbus_conn;
+        DBUSConnectionEventLoop *m_eventloop;
+
+        quint32     m_currentvolume;
+        quint32     m_currentmax;
 };
 
 #endif
+

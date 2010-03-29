@@ -53,10 +53,7 @@ VolumeBar::VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
 
     mainLayout->addItem (container);
 
-    connect (m_bar, SIGNAL (valueChanged (int)),
-             this, SLOT (sliderChanged (int)));
-
-    int current_volume = m_logic->getVolume ();
+    quint32 current_volume = m_logic->getVolume ();
     if (current_volume > 0)
         m_bar->setMinLabelIconID ("icon-m-common-volume");
     else
@@ -64,6 +61,12 @@ VolumeBar::VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
 
     m_bar->setRange (0, m_logic->getMaxVolume ());
     m_bar->setValue (current_volume);
+
+    connect (m_bar, SIGNAL (valueChanged (int)),
+             this, SLOT (sliderChanged (int)));
+
+    connect (m_logic, SIGNAL (volumeChanged (quint32, quint32)),
+             this, SLOT (volumeChanged (quint32, quint32)));
 }
 
 VolumeBar::~VolumeBar ()
@@ -75,7 +78,7 @@ VolumeBar::~VolumeBar ()
 void
 VolumeBar::sliderChanged (int val)
 {
-    m_logic->setVolume (val);
+    m_logic->setVolume ((quint32) val);
 
     if (val > 0)
         m_bar->setMinLabelIconID ("icon-m-common-volume");
@@ -84,19 +87,16 @@ VolumeBar::sliderChanged (int val)
 }
 
 void
-VolumeBar::volumeChanged (int val, int max)
+VolumeBar::volumeChanged (quint32 val, quint32 max)
 {
     SYS_DEBUG ("val = %d, max = %d", val, max);
 
-    if (val > m_bar->maximum ())
-    {
-        m_bar->setRange (0, max - 1);
-        m_bar->setValue (val);
-    }
-    else
-    {
-        m_bar->setValue (val);
-        m_bar->setRange (0, max - 1);
-    }
+    m_bar->blockSignals (true); // to avoid busy loop
+
+    m_bar->setValue (0);
+    m_bar->setRange (0, (int) max - 1);
+    m_bar->setValue ((int) val);
+
+    m_bar->blockSignals (false);
 }
 
