@@ -79,33 +79,6 @@ VolumeBarLogic::~VolumeBarLogic ()
     }
 }
 
-#if 0
-#define DBUS_ARG_TYPE(type) \
-          switch (type) { \
-            case DBUS_TYPE_INVALID: \
-                SYS_DEBUG ("invalid"); \
-                break; \
-            case DBUS_TYPE_STRING: \
-                SYS_DEBUG ("string"); \
-                break; \
-            case DBUS_TYPE_UINT32: \
-                SYS_DEBUG ("uint32"); \
-                break; \
-            case DBUS_TYPE_ARRAY: \
-                SYS_DEBUG ("array"); \
-                break; \
-            case DBUS_TYPE_STRUCT: \
-                SYS_DEBUG ("stuct"); \
-                break; \
-            case DBUS_TYPE_DICT_ENTRY: \
-                SYS_DEBUG ("dict_entry"); \
-                break; \
-            default: \
-                SYS_DEBUG ("type_code %d", type); \
-                break; \
-          }
-#endif
-
 void
 VolumeBarLogic::initValues ()
 {
@@ -184,6 +157,33 @@ VolumeBarLogic::initValues ()
         dbus_message_unref (reply);
 }
 
+#if 0
+#define DBUS_ARG_TYPE(type) \
+          switch (type) { \
+            case DBUS_TYPE_INVALID: \
+                SYS_DEBUG ("invalid"); \
+                break; \
+            case DBUS_TYPE_STRING: \
+                SYS_DEBUG ("string"); \
+                break; \
+            case DBUS_TYPE_UINT32: \
+                SYS_DEBUG ("uint32"); \
+                break; \
+            case DBUS_TYPE_ARRAY: \
+                SYS_DEBUG ("array"); \
+                break; \
+            case DBUS_TYPE_STRUCT: \
+                SYS_DEBUG ("stuct"); \
+                break; \
+            case DBUS_TYPE_DICT_ENTRY: \
+                SYS_DEBUG ("dict_entry"); \
+                break; \
+            default: \
+                SYS_DEBUG ("type_code %d", type); \
+                break; \
+          }
+#endif
+
 static void
 stepsUpdatedSignal (DBusConnection *conn,
                     DBusMessage    *message,
@@ -191,11 +191,24 @@ stepsUpdatedSignal (DBusConnection *conn,
 {
     Q_UNUSED (conn);
     Q_UNUSED (message);
+    Q_UNUSED (logic);
     SYS_DEBUG ("");
+
 #if 0
     quint32 value = 0;
     quint32 maxvalue = 0;
 
+    DBusMessageIter iter;        
+    dbus_message_iter_init (reply, &iter);
+    // Recurse into the array [array of dicts]
+    while (dbus_message_iter_get_arg_type (&iter) != DBUS_TYPE_INVALID)
+    {
+        DBusMessageIter dict_entry;
+        dbus_message_iter_recurse (&iter, &dict_entry);
+    }
+#endif
+
+#if 0
     // Forward the data to the BusinessLogic 
     logic->stepsUpdated (value, maxvalue);
 #endif
