@@ -59,7 +59,7 @@ VolumeBar::VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
     else
         m_bar->setMinLabelIconID ("icon-m-common-volume-off");
 
-    m_bar->setRange (0, m_logic->getMaxVolume ());
+    m_bar->setRange (0, (int) m_logic->getMaxVolume () - 1);
     m_bar->setValue (current_volume);
 
     connect (m_bar, SIGNAL (valueChanged (int)),

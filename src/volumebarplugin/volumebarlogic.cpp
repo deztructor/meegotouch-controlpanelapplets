@@ -41,7 +41,7 @@ VolumeBarLogic::VolumeBarLogic () :
     char *pa_bus_address = getenv ("PULSE_DBUS_SERVER");
 
     if (pa_bus_address == NULL)
-        pa_bus_address = DEFAULT_ADDRESS;
+        pa_bus_address = (char *) DEFAULT_ADDRESS;
 
     dbus_error_init (&dbus_err);
 
@@ -53,8 +53,11 @@ VolumeBarLogic::VolumeBarLogic () :
         (m_eventloop = new DBUSConnectionEventLoop) &&
         (m_eventloop->addConnection (m_dbus_conn)))
     {
-        dbus_bus_add_match (m_dbus_conn, "type='signal',"
-                            "interface='" VOLUME_IF "'", NULL);
+        // Seems for peer-to-peer connections this call doesn't matters,
+        // currently i got this message on stepsUpdatedSignal handler:
+        // "Method "AddMatch" with signature "s" on interface
+        // "org.freedesktop.DBus" doesn't exist"
+        dbus_bus_add_match (m_dbus_conn, "type='signal'", NULL);
         dbus_connection_add_filter (
             m_dbus_conn,
             (DBusHandleMessageFunction) stepsUpdatedSignal,
@@ -88,8 +91,8 @@ VolumeBarLogic::initValues ()
 
     dbus_error_init (&error);
 
-    msg = dbus_message_new_method_call (VOLUME_SV, // "org.freedesktop.DBus",
-                                        VOLUME_PATH, // "/org/freedesktop/DBus",
+    msg = dbus_message_new_method_call (VOLUME_SV,
+                                        VOLUME_PATH,
                                         "org.freedesktop.DBus.Properties",
                                         "GetAll");
     const char *volume_if = VOLUME_IF;
@@ -157,7 +160,6 @@ VolumeBarLogic::initValues ()
         dbus_message_unref (reply);
 }
 
-#if 0
 #define DBUS_ARG_TYPE(type) \
           switch (type) { \
             case DBUS_TYPE_INVALID: \
@@ -182,7 +184,9 @@ VolumeBarLogic::initValues ()
                 SYS_DEBUG ("type_code %d", type); \
                 break; \
           }
-#endif
+#define DBUS_ITER_TYPE(iter) \
+            SYS_DEBUG (#iter); \
+            DBUS_ARG_TYPE(dbus_message_iter_get_arg_type (&iter))
 
 static void
 stepsUpdatedSignal (DBusConnection *conn,
@@ -190,23 +194,38 @@ stepsUpdatedSignal (DBusConnection *conn,
                     VolumeBarLogic *logic)
 {
     Q_UNUSED (conn);
-    Q_UNUSED (message);
     Q_UNUSED (logic);
-    SYS_DEBUG ("");
 
-#if 0
-    quint32 value = 0;
-    quint32 maxvalue = 0;
+//    quint32 value = 0;
+//    quint32 maxvalue = 0;
 
     DBusMessageIter iter;        
-    dbus_message_iter_init (reply, &iter);
+    dbus_message_iter_init (message, &iter);
     // Recurse into the array [array of dicts]
     while (dbus_message_iter_get_arg_type (&iter) != DBUS_TYPE_INVALID)
     {
+//        DBUS_ITER_TYPE (iter);
+//        ^ XXX: i need this when some signal really comes from PulseAudio
+
+        if (dbus_message_iter_get_arg_type (&iter) == DBUS_TYPE_STRING)
+        {
+            char *val = NULL;
+            dbus_message_iter_get_basic (&iter, &val);
+            SYS_DEBUG ("msg: %s", val);
+        }
+
+#if 0
         DBusMessageIter dict_entry;
         dbus_message_iter_recurse (&iter, &dict_entry);
-    }
+
+        while (dbus_message_iter_get_arg_type (&dict_entry) != DBUS_TYPE_INVALID)
+        {
+            DBUS_ITER_TYPE (dict_entry);
+            dbus_message_iter_next (&dict_entry);
+        }
 #endif
+        dbus_message_iter_next (&iter);
+    }
 
 #if 0
     // Forward the data to the BusinessLogic 
@@ -229,9 +248,51 @@ VolumeBarLogic::stepsUpdated (quint32 value, quint32 maxvalue)
 void
 VolumeBarLogic::setVolume (quint32 value)
 {
-    SYS_DEBUG ("value = %d", value);
+    DBusMessage     *message;
+    char            *volume_if = (char *) VOLUME_IF;
+    char            *method    = (char *) "CurrentStep";
 
-//    m_if->setProperty ("CurrentStep", QVariant (value));
+    message = dbus_message_new_method_call (VOLUME_SV,
+                                            VOLUME_PATH,
+                                            "org.freedesktop.DBus.Properties",
+                                            "Set");
+
+    if (message &&
+        dbus_message_append_args (message,
+                                  DBUS_TYPE_STRING, &volume_if,
+                                  DBUS_TYPE_STRING, &method,
+                                  DBUS_TYPE_INVALID))
+    {
+        dbus_uint32_t    serial = 0;
+        DBusMessageIter  append;
+        DBusMessageIter  sub;
+
+        // Create and append the variant argument ...
+        dbus_message_iter_init_append (message, &append);
+
+        dbus_message_iter_open_container (&append,
+                                          DBUS_TYPE_VARIANT,
+                                          DBUS_TYPE_UINT32_AS_STRING,
+                                          &sub);
+        // Set the variant argument value:
+        dbus_message_iter_append_basic (&sub, DBUS_TYPE_UINT32, &value);
+        // Close the append iterator
+        dbus_message_iter_close_container (&append, &sub);
+
+        // Send/flush the message immediately:
+        dbus_connection_send (m_dbus_conn, message, &serial);
+        dbus_connection_flush (m_dbus_conn);
+
+//      SYS_DEBUG ("volume set to %d [d-bus msg serial: %u]", value, serial);
+//      ^ Warning: this debug message can produce too many output
+    }
+    else
+        SYS_WARNING ("Cannot set volume! [not enough memory]");
+
+    if (message)
+        dbus_message_unref (message);
+
+    m_currentvolume = value;
 }
 
 quint32
