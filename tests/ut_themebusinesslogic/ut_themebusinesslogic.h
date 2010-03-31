@@ -10,6 +10,17 @@
 class DuiApplication;
 class ThemeBusinessLogic;
 
+class UtThemeBusinessLogicPrivate : public QObject 
+{
+    Q_OBJECT
+
+public slots:
+    void themeChanged (QString themeCodeName);
+
+public:
+    QString m_ThemeCodeName;
+};
+
 class Ut_ThemeBusinessLogic : public QObject 
 {
 Q_OBJECT
@@ -22,10 +33,12 @@ private slots:
 
     void testCurrentTheme ();
     void testAvailableThemes ();
+    void testChangeTheme ();
 
 private:
-    DuiApplication       *m_App;
-    ThemeBusinessLogic   *m_Api;
+    UtThemeBusinessLogicPrivate *m_Priv;
+    DuiApplication              *m_App;
+    ThemeBusinessLogic          *m_Api;
 };
 
 #endif
