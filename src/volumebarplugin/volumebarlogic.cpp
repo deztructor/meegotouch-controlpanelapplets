@@ -32,7 +32,7 @@ stepsUpdatedSignal (DBusConnection *conn,
 
 VolumeBarLogic::VolumeBarLogic () :
     QObject (),
-    m_dbus_conn (0),
+    m_dbus_conn (NULL),
     m_eventloop (0),
     m_currentvolume (0),
     m_currentmax (0)
@@ -88,6 +88,9 @@ VolumeBarLogic::initValues ()
     DBusMessage *msg;
     DBusMessage *reply;
     DBusError    error;
+
+    if (m_dbus_conn == NULL)
+        return;
 
     dbus_error_init (&error);
 
