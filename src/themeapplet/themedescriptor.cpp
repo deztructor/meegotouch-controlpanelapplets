@@ -50,6 +50,21 @@ ThemeDescriptor::ThemeDescriptor (
     m_Valid = true;
 }
 
+bool 
+ThemeDescriptor::operator== (
+        const ThemeDescriptor &other) const
+{
+    return m_Valid && other.m_Valid && m_CodeName == other.m_CodeName;
+}
+
+bool 
+ThemeDescriptor::operator== (
+        const QString &name) const
+{
+    return m_Valid && 
+        (m_CodeName == name || m_Name == name);
+}
+
 ThemeDescriptor::~ThemeDescriptor ()
 {
     if (m_DesktopEntry)

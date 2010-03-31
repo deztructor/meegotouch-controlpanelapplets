@@ -3,6 +3,7 @@
 
 #include "themecontainer.h"
 #include "themedescriptor.h"
+#include "themebusinesslogic.h"
 
 #include <QString>
 #include <DuiLabel>
@@ -19,12 +20,19 @@ DUI_REGISTER_WIDGET_NO_CREATE(ThemeContainer)
 
 
 ThemeContainer::ThemeContainer (
-        ThemeDescriptor *descr,
-        DuiWidget       *parent) :
+        ThemeDescriptor     *descr,
+        ThemeBusinessLogic  *logic,
+        DuiWidget           *parent) :
     DuiWidget (parent),
-    m_ThemeDescriptor (descr)
+    m_ThemeDescriptor (descr),
+    m_ThemeBusinessLogic (logic)
 {
     createWidgets ();
+    setActive (!current());
+
+    if (m_ThemeBusinessLogic) 
+        connect (m_ThemeBusinessLogic, SIGNAL(themeChanged(QString)),
+                this, SLOT(themeChanged(QString)));
 }
 
 ThemeContainer::~ThemeContainer ()
@@ -34,9 +42,9 @@ ThemeContainer::~ThemeContainer ()
 void
 ThemeContainer::createWidgets ()
 {
-    DuiLayout        *layout;
+    DuiLayout              *layout;
     DuiLinearLayoutPolicy  *layoutPolicy;
-
+         
     layout = new DuiLayout (this);
 
     layoutPolicy = new DuiLinearLayoutPolicy (layout, Qt::Horizontal);
@@ -46,6 +54,7 @@ ThemeContainer::createWidgets ()
      */
     m_Icon = new DuiImageWidget (m_ThemeDescriptor->iconName());
     m_Icon->setObjectName ("ThemeIcon");
+    m_Icon->setActive (!current());
     layoutPolicy->addItem (m_Icon, Qt::AlignLeft | Qt::AlignVCenter);
     layoutPolicy->setStretchFactor (m_Icon, 0);
 
@@ -54,12 +63,38 @@ ThemeContainer::createWidgets ()
      */
     m_NameLabel = new DuiLabel (m_ThemeDescriptor->name());
     m_NameLabel->setObjectName ("ThemeNameLabel");
+    m_NameLabel->setActive (!current());
     layoutPolicy->addItem (m_NameLabel, Qt::AlignRight | Qt::AlignVCenter);
     layoutPolicy->setStretchFactor (m_NameLabel, 1);
 
     this->setLayout (layout);
 }
 
+bool
+ThemeContainer::current ()
+{
+    bool    thisIsCurrent = false;
+
+    if (m_ThemeBusinessLogic) {
+        QString current = m_ThemeBusinessLogic->currentThemeCodeName();
+        thisIsCurrent = *m_ThemeDescriptor == current;
+    }
+
+    return thisIsCurrent;
+}
+
+void
+ThemeContainer::themeChanged (QString themeCodeName)
+{
+    bool thisIsCurrent = *m_ThemeDescriptor == themeCodeName;
+
+    SYS_DEBUG ("*** thisIsCurrent = %s", SYS_BOOL(thisIsCurrent));
+    setActive (!thisIsCurrent);
+    if (m_Icon)
+        m_Icon->setActive (!thisIsCurrent);
+    if (m_NameLabel)
+        m_NameLabel->setActive (!thisIsCurrent);
+}
 
 void 
 ThemeContainer::mousePressEvent (
@@ -79,7 +114,8 @@ ThemeContainer::mouseReleaseEvent (
 {
     //SYS_DEBUG ("");
 
-    if (QRectF(QPointF(), size()).contains(event->pos())) {
+    if (QRectF(QPointF(), size()).contains(event->pos()) &&
+            !current()) {
         SYS_DEBUG ("Emitting activated('%s')", 
                 SYS_STR(m_ThemeDescriptor->codeName()));
         emit activated(m_ThemeDescriptor);

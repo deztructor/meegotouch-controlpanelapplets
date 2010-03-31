@@ -5,6 +5,7 @@
 
 #include <DuiWidget>
 #include <QObject>
+#include <QPointer>
 
 class QString;
 class DuiWidget;
@@ -12,6 +13,7 @@ class DuiLabel;
 class DuiImageWidget;
 class QGraphicsSceneMouseEvent;
 class ThemeDescriptor;
+class ThemeBusinessLogic;
 
 /*!
  * A simple layout type widget that represents one theme.
@@ -22,12 +24,16 @@ class ThemeContainer: public DuiWidget
 
 public:
     ThemeContainer (
-            ThemeDescriptor *descr,
-            DuiWidget       *parent = 0);
+            ThemeDescriptor    *descr,
+            ThemeBusinessLogic *logic = 0,
+            DuiWidget          *parent = 0);
     ~ThemeContainer ();
 
     virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
     virtual void mouseReleaseEvent (QGraphicsSceneMouseEvent *event);
+
+public slots:
+    void themeChanged (QString themeCodeName);
 
 signals:
     /*!
@@ -39,9 +45,11 @@ signals:
 
 private:
     void createWidgets ();
+    bool current ();
 
-    DuiLabel         *m_NameLabel;
-    DuiImageWidget   *m_Icon;
-    ThemeDescriptor  *m_ThemeDescriptor;
+    DuiLabel            *m_NameLabel;
+    DuiImageWidget      *m_Icon;
+    ThemeDescriptor     *m_ThemeDescriptor;
+    QPointer<ThemeBusinessLogic> m_ThemeBusinessLogic;
 };
 #endif
