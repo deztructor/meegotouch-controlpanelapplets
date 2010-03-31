@@ -114,7 +114,7 @@ ThemeWidget::readLocalThemes ()
             continue;
         }
         //SYS_DEBUG ("Theme name[%d] = %s", n, SYS_STR(themeName));
-        themeContainer = new ThemeContainer (theme);
+        themeContainer = new ThemeContainer (theme, m_ThemeBusinessLogic);
         m_LocalLayoutPolicy->addItem (themeContainer, x, y);
 
         /*

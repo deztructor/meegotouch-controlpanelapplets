@@ -22,6 +22,8 @@ public:
             const QString &codeName);
     ~ThemeDescriptor ();
 
+    bool operator== (const ThemeDescriptor &other) const;
+    bool operator== (const QString &name) const;
     bool isValid () const;
     bool isVisible () const;
     QString name() const;
