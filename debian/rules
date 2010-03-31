@@ -104,6 +104,8 @@ binary-arch: build install
 #	dh_python
 	dh_makeshlibs
 	dh_installdeb
+# Its prevents me to build packages on i386 target
+# FIXME: remove this comment before releasing:
 #	dh_shlibdeps
 	dh_gencontrol
 	dh_md5sums

@@ -53,18 +53,16 @@ VolumeBarLogic::VolumeBarLogic () :
         (m_eventloop = new DBUSConnectionEventLoop) &&
         (m_eventloop->addConnection (m_dbus_conn)))
     {
-        // Seems for peer-to-peer connections this call doesn't matters,
-        // currently i got this message on stepsUpdatedSignal handler:
-        // "Method "AddMatch" with signature "s" on interface
-        // "org.freedesktop.DBus" doesn't exist"
-        dbus_bus_add_match (m_dbus_conn, "type='signal'", NULL);
         dbus_connection_add_filter (
             m_dbus_conn,
             (DBusHandleMessageFunction) stepsUpdatedSignal,
             (void *) this, NULL);
-    }
 
-    initValues ();
+        initValues ();
+
+//XXX: FIXME: TODO: This causes crash in DBusConnectionEventLoop:
+//        addSignalMatch ();
+    }
 }
 
 VolumeBarLogic::~VolumeBarLogic ()
@@ -88,9 +86,6 @@ VolumeBarLogic::initValues ()
     DBusMessage *msg;
     DBusMessage *reply;
     DBusError    error;
-
-    if (m_dbus_conn == NULL)
-        return;
 
     dbus_error_init (&error);
 
@@ -163,6 +158,35 @@ VolumeBarLogic::initValues ()
         dbus_message_unref (reply);
 }
 
+void
+VolumeBarLogic::addSignalMatch ()
+{
+    SYS_DEBUG ("");
+
+    DBusMessage     *message = NULL;
+    char            *signal = (char *) "com.Nokia.MainVolume1.StepsUpdated";
+
+    message = dbus_message_new_method_call ("org.PulseAudio.Core1",
+                                            "/org/pulseaudio/core1",
+                                            "org.PulseAudio.Core1",
+                                            "ListenForSignal");
+
+    if (message != NULL)
+    {
+        dbus_message_append_args (message,
+                                  DBUS_TYPE_STRING, &signal,
+                                  DBUS_TYPE_INVALID);
+
+        dbus_connection_send (m_dbus_conn, message, NULL);
+        dbus_connection_flush (m_dbus_conn);
+    }
+    else
+        SYS_WARNING ("Cannot listen for PulseAudio signals [out of memory]");
+
+    if (message)
+        dbus_message_unref (message);
+}
+
 #define DBUS_ARG_TYPE(type) \
           switch (type) { \
             case DBUS_TYPE_INVALID: \
@@ -188,7 +212,6 @@ VolumeBarLogic::initValues ()
                 break; \
           }
 #define DBUS_ITER_TYPE(iter) \
-            SYS_DEBUG (#iter); \
             DBUS_ARG_TYPE(dbus_message_iter_get_arg_type (&iter))
 
 static void
@@ -196,6 +219,17 @@ stepsUpdatedSignal (DBusConnection *conn,
                     DBusMessage    *message,
                     VolumeBarLogic *logic)
 {
+    SYS_DEBUG ("message address: %p", message);
+    if (message)
+    {
+        SYS_DEBUG ("message signature, interface, member: %s, %s, %s",
+                   dbus_message_get_signature (message),
+                   dbus_message_get_interface (message),
+                   dbus_message_get_member (message));
+        SYS_DEBUG ("message tpye: %s", dbus_message_type_to_string (
+                   dbus_message_get_type (message)));
+    }
+
     Q_UNUSED (conn);
     Q_UNUSED (logic);
 
@@ -207,8 +241,7 @@ stepsUpdatedSignal (DBusConnection *conn,
     // Recurse into the array [array of dicts]
     while (dbus_message_iter_get_arg_type (&iter) != DBUS_TYPE_INVALID)
     {
-//        DBUS_ITER_TYPE (iter);
-//        ^ XXX: i need this when some signal really comes from PulseAudio
+        DBUS_ITER_TYPE (iter);
 
         if (dbus_message_iter_get_arg_type (&iter) == DBUS_TYPE_STRING)
         {

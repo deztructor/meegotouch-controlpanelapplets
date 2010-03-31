@@ -25,6 +25,7 @@ class VolumeBarLogic : public QObject
 
     private:
         void initValues ();
+        void addSignalMatch ();
 
         DBusConnection          *m_dbus_conn;
         DBUSConnectionEventLoop *m_eventloop;
