@@ -32,7 +32,7 @@ Ft_AppletLoader::initTestCase ()
 {
     int argc = 1;
     char *argv[] = {
-        "./ft_dcpapplets",
+        (char *) "./ft_dcpapplets",
         NULL
     };
 
