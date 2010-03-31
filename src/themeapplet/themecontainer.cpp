@@ -12,7 +12,7 @@
 #include <DuiLinearLayoutPolicy>
 #include <QGraphicsSceneMouseEvent>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 #include "duiwidgetcreator.h"
