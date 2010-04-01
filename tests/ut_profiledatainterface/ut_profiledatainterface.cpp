@@ -39,6 +39,10 @@ Ut_ProfileDataInterface::cleanupTestCase()
     delete m_Api;
 }
 
+/*!
+ * Gets the current profile name, checks if the profile name is not an empty
+ * string.
+ */
 void 
 Ut_ProfileDataInterface::testGetCurrentProfileName ()
 {
@@ -48,6 +52,10 @@ Ut_ProfileDataInterface::testGetCurrentProfileName ()
     QVERIFY(!prof.isEmpty());
 }
 
+/*!
+ * Reads the profile data and prints the details with debug messages. Chacks if
+ * there is at least 1 available profiles.
+ */
 void 
 Ut_ProfileDataInterface::testGetProfilesData ()
 {
@@ -89,6 +97,12 @@ Ut_ProfileDataInterface::testSetGetProfile ()
     }
 }
 
+/*!
+ * Tests if the vibration can be enabled/disabled in the profile. 
+ *
+ * Please note that this test is currently disabled, since there is some bug in
+ * the backend.
+ */
 void 
 Ut_ProfileDataInterface::testSetVibration ()
 {
