@@ -1,3 +1,9 @@
+systemui-applets (0.12.7) harmattan; urgency=low
+
+  * Fix a build error
+
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 01 Apr 2010 16:14:35 +0200
+
 systemui-applets (0.12.6) harmattan; urgency=low
 
   * Adjusting dependencies...
