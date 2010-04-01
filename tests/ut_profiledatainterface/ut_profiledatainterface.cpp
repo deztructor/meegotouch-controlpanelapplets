@@ -51,8 +51,7 @@ Ut_ProfileDataInterface::testGetCurrentProfileName ()
 void 
 Ut_ProfileDataInterface::testGetProfilesData ()
 {
-    QList<ProfileDataInterface::ProfileData> list = 
-        m_Api->getProfilesData ();
+    QList<ProfileDataInterface::ProfileData> list = m_Api->getProfilesData ();
     int n = 0;
 
     foreach (ProfileDataInterface::ProfileData item, list) {
@@ -75,6 +74,10 @@ Ut_ProfileDataInterface::testGetProfilesData ()
     QVERIFY (n > 0);
 }
 
+/*!
+ * Will go through the profiles and set each and every one of them as current
+ * profile. Tests if the setting of the current profile was successfull.
+ */
 void 
 Ut_ProfileDataInterface::testSetGetProfile ()
 {
@@ -83,6 +86,49 @@ Ut_ProfileDataInterface::testSetGetProfile ()
         m_Api->setProfile (profileId);
 
         QVERIFY (m_Api->getCurrentProfile() == profileId);
+    }
+}
+
+void 
+Ut_ProfileDataInterface::testSetVibration ()
+{
+    QList<ProfileDataInterface::ProfileData> list;
+
+    /*
+     * Let's disable the vibration for all the profiles and check if it is
+     * really diabled.
+     */
+    list = m_Api->getProfilesData ();
+    foreach (ProfileDataInterface::ProfileData item, list) {
+        m_Api->setVibration (item.profileId, false);
+    }
+
+    list = m_Api->getProfilesData ();
+    foreach (ProfileDataInterface::ProfileData item, list) {
+        if (item.vibrationEnabled)
+            qDebug() << "Vibration for " << item.profileName << " is " <<
+                (item.vibrationEnabled ? "enabled" : "disabled") <<
+                "(should be disabled)";
+
+//        QVERIFY (!item.vibrationEnabled);
+    }
+
+    /*
+     * The same with enabled vibration.
+     */
+    list = m_Api->getProfilesData ();
+    foreach (ProfileDataInterface::ProfileData item, list) {
+        m_Api->setVibration (item.profileId, true);
+    }
+
+    list = m_Api->getProfilesData ();
+    foreach (ProfileDataInterface::ProfileData item, list) {
+        if (!item.vibrationEnabled)
+            qDebug() << "Vibration for " << item.profileName << " is " <<
+                (item.vibrationEnabled ? "enabled" : "disabled") <<
+                "(should be enabled)";
+
+//        QVERIFY (item.vibrationEnabled);
     }
 }
 
