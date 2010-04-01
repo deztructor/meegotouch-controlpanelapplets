@@ -1,8 +1,9 @@
-systemui-applets (0.12.6~unreleased) harmattan; urgency=low
+systemui-applets (0.12.6) harmattan; urgency=low
 
-  * NEW VERSION
+  * Adjusting dependencies...
+  * Fixes: NB#161391 - duistatusindicatormenu utilizing CPU all the time
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 31 Mar 2010 10:32:28 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 01 Apr 2010 15:21:24 +0200
 
 systemui-applets (0.12.5) harmattan; urgency=low
 

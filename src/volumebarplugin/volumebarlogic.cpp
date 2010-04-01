@@ -37,6 +37,8 @@ VolumeBarLogic::VolumeBarLogic () :
     m_currentvolume (0),
     m_currentmax (0)
 {
+    qInstallMsgHandler (0);
+
     DBusError dbus_err;
     char *pa_bus_address = getenv ("PULSE_DBUS_SERVER");
 
@@ -61,7 +63,7 @@ VolumeBarLogic::VolumeBarLogic () :
         initValues ();
 
 //XXX: FIXME: TODO: This causes crash in DBusConnectionEventLoop:
-//        addSignalMatch ();
+        addSignalMatch ();
     }
 }
 
