@@ -23,6 +23,7 @@ private slots:
     void testGetCurrentProfileName ();
     void testGetProfilesData ();
     void testSetGetProfile ();
+    void testSetVibration ();
 
 private:
     DuiApplication       *m_App;

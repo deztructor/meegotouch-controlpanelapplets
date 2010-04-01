@@ -16,7 +16,7 @@ Depends: ${shlibs:Depends}, testrunner, ci-testing, duicontrolpanel-usbapplet,
          duicontrolpanel-batteryapplet, duistatusindicatormenu-batteryplugin,
          duistatusindicatormenu-volumeplugin, duicontrolpanel-displayapplet,
          duicontrolpanel-profileapplet, duistatusindicatormenu-profileplugin,
-         duicontrolpanel-ledapplet
+         duicontrolpanel-ledapplet, duicontrolpanel-themeapplet
 XB-Maemo-CI-Packages: system-ui
 XB-Maemo-CI-Stage: fast, staging
 Description: Test package for system-ui applets
@@ -65,7 +65,7 @@ Package: duicontrolpanel-profileapplet
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english
+         libprofile-qt0, systemui-applets-l10n-engineering-english
 Description: Profiles settings applet.
 
 Package: duicontrolpanel-themeapplet
@@ -85,7 +85,7 @@ Description: Testapplet to manual test duicontrolpanel.
 Package: duistatusindicatormenu-profileplugin
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends},
+Depends: ${shlibs:Depends}, ${misc:Depends}, libprofile-qt0
          systemui-applets-l10n-engineering-english
 Description: Profile status indicator menu plugin.
 
