@@ -65,7 +65,7 @@ Package: duicontrolpanel-profileapplet
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         libprofile-qt0, systemui-applets-l10n-engineering-english
+         systemui-applets-l10n-engineering-english
 Description: Profiles settings applet.
 
 Package: duicontrolpanel-themeapplet
@@ -85,7 +85,7 @@ Description: Testapplet to manual test duicontrolpanel.
 Package: duistatusindicatormenu-profileplugin
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libprofile-qt0
+Depends: ${shlibs:Depends}, ${misc:Depends},
          systemui-applets-l10n-engineering-english
 Description: Profile status indicator menu plugin.
 
