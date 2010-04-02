@@ -25,8 +25,8 @@ LedWidget::LedWidget (
     SYS_DEBUG ("");
     initWidget ();
 
-    connect (m_LedDBusInterface, SIGNAL(eventsLedStateReceived(bool)),
-            this, SLOT(eventsLedStateReceived(bool)));
+    connect (m_LedDBusInterface, SIGNAL(eventsLedStateReceived(int)),
+            this, SLOT(eventsLedStateReceived(int)));
 
     m_LedDBusInterface->eventsLedStateRequired ();
 }
@@ -99,12 +99,19 @@ LedWidget::eventButtonToggled (
 
 void 
 LedWidget::eventsLedStateReceived (
-        bool enabled)
+        int enabledLeds)
 {
-#if 0
-    SYS_DEBUG ("enabled = %s", enabled ? "yes" : "no");
-    m_EventsButton->setChecked (enabled);
-#endif
+    int   n;
+    bool  checked;
+
+    SYS_DEBUG ("*** enabledLeds = %d", enabledLeds);
+
+    FOREACHCATEGORY(n) {
+        checked = enabledLeds & (1 << n);
+        SYS_DEBUG ("checked[%d] = %s", n, SYS_BOOL(checked));
+        if (m_EventButtons[n])
+            m_EventButtons[n]->setChecked (checked);
+    }
 }
 
 

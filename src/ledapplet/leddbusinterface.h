@@ -24,7 +24,7 @@ public:
 
 signals:
     void ledStateReceived (bool state);
-    void eventsLedStateReceived (bool state);
+    void eventsLedStateReceived (int state);
 
 public slots:
     void DBusMessagingFailure (QDBusError error);

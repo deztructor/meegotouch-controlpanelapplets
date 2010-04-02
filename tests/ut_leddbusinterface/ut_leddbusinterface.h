@@ -20,7 +20,7 @@ public:
 
 public slots:
     void ledStateReceived (bool state);
-    void eventsLedStateReceived (bool state);
+    void eventsLedStateReceived (int state);
 
 public:
     bool m_ledStateReceived;

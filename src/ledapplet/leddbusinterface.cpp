@@ -67,7 +67,7 @@ LedDBusInterface::eventsLedStateRequired ()
     m_DbusIf->callWithCallback (
             QString ("EventsLedEnabled"), QList<QVariant> (),
             this,
-            SIGNAL (eventsLedStateReceived (bool)),
+            SIGNAL (eventsLedStateReceived (int)),
             SLOT (DBusMessagingFailure (QDBusError)));
 }
 

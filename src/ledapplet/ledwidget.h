@@ -31,10 +31,8 @@ protected:
 
 protected slots:
     void eventButtonToggled  (bool newState);
-
     void eventsToggled       (bool newState);
-
-    void eventsLedStateReceived (bool enabled);
+    void eventsLedStateReceived (int enabledLeds);
 
 private:
     QString labelStringForCategory (LedWidget::CategoryType category) const;
