@@ -6,7 +6,7 @@
 #include <QDBusError>
 #include <QVariant>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 LedDBusInterface::LedDBusInterface ()
@@ -56,29 +56,6 @@ LedDBusInterface::setLedState (
     m_DbusIf->call (
             QDBus::NoBlock,
             QString ("setLedsEnabled"),
-            enabled);
-}
-
-void
-LedDBusInterface::illuminationLedStateRequired ()
-{
-    SYS_DEBUG ("");
-
-    m_DbusIf->callWithCallback (
-            QString ("IlluminationLedEnabled"), QList<QVariant> (),
-            this,
-            SIGNAL (illuminationLedStateReceived (bool)),
-            SLOT (DBusMessagingFailure (QDBusError)));
-}
-
-void
-LedDBusInterface::setIlluminationLedState (
-        bool    enabled)
-{
-    SYS_DEBUG ("*** enabled = %s", enabled ? "yes" : "no");
-    m_DbusIf->call (
-            QDBus::NoBlock,
-            QString ("setIlluminationLedEnabled"),
             enabled);
 }
 

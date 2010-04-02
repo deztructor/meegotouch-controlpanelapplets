@@ -32,10 +32,8 @@ protected:
 protected slots:
     void eventButtonToggled  (bool newState);
 
-    void illuminationToggled (bool newState);
     void eventsToggled       (bool newState);
 
-    void illuminationLedStateReceived (bool enabled);
     void eventsLedStateReceived (bool enabled);
 
 private:
@@ -43,9 +41,6 @@ private:
     LedWidget::CategoryType categoryFromWidget (DuiButton *button) const;
     
     LedDBusInterface   *m_LedDBusInterface;
-    DuiButton          *m_IlluminationButton;
-    DuiButton          *m_EventsButton;
-
     DuiButton          *m_EventButtons[LastCategoryType];
     DuiLabel           *m_EventLabels[LastCategoryType];
 };

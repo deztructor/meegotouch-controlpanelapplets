@@ -19,15 +19,11 @@ public:
     void ledStateRequired ();
     void setLedState (bool enabled);
 
-    void illuminationLedStateRequired ();
-    void setIlluminationLedState (bool enabled);
-
     void eventsLedStateRequired ();
     void setEventsLedState (bool enabled);
 
 signals:
     void ledStateReceived (bool state);
-    void illuminationLedStateReceived (bool state);
     void eventsLedStateReceived (bool state);
 
 public slots:

@@ -16,7 +16,6 @@ const int oneStepWaiting = 100;
  */
 Ut_LedDbusInterfacePrivate::Ut_LedDbusInterfacePrivate () :
     m_ledStateReceived (false),
-    m_illuminationLedStateReceived (false),
     m_eventsLedStateReceived (false)
 {
 }
@@ -29,16 +28,6 @@ Ut_LedDbusInterfacePrivate::ledStateReceived (
 
     qDebug() << __func__ << "Signal received";
     m_ledStateReceived = true;
-}
-
-void
-Ut_LedDbusInterfacePrivate::illuminationLedStateReceived (
-        bool state)
-{
-    Q_UNUSED (state);
-
-    qDebug() << __func__ << "Signal received";
-    m_illuminationLedStateReceived = true;
 }
 
 void
@@ -141,13 +130,10 @@ Ut_LedDbusInterface::initTestCase()
 
     connect (m_LedDBusInterface, SIGNAL(ledStateReceived(bool)),
             m_priv, SLOT(ledStateReceived(bool)));
-    connect (m_LedDBusInterface, SIGNAL(illuminationLedStateReceived(bool)),
-            m_priv, SLOT(illuminationLedStateReceived(bool)));
     connect (m_LedDBusInterface, SIGNAL(eventsLedStateReceived(bool)),
             m_priv, SLOT(eventsLedStateReceived(bool)));
 
     m_LedDBusInterface->ledStateRequired ();
-    m_LedDBusInterface->illuminationLedStateRequired ();
     m_LedDBusInterface->eventsLedStateRequired ();
 }
 
@@ -171,10 +157,6 @@ Ut_LedDbusInterface::testLedStatesArrived ()
 
     success = waitforit ("m_ledStateReceived", 
             &m_priv->m_ledStateReceived);
-    QVERIFY (success);
-    
-    success = waitforit ("m_illuminationLedStateReceived", 
-            &m_priv->m_illuminationLedStateReceived);
     QVERIFY (success);
     
     success = waitforit ("m_eventsLedStateReceived", 

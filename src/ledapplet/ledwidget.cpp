@@ -25,13 +25,9 @@ LedWidget::LedWidget (
     SYS_DEBUG ("");
     initWidget ();
 
-    connect (m_LedDBusInterface, SIGNAL(illuminationLedStateReceived(bool)),
-            this, SLOT(illuminationLedStateReceived(bool)));
-    
     connect (m_LedDBusInterface, SIGNAL(eventsLedStateReceived(bool)),
             this, SLOT(eventsLedStateReceived(bool)));
 
-    m_LedDBusInterface->illuminationLedStateRequired ();
     m_LedDBusInterface->eventsLedStateRequired ();
 }
 
@@ -72,52 +68,6 @@ LedWidget::initWidget ()
         connect (m_EventButtons[n], SIGNAL (toggled(bool)),
             this, SLOT (eventButtonToggled(bool)));
     }
-#if 0
-    /*
-     * This was the old implementation before the UI spec was received (this
-     * version was created using the design brief as source). I think we can
-     * keep this piece of code for some time.
-     */
-    DuiLabel                *label1, *label2;
-
-    label1 = new DuiLabel ("Illumination light");
-
-    m_IlluminationButton = new DuiButton ();
-    m_IlluminationButton->setViewType (DuiButton::switchType);
-    m_IlluminationButton->setCheckable (true);
-
-    label2 = new DuiLabel ("Incoming events");
-
-    m_EventsButton = new DuiButton ();
-    m_EventsButton->setViewType (DuiButton::switchType);
-    m_EventsButton->setCheckable (true);
-
-    /*
-     * Well, no UI spec yet, so I'm not sure this is what we want...
-     */
-    portraitPolicy->addItem (label1, Qt::AlignLeft | Qt::AlignVCenter);
-    portraitPolicy->addItem (m_IlluminationButton, Qt::AlignRight);
-    portraitPolicy->addItem (label2, Qt::AlignLeft | Qt::AlignVCenter);
-    portraitPolicy->addItem (m_EventsButton, Qt::AlignRight);
-   
-    landscapePolicy->addItem(label1, 0, 0);
-    landscapePolicy->addItem(m_IlluminationButton, 0, 1);
-    landscapePolicy->addItem(label2, 1, 0);
-    landscapePolicy->addItem(m_EventsButton, 1, 1);
-
-    connect (m_IlluminationButton, SIGNAL (toggled(bool)),
-            this, SLOT (illuminationToggled(bool)));
-    connect (m_EventsButton, SIGNAL (toggled(bool)),
-            this, SLOT (eventsToggled(bool)));
-#endif
-}
-
-void 
-LedWidget::illuminationToggled (
-        bool newState)
-{
-    SYS_DEBUG ("*** state = %s", newState ? "true" : "false");
-    m_LedDBusInterface->setIlluminationLedState (newState);
 }
 
 void 
@@ -145,16 +95,6 @@ LedWidget::eventButtonToggled (
     category = categoryFromWidget (button);
     SYS_DEBUG ("*** category = %d", category);
 
-}
-
-void
-LedWidget::illuminationLedStateReceived (
-        bool enabled)
-{
-#if 0
-    SYS_DEBUG ("enabled = %s", enabled ? "yes" : "no");
-    m_IlluminationButton->setChecked (enabled);
-#endif
 }
 
 void 
