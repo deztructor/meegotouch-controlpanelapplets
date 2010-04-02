@@ -101,7 +101,7 @@ Ut_ProfileDataInterface::testSetGetProfile ()
  * Tests if the vibration can be enabled/disabled in the profile. 
  *
  * Please note that this test is currently disabled, since there is some bug in
- * the backend.
+ * the backend. Ok, as NB#161433 is fixed I re-enable the test.
  */
 void 
 Ut_ProfileDataInterface::testSetVibration ()
@@ -124,7 +124,7 @@ Ut_ProfileDataInterface::testSetVibration ()
                 (item.vibrationEnabled ? "enabled" : "disabled") <<
                 "(should be disabled)";
 
-//        QVERIFY (!item.vibrationEnabled);
+        QVERIFY (!item.vibrationEnabled);
     }
 
     /*
@@ -142,7 +142,7 @@ Ut_ProfileDataInterface::testSetVibration ()
                 (item.vibrationEnabled ? "enabled" : "disabled") <<
                 "(should be enabled)";
 
-//        QVERIFY (item.vibrationEnabled);
+        QVERIFY (item.vibrationEnabled);
     }
 }
 

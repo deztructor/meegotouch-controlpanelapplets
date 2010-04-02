@@ -6,6 +6,7 @@
 #include "dcpwidget.h"
 
 class DuiButton;
+class DuiLabel;
 class LedDBusInterface;
 
 class LedWidget : public DcpWidget
@@ -15,10 +16,22 @@ class LedWidget : public DcpWidget
 public:
     LedWidget (LedDBusInterface *dbusIf, QGraphicsWidget *parent = 0);
 
+    typedef enum {
+        MissedCall               = 0,
+        SMSReceived,
+        EmailReceived,
+        InstantMessageReceived,
+        Charging,
+        OtherNotifications,
+        LastCategoryType
+    } CategoryType;
+
 protected:
     void initWidget (void);
 
 protected slots:
+    void eventButtonToggled  (bool newState);
+
     void illuminationToggled (bool newState);
     void eventsToggled       (bool newState);
 
@@ -26,8 +39,14 @@ protected slots:
     void eventsLedStateReceived (bool enabled);
 
 private:
+    QString labelStringForCategory (LedWidget::CategoryType category) const;
+    LedWidget::CategoryType categoryFromWidget (DuiButton *button) const;
+    
     LedDBusInterface   *m_LedDBusInterface;
     DuiButton          *m_IlluminationButton;
     DuiButton          *m_EventsButton;
+
+    DuiButton          *m_EventButtons[LastCategoryType];
+    DuiLabel           *m_EventLabels[LastCategoryType];
 };
 #endif
