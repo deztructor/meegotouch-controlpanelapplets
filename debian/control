@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: David Kedves <dkedves@blumsoft.eu>
 Build-Depends: debhelper (>= 5), libduicontrolpanel-dev,
                libdui-dev (>= 0.18), libqmsystem-dev,
-               libprofile-qt-dev (>= 0.13), duistatusindicatormenu-dev,
+               libprofile-qt-dev (>= 0.13), system-ui-dev,
                libdbus-1-dev, libdbus-qeventloop-dev
 Standards-Version: 3.7.3
 
@@ -43,14 +43,14 @@ Description: Battery settings applet.
 Package: duistatusindicatormenu-batteryplugin
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duistatusindicatormenu,
+Depends: ${shlibs:Depends}, ${misc:Depends},
          system-ui, systemui-applets-l10n-engineering-english
 Description: Battery status indicator menu plugin.
 
 Package: duistatusindicatormenu-volumeplugin
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duistatusindicatormenu, 
+Depends: ${shlibs:Depends}, ${misc:Depends},
          systemui-applets-l10n-engineering-english, libdbus-qeventloop1
 Description: Volume status indicator plugin
 
@@ -65,7 +65,7 @@ Package: duicontrolpanel-profileapplet
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         libprofile-qt0, systemui-applets-l10n-engineering-english
+         systemui-applets-l10n-engineering-english
 Description: Profiles settings applet.
 
 Package: duicontrolpanel-themeapplet
@@ -85,8 +85,8 @@ Description: Testapplet to manual test duicontrolpanel.
 Package: duistatusindicatormenu-profileplugin
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duistatusindicatormenu,
-         libprofile-qt0, systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, ${misc:Depends},
+         systemui-applets-l10n-engineering-english
 Description: Profile status indicator menu plugin.
 
 Package: duicontrolpanel-ledapplet
