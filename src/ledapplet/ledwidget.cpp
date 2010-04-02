@@ -71,13 +71,6 @@ LedWidget::initWidget ()
 }
 
 void 
-LedWidget::eventsToggled (
-        bool newState)
-{
-    m_LedDBusInterface->setEventsLedState (newState);
-}
-
-void 
 LedWidget::eventButtonToggled (
         bool newState)
 {
@@ -94,7 +87,9 @@ LedWidget::eventButtonToggled (
 
     category = categoryFromWidget (button);
     SYS_DEBUG ("*** category = %d", category);
-
+    
+    m_LedDBusInterface->setEventsLedState (
+            1 << category, newState);
 }
 
 void 

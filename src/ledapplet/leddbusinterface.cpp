@@ -73,11 +73,14 @@ LedDBusInterface::eventsLedStateRequired ()
 
 void
 LedDBusInterface::setEventsLedState (
+        int     mask,
         bool    enabled)
 {
-    SYS_DEBUG ("*** enabled = %s", enabled ? "yes" : "no");
+    SYS_DEBUG ("*** mask    = %d", mask);
+    SYS_DEBUG ("*** enabled = %s", SYS_BOOL(enabled));
     m_DbusIf->call (
             QDBus::NoBlock,
             QString ("setEventsLedEnabled"),
+            mask,
             enabled);
 }

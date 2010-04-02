@@ -20,7 +20,7 @@ public:
     void setLedState (bool enabled);
 
     void eventsLedStateRequired ();
-    void setEventsLedState (bool enabled);
+    void setEventsLedState (int mask, bool enabled);
 
 signals:
     void ledStateReceived (bool state);

@@ -31,7 +31,6 @@ protected:
 
 protected slots:
     void eventButtonToggled  (bool newState);
-    void eventsToggled       (bool newState);
     void eventsLedStateReceived (int enabledLeds);
 
 private:
