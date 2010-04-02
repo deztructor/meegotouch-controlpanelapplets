@@ -63,7 +63,7 @@ VolumeBarLogic::VolumeBarLogic () :
         initValues ();
 
 //XXX: FIXME: TODO: This causes crash in DBusConnectionEventLoop:
-        addSignalMatch ();
+//        addSignalMatch ();
     }
 }
 
