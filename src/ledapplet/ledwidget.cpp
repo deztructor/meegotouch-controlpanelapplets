@@ -138,6 +138,9 @@ LedWidget::labelStringForCategory (
         case OtherNotifications:
             //% "Other notifications"
             return qtTrId ("qtn_ligh_other_notifications");
+
+        case LastCategoryType:
+            return "";
     }
 
     return "";

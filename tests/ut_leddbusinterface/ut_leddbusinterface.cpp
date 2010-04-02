@@ -153,11 +153,11 @@ Ut_LedDbusInterface::cleanupTestCase()
 void
 Ut_LedDbusInterface::testLedStatesArrived ()
 {
-    bool success;
+    bool success1, success2;
 
-    success = waitforit ("m_ledStateReceived", 
+    success1 = waitforit ("m_ledStateReceived", 
             &m_priv->m_ledStateReceived);
-    QVERIFY (success);
+    QVERIFY (success1);
    
     #if 0
     /*
@@ -165,9 +165,9 @@ Ut_LedDbusInterface::testLedStatesArrived ()
      * sysuid is integrated, so that this test does not fail the integration of
      * the systemui-applets.
      */
-    success = waitforit ("m_eventsLedStateReceived", 
+    success2 = waitforit ("m_eventsLedStateReceived", 
             &m_priv->m_eventsLedStateReceived);
-    QVERIFY (success);
+    QVERIFY (success2);
     #endif
 }
 

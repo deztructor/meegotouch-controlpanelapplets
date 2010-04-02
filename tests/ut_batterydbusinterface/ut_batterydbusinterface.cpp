@@ -136,7 +136,7 @@ waitForSysuidRunning ()
      * If the sysuid started we still need to wait a few seconds until it
      * initializes itself.
      */
-    QTest::qWait (5000);
+    QTest::qWait (10000);
     
     #if 1
     qDebug() << "--- What about the sysuid? Is it running? ------";
