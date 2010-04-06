@@ -19,11 +19,13 @@ INCLUDEPATH += \
 
 HEADERS = volumebarplugin.h \
           volumebarlogic.h \
+          volumeoverlay.h \
           volumebar.h \
           ../debug.h
 
 SOURCES = volumebarplugin.cpp \
           volumebarlogic.cpp \
+          volumeoverlay.cpp \
           volumebar.cpp \
           ../debug.cpp
 
@@ -31,5 +33,10 @@ TARGET = $$qtLibraryTarget(volume)
 DESTDIR = lib
 target.path += /usr/lib/duistatusindicatormenu/plugins
 
-INSTALLS += target
+css.files += volumebar.css
+css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/dui/sysuid
+
+INSTALLS += \
+    target \
+    css
 

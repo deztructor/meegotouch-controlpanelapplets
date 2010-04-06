@@ -1,0 +1,18 @@
+#VolumeOverlay {
+    padding-left:   18px;
+    padding-right:  18px;
+    padding-top:    18px;
+    padding-bottom: 18px;
+
+    /*
+    show-animation: "DuiWidgetSlideInAnimation";
+    hide-animation: "DuiWidgetSlideOutAnimation";
+    */
+
+    minimum-size: 80% -1;
+    preferred-size: -1 -1;
+    maximum-size: 100% 100%;
+
+    background-image : "duinotification-event-background" 18px 18px 18px 18px;
+}
+

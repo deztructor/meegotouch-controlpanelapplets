@@ -1,4 +1,5 @@
 #include "volumebar.h"
+#include "volumeoverlay.h"
 #include "volumebarlogic.h"
 
 #define DEBUG
@@ -21,7 +22,8 @@ VolumeBar::VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
                       QGraphicsItem *parent) :
         DuiWidget (parent),
         m_bar (0),
-        m_logic (0)
+        m_logic (0),
+        m_overlay (new VolumeOverlay (parent))
 {
     Q_UNUSED(statusIndicatorMenu)
 
@@ -59,8 +61,13 @@ VolumeBar::VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
     else
         m_bar->setMinLabelIconID ("icon-m-common-volume-off");
 
+#ifndef i386
     m_bar->setRange (0, (int) m_logic->getMaxVolume () - 1);
     m_bar->setValue (current_volume);
+#else
+    m_bar->setRange (0, 100);
+    m_bar->setValue (30);
+#endif
 
     connect (m_bar, SIGNAL (valueChanged (int)),
              this, SLOT (sliderChanged (int)));
@@ -73,6 +80,10 @@ VolumeBar::~VolumeBar ()
 {
     //Free the resources here
     delete m_logic;
+    m_logic = 0;
+
+    delete m_overlay;
+    m_overlay = 0;
 }
 
 void
@@ -84,6 +95,9 @@ VolumeBar::sliderChanged (int val)
         m_bar->setMinLabelIconID ("icon-m-common-volume");
     else
         m_bar->setMinLabelIconID ("icon-m-common-volume-off");
+
+    //XXX
+    m_overlay->UpdateVolume (val);
 }
 
 void
@@ -96,6 +110,8 @@ VolumeBar::volumeChanged (quint32 val, quint32 max)
     m_bar->setValue (0);
     m_bar->setRange (0, (int) max - 1);
     m_bar->setValue ((int) val);
+
+    m_overlay->UpdateVolume (val * 100 / max);
 
     m_bar->blockSignals (false);
 }

@@ -6,6 +6,7 @@
 class DuiSlider;
 class DuiContainer;
 class VolumeBarLogic;
+class VolumeOverlay;
 class DuiStatusIndicatorMenuInterface;
 
 class VolumeBar : public DuiWidget
@@ -24,6 +25,7 @@ private slots:
 private:
     DuiSlider       *m_bar;
     VolumeBarLogic  *m_logic;
+    VolumeOverlay   *m_overlay;
 };
 
 #endif

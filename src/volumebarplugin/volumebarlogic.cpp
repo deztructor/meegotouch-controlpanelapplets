@@ -240,6 +240,9 @@ stepsUpdatedSignal (DBusConnection *conn,
 
     DBusMessageIter iter;        
     dbus_message_iter_init (message, &iter);
+
+    DBUS_ITER_TYPE (iter);
+
     // Recurse into the array [array of dicts]
     while (dbus_message_iter_get_arg_type (&iter) != DBUS_TYPE_INVALID)
     {
@@ -286,6 +289,9 @@ VolumeBarLogic::stepsUpdated (quint32 value, quint32 maxvalue)
 void
 VolumeBarLogic::setVolume (quint32 value)
 {
+    if (m_dbus_conn == NULL)
+        return;
+
     DBusMessage     *message;
     char            *volume_if = (char *) VOLUME_IF;
     char            *method    = (char *) "CurrentStep";
@@ -301,7 +307,6 @@ VolumeBarLogic::setVolume (quint32 value)
                                   DBUS_TYPE_STRING, &method,
                                   DBUS_TYPE_INVALID))
     {
-        dbus_uint32_t    serial = 0;
         DBusMessageIter  append;
         DBusMessageIter  sub;
 
@@ -318,11 +323,8 @@ VolumeBarLogic::setVolume (quint32 value)
         dbus_message_iter_close_container (&append, &sub);
 
         // Send/flush the message immediately:
-        dbus_connection_send (m_dbus_conn, message, &serial);
+        dbus_connection_send (m_dbus_conn, message, NULL);
         dbus_connection_flush (m_dbus_conn);
-
-//      SYS_DEBUG ("volume set to %d [d-bus msg serial: %u]", value, serial);
-//      ^ Warning: this debug message can produce too many output
     }
     else
         SYS_WARNING ("Cannot set volume! [not enough memory]");
