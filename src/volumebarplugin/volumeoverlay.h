@@ -3,7 +3,9 @@
 
 #include <DuiOverlay>
 #include <QObject>
-#include <QTimer>
+
+class DuiSlider;
+class QTimer;
 
 class VolumeOverlay : public DuiOverlay
 {
@@ -12,20 +14,22 @@ class VolumeOverlay : public DuiOverlay
   public:
     VolumeOverlay (QGraphicsItem *parent = 0);
     ~VolumeOverlay ();
-#if 0
-    virtual QSizeF sizeHint (Qt::SizeHint which,
-                             const QSizeF &constraint = QSizeF ()) const;
-#endif
+
+  signals:
+    void VolumeChanged (int val);
 
   public slots:
-    void UpdateVolume (int percentage);
+    void UpdateVolume (int val, int max);
 
   private slots:
+    void updateSliderIcon (int val);
     void hideMe ();
 
   private:
-    QTimer      *m_timer;
+    QTimer          *m_timer;
+    DuiSlider       *m_slider;
 
+    void constructUi ();
 };
 
 #endif

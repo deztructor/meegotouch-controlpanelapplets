@@ -9,7 +9,7 @@
     hide-animation: "DuiWidgetSlideOutAnimation";
     */
 
-    minimum-size: 80% -1;
+    minimum-size: -1 400;
     preferred-size: -1 -1;
     maximum-size: 100% 100%;
 

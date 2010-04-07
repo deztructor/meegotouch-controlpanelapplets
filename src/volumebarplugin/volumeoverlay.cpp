@@ -1,17 +1,19 @@
 #include "volumeoverlay.h"
 #include <DuiSceneWindow>
-#include <DuiLabel>
+#include <DuiImageWidget>
 #include <DuiSlider>
+#include <QTimer>
 
 #define DEBUG
 #include "../debug.h"
 
 // FIXME: TBD
-#define HIDE_TIMEOUT 1000
+#define HIDE_TIMEOUT 1500
 
 VolumeOverlay::VolumeOverlay (QGraphicsItem *parent) :
     DuiOverlay (parent),
-    m_timer (0)
+    m_timer (0),
+    m_slider (0)
 {
     m_timer = new QTimer;
     m_timer->setInterval (HIDE_TIMEOUT);
@@ -19,9 +21,8 @@ VolumeOverlay::VolumeOverlay (QGraphicsItem *parent) :
              this, SLOT (hideMe ()));
 
     setObjectName ("VolumeOverlay");
-    setManagedManually (true);
 
-    setWidget (new DuiSlider);
+    constructUi ();
 }
 
 VolumeOverlay::~VolumeOverlay ()
@@ -31,15 +32,43 @@ VolumeOverlay::~VolumeOverlay ()
 }
 
 void
-VolumeOverlay::UpdateVolume (int percentage)
+VolumeOverlay::constructUi ()
 {
-    SYS_DEBUG ("percentage = %d", percentage);
+    m_slider = new DuiSlider;
 
-    Q_UNUSED (percentage);
+    m_slider->setOrientation (Qt::Vertical);
+    m_slider->setMaxLabelIconID (QString ("icon-m-common-volume"));
 
+    connect (m_slider, SIGNAL (valueChanged (int)),
+             this, SIGNAL (VolumeChanged (int)));
+
+    connect (m_slider, SIGNAL (valueChanged (int)),
+             this, SLOT (updateSliderIcon (int)));
+
+    // Stop the timeout when the slider is in pressed state ...
+    connect (m_slider, SIGNAL (sliderPressed ()),
+             m_timer, SLOT (stop ()));
+    // ...a ndre-start it when slider released.
+    connect (m_slider, SIGNAL (sliderReleased ()),
+             m_timer, SLOT (start ()));
+
+    setWidget (m_slider);
+}
+
+void
+VolumeOverlay::UpdateVolume (int val, int max)
+{
     m_timer->stop ();
 
-    // TODO: update the contents with the new percentage value...
+    updateSliderIcon (val);
+
+    m_slider->blockSignals (true);
+
+    m_slider->setValue (0);
+    m_slider->setRange (0, max - 1);
+    m_slider->setValue (val);
+
+    m_slider->blockSignals (false);
 
     appear (DuiSceneWindow::KeepWhenDone);
     m_timer->start ();
@@ -54,4 +83,12 @@ VolumeOverlay::hideMe ()
     disappear ();
 }
 
-
+void
+VolumeOverlay::updateSliderIcon (int val)
+{
+    // update the icon-id
+    if (val == 0)
+        m_slider->setMaxLabelIconID (QString ("icon-m-common-volume-off"));
+    else
+        m_slider->setMaxLabelIconID (QString ("icon-m-common-volume"));
+}

@@ -61,19 +61,17 @@ VolumeBar::VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
     else
         m_bar->setMinLabelIconID ("icon-m-common-volume-off");
 
-#ifndef i386
     m_bar->setRange (0, (int) m_logic->getMaxVolume () - 1);
     m_bar->setValue (current_volume);
-#else
-    m_bar->setRange (0, 100);
-    m_bar->setValue (30);
-#endif
 
     connect (m_bar, SIGNAL (valueChanged (int)),
              this, SLOT (sliderChanged (int)));
 
     connect (m_logic, SIGNAL (volumeChanged (quint32, quint32)),
              this, SLOT (volumeChanged (quint32, quint32)));
+
+    connect (m_overlay, SIGNAL (VolumeChanged (int)),
+             this, SLOT (overlayChanged (int)));
 }
 
 VolumeBar::~VolumeBar ()
@@ -96,8 +94,9 @@ VolumeBar::sliderChanged (int val)
     else
         m_bar->setMinLabelIconID ("icon-m-common-volume-off");
 
-    //XXX
-    m_overlay->UpdateVolume (val);
+#if defined (i386) && defined (DEBUG)
+    m_overlay->UpdateVolume (val, (int) m_logic->getMaxVolume ());
+#endif
 }
 
 void
@@ -111,8 +110,24 @@ VolumeBar::volumeChanged (quint32 val, quint32 max)
     m_bar->setRange (0, (int) max - 1);
     m_bar->setValue ((int) val);
 
-    m_overlay->UpdateVolume (val * 100 / max);
+    m_overlay->UpdateVolume ((int) val, (int) max);
 
+    m_bar->blockSignals (false);
+}
+
+void
+VolumeBar::overlayChanged (int val)
+{
+    // Set the volume value / slider icon
+    m_logic->setVolume ((quint32) val);
+    if (val > 0)
+        m_bar->setMinLabelIconID ("icon-m-common-volume");
+    else
+        m_bar->setMinLabelIconID ("icon-m-common-volume-off");
+
+    // And then update the slider
+    m_bar->blockSignals (true);
+    m_bar->setValue (val);
     m_bar->blockSignals (false);
 }
 
