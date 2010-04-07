@@ -16,7 +16,8 @@ Depends: ${shlibs:Depends}, testrunner, ci-testing, duicontrolpanel-usbapplet,
          duicontrolpanel-batteryapplet, duistatusindicatormenu-batteryplugin,
          duistatusindicatormenu-volumeplugin, duicontrolpanel-displayapplet,
          duicontrolpanel-profileapplet, duistatusindicatormenu-profileplugin,
-         duicontrolpanel-ledapplet, duicontrolpanel-themeapplet
+         duicontrolpanel-ledapplet, duicontrolpanel-themeapplet, 
+         duicontrolpanel-wallpaperapplet
 XB-Maemo-CI-Packages: system-ui
 XB-Maemo-CI-Stage: fast, staging
 Description: Test package for system-ui applets
@@ -74,6 +75,13 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
          systemui-applets-l10n-engineering-english
 Description: Theme changing applet.
+
+Package: duicontrolpanel-wallpaperapplet
+Section: misc
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
+         systemui-applets-l10n-engineering-english
+Description: Desktop wallpaper changing applet.
 
 Package: duicontrolpanel-testapplet
 Section: misc

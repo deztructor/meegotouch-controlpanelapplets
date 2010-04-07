@@ -8,6 +8,7 @@ SOURCEDIR = $$PWD/../src/displayapplet \
             $$PWD/../src/usbapplet \
             $$PWD/../src/volumebarplugin \
             $$PWD/../src/themeapplet \
+	    $$PWD/../src/wallpaperapplet \
 	    $$PWD/../src/ledapplet 
 TRANSLATIONDIR = $$PWD
 TRANSLATION_INSTALLDIR = /usr/share/l10n/dui

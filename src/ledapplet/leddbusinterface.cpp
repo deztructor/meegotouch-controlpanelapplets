@@ -39,13 +39,15 @@ LedDBusInterface::DBusMessagingFailure (
 void
 LedDBusInterface::ledStateRequired ()
 {
-    SYS_DEBUG ("");
+    SYS_DEBUG ("Start");
 
     m_DbusIf->callWithCallback (
             QString ("LedsEnabled"), QList<QVariant> (),
             this,
             SIGNAL (ledStateReceived (bool)),
             SLOT (DBusMessagingFailure (QDBusError)));
+
+    SYS_DEBUG ("End");
 }
 
 void
@@ -62,13 +64,14 @@ LedDBusInterface::setLedState (
 void
 LedDBusInterface::eventsLedStateRequired ()
 {
-    SYS_DEBUG ("");
+    SYS_DEBUG ("Start");
 
     m_DbusIf->callWithCallback (
             QString ("EventsLedEnabled"), QList<QVariant> (),
             this,
             SIGNAL (eventsLedStateReceived (int)),
             SLOT (DBusMessagingFailure (QDBusError)));
+    SYS_DEBUG ("End");
 }
 
 void
