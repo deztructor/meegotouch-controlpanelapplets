@@ -1,8 +1,9 @@
 systemui-applets (0.12.8~1) harmattan; urgency=low
 
-  * NEW VERSION
+  * Implemented: SWP#DUI-2063 - Volume Control UI -
+                 Interactive Slider (overlay)
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 07 Apr 2010 09:22:27 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 07 Apr 2010 11:44:35 +0200
 
 systemui-applets (0.12.7) harmattan; urgency=low
 

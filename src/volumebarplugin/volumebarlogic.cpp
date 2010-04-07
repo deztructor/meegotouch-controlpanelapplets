@@ -65,6 +65,14 @@ VolumeBarLogic::VolumeBarLogic () :
 //XXX: FIXME: TODO: This causes crash in DBusConnectionEventLoop:
 //        addSignalMatch ();
     }
+#if defined( i386) && defined (DEBUG)
+    else
+    {
+        // this is for testing the UI:
+        m_currentmax = 10;
+        m_currentvolume = 2;
+    }
+#endif
 }
 
 VolumeBarLogic::~VolumeBarLogic ()

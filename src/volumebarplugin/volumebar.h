@@ -20,6 +20,7 @@ public:
 
 private slots:
     void sliderChanged (int val);
+    void overlayChanged (int val);
     void volumeChanged (quint32 val, quint32 max);
 
 private:
