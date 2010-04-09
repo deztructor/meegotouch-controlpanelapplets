@@ -166,8 +166,10 @@ Ut_LedDbusInterface::testLedStatesArrived ()
      * the systemui-applets.
      */
     success2 = waitforit ("m_eventsLedStateReceived", 
-            &m_priv->m_eventsLedStateReceived);
+                          &m_priv->m_eventsLedStateReceived);
     QVERIFY (success2);
+    #else
+    Q_UNUSED (success2);
     #endif
 }
 

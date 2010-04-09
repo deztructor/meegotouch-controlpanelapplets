@@ -2,8 +2,10 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 #include "volumebarlogic.h"
 
+#include <dbusconnectioneventloop.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include <QVariant>
 #include <QString>
 
@@ -33,7 +35,6 @@ stepsUpdatedSignal (DBusConnection *conn,
 VolumeBarLogic::VolumeBarLogic () :
     QObject (),
     m_dbus_conn (NULL),
-    m_eventloop (0),
     m_currentvolume (0),
     m_currentmax (0)
 {
@@ -51,9 +52,14 @@ VolumeBarLogic::VolumeBarLogic () :
 
     DBUS_ERR_CHECK (dbus_err);
 
+#if 0
+    /*
+     * XXX: This code depends on an unreleased version of
+     *      libdbus-qeventloop ... so i had to comment out this code
+     */
+
     if ((m_dbus_conn != NULL) && 
-        (m_eventloop = new DBUSConnectionEventLoop) &&
-        (m_eventloop->addConnection (m_dbus_conn)))
+        (DBUSConnectionEventLoop::addConnection (m_dbus_conn)))
     {
         dbus_connection_add_filter (
             m_dbus_conn,
@@ -73,6 +79,7 @@ VolumeBarLogic::VolumeBarLogic () :
         m_currentvolume = 2;
     }
 #endif
+#endif
 }
 
 VolumeBarLogic::~VolumeBarLogic ()
@@ -81,12 +88,6 @@ VolumeBarLogic::~VolumeBarLogic ()
     {
         dbus_connection_unref (m_dbus_conn);
         m_dbus_conn = 0;
-
-        if (m_eventloop)
-        {
-            delete m_eventloop;
-            m_eventloop = 0;
-        }
     }
 }
 

@@ -4,7 +4,7 @@
 #include <DuiSlider>
 #include <QTimer>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 // FIXME: TBD
@@ -92,3 +92,4 @@ VolumeOverlay::updateSliderIcon (int val)
     else
         m_slider->setMaxLabelIconID (QString ("icon-m-common-volume"));
 }
+
