@@ -1,9 +1,6 @@
 #include "ut_volumebarlogic.h"
 #include <volumebarlogic.h>
 
-#define DEBUG
-#include "../../src/debug.h"
-
 void
 Ut_VolumeBarLogic::init ()
 {
@@ -35,7 +32,7 @@ Ut_VolumeBarLogic::testVolumeSetGet ()
 
     m_Api->setVolume (val);
 
-    Q_VERIFY (m_Api->getVolume () == val)  ;
+    QVERIFY (m_Api->getVolume () == val)  ;
 }
 
 void
@@ -49,9 +46,9 @@ Ut_VolumeBarLogic::testVolumeChangeByPa ()
     m_Api->stepsUpdated (currentstep, stepcount);
 
     // Check the current ...
-    Q_VERIFY (m_Api->getVolume () == currentstep);
+    QVERIFY (m_Api->getVolume () == currentstep);
     // .. and the maximal values
-    Q_VERIFY (m_Api->getMaxVolume () == stepcount);
+    QVERIFY (m_Api->getMaxVolume () == stepcount);
 }
 
 void
@@ -67,7 +64,7 @@ Ut_VolumeBarLogic::testSignaling ()
     // Do what PulseAudio do [of course Pa doing this indirectly...]
     m_Api->stepsUpdated (currentstep, stepcount);
 
-    qWait (500); // wait for a little time
+    QTest::qWait (500); // wait for a little time
 
     QList<QVariant> arguments = spy.takeFirst ();
     // Verify the signal parameters

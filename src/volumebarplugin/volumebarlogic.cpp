@@ -60,6 +60,9 @@ VolumeBarLogic::VolumeBarLogic () :
 
     if ((m_dbus_conn != NULL) && 
         (DBUSConnectionEventLoop::addConnection (m_dbus_conn)))
+#else
+    if (m_dbus_conn != NULL)
+#endif
     {
         dbus_connection_add_filter (
             m_dbus_conn,
@@ -77,8 +80,6 @@ VolumeBarLogic::VolumeBarLogic () :
         m_currentmax = 10;
         m_currentvolume = 2;
     }
-#endif
-
 #endif
 }
 
