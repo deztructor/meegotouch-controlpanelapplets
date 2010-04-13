@@ -63,13 +63,13 @@ Ft_PluginLoader::DoPluginTest (const QString &soname)
 
     delete object;
 }
-
+#if 0
 void
 Ft_PluginLoader::testbatteryplugin ()
 {
     DoPluginTest ("libbattery.so");
 }
-
+#endif
 void
 Ft_PluginLoader::testprofileplugin ()
 {
