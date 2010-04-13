@@ -296,6 +296,9 @@ VolumeBarLogic::stepsUpdated (quint32 value, quint32 maxvalue)
 void
 VolumeBarLogic::setVolume (quint32 value)
 {
+    m_currentvolume = value;
+
+    // Don't try to set the volume via d-bus when it isn't available
     if (m_dbus_conn == NULL)
         return;
 
@@ -338,8 +341,6 @@ VolumeBarLogic::setVolume (quint32 value)
 
     if (message)
         dbus_message_unref (message);
-
-    m_currentvolume = value;
 }
 
 quint32

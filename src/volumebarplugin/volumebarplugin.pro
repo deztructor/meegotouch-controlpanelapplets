@@ -7,7 +7,6 @@ CONFIG += plugin \
           dui \
           duistatusindicatormenu \
           link_pkgconfig \
-          qmsystem \
           silent
 
 PKGCONFIG += dbus-1
