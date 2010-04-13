@@ -9,7 +9,7 @@
 #include <QVariant>
 #include <QString>
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -52,12 +52,6 @@ VolumeBarLogic::VolumeBarLogic () :
 
     DBUS_ERR_CHECK (dbus_err);
 
-#if 0
-    /*
-     * XXX: This code depends on an unreleased version of
-     *      libdbus-qeventloop ... so i had to comment out this code
-     */
-
     if ((m_dbus_conn != NULL) && 
         (DBUSConnectionEventLoop::addConnection (m_dbus_conn)))
     {
@@ -68,8 +62,7 @@ VolumeBarLogic::VolumeBarLogic () :
 
         initValues ();
 
-//XXX: FIXME: TODO: This causes crash in DBusConnectionEventLoop:
-//        addSignalMatch ();
+        addSignalMatch ();
     }
 #if defined( i386) && defined (DEBUG)
     else
@@ -78,7 +71,6 @@ VolumeBarLogic::VolumeBarLogic () :
         m_currentmax = 10;
         m_currentvolume = 2;
     }
-#endif
 #endif
 }
 
@@ -176,16 +168,18 @@ VolumeBarLogic::addSignalMatch ()
 
     DBusMessage     *message = NULL;
     char            *signal = (char *) "com.Nokia.MainVolume1.StepsUpdated";
+    char           **emptyarray = { NULL };
 
-    message = dbus_message_new_method_call ("org.PulseAudio.Core1",
+    message = dbus_message_new_method_call (NULL,
                                             "/org/pulseaudio/core1",
-                                            "org.PulseAudio.Core1",
+                                            NULL,
                                             "ListenForSignal");
 
     if (message != NULL)
     {
         dbus_message_append_args (message,
                                   DBUS_TYPE_STRING, &signal,
+                                  DBUS_TYPE_ARRAY, DBUS_TYPE_OBJECT_PATH, &emptyarray, 0,
                                   DBUS_TYPE_INVALID);
 
         dbus_connection_send (m_dbus_conn, message, NULL);
@@ -198,6 +192,7 @@ VolumeBarLogic::addSignalMatch ()
         dbus_message_unref (message);
 }
 
+#if 0
 #define DBUS_ARG_TYPE(type) \
           switch (type) { \
             case DBUS_TYPE_INVALID: \
@@ -224,29 +219,38 @@ VolumeBarLogic::addSignalMatch ()
           }
 #define DBUS_ITER_TYPE(iter) \
             DBUS_ARG_TYPE(dbus_message_iter_get_arg_type (&iter))
+#endif
 
 static void
 stepsUpdatedSignal (DBusConnection *conn,
                     DBusMessage    *message,
                     VolumeBarLogic *logic)
 {
-    SYS_DEBUG ("message address: %p", message);
-    if (message)
+    Q_UNUSED (conn);
+
+    if (message &&
+        dbus_message_has_member (message, "StepsUpdated"))
     {
-        SYS_DEBUG ("message signature, interface, member: %s, %s, %s",
-                   dbus_message_get_signature (message),
-                   dbus_message_get_interface (message),
-                   dbus_message_get_member (message));
-        SYS_DEBUG ("message tpye: %s", dbus_message_type_to_string (
-                   dbus_message_get_type (message)));
+        DBusError error;
+        quint32   value = 0;
+        quint32   maxvalue = 0;
+
+        dbus_error_init (&error);
+
+        if (dbus_message_get_args (message, &error,
+                                   DBUS_TYPE_UINT32, &maxvalue,
+                                   DBUS_TYPE_UINT32, &value,
+                                   DBUS_TYPE_INVALID))
+        {
+            SYS_DEBUG ("StepsUpdated (StepCount: %u, CurrentStep: %u);",
+                       maxvalue, value);
+            logic->stepsUpdated (value, maxvalue);
+        }
+
+        DBUS_ERR_CHECK (error);
     }
 
-    Q_UNUSED (conn);
-    Q_UNUSED (logic);
-
-//    quint32 value = 0;
-//    quint32 maxvalue = 0;
-
+#if 0
     DBusMessageIter iter;        
     dbus_message_iter_init (message, &iter);
 
@@ -264,22 +268,8 @@ stepsUpdatedSignal (DBusConnection *conn,
             SYS_DEBUG ("msg: %s", val);
         }
 
-#if 0
-        DBusMessageIter dict_entry;
-        dbus_message_iter_recurse (&iter, &dict_entry);
-
-        while (dbus_message_iter_get_arg_type (&dict_entry) != DBUS_TYPE_INVALID)
-        {
-            DBUS_ITER_TYPE (dict_entry);
-            dbus_message_iter_next (&dict_entry);
-        }
-#endif
         dbus_message_iter_next (&iter);
     }
-
-#if 0
-    // Forward the data to the BusinessLogic 
-    logic->stepsUpdated (value, maxvalue);
 #endif
 }
 
