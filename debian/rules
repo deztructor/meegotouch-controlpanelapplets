@@ -45,7 +45,7 @@ configure-stamp:
 	touch configure-stamp
 
 build: build-stamp
-build-stamp: configure-stamp 
+build-stamp: configure-stamp
 	dh_testdir
 
 	make $(PARALLEL_MAKEFLAGS)
@@ -60,12 +60,12 @@ clean:
 
 	-@make $(PARALLEL_MAKEFLAGS) clean
 
-	dh_clean 
+	dh_clean
 
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k 
+	dh_clean -k
 	dh_installdirs
 
 	# Add here commands to install the package into debian/tmp
@@ -81,11 +81,11 @@ binary-indep: build install
 binary-arch: build install
 	dh_testdir
 	dh_testroot
-	dh_installchangelogs 
+#	dh_installchangelogs
 #	dh_installdocs
-	dh_install --sourcedir=debian/tmp -v 
+	dh_install --sourcedir=debian/tmp -v
 	dh_link
-	dh_strip 
+	dh_strip
 	dh_compress
 	dh_fixperms
 #	dh_perl
