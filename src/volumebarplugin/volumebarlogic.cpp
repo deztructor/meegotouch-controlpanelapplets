@@ -52,6 +52,12 @@ VolumeBarLogic::VolumeBarLogic () :
 
     DBUS_ERR_CHECK (dbus_err);
 
+/*
+ * TODO: XXX: The current version of DBUSConnectionEventLoop is so old,
+ * so i had to comment out this code-block until the new one is released...
+ */
+#if 0
+
     if ((m_dbus_conn != NULL) && 
         (DBUSConnectionEventLoop::addConnection (m_dbus_conn)))
     {
@@ -71,6 +77,8 @@ VolumeBarLogic::VolumeBarLogic () :
         m_currentmax = 10;
         m_currentvolume = 2;
     }
+#endif
+
 #endif
 }
 
