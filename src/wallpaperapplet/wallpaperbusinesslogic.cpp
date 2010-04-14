@@ -11,6 +11,9 @@
 #include <DuiTheme>
 #include <DuiGConfItem>
 
+#include <QProcessEnvironment>
+#include <QDir>
+
 #define DEBUG
 #include "../debug.h"
 
@@ -73,12 +76,31 @@ QStringList
 WallpaperBusinessLogic::availableWallpapers () const
 {
     QStringList list;
-
     list <<
         "/usr/share/themes/base/dui/images/duiapplicationpage-background.png" <<
         "/usr/share/themes/plankton/dui/images/duiapplicationpage-background.png" <<
         "/usr/share/themes/plankton/dui/images/duiapplicationpage-portrait-background.png" <<
         "/usr/share/themes/plankton/dui/images/duiapplicationpage-portrait-background.png";
+
+    /*
+     * FIXME:
+     * I have no idea how we sould get the available images, this will do as a
+     * test.
+     */
+    QString             home = getenv("HOME");
+    QString 	        dirname = home + "/MyDocs";
+    QStringList         filterList;
+
+
+    filterList << "*.jpg" << "*.JPG" << "*.jpeg" << "*.JPEG" << "*.png" <<
+        "*.PNG";
+
+    SYS_DEBUG ("*** dirname = %s", SYS_STR(dirname));
+
+    QDir imageDir (dirname);
+    foreach (QString imageFile, imageDir.entryList(filterList, QDir::Files)) {
+        list << imageFile;
+    }
 
     return list;
 }
