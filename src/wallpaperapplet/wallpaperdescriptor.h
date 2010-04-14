@@ -6,8 +6,10 @@
 
 #include <QObject>
 #include <QMetaType>
+#include <QImage>
 
 class QString;
+
 
 class Q_DECL_EXPORT WallpaperDescriptor : public QObject {
     Q_OBJECT
@@ -22,11 +24,17 @@ public:
     QString filename () const;
     QString basename () const;
 
+    void loadImage ();
+    QImage image();
+    bool isImageLoaded();
 private:
+    bool        m_ImageLoaded;
     QString     m_Filename;
+    QImage      m_Image;
 };
 
 Q_DECLARE_METATYPE(WallpaperDescriptor)
+Q_DECLARE_METATYPE(WallpaperDescriptor *)
 
 #endif
 

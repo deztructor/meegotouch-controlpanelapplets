@@ -5,8 +5,10 @@
 
 #include <DuiList>
 #include <QModelIndex>
+
 class WallpaperDescriptor;
 class WallpaperBusinessLogic;
+class WallpaperImageLoader;
 
 class WallpaperList : public DuiList {
     Q_OBJECT
@@ -24,12 +26,14 @@ public:
 
 private slots:
     void slotItemClicked (const QModelIndex &index);
-
+    void loadPictures ();
+    
 signals:
     void imageActivated (WallpaperDescriptor &desc);
 
 private:
     WallpaperBusinessLogic *m_BusinessLogic;
+    WallpaperImageLoader   *m_ImageLoader;
     DataSourceType          m_DataSourceType;
 };
 

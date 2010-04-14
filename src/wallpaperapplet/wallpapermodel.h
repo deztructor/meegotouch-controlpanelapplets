@@ -3,12 +3,14 @@
 #ifndef WALLPAPERMODEL_H
 #define WALLPAPERMODEL_H
 
+#include <QList>
 #include <QAbstractTableModel>
 #include <DuiAbstractCellCreator>
 #include <DuiContentItem>
 #include "wallpaperdescriptor.h"
 
 class WallpaperBusinessLogic;
+class WallpaperDescriptor;
 
 class WallpaperModel: public QAbstractTableModel
 {
@@ -26,9 +28,12 @@ class WallpaperModel: public QAbstractTableModel
             int role = Qt::DisplayRole) const;
     virtual int columnCount (const QModelIndex&) const;
 
+public slots:
+    void imageLoaded (const QModelIndex &row);
+
 private:
     WallpaperBusinessLogic *m_BusinessLogic;
-    QStringList             m_Filenames;
+    QList<WallpaperDescriptor *> m_DescriptorList;
 };
 
 class WallpaperContentItemCreator : 
@@ -36,6 +41,28 @@ class WallpaperContentItemCreator :
 {
   public:
       void updateCell(const QModelIndex& index, DuiWidget *cell) const;
+};
+
+
+class WallpaperImageLoader : public QObject
+{
+    Q_OBJECT
+
+public:
+    struct Job {
+        WallpaperDescriptor  *desc;
+        QModelIndex           row;
+    };
+
+public slots:
+    void loadPictures (
+            const QModelIndex& firstVisibleRow, 
+            const QModelIndex& lastVisibleRow);
+
+    void processJobQueue();
+
+private:
+    QList<Job>  thumbnailLoadingJobs;
 };
 
 #endif

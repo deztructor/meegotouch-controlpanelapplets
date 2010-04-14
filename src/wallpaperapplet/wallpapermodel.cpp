@@ -3,9 +3,63 @@
 
 #include "wallpapermodel.h"
 #include "wallpaperbusinesslogic.h"
+#include "wallpaperdescriptor.h"
+
+#include <QTimer>
 
 #define DEBUG
 #include <../debug.h>
+/******************************************************************************
+ * WallpaperImageLoader implementation.
+ */
+void
+WallpaperImageLoader::loadPictures (
+            const QModelIndex& firstVisibleRow, 
+            const QModelIndex& lastVisibleRow)
+{
+    int    from = firstVisibleRow.row();
+    int    to = lastVisibleRow.row();
+
+    SYS_DEBUG ("Between %d - %d", from, to);
+    for (int n = from; n <= to; ++n) {
+        QModelIndex index(firstVisibleRow.sibling (n, 0));
+        if(!index.isValid())
+            continue;
+
+        QVariant data = index.data(Qt::DisplayRole);
+        WallpaperDescriptor *desc = data.value<WallpaperDescriptor*>();
+
+        if (!desc->isImageLoaded()) {
+            Job job;
+            job.desc = desc;
+            job.row = index;
+
+            thumbnailLoadingJobs << job;
+        }
+    }
+
+    if(thumbnailLoadingJobs.count() != 0)
+        QTimer::singleShot(100, this, SLOT(processJobQueue()));
+}
+
+void 
+WallpaperImageLoader::processJobQueue ()
+{
+    if(thumbnailLoadingJobs.isEmpty())
+        return;
+
+    Job job = thumbnailLoadingJobs.takeFirst();
+
+    job.desc->loadImage();
+    //notifyModel(job.row);
+
+    WallpaperModel *model = (WallpaperModel*)job.row.model();
+    model->imageLoaded (job.row);
+
+    // Continue loading and letting UI thread do something
+    if(thumbnailLoadingJobs.count() > 0)
+        QTimer::singleShot(100, this, SLOT(processJobQueue()));
+}
 
 /******************************************************************************
  * WallpaperContentItemCreator implementation.
@@ -15,12 +69,27 @@ WallpaperContentItemCreator::updateCell (
         const QModelIndex&   index, 
         DuiWidget           *cell) const
 {
-    DuiContentItem * contentItem = qobject_cast<DuiContentItem *>(cell);
-
+    DuiContentItem *contentItem = qobject_cast<DuiContentItem *>(cell);
     QVariant data = index.data(Qt::DisplayRole);
-    WallpaperDescriptor rowData = data.value<WallpaperDescriptor>();
-    contentItem->setTitle (rowData.basename());
-    contentItem->setSubtitle (rowData.filename());
+    WallpaperDescriptor *rowData = data.value<WallpaperDescriptor *>();
+
+    contentItem->setTitle (rowData->basename());
+    contentItem->setSubtitle (rowData->filename());
+
+    if (rowData->isImageLoaded()) {
+        SYS_DEBUG ("Image loaded for %s", SYS_STR(rowData->basename()));
+#if 1
+    /*
+     * Older libdui (that we use) supports pixmap here, while newer versions has
+     * the support for QImage.
+     */
+    QPixmap pixmap = QPixmap::fromImage (rowData->image());
+    contentItem->setPixmap (pixmap);
+    //contentItem->setOptionalPixmap (pixmap);
+#else
+    contentItem->setImage (rowData->image());
+#endif
+    }
 }
 
 /******************************************************************************
@@ -34,10 +103,14 @@ WallpaperModel::WallpaperModel (
     m_BusinessLogic (logic)
 {
     Q_ASSERT (logic != 0);
+    
     /*
      * FIXME: Maybe we should delay this?
      */
-    m_Filenames = logic->availableWallpapers();
+    QStringList filenames = logic->availableWallpapers();
+    foreach (QString filename, filenames) {
+        m_DescriptorList << new WallpaperDescriptor (filename);
+    }
 }
 
 int 
@@ -47,7 +120,7 @@ WallpaperModel::rowCount(
     Q_UNUSED (parent);
     
     //SYS_DEBUG ("Returning %d", m_Filenames.size());
-    return m_Filenames.size();
+    return m_DescriptorList.size();
 }
 
 QVariant
@@ -55,19 +128,17 @@ WallpaperModel::data (
         const QModelIndex &index, 
         int role) const
 {
+    QVariant             var;
+
     Q_UNUSED (role);
     Q_UNUSED (index);
-    QString tmp = "Row...";
-    QVariant var;
 
-    WallpaperDescriptor desc;
     Q_ASSERT (index.row() >= 0);
-    Q_ASSERT (index.row() < m_Filenames.size());
+    Q_ASSERT (index.row() < m_DescriptorList.size());
 
-    desc.setFilename (m_Filenames[index.row()]);
-    var.setValue (desc);
+    var.setValue (m_DescriptorList[index.row()]);
     
-    SYS_DEBUG ("Returning for %d", index.row());
+    //SYS_DEBUG ("Returning for %d", index.row());
     return var;
 }
 
@@ -77,3 +148,11 @@ WallpaperModel::columnCount (
 {
     return 1;
 }
+
+void
+WallpaperModel::imageLoaded (
+        const QModelIndex &row)
+{
+    emit dataChanged (row, row);
+}
+

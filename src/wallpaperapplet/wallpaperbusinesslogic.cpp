@@ -99,7 +99,7 @@ WallpaperBusinessLogic::availableWallpapers () const
 
     QDir imageDir (dirname);
     foreach (QString imageFile, imageDir.entryList(filterList, QDir::Files)) {
-        list << imageFile;
+        list << (dirname + "/" + imageFile);
     }
 
     return list;

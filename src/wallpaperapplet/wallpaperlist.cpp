@@ -4,16 +4,22 @@
 #include "wallpaperlist.h"
 #include "wallpapermodel.h"
 
+#include <QTimer>
+
 #define DEBUG
 #include "../debug.h"
 
 WallpaperList::WallpaperList (
         WallpaperBusinessLogic *logic) :
     m_BusinessLogic (logic),
+    m_ImageLoader (0),
     m_DataSourceType (WallpaperList::DataSourceUnknown)
 {
     connect (this, SIGNAL(itemClicked(const QModelIndex &)),
             this, SLOT(slotItemClicked(const QModelIndex &)));
+
+    connect (this, SIGNAL(panningStopped()), 
+            this, SLOT(loadPictures()));
 }
 
 void
@@ -24,12 +30,17 @@ WallpaperList::setDataSourceType (
     WallpaperModel *model;
 
     Q_ASSERT (m_DataSourceType == DataSourceUnknown);
+    Q_ASSERT (m_ImageLoader == 0);
+
+    m_ImageLoader = new WallpaperImageLoader;
 
     cellCreator = new WallpaperContentItemCreator;
     setCellCreator (cellCreator);
 
     model = new WallpaperModel (m_BusinessLogic);
     setItemModel (model);
+
+    QTimer::singleShot(1500, this, SLOT(loadPictures()));
 }
 
 
@@ -44,3 +55,12 @@ WallpaperList::slotItemClicked (
     emit imageActivated(rowData);
 }
 
+void 
+WallpaperList::loadPictures ()
+{
+    SYS_DEBUG ("");
+    if (m_ImageLoader == 0)
+        return;
+
+    m_ImageLoader->loadPictures (firstVisibleItem(), lastVisibleItem());
+}
