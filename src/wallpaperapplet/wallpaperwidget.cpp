@@ -2,10 +2,11 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 
 #include "wallpaperwidget.h"
+#include "wallpaperlist.h"
 
 #include <QGraphicsLinearLayout>
 #include <DuiLayout>
-#include <DuiGridLayoutPolicy>
+#include <DuiLinearLayoutPolicy>
 #include <DuiContainer>
 
 #define DEBUG
@@ -32,8 +33,6 @@ WallpaperWidget::createWidgets ()
 {
     QGraphicsLinearLayout *mainLayout;
 
-    //DuiLayout *layout = new DuiLayout();
-    
     m_LocalContainer = createContainer (WallpaperWidget::ThemeLocal);
     m_OviContainer = createContainer (WallpaperWidget::ThemeOvi);
 
@@ -48,12 +47,10 @@ DuiContainer *
 WallpaperWidget::createContainer (
         WallpaperWidget::ThemeCategoryId category)
 {
-    DuiGridLayoutPolicy *policy;
+    DuiLinearLayoutPolicy *policy;
     DuiLayout *layout = new DuiLayout();
-    
-    policy = new DuiGridLayoutPolicy (layout);
-    policy->setColumnStretchFactor (0, 1);
-    policy->setColumnStretchFactor (1, 1);
+
+    policy = new DuiLinearLayoutPolicy (layout, Qt::Vertical);
     layout->setPolicy (policy);
     
     DuiContainer *container = new DuiContainer ();
@@ -62,6 +59,16 @@ WallpaperWidget::createContainer (
     switch (category) {
         case WallpaperWidget::ThemeLocal:
             m_LocalLayoutPolicy = policy;
+
+            m_LocalList = new WallpaperList;
+            m_LocalList->setDataSourceType (WallpaperList::DataSourceLocal);
+            connect (
+                    m_LocalList, 
+                    SIGNAL(imageActivated(WallpaperDescriptor &)),
+                    m_WallpaperBusinessLogic, 
+                    SLOT(setBackground(WallpaperDescriptor &)));
+
+            policy->addItem (m_LocalList);
             break;
 
         case WallpaperWidget::ThemeOvi:
@@ -91,47 +98,3 @@ WallpaperWidget::retranslateUi ()
     }
 }
 
-void
-WallpaperWidget::readLocalThemes ()
-{
-#if 0
-    Q_ASSERT (m_ThemeBusinessLogic != 0);
-    Q_ASSERT (m_LocalLayoutPolicy != 0);
-
-    QList<ThemeDescriptor *> themeList = 
-        m_ThemeBusinessLogic->availableThemes ();
-    int n = 0;
-    foreach (ThemeDescriptor *theme, themeList) {
-        ThemeContainer *themeContainer;
-        int x = n / MaxColumns;
-        int y = n % MaxColumns;
-
-        if (!theme->isVisible()) {
-            delete theme;
-            continue;
-        }
-        //SYS_DEBUG ("Theme name[%d] = %s", n, SYS_STR(themeName));
-        themeContainer = new ThemeContainer (theme, m_ThemeBusinessLogic);
-        m_LocalLayoutPolicy->addItem (themeContainer, x, y);
-
-        /*
-         * FIXME: This should be some pre-select so we can show the dialog.
-         */
-        connect (themeContainer, SIGNAL(activated(ThemeDescriptor *)),
-                this, SLOT(themeActivated(ThemeDescriptor *)));
-        ++n;
-    }
-#endif
-}
-#if 0
-void 
-WallpaperWidget::themeActivated (
-        ThemeDescriptor *themeDescr)
-{
-    ThemeDialog *dialog;
-    SYS_DEBUG ("Theme '%s' activated", SYS_STR(themeDescr->name()));
-
-    dialog = new ThemeDialog (m_ThemeBusinessLogic, themeDescr);
-    dialog->showDialog ();
-}
-#endif

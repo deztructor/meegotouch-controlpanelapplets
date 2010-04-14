@@ -7,10 +7,27 @@
 #include <QObject>
 
 class QString;
+class DuiGConfItem;
+class WallpaperDescriptor;
 
 class WallpaperBusinessLogic : public QObject
 {
     Q_OBJECT
+
+public:
+    WallpaperBusinessLogic ();
+    ~WallpaperBusinessLogic ();
+
+    bool hasWallpaperFileName (bool portrait = false);
+    QString WallpaperFileName (bool portrait = false);
+    WallpaperDescriptor Wallpaper (bool portrait = false);
+
+public slots:
+    void setBackground (WallpaperDescriptor &desc);
+
+private:
+    DuiGConfItem   *m_LandscapeGConfItem;
+    DuiGConfItem   *m_PortraitGConfItem;
 };
 
 #endif

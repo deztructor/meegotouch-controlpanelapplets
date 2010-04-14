@@ -9,7 +9,9 @@
 #include "wallpaperbusinesslogic.h"
 
 class DuiContainer;
-class DuiGridLayoutPolicy;
+class DuiLinearLayoutPolicy;
+class DuiList;
+class WallpaperList;
 
 class WallpaperWidget : public DcpWidget
 {
@@ -31,13 +33,14 @@ public:
 private:
     void createWidgets ();
     DuiContainer *createContainer (WallpaperWidget::ThemeCategoryId category);
-    void readLocalThemes ();
 
     QPointer<WallpaperBusinessLogic>  m_WallpaperBusinessLogic;
     DuiContainer                 *m_LocalContainer;
-    DuiGridLayoutPolicy          *m_LocalLayoutPolicy;
+    DuiLinearLayoutPolicy          *m_LocalLayoutPolicy;
     DuiContainer                 *m_OviContainer;
-    DuiGridLayoutPolicy          *m_OviLayoutPolicy;
+    DuiLinearLayoutPolicy          *m_OviLayoutPolicy;
+
+    WallpaperList                      *m_LocalList;
 };
 
 #endif

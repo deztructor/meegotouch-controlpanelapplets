@@ -21,6 +21,9 @@ OBJECTS_DIR = .objects
 
 HEADERS = \
     ../debug.h \
+    wallpaperdescriptor.h \
+    wallpapermodel.h \
+    wallpaperlist.h \
     wallpaperbusinesslogic.h \
     wallpaperapplet.h \
     wallpaperwidget.h \
@@ -28,6 +31,9 @@ HEADERS = \
 
 SOURCES = \
     ../debug.cpp \
+    wallpaperdescriptor.cpp \
+    wallpaperlist.cpp \
+    wallpapermodel.cpp \
     wallpaperbusinesslogic.cpp \
     wallpaperapplet.cpp \
     wallpaperwidget.cpp \

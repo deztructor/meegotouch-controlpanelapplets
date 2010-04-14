@@ -2,6 +2,7 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 
 #include "wallpaperbrief.h"
+#include "wallpaperdescriptor.h"
 
 #define DEBUG
 #include "../debug.h"
@@ -16,6 +17,12 @@ QString
 WallpaperBrief::valueText() const
 {
     Q_ASSERT (m_WallpaperBusinessLogic != 0);
-    return "Unimplemented";
+    if (m_WallpaperBusinessLogic->hasWallpaperFileName()) {
+        WallpaperDescriptor desc = m_WallpaperBusinessLogic->Wallpaper();
+        return desc.basename();
+    }
+     
+    //% "None"
+    return qtTrId("wallpaper_none");
 }
 
