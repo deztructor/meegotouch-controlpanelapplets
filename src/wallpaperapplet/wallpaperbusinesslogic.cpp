@@ -68,3 +68,17 @@ WallpaperBusinessLogic::setBackground (
     m_PortraitGConfItem->set (desc.filename());
     m_LandscapeGConfItem->set (desc.filename());
 }
+
+QStringList
+WallpaperBusinessLogic::availableWallpapers () const
+{
+    QStringList list;
+
+    list <<
+        "/usr/share/themes/base/dui/images/duiapplicationpage-background.png" <<
+        "/usr/share/themes/plankton/dui/images/duiapplicationpage-background.png" <<
+        "/usr/share/themes/plankton/dui/images/duiapplicationpage-portrait-background.png" <<
+        "/usr/share/themes/plankton/dui/images/duiapplicationpage-portrait-background.png";
+
+    return list;
+}

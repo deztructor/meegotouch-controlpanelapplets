@@ -8,13 +8,27 @@
 #include <DuiContentItem>
 #include "wallpaperdescriptor.h"
 
+class WallpaperBusinessLogic;
+
 class WallpaperModel: public QAbstractTableModel
 {
     Q_OBJECT
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    public:
+        WallpaperModel (
+                WallpaperBusinessLogic *logic,
+                QObject                *parent = 0);
+
+    virtual int rowCount (
+            const QModelIndex &parent = QModelIndex()) const;
+    virtual QVariant data (
+            const QModelIndex &index, 
+            int role = Qt::DisplayRole) const;
     virtual int columnCount (const QModelIndex&) const;
+
+private:
+    WallpaperBusinessLogic *m_BusinessLogic;
+    QStringList             m_Filenames;
 };
 
 class WallpaperContentItemCreator : 

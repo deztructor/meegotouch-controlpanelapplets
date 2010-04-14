@@ -2,6 +2,7 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 
 #include "wallpapermodel.h"
+#include "wallpaperbusinesslogic.h"
 
 #define DEBUG
 #include <../debug.h>
@@ -25,14 +26,28 @@ WallpaperContentItemCreator::updateCell (
 /******************************************************************************
  * WallpaperModel implementation.
  */
+
+WallpaperModel::WallpaperModel (
+        WallpaperBusinessLogic *logic,
+        QObject                *parent) :
+    QAbstractTableModel (parent),
+    m_BusinessLogic (logic)
+{
+    Q_ASSERT (logic != 0);
+    /*
+     * FIXME: Maybe we should delay this?
+     */
+    m_Filenames = logic->availableWallpapers();
+}
+
 int 
 WallpaperModel::rowCount(
 		const QModelIndex &parent) const
 {
-    Q_UNUSED(parent);
-
-    SYS_DEBUG ("Returning 5");
-    return 5;
+    Q_UNUSED (parent);
+    
+    //SYS_DEBUG ("Returning %d", m_Filenames.size());
+    return m_Filenames.size();
 }
 
 QVariant
@@ -46,24 +61,12 @@ WallpaperModel::data (
     QVariant var;
 
     WallpaperDescriptor desc;
-    if (index.row() == 0) {
-        desc.setFilename ("/usr/share/themes/base/dui/images/duiapplicationpage-background.png");
-    } else if (index.row() == 1) {
-        desc.setFilename ("/usr/share/themes/plankton/dui/images/duiapplicationpage-background.png");
-    } else if (index.row() == 2) {
-        desc.setFilename ("/usr/share/themes/plankton/dui/images/duiapplicationpage-portrait-background.png");
-    } else {
-        desc.setFilename ("/usr/share/themes/plankton/dui/images/duiapplicationpage-portrait-background.png");
-    }
+    Q_ASSERT (index.row() >= 0);
+    Q_ASSERT (index.row() < m_Filenames.size());
 
+    desc.setFilename (m_Filenames[index.row()]);
     var.setValue (desc);
-
-    /*
-    /usr/share/themes/base/dui/images/duiapplicationpage-background.png
-    /usr/share/themes/plankton/dui/images/duiapplicationpage-background.png
-    /usr/share/themes/plankton/dui/images/duiapplicationpage-portrait-background.png
-    */
-
+    
     SYS_DEBUG ("Returning for %d", index.row());
     return var;
 }
@@ -72,6 +75,5 @@ int
 WallpaperModel::columnCount (
         const QModelIndex&) const
 {
-    SYS_DEBUG ("Returning 1");
     return 1;
 }

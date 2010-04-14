@@ -60,7 +60,7 @@ WallpaperWidget::createContainer (
         case WallpaperWidget::ThemeLocal:
             m_LocalLayoutPolicy = policy;
 
-            m_LocalList = new WallpaperList;
+            m_LocalList = new WallpaperList (m_WallpaperBusinessLogic);
             m_LocalList->setDataSourceType (WallpaperList::DataSourceLocal);
             connect (
                     m_LocalList, 

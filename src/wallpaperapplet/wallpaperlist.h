@@ -6,12 +6,13 @@
 #include <DuiList>
 #include <QModelIndex>
 class WallpaperDescriptor;
+class WallpaperBusinessLogic;
 
 class WallpaperList : public DuiList {
     Q_OBJECT
         
 public:
-    WallpaperList ();
+    WallpaperList (WallpaperBusinessLogic *logic);
 
     typedef enum {
         DataSourceLocal,
@@ -28,7 +29,8 @@ signals:
     void imageActivated (WallpaperDescriptor &desc);
 
 private:
-    DataSourceType    m_DataSourceType;
+    WallpaperBusinessLogic *m_BusinessLogic;
+    DataSourceType          m_DataSourceType;
 };
 
 #endif

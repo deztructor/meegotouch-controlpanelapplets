@@ -7,7 +7,9 @@
 #define DEBUG
 #include "../debug.h"
 
-WallpaperList::WallpaperList () :
+WallpaperList::WallpaperList (
+        WallpaperBusinessLogic *logic) :
+    m_BusinessLogic (logic),
     m_DataSourceType (WallpaperList::DataSourceUnknown)
 {
     connect (this, SIGNAL(itemClicked(const QModelIndex &)),
@@ -26,7 +28,7 @@ WallpaperList::setDataSourceType (
     cellCreator = new WallpaperContentItemCreator;
     setCellCreator (cellCreator);
 
-    model = new WallpaperModel;
+    model = new WallpaperModel (m_BusinessLogic);
     setItemModel (model);
 }
 

@@ -9,6 +9,7 @@
 class QString;
 class DuiGConfItem;
 class WallpaperDescriptor;
+class QStringList;
 
 class WallpaperBusinessLogic : public QObject
 {
@@ -21,6 +22,8 @@ public:
     bool hasWallpaperFileName (bool portrait = false);
     QString WallpaperFileName (bool portrait = false);
     WallpaperDescriptor Wallpaper (bool portrait = false);
+
+    QStringList availableWallpapers () const;
 
 public slots:
     void setBackground (WallpaperDescriptor &desc);
