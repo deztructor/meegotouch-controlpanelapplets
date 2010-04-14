@@ -20,7 +20,9 @@ private slots:
     void initTestCase ();
     void cleanupTestCase ();
     // The testcases
+#if 0
     void testbatteryplugin ();
+#endif
     void testprofileplugin ();
     void testvolumeplugin ();
 

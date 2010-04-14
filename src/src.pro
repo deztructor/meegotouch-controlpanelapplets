@@ -1,12 +1,11 @@
 TEMPLATE = subdirs
 SUBDIRS = batteryapplet   \
-          batteryplugin   \
           displayapplet   \
           profileapplet   \
-	  themeapplet     \
+          themeapplet     \
           ledapplet       \
-	  testapplet      \
+          testapplet      \
           profileplugin   \
           usbapplet       \
-	  wallpaperapplet \
+          wallpaperapplet \
           volumebarplugin
