@@ -3,7 +3,7 @@
 
 #include <MTheme>
 
-#define CSS_DIR "/usr/share/themes/base/m/sysuid/"
+#define CSS_DIR "/usr/share/themes/base/meegotouch/sysuid/"
 
 Q_EXPORT_PLUGIN2(volumebar, VolumeBarPlugin);
 

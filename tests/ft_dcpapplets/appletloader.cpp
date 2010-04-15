@@ -13,7 +13,7 @@
 #include <dcpappletplugin.h>
 #endif
 
-#define DESKTOP_PATH "/usr/lib/mcontrolpanel/"
+#define DESKTOP_PATH "/usr/lib/duicontrolpanel/"
 
 void
 Ft_AppletLoader::init ()
