@@ -52,17 +52,8 @@ VolumeBarLogic::VolumeBarLogic () :
 
     DBUS_ERR_CHECK (dbus_err);
 
-/*
- * TODO: XXX: The current version of DBUSConnectionEventLoop is so old,
- * so i had to comment out this code-block until the new one is released...
- */
-#if 0
-
     if ((m_dbus_conn != NULL) && 
         (DBUSConnectionEventLoop::addConnection (m_dbus_conn)))
-#else
-    if (m_dbus_conn != NULL)
-#endif
     {
         dbus_connection_add_filter (
             m_dbus_conn,
@@ -73,7 +64,7 @@ VolumeBarLogic::VolumeBarLogic () :
 
         addSignalMatch ();
     }
-#if defined( i386) && defined (DEBUG)
+#if defined (i386) && defined (DEBUG)
     else
     {
         // this is for testing the UI:

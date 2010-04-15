@@ -3,9 +3,9 @@ Section: devel
 Priority: optional
 Maintainer: David Kedves <dkedves@blumsoft.eu>
 Build-Depends: debhelper (>= 5), libduicontrolpanel-dev,
-               libdui-dev (>= 0.18), libqmsystem-dev,
+               libdui-dev (>= 0.19), libqmsystem-dev,
                libprofile-qt-dev (>= 0.13), system-ui-dev,
-               libdbus-1-dev, libdbus-qeventloop-dev
+               libdbus-1-dev, libdbus-qeventloop-dev (>= 1.5)
 Standards-Version: 3.7.3
 
 Package: systemui-applets-tests
