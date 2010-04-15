@@ -3,11 +3,11 @@
 #ifndef BATTERYIMAGE_H
 #define BATTERYIMAGE_H
 
-#include <DuiImageWidget>
+#include <MImageWidget>
 
 class QTimer;
 
-class BatteryImage : public DuiImageWidget
+class BatteryImage : public MImageWidget
 {
     Q_OBJECT
 

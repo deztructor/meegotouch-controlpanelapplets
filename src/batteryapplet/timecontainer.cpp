@@ -2,24 +2,24 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 #include "timecontainer.h"
 
-#include <DuiGridLayoutPolicy>
-#include <DuiImageWidget>
-#include <DuiLabel>
-#include <DuiLayout>
+#include <MGridLayoutPolicy>
+#include <MImageWidget>
+#include <MLabel>
+#include <MLayout>
 
 TimeContainer::TimeContainer(
 		const QString  &text, 
-		DuiImageWidget *image, 
-		DuiWidget      *parent) :
-	DuiContainer (parent),
+		MImageWidget *image, 
+		MWidget      *parent) :
+	MContainer (parent),
         m_Image (image),
         m_TextLabel (0),
         m_TimeLabel (0)
 {
-    m_TimeLabel = new DuiLabel ("N/A");
+    m_TimeLabel = new MLabel ("N/A");
     m_TimeLabel->setObjectName ("batteryTimeLabel");
 
-    m_TextLabel = new DuiLabel (text);
+    m_TextLabel = new MLabel (text);
     m_TextLabel->setObjectName ("batteryLabel");
 
     setHeaderVisible (false);
@@ -70,8 +70,8 @@ void TimeContainer::updateTimeLabel (const QString &value)
 void TimeContainer::setLayout()
 {
     // set the layout
-    DuiLayout *layout = new DuiLayout();
-    DuiGridLayoutPolicy *layoutPolicy = new DuiGridLayoutPolicy(layout);
+    MLayout *layout = new MLayout();
+    MGridLayoutPolicy *layoutPolicy = new MGridLayoutPolicy(layout);
     centralWidget()->setLayout(layout);
 
     // add the widgets

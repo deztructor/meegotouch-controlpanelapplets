@@ -1,19 +1,19 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et sw=4 ts=4 sts=4: */
 
-#include <DuiLocale>
+#include <MLocale>
 #include <QLocale>
 #include <QVariant>
 #include <QString>
 #include <QDebug>
 
-#include <DuiGConfItem>
+#include <MGConfItem>
 #include "usbbrief.h"
 #include "usbmodes.h"
 
 UsbBrief::UsbBrief ()
 {
-    DuiGConfItem    gconf_item (USB_GCONF_KEY);
+    MGConfItem    gconf_item (USB_GCONF_KEY);
     QString         val = gconf_item.value ().toString ();
 
     m_CurrentMode = USB_AUTO;

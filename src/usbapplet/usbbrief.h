@@ -4,7 +4,7 @@
 #ifndef USBBRIEF_H
 #define USBBRIEF_H
 
-#include <DuiLocale>
+#include <MLocale>
 #include <DcpBrief>
 
 class UsbBrief: public DcpBrief {

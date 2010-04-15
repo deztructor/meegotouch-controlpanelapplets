@@ -1,10 +1,10 @@
 #ifndef PROFILEWIDGET_H
 #define PROFILEWIDGET_H
 
-#include <DuiWidget>
+#include <MWidget>
 
-class DuiApplicationPage;
-class DuiStatusIndicatorMenuInterface;
+class MApplicationPage;
+class MStatusIndicatorMenuInterface;
 class ProfileDataInterface;
 class ProfileButtons;
 
@@ -12,12 +12,12 @@ class ProfileButtons;
  * The Profile widget makes it possible to select the currently
  * active profile.
  */
-class ProfileWidget : public DuiWidget
+class ProfileWidget : public MWidget
 {
     Q_OBJECT
 
 public:
-    ProfileWidget (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
+    ProfileWidget (MStatusIndicatorMenuInterface &statusIndicatorMenu,
                    QGraphicsItem *parent = NULL);
     virtual ~ProfileWidget ();
     /*!
@@ -27,7 +27,7 @@ public:
 
 private slots:
     /*!
-     * \brief A slot for showing the profile duicontrolpanel plugin
+     * \brief A slot for showing the profile mcontrolpanel plugin
      */
     void showProfileModificationPage ();
 
@@ -44,7 +44,7 @@ private:
 
 private:
     //! Interface for controlling the status indicator menu
-    DuiStatusIndicatorMenuInterface &statusIndicatorMenu;
+    MStatusIndicatorMenuInterface &statusIndicatorMenu;
 
     //! Profile data If to receive information about possible profiles
     ProfileDataInterface            *dataIf;

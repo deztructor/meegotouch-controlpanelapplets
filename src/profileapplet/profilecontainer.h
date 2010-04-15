@@ -4,18 +4,18 @@
 #ifndef PROFILECONTAINER_H
 #define PROFILECONTAINER_H
 
-#include <DuiContainer>
+#include <MContainer>
 
-class DuiLabel;
-class DuiButton;
-class DuiSlider;
-class DuiImageWidget;
+class MLabel;
+class MButton;
+class MSlider;
+class MImageWidget;
 
 /*!
  * A widget that shows and controls the basic properties of a profile: the mute
  * state, the volume level and the vibration on/off property.
  */
-class ProfileContainer: public DuiContainer
+class ProfileContainer: public MContainer
 {
     Q_OBJECT
 
@@ -25,7 +25,7 @@ public:
             const QString &title, 
             int            level, 
             bool           vibra, 
-            DuiWidget     *parent = 0);
+            MWidget     *parent = 0);
     ~ProfileContainer ();
 
     void setLevel (int value);
@@ -45,12 +45,12 @@ private:
     void setLayout();
 
 private:
-    DuiSlider         *m_Slider;
-    DuiButton         *m_VibrationSwitch;
-    DuiLabel          *m_VibrationLabel;
-    DuiLabel          *m_OnOffLabel;
-    DuiLabel          *m_NoRingLabel;
-    DuiImageWidget    *m_Img;
+    MSlider         *m_Slider;
+    MButton         *m_VibrationSwitch;
+    MLabel          *m_VibrationLabel;
+    MLabel          *m_OnOffLabel;
+    MLabel          *m_NoRingLabel;
+    MImageWidget    *m_Img;
     int                m_Level;
     const int          m_ProfileId;
 };

@@ -1,17 +1,17 @@
 #include "volumebarplugin.h"
 #include "volumebar.h"
 
-#include <DuiTheme>
+#include <MTheme>
 
-#define CSS_DIR "/usr/share/themes/base/dui/sysuid/"
+#define CSS_DIR "/usr/share/themes/base/m/sysuid/"
 
 Q_EXPORT_PLUGIN2(volumebar, VolumeBarPlugin);
 
-DuiWidget*
+MWidget*
 VolumeBarPlugin::constructWidget (
-    DuiStatusIndicatorMenuInterface &statusIndicatorMenu)
+    MStatusIndicatorMenuInterface &statusIndicatorMenu)
 {
-    DuiTheme::loadCSS (CSS_DIR "volumebar.css");
+    MTheme::loadCSS (CSS_DIR "volumebar.css");
 
     return new VolumeBar (statusIndicatorMenu);
 }

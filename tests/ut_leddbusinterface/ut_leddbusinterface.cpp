@@ -2,7 +2,7 @@
 /* vim:set et sw=4 ts=4 sts=4: */
 #include "ut_leddbusinterface.h"
 #include "leddbusinterface.h"
-#include <DuiApplication>
+#include <MApplication>
 #include <QString>
 #include <QStringList>
 
@@ -54,7 +54,7 @@ Ut_LedDbusInterface::cleanup()
 {
 }
 
-DuiApplication *app;
+MApplication *app;
 
 
 static bool
@@ -121,7 +121,7 @@ Ut_LedDbusInterface::initTestCase()
 
     int argc = 1;
     char* app_name = (char*) "./Ut_LedDbusInterface";
-    app = new DuiApplication(argc, &app_name);
+    app = new MApplication(argc, &app_name);
 
     waitForSysuidRunning();
 

@@ -8,8 +8,8 @@ INCLUDEPATH += $$SRC_PREFIX \
 #
 LIBS += -lprofile-qt
 INCLUDEPATH += \
-    /usr/include/qt4/dui \
-    /usr/include/duicontrolpanel \
+    /usr/include/qt4/m \
+    /usr/include/mcontrolpanel \
     /usr/include/profile-qt
 
 QT += \
@@ -24,8 +24,8 @@ target.path = /usr/lib/systemui-applets-tests
 CONFIG += \
 	plugin \
 	gui \
-	dui \
-	duicontrolpanel \
+	m \
+	mcontrolpanel \
 	debug \
 	silent 
 

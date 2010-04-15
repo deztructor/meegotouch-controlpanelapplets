@@ -3,7 +3,7 @@
 #include "ut_displaybusinesslogic.h"
 #include "displaybusinesslogic.h"
 
-#include <DuiApplication>
+#include <MApplication>
 #include <QList>
 
 #define DEBUG
@@ -29,7 +29,7 @@ Ut_DisplayBusinessLogic::initTestCase()
     int argc = 1;
     char* app_name = (char*) "./Ut_DisplayBusinessLogic";
 
-    m_App = new DuiApplication (argc, &app_name);
+    m_App = new MApplication (argc, &app_name);
     m_Api = new DisplayBusinessLogic;
 }
 

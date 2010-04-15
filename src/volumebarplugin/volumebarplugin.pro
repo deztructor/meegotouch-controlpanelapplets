@@ -4,8 +4,8 @@ TEMPLATE = lib
 
 CONFIG += plugin \
           gui \
-          dui \
-          duistatusindicatormenu \
+          m \
+          mstatusindicatormenu \
           link_pkgconfig \
           qmsystem \
           silent
@@ -15,7 +15,7 @@ PKGCONFIG += dbus-1
 LIBS += -ldbus-qeventloop
 
 INCLUDEPATH += \
-    /usr/include/duistatusindicatormenu \
+    /usr/include/mstatusindicatormenu \
     /usr/include/dbus-1.0
 
 HEADERS = volumebarplugin.h \
@@ -32,10 +32,10 @@ SOURCES = volumebarplugin.cpp \
 
 TARGET = $$qtLibraryTarget(volume)
 DESTDIR = lib
-target.path += /usr/lib/duistatusindicatormenu/plugins
+target.path += /usr/lib/mstatusindicatormenu/plugins
 
 css.files += volumebar.css
-css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/dui/sysuid
+css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/m/sysuid
 
 INSTALLS += \
     target \

@@ -7,7 +7,7 @@
 #include <QtTest/QtTest>
 #include <QObject>
 
-class DuiApplication;
+class MApplication;
 class ProfileDataInterface;
 
 class Ut_ProfileDataInterface : public QObject 
@@ -26,7 +26,7 @@ private slots:
     void testSetVibration ();
 
 private:
-    DuiApplication       *m_App;
+    MApplication       *m_App;
     ProfileDataInterface *m_Api;
 };
 

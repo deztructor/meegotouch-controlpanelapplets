@@ -1,7 +1,7 @@
 /*
  * profileplugin.cpp
  *
- * This file is part of duistatusindicatormenu
+ * This file is part of mstatusindicatormenu
  *
  * Copyright (C) 2009 Nokia Corporation. All rights reserved.
  *
@@ -19,9 +19,9 @@
 
 Q_EXPORT_PLUGIN2(profile, ProfilePlugin);
 
-DuiWidget*
+MWidget*
 ProfilePlugin::constructWidget (
-    DuiStatusIndicatorMenuInterface &statusIndicatorMenu)
+    MStatusIndicatorMenuInterface &statusIndicatorMenu)
 {
     return new ProfileWidget (statusIndicatorMenu);
 }

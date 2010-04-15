@@ -5,15 +5,15 @@
 #include "wallpapereditorwidget.h"
 #include "wallpaperbrief.h"
 
-#include <DuiTheme>
-#include <DuiAction>
+#include <MTheme>
+#include <MAction>
 
 #define DEBUG
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(wallpaperapplet, WallpaperApplet)
 
-const QString cssDir = "/usr/share/themes/base/dui/duicontrolpanel/style/";
+const QString cssDir = "/usr/share/themes/base/m/mcontrolpanel/style/";
 
 WallpaperApplet::WallpaperApplet() :
     m_WallpaperBusinessLogic (new WallpaperBusinessLogic)
@@ -27,7 +27,7 @@ WallpaperApplet::~WallpaperApplet()
 void 
 WallpaperApplet::init()
 {
-    DuiTheme::loadCSS(cssDir + "wallpaperapplet.css");
+    MTheme::loadCSS(cssDir + "wallpaperapplet.css");
 }
 
 DcpWidget *
@@ -71,26 +71,26 @@ WallpaperApplet::title() const
     return qtTrId ("qtn_theme_wallpaper"); // This is not official logical id
 }
 
-QVector<DuiAction*>
+QVector<MAction*>
 WallpaperApplet::viewMenuItems()
 {
-    DuiAction            *helpAction;
-    QVector<DuiAction*>   vector;
+    MAction            *helpAction;
+    QVector<MAction*>   vector;
 
     SYS_DEBUG ("");
-    helpAction = new DuiAction (
+    helpAction = new MAction (
             //% "Help"
             qtTrId ("qtn_comm_help"), 
             pageMain (0));
-    helpAction->setLocation (DuiAction::ApplicationMenuLocation);
+    helpAction->setLocation (MAction::ApplicationMenuLocation);
 #if 0
-    DuiAction            *doneAction;
-    doneAction = new DuiAction(
+    MAction            *doneAction;
+    doneAction = new MAction(
             "icon-m-framework-done",
             //% "Done"
             qtTrId("qtn_wall_done"), 
             this);
-    doneAction->setLocation (DuiAction::ToolBarLocation);
+    doneAction->setLocation (MAction::ToolBarLocation);
     doneAction->setVisible (true);
 #endif
     vector.append(helpAction);

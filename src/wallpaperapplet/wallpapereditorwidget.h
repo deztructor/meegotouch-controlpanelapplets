@@ -8,10 +8,10 @@
 
 #include "wallpaperbusinesslogic.h"
 
-class DuiContainer;
-class DuiLinearLayoutPolicy;
-class DuiAction;
-class DuiImageWidget;
+class MContainer;
+class MLinearLayoutPolicy;
+class MAction;
+class MImageWidget;
 
 class WallpaperEditorWidget : public DcpWidget
 {
@@ -31,8 +31,8 @@ private:
     void createActions ();
 
     QPointer<WallpaperBusinessLogic>  m_WallpaperBusinessLogic;
-    DuiImageWidget                   *m_Image;
-    DuiAction                        *m_DoneAction;
+    MImageWidget                   *m_Image;
+    MAction                        *m_DoneAction;
 };
 
 #endif

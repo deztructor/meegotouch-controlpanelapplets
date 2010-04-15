@@ -8,7 +8,7 @@
 #include <DcpBrief>
 #include <QObject>
 
-class DuiAction;
+class MAction;
 class DisplayWidget;
 
 class DisplayApplet : public QObject, public DcpAppletIf
@@ -21,7 +21,7 @@ public:
     virtual DcpWidget* constructWidget(int widgetId);
     virtual DcpWidget* pageMain();
     virtual QString title() const;
-    virtual QVector<DuiAction *> viewMenuItems();
+    virtual QVector<MAction *> viewMenuItems();
     virtual DcpBrief* constructBrief(int partId);
 
 private:

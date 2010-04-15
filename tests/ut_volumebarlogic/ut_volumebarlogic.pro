@@ -20,7 +20,7 @@ PKGCONFIG += dbus-1
 LIBS += -ldbus-qeventloop
 
 INCLUDEPATH += \
-    /usr/include/duistatusindicatormenu \
+    /usr/include/mstatusindicatormenu \
     /usr/include/dbus-1.0
 
 

@@ -5,11 +5,11 @@
 
 #include <QGraphicsLinearLayout>
 #include <QStringList>
-#include <DuiButton>
-#include <DuiLabel>
-#include <DuiLayout>
-#include <DuiGridLayoutPolicy>
-#include <DuiContainer>
+#include <MButton>
+#include <MLabel>
+#include <MLayout>
+#include <MGridLayoutPolicy>
+#include <MContainer>
 
 #define DEBUG
 #include "../debug.h"
@@ -35,13 +35,13 @@ void
 TestWidget::createWidgets ()
 {
     QGraphicsLinearLayout *mainLayout;
-    DuiLabel              *tLabel;
+    MLabel              *tLabel;
     char title[512];
 
     sprintf (title, "This is page %d at %p", m_NumId, this);
 
-    //DuiLayout *layout = new DuiLayout()
-    tLabel = new DuiLabel (title);
+    //MLayout *layout = new MLayout()
+    tLabel = new MLabel (title);
     
     m_LocalContainer = createContainer ();
 
@@ -53,16 +53,16 @@ TestWidget::createWidgets ()
     this->setLayout (mainLayout);
 }
 
-DuiContainer * 
+MContainer * 
 TestWidget::createContainer ()
 {
-    DuiGridLayoutPolicy *policy;
-    DuiLayout *layout = new DuiLayout();
+    MGridLayoutPolicy *policy;
+    MLayout *layout = new MLayout();
     
-    policy = new DuiGridLayoutPolicy (layout);
+    policy = new MGridLayoutPolicy (layout);
     layout->setPolicy (policy);
     
-    DuiContainer *container = new DuiContainer ();
+    MContainer *container = new MContainer ();
     container->centralWidget()->setLayout (layout);
 
     m_LocalLayoutPolicy = policy;
@@ -95,11 +95,11 @@ TestWidget::readLocalThemes ()
 
     int n = 0;
     foreach (QString title, titleList) {
-        DuiButton *button;
+        MButton *button;
         int x = n / MaxColumns;
         int y = n % MaxColumns;
 
-        button = new DuiButton (title);
+        button = new MButton (title);
         m_LocalLayoutPolicy->addItem (button, x, y);
 
         connect (button, SIGNAL(clicked()),
@@ -113,7 +113,7 @@ TestWidget::readLocalThemes ()
 void 
 TestWidget::pagingClicked ()
 {
-    DuiButton *button = qobject_cast<DuiButton*> (sender());
+    MButton *button = qobject_cast<MButton*> (sender());
     QString label;
     int Id;
 

@@ -2,11 +2,11 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 
 #include <QObject>
-#include <DuiLayout>
-#include <DuiLabel>
-#include <DuiButton>
-#include <DuiLinearLayoutPolicy>
-#include <DuiGridLayoutPolicy>
+#include <MLayout>
+#include <MLabel>
+#include <MButton>
+#include <MLinearLayoutPolicy>
+#include <MGridLayoutPolicy>
 
 #include "ledwidget.h"
 #include "leddbusinterface.h"
@@ -37,24 +37,24 @@ LedWidget::LedWidget (
 void
 LedWidget::initWidget ()
 {
-    DuiLayout               *mainLayout;
-    DuiGridLayoutPolicy     *landscapePolicy;
-    DuiLinearLayoutPolicy   *portraitPolicy;
+    MLayout               *mainLayout;
+    MGridLayoutPolicy     *landscapePolicy;
+    MLinearLayoutPolicy   *portraitPolicy;
     int                      n;
 
     SYS_DEBUG ("");
 
-    mainLayout = new DuiLayout (this);
-    landscapePolicy = new DuiGridLayoutPolicy (mainLayout);
-    portraitPolicy  = new DuiLinearLayoutPolicy (mainLayout, Qt::Vertical);
+    mainLayout = new MLayout (this);
+    landscapePolicy = new MGridLayoutPolicy (mainLayout);
+    portraitPolicy  = new MLinearLayoutPolicy (mainLayout, Qt::Vertical);
     mainLayout->setLandscapePolicy (landscapePolicy);
     mainLayout->setPortraitPolicy (portraitPolicy);
 
     FOREACHCATEGORY(n) {
-        m_EventLabels[n] = new DuiLabel (
+        m_EventLabels[n] = new MLabel (
                 labelStringForCategory((LedWidget::CategoryType) n));
-        m_EventButtons[n] = new DuiButton ();
-        m_EventButtons[n]->setViewType (DuiButton::switchType);
+        m_EventButtons[n] = new MButton ();
+        m_EventButtons[n]->setViewType (MButton::switchType);
         m_EventButtons[n]->setCheckable (true);
         
         portraitPolicy->addItem (
@@ -74,7 +74,7 @@ void
 LedWidget::eventButtonToggled (
         bool newState)
 {
-    DuiButton *button = qobject_cast<DuiButton *> (sender());
+    MButton *button = qobject_cast<MButton *> (sender());
     LedWidget::CategoryType category;
 
     Q_UNUSED (newState);
@@ -148,7 +148,7 @@ LedWidget::labelStringForCategory (
 
 LedWidget::CategoryType 
 LedWidget::categoryFromWidget (
-        DuiButton *button) const
+        MButton *button) const
 {
     int n;
 

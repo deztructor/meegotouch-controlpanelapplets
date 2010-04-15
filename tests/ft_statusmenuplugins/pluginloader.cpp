@@ -2,12 +2,12 @@
 /* vim:set et sw=4 ts=4 sts=4: */
 #include "pluginloader.h"
 #include <QTest>
-#include <DuiWidget>
+#include <MWidget>
 #include "StatusIndicatorMenuStub.h"
 
 using namespace QTest;
 
-#define LIBDIR "/usr/lib/duistatusindicatormenu/plugins/"
+#define LIBDIR "/usr/lib/mstatusindicatormenu/plugins/"
 
 void
 Ft_PluginLoader::init ()
@@ -24,11 +24,11 @@ Ft_PluginLoader::cleanup ()
 void
 Ft_PluginLoader::initTestCase ()
 {
-    // Init QT/DUI
+    // Init QT/M
     int argc = 1;
     char* app_name = (char*) "./ft_statusmenuplugins";
 
-    m_app = new DuiApplication (argc, &app_name);
+    m_app = new MApplication (argc, &app_name);
     m_smstub = new StatusIndicatorMenuStub;
 }
 
@@ -49,8 +49,8 @@ Ft_PluginLoader::DoPluginTest (const QString &soname)
     QPluginLoader  loader (QString (LIBDIR) + soname);
     QObject       *object = loader.instance ();
 
-    DuiStatusIndicatorMenuPluginInterface* plugin =
-        qobject_cast<DuiStatusIndicatorMenuPluginInterface *> (object);
+    MStatusIndicatorMenuPluginInterface* plugin =
+        qobject_cast<MStatusIndicatorMenuPluginInterface *> (object);
 
     QVERIFY(plugin);
 

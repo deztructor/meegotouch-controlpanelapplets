@@ -3,13 +3,13 @@
 #include "batteryimage.h"
 
 #include <QTimer>
-#include <DuiTheme>
+#include <MTheme>
 
 #undef DEBUG
 #include "../debug.h"
 
 BatteryImage::BatteryImage (QGraphicsItem *parent) :
-        DuiImageWidget (parent),
+        MImageWidget (parent),
         m_timer (NULL),
         m_batteryLevel (0)
 {
@@ -28,7 +28,7 @@ BatteryImage::loadImages (bool charging)
 
   if (charging && m_ChargingImages.isEmpty ())
   {
-    DuiTheme *theme = DuiTheme::instance ();
+    MTheme *theme = MTheme::instance ();
 
     m_ChargingImages << 
         theme->pixmap (QString ("icon-s-status-battery-verylow")) <<
@@ -48,7 +48,7 @@ BatteryImage::loadImages (bool charging)
 #endif
   if (m_Images.isEmpty ())
   {
-    DuiTheme *theme = DuiTheme::instance ();
+    MTheme *theme = MTheme::instance ();
 
     m_Images << 
         theme->pixmap (QString ("icon-m-energy-management-battery-verylow")) << 
@@ -73,14 +73,14 @@ BatteryImage::~BatteryImage ()
     {
         // Release the pixmaps
         foreach (const QPixmap *icon, m_Images)
-            DuiTheme::instance ()->releasePixmap (icon);
+            MTheme::instance ()->releasePixmap (icon);
         m_Images.clear ();
     }
 #if 0
     if (! m_ChargingImages.isEmpty ())
     {   // Release the pixmaps
         foreach (const QPixmap *icon, m_ChargingImages)
-            DuiTheme::instance ()->releasePixmap (icon);
+            MTheme::instance ()->releasePixmap (icon);
         m_ChargingImages.clear ();
     }
 #endif

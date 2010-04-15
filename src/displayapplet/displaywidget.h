@@ -5,10 +5,10 @@
 
 #include <dcpwidget.h>
 
-class DuiButton;
-class DuiSlider;
-class DuiLabel;
-class DuiContainer;
+class MButton;
+class MSlider;
+class MLabel;
+class MContainer;
 class DisplayBusinessLogic;
 
 class DisplayWidget : public DcpWidget
@@ -30,15 +30,15 @@ private:
     DisplayBusinessLogic   *m_logic;
     QList<int>              m_brightness_vals;
     QList<int>              m_screenlight_vals;
-    DuiSlider              *m_brightnessSlider;
-    DuiSlider              *m_screenlightSlider;
+    MSlider              *m_brightnessSlider;
+    MSlider              *m_screenlightSlider;
 
     void retranslateUi ();
 
-    DuiContainer           *m_brightnessContainer;
-    DuiContainer           *m_screenlightContainer;
-    DuiContainer           *m_blankInhibitContainer;
-    DuiLabel               *m_OnOffLabel;
+    MContainer           *m_brightnessContainer;
+    MContainer           *m_screenlightContainer;
+    MContainer           *m_blankInhibitContainer;
+    MLabel               *m_OnOffLabel;
 };
 
 #endif // DISPLAYWIDGET_H

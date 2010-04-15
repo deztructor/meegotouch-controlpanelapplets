@@ -1,24 +1,24 @@
 #ifndef VOLUMEBAR_H
 #define VOLUMEBAR_H
 
-#include <DuiWidget>
+#include <MWidget>
 
-class DuiSlider;
-class DuiContainer;
+class MSlider;
+class MContainer;
 class VolumeBarLogic;
 class VolumeOverlay;
-class DuiStatusIndicatorMenuInterface;
+class MStatusIndicatorMenuInterface;
 
 // For Hw-volume key handling
 #include <qmkeys.h>
 using namespace Maemo;
 
-class VolumeBar : public DuiWidget
+class VolumeBar : public MWidget
 {
     Q_OBJECT
 
 public:
-    VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
+    VolumeBar (MStatusIndicatorMenuInterface &statusIndicatorMenu,
                QGraphicsItem *parent = 0);
     ~VolumeBar ();
 
@@ -29,7 +29,7 @@ private slots:
     void hwKeyEvent (QmKeys::Key key, QmKeys::State state);
 
 private:
-    DuiSlider       *m_bar;
+    MSlider       *m_bar;
     VolumeBarLogic  *m_logic;
     VolumeOverlay   *m_overlay;
     Maemo::QmKeys   *m_hwkeys;

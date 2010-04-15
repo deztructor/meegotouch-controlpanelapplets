@@ -5,24 +5,24 @@
 #undef DEBUG
 #include "../debug.h"
 
-#include <DuiContainer>
-#include <DuiControlPanelIf>
-#include <DuiGridLayoutPolicy>
-#include <DuiGConfItem>
-#include <DuiImageWidget>
-#include <DuiLabel>
-#include <DuiLayout>
-#include <DuiLocale>
-#include <DuiStatusIndicatorMenuPluginInterface>
-#include <DuiTheme>
+#include <MContainer>
+#include <MControlPanelIf>
+#include <MGridLayoutPolicy>
+#include <MGConfItem>
+#include <MImageWidget>
+#include <MLabel>
+#include <MLayout>
+#include <MLocale>
+#include <MStatusIndicatorMenuPluginInterface>
+#include <MTheme>
 
 #include <QGraphicsLinearLayout>
 
-const QString cssDir = "/usr/share/duistatusindicatormenu/themes/style/";
+const QString cssDir = "/usr/share/mstatusindicatormenu/themes/style/";
 
-Battery::Battery (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
+Battery::Battery (MStatusIndicatorMenuInterface &statusIndicatorMenu,
                   QGraphicsItem *parent) :
-        DuiWidget (parent),
+        MWidget (parent),
         dbusIf (0),
         statusIndicatorMenu (statusIndicatorMenu),
         modeLabel (0),
@@ -35,25 +35,25 @@ Battery::Battery (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
 {
     SYS_DEBUG ("");
 
-    DuiTheme::loadCSS (cssDir + "batteryplugin.css");
+    MTheme::loadCSS (cssDir + "batteryplugin.css");
 
     QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
     setLayout (mainLayout);
     mainLayout->setContentsMargins (0, 0, 0, 0);
 
     // init widgets
-    modeLabel = new DuiLabel;
+    modeLabel = new MLabel;
     modeLabel->setObjectName ("batteryModeLabel");
-    timeLabel = new DuiLabel;
+    timeLabel = new MLabel;
     timeLabel->setObjectName ("batteryTimeLabel");
     batteryImage = new BatteryImage;
     batteryImage->setObjectName ("batteryImage");
 
     // Create a container for the battery
-    container = new DuiContainer;
-    DuiWidget *widget = new DuiWidget;
-    DuiLayout *layout = new DuiLayout;
-    DuiGridLayoutPolicy *layoutPolicy = new DuiGridLayoutPolicy (layout);
+    container = new MContainer;
+    MWidget *widget = new MWidget;
+    MLayout *layout = new MLayout;
+    MGridLayoutPolicy *layoutPolicy = new MGridLayoutPolicy (layout);
     widget->setLayout (layout);
     //% "Battery"
     container->setTitle (qtTrId ("qtn_ener_battery"));
@@ -199,7 +199,7 @@ void
 Battery::showBatteryModificationPage ()
 {
     // instantiate the interface
-    DuiControlPanelIf cpIf;
+    MControlPanelIf cpIf;
     // check the interface is valid
     if (!cpIf.isValid ())
         return;

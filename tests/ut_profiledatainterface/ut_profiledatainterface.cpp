@@ -3,7 +3,7 @@
 #include "ut_profiledatainterface.h"
 #include "profiledatainterface.h"
 
-#include <DuiApplication>
+#include <MApplication>
 
 #define DEBUG
 #include "../../src/debug.h"
@@ -28,7 +28,7 @@ Ut_ProfileDataInterface::initTestCase()
     int argc = 1;
     char* app_name = (char*) "./Ut_ProfileDataInterface";
 
-    m_App = new DuiApplication (argc, &app_name);
+    m_App = new MApplication (argc, &app_name);
     m_Api = new ProfileDataInterface;
 }
 

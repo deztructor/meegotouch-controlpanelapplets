@@ -3,19 +3,19 @@
 #ifndef SLIDERCONTAINER_H
 #define SLIDERCONTAINER_H
 
-#include <DuiContainer>
+#include <MContainer>
 
-class DuiButton;
-class DuiLabel;
-class DuiSlider;
-class DuiLinearLayoutPolicy; 
+class MButton;
+class MLabel;
+class MSlider;
+class MLinearLayoutPolicy; 
 
-class SliderContainer : public DuiContainer
+class SliderContainer : public MContainer
 {
     Q_OBJECT
 
 public:
-    SliderContainer (DuiWidget *parent = 0);
+    SliderContainer (MWidget *parent = 0);
     ~SliderContainer ();
     void retranslate ();
 
@@ -34,13 +34,13 @@ signals:
     void PSMThresholdValueChanged (QString);
 
 private:
-    DuiButton               *m_PSMAutoButton;
-    DuiSlider               *m_PSMSlider;
-    DuiLabel                *m_AutoPSMLabel;
-    DuiLabel                *m_PsmValueLabel;
+    MButton               *m_PSMAutoButton;
+    MSlider               *m_PSMSlider;
+    MLabel                *m_AutoPSMLabel;
+    MLabel                *m_PsmValueLabel;
     QStringList              m_SliderValues;
     int                      m_SliderValue;
-    DuiLinearLayoutPolicy   *m_LayoutPolicy;
+    MLinearLayoutPolicy   *m_LayoutPolicy;
     bool                     m_SliderExists;
     
     void    setLayout();

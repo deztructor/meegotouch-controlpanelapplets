@@ -1,8 +1,8 @@
 TEMPLATE = app
 QT += testlib
 
-CONFIG += dui duicontrolpanel silent
-LIBS += -lduicontrolpanel
+CONFIG += m mcontrolpanel silent
+LIBS += -lmcontrolpanel
 
 TARGET = ft_dcpapplets
 target.path = /usr/lib/systemui-applets-tests

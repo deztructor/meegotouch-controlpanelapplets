@@ -8,8 +8,8 @@
 #include <QFile>
 #include <QString>
 #include <QStringList>
-#include <DuiTheme>
-#include <DuiGConfItem>
+#include <MTheme>
+#include <MGConfItem>
 
 //#define DEBUG
 #include "../debug.h"
@@ -23,7 +23,7 @@ static const QString themeDirName ("/usr/share/themes");
 QString
 ThemeBusinessLogic::currentThemeCodeName () const
 {
-    DuiTheme *theme = DuiTheme::instance();
+    MTheme *theme = MTheme::instance();
 
     Q_ASSERT (theme != 0);
 
@@ -90,7 +90,7 @@ ThemeBusinessLogic::changeTheme (
 {
     SYS_DEBUG ("Activating theme '%s'", SYS_STR(themeCodeName));
     
-    DuiGConfItem  gconfItem ("/Dui/theme/name");
+    MGConfItem  gconfItem ("/M/theme/name");
     gconfItem.set (themeCodeName);
     emit themeChanged (themeCodeName);
 }

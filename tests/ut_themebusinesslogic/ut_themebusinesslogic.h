@@ -7,7 +7,7 @@
 #include <QtTest/QtTest>
 #include <QObject>
 
-class DuiApplication;
+class MApplication;
 class ThemeBusinessLogic;
 
 class UtThemeBusinessLogicPrivate : public QObject 
@@ -37,7 +37,7 @@ private slots:
 
 private:
     UtThemeBusinessLogicPrivate *m_Priv;
-    DuiApplication              *m_App;
+    MApplication              *m_App;
     ThemeBusinessLogic          *m_Api;
 };
 

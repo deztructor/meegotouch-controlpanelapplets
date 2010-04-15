@@ -4,14 +4,14 @@
 #define THEMEDIALOG_H
 
 #include <QObject>
-#include <DuiDialog>
+#include <MDialog>
 #include <QPointer>
 
 class ThemeBusinessLogic;
 class ThemeDescriptor;
 class QString;
 
-class ThemeDialog: public DuiDialog
+class ThemeDialog: public MDialog
 {
 Q_OBJECT
 

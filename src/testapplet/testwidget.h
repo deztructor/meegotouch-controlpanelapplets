@@ -6,8 +6,8 @@
 #include <QPointer>
 #include "dcpwidget.h"
 
-class DuiContainer;
-class DuiGridLayoutPolicy;
+class MContainer;
+class MGridLayoutPolicy;
 
 class TestWidget : public DcpWidget
 {
@@ -26,11 +26,11 @@ private slots:
 
 private:
     void createWidgets ();
-    DuiContainer *createContainer ();
+    MContainer *createContainer ();
     void readLocalThemes ();
 
-    DuiContainer                 *m_LocalContainer;
-    DuiGridLayoutPolicy          *m_LocalLayoutPolicy;
+    MContainer                 *m_LocalContainer;
+    MGridLayoutPolicy          *m_LocalLayoutPolicy;
     int                           m_NumId;
 };
 

@@ -4,8 +4,8 @@
 #include "testwidget.h"
 #include "testbrief.h"
 
-#include <DuiTheme>
-#include <DuiAction>
+#include <MTheme>
+#include <MAction>
 
 #define DEBUG
 #include "../debug.h"
@@ -24,7 +24,7 @@ TestApplet::~TestApplet()
 void 
 TestApplet::init()
 {
-    //DuiTheme::loadCSS(cssDir + "themeapplet.css");
+    //MTheme::loadCSS(cssDir + "themeapplet.css");
 }
 
 DcpWidget *
@@ -127,16 +127,16 @@ TestApplet::title() const
     return qtTrId ("qtn_test_test"); // This is not official logical id
 }
 
-QVector<DuiAction*>
+QVector<MAction*>
 TestApplet::viewMenuItems()
 {
-    QVector<DuiAction*> vector;
+    QVector<MAction*> vector;
     //% "Help"
-    DuiAction* helpAction = new DuiAction (qtTrId ("qtn_comm_help"), 
+    MAction* helpAction = new MAction (qtTrId ("qtn_comm_help"), 
             pageMain (0));
 
     vector.append(helpAction);
-    helpAction->setLocation(DuiAction::ApplicationMenuLocation);
+    helpAction->setLocation(MAction::ApplicationMenuLocation);
 
     return vector;
 }

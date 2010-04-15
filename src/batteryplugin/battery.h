@@ -1,20 +1,20 @@
 #ifndef BATTERY_H
 #define BATTERY_H
 
-#include <DuiWidget>
+#include <MWidget>
 
-class DuiLabel;
-class DuiContainer;
-class DuiStatusIndicatorMenuInterface;
+class MLabel;
+class MContainer;
+class MStatusIndicatorMenuInterface;
 class BatteryDBusInterface;
 class BatteryImage;
 
-class Battery : public DuiWidget
+class Battery : public MWidget
 {
     Q_OBJECT
 
 public:
-    Battery (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
+    Battery (MStatusIndicatorMenuInterface &statusIndicatorMenu,
              QGraphicsItem *parent = NULL);
     virtual ~Battery ();
     void retranslateUi ();
@@ -33,12 +33,12 @@ private: //methods
 
 private: //attributes
     BatteryDBusInterface            *dbusIf;
-    DuiStatusIndicatorMenuInterface &statusIndicatorMenu;
+    MStatusIndicatorMenuInterface &statusIndicatorMenu;
     //^^ ! Interface for controlling the status indicator menu
-    DuiLabel                        *modeLabel;
-    DuiLabel                        *timeLabel;
+    MLabel                        *modeLabel;
+    MLabel                        *timeLabel;
     BatteryImage                    *batteryImage;
-    DuiContainer                    *container;
+    MContainer                    *container;
     bool                             PSMode;
     int                              last_value;
     bool                             charging;

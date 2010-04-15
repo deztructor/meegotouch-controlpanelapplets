@@ -11,5 +11,5 @@ SOURCEDIR = $$PWD/../src/displayapplet \
 	    $$PWD/../src/wallpaperapplet \
 	    $$PWD/../src/ledapplet 
 TRANSLATIONDIR = $$PWD
-TRANSLATION_INSTALLDIR = /usr/share/l10n/dui
+TRANSLATION_INSTALLDIR = /usr/share/l10n/m
 include(translations.pri)

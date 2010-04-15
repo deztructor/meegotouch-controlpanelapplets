@@ -1,13 +1,13 @@
 TEMPLATE = lib
 CONFIG += plugin \
     gui \
-    dui \
+    m \
     silent \
     debug \
     qmsystem
-LIBS += -lduicontrolpanel
-INCLUDEPATH += /usr/include/qt4/dui \
-    /usr/include/duicontrolpanel
+LIBS += -lmcontrolpanel
+INCLUDEPATH += /usr/include/qt4/m \
+    /usr/include/mcontrolpanel
 QT += dbus
 contains(cov, true) { 
     message("Coverage options enabled")
@@ -33,8 +33,8 @@ SOURCES = \
 
 DESTDIR = lib
 desktop.files += *.desktop
-desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
-target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
+desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/mcontrolpanel
+target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/mcontrolpanel/applets
 
 message("The plugin will be installed to: " $$target.path)
 INSTALLS += target \

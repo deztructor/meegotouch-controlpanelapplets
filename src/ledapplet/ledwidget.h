@@ -5,8 +5,8 @@
 
 #include "dcpwidget.h"
 
-class DuiButton;
-class DuiLabel;
+class MButton;
+class MLabel;
 class LedDBusInterface;
 
 class LedWidget : public DcpWidget
@@ -35,10 +35,10 @@ protected slots:
 
 private:
     QString labelStringForCategory (LedWidget::CategoryType category) const;
-    LedWidget::CategoryType categoryFromWidget (DuiButton *button) const;
+    LedWidget::CategoryType categoryFromWidget (MButton *button) const;
     
     LedDBusInterface   *m_LedDBusInterface;
-    DuiButton          *m_EventButtons[LastCategoryType];
-    DuiLabel           *m_EventLabels[LastCategoryType];
+    MButton          *m_EventButtons[LastCategoryType];
+    MLabel           *m_EventLabels[LastCategoryType];
 };
 #endif

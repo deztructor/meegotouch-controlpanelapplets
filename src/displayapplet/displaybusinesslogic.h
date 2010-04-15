@@ -7,7 +7,7 @@
 
 #include <QObject>
 
-class DuiGConfItem;
+class MGConfItem;
 
 using namespace Maemo;
 
@@ -33,7 +33,7 @@ public slots:
 
 private: 
     QmDisplayState *m_Display;
-    DuiGConfItem   *m_possibleDimValues;
+    MGConfItem   *m_possibleDimValues;
 
 };
 

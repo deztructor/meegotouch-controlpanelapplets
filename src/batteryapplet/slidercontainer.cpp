@@ -2,17 +2,17 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 #include "slidercontainer.h"
 
-#include <DuiButton>
-#include <DuiLinearLayoutPolicy>
-#include <DuiLabel>
-#include <DuiLayout>
-#include <DuiSlider>
+#include <MButton>
+#include <MLinearLayoutPolicy>
+#include <MLabel>
+#include <MLayout>
+#include <MSlider>
 
 #undef DEBUG 
 #include "../debug.h"
 
-SliderContainer::SliderContainer (DuiWidget *parent) :
-        DuiContainer (parent),
+SliderContainer::SliderContainer (MWidget *parent) :
+        MContainer (parent),
         m_PSMAutoButton (0),
         m_PSMSlider (0),
         m_SliderValue (-1),
@@ -41,31 +41,31 @@ SliderContainer::retranslate ()
 
 void SliderContainer::setLayout()
 {
-    DuiLayout              *labelLayout;
-    DuiLinearLayoutPolicy  *labelLayoutPolicy;
+    MLayout              *labelLayout;
+    MLinearLayoutPolicy  *labelLayoutPolicy;
 
     SYS_DEBUG ("");
 
-    labelLayout = new DuiLayout;
-    labelLayoutPolicy = new DuiLinearLayoutPolicy (labelLayout, Qt::Vertical);
+    labelLayout = new MLayout;
+    labelLayoutPolicy = new MLinearLayoutPolicy (labelLayout, Qt::Vertical);
 
-    DuiLayout *layout = new DuiLayout;
-    m_LayoutPolicy = new DuiLinearLayoutPolicy (layout, Qt::Vertical);
+    MLayout *layout = new MLayout;
+    m_LayoutPolicy = new MLinearLayoutPolicy (layout, Qt::Vertical);
 
-    DuiLayout *hlayout = new DuiLayout;
-    DuiLinearLayoutPolicy *hpolicy = new DuiLinearLayoutPolicy (hlayout, Qt::Horizontal);
+    MLayout *hlayout = new MLayout;
+    MLinearLayoutPolicy *hpolicy = new MLinearLayoutPolicy (hlayout, Qt::Horizontal);
 
     /*
      * "Auto activate power save" label
      */
-    m_AutoPSMLabel = new DuiLabel;
+    m_AutoPSMLabel = new MLabel;
     m_AutoPSMLabel->setObjectName ("batteryLabel");
     labelLayoutPolicy->addItem (m_AutoPSMLabel, Qt::AlignLeft);
 
     /*
      *
      */
-    m_PsmValueLabel = new DuiLabel;
+    m_PsmValueLabel = new MLabel;
     m_PsmValueLabel->setObjectName ("psmValueLabel");
     labelLayoutPolicy->addItem (m_PsmValueLabel, Qt::AlignLeft);
     
@@ -75,11 +75,11 @@ void SliderContainer::setLayout()
     hpolicy->addItem (labelLayout);
 
     // m_PSMAutoButton
-    m_PSMAutoButton = new DuiButton;
+    m_PSMAutoButton = new MButton;
     connect (m_PSMAutoButton, SIGNAL (toggled (bool)),
              this, SLOT (PSMAutoButtonToggled (bool)));
     m_PSMAutoButton->setCheckable (true);
-    m_PSMAutoButton->setViewType (DuiButton::switchType);
+    m_PSMAutoButton->setViewType (MButton::switchType);
     // m_PSMAutoButton->setObjectName ("PSMAutoButton");
     hpolicy->addItem (m_PSMAutoButton, Qt::AlignRight | Qt::AlignVCenter);
 
@@ -161,7 +161,7 @@ SliderContainer::toggleSliderExistence (
 
     if (toggle) {
         if ((m_LayoutPolicy->count () < 2) && (m_PSMSlider == 0)) {
-            m_PSMSlider = new DuiSlider;
+            m_PSMSlider = new MSlider;
             SYS_DEBUG ("Connecting %p->valueChanged", m_PSMSlider);
             SYS_DEBUG ("m_SliderValue = %d", m_SliderValue);
             

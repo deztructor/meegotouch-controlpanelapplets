@@ -3,11 +3,11 @@
 #include "profilebuttons.h"
 
 #include <QHash>
-#include <DuiButton>
-#include <DuiButtonGroup>
-#include <DuiLayout>
-#include <DuiLinearLayoutPolicy>
-#include <DuiGridLayoutPolicy>
+#include <MButton>
+#include <MButtonGroup>
+#include <MLayout>
+#include <MLinearLayoutPolicy>
+#include <MGridLayoutPolicy>
 
 #undef DEBUG
 #include "../debug.h"
@@ -15,8 +15,8 @@
 static const int nButtonColumns = 2;
 
 ProfileButtons::ProfileButtons (
-        DuiWidget *parent) :
-    DuiContainer (parent),
+        MWidget *parent) :
+    MContainer (parent),
     m_Buttons (0)
 {
 }
@@ -31,7 +31,7 @@ ProfileButtons::init (
         QMap<int, QString> data, 
         int currentId)
 {
-    m_Buttons = new DuiButtonGroup();
+    m_Buttons = new MButtonGroup();
     connect (m_Buttons, SIGNAL(buttonClicked(int)), 
             this, SIGNAL(profileSelected(int)));
 
@@ -50,7 +50,7 @@ ProfileButtons::addButton (
         int       id, 
         bool      checked)
 {
-    DuiButton *button = new DuiButton (name);
+    MButton *button = new MButton (name);
     button->setCheckable (true);
     button->setChecked (checked);
     m_Buttons->addButton (button, id);
@@ -70,9 +70,9 @@ ProfileButtons::selectProfile (
     if (m_Buttons == NULL)
         return retval;
 
-    QList<DuiButton*> buttonList = m_Buttons->buttons();
+    QList<MButton*> buttonList = m_Buttons->buttons();
     for (int i = 0; i < buttonList.size(); ++i) {
-        DuiButton *button = buttonList.at (i);
+        MButton *button = buttonList.at (i);
         bool       checked;
         
         checked = id == m_Buttons->id (button);
@@ -94,7 +94,7 @@ ProfileButtons::selectedProfileName ()
     if (m_Buttons == NULL)
         return QString ("");
 
-    DuiButton *button = m_Buttons->checkedButton();
+    MButton *button = m_Buttons->checkedButton();
     if (button)
         return button->text();
 
@@ -108,19 +108,19 @@ ProfileButtons::selectedProfileName ()
 void 
 ProfileButtons::setLayout ()
 {
-    DuiLayout              *layout;
-    DuiLinearLayoutPolicy  *landscapePolicy;
-    DuiGridLayoutPolicy    *portraitPolicy;
-    QList<DuiButton*>       buttonList = m_Buttons->buttons();
+    MLayout              *layout;
+    MLinearLayoutPolicy  *landscapePolicy;
+    MGridLayoutPolicy    *portraitPolicy;
+    QList<MButton*>       buttonList = m_Buttons->buttons();
     int                     col = 0;
     int                     row = 0;
 
-    layout = new DuiLayout();
+    layout = new MLayout();
 
-    landscapePolicy = new DuiLinearLayoutPolicy(layout, Qt::Horizontal);
+    landscapePolicy = new MLinearLayoutPolicy(layout, Qt::Horizontal);
     layout->setLandscapePolicy(landscapePolicy); // ownership transferred
 
-    portraitPolicy = new DuiGridLayoutPolicy(layout);
+    portraitPolicy = new MGridLayoutPolicy(layout);
     layout->setPortraitPolicy(portraitPolicy); // ownership transferred
 
     // Storing the buttons in the layout. 

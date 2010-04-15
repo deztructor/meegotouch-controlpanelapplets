@@ -2,9 +2,9 @@
 /* vim:set et sw=4 ts=4 sts=4: */
 
 #include <QDebug>
-#include <DuiAction>
+#include <MAction>
 #include <DcpWidget>
-#include <DuiLocale>
+#include <MLocale>
 
 #include "usbbrief.h"
 #include "usbview.h"
@@ -41,11 +41,11 @@ UsbApplet::title (void) const
     return qtTrId ("qtn_usb_title");
 }
 
-QVector<DuiAction*> 
+QVector<MAction*> 
 UsbApplet::viewMenuItems (
         void)
 {
-    QVector<DuiAction*> vector;
+    QVector<MAction*> vector;
 
     return vector;
 }

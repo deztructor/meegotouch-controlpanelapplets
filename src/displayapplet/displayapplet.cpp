@@ -13,8 +13,8 @@
 #include <QtPlugin>
 #include <QDebug>
 
-#include <DuiTheme>
-#include <DuiAction>
+#include <MTheme>
+#include <MAction>
 
 #undef DEBUG
 #include "../debug.h"
@@ -46,13 +46,13 @@ QString DisplayApplet::title() const
     return qtTrId ("qtn_disp_display");
 }
 
-QVector<DuiAction*> DisplayApplet::viewMenuItems()
+QVector<MAction*> DisplayApplet::viewMenuItems()
 {
-    QVector<DuiAction*> vector;
+    QVector<MAction*> vector;
     //% "Help"
-    DuiAction* helpAction = new DuiAction(qtTrId ("qtn_comm_help"), pageMain());
+    MAction* helpAction = new MAction(qtTrId ("qtn_comm_help"), pageMain());
     vector.append(helpAction);
-    helpAction->setLocation(DuiAction::ApplicationMenuLocation);
+    helpAction->setLocation(MAction::ApplicationMenuLocation);
     return vector;
 }
 

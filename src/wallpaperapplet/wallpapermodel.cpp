@@ -73,9 +73,9 @@ WallpaperImageLoader::processJobQueue ()
 void 
 WallpaperContentItemCreator::updateCell (
         const QModelIndex&   index, 
-        DuiWidget           *cell) const
+        MWidget           *cell) const
 {
-    DuiContentItem *contentItem = qobject_cast<DuiContentItem *>(cell);
+    MContentItem *contentItem = qobject_cast<MContentItem *>(cell);
     QVariant data = index.data(Qt::DisplayRole);
     WallpaperDescriptor *rowData = data.value<WallpaperDescriptor *>();
 

@@ -7,9 +7,9 @@
 #include "themedialog.h"
 
 #include <QGraphicsLinearLayout>
-#include <DuiLayout>
-#include <DuiGridLayoutPolicy>
-#include <DuiContainer>
+#include <MLayout>
+#include <MGridLayoutPolicy>
+#include <MContainer>
 
 //#define DEBUG
 #include "../debug.h"
@@ -36,7 +36,7 @@ ThemeWidget::createWidgets ()
 {
     QGraphicsLinearLayout *mainLayout;
 
-    //DuiLayout *layout = new DuiLayout();
+    //MLayout *layout = new MLayout();
     
     m_LocalContainer = createContainer (ThemeWidget::ThemeLocal);
     m_OviContainer = createContainer (ThemeWidget::ThemeOvi);
@@ -48,19 +48,19 @@ ThemeWidget::createWidgets ()
     this->setLayout (mainLayout);
 }
 
-DuiContainer * 
+MContainer * 
 ThemeWidget::createContainer (
         ThemeWidget::ThemeCategoryId category)
 {
-    DuiGridLayoutPolicy *policy;
-    DuiLayout *layout = new DuiLayout();
+    MGridLayoutPolicy *policy;
+    MLayout *layout = new MLayout();
     
-    policy = new DuiGridLayoutPolicy (layout);
+    policy = new MGridLayoutPolicy (layout);
     policy->setColumnStretchFactor (0, 1);
     policy->setColumnStretchFactor (1, 1);
     layout->setPolicy (policy);
     
-    DuiContainer *container = new DuiContainer ();
+    MContainer *container = new MContainer ();
     container->centralWidget()->setLayout (layout);
 
     switch (category) {

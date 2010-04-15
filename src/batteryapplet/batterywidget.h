@@ -5,7 +5,7 @@
 
 #include "dcpwidget.h"
 
-class DuiButton;
+class MButton;
 class BatteryDBusInterface;
 class BatteryImage;
 class SliderContainer;
@@ -33,7 +33,7 @@ private slots:
 private:
     BatteryDBusInterface    *batteryIf;
     BatteryImage            *batteryImage;
-    DuiButton               *PSMButton;
+    MButton               *PSMButton;
     // true means we are believed to be in power save mode
     bool                     PSMButtonToggle;
     SliderContainer         *sliderContainer;

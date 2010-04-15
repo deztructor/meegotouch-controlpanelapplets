@@ -1,15 +1,15 @@
 MOC_DIR = .moc
-DUIGEN_OUTDIR = .gen
+MGEN_OUTDIR = .gen
 OBJECTS_DIR = .obj
 QT += dbus
 LIBS += -lprofile-qt \
-        -lduicontrolpanel
+        -lmcontrolpanel
 TEMPLATE      = lib
-CONFIG       += plugin gui dui duistatusindicatormenu silent
+CONFIG       += plugin gui m mstatusindicatormenu silent
 INCLUDEPATH  += ../profileapplet \
                 /usr/include/profile-qt \
-                /usr/include/duicontrolpanel \
-                /usr/include/duistatusindicatormenu
+                /usr/include/mcontrolpanel \
+                /usr/include/mstatusindicatormenu
 
 HEADERS = profileplugin.h \
           profilewidget.h \
@@ -25,5 +25,5 @@ SOURCES = profileplugin.cpp \
 
 TARGET        = $$qtLibraryTarget(profile)
 DESTDIR       = lib
-target.path += /usr/lib/duistatusindicatormenu/plugins/ 
+target.path += /usr/lib/mstatusindicatormenu/plugins/ 
 INSTALLS +=  target

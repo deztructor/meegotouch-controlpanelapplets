@@ -1,7 +1,7 @@
 /*
  * profile.cpp
  *
- * This file is part of duistatusindicatormenu
+ * This file is part of mstatusindicatormenu
  *
  * Copyright (C) 2009 Nokia Corporation. All rights reserved.
  *
@@ -21,30 +21,30 @@
 #undef DEBUG
 #include "../debug.h"
 
-#include <DuiButton>
-#include <DuiButtonGroup>
-#include <DuiApplication>
-#include <DuiContainer>
-#include <DuiControlPanelIf>
-#include <DuiGridLayoutPolicy>
-#include <DuiLayout>
-#include <DuiLinearLayoutPolicy>
-#include <DuiLocale>
-#include <DuiStatusIndicatorMenuPluginInterface>
+#include <MButton>
+#include <MButtonGroup>
+#include <MApplication>
+#include <MContainer>
+#include <MControlPanelIf>
+#include <MGridLayoutPolicy>
+#include <MLayout>
+#include <MLinearLayoutPolicy>
+#include <MLocale>
+#include <MStatusIndicatorMenuPluginInterface>
 
 #include <QGraphicsLinearLayout>
 
 #define SYSTEMUI_TRANSLATION "systemui-applets"
 
 ProfileWidget::ProfileWidget (
-    DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
+    MStatusIndicatorMenuInterface &statusIndicatorMenu,
     QGraphicsItem *parent) :
-        DuiWidget (parent),
+        MWidget (parent),
         statusIndicatorMenu (statusIndicatorMenu),
         dataIf (0),
         profileButtons (0)
 {
-    DuiApplication  *App = DuiApplication::instance ();
+    MApplication  *App = MApplication::instance ();
 
     Q_UNUSED(statusIndicatorMenu);
     dataIf = new ProfileDataInterface ();
@@ -99,7 +99,7 @@ void
 ProfileWidget::showProfileModificationPage ()
 {
     // instantiate the interface
-    DuiControlPanelIf cpIf;
+    MControlPanelIf cpIf;
     // check the interface is valid
     if (!cpIf.isValid ())
         return;
@@ -116,14 +116,14 @@ ProfileWidget::loadTranslation ()
         return;
     running = true;
 
-    DuiLocale       locale;
+    MLocale       locale;
 
     SYS_DEBUG ("Language changed to '%s'",
                SYS_STR (locale.language ()));
 
     locale.installTrCatalog (SYSTEMUI_TRANSLATION ".qm");
     locale.installTrCatalog (SYSTEMUI_TRANSLATION);
-    DuiLocale::setDefault (locale);
+    MLocale::setDefault (locale);
 
     running = false;
 }

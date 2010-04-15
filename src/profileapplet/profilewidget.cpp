@@ -8,12 +8,12 @@
 
 #include <QGraphicsLinearLayout>
 
-#include <DuiButton>
-#include <DuiContainer>
-#include <DuiLabel>
-#include <DuiLayout>
-#include <DuiGridLayoutPolicy>
-#include <DuiLinearLayoutPolicy>
+#include <MButton>
+#include <MContainer>
+#include <MLabel>
+#include <MLayout>
+#include <MGridLayoutPolicy>
+#include <MLinearLayoutPolicy>
 #include <QDebug>
 
 #undef DEBUG
@@ -83,7 +83,7 @@ ProfileWidget::initProfiles ()
     connect (m_ProfileButtons, SIGNAL(profileSelected(int)), 
             this, SLOT(profileSelected(int)));
 
-    DuiContainer *contentContainer = createContainer();
+    MContainer *contentContainer = createContainer();
 
     /*
      * mainLayout
@@ -98,23 +98,23 @@ ProfileWidget::initProfiles ()
  * the same. The code is not changed yet, I'm afraid the UI spec might be
  * changed back...
  */
-DuiContainer * 
+MContainer * 
 ProfileWidget::createContainer ()
 {
-    DuiLayout *layout = new DuiLayout();
+    MLayout *layout = new MLayout();
 
     //% "Current profile"
-    m_currentHeader = new DuiLabel (qtTrId ("qtn_prof_currprof"));
+    m_currentHeader = new MLabel (qtTrId ("qtn_prof_currprof"));
     //% "Profile Settings"
-    m_settingsHeader = new DuiLabel (qtTrId ("qtn_prof_settings"));
+    m_settingsHeader = new MLabel (qtTrId ("qtn_prof_settings"));
 
-    DuiLinearLayoutPolicy *portraitPolicy = 
-        new DuiLinearLayoutPolicy(layout, Qt::Vertical);
+    MLinearLayoutPolicy *portraitPolicy = 
+        new MLinearLayoutPolicy(layout, Qt::Vertical);
     portraitPolicy->addItem (m_currentHeader, Qt::AlignLeft);
     portraitPolicy->addItem (m_ProfileButtons, Qt::AlignCenter);
     portraitPolicy->addItem (m_settingsHeader, Qt::AlignLeft);
 
-    DuiGridLayoutPolicy *landscapePolicy = new DuiGridLayoutPolicy (layout);
+    MGridLayoutPolicy *landscapePolicy = new MGridLayoutPolicy (layout);
     landscapePolicy->addItem(m_currentHeader, 0, 0, 1, 2);
     landscapePolicy->addItem(m_ProfileButtons, 1, 0, 1, 2, Qt::AlignCenter);
     landscapePolicy->addItem(m_settingsHeader, 2, 0, 1, 2);
@@ -137,7 +137,7 @@ ProfileWidget::createContainer ()
     //layout->setPortraitPolicy (portraitPolicy);
     layout->setPolicy (portraitPolicy);
 
-    DuiContainer *container = new DuiContainer ();
+    MContainer *container = new MContainer ();
     container->centralWidget()->setLayout (layout);
 
     return container;
@@ -160,7 +160,7 @@ void
 ProfileWidget::vibrationChanged (
         bool enabled)
 {
-    //NOTE: DuiButton->isChecked() method returns the state before the 
+    //NOTE: MButton->isChecked() method returns the state before the 
     // press at this point
     ProfileContainer *profile =
         static_cast<ProfileContainer*> (this->sender ());

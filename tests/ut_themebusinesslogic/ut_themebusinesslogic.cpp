@@ -4,7 +4,7 @@
 #include "themebusinesslogic.h"
 #include "themedescriptor.h"
 
-#include <DuiApplication>
+#include <MApplication>
 
 #define DEBUG
 #include "../../src/debug.h"
@@ -42,7 +42,7 @@ Ut_ThemeBusinessLogic::initTestCase()
     char* app_name = (char*) "./Ut_ThemeBusinessLogic";
 
     m_Priv = new UtThemeBusinessLogicPrivate;
-    m_App = new DuiApplication (argc, &app_name);
+    m_App = new MApplication (argc, &app_name);
     m_Api = new ThemeBusinessLogic;
 
     connect (m_Api, SIGNAL(themeChanged(QString)),

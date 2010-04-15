@@ -7,7 +7,7 @@
 #include <QObject>
 
 class QString;
-class DuiGConfItem;
+class MGConfItem;
 class WallpaperDescriptor;
 class QStringList;
 
@@ -35,8 +35,8 @@ public slots:
     void setBackground (WallpaperDescriptor *desc = 0);
 
 private:
-    DuiGConfItem   *m_LandscapeGConfItem;
-    DuiGConfItem   *m_PortraitGConfItem;
+    MGConfItem   *m_LandscapeGConfItem;
+    MGConfItem   *m_PortraitGConfItem;
     QPointer<WallpaperDescriptor> m_EditedImage;
 };
 

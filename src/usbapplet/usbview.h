@@ -5,9 +5,9 @@
 
 #include "usbmodes.h"
 #include <QString>
-#include <DuiGConfItem>
-#include <DuiLabel>
-#include <DuiButton>
+#include <MGConfItem>
+#include <MLabel>
+#include <MButton>
 #include <DcpWidget>
 
 class UsbView : public DcpWidget 
@@ -28,10 +28,10 @@ private:
     void initWidget (void);
     void retranslateUi ();
 
-    DuiGConfItem   *m_GConfItem;
+    MGConfItem   *m_GConfItem;
     usb_modes       m_current_mode;
-    DuiButton      *m_buttons[USB_AUTO+1];
-    DuiLabel       *m_info_label;
+    MButton      *m_buttons[USB_AUTO+1];
+    MLabel       *m_info_label;
 };
 
 #endif

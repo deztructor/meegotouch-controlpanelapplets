@@ -5,22 +5,22 @@
 #undef DEBUG
 #include "../debug.h"
 
-#include <DuiStatusIndicatorMenuPluginInterface>
-#include <DuiLinearLayoutPolicy>
-#include <DuiContainer>
-#include <DuiSlider>
-#include <DuiLabel>
-#include <DuiLayout>
-#include <DuiLocale>
-#include <DuiTheme>
+#include <MStatusIndicatorMenuPluginInterface>
+#include <MLinearLayoutPolicy>
+#include <MContainer>
+#include <MSlider>
+#include <MLabel>
+#include <MLayout>
+#include <MLocale>
+#include <MTheme>
 
 #include <QGraphicsLinearLayout>
 
 #define SYSTEMUI_TRANSLATION "systemui-applets"
 
-VolumeBar::VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
+VolumeBar::VolumeBar (MStatusIndicatorMenuInterface &statusIndicatorMenu,
                       QGraphicsItem *parent) :
-        DuiWidget (parent),
+        MWidget (parent),
         m_bar (0),
         m_logic (0),
         m_overlay (0),
@@ -38,19 +38,19 @@ VolumeBar::VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
     setLayout (mainLayout);
     mainLayout->setContentsMargins (0, 0, 0, 0);
 
-    DuiContainer *container = new DuiContainer;
+    MContainer *container = new MContainer;
 
     container->setHeaderVisible (false);
 
-    DuiLayout *layout = new DuiLayout;
-    DuiLinearLayoutPolicy *hbox =
-        new DuiLinearLayoutPolicy (layout, Qt::Horizontal);
+    MLayout *layout = new MLayout;
+    MLinearLayoutPolicy *hbox =
+        new MLinearLayoutPolicy (layout, Qt::Horizontal);
     container->setLayout (layout);
 
     //% "Volume"
-    DuiLabel *label = new DuiLabel (qtTrId ("qtn_volume"));
+    MLabel *label = new MLabel (qtTrId ("qtn_volume"));
 
-    m_bar = new DuiSlider;
+    m_bar = new MSlider;
     m_bar->setMinLabelVisible (true);
 
     hbox->addItem (label, Qt::AlignLeft);

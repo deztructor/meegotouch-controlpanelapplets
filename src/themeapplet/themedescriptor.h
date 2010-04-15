@@ -6,7 +6,7 @@
 #include <QObject>
 
 class QString;
-class DuiDesktopEntry;
+class MDesktopEntry;
 
 /*!
  * A simple class to handle all the information we need to know about one
@@ -36,7 +36,7 @@ private:
     QString           m_CodeName;
     QString           m_Name;
     QString           m_IconName;
-    DuiDesktopEntry  *m_DesktopEntry;
+    MDesktopEntry  *m_DesktopEntry;
 };
 
 #endif

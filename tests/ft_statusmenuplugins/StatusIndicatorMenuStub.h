@@ -2,10 +2,10 @@
 #define STATUSINDICATORMENU_STUB_H
 
 #include <QObject>
-#include <DuiWidget>
-#include <duistatusindicatormenuplugininterface.h>
+#include <MWidget>
+#include <mstatusindicatormenuplugininterface.h>
 
-class StatusIndicatorMenuStub : public DuiWidget, public DuiStatusIndicatorMenuInterface
+class StatusIndicatorMenuStub : public MWidget, public MStatusIndicatorMenuInterface
 {
     Q_OBJECT
 

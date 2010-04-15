@@ -2,7 +2,7 @@
 /* vim:set et sw=4 ts=4 sts=4: */
 #include "ut_batterydbusinterface.h"
 #include "batterydbusinterface.h"
-#include <DuiApplication>
+#include <MApplication>
 #include <QString>
 #include <QStringList>
 
@@ -84,7 +84,7 @@ Ut_BatteryDbusInterface::cleanup()
 {
 }
 
-DuiApplication *app;
+MApplication *app;
 
 
 static bool
@@ -151,7 +151,7 @@ Ut_BatteryDbusInterface::initTestCase()
 
     int argc = 1;
     char* app_name = (char*) "./Ut_BatteryDbusInterface";
-    app = new DuiApplication(argc, &app_name);
+    app = new MApplication(argc, &app_name);
 
     waitForSysuidRunning();
 

@@ -1,7 +1,7 @@
 #include "volumeoverlay.h"
-#include <DuiSceneWindow>
-#include <DuiImageWidget>
-#include <DuiSlider>
+#include <MSceneWindow>
+#include <MImageWidget>
+#include <MSlider>
 #include <QTimer>
 
 #undef DEBUG
@@ -11,7 +11,7 @@
 #define HIDE_TIMEOUT 1500
 
 VolumeOverlay::VolumeOverlay (QGraphicsItem *parent) :
-    DuiOverlay (parent),
+    MOverlay (parent),
     m_timer (0),
     m_slider (0)
 {
@@ -34,7 +34,7 @@ VolumeOverlay::~VolumeOverlay ()
 void
 VolumeOverlay::constructUi ()
 {
-    m_slider = new DuiSlider;
+    m_slider = new MSlider;
 
     m_slider->setOrientation (Qt::Vertical);
     m_slider->setMaxLabelIconID (QString ("icon-m-common-volume"));
@@ -70,7 +70,7 @@ VolumeOverlay::UpdateVolume (int val, int max)
 
     m_slider->blockSignals (false);
 
-    appear (DuiSceneWindow::KeepWhenDone);
+    appear (MSceneWindow::KeepWhenDone);
     m_timer->start ();
 }
 

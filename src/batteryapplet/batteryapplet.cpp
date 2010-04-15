@@ -12,15 +12,15 @@
 #include <QtGui>
 #include <QDebug>
 
-#include <DuiTheme>
-#include <DuiAction>
+#include <MTheme>
+#include <MAction>
 
 #undef DEBUG
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(batteryapplet, BatteryApplet)
 
-const QString cssDir = "/usr/share/themes/base/dui/duicontrolpanel/style/";
+const QString cssDir = "/usr/share/themes/base/m/mcontrolpanel/style/";
 
 BatteryApplet::BatteryApplet ():
 	m_MainWidget (0)
@@ -34,7 +34,7 @@ BatteryApplet::~BatteryApplet ()
 
 void BatteryApplet::init()
 {
-    DuiTheme::loadCSS(cssDir + "batteryapplet.css");
+    MTheme::loadCSS(cssDir + "batteryapplet.css");
 }
 
 DcpWidget *
@@ -66,13 +66,13 @@ QString BatteryApplet::title() const
     return qtTrId ("qtn_ener_battery");
 }
 
-QVector<DuiAction*> BatteryApplet::viewMenuItems()
+QVector<MAction*> BatteryApplet::viewMenuItems()
 {
-    QVector<DuiAction*> vector;
+    QVector<MAction*> vector;
     //% "Help"
-    DuiAction* helpAction = new DuiAction(qtTrId ("qtn_comm_help"), pageMain());
+    MAction* helpAction = new MAction(qtTrId ("qtn_comm_help"), pageMain());
     vector.append(helpAction);
-    helpAction->setLocation(DuiAction::ApplicationMenuLocation);
+    helpAction->setLocation(MAction::ApplicationMenuLocation);
     return vector;
 }
 

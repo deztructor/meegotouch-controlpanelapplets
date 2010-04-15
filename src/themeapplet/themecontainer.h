@@ -3,14 +3,14 @@
 #ifndef THEMECONTAINER_H
 #define THEMECONTAINER_H
 
-#include <DuiWidget>
+#include <MWidget>
 #include <QObject>
 #include <QPointer>
 
 class QString;
-class DuiWidget;
-class DuiLabel;
-class DuiImageWidget;
+class MWidget;
+class MLabel;
+class MImageWidget;
 class QGraphicsSceneMouseEvent;
 class ThemeDescriptor;
 class ThemeBusinessLogic;
@@ -18,7 +18,7 @@ class ThemeBusinessLogic;
 /*!
  * A simple layout type widget that represents one theme.
  */
-class ThemeContainer: public DuiWidget 
+class ThemeContainer: public MWidget 
 {
     Q_OBJECT
 
@@ -26,7 +26,7 @@ public:
     ThemeContainer (
             ThemeDescriptor    *descr,
             ThemeBusinessLogic *logic = 0,
-            DuiWidget          *parent = 0);
+            MWidget          *parent = 0);
     ~ThemeContainer ();
 
     virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
@@ -47,8 +47,8 @@ private:
     void createWidgets ();
     bool current ();
 
-    DuiLabel            *m_NameLabel;
-    DuiImageWidget      *m_Icon;
+    MLabel            *m_NameLabel;
+    MImageWidget      *m_Icon;
     ThemeDescriptor     *m_ThemeDescriptor;
     QPointer<ThemeBusinessLogic> m_ThemeBusinessLogic;
 };

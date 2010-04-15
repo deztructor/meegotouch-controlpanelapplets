@@ -6,12 +6,12 @@
 
 #include <QDebug>
 
-#include <DuiButton>
-#include <DuiContainer>
-#include <DuiLabel>
-#include <DuiLayout>
-#include <DuiSlider>
-#include <DuiLinearLayoutPolicy>
+#include <MButton>
+#include <MContainer>
+#include <MLabel>
+#include <MLayout>
+#include <MSlider>
+#include <MLinearLayoutPolicy>
 
 DisplayWidget::DisplayWidget(QGraphicsWidget *parent) :
         DcpWidget(parent),
@@ -27,11 +27,11 @@ DisplayWidget::~DisplayWidget()
 
 void DisplayWidget::initWidget()
 {
-    DuiLayout               *mainLayout;
-    DuiLinearLayoutPolicy   *policy;
+    MLayout               *mainLayout;
+    MLinearLayoutPolicy   *policy;
 
-    mainLayout = new DuiLayout (this);
-    policy     = new DuiLinearLayoutPolicy (mainLayout, Qt::Vertical);
+    mainLayout = new MLayout (this);
+    policy     = new MLinearLayoutPolicy (mainLayout, Qt::Vertical);
 
     policy->setSpacing (10);
     mainLayout->setPolicy (policy);
@@ -39,14 +39,14 @@ void DisplayWidget::initWidget()
     m_logic = new DisplayBusinessLogic();
 
     // Brightness
-    DuiLayout* brightnessLayout = new DuiLayout;
+    MLayout* brightnessLayout = new MLayout;
 
-    DuiLinearLayoutPolicy* brightnessLayoutPolicy =
-        new DuiLinearLayoutPolicy (brightnessLayout, Qt::Horizontal);
+    MLinearLayoutPolicy* brightnessLayoutPolicy =
+        new MLinearLayoutPolicy (brightnessLayout, Qt::Horizontal);
     brightnessLayoutPolicy->setSpacing (0);
     brightnessLayoutPolicy->setContentsMargins (0, 0, 0, 0);
 
-    m_brightnessSlider = new DuiSlider;
+    m_brightnessSlider = new MSlider;
     brightnessLayoutPolicy->addItem (m_brightnessSlider);
 
     m_brightness_vals = m_logic->brightnessValues ();
@@ -64,7 +64,7 @@ void DisplayWidget::initWidget()
     connect (m_brightnessSlider, SIGNAL (valueChanged (int)),
              m_logic, SLOT (setBrightnessValue (int)));
 
-    m_brightnessContainer = new DuiContainer;
+    m_brightnessContainer = new MContainer;
     //% "Brightness"
     m_brightnessContainer->setTitle (qtTrId ("qtn_disp_bright"));
     m_brightnessContainer->centralWidget ()->setLayout (brightnessLayout);
@@ -72,13 +72,13 @@ void DisplayWidget::initWidget()
     policy->addItem (m_brightnessContainer);
 
     // Screen light
-    DuiLayout* screenlightLayout = new DuiLayout;
-    DuiLinearLayoutPolicy* screenlightLayoutPolicy =
-        new DuiLinearLayoutPolicy(screenlightLayout, Qt::Vertical);
+    MLayout* screenlightLayout = new MLayout;
+    MLinearLayoutPolicy* screenlightLayoutPolicy =
+        new MLinearLayoutPolicy(screenlightLayout, Qt::Vertical);
     screenlightLayoutPolicy->setSpacing(0);
     screenlightLayoutPolicy->setContentsMargins(0, 0, 0, 0);
 
-    m_screenlightSlider = new DuiSlider;
+    m_screenlightSlider = new MSlider;
     screenlightLayoutPolicy->addItem (m_screenlightSlider);
 
     m_screenlight_vals = m_logic->screenLightsValues ();
@@ -97,7 +97,7 @@ void DisplayWidget::initWidget()
     connect (m_screenlightSlider, SIGNAL (valueChanged (int)),
              this, SLOT (modify_screenlight_handle (int)));
 
-    m_screenlightContainer = new DuiContainer;
+    m_screenlightContainer = new MContainer;
     //% "Backlight time-out" 
     m_screenlightContainer->setTitle (qtTrId ("qtn_disp_screenoff"));
     m_screenlightContainer->centralWidget ()->setLayout (screenlightLayout);
@@ -108,22 +108,22 @@ void DisplayWidget::initWidget()
     policy->addItem (m_screenlightContainer);
 
     // Blank inhibit
-    DuiButton *blankInhibitButton = new DuiButton;
+    MButton *blankInhibitButton = new MButton;
     blankInhibitButton->setCheckable (true);
-    blankInhibitButton->setViewType (DuiButton::switchType);
+    blankInhibitButton->setViewType (MButton::switchType);
 
-    DuiLayout *blankInhibitLayout = new DuiLayout;
-    DuiLinearLayoutPolicy *blankInhibitLayoutPolicy =
-        new DuiLinearLayoutPolicy (blankInhibitLayout, Qt::Horizontal);
+    MLayout *blankInhibitLayout = new MLayout;
+    MLinearLayoutPolicy *blankInhibitLayoutPolicy =
+        new MLinearLayoutPolicy (blankInhibitLayout, Qt::Horizontal);
 
-    m_OnOffLabel = new DuiLabel;
+    m_OnOffLabel = new MLabel;
     m_OnOffLabel->setObjectName("BlankInhibitStateLabel");
 
     blankInhibitLayoutPolicy->addItem (m_OnOffLabel, Qt::AlignLeft);
     blankInhibitLayoutPolicy->addItem (blankInhibitButton,
                                        Qt::AlignRight | Qt::AlignVCenter);
 
-    m_blankInhibitContainer = new DuiContainer;
+    m_blankInhibitContainer = new MContainer;
     //% "Display stays lit when charging"
     m_blankInhibitContainer->setTitle (qtTrId ("qtn_disp_screenon"));
     m_blankInhibitContainer->centralWidget ()->setLayout (blankInhibitLayout);

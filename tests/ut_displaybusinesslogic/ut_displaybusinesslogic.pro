@@ -16,8 +16,8 @@ CONFIG += \
 	qmsystem \
 	plugin \
 	gui \
-	dui \
-	duicontrolpanel \
+	m \
+	mcontrolpanel \
 	debug \
 	silent 
 

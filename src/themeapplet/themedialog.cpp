@@ -5,9 +5,9 @@
 #include "themebusinesslogic.h"
 #include "themedescriptor.h"
 
-#include <DuiButton>
+#include <MButton>
 #include <QGraphicsLinearLayout>
-#include <DuiContainer>
+#include <MContainer>
 
 //#define DEBUG
 #include "../debug.h"
@@ -15,24 +15,24 @@
 ThemeDialog::ThemeDialog (
         ThemeBusinessLogic *themeBusinessLogic,
         ThemeDescriptor    *themeDesc):
-    DuiDialog (),
+    MDialog (),
     m_ThemeBusinessLogic (themeBusinessLogic),
     m_ThemeDesc (themeDesc)
 {  
     QGraphicsLinearLayout *layout;
-    DuiContainer  *hbox;
-    DuiButton *selectButton;
-    DuiButton *cancelButton;
+    MContainer  *hbox;
+    MButton *selectButton;
+    MButton *cancelButton;
 
     layout = new QGraphicsLinearLayout;
 
     //% "Select"
-    selectButton = new DuiButton (qtTrId ("qtn_theme_select"));
+    selectButton = new MButton (qtTrId ("qtn_theme_select"));
     connect (selectButton, SIGNAL(clicked()),
             this, SLOT(acceptClicked()));
     
     //% "Cancel"
-    cancelButton = new DuiButton (qtTrId ("qtn_theme_cancel"));
+    cancelButton = new MButton (qtTrId ("qtn_theme_cancel"));
     connect (cancelButton, SIGNAL(clicked()),
             this, SLOT(cancelClicked()));
 
@@ -41,7 +41,7 @@ ThemeDialog::ThemeDialog (
     layout->addItem (cancelButton);
     layout->setStretchFactor (cancelButton, 1);
     
-    hbox = new DuiContainer;
+    hbox = new MContainer;
     hbox->setHeaderVisible (false);
     hbox->setLayout (layout);
 
@@ -57,7 +57,7 @@ ThemeDialog::ThemeDialog (
 void
 ThemeDialog::showDialog()
 {
-    appear(DuiSceneWindow::DestroyWhenDone);
+    appear(MSceneWindow::DestroyWhenDone);
 }
 
 void 

@@ -4,15 +4,15 @@
 #include "themewidget.h"
 #include "themebrief.h"
 
-#include <DuiTheme>
-#include <DuiAction>
+#include <MTheme>
+#include <MAction>
 
 //#define DEBUG
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(themeapplet, ThemeApplet)
 
-const QString cssDir = "/usr/share/themes/base/dui/duicontrolpanel/style/";
+const QString cssDir = "/usr/share/themes/base/m/mcontrolpanel/style/";
 
 ThemeApplet::ThemeApplet() :
     m_ThemeBusinessLogic (new ThemeBusinessLogic)
@@ -26,7 +26,7 @@ ThemeApplet::~ThemeApplet()
 void 
 ThemeApplet::init()
 {
-    DuiTheme::loadCSS(cssDir + "themeapplet.css");
+    MTheme::loadCSS(cssDir + "themeapplet.css");
 }
 
 DcpWidget *
@@ -64,16 +64,16 @@ ThemeApplet::title() const
     return qtTrId ("qtn_theme_theme"); // This is not official logical id
 }
 
-QVector<DuiAction*>
+QVector<MAction*>
 ThemeApplet::viewMenuItems()
 {
-    QVector<DuiAction*> vector;
+    QVector<MAction*> vector;
     //% "Help"
-    DuiAction* helpAction = new DuiAction (qtTrId ("qtn_comm_help"), 
+    MAction* helpAction = new MAction (qtTrId ("qtn_comm_help"), 
             pageMain ());
 
     vector.append(helpAction);
-    helpAction->setLocation(DuiAction::ApplicationMenuLocation);
+    helpAction->setLocation(MAction::ApplicationMenuLocation);
 
     return vector;
 }

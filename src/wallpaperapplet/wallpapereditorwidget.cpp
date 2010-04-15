@@ -7,15 +7,15 @@
 
 #include <QGraphicsLinearLayout>
 #include <QGraphicsGridLayout>
-#include <DuiButton>
-#include <DuiImageWidget>
-#include <DuiLayout>
-#include <DuiLinearLayoutPolicy>
+#include <MButton>
+#include <MImageWidget>
+#include <MLayout>
+#include <MLinearLayoutPolicy>
 
-#include <DuiAction>
-#include <DuiApplicationWindow>
-#include <DuiApplication>
-#include <DuiApplicationPage>
+#include <MAction>
+#include <MApplicationWindow>
+#include <MApplication>
+#include <MApplicationPage>
 
 #define DEBUG
 #include "../debug.h"
@@ -41,7 +41,7 @@ WallpaperEditorWidget::createWidgets ()
 {
     this->setContentsMargins(0, 0, 0, 0);
 
-    m_Image = new DuiImageWidget;
+    m_Image = new MImageWidget;
     m_WallpaperBusinessLogic->editedImage()->loadImage();
     m_Image->setImage (m_WallpaperBusinessLogic->editedImage()->image());
 
@@ -70,15 +70,15 @@ WallpaperEditorWidget::createWidgets ()
 void
 WallpaperEditorWidget::createActions ()
 {
-    DuiApplicationWindow *window = 
-        DuiApplication::instance()->activeApplicationWindow();
+    MApplicationWindow *window = 
+        MApplication::instance()->activeApplicationWindow();
 
-    m_DoneAction = new DuiAction(
+    m_DoneAction = new MAction(
             "icon-m-framework-done",
             //% "Done"
             qtTrId("qtn_wall_done"), 
             this);
-    m_DoneAction->setLocation(DuiAction::ToolBarLocation);
+    m_DoneAction->setLocation(MAction::ToolBarLocation);
     window->addAction(m_DoneAction);
     m_DoneAction->setVisible(true);
 

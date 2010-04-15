@@ -8,8 +8,8 @@
 #include <QFile>
 #include <QString>
 #include <QStringList>
-#include <DuiTheme>
-#include <DuiGConfItem>
+#include <MTheme>
+#include <MGConfItem>
 
 #include <QProcessEnvironment>
 #include <QDir>
@@ -23,8 +23,8 @@ static const QString PictureKey = "/picture_filename";
 
 WallpaperBusinessLogic::WallpaperBusinessLogic()
 {
-    m_LandscapeGConfItem = new DuiGConfItem (LandscapeKey + PictureKey);
-    m_PortraitGConfItem = new DuiGConfItem (PortraitKey + PictureKey);
+    m_LandscapeGConfItem = new MGConfItem (LandscapeKey + PictureKey);
+    m_PortraitGConfItem = new MGConfItem (PortraitKey + PictureKey);
     m_EditedImage = 0;
 }
 
@@ -87,10 +87,10 @@ WallpaperBusinessLogic::availableWallpapers () const
 {
     QStringList list;
     list <<
-        "/usr/share/themes/base/dui/images/duiapplicationpage-background.png" <<
-        "/usr/share/themes/plankton/dui/images/duiapplicationpage-background.png" <<
-        "/usr/share/themes/plankton/dui/images/duiapplicationpage-portrait-background.png" <<
-        "/usr/share/themes/plankton/dui/images/duiapplicationpage-portrait-background.png";
+        "/usr/share/themes/base/m/images/mapplicationpage-background.png" <<
+        "/usr/share/themes/plankton/m/images/mapplicationpage-background.png" <<
+        "/usr/share/themes/plankton/m/images/mapplicationpage-portrait-background.png" <<
+        "/usr/share/themes/plankton/m/images/mapplicationpage-portrait-background.png";
 
     /*
      * FIXME:

@@ -15,8 +15,8 @@ target.path = /usr/lib/systemui-applets-tests
 CONFIG += \
 	plugin \
 	gui \
-	dui \
-	duicontrolpanel \
+	m \
+	mcontrolpanel \
 	debug \
 	silent 
 

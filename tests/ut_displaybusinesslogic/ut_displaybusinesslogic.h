@@ -7,7 +7,7 @@
 #include <QtTest/QtTest>
 #include <QObject>
 
-class DuiApplication;
+class MApplication;
 class DisplayBusinessLogic;
 
 class Ut_DisplayBusinessLogic : public QObject 
@@ -25,7 +25,7 @@ private slots:
     void testSetBrightness ();
     
 private:
-    DuiApplication       *m_App;
+    MApplication       *m_App;
     DisplayBusinessLogic *m_Api;
     int                   m_MaxBrightness, m_MinBrightness;
     int                   m_Maxtimeout, m_Mintimeout;

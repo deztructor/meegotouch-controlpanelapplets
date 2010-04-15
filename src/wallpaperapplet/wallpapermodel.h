@@ -5,8 +5,8 @@
 
 #include <QList>
 #include <QAbstractTableModel>
-#include <DuiAbstractCellCreator>
-#include <DuiContentItem>
+#include <MAbstractCellCreator>
+#include <MContentItem>
 #include "wallpaperdescriptor.h"
 
 class WallpaperBusinessLogic;
@@ -37,10 +37,10 @@ private:
 };
 
 class WallpaperContentItemCreator : 
-    public DuiAbstractCellCreator<DuiContentItem>
+    public MAbstractCellCreator<MContentItem>
 {
   public:
-      void updateCell(const QModelIndex& index, DuiWidget *cell) const;
+      void updateCell(const QModelIndex& index, MWidget *cell) const;
 };
 
 

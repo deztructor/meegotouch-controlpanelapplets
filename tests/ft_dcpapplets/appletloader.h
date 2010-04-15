@@ -5,8 +5,8 @@
 
 #include <QObject>
 #include <QtTest/QtTest>
-// From DuiControlPanel
-#include <duiapplication.h>
+// From MControlPanel
+#include <mapplication.h>
 
 class Ft_AppletLoader : public QObject
 {
@@ -26,7 +26,7 @@ private slots:
 
 
 private:
-    DuiApplication      *m_app;
+    MApplication      *m_app;
 
     void    DoAppletTest (const char *desktopfile);
 };

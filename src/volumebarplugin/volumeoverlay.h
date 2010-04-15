@@ -1,13 +1,13 @@
 #ifndef _VOLUMEOVERLAY_H
 #define _VOLUMEOVERLAY_H
 
-#include <DuiOverlay>
+#include <MOverlay>
 #include <QObject>
 
-class DuiSlider;
+class MSlider;
 class QTimer;
 
-class VolumeOverlay : public DuiOverlay
+class VolumeOverlay : public MOverlay
 {
   Q_OBJECT
 
@@ -27,7 +27,7 @@ class VolumeOverlay : public DuiOverlay
 
   private:
     QTimer          *m_timer;
-    DuiSlider       *m_slider;
+    MSlider       *m_slider;
 
     void constructUi ();
 };

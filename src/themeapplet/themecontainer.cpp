@@ -6,24 +6,24 @@
 #include "themebusinesslogic.h"
 
 #include <QString>
-#include <DuiLabel>
-#include <DuiImageWidget>
-#include <DuiLayout>
-#include <DuiLinearLayoutPolicy>
+#include <MLabel>
+#include <MImageWidget>
+#include <MLayout>
+#include <MLinearLayoutPolicy>
 #include <QGraphicsSceneMouseEvent>
 
 //#define DEBUG
 #include "../debug.h"
 
-#include "duiwidgetcreator.h"
-DUI_REGISTER_WIDGET_NO_CREATE(ThemeContainer)
+#include "mwidgetcreator.h"
+M_REGISTER_WIDGET_NO_CREATE(ThemeContainer)
 
 
 ThemeContainer::ThemeContainer (
         ThemeDescriptor     *descr,
         ThemeBusinessLogic  *logic,
-        DuiWidget           *parent) :
-    DuiWidget (parent),
+        MWidget           *parent) :
+    MWidget (parent),
     m_ThemeDescriptor (descr),
     m_ThemeBusinessLogic (logic)
 {
@@ -42,17 +42,17 @@ ThemeContainer::~ThemeContainer ()
 void
 ThemeContainer::createWidgets ()
 {
-    DuiLayout              *layout;
-    DuiLinearLayoutPolicy  *layoutPolicy;
+    MLayout              *layout;
+    MLinearLayoutPolicy  *layoutPolicy;
          
-    layout = new DuiLayout (this);
+    layout = new MLayout (this);
 
-    layoutPolicy = new DuiLinearLayoutPolicy (layout, Qt::Horizontal);
+    layoutPolicy = new MLinearLayoutPolicy (layout, Qt::Horizontal);
     layout->setPolicy (layoutPolicy);
     /*
      * An icon representing the theme.
      */
-    m_Icon = new DuiImageWidget (m_ThemeDescriptor->iconName());
+    m_Icon = new MImageWidget (m_ThemeDescriptor->iconName());
     m_Icon->setObjectName ("ThemeIcon");
     m_Icon->setActive (!current());
     layoutPolicy->addItem (m_Icon, Qt::AlignLeft | Qt::AlignVCenter);
@@ -61,7 +61,7 @@ ThemeContainer::createWidgets ()
     /*
      * A label with the name of the theme. 
      */
-    m_NameLabel = new DuiLabel (m_ThemeDescriptor->name());
+    m_NameLabel = new MLabel (m_ThemeDescriptor->name());
     m_NameLabel->setObjectName ("ThemeNameLabel");
     m_NameLabel->setActive (!current());
     layoutPolicy->addItem (m_NameLabel, Qt::AlignRight | Qt::AlignVCenter);

@@ -3,7 +3,7 @@
 #ifndef WALLPAPERLIST_H
 #define WALLPAPERLIST_H
 
-#include <DuiList>
+#include <MList>
 #include <QModelIndex>
 
 class WallpaperDescriptor;
@@ -13,7 +13,7 @@ class WallpaperImageLoader;
 /*!
  * A list widget that shows a list of the available wallpapers.
  */
-class WallpaperList : public DuiList {
+class WallpaperList : public MList {
     Q_OBJECT
         
 public:

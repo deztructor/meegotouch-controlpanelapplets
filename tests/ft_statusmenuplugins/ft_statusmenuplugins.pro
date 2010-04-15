@@ -2,8 +2,8 @@ TEMPLATE = app
 QT += testlib
 
 CONFIG += \
-    dui \
-    duistatusindicatormenu \
+    m \
+    mstatusindicatormenu \
     silent
 
 TARGET = ft_statusmenuplugins

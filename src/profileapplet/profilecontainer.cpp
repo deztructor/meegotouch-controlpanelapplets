@@ -5,14 +5,14 @@
 #include "profilebuttons.h"
 
 #include <QGraphicsLinearLayout>
-#include <DuiButton>
-#include <DuiSlider>
-#include <DuiLabel>
-#include <DuiLayout>
-#include <DuiImageWidget>
-#include <DuiGridLayoutPolicy>
-#include <DuiLinearLayoutPolicy>
-#include <DuiSeparator>
+#include <MButton>
+#include <MSlider>
+#include <MLabel>
+#include <MLayout>
+#include <MImageWidget>
+#include <MGridLayoutPolicy>
+#include <MLinearLayoutPolicy>
+#include <MSeparator>
 #include <QDebug>
 
 #undef DEBUG
@@ -29,8 +29,8 @@ ProfileContainer::ProfileContainer (
         const QString &title, 
         int            level, 
         bool           vibra, 
-        DuiWidget     *parent) :
-    DuiContainer (title, parent),
+        MWidget     *parent) :
+    MContainer (title, parent),
     m_Slider (0),
     m_NoRingLabel (0),
     m_Img (0),
@@ -44,7 +44,7 @@ ProfileContainer::ProfileContainer (
          * Had to remove the 'continuous' for it ruined the theming of the
          * slider, the height become huge.
          */
-        m_Slider = new DuiSlider (0/*, "continuous"*/);
+        m_Slider = new MSlider (0/*, "continuous"*/);
         m_Slider->setOrientation (Qt::Horizontal);
         m_Slider->setRange (ProfileApplet::sliderMin, ProfileApplet::sliderMax);
         #if 0
@@ -64,14 +64,14 @@ ProfileContainer::ProfileContainer (
     }
 
     //% "Vibration"
-    m_VibrationLabel = new DuiLabel (qtTrId ("qtn_prof_vibration"));
+    m_VibrationLabel = new MLabel (qtTrId ("qtn_prof_vibration"));
 
-    m_OnOffLabel = new DuiLabel ();
+    m_OnOffLabel = new MLabel ();
     m_OnOffLabel->setObjectName ("OnOffLabel");
 
-    m_VibrationSwitch = new DuiButton;
+    m_VibrationSwitch = new MButton;
     m_VibrationSwitch->setCheckable (true);
-    m_VibrationSwitch->setViewType (DuiButton::switchType);
+    m_VibrationSwitch->setViewType (MButton::switchType);
 
 
     setVibration (vibra);
@@ -91,14 +91,14 @@ ProfileContainer::setLayout ()
 {
     QGraphicsLayoutItem   *item;
     QGraphicsLinearLayout *hbox, *hbox1, *vbox;
-    DuiLayout             *layout = new DuiLayout();
-    DuiSeparator          *vSep, *hSep;
-    DuiLinearLayoutPolicy *landscapePolicy, *portraitPolicy;
+    MLayout             *layout = new MLayout();
+    MSeparator          *vSep, *hSep;
+    MLinearLayoutPolicy *landscapePolicy, *portraitPolicy;
     
     SYS_DEBUG ("");
 
-    landscapePolicy = new DuiLinearLayoutPolicy (layout, Qt::Horizontal);
-    portraitPolicy  = new DuiLinearLayoutPolicy (layout, Qt::Vertical);
+    landscapePolicy = new MLinearLayoutPolicy (layout, Qt::Horizontal);
+    portraitPolicy  = new MLinearLayoutPolicy (layout, Qt::Vertical);
     #if 0
     layout->setLandscapePolicy (portraitPolicy);
     layout->setPortraitPolicy (landscapePolicy);
@@ -110,17 +110,17 @@ ProfileContainer::setLayout ()
      * FIXME: Ok, but what happens when we change the 'mute' state?
      */
     if (m_Slider) {
-        m_Img = new DuiImageWidget ("icon-m-common-volume");
+        m_Img = new MImageWidget ("icon-m-common-volume");
         item = m_Slider;
     } else {
-        m_Img = new DuiImageWidget ("icon-m-common-volume-off");
+        m_Img = new MImageWidget ("icon-m-common-volume-off");
         //% "No ringing"
-        item = m_NoRingLabel = new DuiLabel (qtTrId ("qtn_prof_noring"));
+        item = m_NoRingLabel = new MLabel (qtTrId ("qtn_prof_noring"));
     }
     m_Img->setObjectName ("speakerIcon");
 
-    vSep = new DuiSeparator (this, Qt::Vertical);
-    hSep = new DuiSeparator (this, Qt::Horizontal);
+    vSep = new MSeparator (this, Qt::Vertical);
+    hSep = new MSeparator (this, Qt::Horizontal);
 
     vbox = new QGraphicsLinearLayout (Qt::Vertical);
     vbox->setSpacing (0.0);

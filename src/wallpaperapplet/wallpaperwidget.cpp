@@ -5,9 +5,9 @@
 #include "wallpaperlist.h"
 
 #include <QGraphicsLinearLayout>
-#include <DuiLayout>
-#include <DuiLinearLayoutPolicy>
-#include <DuiContainer>
+#include <MLayout>
+#include <MLinearLayoutPolicy>
+#include <MContainer>
 
 #define DEBUG
 #include "../debug.h"
@@ -43,17 +43,17 @@ WallpaperWidget::createWidgets ()
     this->setLayout (mainLayout);
 }
 
-DuiContainer * 
+MContainer * 
 WallpaperWidget::createContainer (
         WallpaperWidget::ThemeCategoryId category)
 {
-    DuiLinearLayoutPolicy *policy;
-    DuiLayout *layout = new DuiLayout();
+    MLinearLayoutPolicy *policy;
+    MLayout *layout = new MLayout();
 
-    policy = new DuiLinearLayoutPolicy (layout, Qt::Vertical);
+    policy = new MLinearLayoutPolicy (layout, Qt::Vertical);
     layout->setPolicy (policy);
     
-    DuiContainer *container = new DuiContainer ();
+    MContainer *container = new MContainer ();
     container->centralWidget()->setLayout (layout);
 
     switch (category) {

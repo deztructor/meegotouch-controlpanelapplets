@@ -1,17 +1,17 @@
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
 TEMPLATE = lib
-LIBS += -lduicontrolpanel
+LIBS += -lmcontrolpanel
 CONFIG += plugin \
           gui \
-          dui \
-          duistatusindicatormenu \
+          m \
+          mstatusindicatormenu \
           silent
 
 QT += dbus
 INCLUDEPATH += ../batteryapplet \
-               /usr/include/duicontrolpanel \
-               /usr/include/duistatusindicatormenu
+               /usr/include/mcontrolpanel \
+               /usr/include/mstatusindicatormenu
 
 HEADERS = batteryplugin.h \
           battery.h \
@@ -27,10 +27,10 @@ SOURCES = batteryplugin.cpp \
 
 TARGET = $$qtLibraryTarget(battery)
 DESTDIR = lib
-target.path += /usr/lib/duistatusindicatormenu/plugins
+target.path += /usr/lib/mstatusindicatormenu/plugins
 
 css.files = batteryplugin.css
-css.path += /usr/share/duistatusindicatormenu/themes/style/
+css.path += /usr/share/mstatusindicatormenu/themes/style/
 
 INSTALLS += target \
             css

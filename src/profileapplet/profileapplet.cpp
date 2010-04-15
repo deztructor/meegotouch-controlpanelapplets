@@ -11,12 +11,12 @@
 #include <QtGui>
 #include <QDebug>
 
-#include <DuiTheme>
-#include <DuiAction>
+#include <MTheme>
+#include <MAction>
 
 Q_EXPORT_PLUGIN2(profileapplet, ProfileApplet)
 
-const QString cssDir = "/usr/share/themes/base/dui/duicontrolpanel/style/";
+const QString cssDir = "/usr/share/themes/base/m/mcontrolpanel/style/";
 
 ProfileApplet::ProfileApplet() :
     m_Api (new ProfileDataInterface)
@@ -32,7 +32,7 @@ ProfileApplet::~ProfileApplet()
 void 
 ProfileApplet::init()
 {
-    DuiTheme::loadCSS(cssDir + "profileapplet.css");
+    MTheme::loadCSS(cssDir + "profileapplet.css");
 }
 
 DcpWidget *
@@ -57,13 +57,13 @@ QString ProfileApplet::title() const
     return qtTrId ("qtn_prof_profile");
 }
 
-QVector<DuiAction*> ProfileApplet::viewMenuItems()
+QVector<MAction*> ProfileApplet::viewMenuItems()
 {
-    QVector<DuiAction*> vector;
+    QVector<MAction*> vector;
     //% "Help"
-    DuiAction* helpAction = new DuiAction (qtTrId ("qtn_comm_help"), pageMain ());
+    MAction* helpAction = new MAction (qtTrId ("qtn_comm_help"), pageMain ());
     vector.append(helpAction);
-    helpAction->setLocation(DuiAction::ApplicationMenuLocation);
+    helpAction->setLocation(MAction::ApplicationMenuLocation);
     return vector;
 }
 

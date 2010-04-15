@@ -9,8 +9,8 @@
 #include "profilebuttons.h"
 #include "profiledatainterface.h"
 
-class DuiLabel;
-class DuiContainer;
+class MLabel;
+class MContainer;
 class ProfileContainer;
 
 class ProfileWidget : public DcpWidget
@@ -40,13 +40,13 @@ private slots:
     void vibrationChanged (bool enabled);
 
 private:
-    DuiContainer* createContainer();
+    MContainer* createContainer();
 
 private:
     QPointer<ProfileDataInterface>   m_ProfileIf;
     ProfileButtons                  *m_ProfileButtons;
     QHash<int, ProfileContainer*>    m_Containers;
-    DuiLabel                        *m_currentHeader;
-    DuiLabel                        *m_settingsHeader;
+    MLabel                        *m_currentHeader;
+    MLabel                        *m_settingsHeader;
 };
 #endif

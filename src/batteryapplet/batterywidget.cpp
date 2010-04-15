@@ -9,11 +9,11 @@
 
 #include <QGraphicsLinearLayout>
 
-#include <DuiButton>
-#include <DuiContainer>
-#include <DuiGridLayoutPolicy>
-#include <DuiLayout>
-#include <DuiLinearLayoutPolicy>
+#include <MButton>
+#include <MContainer>
+#include <MGridLayoutPolicy>
+#include <MLayout>
+#include <MLinearLayoutPolicy>
 
 #undef DEBUG 
 #include "../debug.h"
@@ -75,11 +75,11 @@ void BatteryWidget::initWidget ()
     // standByTimeContainer
     //% "Estimated stand-by time:"
     standByTimeContainer = new TimeContainer (
-            qtTrId ("qtn_ener_st"), new DuiImageWidget);
+            qtTrId ("qtn_ener_st"), new MImageWidget);
                                   //"qgn_ener_standby" ^
 
     // PSMButton
-    PSMButton = new DuiButton ;
+    PSMButton = new MButton ;
     connect (PSMButton, SIGNAL (released ()), 
              this, SLOT (PSMButtonReleased ()));
 
@@ -92,10 +92,10 @@ void BatteryWidget::initWidget ()
              batteryIf, SLOT (setPSMThresholdValue (QString)));
 
     // mainContainer
-    DuiLayout *orientationLayout = new DuiLayout;
+    MLayout *orientationLayout = new MLayout;
 
-    DuiGridLayoutPolicy *landscapeLayoutPolicy =
-        new DuiGridLayoutPolicy (orientationLayout);
+    MGridLayoutPolicy *landscapeLayoutPolicy =
+        new MGridLayoutPolicy (orientationLayout);
     landscapeLayoutPolicy->addItem (talkTimeContainer, 0, 0);
     landscapeLayoutPolicy->addItem (standByTimeContainer, 0, 1);
     landscapeLayoutPolicy->setColumnStretchFactor (0, 2);
@@ -105,8 +105,8 @@ void BatteryWidget::initWidget ()
     landscapeLayoutPolicy->setSpacing (10);
     orientationLayout->setLandscapePolicy (landscapeLayoutPolicy);
 
-    DuiLinearLayoutPolicy *portraitLayoutPolicy =
-        new DuiLinearLayoutPolicy (orientationLayout, Qt::Vertical);
+    MLinearLayoutPolicy *portraitLayoutPolicy =
+        new MLinearLayoutPolicy (orientationLayout, Qt::Vertical);
     portraitLayoutPolicy->addItem (talkTimeContainer, Qt::AlignLeft);
     portraitLayoutPolicy->addItem (standByTimeContainer, Qt::AlignLeft);
     portraitLayoutPolicy->setStretchFactor (talkTimeContainer, 2);
@@ -116,7 +116,7 @@ void BatteryWidget::initWidget ()
     portraitLayoutPolicy->setSpacing (10);
     orientationLayout->setPortraitPolicy (portraitLayoutPolicy);
 
-    DuiContainer *mainContainer = new DuiContainer;
+    MContainer *mainContainer = new MContainer;
     mainContainer->setHeaderVisible (false);
     mainContainer->centralWidget ()->setLayout (orientationLayout);
 

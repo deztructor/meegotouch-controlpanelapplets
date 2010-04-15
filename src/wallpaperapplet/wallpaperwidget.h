@@ -8,9 +8,9 @@
 
 #include "wallpaperbusinesslogic.h"
 
-class DuiContainer;
-class DuiLinearLayoutPolicy;
-class DuiList;
+class MContainer;
+class MLinearLayoutPolicy;
+class MList;
 class WallpaperList;
 
 class WallpaperWidget : public DcpWidget
@@ -35,13 +35,13 @@ private slots:
 
 private:
     void createWidgets ();
-    DuiContainer *createContainer (WallpaperWidget::ThemeCategoryId category);
+    MContainer *createContainer (WallpaperWidget::ThemeCategoryId category);
 
     QPointer<WallpaperBusinessLogic>  m_WallpaperBusinessLogic;
-    DuiContainer                 *m_LocalContainer;
-    DuiLinearLayoutPolicy          *m_LocalLayoutPolicy;
-    DuiContainer                 *m_OviContainer;
-    DuiLinearLayoutPolicy          *m_OviLayoutPolicy;
+    MContainer                 *m_LocalContainer;
+    MLinearLayoutPolicy          *m_LocalLayoutPolicy;
+    MContainer                 *m_OviContainer;
+    MLinearLayoutPolicy          *m_OviLayoutPolicy;
 
     WallpaperList                      *m_LocalList;
 };

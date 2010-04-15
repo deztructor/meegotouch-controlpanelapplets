@@ -13,7 +13,7 @@
 #include <dcpappletplugin.h>
 #endif
 
-#define DESKTOP_PATH "/usr/lib/duicontrolpanel/"
+#define DESKTOP_PATH "/usr/lib/mcontrolpanel/"
 
 void
 Ft_AppletLoader::init ()
@@ -36,7 +36,7 @@ Ft_AppletLoader::initTestCase ()
         NULL
     };
 
-    m_app = new DuiApplication (argc, argv);
+    m_app = new MApplication (argc, argv);
 }
 
 void
@@ -84,7 +84,7 @@ Ft_AppletLoader::DoAppletTest (const char *desktopfile)
      * We should call the getMainWidgetId here, but I'm not sure how it is done
      * after the refactoring.
      */
-    DuiWidget *widget = applet->constructWidget (0);
+    MWidget *widget = applet->constructWidget (0);
     QVERIFY2(widget, 
 		    "Error when creating applet's main widget");
 

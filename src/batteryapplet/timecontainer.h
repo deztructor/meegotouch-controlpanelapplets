@@ -3,10 +3,10 @@
 #ifndef TIMECONTAINER_H
 #define TIMECONTAINER_H
 
-#include <DuiContainer>
+#include <MContainer>
 
-class DuiImageWidget;
-class DuiLabel;
+class MImageWidget;
+class MLabel;
 
 /*!
  * A simple widget with two labels, one is the title/meaning of the widget, the
@@ -14,11 +14,11 @@ class DuiLabel;
  * in stand-by and active mode.
  * This widget also holds an image, but does not handle its changes.
  */
-class TimeContainer : public DuiContainer
+class TimeContainer : public MContainer
 {
 public:
-    TimeContainer(const QString &text, DuiImageWidget *image,
-                  DuiWidget *parent = 0);
+    TimeContainer(const QString &text, MImageWidget *image,
+                  MWidget *parent = 0);
 
     void updateTimeLabel (const QString &text);
     void setText (const QString &text);
@@ -27,9 +27,9 @@ private:
     void setLayout();
 
 private:
-    DuiImageWidget  *m_Image;
-    DuiLabel        *m_TextLabel;
-    DuiLabel        *m_TimeLabel;
+    MImageWidget  *m_Image;
+    MLabel        *m_TextLabel;
+    MLabel        *m_TimeLabel;
 };
 
 #endif // STANDBYTIMECONTAINER_H

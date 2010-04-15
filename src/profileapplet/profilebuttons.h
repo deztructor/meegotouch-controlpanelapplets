@@ -3,16 +3,16 @@
 #ifndef PROFILEBUTTONS_H
 #define PROFILEBUTTONS_H
 
-#include <DuiContainer>
+#include <MContainer>
 
-class DuiButtonGroup;
+class MButtonGroup;
 
-class ProfileButtons : public DuiContainer
+class ProfileButtons : public MContainer
 {
     Q_OBJECT
 
 public:
-    ProfileButtons (DuiWidget *parent = 0);
+    ProfileButtons (MWidget *parent = 0);
     virtual ~ProfileButtons();
 
     void init (QMap<int, QString> data, int currentId);
@@ -31,7 +31,7 @@ private:
     void setLayout();
 
 private:
-    DuiButtonGroup *m_Buttons;
+    MButtonGroup *m_Buttons;
 
 };
 

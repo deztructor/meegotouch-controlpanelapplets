@@ -1,15 +1,15 @@
 TEMPLATE = lib
 CONFIG += plugin \
     gui \
-    dui \
+    m \
     silent \
     debug \
-    duicontrolpanel
+    mcontrolpanel
 
-LIBS += -lduicontrolpanel 
+LIBS += -lmcontrolpanel 
 
-INCLUDEPATH += /usr/include/qt4/dui \
-               /usr/include/duicontrolpanel 
+INCLUDEPATH += /usr/include/qt4/m \
+               /usr/include/mcontrolpanel 
 
 QT += dbus
 contains(cov, true) { 
@@ -43,9 +43,9 @@ SOURCES =                  \
 css.files = batteryapplet.css
 DESTDIR = lib
 desktop.files += *.desktop
-desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
-target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
-css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/dui/duicontrolpanel/style
+desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/mcontrolpanel
+target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/mcontrolpanel/applets
+css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/m/mcontrolpanel/style
 message("The plugin will be installed to: " $$target.path)
 message("CSS path will be: " $$css.path)
 INSTALLS += target \
