@@ -16,8 +16,8 @@ CONFIG += \
 	qmsystem \
 	plugin \
 	gui \
-	m \
-	mcontrolpanel \
+	meegotouch \
+	duicontrolpanel \
 	debug \
 	silent 
 

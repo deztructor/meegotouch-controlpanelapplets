@@ -8,8 +8,7 @@ INCLUDEPATH += $$SRC_PREFIX \
 #
 LIBS += -lprofile-qt
 INCLUDEPATH += \
-    /usr/include/qt4/m \
-    /usr/include/mcontrolpanel \
+    /usr/include/duicontrolpanel \
     /usr/include/profile-qt
 
 QT += \
@@ -24,8 +23,8 @@ target.path = /usr/lib/systemui-applets-tests
 CONFIG += \
 	plugin \
 	gui \
-	m \
-	mcontrolpanel \
+	meegotouch \
+	duicontrolpanel \
 	debug \
 	silent 
 

@@ -2,8 +2,8 @@ TEMPLATE = app
 QT += testlib
 
 CONFIG += \
-    m \
-    mstatusindicatormenu \
+    meegotouch \
+    duistatusindicatormenu \
     silent
 
 TARGET = ft_statusmenuplugins
