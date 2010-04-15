@@ -74,13 +74,28 @@ WallpaperApplet::title() const
 QVector<DuiAction*>
 WallpaperApplet::viewMenuItems()
 {
-    QVector<DuiAction*> vector;
-    //% "Help"
-    DuiAction* helpAction = new DuiAction (qtTrId ("qtn_comm_help"), 
-            pageMain (0));
+    DuiAction            *helpAction;
+    QVector<DuiAction*>   vector;
 
+    SYS_DEBUG ("");
+    helpAction = new DuiAction (
+            //% "Help"
+            qtTrId ("qtn_comm_help"), 
+            pageMain (0));
+    helpAction->setLocation (DuiAction::ApplicationMenuLocation);
+#if 0
+    DuiAction            *doneAction;
+    doneAction = new DuiAction(
+            "icon-m-framework-done",
+            //% "Done"
+            qtTrId("qtn_wall_done"), 
+            this);
+    doneAction->setLocation (DuiAction::ToolBarLocation);
+    doneAction->setVisible (true);
+#endif
     vector.append(helpAction);
-    helpAction->setLocation(DuiAction::ApplicationMenuLocation);
+    //vector.append(doneAction);
+
 
     return vector;
 }

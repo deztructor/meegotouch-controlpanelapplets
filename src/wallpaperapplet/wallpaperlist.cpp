@@ -12,12 +12,17 @@
 WallpaperList::WallpaperList (
         WallpaperBusinessLogic *logic) :
     m_BusinessLogic (logic),
-    m_ImageLoader (0),
+    m_ImageLoader (new WallpaperImageLoader),
     m_DataSourceType (WallpaperList::DataSourceUnknown)
 {
     connect (this, SIGNAL(itemClicked(const QModelIndex &)),
             this, SLOT(slotItemClicked(const QModelIndex &)));
-
+    /*
+     * When the panning stops we load thumbnail images, when it starts we stop
+     * doing the image loading so the panning will be smooth.
+     */
+    connect (this, SIGNAL(panningStarted()), 
+            m_ImageLoader, SLOT(stopLoadingPictures()));
     connect (this, SIGNAL(panningStopped()), 
             this, SLOT(loadPictures()));
 }
@@ -30,9 +35,6 @@ WallpaperList::setDataSourceType (
     WallpaperModel *model;
 
     Q_ASSERT (m_DataSourceType == DataSourceUnknown);
-    Q_ASSERT (m_ImageLoader == 0);
-
-    m_ImageLoader = new WallpaperImageLoader;
 
     cellCreator = new WallpaperContentItemCreator;
     setCellCreator (cellCreator);

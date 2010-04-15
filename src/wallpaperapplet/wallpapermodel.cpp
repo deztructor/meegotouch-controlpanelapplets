@@ -43,6 +43,12 @@ WallpaperImageLoader::loadPictures (
 }
 
 void 
+WallpaperImageLoader::stopLoadingPictures()
+{
+    thumbnailLoadingJobs.clear();
+}
+
+void 
 WallpaperImageLoader::processJobQueue ()
 {
     if(thumbnailLoadingJobs.isEmpty())
@@ -74,10 +80,8 @@ WallpaperContentItemCreator::updateCell (
     WallpaperDescriptor *rowData = data.value<WallpaperDescriptor *>();
 
     contentItem->setTitle (rowData->basename());
-    contentItem->setSubtitle (rowData->filename());
+    //contentItem->setSubtitle (rowData->filename());
 
-    if (rowData->isImageLoaded()) {
-        SYS_DEBUG ("Image loaded for %s", SYS_STR(rowData->basename()));
 #if 1
     /*
      * Older libdui (that we use) supports pixmap here, while newer versions has
@@ -89,7 +93,6 @@ WallpaperContentItemCreator::updateCell (
 #else
     contentItem->setImage (rowData->thumbnail());
 #endif
-    }
 }
 
 /******************************************************************************

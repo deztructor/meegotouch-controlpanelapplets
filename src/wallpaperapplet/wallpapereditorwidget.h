@@ -10,7 +10,7 @@
 
 class DuiContainer;
 class DuiLinearLayoutPolicy;
-class DuiButton;
+class DuiAction;
 class DuiImageWidget;
 
 class WallpaperEditorWidget : public DcpWidget
@@ -23,17 +23,16 @@ public:
             QGraphicsWidget        *parent = 0);
     ~WallpaperEditorWidget ();
 
-    void retranslateUi ();
-
 private slots:
-    void slotDoneButtonClicked ();
+    void slotDoneActivated ();
 
 private:
     void createWidgets ();
+    void createActions ();
 
     QPointer<WallpaperBusinessLogic>  m_WallpaperBusinessLogic;
     DuiImageWidget                   *m_Image;
-    DuiButton                        *m_DoneButton;
+    DuiAction                        *m_DoneAction;
 };
 
 #endif

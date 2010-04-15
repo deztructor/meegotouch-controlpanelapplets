@@ -60,6 +60,7 @@ public slots:
             const QModelIndex& lastVisibleRow);
 
     void processJobQueue();
+    void stopLoadingPictures ();
 
 private:
     QList<Job>  thumbnailLoadingJobs;

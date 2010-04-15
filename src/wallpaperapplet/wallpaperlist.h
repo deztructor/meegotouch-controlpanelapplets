@@ -10,6 +10,9 @@ class WallpaperDescriptor;
 class WallpaperBusinessLogic;
 class WallpaperImageLoader;
 
+/*!
+ * A list widget that shows a list of the available wallpapers.
+ */
 class WallpaperList : public DuiList {
     Q_OBJECT
         
