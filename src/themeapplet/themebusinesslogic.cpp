@@ -11,7 +11,7 @@
 #include <MTheme>
 #include <MGConfItem>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 static const QString themeDirName ("/usr/share/themes");
@@ -90,7 +90,7 @@ ThemeBusinessLogic::changeTheme (
 {
     SYS_DEBUG ("Activating theme '%s'", SYS_STR(themeCodeName));
     
-    MGConfItem  gconfItem ("/M/theme/name");
+    MGConfItem  gconfItem ("/dui/theme/name");
     gconfItem.set (themeCodeName);
     emit themeChanged (themeCodeName);
 }

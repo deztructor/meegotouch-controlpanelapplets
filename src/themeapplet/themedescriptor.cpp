@@ -11,12 +11,12 @@
 #include "../debug.h"
 
 
-static const QString requiredType = "X-M-Metatheme";
+static const QString requiredType = "X-DUI-Metatheme";
 static const QString typeKey = "Desktop Entry/Type";
 
 static const QString nameKey = "Desktop Entry/Name";
-static const QString iconNameKey = "X-M-Metatheme/X-Icon";
-static const QString visibleKey = "X-M-Metatheme/X-Visible";
+static const QString iconNameKey = "X-DUI-Metatheme/X-Icon";
+static const QString visibleKey = "X-DUI-Metatheme/X-Visible";
 
 ThemeDescriptor::ThemeDescriptor (
         const QString &directoryPath,
