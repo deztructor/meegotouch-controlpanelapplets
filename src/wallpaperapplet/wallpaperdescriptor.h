@@ -25,12 +25,15 @@ public:
     QString basename () const;
 
     void loadImage ();
-    QImage image();
-    bool isImageLoaded();
+    bool isImageLoaded ();
+    QImage thumbnail ();
+    QImage image ();
+
 private:
     bool        m_ImageLoaded;
     QString     m_Filename;
     QImage      m_Image;
+    QImage      m_Thumbnail;
 };
 
 Q_DECLARE_METATYPE(WallpaperDescriptor)

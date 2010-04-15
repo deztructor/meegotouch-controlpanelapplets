@@ -10,8 +10,8 @@
 
 class DuiContainer;
 class DuiLinearLayoutPolicy;
-class DuiList;
-class WallpaperList;
+class DuiButton;
+class DuiImageWidget;
 
 class WallpaperEditorWidget : public DcpWidget
 {
@@ -25,10 +25,15 @@ public:
 
     void retranslateUi ();
 
+private slots:
+    void slotDoneButtonClicked ();
+
 private:
     void createWidgets ();
 
     QPointer<WallpaperBusinessLogic>  m_WallpaperBusinessLogic;
+    DuiImageWidget                   *m_Image;
+    DuiButton                        *m_DoneButton;
 };
 
 #endif

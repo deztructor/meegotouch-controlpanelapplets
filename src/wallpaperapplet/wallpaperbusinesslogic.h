@@ -11,6 +11,9 @@ class DuiGConfItem;
 class WallpaperDescriptor;
 class QStringList;
 
+#include <QPointer>
+#include <wallpaperdescriptor.h>
+
 class WallpaperBusinessLogic : public QObject
 {
     Q_OBJECT
@@ -25,12 +28,16 @@ public:
 
     QStringList availableWallpapers () const;
 
+    void setEditedImage (WallpaperDescriptor  *desc);
+    WallpaperDescriptor *editedImage ();
+
 public slots:
-    void setBackground (WallpaperDescriptor &desc);
+    void setBackground (WallpaperDescriptor *desc = 0);
 
 private:
     DuiGConfItem   *m_LandscapeGConfItem;
     DuiGConfItem   *m_PortraitGConfItem;
+    QPointer<WallpaperDescriptor> m_EditedImage;
 };
 
 #endif

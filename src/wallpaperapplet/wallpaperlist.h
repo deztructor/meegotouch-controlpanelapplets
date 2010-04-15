@@ -29,7 +29,7 @@ private slots:
     void loadPictures ();
     
 signals:
-    void imageActivated (WallpaperDescriptor &desc);
+    void imageActivated (WallpaperDescriptor *desc);
 
 private:
     WallpaperBusinessLogic *m_BusinessLogic;

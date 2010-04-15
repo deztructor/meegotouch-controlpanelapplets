@@ -49,9 +49,9 @@ WallpaperList::slotItemClicked (
         const QModelIndex &index)
 {
     QVariant data = index.data(Qt::DisplayRole);
-    WallpaperDescriptor rowData = data.value<WallpaperDescriptor>();
+    WallpaperDescriptor *rowData = data.value<WallpaperDescriptor *>();
 
-    SYS_DEBUG ("*** filename = %s", SYS_STR(rowData.filename()));
+    SYS_DEBUG ("*** filename = %s", SYS_STR(rowData->filename()));
     emit imageActivated(rowData);
 }
 

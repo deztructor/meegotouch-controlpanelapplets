@@ -83,11 +83,11 @@ WallpaperContentItemCreator::updateCell (
      * Older libdui (that we use) supports pixmap here, while newer versions has
      * the support for QImage.
      */
-    QPixmap pixmap = QPixmap::fromImage (rowData->image());
+    QPixmap pixmap = QPixmap::fromImage (rowData->thumbnail());
     contentItem->setPixmap (pixmap);
     //contentItem->setOptionalPixmap (pixmap);
 #else
-    contentItem->setImage (rowData->image());
+    contentItem->setImage (rowData->thumbnail());
 #endif
     }
 }

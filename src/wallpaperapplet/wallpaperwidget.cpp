@@ -63,8 +63,8 @@ WallpaperWidget::createContainer (
             m_LocalList = new WallpaperList (m_WallpaperBusinessLogic);
             m_LocalList->setDataSourceType (WallpaperList::DataSourceLocal);
             connect (
-                    m_LocalList, SIGNAL(imageActivated(WallpaperDescriptor &)),
-                    this, SLOT(slotImageActivated(WallpaperDescriptor &)));
+                    m_LocalList, SIGNAL(imageActivated(WallpaperDescriptor *)),
+                    this, SLOT(slotImageActivated(WallpaperDescriptor *)));
 
             policy->addItem (m_LocalList);
             break;
@@ -102,9 +102,10 @@ WallpaperWidget::retranslateUi ()
  */
 void 
 WallpaperWidget::slotImageActivated (
-        WallpaperDescriptor &desc)
+        WallpaperDescriptor *desc)
 {
-    SYS_DEBUG ("");
-    //emit m_WallpaperBusinessLogic->setBackground (desc);
+    SYS_DEBUG ("*** desc = %s", SYS_STR(desc->basename()));
+    
+    m_WallpaperBusinessLogic->setEditedImage (desc);
     emit changeWidget (1);
 }

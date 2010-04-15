@@ -6,9 +6,10 @@
 #include "wallpapereditorwidget.h"
 
 #include <QGraphicsLinearLayout>
+#include <DuiButton>
+#include <DuiImageWidget>
 #include <DuiLayout>
 #include <DuiLinearLayoutPolicy>
-#include <DuiContainer>
 
 #define DEBUG
 #include "../debug.h"
@@ -17,7 +18,9 @@ WallpaperEditorWidget::WallpaperEditorWidget (
         WallpaperBusinessLogic *wallpaperBusinessLogic, 
         QGraphicsWidget        *parent) :
     DcpWidget (parent),
-    m_WallpaperBusinessLogic (wallpaperBusinessLogic)
+    m_WallpaperBusinessLogic (wallpaperBusinessLogic),
+    m_Image (0),
+    m_DoneButton (0)
 {
     createWidgets ();
     retranslateUi ();
@@ -30,18 +33,22 @@ WallpaperEditorWidget::~WallpaperEditorWidget ()
 void
 WallpaperEditorWidget::createWidgets ()
 {
-#if 0
     QGraphicsLinearLayout *mainLayout;
 
-    m_LocalContainer = createContainer (WallpaperWidget::ThemeLocal);
-    m_OviContainer = createContainer (WallpaperWidget::ThemeOvi);
+    m_Image = new DuiImageWidget;
+    //m_WallpaperBusinessLogic->editedImage()->loadImage();
+    m_Image->setImage (m_WallpaperBusinessLogic->editedImage()->image());
+
+    //% "Done"
+    m_DoneButton = new DuiButton (qtTrId("qtn_wall_done"));
+    connect (m_DoneButton, SIGNAL(clicked()),
+            this, SLOT(slotDoneButtonClicked()));
 
     mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
-    mainLayout->addItem (m_LocalContainer);
-    mainLayout->addItem (m_OviContainer);
+    mainLayout->addItem (m_Image);
+    mainLayout->addItem (m_DoneButton);
 
     this->setLayout (mainLayout);
-#endif
 }
 
 
@@ -50,3 +57,10 @@ WallpaperEditorWidget::retranslateUi ()
 {
 }
 
+void
+WallpaperEditorWidget::slotDoneButtonClicked ()
+{
+    SYS_DEBUG ("");
+    m_WallpaperBusinessLogic->setBackground();
+    changeWidget (0);
+}

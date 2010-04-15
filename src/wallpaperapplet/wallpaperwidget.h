@@ -31,7 +31,7 @@ public:
     } ThemeCategoryId;
 
 private slots:
-    void slotImageActivated (WallpaperDescriptor &desc);
+    void slotImageActivated (WallpaperDescriptor *desc);
 
 private:
     void createWidgets ();

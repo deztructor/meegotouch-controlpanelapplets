@@ -68,11 +68,18 @@ WallpaperDescriptor::loadImage ()
 
     success = m_Image.load (filename());
     if (!success) {
-        SYS_WARNING ("The image was not loaded!");
+        SYS_WARNING ("The image was not loaded from %s", SYS_STR(filename()));
     }
 
-    m_Image = m_Image.scaled(100, 100, Qt::KeepAspectRatio);
+    m_Thumbnail = m_Image.scaled(100, 100, Qt::KeepAspectRatio);
+    m_Image = m_Image.scaled(800, 480, Qt::KeepAspectRatio);
     m_ImageLoaded = true;
+}
+
+QImage 
+WallpaperDescriptor::thumbnail()
+{
+    return m_Thumbnail;
 }
 
 QImage 

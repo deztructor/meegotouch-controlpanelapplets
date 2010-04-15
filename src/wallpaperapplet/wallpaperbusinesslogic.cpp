@@ -25,6 +25,7 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
 {
     m_LandscapeGConfItem = new DuiGConfItem (LandscapeKey + PictureKey);
     m_PortraitGConfItem = new DuiGConfItem (PortraitKey + PictureKey);
+    m_EditedImage = 0;
 }
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
@@ -62,16 +63,25 @@ WallpaperBusinessLogic::Wallpaper (
 
 void
 WallpaperBusinessLogic::setBackground (
-        WallpaperDescriptor &desc)
+        WallpaperDescriptor *desc)
 {
+    if (desc == 0)
+        desc = m_EditedImage;
+
     Q_ASSERT (m_PortraitGConfItem != 0);
     Q_ASSERT (m_LandscapeGConfItem != 0);
 
-    SYS_DEBUG ("*** filename = %s", SYS_STR(desc.filename()));
-    m_PortraitGConfItem->set (desc.filename());
-    m_LandscapeGConfItem->set (desc.filename());
+    SYS_DEBUG ("*** filename = %s", SYS_STR(desc->filename()));
+    m_PortraitGConfItem->set (desc->filename());
+    m_LandscapeGConfItem->set (desc->filename());
 }
 
+/*!
+ * Returns a list of filenames (full path filenames to be precise) of the
+ * available wallpapers. These are the raw image files, before they were edited.
+ *
+ * FIXME: This function needs some polishing.
+ */
 QStringList
 WallpaperBusinessLogic::availableWallpapers () const
 {
@@ -103,4 +113,19 @@ WallpaperBusinessLogic::availableWallpapers () const
     }
 
     return list;
+}
+
+void
+WallpaperBusinessLogic::setEditedImage (
+        WallpaperDescriptor  *desc)
+{
+    SYS_DEBUG ("*** desc = %s", SYS_STR(desc->filename()));
+    m_EditedImage = desc;
+}
+
+WallpaperDescriptor *
+WallpaperBusinessLogic::editedImage ()
+{
+    SYS_DEBUG ("*** m_EditedImage = %s", SYS_STR(m_EditedImage->filename()));
+    return m_EditedImage;
 }
