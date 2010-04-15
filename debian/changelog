@@ -6,7 +6,7 @@ systemui-applets (0.12.8~1) harmattan; urgency=low
   * Implemented: SWP#DUI-2627 - Volume control HW key support
   * Disabled battery statusindicatormenu plugin (dropped)
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 13 Apr 2010 20:57:41 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 15 Apr 2010 11:07:51 +0200
 
 systemui-applets (0.12.7) harmattan; urgency=low
 
