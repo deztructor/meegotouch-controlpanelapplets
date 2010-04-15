@@ -87,10 +87,10 @@ WallpaperBusinessLogic::availableWallpapers () const
 {
     QStringList list;
     list <<
-        "/usr/share/themes/base/m/images/mapplicationpage-background.png" <<
-        "/usr/share/themes/plankton/m/images/mapplicationpage-background.png" <<
-        "/usr/share/themes/plankton/m/images/mapplicationpage-portrait-background.png" <<
-        "/usr/share/themes/plankton/m/images/mapplicationpage-portrait-background.png";
+        "/usr/share/themes/base/meegotouch/images/duiapplicationpage-background.png" <<
+        "/usr/share/themes/plankton/meegotouch/images/duiapplicationpage-background.png" <<
+        "/usr/share/themes/plankton/meegotouch/images/duiapplicationpage-portrait-background.png" <<
+        "/usr/share/themes/plankton/meegotouch/images/duiapplicationpage-portrait-background.png";
 
     /*
      * FIXME:
@@ -109,6 +109,7 @@ WallpaperBusinessLogic::availableWallpapers () const
 
     QDir imageDir (dirname);
     foreach (QString imageFile, imageDir.entryList(filterList, QDir::Files)) {
+        SYS_DEBUG ("*** imageFile = %s", SYS_STR(imageFile));
         list << (dirname + "/" + imageFile);
     }
 
