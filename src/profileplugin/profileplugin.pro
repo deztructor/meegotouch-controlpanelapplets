@@ -3,13 +3,13 @@ MGEN_OUTDIR = .gen
 OBJECTS_DIR = .obj
 QT += dbus
 LIBS += -lprofile-qt \
-        -lmcontrolpanel
+        -lduicontrolpanel
 TEMPLATE      = lib
-CONFIG       += plugin gui m mstatusindicatormenu silent
+CONFIG       += plugin gui meegotouch silent
 INCLUDEPATH  += ../profileapplet \
                 /usr/include/profile-qt \
-                /usr/include/mcontrolpanel \
-                /usr/include/mstatusindicatormenu
+                /usr/include/duicontrolpanel \
+                /usr/include/duistatusindicatormenu
 
 HEADERS = profileplugin.h \
           profilewidget.h \

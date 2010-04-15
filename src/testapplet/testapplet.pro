@@ -1,14 +1,14 @@
 TEMPLATE = lib
 CONFIG += plugin \
     gui \
-    m \
+    meegotouch \
     silent \
     debug
 
-LIBS += -lmcontrolpanel 
+LIBS += -lduicontrolpanel 
 
-INCLUDEPATH += /usr/include/qt4/m \
-    /usr/include/mcontrolpanel 
+INCLUDEPATH += \
+    /usr/include/duicontrolpanel 
 
 contains(cov, true) { 
     message("Coverage options enabled")
@@ -33,8 +33,8 @@ SOURCES = \
 
 DESTDIR = lib
 desktop.files += *.desktop
-desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/mcontrolpanel
-target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/mcontrolpanel/applets
+desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
+target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 
 message("The plugin will be installed to: " $$target.path)
 INSTALLS += target \

@@ -1,13 +1,13 @@
 TEMPLATE = lib
 CONFIG += plugin \
     gui \
-    m \
+    meegotouch \
     silent \
     debug
-LIBS += -lmcontrolpanel \
+LIBS += -lduicontrolpanel \
     -lprofile-qt
-INCLUDEPATH += /usr/include/qt4/m \
-    /usr/include/mcontrolpanel \
+INCLUDEPATH += \ 
+    /usr/include/duicontrolpanel \
     /usr/include/profile-qt
 QT += dbus
 contains(cov, true) { 
@@ -36,9 +36,9 @@ SOURCES = \
 css.files = profileapplet.css
 DESTDIR = lib
 desktop.files += *.desktop
-desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/mcontrolpanel
-target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/mcontrolpanel/applets
-css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/m/mcontrolpanel/style
+desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
+target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
+css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meego/duicontrolpanel/style
 
 message("The plugin will be installed to: " $$target.path)
 message("CSS path will be: " $$css.path)

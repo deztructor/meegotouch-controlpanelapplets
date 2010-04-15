@@ -4,8 +4,7 @@ TEMPLATE = lib
 
 CONFIG += plugin \
           gui \
-          m \
-          mstatusindicatormenu \
+          meegotouch \
           link_pkgconfig \
           qmsystem \
           silent
@@ -15,7 +14,7 @@ PKGCONFIG += dbus-1
 LIBS += -ldbus-qeventloop
 
 INCLUDEPATH += \
-    /usr/include/mstatusindicatormenu \
+    /usr/include/duistatusindicatormenu \
     /usr/include/dbus-1.0
 
 HEADERS = volumebarplugin.h \
@@ -32,10 +31,10 @@ SOURCES = volumebarplugin.cpp \
 
 TARGET = $$qtLibraryTarget(volume)
 DESTDIR = lib
-target.path += /usr/lib/mstatusindicatormenu/plugins
+target.path += /usr/lib/duistatusindicatormenu/plugins
 
 css.files += volumebar.css
-css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/m/sysuid
+css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meego/sysuid
 
 INSTALLS += \
     target \

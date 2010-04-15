@@ -1,17 +1,16 @@
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
 TEMPLATE = lib
-LIBS += -lmcontrolpanel
+LIBS += -lduicontrolpanel
 CONFIG += plugin \
           gui \
-          m \
-          mstatusindicatormenu \
+          meegotouch \
           silent
 
 QT += dbus
 INCLUDEPATH += ../batteryapplet \
-               /usr/include/mcontrolpanel \
-               /usr/include/mstatusindicatormenu
+               /usr/include/duicontrolpanel \
+               /usr/include/duistatusindicatormenu
 
 HEADERS = batteryplugin.h \
           battery.h \
@@ -27,10 +26,10 @@ SOURCES = batteryplugin.cpp \
 
 TARGET = $$qtLibraryTarget(battery)
 DESTDIR = lib
-target.path += /usr/lib/mstatusindicatormenu/plugins
+target.path += /usr/lib/duistatusindicatormenu/plugins
 
 css.files = batteryplugin.css
-css.path += /usr/share/mstatusindicatormenu/themes/style/
+css.path += /usr/share/duistatusindicatormenu/themes/style/
 
 INSTALLS += target \
             css
