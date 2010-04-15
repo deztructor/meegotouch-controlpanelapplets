@@ -1,13 +1,13 @@
 #ifndef VOLUMEBARPLUGIN_H
 #define VOLUMEBARPLUGIN_H
 
-#include <MStatusIndicatorMenuPluginInterface>
+#include <DuiStatusIndicatorMenuPluginInterface>
 #include <QObject>
 
-class VolumeBarPlugin : public QObject, public MStatusIndicatorMenuPluginInterface
+class VolumeBarPlugin : public QObject, public DuiStatusIndicatorMenuPluginInterface
 {
     Q_OBJECT
-    Q_INTERFACES(MStatusIndicatorMenuPluginInterface)
+    Q_INTERFACES(DuiStatusIndicatorMenuPluginInterface)
 
 public:
     MWidget *constructWidget (
