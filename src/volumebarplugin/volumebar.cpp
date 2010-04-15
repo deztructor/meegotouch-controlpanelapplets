@@ -5,7 +5,7 @@
 #undef DEBUG
 #include "../debug.h"
 
-#include <MStatusIndicatorMenuPluginInterface>
+#include <DuiStatusIndicatorMenuPluginInterface>
 #include <MLinearLayoutPolicy>
 #include <MContainer>
 #include <MSlider>
