@@ -25,5 +25,5 @@ SOURCES = profileplugin.cpp \
 
 TARGET        = $$qtLibraryTarget(profile)
 DESTDIR       = lib
-target.path += /usr/lib/mstatusindicatormenu/plugins/ 
+target.path += /usr/lib/duistatusindicatormenu/plugins/ 
 INSTALLS +=  target
