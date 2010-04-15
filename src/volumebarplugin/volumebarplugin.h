@@ -11,7 +11,7 @@ class VolumeBarPlugin : public QObject, public MStatusIndicatorMenuPluginInterfa
 
 public:
     MWidget *constructWidget (
-        MStatusIndicatorMenuInterface &statusIndicatorMenu);
+        DuiStatusIndicatorMenuInterface &statusIndicatorMenu);
 };
 
 

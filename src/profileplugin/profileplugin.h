@@ -17,19 +17,19 @@
 #ifndef PROFILEPLUGIN_H
 #define PROFILEPLUGIN_H
 
-#include <MStatusIndicatorMenuPluginInterface>
+#include <DuiStatusIndicatorMenuPluginInterface>
 #include <QObject>
 
 // This class doesn't do anything else but creates a widget
-class ProfilePlugin : public QObject, public MStatusIndicatorMenuPluginInterface
+class ProfilePlugin : public QObject, public DuiStatusIndicatorMenuPluginInterface
 {
     Q_OBJECT
-    Q_INTERFACES(MStatusIndicatorMenuPluginInterface)
+    Q_INTERFACES(DuiStatusIndicatorMenuPluginInterface)
 
 public:
     // Methods derived from MStatusIndicatorMenuPlugin
     virtual MWidget *constructWidget (
-        MStatusIndicatorMenuInterface &statusIndicatorMenu);
+        DuiStatusIndicatorMenuInterface &statusIndicatorMenu);
 };
 
 #endif // PROFILEPLUGIN_H

@@ -9,7 +9,7 @@ Q_EXPORT_PLUGIN2(volumebar, VolumeBarPlugin);
 
 MWidget*
 VolumeBarPlugin::constructWidget (
-    MStatusIndicatorMenuInterface &statusIndicatorMenu)
+    DuiStatusIndicatorMenuInterface &statusIndicatorMenu)
 {
     MTheme::loadCSS (CSS_DIR "volumebar.css");
 

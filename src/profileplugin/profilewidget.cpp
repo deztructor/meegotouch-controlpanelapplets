@@ -37,7 +37,7 @@
 #define SYSTEMUI_TRANSLATION "systemui-applets"
 
 ProfileWidget::ProfileWidget (
-    MStatusIndicatorMenuInterface &statusIndicatorMenu,
+    DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
     QGraphicsItem *parent) :
         MWidget (parent),
         statusIndicatorMenu (statusIndicatorMenu),

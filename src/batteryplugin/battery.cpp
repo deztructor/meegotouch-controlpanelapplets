@@ -20,7 +20,7 @@
 
 const QString cssDir = "/usr/share/mstatusindicatormenu/themes/style/";
 
-Battery::Battery (MStatusIndicatorMenuInterface &statusIndicatorMenu,
+Battery::Battery (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
                   QGraphicsItem *parent) :
         MWidget (parent),
         dbusIf (0),

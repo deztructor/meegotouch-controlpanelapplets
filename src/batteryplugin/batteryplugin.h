@@ -12,7 +12,7 @@ class BatteryPlugin : public QObject, public MStatusIndicatorMenuPluginInterface
 public:
     // Methods derived from MStatusIndicatorMenuPlugin
     virtual MWidget *constructWidget (
-        MStatusIndicatorMenuInterface &statusIndicatorMenu);
+        DuiStatusIndicatorMenuInterface &statusIndicatorMenu);
 };
 
 #endif // BATTERYPLUGIN_H

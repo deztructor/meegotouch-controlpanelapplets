@@ -7,7 +7,7 @@ class MSlider;
 class MContainer;
 class VolumeBarLogic;
 class VolumeOverlay;
-class MStatusIndicatorMenuInterface;
+class DuiStatusIndicatorMenuInterface;
 
 // For Hw-volume key handling
 #include <qmkeys.h>
@@ -18,7 +18,7 @@ class VolumeBar : public MWidget
     Q_OBJECT
 
 public:
-    VolumeBar (MStatusIndicatorMenuInterface &statusIndicatorMenu,
+    VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
                QGraphicsItem *parent = 0);
     ~VolumeBar ();
 

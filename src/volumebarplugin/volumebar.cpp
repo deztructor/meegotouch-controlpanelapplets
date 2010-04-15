@@ -18,7 +18,7 @@
 
 #define SYSTEMUI_TRANSLATION "systemui-applets"
 
-VolumeBar::VolumeBar (MStatusIndicatorMenuInterface &statusIndicatorMenu,
+VolumeBar::VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
                       QGraphicsItem *parent) :
         MWidget (parent),
         m_bar (0),

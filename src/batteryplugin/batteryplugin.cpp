@@ -5,7 +5,7 @@ Q_EXPORT_PLUGIN2(battery, BatteryPlugin);
 
 MWidget*
 BatteryPlugin::constructWidget (
-    MStatusIndicatorMenuInterface &statusIndicatorMenu)
+    DuiStatusIndicatorMenuInterface &statusIndicatorMenu)
 {
     return new Battery (statusIndicatorMenu);
 }
