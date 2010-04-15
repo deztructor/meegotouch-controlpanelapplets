@@ -1,2 +1,2 @@
-usr/lib/duistatusindicatormenu/plugins/libvolume.so
-usr/share/themes/base/meego/sysuid/volume*.css
+usr/lib/meegotouch/statusindicatormenuplugins/libvolume.so
+usr/share/themes/base/meegotouch/sysuid/volume*.css

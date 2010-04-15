@@ -7,7 +7,7 @@
 
 using namespace QTest;
 
-#define LIBDIR "/usr/lib/mstatusindicatormenu/plugins/"
+#define LIBDIR "/usr/lib/meegotouch/statusindicatormenuplugins/"
 
 void
 Ft_PluginLoader::init ()

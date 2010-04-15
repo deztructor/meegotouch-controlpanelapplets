@@ -31,10 +31,10 @@ SOURCES = volumebarplugin.cpp \
 
 TARGET = $$qtLibraryTarget(volume)
 DESTDIR = lib
-target.path += /usr/lib/duistatusindicatormenu/plugins
+target.path += /usr/lib/meegotouch/statusindicatormenuplugins
 
 css.files += volumebar.css
-css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meego/sysuid
+css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/sysuid
 
 INSTALLS += \
     target \
