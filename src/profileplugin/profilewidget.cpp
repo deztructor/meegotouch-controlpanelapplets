@@ -25,7 +25,7 @@
 #include <MButtonGroup>
 #include <MApplication>
 #include <MContainer>
-#include <MControlPanelIf>
+#include <DuiControlPanelIf>
 #include <MGridLayoutPolicy>
 #include <MLayout>
 #include <MLinearLayoutPolicy>
@@ -99,7 +99,7 @@ void
 ProfileWidget::showProfileModificationPage ()
 {
     // instantiate the interface
-    MControlPanelIf cpIf;
+    DuiControlPanelIf cpIf;
     // check the interface is valid
     if (!cpIf.isValid ())
         return;

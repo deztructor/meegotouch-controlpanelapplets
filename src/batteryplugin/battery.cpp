@@ -6,7 +6,7 @@
 #include "../debug.h"
 
 #include <MContainer>
-#include <MControlPanelIf>
+#include <DuiControlPanelIf>
 #include <MGridLayoutPolicy>
 #include <MGConfItem>
 #include <MImageWidget>
@@ -199,7 +199,7 @@ void
 Battery::showBatteryModificationPage ()
 {
     // instantiate the interface
-    MControlPanelIf cpIf;
+    DuiControlPanelIf cpIf;
     // check the interface is valid
     if (!cpIf.isValid ())
         return;
