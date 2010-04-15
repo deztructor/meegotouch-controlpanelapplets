@@ -3,9 +3,9 @@
 
 #include <QObject>
 #include <MWidget>
-#include <mstatusindicatormenuplugininterface.h>
+#include <duistatusindicatormenuplugininterface.h>
 
-class StatusIndicatorMenuStub : public MWidget, public MStatusIndicatorMenuInterface
+class StatusIndicatorMenuStub : public MWidget, public DuiStatusIndicatorMenuInterface
 {
     Q_OBJECT
 

@@ -4,10 +4,8 @@
 #include <QObject>
 #include <QPluginLoader>
 #include <QtTest/QtTest>
-// From libM
 #include <mapplication.h>
-// From M Status Indicator Menu (system-ui)
-#include <mstatusindicatormenuplugininterface.h>
+#include <duistatusindicatormenuplugininterface.h>
 
 
 class Ft_PluginLoader : public QObject
@@ -28,7 +26,7 @@ private slots:
 
 private:
     MApplication                      *m_app;
-    MStatusIndicatorMenuInterface     *m_smstub;
+    DuiStatusIndicatorMenuInterface   *m_smstub;
 
     void    DoPluginTest (const QString &soname);
 };

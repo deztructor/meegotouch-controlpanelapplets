@@ -49,8 +49,8 @@ Ft_PluginLoader::DoPluginTest (const QString &soname)
     QPluginLoader  loader (QString (LIBDIR) + soname);
     QObject       *object = loader.instance ();
 
-    MStatusIndicatorMenuPluginInterface* plugin =
-        qobject_cast<MStatusIndicatorMenuPluginInterface *> (object);
+    DuiStatusIndicatorMenuPluginInterface* plugin =
+        qobject_cast<DuiStatusIndicatorMenuPluginInterface *> (object);
 
     QVERIFY(plugin);
 

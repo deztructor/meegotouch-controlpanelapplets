@@ -1,8 +1,8 @@
 TEMPLATE = app
 QT += testlib
 
-CONFIG += m mcontrolpanel silent
-LIBS += -lmcontrolpanel
+CONFIG += meegotouch duicontrolpanel silent
+LIBS += -lduicontrolpanel
 
 TARGET = ft_dcpapplets
 target.path = /usr/lib/systemui-applets-tests
