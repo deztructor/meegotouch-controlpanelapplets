@@ -30,7 +30,7 @@
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 #include <MLocale>
-#include <MStatusIndicatorMenuPluginInterface>
+#include <DuiStatusIndicatorMenuPluginInterface>
 
 #include <QGraphicsLinearLayout>
 

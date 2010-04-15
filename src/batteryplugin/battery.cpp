@@ -13,7 +13,7 @@
 #include <MLabel>
 #include <MLayout>
 #include <MLocale>
-#include <MStatusIndicatorMenuPluginInterface>
+#include <DuiStatusIndicatorMenuPluginInterface>
 #include <MTheme>
 
 #include <QGraphicsLinearLayout>
