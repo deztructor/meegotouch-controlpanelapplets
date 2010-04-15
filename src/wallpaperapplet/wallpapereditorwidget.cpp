@@ -6,6 +6,7 @@
 #include "wallpapereditorwidget.h"
 
 #include <QGraphicsLinearLayout>
+#include <QGraphicsGridLayout>
 #include <DuiButton>
 #include <DuiImageWidget>
 #include <DuiLayout>
@@ -38,15 +39,22 @@ WallpaperEditorWidget::~WallpaperEditorWidget ()
 void
 WallpaperEditorWidget::createWidgets ()
 {
-    QGraphicsLinearLayout *mainLayout;
+    this->setContentsMargins(0, 0, 0, 0);
 
     m_Image = new DuiImageWidget;
     m_WallpaperBusinessLogic->editedImage()->loadImage();
     m_Image->setImage (m_WallpaperBusinessLogic->editedImage()->image());
 
+#if 0
+    QGraphicsLinearLayout *mainLayout;
     mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    mainLayout->setContentsMargins (0, 0, 0, 0);
     mainLayout->addItem (m_Image);
-
+#else
+    QGraphicsGridLayout *mainLayout = new QGraphicsGridLayout();
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->addItem(m_Image, 0, 0);
+#endif
 
     this->setLayout (mainLayout);
 }
@@ -78,7 +86,10 @@ WallpaperEditorWidget::createActions ()
             this, SLOT(slotDoneActivated()));
 }
 
-
+/*
+ * This slot is called when the user activates the 'done' action and so we have
+ * to store the settings.
+ */
 void
 WallpaperEditorWidget::slotDoneActivated ()
 {
