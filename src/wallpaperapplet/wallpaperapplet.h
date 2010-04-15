@@ -5,12 +5,13 @@
 
 #include "dcpappletif.h"
 #include "wallpaperbusinesslogic.h"
-#include "wallpaperwidget.h"
 
 #include <QObject>
 #include <QPointer>
 #include <DcpAppletIf>
 
+class WallpaperWidget;
+class WallpaperEditorWidget;
 
 class WallpaperApplet : public QObject, public DcpAppletIf
 {
@@ -23,13 +24,14 @@ public:
 
     virtual void init();
     virtual DcpWidget *constructWidget (int widgetId);
-    virtual DcpWidget *pageMain ();
+    virtual DcpWidget *pageMain (int widgetId);
     virtual QString title() const;
     virtual QVector<DuiAction *> viewMenuItems();
     virtual DcpBrief* constructBrief(int partId);
 
 private:
-    QPointer<WallpaperWidget> m_MainWidget;
+    QPointer<WallpaperWidget>        m_MainWidget;
+    QPointer<WallpaperEditorWidget>  m_EditorWidget;
     QPointer<WallpaperBusinessLogic> m_WallpaperBusinessLogic;
 };
 #endif

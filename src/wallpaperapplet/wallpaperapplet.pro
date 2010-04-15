@@ -27,6 +27,7 @@ HEADERS = \
     wallpaperbusinesslogic.h \
     wallpaperapplet.h \
     wallpaperwidget.h \
+    wallpapereditorwidget.h \
     wallpaperbrief.h 
 
 SOURCES = \
@@ -37,6 +38,7 @@ SOURCES = \
     wallpaperbusinesslogic.cpp \
     wallpaperapplet.cpp \
     wallpaperwidget.cpp \
+    wallpapereditorwidget.cpp \
     wallpaperbrief.cpp 
 
 css.files = wallpaper.css

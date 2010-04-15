@@ -30,6 +30,9 @@ public:
         ThemeOvi
     } ThemeCategoryId;
 
+private slots:
+    void slotImageActivated (WallpaperDescriptor &desc);
+
 private:
     void createWidgets ();
     DuiContainer *createContainer (WallpaperWidget::ThemeCategoryId category);

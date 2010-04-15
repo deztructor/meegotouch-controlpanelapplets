@@ -63,10 +63,8 @@ WallpaperWidget::createContainer (
             m_LocalList = new WallpaperList (m_WallpaperBusinessLogic);
             m_LocalList->setDataSourceType (WallpaperList::DataSourceLocal);
             connect (
-                    m_LocalList, 
-                    SIGNAL(imageActivated(WallpaperDescriptor &)),
-                    m_WallpaperBusinessLogic, 
-                    SLOT(setBackground(WallpaperDescriptor &)));
+                    m_LocalList, SIGNAL(imageActivated(WallpaperDescriptor &)),
+                    this, SLOT(slotImageActivated(WallpaperDescriptor &)));
 
             policy->addItem (m_LocalList);
             break;
@@ -98,3 +96,15 @@ WallpaperWidget::retranslateUi ()
     }
 }
 
+/*
+ * This slot is called when the user activates an image in the list. The
+ * WallpaperList has a signal for that.
+ */
+void 
+WallpaperWidget::slotImageActivated (
+        WallpaperDescriptor &desc)
+{
+    SYS_DEBUG ("");
+    //emit m_WallpaperBusinessLogic->setBackground (desc);
+    emit changeWidget (1);
+}

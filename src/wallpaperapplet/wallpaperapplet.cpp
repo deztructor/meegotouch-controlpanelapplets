@@ -2,6 +2,7 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 #include "wallpaperapplet.h"
 #include "wallpaperwidget.h"
+#include "wallpapereditorwidget.h"
 #include "wallpaperbrief.h"
 
 #include <DuiTheme>
@@ -30,31 +31,37 @@ WallpaperApplet::init()
 }
 
 DcpWidget *
-WallpaperApplet::pageMain()
+WallpaperApplet::pageMain(
+        int widgetId)
 {
-    static int i = 0;
+    SYS_DEBUG ("widgetId = %d", widgetId);
+    switch (widgetId) {
+        case 0:
+            if (m_MainWidget == 0) 
+                m_MainWidget = new WallpaperWidget (m_WallpaperBusinessLogic);
+            
+            return m_MainWidget;
 
-    SYS_DEBUG ("Entering %d", i);
-    if (m_MainWidget == NULL) {
-        m_MainWidget = new WallpaperWidget (m_WallpaperBusinessLogic);
-        SYS_DEBUG ("Widget created");
+        case 1:
+            if (m_EditorWidget == 0)
+                m_EditorWidget = new WallpaperEditorWidget (
+                        m_WallpaperBusinessLogic);
+            return m_EditorWidget;
+
+        default:
+            SYS_WARNING ("Unknown widgetId: %d", widgetId);
     }
 
-    SYS_DEBUG ("returning m_MainWidget: %d", i);
-    ++i;
-    return m_MainWidget;
+    return 0;
 }
 
 DcpWidget *
 WallpaperApplet::constructWidget (
         int widgetId)
 {
-    static int i = 0;
-    Q_UNUSED(widgetId);
-
-    SYS_DEBUG ("We are called: %d", i);
-    ++i;
-    return pageMain ();
+    SYS_DEBUG ("-----------------------------------");
+    SYS_DEBUG ("*** widgetId = %d", widgetId);
+    return pageMain (widgetId);
 }
 
 QString
@@ -70,7 +77,7 @@ WallpaperApplet::viewMenuItems()
     QVector<DuiAction*> vector;
     //% "Help"
     DuiAction* helpAction = new DuiAction (qtTrId ("qtn_comm_help"), 
-            pageMain ());
+            pageMain (0));
 
     vector.append(helpAction);
     helpAction->setLocation(DuiAction::ApplicationMenuLocation);
