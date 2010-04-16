@@ -4,6 +4,8 @@
 #include "wallpaperbrief.h"
 #include "wallpaperdescriptor.h"
 
+#include <dcpwidgettypes.h>
+
 #define DEBUG
 #include "../debug.h"
 
@@ -11,6 +13,13 @@ WallpaperBrief::WallpaperBrief (
         WallpaperBusinessLogic *businessLogic) :
     m_WallpaperBusinessLogic (businessLogic)
 {
+}
+
+int
+WallpaperBrief::widgetTypeID() const
+{
+    SYS_DEBUG ("");
+    return DcpWidgetType::Image;
 }
 
 QString 
@@ -24,5 +33,19 @@ WallpaperBrief::valueText() const
      
     //% "None"
     return qtTrId("wallpaper_none");
+}
+
+QString 
+WallpaperBrief::image () const
+{
+    Q_ASSERT (m_WallpaperBusinessLogic != 0);
+    if (m_WallpaperBusinessLogic->hasWallpaperFileName()) {
+        WallpaperDescriptor desc = m_WallpaperBusinessLogic->Wallpaper();
+        SYS_DEBUG ("------------------------------------------");
+        SYS_DEBUG ("--- returning %s", SYS_STR(desc.filename()));
+        return desc.filename();
+    }
+     
+    return "";
 }
 

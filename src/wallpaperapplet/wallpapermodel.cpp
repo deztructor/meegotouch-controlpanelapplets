@@ -70,15 +70,22 @@ WallpaperImageLoader::processJobQueue ()
 /******************************************************************************
  * WallpaperContentItemCreator implementation.
  */
-#if 0
 void 
 WallpaperContentItemCreator::updateContentItemMode(
               const QModelIndex &index, 
               MContentItem *contentItem) const
 {
+    int row = index.row();
+    int rows = index.model()->rowCount();
+
     SYS_DEBUG ("");
+    if (row == 0)
+        contentItem->setItemMode(MContentItem::SingleColumnTop);
+    else if (row < rows - 1)
+        contentItem->setItemMode(MContentItem::SingleColumnCenter);
+    else 
+        contentItem->setItemMode(MContentItem::SingleColumnBottom);
 }
-#endif
 
 void 
 WallpaperContentItemCreator::updateCell (
@@ -105,6 +112,7 @@ WallpaperContentItemCreator::updateCell (
 #endif
 
     contentItem->setItemMode(MContentItem::Single);
+    updateContentItemMode(index, contentItem);
 }
 
 /******************************************************************************

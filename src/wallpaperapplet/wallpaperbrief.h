@@ -15,7 +15,10 @@ class WallpaperBrief: public DcpBrief
 
 public:
     WallpaperBrief (WallpaperBusinessLogic *businessLogic);
+
+    virtual int widgetTypeID() const;
     virtual QString valueText() const;
+    virtual QString image () const;
 
 private:
     QPointer<WallpaperBusinessLogic> m_WallpaperBusinessLogic;

@@ -20,6 +20,13 @@ WallpaperWidget::WallpaperWidget (
     DcpWidget (parent),
     m_WallpaperBusinessLogic (wallpaperBusinessLogic)
 {
+    /*
+     * Unfortunatelly the content has to be created late, otherwise the list
+     * only shows one row.
+     * FIXME: I'm n ot sure how late should this be done, I thing we should use
+     * the void MApplicationPage::createContent(), but I don't know how to do
+     * that.
+     */
     //createContent ();
     QTimer::singleShot(500, this, SLOT(createContent()));
 }
