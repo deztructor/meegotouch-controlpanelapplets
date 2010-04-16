@@ -71,8 +71,16 @@ WallpaperImageLoader::processJobQueue ()
  * WallpaperContentItemCreator implementation.
  */
 void 
+WallpaperContentItemCreator::updateContentItemMode(
+              const QModelIndex &index, 
+              MContentItem *contentItem) const
+{
+    SYS_DEBUG ("");
+}
+
+void 
 WallpaperContentItemCreator::updateCell (
-        const QModelIndex&   index, 
+        const QModelIndex &index, 
         MWidget           *cell) const
 {
     MContentItem *contentItem = qobject_cast<MContentItem *>(cell);
@@ -80,7 +88,7 @@ WallpaperContentItemCreator::updateCell (
     WallpaperDescriptor *rowData = data.value<WallpaperDescriptor *>();
 
     contentItem->setTitle (rowData->basename());
-    //contentItem->setSubtitle (rowData->filename());
+    contentItem->setSubtitle (rowData->filename());
 
 #if 1
     /*
@@ -93,6 +101,8 @@ WallpaperContentItemCreator::updateCell (
 #else
     contentItem->setImage (rowData->thumbnail());
 #endif
+
+    contentItem->setItemMode(MContentItem::Single);
 }
 
 /******************************************************************************
@@ -122,7 +132,7 @@ WallpaperModel::rowCount(
 {
     Q_UNUSED (parent);
     
-    //SYS_DEBUG ("Returning %d", m_Filenames.size());
+    SYS_DEBUG ("Returning %d", m_DescriptorList.size());
     return m_DescriptorList.size();
 }
 
@@ -141,7 +151,7 @@ WallpaperModel::data (
 
     var.setValue (m_DescriptorList[index.row()]);
     
-    //SYS_DEBUG ("Returning for %d", index.row());
+    SYS_DEBUG ("Returning for %d", index.row());
     return var;
 }
 
@@ -149,6 +159,7 @@ int
 WallpaperModel::columnCount (
         const QModelIndex&) const
 {
+    SYS_DEBUG ("Returning 1");
     return 1;
 }
 

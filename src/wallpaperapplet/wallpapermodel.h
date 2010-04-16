@@ -40,7 +40,12 @@ class WallpaperContentItemCreator :
     public MAbstractCellCreator<MContentItem>
 {
   public:
-      void updateCell(const QModelIndex& index, MWidget *cell) const;
+      void updateCell(
+              const QModelIndex &index, 
+              MWidget *cell) const;
+      void updateContentItemMode(
+              const QModelIndex &index, 
+              MContentItem *contentItem) const;
 };
 
 

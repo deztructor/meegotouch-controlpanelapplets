@@ -14,7 +14,10 @@
 #define DEBUG
 #include "../debug.h"
 
+// The directory where all the available themes are installed.
 static const QString themeDirName ("/usr/share/themes");
+// The GCon key where meegotouch expects us to place the theme name.
+static const QString themeGConfKey ("/meegotouch/theme/name");
 
 /*!
  * Returns the code name of the current theme. This code name can be used as a
@@ -90,7 +93,7 @@ ThemeBusinessLogic::changeTheme (
 {
     SYS_DEBUG ("Activating theme '%s'", SYS_STR(themeCodeName));
     
-    MGConfItem  gconfItem ("/dui/theme/name");
+    MGConfItem  gconfItem (themeGConfKey);
     gconfItem.set (themeCodeName);
     emit themeChanged (themeCodeName);
 }
