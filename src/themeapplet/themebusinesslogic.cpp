@@ -55,6 +55,28 @@ ThemeBusinessLogic::currentThemeName () const
 }
 
 /*!
+ * Returns the official name of the current theme. This name can be used as a UI
+ * string.
+ */
+QString
+ThemeBusinessLogic::currentThemeIconName () const
+{
+    QString codeName = currentThemeCodeName();
+    QList<ThemeDescriptor *> list = availableThemes ();
+    QString retval;
+
+    foreach (ThemeDescriptor *descr, list) {
+        if (descr->codeName() == codeName)
+            retval = descr->iconName();
+
+        delete descr;
+    }
+
+    return retval;
+}
+
+
+/*!
  * Returns all the available themes. Please note, that some of these themes
  * might be hidden/invisible.
  */

@@ -15,7 +15,11 @@ class ThemeBrief: public DcpBrief
 
 public:
     ThemeBrief (ThemeBusinessLogic *businessLogic);
+
+    virtual int widgetTypeID() const;
     virtual QString valueText() const;
+    virtual QString icon () const;
+    virtual QString image () const;
 
 private:
     QPointer<ThemeBusinessLogic> m_ThemeBusinessLogic;

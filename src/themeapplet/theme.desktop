@@ -16,5 +16,5 @@ X-DUIApplet-ImagePortrait=Widget_portrait_NOT_DEFINED.png
 [DCP]
 Category= qtn_sett_main_look
 Order=2
-WidgetType= DcpLabel2
+WidgetType=DcpLabel2Image
 Text2= Not found

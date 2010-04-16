@@ -13,6 +13,12 @@ class ThemeBusinessLogic : public QObject
 {
     Q_OBJECT
 
+public:
+    QString currentThemeCodeName () const;
+    QString currentThemeName () const;
+    QString currentThemeIconName () const;
+    QList<ThemeDescriptor *> availableThemes () const;
+
 public slots:
     /*!
      * Sets the current theme to the theme with the given id.
@@ -21,11 +27,6 @@ public slots:
 
 signals:
     void themeChanged (QString themeCodeName);
-
-public:
-    QString currentThemeCodeName () const;
-    QString currentThemeName () const;
-    QList<ThemeDescriptor *> availableThemes () const;
 };
 
 #endif
