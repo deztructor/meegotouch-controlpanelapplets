@@ -23,27 +23,14 @@ public:
             QGraphicsWidget        *parent = 0);
     ~WallpaperWidget ();
 
-    void retranslateUi ();
-
-    typedef enum {
-        ThemeLocal,
-        ThemeOvi
-    } ThemeCategoryId;
-
 private slots:
     void slotImageActivated (WallpaperDescriptor *desc);
+    virtual void createContent ();
 
 private:
-    void createWidgets ();
-    MContainer *createContainer (WallpaperWidget::ThemeCategoryId category);
 
-    QPointer<WallpaperBusinessLogic>  m_WallpaperBusinessLogic;
-    MContainer                 *m_LocalContainer;
-    MLinearLayoutPolicy          *m_LocalLayoutPolicy;
-    MContainer                 *m_OviContainer;
-    MLinearLayoutPolicy          *m_OviLayoutPolicy;
-
-    WallpaperList                      *m_LocalList;
+    QPointer<WallpaperBusinessLogic>   m_WallpaperBusinessLogic;
+    WallpaperList                     *m_ImageList;
 };
 
 #endif

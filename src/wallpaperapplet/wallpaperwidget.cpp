@@ -8,7 +8,7 @@
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 #include <MContainer>
-
+#include <QTimer>
 #define DEBUG
 #include "../debug.h"
 
@@ -20,8 +20,8 @@ WallpaperWidget::WallpaperWidget (
     DcpWidget (parent),
     m_WallpaperBusinessLogic (wallpaperBusinessLogic)
 {
-    createWidgets ();
-    retranslateUi ();
+    //createContent ();
+    QTimer::singleShot(500, this, SLOT(createContent()));
 }
 
 WallpaperWidget::~WallpaperWidget ()
@@ -29,72 +29,30 @@ WallpaperWidget::~WallpaperWidget ()
 }
 
 void
-WallpaperWidget::createWidgets ()
+WallpaperWidget::createContent ()
 {
     QGraphicsLinearLayout *mainLayout;
 
-    m_LocalContainer = createContainer (WallpaperWidget::ThemeLocal);
-    m_OviContainer = createContainer (WallpaperWidget::ThemeOvi);
-
+    SYS_DEBUG ("");
     mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
-    mainLayout->addItem (m_LocalContainer);
-    mainLayout->addItem (m_OviContainer);
+    setLayout (mainLayout);
 
-    this->setLayout (mainLayout);
+    /*
+     * The list of the available images.
+     */
+    m_ImageList = new WallpaperList (m_WallpaperBusinessLogic, this);
+    m_ImageList->setObjectName("WallpaperImageList");
+    connect (m_ImageList, SIGNAL(imageActivated(WallpaperDescriptor *)),
+            this, SLOT(slotImageActivated(WallpaperDescriptor *)));
+    m_ImageList->setDataSourceType (WallpaperList::DataSourceLocal);
+
+    /*
+     * Adding all widgets into the layout.
+     */
+    mainLayout->addItem (m_ImageList);
+    mainLayout->setStretchFactor (m_ImageList, 1);
 }
 
-MContainer * 
-WallpaperWidget::createContainer (
-        WallpaperWidget::ThemeCategoryId category)
-{
-    MLinearLayoutPolicy *policy;
-    MLayout *layout = new MLayout();
-
-    policy = new MLinearLayoutPolicy (layout, Qt::Vertical);
-    layout->setPolicy (policy);
-    
-    MContainer *container = new MContainer ();
-    container->centralWidget()->setLayout (layout);
-
-    switch (category) {
-        case WallpaperWidget::ThemeLocal:
-            m_LocalLayoutPolicy = policy;
-
-            m_LocalList = new WallpaperList (m_WallpaperBusinessLogic);
-            m_LocalList->setDataSourceType (WallpaperList::DataSourceLocal);
-            connect (
-                    m_LocalList, SIGNAL(imageActivated(WallpaperDescriptor *)),
-                    this, SLOT(slotImageActivated(WallpaperDescriptor *)));
-
-            policy->addItem (m_LocalList);
-            break;
-
-        case WallpaperWidget::ThemeOvi:
-            m_OviLayoutPolicy = policy;
-    }
-
-    return container;
-}
-
-void
-WallpaperWidget::retranslateUi ()
-{
-    if (m_LocalContainer) {
-        /*
-         * FIXME: This is not an official locale id.
-         */
-        //% "Available wallpapers"
-        m_LocalContainer->setTitle (qtTrId ("qtn_wallpapers_locale"));
-    }
-
-    if (m_OviContainer) {
-        /*
-         * FIXME: This is not an official locale id.
-         */
-        //% "Ovi wallpapers"
-        m_OviContainer->setTitle (qtTrId ("qtn_wallpapers_ovi"));
-    }
-}
 
 /*
  * This slot is called when the user activates an image in the list. The

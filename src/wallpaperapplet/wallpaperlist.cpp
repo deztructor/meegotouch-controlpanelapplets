@@ -10,7 +10,9 @@
 #include "../debug.h"
 
 WallpaperList::WallpaperList (
-        WallpaperBusinessLogic *logic) :
+        WallpaperBusinessLogic *logic,
+        QGraphicsItem          *parent) :
+    MList (parent),
     m_BusinessLogic (logic),
     m_ImageLoader (new WallpaperImageLoader),
     m_DataSourceType (WallpaperList::DataSourceUnknown)
@@ -35,12 +37,13 @@ WallpaperList::setDataSourceType (
     WallpaperModel *model;
 
     Q_ASSERT (m_DataSourceType == DataSourceUnknown);
+    
+    model = new WallpaperModel (m_BusinessLogic);
+    setItemModel (model);
 
     cellCreator = new WallpaperContentItemCreator;
     setCellCreator (cellCreator);
 
-    model = new WallpaperModel (m_BusinessLogic);
-    setItemModel (model);
 
     QTimer::singleShot(1500, this, SLOT(loadPictures()));
 }

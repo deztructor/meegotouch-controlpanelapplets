@@ -39,7 +39,7 @@ WallpaperApplet::pageMain(
         case 0:
             if (m_MainWidget == 0) 
                 m_MainWidget = new WallpaperWidget (m_WallpaperBusinessLogic);
-            
+                //m_MainWidget->createContent();
             return m_MainWidget;
 
         case 1:

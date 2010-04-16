@@ -70,6 +70,7 @@ WallpaperImageLoader::processJobQueue ()
 /******************************************************************************
  * WallpaperContentItemCreator implementation.
  */
+#if 0
 void 
 WallpaperContentItemCreator::updateContentItemMode(
               const QModelIndex &index, 
@@ -77,6 +78,7 @@ WallpaperContentItemCreator::updateContentItemMode(
 {
     SYS_DEBUG ("");
 }
+#endif
 
 void 
 WallpaperContentItemCreator::updateCell (

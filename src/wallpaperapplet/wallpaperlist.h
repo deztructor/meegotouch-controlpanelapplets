@@ -6,6 +6,7 @@
 #include <MList>
 #include <QModelIndex>
 
+class QGraphicsItem;
 class WallpaperDescriptor;
 class WallpaperBusinessLogic;
 class WallpaperImageLoader;
@@ -17,7 +18,9 @@ class WallpaperList : public MList {
     Q_OBJECT
         
 public:
-    WallpaperList (WallpaperBusinessLogic *logic);
+    WallpaperList (
+            WallpaperBusinessLogic  *logic,
+            QGraphicsItem           *parent = 0);
 
     typedef enum {
         DataSourceLocal,

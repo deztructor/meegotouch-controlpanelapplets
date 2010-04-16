@@ -43,9 +43,11 @@ class WallpaperContentItemCreator :
       void updateCell(
               const QModelIndex &index, 
               MWidget *cell) const;
+    #if 0
       void updateContentItemMode(
               const QModelIndex &index, 
               MContentItem *contentItem) const;
+    #endif
 };
 
 

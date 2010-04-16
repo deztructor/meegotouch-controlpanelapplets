@@ -86,12 +86,13 @@ QStringList
 WallpaperBusinessLogic::availableWallpapers () const
 {
     QStringList list;
+#if 1
     list <<
         "/usr/share/themes/base/meegotouch/images/duiapplicationpage-background.png" <<
         "/usr/share/themes/plankton/meegotouch/images/duiapplicationpage-background.png" <<
         "/usr/share/themes/plankton/meegotouch/images/duiapplicationpage-portrait-background.png" <<
         "/usr/share/themes/plankton/meegotouch/images/duiapplicationpage-portrait-background.png";
-
+#endif
     /*
      * FIXME:
      * I have no idea how we sould get the available images, this will do as a
