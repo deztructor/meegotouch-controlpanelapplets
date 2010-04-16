@@ -40,6 +40,19 @@ Ut_WallpaperBusinessLogic::cleanupTestCase()
     delete m_Api;
 }
 
+void
+Ut_WallpaperBusinessLogic::testSimpleQueries ()
+{
+    QString thing;
+    bool    bthing;
+
+    thing = m_Api->WallpaperFileName ();
+    qDebug() << "WallpaperFileName is " << thing;
+
+    bthing = m_Api->hasWallpaperFileName();
+    qDebug() << "hasWallpaperFileName is " << (bthing ? "yes" : "no");
+}
+
 QTEST_APPLESS_MAIN(Ut_WallpaperBusinessLogic)
 
 
