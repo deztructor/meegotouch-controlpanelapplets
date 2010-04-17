@@ -3,7 +3,7 @@
 
 #include "themewidget.h"
 #include "themedescriptor.h"
-#include "themecontainer.h"
+#include "themecontentitem.h"
 #include "themedialog.h"
 
 #include <QGraphicsLinearLayout>
@@ -11,7 +11,7 @@
 #include <MGridLayoutPolicy>
 #include <MContainer>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 static const int MaxColumns = 2;
@@ -105,7 +105,7 @@ ThemeWidget::readLocalThemes ()
         m_ThemeBusinessLogic->availableThemes ();
     int n = 0;
     foreach (ThemeDescriptor *theme, themeList) {
-        ThemeContainer *themeContainer;
+        //ThemeContainer *themeContainer;
         int x = n / MaxColumns;
         int y = n % MaxColumns;
 
@@ -113,15 +113,14 @@ ThemeWidget::readLocalThemes ()
             delete theme;
             continue;
         }
-        //SYS_DEBUG ("Theme name[%d] = %s", n, SYS_STR(themeName));
-        themeContainer = new ThemeContainer (theme, m_ThemeBusinessLogic);
-        m_LocalLayoutPolicy->addItem (themeContainer, x, y);
 
-        /*
-         * FIXME: This should be some pre-select so we can show the dialog.
-         */
-        connect (themeContainer, SIGNAL(activated(ThemeDescriptor *)),
+        ThemeContentItem *contentitem;
+
+        contentitem = new ThemeContentItem (theme, m_ThemeBusinessLogic);
+        connect (contentitem, SIGNAL(activated(ThemeDescriptor *)),
                 this, SLOT(themeActivated(ThemeDescriptor *)));
+        m_LocalLayoutPolicy->addItem (contentitem, x, y);
+
         ++n;
     }
 }

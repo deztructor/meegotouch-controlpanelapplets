@@ -26,7 +26,7 @@ HEADERS = \
     themeapplet.h \
     themewidget.h \
     themebrief.h \
-    themecontainer.h \
+    themecontentitem.h \
     themedialog.h
 
 SOURCES = \
@@ -36,7 +36,7 @@ SOURCES = \
     themeapplet.cpp \
     themewidget.cpp \
     themebrief.cpp \
-    themecontainer.cpp \
+    themecontentitem.cpp \
     themedialog.cpp
 
 css.files = themeapplet.css

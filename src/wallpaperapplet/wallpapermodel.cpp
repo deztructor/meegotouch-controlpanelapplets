@@ -111,7 +111,6 @@ WallpaperContentItemCreator::updateCell (
     contentItem->setImage (rowData->thumbnail());
 #endif
 
-    contentItem->setItemMode(MContentItem::Single);
     updateContentItemMode(index, contentItem);
 }
 
