@@ -38,13 +38,4 @@ ThemeBrief::icon () const
     return m_ThemeBusinessLogic->currentThemeIconName ();
 }
 
-QString 
-ThemeBrief::image () const
-{
-    Q_ASSERT (m_ThemeBusinessLogic != 0);
 
-    SYS_DEBUG ("================================");
-    SYS_DEBUG ("Returning %s", 
-            SYS_STR(m_ThemeBusinessLogic->currentThemeIconName ()));
-    return m_ThemeBusinessLogic->currentThemeIconName ();
-}
