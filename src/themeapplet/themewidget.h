@@ -4,13 +4,14 @@
 #define THEMEWIDGET_H
 
 #include <QPointer>
-#include "dcpwidget.h"
+#include <MContentItem>
+#include <dcpwidget.h>
 
 #include "themebusinesslogic.h"
 #include "themedescriptor.h"
 
+class ThemeListContainer;
 class MContainer;
-class MGridLayoutPolicy;
 
 class ThemeWidget : public DcpWidget
 {
@@ -38,10 +39,8 @@ private:
     void readLocalThemes ();
 
     QPointer<ThemeBusinessLogic>  m_ThemeBusinessLogic;
-    MContainer                 *m_LocalContainer;
-    MGridLayoutPolicy          *m_LocalLayoutPolicy;
-    MContainer                 *m_OviContainer;
-    MGridLayoutPolicy          *m_OviLayoutPolicy;
+    ThemeListContainer           *m_LocalContainer;
+    ThemeListContainer           *m_OviContainer;
 };
 
 #endif

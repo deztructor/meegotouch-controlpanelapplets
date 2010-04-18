@@ -24,6 +24,7 @@ HEADERS = \
     themedescriptor.h \
     themebusinesslogic.h \
     themeapplet.h \
+    themelistcontainer.h \
     themewidget.h \
     themebrief.h \
     themecontentitem.h \
@@ -34,6 +35,7 @@ SOURCES = \
     themedescriptor.cpp \
     themebusinesslogic.cpp \
     themeapplet.cpp \
+    themelistcontainer.cpp \
     themewidget.cpp \
     themebrief.cpp \
     themecontentitem.cpp \

@@ -3,18 +3,19 @@
 
 #include "themewidget.h"
 #include "themedescriptor.h"
+#include "themelistcontainer.h"
 #include "themecontentitem.h"
 #include "themedialog.h"
 
 #include <QGraphicsLinearLayout>
 #include <MLayout>
 #include <MGridLayoutPolicy>
+#include <MLinearLayoutPolicy>
 #include <MContainer>
+#include <MApplication>
+#include <MApplicationWindow>
 
-#define DEBUG
 #include "../debug.h"
-
-static const int MaxColumns = 2;
 
 ThemeWidget::ThemeWidget (
         ThemeBusinessLogic *themeBusinessLogic, 
@@ -36,43 +37,14 @@ ThemeWidget::createWidgets ()
 {
     QGraphicsLinearLayout *mainLayout;
 
-    //MLayout *layout = new MLayout();
-    
-    m_LocalContainer = createContainer (ThemeWidget::ThemeLocal);
-    m_OviContainer = createContainer (ThemeWidget::ThemeOvi);
+    m_LocalContainer = new ThemeListContainer();
+    m_OviContainer = new ThemeListContainer();
 
     mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
     mainLayout->addItem (m_LocalContainer);
     mainLayout->addItem (m_OviContainer);
 
     this->setLayout (mainLayout);
-}
-
-MContainer * 
-ThemeWidget::createContainer (
-        ThemeWidget::ThemeCategoryId category)
-{
-    MGridLayoutPolicy *policy;
-    MLayout *layout = new MLayout();
-    
-    policy = new MGridLayoutPolicy (layout);
-    policy->setColumnStretchFactor (0, 1);
-    policy->setColumnStretchFactor (1, 1);
-    layout->setPolicy (policy);
-    
-    MContainer *container = new MContainer ();
-    container->centralWidget()->setLayout (layout);
-
-    switch (category) {
-        case ThemeWidget::ThemeLocal:
-            m_LocalLayoutPolicy = policy;
-            break;
-
-        case ThemeWidget::ThemeOvi:
-            m_OviLayoutPolicy = policy;
-    }
-
-    return container;
 }
 
 void
@@ -98,32 +70,39 @@ ThemeWidget::retranslateUi ()
 void
 ThemeWidget::readLocalThemes ()
 {
-    Q_ASSERT (m_ThemeBusinessLogic != 0);
-    Q_ASSERT (m_LocalLayoutPolicy != 0);
+    QList<ThemeDescriptor *> themeList = m_ThemeBusinessLogic->availableThemes ();
 
-    QList<ThemeDescriptor *> themeList = 
-        m_ThemeBusinessLogic->availableThemes ();
-    int n = 0;
+    #if 0
+    // Just for testing...
+    QList<ThemeDescriptor *> themeList1 = m_ThemeBusinessLogic->availableThemes ();
+    themeList << themeList1;
+    #endif
+
+    /*
+     * Now we are putting the widgets in place.
+     */
     foreach (ThemeDescriptor *theme, themeList) {
-        //ThemeContainer *themeContainer;
-        int x = n / MaxColumns;
-        int y = n % MaxColumns;
-
+        ThemeContentItem *contentitem;
+        
         if (!theme->isVisible()) {
             delete theme;
             continue;
         }
 
-        ThemeContentItem *contentitem;
+        contentitem = m_LocalContainer->addThemeDescriptor (
+                m_ThemeBusinessLogic, theme);
 
-        contentitem = new ThemeContentItem (theme, m_ThemeBusinessLogic);
         connect (contentitem, SIGNAL(activated(ThemeDescriptor *)),
                 this, SLOT(themeActivated(ThemeDescriptor *)));
-        m_LocalLayoutPolicy->addItem (contentitem, x, y);
-
-        ++n;
     }
+
+    /*
+     * Now that we added all the items we can calculate the visual appearance
+     * for them.
+     */
+    m_LocalContainer->recalculateItemModes ();
 }
+
 
 void 
 ThemeWidget::themeActivated (

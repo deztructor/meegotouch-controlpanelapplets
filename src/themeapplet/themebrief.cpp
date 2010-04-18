@@ -4,7 +4,6 @@
 #include "themebrief.h"
 #include <dcpwidgettypes.h>
 
-#define DEBUG
 #include "../debug.h"
 
 ThemeBrief::ThemeBrief (
@@ -32,7 +31,6 @@ ThemeBrief::icon () const
 {
     Q_ASSERT (m_ThemeBusinessLogic != 0);
 
-    SYS_DEBUG ("================================");
     SYS_DEBUG ("Returning %s", 
             SYS_STR(m_ThemeBusinessLogic->currentThemeIconName ()));
     return m_ThemeBusinessLogic->currentThemeIconName ();

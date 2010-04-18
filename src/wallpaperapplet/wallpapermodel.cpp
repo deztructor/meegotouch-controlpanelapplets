@@ -7,8 +7,8 @@
 
 #include <QTimer>
 
-#define DEBUG
 #include <../debug.h>
+
 /******************************************************************************
  * WallpaperImageLoader implementation.
  */

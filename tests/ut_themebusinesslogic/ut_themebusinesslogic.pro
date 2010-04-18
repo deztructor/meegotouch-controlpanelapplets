@@ -29,6 +29,7 @@ HEADERS += \
     $$SRC_PREFIX/themecontentitem.h \
     $$SRC_PREFIX/themedescriptor.h \
     $$SRC_PREFIX/themedialog.h \
+    $$SRC_PREFIX/themelistcontainer.h \
     $$SRC_PREFIX/themewidget.h
 
 SOURCES += \
@@ -40,6 +41,7 @@ SOURCES += \
     $$SRC_PREFIX/themecontentitem.cpp \
     $$SRC_PREFIX/themedescriptor.cpp \
     $$SRC_PREFIX/themedialog.cpp \
+    $$SRC_PREFIX/themelistcontainer.cpp \
     $$SRC_PREFIX/themewidget.cpp 
 
 INSTALLS += target

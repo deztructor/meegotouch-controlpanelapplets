@@ -41,8 +41,6 @@ WallpaperBrief::image () const
     Q_ASSERT (m_WallpaperBusinessLogic != 0);
     if (m_WallpaperBusinessLogic->hasWallpaperFileName()) {
         WallpaperDescriptor desc = m_WallpaperBusinessLogic->Wallpaper();
-        SYS_DEBUG ("------------------------------------------");
-        SYS_DEBUG ("--- returning %s", SYS_STR(desc.filename()));
         return desc.filename();
     }
      
