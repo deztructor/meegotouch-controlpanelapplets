@@ -14,6 +14,10 @@ class ThemeBusinessLogic;
 class ThemeContentItem;
 class ThemeDescriptor;
 
+/*!
+ * A simple list-like widget to show a set of themes represented by
+ * ThemeContentItem objects.
+ */
 class ThemeListContainer : public MContainer
 {
     Q_OBJECT

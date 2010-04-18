@@ -20,10 +20,11 @@ ThemeListContainer::ThemeListContainer (
     MContainer (parent)
 {
     m_Columns = 
-        MApplication::activeApplicationWindow()->orientation() == M::Landscape ? 
+        MApplication::activeApplicationWindow()->orientation() == M::Landscape ?
         MaxColumns : 1;
-    
+
     createLayout ();
+
     connect(MApplication::activeApplicationWindow(),
             SIGNAL(orientationChanged(M::Orientation)),
             this, SLOT(orientationChanged(M::Orientation)));
@@ -39,13 +40,17 @@ ThemeListContainer::addThemeDescriptor (
     int               n, x, y;
     
     /*
-     *
+     * Creating a we ThemeContentItem for the theme and storing it in a list. We
+     * need to store the widget so can set its visual style once the page is
+     * rotated.
      */
     contentitem = new ThemeContentItem (theme, themeBusinessLogic);
     m_ItemList.append (contentitem);
     
     /*
-     * Calculating the place of the new item and adding it to the policies.
+     * Calculating the place of the new item and adding it to the policies. We
+     * use the MaxColumns for this calculation, the coordinates will be for
+     * the grid layout item, used only in landscape mode.
      */
     n = m_ItemList.size() - 1;
     x = n % MaxColumns;
@@ -67,7 +72,10 @@ ThemeListContainer::createLayout ()
     m_GridLayoutPolicy->setColumnStretchFactor (1, 1);
 
     m_LinearLayoutPolicy = new MLinearLayoutPolicy (layout, Qt::Vertical);
-
+    
+    /*
+     * Setting the policies for portrait and landscape.
+     */
     layout->setLandscapePolicy (m_GridLayoutPolicy);
     layout->setPortraitPolicy (m_LinearLayoutPolicy);
 
@@ -87,6 +95,7 @@ ThemeListContainer::calculateItemMode (
     bool lastRow       = (x + y * m_Columns) >= (length - m_Columns);
     bool singleColumn  = m_Columns == 1;
 
+    #if 0
     SYS_DEBUG ("**********************");
     SYS_DEBUG ("*** m_Columns       = %d", m_Columns);
     SYS_DEBUG ("*** length          = %d", length);
@@ -95,6 +104,7 @@ ThemeListContainer::calculateItemMode (
     SYS_DEBUG ("*** inLastColumn    = %s", inLastColumn ? "yes" : "no");
     SYS_DEBUG ("*** inFirstColumn   = %s", inFirstColumn ? "yes" : "no");
     SYS_DEBUG ("*** lastRow         = %s", lastRow ? "yes" : "no");
+    #endif
     
     if (singleColumn) {
         if (y == 0)
@@ -145,7 +155,11 @@ ThemeListContainer::recalculateItemModes ()
     int    n, nitems;
     int    x, y;
 
-
+    /*
+     * Will go through the items and set the visual style for them. We use the
+     * actual column number, so the items will appear as they should. The actual
+     * location of them is handled by the two policies.
+     */
     nitems = m_ItemList.size(); 
     for (n = 0; n < nitems; ++n) {
         x = n % m_Columns;
@@ -161,7 +175,12 @@ ThemeListContainer::orientationChanged (
         M::Orientation orientation)
 {
     SYS_DEBUG ("");
-    
+
+    /*
+     * In portrait mode we use the linear layout policy, we show only one
+     * column, in landscape mode we use the grid layout policy and we show
+     * MaxColumns column.
+     */
     switch (orientation) {
         case M::Portrait:
             SYS_DEBUG ("Turned to portrait");
