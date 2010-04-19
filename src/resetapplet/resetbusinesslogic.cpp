@@ -14,4 +14,21 @@ ResetBusinessLogic::~ResetBusinessLogic()
 {
 }
 
+/*!
+ * Performs teh 'Restore original settings' action.
+ */
+void
+ResetBusinessLogic::performRestoreSettings ()
+{
+    SYS_DEBUG ("");
+}
+
+/*!
+ * Performs the 'Clear device' action.
+ */
+void 
+ResetBusinessLogic::performClearData ()
+{
+    SYS_DEBUG ("");
+}
 

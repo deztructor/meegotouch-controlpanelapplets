@@ -6,6 +6,8 @@
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 #include <MButton>
+#include <MDialog>
+#include <MMessageBox>
 
 #define DEBUG
 #include "../debug.h"
@@ -73,12 +75,61 @@ ResetWidget::createContent ()
 void
 ResetWidget::restoreActivated ()
 {
+    MDialog   *dialog;
+    int        retval;
+
+    //% "<p align=\"left\">Restore original settings?</p>"
+    //% "<p align=\"left\">The device will reboot, temporarily disabling all "
+    //% "functions, including emergency calls. User created-content "
+    //% "will be unaffected.</p>"
+    QString    question = qtTrId("qtn_rset_restore_query");
+
     SYS_DEBUG ("");
+    dialog = new MMessageBox ("", question, M::YesButton | M::NoButton);
+    
+    retval = dialog->exec();
+    switch (retval) {
+        case M::YesButton:
+            SYS_DEBUG ("YES");
+            m_ResetBusinessLogic->performRestoreSettings();
+            break;
+
+        case M::NoButton:
+            SYS_DEBUG ("NO");
+            /*
+             * We do not have to do anything.
+             */
+            break;
+    }
 }
 
 void
 ResetWidget::clearActivated ()
 {
+    MDialog   *dialog;
+    int        retval;
+
+    //% "<p align=\"left\">Clear all user data?</p>"
+    //% "<p align=\"left\">The device will reboot, temporarily disabling all "
+    //% "functions, including emergency calls.</p>"
+    QString    question = qtTrId("qtn_rset_clear_query");
+
     SYS_DEBUG ("");
+    dialog = new MMessageBox ("", question, M::YesButton | M::NoButton);
+    
+    retval = dialog->exec();
+    switch (retval) {
+        case M::YesButton:
+            SYS_DEBUG ("YES");
+            m_ResetBusinessLogic->performClearData();
+            break;
+
+        case M::NoButton:
+            SYS_DEBUG ("NO");
+            /*
+             * We do not have to do anything.
+             */
+            break;
+    }
 }
 

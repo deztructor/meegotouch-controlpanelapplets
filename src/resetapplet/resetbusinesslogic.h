@@ -15,6 +15,10 @@ class ResetBusinessLogic : public QObject
 public:
     ResetBusinessLogic ();
     ~ResetBusinessLogic ();
+
+public slots:
+    void performRestoreSettings ();
+    void performClearData ();
 };
 
 #endif
