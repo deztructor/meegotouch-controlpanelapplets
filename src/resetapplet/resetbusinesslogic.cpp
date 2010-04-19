@@ -20,7 +20,14 @@ ResetBusinessLogic::~ResetBusinessLogic()
 void
 ResetBusinessLogic::performRestoreSettings ()
 {
-    SYS_DEBUG ("");
+    char *command = "/usr/sbin/clean-device.sh --rfs";
+    int   retval;
+
+    SYS_DEBUG ("*** executing command: %s", command);
+    retval = system (command);
+    if (retval != 0) {
+        SYS_WARNING ("The command '%s' failed: %m", command);
+    }
 }
 
 /*!
@@ -29,6 +36,13 @@ ResetBusinessLogic::performRestoreSettings ()
 void 
 ResetBusinessLogic::performClearData ()
 {
-    SYS_DEBUG ("");
+    char *command = "/usr/sbin/clean-device.sh --cud";
+    int   retval;
+
+    SYS_DEBUG ("*** executing command: %s", command);
+    retval = system (command);
+    if (retval != 0) {
+        SYS_WARNING ("The command '%s' failed: %m", command);
+    }
 }
 
