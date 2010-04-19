@@ -5,7 +5,7 @@
 #include <QPluginLoader>
 #include <QtTest/QtTest>
 #include <mapplication.h>
-#include <duistatusindicatormenuplugininterface.h>
+#include <mstatusindicatormenuplugininterface.h>
 
 
 class Ft_PluginLoader : public QObject
@@ -25,8 +25,8 @@ private slots:
     void testvolumeplugin ();
 
 private:
-    MApplication                      *m_app;
-    DuiStatusIndicatorMenuInterface   *m_smstub;
+    MApplication                    *m_app;
+    MStatusIndicatorMenuInterface   *m_smstub;
 
     void    DoPluginTest (const QString &soname);
 };

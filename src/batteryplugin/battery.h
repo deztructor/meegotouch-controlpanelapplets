@@ -5,7 +5,7 @@
 
 class MLabel;
 class MContainer;
-class DuiStatusIndicatorMenuInterface;
+class MStatusIndicatorMenuInterface;
 class BatteryDBusInterface;
 class BatteryImage;
 
@@ -14,7 +14,7 @@ class Battery : public MWidget
     Q_OBJECT
 
 public:
-    Battery (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
+    Battery (MStatusIndicatorMenuInterface &statusIndicatorMenu,
              QGraphicsItem *parent = NULL);
     virtual ~Battery ();
     void retranslateUi ();
@@ -33,7 +33,7 @@ private: //methods
 
 private: //attributes
     BatteryDBusInterface            *dbusIf;
-    DuiStatusIndicatorMenuInterface &statusIndicatorMenu;
+    MStatusIndicatorMenuInterface &statusIndicatorMenu;
     //^^ ! Interface for controlling the status indicator menu
     MLabel                        *modeLabel;
     MLabel                        *timeLabel;
