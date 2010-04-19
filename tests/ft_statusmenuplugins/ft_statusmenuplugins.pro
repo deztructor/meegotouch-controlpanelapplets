@@ -3,7 +3,7 @@ QT += testlib
 
 CONFIG += \
     meegotouch \
-    duistatusindicatormenu \
+    system-ui \
     silent
 
 TARGET = ft_statusmenuplugins

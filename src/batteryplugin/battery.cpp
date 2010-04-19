@@ -13,14 +13,14 @@
 #include <MLabel>
 #include <MLayout>
 #include <MLocale>
-#include <DuiStatusIndicatorMenuPluginInterface>
+#include <MStatusIndicatorMenuPluginInterface>
 #include <MTheme>
 
 #include <QGraphicsLinearLayout>
 
 const QString cssDir = "/usr/share/mstatusindicatormenu/themes/style/";
 
-Battery::Battery (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
+Battery::Battery (MStatusIndicatorMenuInterface &statusIndicatorMenu,
                   QGraphicsItem *parent) :
         MWidget (parent),
         dbusIf (0),

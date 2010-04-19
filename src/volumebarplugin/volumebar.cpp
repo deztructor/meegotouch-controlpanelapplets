@@ -5,7 +5,7 @@
 #undef DEBUG
 #include "../debug.h"
 
-#include <DuiStatusIndicatorMenuPluginInterface>
+#include <MStatusIndicatorMenuPluginInterface>
 #include <MLinearLayoutPolicy>
 #include <MContainer>
 #include <MSlider>
@@ -18,7 +18,7 @@
 
 #define SYSTEMUI_TRANSLATION "systemui-applets"
 
-VolumeBar::VolumeBar (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
+VolumeBar::VolumeBar (MStatusIndicatorMenuInterface &statusIndicatorMenu,
                       QGraphicsItem *parent) :
         MWidget (parent),
         m_bar (0),

@@ -1,12 +1,14 @@
-systemui-applets (0.12.8~1) harmattan; urgency=low
+systemui-applets (0.12.8~2) harmattan; urgency=low
 
   * Implemented: SWP#DUI-2063 - Volume Control UI -
                  Interactive Slider (overlay)
   * Implemented: SWP#DUI-2626 - Volume control status menu plugin
   * Implemented: SWP#DUI-2627 - Volume control HW key support
   * Disabled battery statusindicatormenu plugin (dropped)
+  * Fully meegotouch compatible
+  * Now plugins uses MStatusIndicatorMenu interface
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 15 Apr 2010 11:07:51 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 19 Apr 2010 11:02:29 +0200
 
 systemui-applets (0.12.7) harmattan; urgency=low
 

@@ -4,7 +4,7 @@
 #include <MWidget>
 
 class MApplicationPage;
-class DuiStatusIndicatorMenuInterface;
+class MStatusIndicatorMenuInterface;
 class ProfileDataInterface;
 class ProfileButtons;
 
@@ -17,7 +17,7 @@ class ProfileWidget : public MWidget
     Q_OBJECT
 
 public:
-    ProfileWidget (DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
+    ProfileWidget (MStatusIndicatorMenuInterface &statusIndicatorMenu,
                    QGraphicsItem *parent = NULL);
     virtual ~ProfileWidget ();
     /*!
@@ -44,7 +44,7 @@ private:
 
 private:
     //! Interface for controlling the status indicator menu
-    DuiStatusIndicatorMenuInterface &statusIndicatorMenu;
+    MStatusIndicatorMenuInterface &statusIndicatorMenu;
 
     //! Profile data If to receive information about possible profiles
     ProfileDataInterface            *dataIf;

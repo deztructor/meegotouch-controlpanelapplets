@@ -30,14 +30,14 @@
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 #include <MLocale>
-#include <DuiStatusIndicatorMenuPluginInterface>
+#include <MStatusIndicatorMenuPluginInterface>
 
 #include <QGraphicsLinearLayout>
 
 #define SYSTEMUI_TRANSLATION "systemui-applets"
 
 ProfileWidget::ProfileWidget (
-    DuiStatusIndicatorMenuInterface &statusIndicatorMenu,
+    MStatusIndicatorMenuInterface &statusIndicatorMenu,
     QGraphicsItem *parent) :
         MWidget (parent),
         statusIndicatorMenu (statusIndicatorMenu),

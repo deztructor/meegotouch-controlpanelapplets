@@ -4,13 +4,13 @@ TEMPLATE = lib
 LIBS += -lduicontrolpanel
 CONFIG += plugin \
           gui \
+          system-ui \
           meegotouch \
           silent
 
 QT += dbus
 INCLUDEPATH += ../batteryapplet \
-               /usr/include/duicontrolpanel \
-               /usr/include/duistatusindicatormenu
+               /usr/include/duicontrolpanel
 
 HEADERS = batteryplugin.h \
           battery.h \
@@ -26,7 +26,7 @@ SOURCES = batteryplugin.cpp \
 
 TARGET = $$qtLibraryTarget(battery)
 DESTDIR = lib
-target.path += /usr/lib/duistatusindicatormenu/plugins
+target.path += /usr/lib/meegotouch/statusindicatormenuplugins
 
 css.files = batteryplugin.css
 css.path += /usr/share/duistatusindicatormenu/themes/style/

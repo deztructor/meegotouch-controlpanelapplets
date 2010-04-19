@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: David Kedves <dkedves@blumsoft.eu>
 Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.7.11),
                libmeegotouch-dev (>= 0.20), libqmsystem-dev,
-               libprofile-qt-dev (>= 0.13), system-ui-dev,
+               libprofile-qt-dev (>= 0.13), system-ui-dev (>= 0.15.2),
                libdbus-1-dev, libdbus-qeventloop-dev (>= 1.5)
 Standards-Version: 3.7.3
 
@@ -16,7 +16,7 @@ Depends: ${shlibs:Depends}, testrunner, ci-testing, duicontrolpanel-usbapplet,
          duicontrolpanel-batteryapplet, duistatusindicatormenu-batteryplugin,
          duistatusindicatormenu-volumeplugin, duicontrolpanel-displayapplet,
          duicontrolpanel-profileapplet, duistatusindicatormenu-profileplugin,
-         duicontrolpanel-ledapplet, duicontrolpanel-themeapplet, 
+         duicontrolpanel-ledapplet, duicontrolpanel-themeapplet,
          duicontrolpanel-wallpaperapplet
 XB-Maemo-CI-Packages: system-ui
 XB-Maemo-CI-Stage: fast, staging

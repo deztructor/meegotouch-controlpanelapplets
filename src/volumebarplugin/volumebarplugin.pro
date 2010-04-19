@@ -5,6 +5,7 @@ TEMPLATE = lib
 CONFIG += plugin \
           gui \
           meegotouch \
+          system-ui \
           link_pkgconfig \
           qmsystem \
           silent
@@ -14,7 +15,6 @@ PKGCONFIG += dbus-1
 LIBS += -ldbus-qeventloop
 
 INCLUDEPATH += \
-    /usr/include/duistatusindicatormenu \
     /usr/include/dbus-1.0
 
 HEADERS = volumebarplugin.h \
