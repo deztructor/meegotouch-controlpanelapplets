@@ -3,6 +3,10 @@
 
 #include "resetwidget.h"
 
+#include <MLayout>
+#include <MLinearLayoutPolicy>
+#include <MButton>
+
 #define DEBUG
 #include "../debug.h"
 
@@ -14,37 +18,67 @@ ResetWidget::ResetWidget (
     DcpWidget (parent),
     m_ResetBusinessLogic (resetBusinessLogic)
 {
+    createContent();
 }
 
 ResetWidget::~ResetWidget ()
 {
 }
 
-#if 0
+
 void
 ResetWidget::createContent ()
 {
-    QGraphicsLinearLayout *mainLayout;
+    MLayout             *layout;
+    MLinearLayoutPolicy *landscapePolicy;
+    MLinearLayoutPolicy *portraitPolicy;
+    MButton             *restoreButton;
+    MButton             *clearButton;
 
-    SYS_DEBUG ("");
-    mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
-    setLayout (mainLayout);
+    layout = new MLayout;
 
-    /*
-     * The list of the available images.
-     */
-    m_ImageList = new WallpaperList (m_WallpaperBusinessLogic, this);
-    m_ImageList->setObjectName("WallpaperImageList");
-    connect (m_ImageList, SIGNAL(imageActivated(WallpaperDescriptor *)),
-            this, SLOT(slotImageActivated(WallpaperDescriptor *)));
-    m_ImageList->setDataSourceType (WallpaperList::DataSourceLocal);
+    landscapePolicy = new MLinearLayoutPolicy (layout, Qt::Horizontal);
+    portraitPolicy = new MLinearLayoutPolicy (layout, Qt::Vertical);
 
     /*
-     * Adding all widgets into the layout.
+     *
      */
-    mainLayout->addItem (m_ImageList);
-    mainLayout->setStretchFactor (m_ImageList, 1);
+    //% "Restore original settings"
+    restoreButton = new MButton (qtTrId("qtn_rset_restore"));
+    connect (restoreButton, SIGNAL(clicked()), 
+            this, SLOT(restoreActivated()));
+
+    /*
+     *
+     */
+    //% "Clear device"
+    clearButton = new MButton (qtTrId("qtn_rset_clear"));
+    connect (clearButton, SIGNAL(clicked()), 
+            this, SLOT(clearActivated()));
+    
+    landscapePolicy->addItem (restoreButton);
+    landscapePolicy->addItem (clearButton);
+    landscapePolicy->setStretchFactor (restoreButton, 2);
+    landscapePolicy->setStretchFactor (clearButton, 2);
+
+    portraitPolicy->addItem (restoreButton);
+    portraitPolicy->addItem (clearButton);
+
+    layout->setLandscapePolicy (landscapePolicy);
+    layout->setPortraitPolicy (portraitPolicy);
+
+    setLayout (layout);
 }
-#endif
 
+void
+ResetWidget::restoreActivated ()
+{
+    SYS_DEBUG ("");
+}
+
+void
+ResetWidget::clearActivated ()
+{
+    SYS_DEBUG ("");
+}
 

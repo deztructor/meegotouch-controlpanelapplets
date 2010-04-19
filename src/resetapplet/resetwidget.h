@@ -18,8 +18,13 @@ public:
             QGraphicsWidget        *parent = 0);
     ~ResetWidget ();
 
-private:
+    void createContent ();
 
+private slots:
+    void restoreActivated ();
+    void clearActivated ();
+
+private:
     QPointer<ResetBusinessLogic>    m_ResetBusinessLogic;
 };
 
