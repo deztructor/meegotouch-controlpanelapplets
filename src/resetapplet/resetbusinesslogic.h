@@ -8,6 +8,25 @@
 
 #include <QPointer>
 
+/*!
+ * Provides the 'restore factory settings' and 'clear user data' operations for
+ * the reset applet. These operations are implemented in the 'clean-device'
+ * package, so one might want to install them:
+ *
+ * sudo apt-get install clean-device
+ *
+ * (This package is added to the dependency list of the
+ * duicontrolpanel-resetapplet package.) The class will execute the following
+ * shell command lines to perform the operations.
+ * 
+ * /usr/sbin/clean-device.sh --rfs
+ * /usr/sbin/clean-device.sh --cud
+ *
+ * TODO: To implement the screen lock pin code query. Some info:
+ * (1) apt-get install libdevlock1
+ * (2) git clone git@dvcs.projects.maemo.org:security/duicontrolpanel-devicelockapplet
+ * (3) libqmsystem Maemo::QmLocks Class Reference
+ */
 class ResetBusinessLogic : public QObject
 {
     Q_OBJECT

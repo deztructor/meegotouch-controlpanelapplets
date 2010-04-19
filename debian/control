@@ -87,7 +87,7 @@ Package: duicontrolpanel-resetapplet
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english
+         systemui-applets-l10n-engineering-english, clean-device
 Description: Device clearing and restore settings applet.
 
 Package: duicontrolpanel-testapplet
