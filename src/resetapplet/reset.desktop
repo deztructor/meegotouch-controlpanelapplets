@@ -1,18 +1,18 @@
 [Desktop Entry]
 Type=DUIApplet
-Name=Battery
+Name=Reset settings
 Icon=
 Exec=
-X-logical-id=qtn_ener_battery
+X-logical-id=qtn_rset_reset_settings
 X-translation-catalog=systemui-applets
 
 [DUI]
-X-DUIApplet-Applet=libbatteryapplet.so
+X-DUIApplet-Applet=libresetapplet.so
 X-DUIApplet-ImageLandscape=Widget_landscape_weather.png
 X-DUIApplet-ImagePortrait=Widget_portrait_weather.png
 
 [DCP]
 Category=qtn_sett_main_data
 Order=1
-WidgetType= DcpLabel2
+WidgetType=DcpLabel2
 

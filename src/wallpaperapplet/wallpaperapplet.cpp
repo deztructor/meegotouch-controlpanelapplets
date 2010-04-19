@@ -39,7 +39,6 @@ WallpaperApplet::pageMain(
         case 0:
             if (m_MainWidget == 0) 
                 m_MainWidget = new WallpaperWidget (m_WallpaperBusinessLogic);
-                //m_MainWidget->createContent();
             return m_MainWidget;
 
         case 1:
@@ -59,8 +58,6 @@ DcpWidget *
 WallpaperApplet::constructWidget (
         int widgetId)
 {
-    SYS_DEBUG ("-----------------------------------");
-    SYS_DEBUG ("*** widgetId = %d", widgetId);
     return pageMain (widgetId);
 }
 
@@ -83,19 +80,8 @@ WallpaperApplet::viewMenuItems()
             qtTrId ("qtn_comm_help"), 
             pageMain (0));
     helpAction->setLocation (MAction::ApplicationMenuLocation);
-#if 0
-    MAction            *doneAction;
-    doneAction = new MAction(
-            "icon-m-framework-done",
-            //% "Done"
-            qtTrId("qtn_wall_done"), 
-            this);
-    doneAction->setLocation (MAction::ToolBarLocation);
-    doneAction->setVisible (true);
-#endif
+    
     vector.append(helpAction);
-    //vector.append(doneAction);
-
 
     return vector;
 }

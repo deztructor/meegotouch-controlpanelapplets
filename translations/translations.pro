@@ -9,6 +9,7 @@ SOURCEDIR = $$PWD/../src/displayapplet \
             $$PWD/../src/volumebarplugin \
             $$PWD/../src/themeapplet \
             $$PWD/../src/wallpaperapplet \
+	    $$PWD/../src/resetapplet \
             $$PWD/../src/ledapplet
 
 TRANSLATIONDIR = $$PWD
