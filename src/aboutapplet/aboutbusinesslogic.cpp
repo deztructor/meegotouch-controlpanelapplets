@@ -24,10 +24,17 @@
 #define DBUS_BLUEZ_GET_DEFAULT_ADAPTER_METHOD "DefaultAdapter"
 #define DBUS_BLUEZ_GET_PROPERTIES_METHOD "GetProperties"
 
+#define DBUS_SIM_SERVICE "com.nokia.phone.SIM"
+#define DBUS_SIM_SECURITY_OBJECT_PATH "/com/nokia/phone/SIM/security"
+#define DBUS_SIM_SECURITY_INTERFACE "Phone.Sim.Security"
+#define DBUS_SIM_SECURITY_GET_IMEI_METHOD "get_imei"
+
 AboutBusinessLogic::AboutBusinessLogic() :
-    m_gotBluetoothAddress (false)
+    m_gotBluetoothAddress (false),
+    m_gotImei (false)
 {
     initiateBluetoothQueries ();
+    initiatePhoneQueries ();
 }
 
 AboutBusinessLogic::~AboutBusinessLogic()
@@ -117,7 +124,9 @@ AboutBusinessLogic::BluetoothAddress ()
 QString 
 AboutBusinessLogic::IMEI ()
 {
-    return "value";
+    SYS_DEBUG ("*** m_gotImei             = %s", SYS_BOOL(m_gotImei));
+    SYS_DEBUG ("*** m_Imei                = %s", SYS_STR(m_Imei));
+    return m_Imei;
 }
 
 void
@@ -139,6 +148,25 @@ AboutBusinessLogic::initiateBluetoothQueries ()
 }
 
 void
+AboutBusinessLogic::initiatePhoneQueries ()
+{
+    QDBusInterface  *imeiDBusIf;
+
+    imeiDBusIf = new QDBusInterface (
+            DBUS_SIM_SERVICE, 
+            DBUS_SIM_SECURITY_OBJECT_PATH, 
+            DBUS_SIM_SECURITY_INTERFACE, 
+            QDBusConnection::systemBus ());
+
+    imeiDBusIf->callWithCallback (
+            QString (DBUS_SIM_SECURITY_GET_IMEI_METHOD), 
+            QList<QVariant> (), this,
+            SLOT (imeiReceived(QString)),
+            SLOT (DBusMessagingFailure (QDBusError)));
+}
+
+
+void
 AboutBusinessLogic::defaultBluetoothAdapterReceived (
 		QDBusObjectPath adapter)
 {
@@ -156,6 +184,14 @@ AboutBusinessLogic::defaultBluetoothAdapterReceived (
             QList<QVariant>(), this,
             SLOT (defaultBluetoothAdapterAddressReceived(QMap<QString, QVariant>)),
             SLOT (DBusMessagingFailure (QDBusError)));
+}
+
+void
+AboutBusinessLogic::imeiReceived (
+        QString imei)
+{
+    m_gotImei = true;
+    m_Imei = imei;
 }
 
 void
