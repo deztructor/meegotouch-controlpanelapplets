@@ -10,6 +10,7 @@ SOURCEDIR = $$PWD/../src/displayapplet \
             $$PWD/../src/themeapplet \
             $$PWD/../src/wallpaperapplet \
 	    $$PWD/../src/resetapplet \
+	    $$PWD/../src/aboutapplet \
             $$PWD/../src/ledapplet
 
 TRANSLATIONDIR = $$PWD

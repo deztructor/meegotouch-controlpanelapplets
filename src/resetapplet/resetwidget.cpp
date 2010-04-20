@@ -12,8 +12,6 @@
 #define DEBUG
 #include "../debug.h"
 
-static const int MaxColumns = 2;
-
 ResetWidget::ResetWidget (
         ResetBusinessLogic     *resetBusinessLogic, 
         QGraphicsWidget        *parent) :

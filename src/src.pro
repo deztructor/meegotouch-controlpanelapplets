@@ -9,4 +9,5 @@ SUBDIRS = batteryapplet   \
           usbapplet       \
           wallpaperapplet \
 	  resetapplet     \
+	  aboutapplet     \
           volumebarplugin
