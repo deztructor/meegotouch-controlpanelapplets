@@ -64,15 +64,15 @@ AboutWidget::labelText()
 {
     QString retval;
 
-    retval += "<h1>Name of the product</h1>";
-    retval += "<h1>Maemo 6</h1>";
-    retval += "<h1>Version</h1>";
+    retval += "<h2>Name of the product</h2>";
+    retval += "<h2>Maemo 6</h2>";
+    retval += "<h2>Version</h2>";
     retval += m_AboutBusinessLogic->osVersion();
-    retval += "<h1>Wi-Fi MAC address:</h1>";
+    retval += "<h2>Wi-Fi MAC address:</h2>";
     retval += m_AboutBusinessLogic->WiFiAddress ();
-    retval += "<h1>Bluetooth address:</h1>";
+    retval += "<h2>Bluetooth address:</h2>";
     retval += m_AboutBusinessLogic->BluetoothAddress ();
-    retval += "<h1>IMEI:</h1>";
+    retval += "<h2>IMEI:</h2>";
     retval += m_AboutBusinessLogic->IMEI ();
     retval += "<p>This product includes certain free/open source software</p>";
     retval += "<p>The exact terms of the licenses, disclaimers, "

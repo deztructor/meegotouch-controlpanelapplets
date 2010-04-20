@@ -7,6 +7,8 @@ CONFIG += plugin \
 
 LIBS += -lduicontrolpanel 
 
+QT += dbus
+
 INCLUDEPATH += \
     /usr/include/duicontrolpanel 
 

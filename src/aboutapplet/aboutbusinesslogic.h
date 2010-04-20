@@ -4,9 +4,17 @@
 #define ABOUTBUSINESSLOGIC_H
 
 #include <QObject>
+#include <QMap>
+#include <QDBusError>
+#include <QDBusObjectPath>
 
 class QString;
 
+/*!
+ * To test this class under scratchbox1 I had to start the bluetooth daemon:
+ * # source /tmp/session_bus_address.user
+ * # bluetoothd -n
+ */
 class AboutBusinessLogic : public QObject
 {
     Q_OBJECT
@@ -16,9 +24,21 @@ public:
     ~AboutBusinessLogic ();
 
     QString osVersion ();
+    QString WiFiAddress (const char *iface);
     QString WiFiAddress ();
     QString BluetoothAddress ();
     QString IMEI ();
+
+public slots:
+    void defaultBluetoothAdapterAddressReceived (
+            QMap<QString, QVariant> properties);
+    void defaultBluetoothAdapterReceived (QDBusObjectPath adapter);
+    void DBusMessagingFailure (QDBusError error);
+
+private:
+    void initiateBluetoothQueries ();
+    bool          m_gotBluetoothAddress;
+    QString       m_BluetoothAddress;
 };
 
 #endif
