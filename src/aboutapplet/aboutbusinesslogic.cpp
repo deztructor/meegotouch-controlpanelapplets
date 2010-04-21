@@ -10,6 +10,7 @@
 #include <QString>
 #include <QStringList>
 #include <QtDBus>
+#include <QFile>
 
 #define DEBUG
 #include "../debug.h"
@@ -43,11 +44,48 @@ AboutBusinessLogic::~AboutBusinessLogic()
 
 /*!
  * Returns the version number of the operating system (Maemo version).
+-16-3:~# cat /tmp/osso-product-info 
+or 
+-16-3:~# cat /tmp/osso-product-info
+OSSO_PRODUCT_HARDWARE='<unknown>'
+OSSO_PRODUCT_NAME='<unknown>'
+OSSO_PRODUCT_FULL_NAME='<unknown>'
+OSSO_PRODUCT_RELEASE_NAME='<unknown>'
+OSSO_PRODUCT_RELEASE_FULL_NAME='<unknown>'
+OSSO_PRODUCT_RELEASE_VERSION='0.2010.16-3.REQ.243168'
+OSSO_PRODUCT_WLAN_CHANNEL='<unknown>'
+OSSO_PRODUCT_KEYBOARD='<unknown>'
+OSSO_PRODUCT_REGION='<unknown>'
+OSSO_PRODUCT_SHORT_NAME='<unknown>'
+OSSO_VERSION='RX-71+RM-581+RM-660+RM-680+RM-696_HARMATTAN_0.2010.16-3.REQ.243168_PR_MR0'
  */
 QString 
 AboutBusinessLogic::osVersion ()
 {
-    return "version number";
+    QFile   file("/tmp/osso-product-info");
+    QString retval;
+    char    buf[1024];
+    QString line;
+    qint64  lineLength;
+
+    if (!file.open(QFile::ReadOnly)) 
+        return retval;
+
+    for (;;) {
+        lineLength = file.readLine(buf, sizeof(buf));
+        if (lineLength < 0) 
+            break;
+        line = buf;
+        if (!line.startsWith ("OSSO_PRODUCT_RELEASE_VERSION='"))
+            continue;
+        
+        line.remove (0, 30);
+        line.chop (2);
+        retval = line;
+        SYS_DEBUG ("*** line = %s", SYS_STR(line));
+    }
+
+    return retval;
 }
 
 /*! 
