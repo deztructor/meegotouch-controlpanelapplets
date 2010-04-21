@@ -3,12 +3,15 @@
 #ifndef ABOUTBUSINESSLOGIC_H
 #define ABOUTBUSINESSLOGIC_H
 
+#include <QPointer>
 #include <QObject>
 #include <QMap>
 #include <QDBusError>
-#include <QDBusObjectPath>
+#include <QDBusInterface>
 
+class QDBusObjectPath;
 class QString;
+
 
 /*!
  * To test this class under scratchbox1 I had to start the bluetooth daemon:
@@ -40,6 +43,9 @@ public slots:
     void DBusMessagingFailure (QDBusError error);
 
 private:
+    QPointer<QDBusInterface> m_ManagerDBusIf;
+    QPointer<QDBusInterface> m_AdapterDBusIf;
+    QPointer<QDBusInterface> m_ImeiDBusIf;
     bool          m_gotBluetoothAddress;
     QString       m_BluetoothAddress;
 

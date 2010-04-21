@@ -10,6 +10,8 @@
 #include <QString>
 #include <QStringList>
 #include <QtDBus>
+#include <QDBusInterface>
+#include <QDBusObjectPath>
 #include <QFile>
 
 #define DEBUG
@@ -34,6 +36,11 @@ AboutBusinessLogic::AboutBusinessLogic() :
     m_gotBluetoothAddress (false),
     m_gotImei (false)
 {
+    /*
+     * We might want to initiate these late, but the we have to wait for the
+     * answer. Currently this class will collect the data even if the applet 
+     * is not activated by the user.
+     */
     initiateBluetoothQueries ();
     initiatePhoneQueries ();
 }
@@ -141,7 +148,7 @@ AboutBusinessLogic::WiFiAddress ()
 
     for (int n = 0; interfaceNames[n] != NULL; ++n) {
         retval = WiFiAddress (interfaceNames[n]);
-        SYS_DEBUG ("*** %s12%s%s address is %s", 
+        SYS_DEBUG ("*** %s%s%s address is %s", 
                 TERM_YELLOW, interfaceNames[n], TERM_NORMAL, 
                 SYS_STR(retval));
         if (!retval.isEmpty())
@@ -170,15 +177,15 @@ AboutBusinessLogic::IMEI ()
 void
 AboutBusinessLogic::initiateBluetoothQueries ()
 {
-    QDBusInterface  *managerDBusIf;
+    QDBusInterface  *m_ManagerDBusIf;
 
-    managerDBusIf = new QDBusInterface (
+    m_ManagerDBusIf = new QDBusInterface (
             DBUS_BLUEZ_SERVICE, 
             DBUS_BLUEZ_OBJECT_PATH, 
             DBUS_BLUEZ_MANAGER_INTERFACE, 
             QDBusConnection::systemBus ());
 
-    managerDBusIf->callWithCallback (
+    m_ManagerDBusIf->callWithCallback (
             QString (DBUS_BLUEZ_GET_DEFAULT_ADAPTER_METHOD), 
             QList<QVariant> (), this,
             SLOT (defaultBluetoothAdapterReceived(QDBusObjectPath)),
@@ -188,15 +195,15 @@ AboutBusinessLogic::initiateBluetoothQueries ()
 void
 AboutBusinessLogic::initiatePhoneQueries ()
 {
-    QDBusInterface  *imeiDBusIf;
+    QDBusInterface  *m_ImeiDBusIf;
 
-    imeiDBusIf = new QDBusInterface (
+    m_ImeiDBusIf = new QDBusInterface (
             DBUS_SIM_SERVICE, 
             DBUS_SIM_SECURITY_OBJECT_PATH, 
             DBUS_SIM_SECURITY_INTERFACE, 
             QDBusConnection::systemBus ());
 
-    imeiDBusIf->callWithCallback (
+    m_ImeiDBusIf->callWithCallback (
             QString (DBUS_SIM_SECURITY_GET_IMEI_METHOD), 
             QList<QVariant> (), this,
             SLOT (imeiReceived(QString)),
@@ -208,20 +215,22 @@ void
 AboutBusinessLogic::defaultBluetoothAdapterReceived (
 		QDBusObjectPath adapter)
 {
-    QDBusInterface  *adapterDBusIf;
+    QDBusInterface  *m_AdapterDBusIf;
     
     SYS_DEBUG ("Defaultadapter: %s", SYS_STR (adapter.path()));
-    adapterDBusIf = new QDBusInterface (
+    m_AdapterDBusIf = new QDBusInterface (
             DBUS_BLUEZ_SERVICE, 
             adapter.path(),
             DBUS_BLUEZ_ADAPTER_INTERFACE,
             QDBusConnection::systemBus());
 
-    adapterDBusIf->callWithCallback (
+    m_AdapterDBusIf->callWithCallback (
             QString (DBUS_BLUEZ_GET_PROPERTIES_METHOD), 
             QList<QVariant>(), this,
             SLOT (defaultBluetoothAdapterAddressReceived(QMap<QString, QVariant>)),
             SLOT (DBusMessagingFailure (QDBusError)));
+
+    delete m_ManagerDBusIf;
 }
 
 void
@@ -230,6 +239,7 @@ AboutBusinessLogic::imeiReceived (
 {
     m_gotImei = true;
     m_Imei = imei;
+    delete m_ImeiDBusIf;
 }
 
 void
@@ -240,8 +250,12 @@ AboutBusinessLogic::defaultBluetoothAdapterAddressReceived (
     m_BluetoothAddress = properties["Address"].toString();
     m_gotBluetoothAddress = true;
     SYS_DEBUG ("address = %s", SYS_STR(m_BluetoothAddress));
+    delete m_AdapterDBusIf;
 }
 
+/*!
+ * This slot is 
+ */
 void
 AboutBusinessLogic::DBusMessagingFailure (
 		QDBusError error)
