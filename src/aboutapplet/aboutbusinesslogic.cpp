@@ -158,6 +158,9 @@ AboutBusinessLogic::WiFiAddress ()
     return retval;
 }
 
+/*!
+ * Returns the address of the default bluetooth adapter.
+ */
 QString 
 AboutBusinessLogic::BluetoothAddress ()
 {
@@ -166,6 +169,9 @@ AboutBusinessLogic::BluetoothAddress ()
     return m_BluetoothAddress;
 }
 
+/*!
+ * Returns the IMEI address as a string.
+ */
 QString 
 AboutBusinessLogic::IMEI ()
 {
@@ -174,6 +180,11 @@ AboutBusinessLogic::IMEI ()
     return m_Imei;
 }
 
+/*!
+ * Initiates a query to receive the default bluetooth adapter name. Later on an
+ * other query is going to be initiated to get the address of the default
+ * adapter.
+ */
 void
 AboutBusinessLogic::initiateBluetoothQueries ()
 {
@@ -192,6 +203,10 @@ AboutBusinessLogic::initiateBluetoothQueries ()
             SLOT (DBusMessagingFailure (QDBusError)));
 }
 
+/*!
+ * Initiate all the necessary queries through the dbus to get the IMAI address
+ * of the phone.
+ */
 void
 AboutBusinessLogic::initiatePhoneQueries ()
 {
@@ -210,7 +225,11 @@ AboutBusinessLogic::initiatePhoneQueries ()
             SLOT (DBusMessagingFailure (QDBusError)));
 }
 
-
+/*!
+ * This slot is called when the default adapter name of the bluetooth has been
+ * received through the dbus. This method will initiate a new dbus query to get
+ * the address of this adapter.
+ */
 void
 AboutBusinessLogic::defaultBluetoothAdapterReceived (
 		QDBusObjectPath adapter)
@@ -233,6 +252,9 @@ AboutBusinessLogic::defaultBluetoothAdapterReceived (
     delete m_ManagerDBusIf;
 }
 
+/*!
+ * Slot that is called when the IMEI value is received through the dbus.
+ */
 void
 AboutBusinessLogic::imeiReceived (
         QString imei)
@@ -242,6 +264,10 @@ AboutBusinessLogic::imeiReceived (
     delete m_ImeiDBusIf;
 }
 
+/*!
+ * This slot is called when the address of the default bluetooth adapter has
+ * been received.
+ */
 void
 AboutBusinessLogic::defaultBluetoothAdapterAddressReceived (
         QMap<QString, QVariant> properties)
@@ -254,7 +280,8 @@ AboutBusinessLogic::defaultBluetoothAdapterAddressReceived (
 }
 
 /*!
- * This slot is 
+ * This slot is called when an error is occured during the dbus communication.
+ * The error message is printed as a warning message. 
  */
 void
 AboutBusinessLogic::DBusMessagingFailure (
