@@ -6,6 +6,7 @@
 #include "wallpapereditorwidget.h"
 
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneWheelEvent>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsGridLayout>
 #include <QPixmap>
@@ -30,7 +31,8 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_bgLandscape (0),
     m_bgPortrait (0),
     m_DoneAction (0),
-    m_NoTitlebar (false)
+    m_NoTitlebar (false),
+    m_Scale (1.0)
 {
     m_LandscapeSize = MApplication::activeWindow ()->visibleSceneSize (M::Landscape);    
     MApplication::activeApplicationWindow()->showFullScreen();
@@ -65,8 +67,8 @@ WallpaperEditorWidget::paint (
 
         painter->drawPixmap (
                 imageDX(), imageDY(),
-                m_LandscapeSize.width(),
-                m_LandscapeSize.height(),
+                m_LandscapeSize.width() * m_Scale,
+                m_LandscapeSize.height() * m_Scale,
                 *m_bgLandscape);
     }
 
@@ -155,6 +157,23 @@ WallpaperEditorWidget::mouseMoveEvent (
     SYS_DEBUG ("*** userOffset    = %f, %f", m_UserOffset.x(), m_UserOffset.y());
     SYS_DEBUG ("*** OlduserOffset = %f, %f", m_OldUserOffset.x(), m_OldUserOffset.y());
 
+    /*
+     * We need to update the current page and not just this widget because of
+     * those damn extra margins coming from somewhere.
+     */
+    MApplication::activeApplicationWindow()->currentPage()->update();
+}
+
+void 
+WallpaperEditorWidget::wheelEvent (
+        QGraphicsSceneWheelEvent *event)
+{
+    SYS_DEBUG ("*** delta = %d", event->delta());
+    m_Scale = m_Scale + (event->delta() / 1200.0);
+    if (m_Scale < 0.1)
+        m_Scale = 0.1;
+    
+    SYS_DEBUG ("*** m_Scale = %f", m_Scale);
     /*
      * We need to update the current page and not just this widget because of
      * those damn extra margins coming from somewhere.

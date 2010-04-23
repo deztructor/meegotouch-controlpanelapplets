@@ -11,6 +11,7 @@
 class MContainer;
 class MLinearLayoutPolicy;
 class QGraphicsSceneMouseEvent;
+class QGraphicsSceneWheelEvent;
 class MAction;
 class QSize;
 class QPixmap;
@@ -37,6 +38,7 @@ protected:
     virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
     virtual void mouseReleaseEvent (QGraphicsSceneMouseEvent *event);
     virtual void mouseMoveEvent (QGraphicsSceneMouseEvent *event);
+    virtual void wheelEvent (QGraphicsSceneWheelEvent *event);
 
 private slots:
     void slotDoneActivated ();
@@ -60,6 +62,7 @@ private:
     QPointF          m_LastClick;
     QPointF          m_UserOffset;
     QPointF          m_OldUserOffset;
+    qreal            m_Scale;
 };
 
 #endif
