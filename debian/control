@@ -53,7 +53,8 @@ Package: duistatusindicatormenu-volumeplugin
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends},
-         systemui-applets-l10n-engineering-english, libdbus-qeventloop1
+         systemui-applets-l10n-engineering-english, libdbus-qeventloop1,
+         pulseaudio-module-meego-mainvolume
 Description: Volume status indicator plugin
 
 Package: duicontrolpanel-displayapplet

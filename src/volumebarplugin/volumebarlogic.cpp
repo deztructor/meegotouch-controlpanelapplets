@@ -28,7 +28,7 @@ stepsUpdatedSignal (DBusConnection *conn,
 #define DEFAULT_ADDRESS "unix:path=/var/run/pulse/dbus-socket"
 
 #define VOLUME_SV    "com.Nokia.MainVolume1"
-#define VOLUME_PATH  "/com/nokia/mainvolume1"
+#define VOLUME_PATH  "/com/meego/mainvolume1"
 #define VOLUME_IF    "com.Nokia.MainVolume1"
 
 
