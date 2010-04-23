@@ -10,8 +10,11 @@
 
 class MContainer;
 class MLinearLayoutPolicy;
+class QGraphicsSceneMouseEvent;
 class MAction;
-class MImageWidget;
+class QSize;
+class QPixmap;
+class QPointF;
 
 class WallpaperEditorWidget : public DcpWidget
 {
@@ -23,16 +26,40 @@ public:
             QGraphicsWidget        *parent = 0);
     ~WallpaperEditorWidget ();
 
+    virtual bool pagePans () const;
+
+    virtual void paint (
+            QPainter                        *painter,
+            const QStyleOptionGraphicsItem  *option,
+            QWidget                         *widget = 0);
+
+protected:
+    virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
+    virtual void mouseReleaseEvent (QGraphicsSceneMouseEvent *event);
+    virtual void mouseMoveEvent (QGraphicsSceneMouseEvent *event);
+
 private slots:
     void slotDoneActivated ();
+    void createWidgets ();
 
 private:
-    void createWidgets ();
     void createActions ();
 
+    int  imageDX () const;
+    int  imageDY () const;
+
+private:
     QPointer<WallpaperBusinessLogic>  m_WallpaperBusinessLogic;
-    MImageWidget                   *m_Image;
-    MAction                        *m_DoneAction;
+    QPixmap         *m_bgLandscape;
+    QPixmap         *m_bgPortrait;
+    QSize            m_LandscapeSize;
+    QSize            m_PortraitSize;
+    MAction         *m_DoneAction;
+    bool             m_NoTitlebar;
+
+    QPointF          m_LastClick;
+    QPointF          m_UserOffset;
+    QPointF          m_OldUserOffset;
 };
 
 #endif

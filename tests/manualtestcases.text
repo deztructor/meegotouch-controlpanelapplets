@@ -1,0 +1,47 @@
+Send this list to: 
+	o ext-marius.poenar@nokia.com
+
+ThemeApplet:
+    (1) Check the 'themes' applet brief widget in the 'look & feel' category.
+        o There should be a localized 'themes' line as the name of the applet.
+	o There should be the actual theme name as the secondary line.
+	o There should be an icon representing the actual themes.
+
+    (2) Activate the theme applet
+        o There should be at least one theme represented by its name and icon
+
+    (3) Activate the theme from the 'look & feel' category. Click on a theme 
+        name in 'available themes' that is not the current theme.
+        
+	A dialog should be shown with the localized buttons 'select' and
+	'cancel'. 
+
+	Click on the 'select button', the theme should be changed.
+
+	Click on the back button at the top right corner of the window.
+
+	The controlpanel should page back to the 'look & feel' category.
+
+	Check the 'themes' applet brief as described in (1). It should show the
+	new theme as it is the current theme.
+
+Wallpaper applet
+    (4) Activate the 'wallpapers' applet from the 'look & feel' category of the
+        control panel.
+
+        Select an item from the list of the available wallpaper. A new page
+	should be shown with the selected image.
+
+	Click on the 'done' titlebar button. The applet should page back to the
+	available wallpapers list.
+
+	Check that the 'done' button has been disappeared from the window
+	titlebar.
+
+	Click on the back button. The controlpanel should page back to the 'look
+	& feel' category.
+
+	Check the 'wallpapers' applet. It should show the name and the thumbview
+	of the selected wallpaper.
+
+
