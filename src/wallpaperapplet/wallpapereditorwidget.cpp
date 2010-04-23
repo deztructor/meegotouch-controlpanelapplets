@@ -5,6 +5,7 @@
 
 #include "wallpapereditorwidget.h"
 
+#include <QStyle>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneWheelEvent>
 #include <QGraphicsLinearLayout>
@@ -20,8 +21,13 @@
 #include <MApplication>
 #include <MApplicationPage>
 
+#include "mwidgetcreator.h"
+M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
+
 #define DEBUG
 #include "../debug.h"
+
+static const int ExtraMargin = 10;
 
 WallpaperEditorWidget::WallpaperEditorWidget (
         WallpaperBusinessLogic *wallpaperBusinessLogic, 
@@ -34,13 +40,17 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_NoTitlebar (false),
     m_Scale (1.0)
 {
-    m_LandscapeSize = MApplication::activeWindow ()->visibleSceneSize (M::Landscape);    
+    m_LandscapeSize = MApplication::activeWindow ()->visibleSceneSize (
+            M::Landscape);
     MApplication::activeApplicationWindow()->showFullScreen();
     
-    QTimer::singleShot(0, this, SLOT(createWidgets()));
-    
-    //createWidgets();
+    setObjectName ("WallpaperEditorWidget");
+    QTimer::singleShot (0, this, SLOT(createContent()));
     createActions ();
+
+    connect(MApplication::activeApplicationWindow(),
+            SIGNAL(orientationChanged(M::Orientation)),
+            this, SLOT(orientationChanged(M::Orientation)));
 }
 
 WallpaperEditorWidget::~WallpaperEditorWidget ()
@@ -54,13 +64,13 @@ WallpaperEditorWidget::paint (
         const QStyleOptionGraphicsItem    *option,
         QWidget                           *widget)
 {
-    if ((m_bgPortrait != 0) &&
-        (geometry().height() > geometry().width())) {
+    bool portrait = (geometry().height() > geometry().width());
+
+    if ((m_bgPortrait != 0) && portrait) {
         painter->drawPixmap (geometry().toRect(), *m_bgPortrait);
-    } else if ((m_bgLandscape != 0) &&
-            (geometry ().height () < geometry ().width ())) {
+    } else if (m_bgLandscape && ! portrait) {
         painter->fillRect (
-                -10, -10, 
+                -ExtraMargin, -ExtraMargin, 
                 m_LandscapeSize.width(),
                 m_LandscapeSize.height(),
                 QColor ("black"));
@@ -76,17 +86,23 @@ WallpaperEditorWidget::paint (
 }
 
 void
-WallpaperEditorWidget::createWidgets ()
+WallpaperEditorWidget::createContent ()
 {
     QString filename = m_WallpaperBusinessLogic->editedImage()->filename();
 
     SYS_WARNING ("*** filename = %s", SYS_STR(filename));
+
+    /*
+     * If the image is very big the handling might be slow, so we  scale it
+     * down.
+     */
     QPixmap toCheck (filename);
     m_bgLandscape = new QPixmap (toCheck.scaled (m_LandscapeSize));
 
     SYS_DEBUG ("size = %dx%d", 
             m_LandscapeSize.width(), 
             m_LandscapeSize.height());
+
     //this->setContentsMargins (0, 0, 0, 0);
     //this->setWindowFrameMargins (0.0, 0.0, 0.0, 0.0);
 
@@ -226,7 +242,7 @@ WallpaperEditorWidget::imageDX () const
 {
     int retval = 0;
 
-    retval -= 10;
+    retval -= ExtraMargin;
 
     retval += m_UserOffset.x();
     retval += m_OldUserOffset.x();
@@ -268,7 +284,7 @@ WallpaperEditorWidget::imageDY () const
     SYS_DEBUG ("*** getContentsMargins = %d, %d", wLeftMargin, wTopMargin);
     #endif
 
-    retval -= 10;
+    retval -= ExtraMargin;
 
     if (!m_NoTitlebar)
         retval -= 70;
@@ -276,4 +292,19 @@ WallpaperEditorWidget::imageDY () const
     retval += m_UserOffset.y();
     retval += m_OldUserOffset.y();
     return retval;
+}
+
+void 
+WallpaperEditorWidget::orientationChanged (
+        M::Orientation orientation)
+{
+    switch (orientation) {
+        case M::Portrait:
+            SYS_DEBUG ("Turned to portrait");
+            break;
+
+        case M::Landscape:
+            SYS_DEBUG ("Turned to landscape");
+            break;
+    }
 }

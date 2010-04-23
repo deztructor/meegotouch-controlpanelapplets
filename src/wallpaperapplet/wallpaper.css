@@ -1,4 +1,17 @@
 /* 
  * This CSS file is empty, we can remove it in the future if we are not using
  * it.
+ *
+ * Actually I'm trying to remove that extra margin, but it seems I'm failing...
  */
+#WallpaperEditorWidget {
+	margin: 0px
+}
+
+#MApplicationWindow {
+	margin: 0px
+}
+
+#MApplicationPage {
+	margin: 0px
+}

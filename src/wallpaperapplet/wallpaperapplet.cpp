@@ -27,7 +27,7 @@ WallpaperApplet::~WallpaperApplet()
 void 
 WallpaperApplet::init()
 {
-    MTheme::loadCSS(cssDir + "wallpaperapplet.css");
+    MTheme::loadCSS(cssDir + "wallpaper.css");
 }
 
 DcpWidget *

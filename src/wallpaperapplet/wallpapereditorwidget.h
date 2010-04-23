@@ -41,8 +41,9 @@ protected:
     virtual void wheelEvent (QGraphicsSceneWheelEvent *event);
 
 private slots:
+    void orientationChanged (M::Orientation orientation);
     void slotDoneActivated ();
-    void createWidgets ();
+    void createContent ();
 
 private:
     void createActions ();
