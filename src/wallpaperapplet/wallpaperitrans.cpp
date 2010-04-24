@@ -68,6 +68,12 @@ WallpaperITrans::modScale (
         m_Scale = 0.1;
 }
 
+qreal
+WallpaperITrans::scale () const
+{
+    return m_Scale;
+}
+
 void
 WallpaperITrans::setExpectedSize (
         const QSize &size)

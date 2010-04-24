@@ -10,6 +10,7 @@ class QString;
 class MGConfItem;
 class WallpaperDescriptor;
 class QStringList;
+class WallpaperITrans;
 
 #include <QPointer>
 #include <wallpaperdescriptor.h>
@@ -31,9 +32,30 @@ public:
     void setEditedImage (WallpaperDescriptor  *desc);
     WallpaperDescriptor *editedImage ();
 
+    void setBackground (
+        WallpaperITrans     *landscapeITrans,
+        WallpaperITrans     *portraitITrans,
+        WallpaperDescriptor *desc = 0);
+
 public slots:
+
     void setBackground (WallpaperDescriptor *desc = 0);
 
+private:
+    QString dirPath () const;
+    void ensureHasDirectory ();
+    void createBackupFiles ();
+    void writeDestopFiles (
+        WallpaperITrans     *landscapeITrans,
+        WallpaperITrans     *portraitITrans,
+        WallpaperDescriptor *desc);
+
+    void makeBackup (const QString &filePath);
+    void makeImageFile (
+            const QString        &filePath,
+            WallpaperDescriptor  *desc,
+            WallpaperITrans      *transformations);
+    
 private:
     MGConfItem   *m_LandscapeGConfItem;
     MGConfItem   *m_PortraitGConfItem;

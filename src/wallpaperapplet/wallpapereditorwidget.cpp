@@ -155,8 +155,15 @@ WallpaperEditorWidget::createActions ()
 void
 WallpaperEditorWidget::slotDoneActivated ()
 {
+    WallpaperITrans   *ltrans, *ptrans;
+
     SYS_DEBUG ("");
-    m_WallpaperBusinessLogic->setBackground();
+    ltrans = m_Trans.orientation() == M::Landscape ?
+        &m_Trans : &m_LandscapeTrans;
+    ptrans = m_Trans.orientation() == M::Portrait ?
+        &m_Trans : &m_PortraitTrans;
+
+    m_WallpaperBusinessLogic->setBackground(ltrans, ptrans);
     changeWidget (0);
 }
 
@@ -170,14 +177,7 @@ void
 WallpaperEditorWidget::mouseMoveEvent (
         QGraphicsSceneMouseEvent *event)
 {
-    SYS_DEBUG ("-----------------------------------------------------");
-    SYS_DEBUG ("*** button()      = %d", event->button());
-    SYS_DEBUG ("*** pos()         = %f, %f", event->pos().x(), event->pos().y());
-    SYS_DEBUG ("*** lastClick     = %f, %f", m_LastClick.x(), m_LastClick.y());
     m_UserOffset = event->pos() - m_LastClick;
-
-    SYS_DEBUG ("*** userOffset    = %f, %f", m_UserOffset.x(), m_UserOffset.y());
-    SYS_DEBUG ("*** m_Trans       = %f, %f", m_Trans.x(), m_Trans.y());
 
     /*
      * We need to update the current page and not just this widget because of
@@ -190,8 +190,6 @@ void
 WallpaperEditorWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
 {
-    SYS_DEBUG ("*** delta = %d", event->delta());
-    
     m_Trans.modScale (event->delta());
 
     /*
@@ -227,7 +225,6 @@ WallpaperEditorWidget::mouseReleaseEvent (
 {
     MApplicationPage  *currentPage;
 
-    SYS_DEBUG ("");
     currentPage = MApplication::activeApplicationWindow()->currentPage();
     currentPage->setComponentsDisplayMode (
             MApplicationPage::AllComponents,

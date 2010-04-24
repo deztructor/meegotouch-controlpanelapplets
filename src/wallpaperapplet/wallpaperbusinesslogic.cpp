@@ -3,16 +3,18 @@
 
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperdescriptor.h"
+#include "wallpaperitrans.h"
 
+//#include <QFileInfo>
 #include <QDir>
 #include <QFile>
 #include <QString>
 #include <QStringList>
+#include <QProcessEnvironment>
+#include <QPainter>
+
 #include <MTheme>
 #include <MGConfItem>
-
-#include <QProcessEnvironment>
-#include <QDir>
 
 #define DEBUG
 #include "../debug.h"
@@ -20,6 +22,10 @@
 static const QString PortraitKey = "/desktop/standard/background/portrait";
 static const QString LandscapeKey = "/desktop/standard/background/landscape";
 static const QString PictureKey = "/picture_filename";
+
+static const QString wallpaperDir = ".wallpapers";
+static const QString destopFileName = "wallpaper.desktop";
+static const QString backupExtension = ".BAK";
 
 WallpaperBusinessLogic::WallpaperBusinessLogic()
 {
@@ -33,7 +39,6 @@ WallpaperBusinessLogic::~WallpaperBusinessLogic()
     delete m_LandscapeGConfItem;
     delete m_PortraitGConfItem;
 }
-
 
 bool
 WallpaperBusinessLogic::hasWallpaperFileName (
@@ -63,6 +68,29 @@ WallpaperBusinessLogic::Wallpaper (
 
 void
 WallpaperBusinessLogic::setBackground (
+        WallpaperITrans     *landscapeITrans,
+        WallpaperITrans     *portraitITrans,
+        WallpaperDescriptor *desc)
+{
+    SYS_DEBUG ("");
+    if (desc == 0)
+        desc = m_EditedImage;
+
+    Q_ASSERT (landscapeITrans);
+    Q_ASSERT (portraitITrans);
+    Q_ASSERT (desc);
+
+    ensureHasDirectory ();
+    createBackupFiles ();
+    writeDestopFiles (landscapeITrans, portraitITrans, desc);
+}
+
+/*!
+ * This function does not support image manipulatios, it is deprecated.
+ * FIXME: To remove this function.
+ */
+void
+WallpaperBusinessLogic::setBackground (
         WallpaperDescriptor *desc)
 {
     if (desc == 0)
@@ -76,6 +104,8 @@ WallpaperBusinessLogic::setBackground (
     m_LandscapeGConfItem->set (desc->filename());
 }
 
+
+
 /*!
  * Returns a list of filenames (full path filenames to be precise) of the
  * available wallpapers. These are the raw image files, before they were edited.
@@ -86,7 +116,7 @@ QStringList
 WallpaperBusinessLogic::availableWallpapers () const
 {
     QStringList list;
-#if 1
+#if 0
     list <<
         "/usr/share/themes/base/meegotouch/images/duiapplicationpage-background.png" <<
         "/usr/share/themes/plankton/meegotouch/images/duiapplicationpage-background.png" <<
@@ -131,3 +161,141 @@ WallpaperBusinessLogic::editedImage ()
     SYS_DEBUG ("*** m_EditedImage = %s", SYS_STR(m_EditedImage->filename()));
     return m_EditedImage;
 }
+
+QString
+WallpaperBusinessLogic::dirPath () const
+{
+    QString homeDir (getenv("HOME"));
+    SYS_DEBUG ("*** homeDir     = %s", SYS_STR(homeDir));
+    QString dirPath = homeDir + "/" + wallpaperDir + "/";
+    SYS_DEBUG ("*** dirPath     = %s", SYS_STR(dirPath));
+
+    return dirPath;
+}
+
+void
+WallpaperBusinessLogic::ensureHasDirectory ()
+{
+    QString path = dirPath();
+    QDir    dir (path);
+
+    if (dir.exists()) {
+        SYS_DEBUG ("Directory %s already exists.", SYS_STR(path));
+        return;
+    }
+
+    if (!dir.mkpath(path)) {
+        SYS_WARNING ("Unable to create %s directory.", SYS_STR(path));
+    }
+}
+
+void
+WallpaperBusinessLogic::createBackupFiles ()
+{
+    QString  path = dirPath();
+    QString  desktopPath = path + destopFileName;
+
+    makeBackup (desktopPath);
+}
+
+void
+WallpaperBusinessLogic::writeDestopFiles (
+        WallpaperITrans     *landscapeITrans,
+        WallpaperITrans     *portraitITrans,
+        WallpaperDescriptor *desc)
+{
+    Q_ASSERT (landscapeITrans);
+    Q_ASSERT (portraitITrans);
+    Q_ASSERT (desc);
+
+    QString  path = dirPath();
+    QString  desktopPath = path + destopFileName;
+    QFile    file (desktopPath);
+    QString  basename = desc->basename();
+    QString  portraitFilePath =
+        path + basename + "-portrait." + desc->extension();
+    QString  landscapeFilePath =
+        path + basename + "-landscape." + desc->extension();
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        SYS_DEBUG ("Opening file %s for writing failed.", SYS_STR(desktopPath));
+        return;
+    }
+
+    QTextStream out(&file);
+    out << "[Desktop Entry]\n";
+    out << "Type=WallpaperImage\n";
+    out << "Name=" << basename << "\n";
+    out << "\n";
+
+    out << "[DCP Landscape Wallpaper]\n";
+    out << "OriginalFile=" << desc->filename() << "\n";
+    out << "EditedFile=" << landscapeFilePath << "\n";
+    out << "HorOffset=" << landscapeITrans->x() << "\n";
+    out << "VertOffset=" << landscapeITrans->y() << "\n";
+    out << "Scale=" << landscapeITrans->scale() << "\n";
+    out << "\n";
+
+    out << "[DCP Portrait Wallpaper]\n";
+    out << "OriginalFile=" << desc->filename() << "\n";
+    out << "EditedFile=" << portraitFilePath << "\n";
+    out << "HorOffset=" << portraitITrans->x() << "\n";
+    out << "VertOffset=" << portraitITrans->y() << "\n";
+    out << "Scale=" << portraitITrans->scale() << "\n";
+    out << "\n";
+
+    makeImageFile (portraitFilePath, desc, portraitITrans);
+    makeImageFile (landscapeFilePath, desc, landscapeITrans);
+    
+    m_PortraitGConfItem->set (portraitFilePath);
+    m_LandscapeGConfItem->set (landscapeFilePath);
+}
+
+void
+WallpaperBusinessLogic::makeImageFile (
+            const QString        &filePath,
+            WallpaperDescriptor  *desc,
+            WallpaperITrans      *transformations)
+{
+    QPixmap  pixmap (transformations->expectedSize());
+    QPixmap  original (desc->filename());
+    QPainter painter (&pixmap);
+    qreal    scale = transformations->scale();
+
+    pixmap.fill (QColor("black"));
+    //SYS_DEBUG ("drawPixmap (%d, %d, %d, %d, pixmap)");
+    painter.drawPixmap (
+                transformations->x(), transformations->y(),
+                scale * transformations->expectedWidth (),
+                scale * transformations->expectedHeight (),
+                original);
+
+    pixmap.save (filePath);
+}
+
+/*!
+ * Takes a full path file name, removes its backup file if there is one, renames
+ * the file to create a backup file.
+ */
+void 
+WallpaperBusinessLogic::makeBackup (
+        const QString &filePath)
+{
+    QString  backupFilePath = filePath + backupExtension;
+    QFile    file (filePath);
+    QFile    backupFile (backupFilePath);
+
+    if (!file.exists())
+        return;
+    
+    if (backupFile.exists()) {
+        if (!backupFile.remove()) {
+            SYS_WARNING ("Unable to remove %s backup file.", 
+                    SYS_STR(backupFilePath));
+            return;
+        }
+    }
+
+    file.rename (backupFilePath);
+}
+
