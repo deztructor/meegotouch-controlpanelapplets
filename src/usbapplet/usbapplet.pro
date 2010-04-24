@@ -2,16 +2,20 @@ TEMPLATE      = lib
 CONFIG       += plugin \
                 gui \
                 meegotouch \
+                duicontrolpanel \
                 silent \
+                link_pkgconfig \
                 debug
-LIBS += -lduicontrolpanel
-INCLUDEPATH += /usr/include/duicontrolpanel
+
+PKGCONFIG += dbus-1 usb-moded
+QT += dbus
 
 contains(cov, true) { 
     message("Coverage options enabled")
     QMAKE_CXXFLAGS += --coverage
     QMAKE_LFLAGS += --coverage
 }
+
 MOC_DIR	      = .moc
 OBJECTS_DIR   = .objects
 

@@ -5,14 +5,15 @@ Maintainer: David Kedves <dkedves@blumsoft.eu>
 Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.7.11),
                libmeegotouch-dev (>= 0.20), libqmsystem-dev,
                libprofile-qt-dev (>= 0.13), system-ui-dev (>= 0.15.2),
-               libdbus-1-dev, libdbus-qeventloop-dev (>= 1.5)
+               libdbus-1-dev, libdbus-qeventloop-dev (>= 1.5),
+               usb-moded-dev
 Standards-Version: 3.7.3
 
 Package: systemui-applets-tests
 Section: devel
 Priority: optional
 Architecture: any
-Depends: ${shlibs:Depends}, testrunner, ci-testing, duicontrolpanel-usbapplet,
+Depends: ${shlibs:Depends}, meegotestrunner, duicontrolpanel-usbapplet,
          duicontrolpanel-batteryapplet, duistatusindicatormenu-batteryplugin,
          duistatusindicatormenu-volumeplugin, duicontrolpanel-displayapplet,
          duicontrolpanel-profileapplet, duistatusindicatormenu-profileplugin,
