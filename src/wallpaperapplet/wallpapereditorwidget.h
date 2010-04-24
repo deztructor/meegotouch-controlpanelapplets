@@ -7,6 +7,7 @@
 #include "dcpwidget.h"
 
 #include "wallpaperbusinesslogic.h"
+#include "wallpaperitrans.h"
 
 class MContainer;
 class MLinearLayoutPolicy;
@@ -63,7 +64,10 @@ private:
     QPointF          m_LastClick;
     QPointF          m_UserOffset;
     QPointF          m_OldUserOffset;
-    qreal            m_Scale;
+
+    WallpaperITrans  m_Trans;
+    WallpaperITrans  m_LandscapeTrans;
+    WallpaperITrans  m_PortraitTrans;
 };
 
 #endif

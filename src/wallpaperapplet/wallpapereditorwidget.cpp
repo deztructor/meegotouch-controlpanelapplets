@@ -1,7 +1,5 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
-/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
-/* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 
 #include "wallpapereditorwidget.h"
 
@@ -37,8 +35,7 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_bgLandscape (0),
     m_bgPortrait (0),
     m_DoneAction (0),
-    m_NoTitlebar (false),
-    m_Scale (1.0)
+    m_NoTitlebar (false)
 {
     m_LandscapeSize = MApplication::activeWindow ()->visibleSceneSize (
             M::Landscape);
@@ -51,6 +48,9 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     connect(MApplication::activeApplicationWindow(),
             SIGNAL(orientationChanged(M::Orientation)),
             this, SLOT(orientationChanged(M::Orientation)));
+
+    m_Trans = MApplication::activeApplicationWindow()->orientation() == 
+        M::Portrait ? m_PortraitTrans : m_LandscapeTrans;
 }
 
 WallpaperEditorWidget::~WallpaperEditorWidget ()
@@ -77,8 +77,8 @@ WallpaperEditorWidget::paint (
 
         painter->drawPixmap (
                 imageDX(), imageDY(),
-                m_LandscapeSize.width() * m_Scale,
-                m_LandscapeSize.height() * m_Scale,
+                m_Trans * m_LandscapeSize.width(),
+                m_Trans * m_LandscapeSize.height(),
                 *m_bgLandscape);
     }
 
@@ -185,11 +185,9 @@ WallpaperEditorWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
 {
     SYS_DEBUG ("*** delta = %d", event->delta());
-    m_Scale = m_Scale + (event->delta() / 1200.0);
-    if (m_Scale < 0.1)
-        m_Scale = 0.1;
     
-    SYS_DEBUG ("*** m_Scale = %f", m_Scale);
+    m_Trans.modScale (event->delta());
+
     /*
      * We need to update the current page and not just this widget because of
      * those damn extra margins coming from somewhere.
@@ -301,10 +299,14 @@ WallpaperEditorWidget::orientationChanged (
     switch (orientation) {
         case M::Portrait:
             SYS_DEBUG ("Turned to portrait");
+            m_LandscapeTrans = m_Trans;
+            m_Trans = m_PortraitTrans;
             break;
 
         case M::Landscape:
             SYS_DEBUG ("Turned to landscape");
+            m_LandscapeTrans = m_Trans;
+            m_Trans = m_PortraitTrans;
             break;
     }
 }

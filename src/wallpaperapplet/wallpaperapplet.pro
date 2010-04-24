@@ -28,6 +28,7 @@ HEADERS = \
     wallpaperapplet.h \
     wallpaperwidget.h \
     wallpapereditorwidget.h \
+    wallpaperitrans.h \
     wallpaperbrief.h 
 
 SOURCES = \
@@ -39,6 +40,7 @@ SOURCES = \
     wallpaperapplet.cpp \
     wallpaperwidget.cpp \
     wallpapereditorwidget.cpp \
+    wallpaperitrans.cpp \
     wallpaperbrief.cpp 
 
 css.files = wallpaper.css
