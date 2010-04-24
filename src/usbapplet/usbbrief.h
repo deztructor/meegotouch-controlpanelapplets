@@ -22,9 +22,6 @@ protected:
 public slots:
     void settingsChanged ();
 
-private slots:
-    void currentModeChanged (usb_modes mode);
-
 private:
     UsbSettingsLogic    *m_logic;
 };

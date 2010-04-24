@@ -14,7 +14,7 @@ UsbBrief::UsbBrief (UsbSettingsLogic *logic) : DcpBrief (),
     m_logic (logic)
 {
     connect (m_logic, SIGNAL (currentModeChanged (usb_modes)),
-             this, SLOT (currentModeChanged (usb_modes)));
+             this, SIGNAL (valuesChanged ()));
 }
 
 void 
@@ -45,10 +45,12 @@ UsbBrief::valueText () const
         case USB_MASS_STORAGE:
             //% "Mass Storage mode"
             currentSetting = qtTrId ("qtn_usb_mass_storage");
+            break;
         case USB_AUTO:
         default:
             //% "Always ask"
             currentSetting = qtTrId ("qtn_usb_always_ask");
+            break;
     }
 
     // Check the currently active mode
@@ -75,6 +77,7 @@ UsbBrief::valueText () const
         default:
             SYS_DEBUG ("What about %d mode?", m_logic->getCurrentMode ());
             SYS_DEBUG ("current-setting: %s", SYS_STR (currentSetting));
+            break;
     }
 
     return currentSetting;

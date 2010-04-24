@@ -48,6 +48,8 @@ UsbSettingsLogic::getUsbSetting ()
 
     QString val = m_gconfkey->value ().toString ();
 
+//    SYS_DEBUG ("Get %s: %s", USB_GCONF_KEY, SYS_STR (val));
+
     if (val == MODE_MASS_STORAGE)
         return USB_MASS_STORAGE;
     else if (val == MODE_OVI_SUITE)
@@ -82,6 +84,8 @@ UsbSettingsLogic::setUsbSetting (usb_modes mode)
             break;
     }
 
+//    SYS_DEBUG ("Set %s: %s", USB_GCONF_KEY, SYS_STR (setting));
+
     m_gconfkey->set (setting);
 }
 
@@ -95,7 +99,7 @@ UsbSettingsLogic::getCurrentMode ()
 void
 UsbSettingsLogic::usbModeChange (QString mode)
 {
-    SYS_DEBUG ("mode = %s", SYS_STR (mode));
+    SYS_DEBUG ("usb_moded mode = %s", SYS_STR (mode));
 
     if (mode == USB_DISCONNECTED)
         m_currentMode = USB_NOTCONNECTED;
