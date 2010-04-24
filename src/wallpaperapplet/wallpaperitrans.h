@@ -4,10 +4,13 @@
 #define WALLPAPERITRANS_H
 
 #include <QObject>
+#include <QPointF>
+#include <QSize>
+#include <MApplication>
 
 class QSize;
 class QPixmap;
-class QPointF;
+
 
 /*!
  * A class to manipulate and save images for the meego control panel wallpaper 
@@ -21,11 +24,25 @@ public:
     WallpaperITrans ();
 
     WallpaperITrans &operator= (const WallpaperITrans &rhs);
-    const int operator* (const int i);
+    int operator* (const int i);
+    WallpaperITrans &operator+= (const QPointF &rsh);
 
+    qreal x () const;
+    qreal y () const;
     void modScale (int i);
+    
+    void setExpectedSize (const QSize &size);
+    QSize expectedSize () const;
+    int expectedWidth () const;
+    int expectedHeight () const;
 
+    M::Orientation orientation () const;
+    void setOrientation (M::Orientation orientation);
+    
 private:
-    qreal   m_Scale;
+    M::Orientation   m_Orientation;
+    qreal            m_Scale;
+    QPointF          m_Offset;
+    QSize            m_ExpectedSize;
 };
 #endif

@@ -56,14 +56,11 @@ private:
     QPointer<WallpaperBusinessLogic>  m_WallpaperBusinessLogic;
     QPixmap         *m_bgLandscape;
     QPixmap         *m_bgPortrait;
-    QSize            m_LandscapeSize;
-    QSize            m_PortraitSize;
     MAction         *m_DoneAction;
     bool             m_NoTitlebar;
 
     QPointF          m_LastClick;
     QPointF          m_UserOffset;
-    QPointF          m_OldUserOffset;
 
     WallpaperITrans  m_Trans;
     WallpaperITrans  m_LandscapeTrans;

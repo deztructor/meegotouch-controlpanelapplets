@@ -37,8 +37,14 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_DoneAction (0),
     m_NoTitlebar (false)
 {
-    m_LandscapeSize = MApplication::activeWindow ()->visibleSceneSize (
-            M::Landscape);
+    MWindow *win = MApplication::activeWindow ();
+
+    m_PortraitTrans.setExpectedSize (win->visibleSceneSize (M::Portrait));
+    m_PortraitTrans.setOrientation (M::Portrait);
+    m_LandscapeTrans.setExpectedSize (win->visibleSceneSize (M::Landscape));
+    m_LandscapeTrans.setOrientation (M::Landscape);
+
+
     MApplication::activeApplicationWindow()->showFullScreen();
     
     setObjectName ("WallpaperEditorWidget");
@@ -71,14 +77,14 @@ WallpaperEditorWidget::paint (
     } else if (m_bgLandscape && ! portrait) {
         painter->fillRect (
                 -ExtraMargin, -ExtraMargin, 
-                m_LandscapeSize.width(),
-                m_LandscapeSize.height(),
+                m_Trans.expectedWidth (),
+                m_Trans.expectedHeight (),
                 QColor ("black"));
 
         painter->drawPixmap (
                 imageDX(), imageDY(),
-                m_Trans * m_LandscapeSize.width(),
-                m_Trans * m_LandscapeSize.height(),
+                m_Trans * m_Trans.expectedWidth (),
+                m_Trans * m_Trans.expectedHeight (),
                 *m_bgLandscape);
     }
 
@@ -97,16 +103,16 @@ WallpaperEditorWidget::createContent ()
      * down.
      */
     QPixmap toCheck (filename);
-    m_bgLandscape = new QPixmap (toCheck.scaled (m_LandscapeSize));
+    m_bgLandscape = new QPixmap (toCheck.scaled (m_Trans.expectedSize()));
 
     SYS_DEBUG ("size = %dx%d", 
-            m_LandscapeSize.width(), 
-            m_LandscapeSize.height());
+            m_Trans.expectedWidth(), 
+            m_Trans.expectedHeight());
 
     //this->setContentsMargins (0, 0, 0, 0);
     //this->setWindowFrameMargins (0.0, 0.0, 0.0, 0.0);
 
-    this->setMinimumSize (m_LandscapeSize);
+    this->setMinimumSize (m_Trans.expectedSize());
 
     /*
      * We need to update the current page and not just this widget because of
@@ -171,7 +177,7 @@ WallpaperEditorWidget::mouseMoveEvent (
     m_UserOffset = event->pos() - m_LastClick;
 
     SYS_DEBUG ("*** userOffset    = %f, %f", m_UserOffset.x(), m_UserOffset.y());
-    SYS_DEBUG ("*** OlduserOffset = %f, %f", m_OldUserOffset.x(), m_OldUserOffset.y());
+    SYS_DEBUG ("*** m_Trans       = %f, %f", m_Trans.x(), m_Trans.y());
 
     /*
      * We need to update the current page and not just this widget because of
@@ -227,7 +233,7 @@ WallpaperEditorWidget::mouseReleaseEvent (
             MApplicationPage::AllComponents,
             MApplicationPageModel::Show);
 
-    m_OldUserOffset += m_UserOffset;
+    m_Trans += m_UserOffset;
     m_UserOffset = QPointF();
     m_NoTitlebar = false;
 }
@@ -243,7 +249,8 @@ WallpaperEditorWidget::imageDX () const
     retval -= ExtraMargin;
 
     retval += m_UserOffset.x();
-    retval += m_OldUserOffset.x();
+    retval += m_Trans.x();
+
     return retval;
 }
 
@@ -255,40 +262,14 @@ WallpaperEditorWidget::imageDY () const
 {
     int                 retval = 0;
 
-    #if 0
-    /*
-     * Trying to find where the margins are coming from.
-     */
-    MApplicationPage   *currentPage;
-    MApplicationWindow *window;
-    qreal               topMargin, leftMargin;
-    int                 wTopMargin, wLeftMargin;
-    currentPage = MApplication::activeApplicationWindow()->currentPage();
-    window = MApplication::activeApplicationWindow();
-
-    getWindowFrameMargins (&leftMargin, &topMargin, 0, 0);
-    SYS_DEBUG ("*** windowFrameMargins = %f, %f", leftMargin, topMargin);
-
-    getContentsMargins (&leftMargin, &topMargin, 0, 0);
-    SYS_DEBUG ("*** getContentsMargins = %f, %f", leftMargin, topMargin);
-
-    currentPage->getWindowFrameMargins (&leftMargin, &topMargin, 0, 0);
-    SYS_DEBUG ("*** windowFrameMargins = %f, %f", leftMargin, topMargin);
-
-    currentPage->getContentsMargins (&leftMargin, &topMargin, 0, 0);
-    SYS_DEBUG ("*** getContentsMargins = %f, %f", leftMargin, topMargin);
-    
-    window->getContentsMargins (&wLeftMargin, &wTopMargin, 0, 0);
-    SYS_DEBUG ("*** getContentsMargins = %d, %d", wLeftMargin, wTopMargin);
-    #endif
-
     retval -= ExtraMargin;
 
     if (!m_NoTitlebar)
         retval -= 70;
 
     retval += m_UserOffset.y();
-    retval += m_OldUserOffset.y();
+    retval += m_Trans.y();
+
     return retval;
 }
 
@@ -301,12 +282,14 @@ WallpaperEditorWidget::orientationChanged (
             SYS_DEBUG ("Turned to portrait");
             m_LandscapeTrans = m_Trans;
             m_Trans = m_PortraitTrans;
+            this->setMinimumSize (m_Trans.expectedSize());
             break;
 
         case M::Landscape:
             SYS_DEBUG ("Turned to landscape");
             m_LandscapeTrans = m_Trans;
             m_Trans = m_PortraitTrans;
+            this->setMinimumSize (m_Trans.expectedSize());
             break;
     }
 }
