@@ -45,6 +45,10 @@ private:
     QDBusInterface      *m_usb_moded;
     MGConfItem          *m_gconfkey;
     usb_modes            m_currentMode;
+
+#ifdef UNIT_TEST
+    friend class Ut_UsbSettingsLogic;
+#endif
 };
 
 #endif
