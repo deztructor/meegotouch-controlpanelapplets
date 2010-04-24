@@ -29,6 +29,7 @@ public:
 
     qreal x () const;
     qreal y () const;
+    qreal scale () const;
     void modScale (int i);
     
     void setExpectedSize (const QSize &size);

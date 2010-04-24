@@ -57,6 +57,14 @@ WallpaperDescriptor::basename () const
     return fileInfo.baseName();
 }
 
+QString
+WallpaperDescriptor::extension () const 
+{
+    QFileInfo fileInfo (m_Filename);
+
+    return fileInfo.suffix();
+}
+
 void
 WallpaperDescriptor::loadImage ()
 {

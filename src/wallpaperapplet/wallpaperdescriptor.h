@@ -23,6 +23,7 @@ public:
     void setFilename (const QString &filename);
     QString filename () const;
     QString basename () const;
+    QString extension () const;
 
     void loadImage ();
     bool isImageLoaded ();
