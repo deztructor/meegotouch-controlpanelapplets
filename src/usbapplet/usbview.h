@@ -3,35 +3,33 @@
 #ifndef USBVIEW_H
 #define USBVIEW_H
 
-#include "usbmodes.h"
-#include <QString>
-#include <MGConfItem>
 #include <MLabel>
 #include <MButton>
 #include <DcpWidget>
+#include "usbbusinesslogic.h"
 
-class UsbView : public DcpWidget 
+class UsbView : public DcpWidget
 {
     Q_OBJECT
 
 public:
-    UsbView (QGraphicsWidget *parent = 0);
-	~UsbView ();
+    UsbView (UsbSettingsLogic *logic);
 
 signals:
-    void settingsChanged      (int currentmode);
+    void settingsChanged ();
 
 private slots:
-    void selectionChanged     (int id);
+    void selectionChanged (int id);
+
+protected:
+    void retranslateUi ();
 
 private:
     void initWidget (void);
-    void retranslateUi ();
 
-    MGConfItem   *m_GConfItem;
-    usb_modes       m_current_mode;
-    MButton      *m_buttons[USB_AUTO+1];
-    MLabel       *m_info_label;
+    UsbSettingsLogic    *m_logic;
+    MButton             *m_buttons[3];
+    MLabel              *m_info_label;
 };
 
 #endif

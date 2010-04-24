@@ -3,12 +3,15 @@ CONFIG       += plugin \
                 gui \
                 meegotouch \
                 duicontrolpanel \
-                silent \
                 link_pkgconfig \
+                silent \
                 debug
 
-PKGCONFIG += dbus-1 usb-moded
+PKGCONFIG += dbus-1 usb_moded
 QT += dbus
+
+# FIXME: HACK!!! REMOVE THIS!!!
+message("HACK: fixing usb-moded headers" $$system(cp -f /usr/include/usb-moded/* $$PWD))
 
 contains(cov, true) { 
     message("Coverage options enabled")
@@ -19,14 +22,19 @@ contains(cov, true) {
 MOC_DIR	      = .moc
 OBJECTS_DIR   = .objects
 
-HEADERS += usbapplet.h \
-           usbbrief.h \
-           usbmodes.h \
-           usbview.h
-SOURCES += usbapplet.cpp \
-           usbbrief.cpp \
-           usbmodes.cpp \
-           usbview.cpp
+HEADERS +=  \
+    ../debug.h \
+    usbbusinesslogic.h \
+    usbapplet.h \
+    usbbrief.h \
+    usbview.h
+
+SOURCES += \
+    ../debug.cpp \
+    usbbusinesslogic.cpp \
+    usbapplet.cpp \
+    usbbrief.cpp \
+    usbview.cpp
 
 DESTDIR = lib
 desktop.files += usbapplet.desktop
