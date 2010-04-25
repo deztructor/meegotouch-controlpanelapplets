@@ -113,6 +113,8 @@ UsbSettingsLogic::usbModeChange (QString mode)
     else
         m_currentMode = USB_NOOP;
 
+    SYS_DEBUG ("m_currentMode = %d", m_currentMode);
+
     emit currentModeChanged (m_currentMode);
 }
 

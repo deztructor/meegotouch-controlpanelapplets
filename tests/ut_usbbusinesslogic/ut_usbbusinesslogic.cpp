@@ -84,14 +84,34 @@ Ut_UsbSettingsLogic::testInvalidSaveLoadConfig ()
 void
 Ut_UsbSettingsLogic::testUsbModedRelation ()
 {
-    
     QSignalSpy spy (m_Api, SIGNAL (currentModeChanged (usb_modes)));
 
+    // Simulate some usb_moded signals:
+    m_Api->usbModeChange (QString (MODE_MASS_STORAGE));
     m_Api->usbModeChange (QString (USB_DISCONNECTED));
+    m_Api->usbModeChange (QString (MODE_OVI_SUITE));
+    m_Api->usbModeChange (QString (USB_CONNECTED));
 
-    QVERIFY (spy.count () == 1);
+    QTest::qWait (100);
 
-    // TODO: Do some checks here...
+    QVERIFY (spy.count () == 4);
+
+    // Do some checks here...
+    QList<QVariant> arguments = spy.takeAt (0);
+    usb_modes value = arguments.at (0).value<usb_modes> ();
+    QVERIFY (value == USB_MASS_STORAGE);
+
+    arguments = spy.takeAt (0);
+    value = arguments.at (0).value<usb_modes> ();
+    QVERIFY (value == USB_NOTCONNECTED);
+
+    arguments = spy.takeAt (0);
+    value = arguments.at (0).value<usb_modes> ();
+    QVERIFY (value == USB_OVI_SUITE);
+
+    arguments = spy.takeAt (0);
+    value = arguments.at (0).value<usb_modes> ();
+    QVERIFY (value == USB_NOOP);
 }
 
 QTEST_APPLESS_MAIN(Ut_UsbSettingsLogic)
