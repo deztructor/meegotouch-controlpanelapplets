@@ -4,13 +4,8 @@
 #include <MGConfItem>
 
 #undef DEBUG
+#define WARNING
 #include "../debug.h"
-
-/*
-    TODO:
-    1) Make sure the screen light default index are correct
-
-*/
 
 using namespace Maemo;
 
@@ -97,9 +92,9 @@ DisplayBusinessLogic::screenLightsValues ()
 
     if (gconf_values.isEmpty ())
     {
-        values << 10 << 30 << 60 << 120 << 300;
-        SYS_DEBUG ("GConf doesn't have possible dim "
-                   "values, using the default list");
+        values << 15 << 30 << 60 << 120 << 180;
+        SYS_WARNING ("GConf doesn't have possible dim "
+                     "values, using the default list");
     }
     else
     {
@@ -117,10 +112,11 @@ DisplayBusinessLogic::screenLightsValues ()
 int 
 DisplayBusinessLogic::selectedScreenLightsValue ()
 {
-    QList<int> values = screenLightsValues();
-    int index = values.indexOf(m_Display->getDisplayDimTimeout());
+    QList<int> values = screenLightsValues ();
+    int index = values.indexOf (m_Display->getDisplayDimTimeout ());
+
     if (index < 0) {
-        index = values.size() / 2;
+        index = 1;
         setScreenLightTimeouts (index);
     }
 

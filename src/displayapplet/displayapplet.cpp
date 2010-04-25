@@ -49,10 +49,7 @@ QString DisplayApplet::title() const
 QVector<MAction*> DisplayApplet::viewMenuItems()
 {
     QVector<MAction*> vector;
-    //% "Help"
-    MAction* helpAction = new MAction(qtTrId ("qtn_comm_help"), pageMain());
-    vector.append(helpAction);
-    helpAction->setLocation(MAction::ApplicationMenuLocation);
+
     return vector;
 }
 
