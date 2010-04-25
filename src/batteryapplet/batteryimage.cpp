@@ -5,63 +5,66 @@
 #include <QTimer>
 #include <MTheme>
 
-#undef DEBUG
+#define DEBUG
 #include "../debug.h"
 
 BatteryImage::BatteryImage (QGraphicsItem *parent) :
         MImageWidget (parent),
         m_timer (NULL),
-        m_batteryLevel (0)
+        m_batteryLevel (0),
+        m_iconCurrentSet (ICON_NORMAL)
 {
-    /*
-     * We have to show something even if we get no signals from DBus. FIXME:
-     * maybe this is not the right image, but it is the only one works now.
-     */
-    setImage ("icon-m-energy-management-battery62");
+    qRegisterMetaType<BatteryIconType> ();
+    setImage ("icon-m-energy-management-battery-low");
 }
 
 void
-BatteryImage::loadImages (bool charging)
+BatteryImage::loadImages (BatteryIconType type)
 {
-#if 0
-  // These icons are invisible :-S
+  if (m_timer != 0)
+      m_timer->stop (); // to avoid crashes...
 
-  if (charging && m_ChargingImages.isEmpty ())
+  if (m_Images.isEmpty () == false)
   {
-    MTheme *theme = MTheme::instance ();
+    if (m_iconCurrentSet == type)
+        return; // Nothing to do...
 
-    m_ChargingImages << 
-        theme->pixmap (QString ("icon-s-status-battery-verylow")) <<
-        theme->pixmap (QString ("icon-s-status-battery-low")) <<
-        theme->pixmap (QString ("icon-s-status-battery13")) << 
-        theme->pixmap (QString ("icon-s-status-battery25")) << 
-        theme->pixmap (QString ("icon-s-status-battery38")) << 
-        theme->pixmap (QString ("icon-s-status-battery50")) << 
-        theme->pixmap (QString ("icon-s-status-battery62")) << 
-        theme->pixmap (QString ("icon-s-status-battery75")) << 
-        theme->pixmap (QString ("icon-s-status-battery88")) << 
-        theme->pixmap (QString ("icon-s-status-battery100"));
+    // Release the pixmaps
+    foreach (const QPixmap *icon, m_Images)
+        delete icon;
+    m_Images.clear ();
+
   }
-  else
-#else
-  Q_UNUSED(charging);
-#endif
-  if (m_Images.isEmpty ())
+
+  QString ID = "battery";
+  switch (type)
   {
-    MTheme *theme = MTheme::instance ();
-
-    m_Images << 
-        theme->pixmap (QString ("icon-m-energy-management-battery-verylow")) << 
-        theme->pixmap (QString ("icon-m-energy-management-battery-low")) << 
-        theme->pixmap (QString ("icon-m-energy-management-battery13")) << 
-        theme->pixmap (QString ("icon-m-energy-management-battery25")) << 
-        theme->pixmap (QString ("icon-m-energy-management-battery38")) << 
-        theme->pixmap (QString ("icon-m-energy-management-battery50")) << 
-        theme->pixmap (QString ("icon-m-energy-management-battery62")) << 
-        theme->pixmap (QString ("icon-m-energy-management-battery75")) << 
-        theme->pixmap (QString ("icon-m-energy-management-battery88")) << 
-        theme->pixmap (QString ("icon-m-energy-management-battery100"));
+    case ICON_POWERSAVE:
+        ID = "powersave";
+        break;
+    case ICON_CHARGING:
+        ID = "charging";
+        break;
+    default:
+        break;
   }
+
+  MTheme *theme = MTheme::instance ();
+
+  m_Images <<
+      theme->pixmapCopy (QString ("icon-m-energy-management-%1-verylow").arg (ID)) <<
+      theme->pixmapCopy (QString ("icon-m-energy-management-%1-low").arg (ID)) <<
+      theme->pixmapCopy (QString ("icon-m-energy-management-%1").arg (ID) + "1") <<
+      theme->pixmapCopy (QString ("icon-m-energy-management-%1").arg (ID) + "2") <<
+      theme->pixmapCopy (QString ("icon-m-energy-management-%1").arg (ID) + "3") <<
+      theme->pixmapCopy (QString ("icon-m-energy-management-%1").arg (ID) + "4") <<
+      theme->pixmapCopy (QString ("icon-m-energy-management-%1").arg (ID) + "5") <<
+      theme->pixmapCopy (QString ("icon-m-energy-management-%1").arg (ID) + "6") <<
+      theme->pixmapCopy (QString ("icon-m-energy-management-%1").arg (ID) + "7") <<
+      theme->pixmapCopy (QString ("icon-m-energy-management-%1").arg (ID) + "8");
+
+  if (m_timer != 0)
+      m_timer->start (); // to avoid crashes...
 }
 
 BatteryImage::~BatteryImage ()
@@ -76,31 +79,28 @@ BatteryImage::~BatteryImage ()
             MTheme::instance ()->releasePixmap (icon);
         m_Images.clear ();
     }
-#if 0
-    if (! m_ChargingImages.isEmpty ())
-    {   // Release the pixmaps
-        foreach (const QPixmap *icon, m_ChargingImages)
-            MTheme::instance ()->releasePixmap (icon);
-        m_ChargingImages.clear ();
-    }
-#endif
 }
 
-void 
+void
 BatteryImage::updateBatteryLevel (int level)
 {
     SYS_DEBUG ("level = %d", level);
 
     m_batteryLevel = level;
+
     if (m_timer == NULL)
         updateImage (false);
 }
 
-void 
+void
+BatteryImage::setIconSet (BatteryIconType type)
+{
+    m_iconCurrentSet = type;
+}
+
+void
 BatteryImage::updateImage (bool charging)
 {
-    SYS_DEBUG ("charging = %s", charging ? "true" : "false");
-
     static int imageIndex = m_batteryLevel;
 
     if (charging)
@@ -112,30 +112,24 @@ BatteryImage::updateImage (bool charging)
         imageIndex = m_batteryLevel;
     }
 
-    loadImages (charging);
+    if (charging)
+        m_iconCurrentSet = ICON_CHARGING;
+    else if (m_iconCurrentSet == ICON_CHARGING)
+        m_iconCurrentSet = ICON_NORMAL;
+
+    loadImages (m_iconCurrentSet);
 
     // To avoid crashes (when icons aren't available)
     if (m_Images.isEmpty ())
         return;
 
-#if 0
-    int imageCount = charging ?
-                     m_ChargingImages.size () :
-                     m_Images.size ();
-
-    if (imageCount <= imageIndex)
-       imageIndex = 0;
-
-    if (charging)
-        setPixmap (*(m_ChargingImages.at (imageIndex)));
-    else
-        setPixmap (*(m_Images.at (imageIndex)));
-#else
+    // cumulative charging animation
     if (m_Images.size () <= imageIndex)
-        imageIndex = 0;
+    {
+        imageIndex = m_batteryLevel;
+    }
 
     setPixmap (*(m_Images.at (imageIndex)));
-#endif
 }
 
 void
