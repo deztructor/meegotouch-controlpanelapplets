@@ -4,7 +4,8 @@
 #include "displaybusinesslogic.h"
 #include "dcpdisplay.h"
 
-#include <QDebug>
+#undef DEBUG
+#include "../debug.h"
 
 #include <MButton>
 #include <MComboBox>
@@ -30,6 +31,8 @@ DisplayWidget::~DisplayWidget ()
 
 void DisplayWidget::initWidget ()
 {
+    SYS_DEBUG ("");
+
     MLayout               *mainLayout;
     MLinearLayoutPolicy   *policy;
 
@@ -37,7 +40,7 @@ void DisplayWidget::initWidget ()
     policy     = new MLinearLayoutPolicy (mainLayout, Qt::Vertical);
     mainLayout->setPolicy (policy);
 
-    m_logic = new DisplayBusinessLogic();
+    m_logic = new DisplayBusinessLogic;
 
     // Brightness
     QGraphicsLinearLayout *brightnessLayout =
@@ -76,12 +79,15 @@ void DisplayWidget::initWidget ()
                       qtTrId ("qtn_comm_time_second") :
                       //% "%1 minutes"
                       qtTrId ("qtn_comm_time_minute");
-        m_screenlightCombo->insertItem (i, str);
+        if (value >= 60)
+            value /= 60;
+        SYS_DEBUG ("ADD: NUM = %d, STR = %s", value, SYS_STR (str.arg (value)));
+        m_screenlightCombo->insertItem (i, str.arg (value));
     }
     m_screenlightCombo->setCurrentIndex (m_logic->selectedScreenLightsValue ());
 
     connect (m_screenlightCombo, SIGNAL (currentIndexChanged (int)),
-             this, SLOT (setScreenLightTimeouts (int)));
+             m_logic, SLOT (setScreenLightTimeouts (int)));
 
     policy->addItem (m_screenlightCombo);
 
