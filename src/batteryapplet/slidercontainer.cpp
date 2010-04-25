@@ -244,3 +244,16 @@ SliderContainer::updateSliderValueLabel ()
                     m_SliderValues[m_SliderValue]));
     }
 }
+
+QSizeF
+SliderContainer::sizeHint (Qt::SizeHint which,
+                           const QSizeF &constraint) const
+{
+    // Why not doing this the Qt or the meegotouch by default?
+    if (isVisible ())
+        return MContainer::sizeHint (which, constraint);
+    else
+        return (QSizeF (0., 0.));
+}
+
+

@@ -188,6 +188,7 @@ BatteryWidget::updatePSMButton (
         //% "Activate power save now"
         PSMButton->setText (qtTrId ("qtn_ener_aps"));
     }
+    sliderContainer->setVisible (!toggle);
 }
 
 void BatteryWidget::remainingTimeValuesReceived(const QStringList &timeValues)
