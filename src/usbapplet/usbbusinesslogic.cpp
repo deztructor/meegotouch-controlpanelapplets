@@ -8,6 +8,7 @@
 
 #include <QDBusInterface>
 #include <MGConfItem>
+#include <QMetaType>
 
 #define USB_GCONF_KEY "/Meego/System/UsbMode"
 
@@ -31,7 +32,9 @@ UsbSettingsLogic::UsbSettingsLogic (QObject *parent) :
     m_usb_moded->callWithCallback (QString (USB_MODE_STATE_REQUEST),
                                    QList<QVariant> (), this,
                                    SLOT (usbModeChange (QString)),
-                                   SLOT (dbusError (QString)));
+                                   SLOT (dbusError (QDBusError)));
+
+    qRegisterMetaType<usb_modes> ();
 }
 
 UsbSettingsLogic::~UsbSettingsLogic ()

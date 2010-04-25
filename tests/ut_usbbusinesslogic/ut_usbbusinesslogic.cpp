@@ -33,7 +33,7 @@ Ut_UsbSettingsLogic::initTestCase()
     m_App = new MApplication (argc, &app_name);
     m_Api = new UsbSettingsLogic;
 
-    toRestore = m_Api->getCurrentMode ();
+    toRestore = m_Api->getUsbSetting ();
 }
 
 void 
@@ -84,6 +84,7 @@ Ut_UsbSettingsLogic::testInvalidSaveLoadConfig ()
 void
 Ut_UsbSettingsLogic::testUsbModedRelation ()
 {
+    
     QSignalSpy spy (m_Api, SIGNAL (currentModeChanged (usb_modes)));
 
     m_Api->usbModeChange (QString (USB_DISCONNECTED));

@@ -8,18 +8,20 @@ class QDBusInterface;
 class MGConfItem;
 
 // Buttons in UI exists only for the first three modes
-typedef enum {
+enum usb_modes {
     USB_OVI_SUITE = 10, 
     USB_MASS_STORAGE,
     USB_AUTO,
     USB_NOOP,
     USB_NOTCONNECTED
-} usb_modes;
+};
 
+Q_DECLARE_METATYPE(usb_modes);
 
 class UsbSettingsLogic : public QObject
 {
     Q_OBJECT
+    Q_ENUMS(usb_modes)
 
 public:
     UsbSettingsLogic (QObject *parent = 0);
