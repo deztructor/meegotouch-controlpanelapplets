@@ -9,7 +9,7 @@
 #include <QVariant>
 #include <QString>
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -192,35 +192,6 @@ VolumeBarLogic::addSignalMatch ()
         dbus_message_unref (message);
 }
 
-#if 0
-#define DBUS_ARG_TYPE(type) \
-          switch (type) { \
-            case DBUS_TYPE_INVALID: \
-                SYS_DEBUG ("invalid"); \
-                break; \
-            case DBUS_TYPE_STRING: \
-                SYS_DEBUG ("string"); \
-                break; \
-            case DBUS_TYPE_UINT32: \
-                SYS_DEBUG ("uint32"); \
-                break; \
-            case DBUS_TYPE_ARRAY: \
-                SYS_DEBUG ("array"); \
-                break; \
-            case DBUS_TYPE_STRUCT: \
-                SYS_DEBUG ("stuct"); \
-                break; \
-            case DBUS_TYPE_DICT_ENTRY: \
-                SYS_DEBUG ("dict_entry"); \
-                break; \
-            default: \
-                SYS_DEBUG ("type_code %d", type); \
-                break; \
-          }
-#define DBUS_ITER_TYPE(iter) \
-            DBUS_ARG_TYPE(dbus_message_iter_get_arg_type (&iter))
-#endif
-
 static void
 stepsUpdatedSignal (DBusConnection *conn,
                     DBusMessage    *message,
@@ -249,28 +220,6 @@ stepsUpdatedSignal (DBusConnection *conn,
 
         DBUS_ERR_CHECK (error);
     }
-
-#if 0
-    DBusMessageIter iter;        
-    dbus_message_iter_init (message, &iter);
-
-    DBUS_ITER_TYPE (iter);
-
-    // Recurse into the array [array of dicts]
-    while (dbus_message_iter_get_arg_type (&iter) != DBUS_TYPE_INVALID)
-    {
-        DBUS_ITER_TYPE (iter);
-
-        if (dbus_message_iter_get_arg_type (&iter) == DBUS_TYPE_STRING)
-        {
-            char *val = NULL;
-            dbus_message_iter_get_basic (&iter, &val);
-            SYS_DEBUG ("msg: %s", val);
-        }
-
-        dbus_message_iter_next (&iter);
-    }
-#endif
 }
 
 

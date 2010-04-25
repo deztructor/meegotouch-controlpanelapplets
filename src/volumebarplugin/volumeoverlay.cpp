@@ -7,8 +7,7 @@
 #undef DEBUG
 #include "../debug.h"
 
-// FIXME: TBD
-#define HIDE_TIMEOUT 1500
+#define HIDE_TIMEOUT 3000
 
 VolumeOverlay::VolumeOverlay (QGraphicsItem *parent) :
     MOverlay (parent),
@@ -38,12 +37,11 @@ VolumeOverlay::constructUi ()
 
     m_slider->setOrientation (Qt::Vertical);
     m_slider->setMaxLabelIconID (QString ("icon-m-common-volume"));
+    m_slider->setMinLabelIconID (QString ("icon-m-common-volume-off"));
+
 
     connect (m_slider, SIGNAL (valueChanged (int)),
              this, SIGNAL (VolumeChanged (int)));
-
-    connect (m_slider, SIGNAL (valueChanged (int)),
-             this, SLOT (updateSliderIcon (int)));
 
     // Stop the timeout when the slider is in pressed state ...
     connect (m_slider, SIGNAL (sliderPressed ()),
@@ -59,8 +57,6 @@ void
 VolumeOverlay::UpdateVolume (int val, int max)
 {
     m_timer->stop ();
-
-    updateSliderIcon (val);
 
     m_slider->blockSignals (true);
 
@@ -81,15 +77,5 @@ VolumeOverlay::hideMe ()
 
     m_timer->stop ();
     disappear ();
-}
-
-void
-VolumeOverlay::updateSliderIcon (int val)
-{
-    // update the icon-id
-    if (val == 0)
-        m_slider->setMaxLabelIconID (QString ("icon-m-common-volume-off"));
-    else
-        m_slider->setMaxLabelIconID (QString ("icon-m-common-volume"));
 }
 
