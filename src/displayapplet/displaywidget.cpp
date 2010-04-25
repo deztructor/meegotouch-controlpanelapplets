@@ -120,7 +120,7 @@ DisplayWidget::retranslateUi ()
                       qtTrId ("qtn_comm_time_second") :
                       //% "%1 minutes"
                       qtTrId ("qtn_comm_time_minute");
-        if (value => 60)
+        if (value >= 60)
             value /= 60;
         m_screenlightCombo->setItemText (i, str.arg (value));
     }
