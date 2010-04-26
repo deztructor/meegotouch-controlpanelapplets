@@ -14,12 +14,11 @@ Section: devel
 Priority: optional
 Architecture: any
 Depends: ${shlibs:Depends}, meegotestrunner, duicontrolpanel-usbapplet,
-         duicontrolpanel-batteryapplet, duistatusindicatormenu-batteryplugin,
+         duicontrolpanel-batteryapplet, duicontrolpanel-aboutapplet,
          duistatusindicatormenu-volumeplugin, duicontrolpanel-displayapplet,
          duicontrolpanel-profileapplet, duistatusindicatormenu-profileplugin,
          duicontrolpanel-ledapplet, duicontrolpanel-themeapplet,
-         duicontrolpanel-wallpaperapplet, duicontrolpanel-resetapplet,
-         duicontrolpanel-aboutapplet
+         duicontrolpanel-wallpaperapplet, duicontrolpanel-resetapplet
 XB-Maemo-CI-Packages: system-ui
 XB-Maemo-CI-Stage: fast, staging
 Description: Test package for system-ui applets
@@ -42,13 +41,6 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, system-ui, libduicontrolpanel,
          systemui-applets-l10n-engineering-english
 Description: Battery settings applet.
-
-Package: duistatusindicatormenu-batteryplugin
-Section: misc
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends},
-         system-ui, systemui-applets-l10n-engineering-english
-Description: Battery status indicator menu plugin.
 
 Package: duistatusindicatormenu-volumeplugin
 Section: misc

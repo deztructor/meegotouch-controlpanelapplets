@@ -1,14 +1,15 @@
-systemui-applets (0.13.3~1ubuntu1) karmic; urgency=low
+systemui-applets (0.13.3~3) harmattan; urgency=low
 
+  [ László Pere ]
   * Fixes: NB#165600 - Unable to change the Wall paper. 
 
- -- László Pere <pipas@pipas.blumsoft.eu>  Mon, 26 Apr 2010 12:49:16 +0200
-
-systemui-applets (0.13.3~1) harmattan; urgency=low
-
+  [ David Kedves ]
+  * Remove batteryplugin from source tree
   * Volume control updates:
     - add pulseaudio-module-meego-mainvolume dependency
     - update the DBus API (d-bus math meegoized now)
+  * Updated UI for Display applet, Battery applet, USB applet
+  * Using usb_moded for usb businesslogic
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 23 Apr 2010 10:18:53 +0200
 

@@ -8,6 +8,6 @@ SUBDIRS = batteryapplet   \
           profileplugin   \
           usbapplet       \
           wallpaperapplet \
-	  resetapplet     \
-	  aboutapplet     \
+          resetapplet     \
+          aboutapplet     \
           volumebarplugin
