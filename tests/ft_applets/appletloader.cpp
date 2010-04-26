@@ -122,4 +122,28 @@ Ft_AppletLoader::testusbapplet ()
     DoAppletTest ("usbapplet.desktop");
 }
 
+void
+Ft_AppletLoader::testresetapplet ()
+{
+    DoAppletTest ("reset.desktop");
+}
+
+void
+Ft_AppletLoader::testaboutapplet ()
+{
+    DoAppletTest ("about.desktop");
+}
+
+void
+Ft_AppletLoader::testthemeapplet ()
+{
+    DoAppletTest ("theme.desktop");
+}
+
+void
+Ft_AppletLoader::testwallpaperapplet ()
+{
+    DoAppletTest ("wallpaper.desktop");
+}
+
 QTEST_APPLESS_MAIN(Ft_AppletLoader)
