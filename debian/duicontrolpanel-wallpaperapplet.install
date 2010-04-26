@@ -1,3 +1,4 @@
 usr/lib/duicontrolpanel/wallpaper.desktop
 usr/share/themes/base/meego/duicontrolpanel/style/wallpaper.css
 usr/lib/duicontrolpanel/applets/libwallpaperapplet.so
+etc/osso-rfs-scripts/wallpaper-rfs.sh
