@@ -66,6 +66,8 @@ VolumeOverlay::UpdateVolume (int val, int max)
 
     m_slider->blockSignals (false);
 
+    setOpacity (1.0);
+
     appear (MSceneWindow::KeepWhenDone);
     m_timer->start ();
 }
