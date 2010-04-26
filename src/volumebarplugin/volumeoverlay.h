@@ -22,11 +22,10 @@ class VolumeOverlay : public MOverlay
     void UpdateVolume (int val, int max);
 
   private slots:
-    void updateSliderIcon (int val);
     void hideMe ();
 
   private:
-    QTimer          *m_timer;
+    QTimer        *m_timer;
     MSlider       *m_slider;
 
     void constructUi ();

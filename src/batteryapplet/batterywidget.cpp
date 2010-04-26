@@ -184,10 +184,13 @@ BatteryWidget::updatePSMButton (
     if (toggle) {
         //% "Deactivate power save now"
         PSMButton->setText (qtTrId ("qtn_ener_dps"));
+        batteryImage->setIconSet (ICON_POWERSAVE);
     } else {
         //% "Activate power save now"
         PSMButton->setText (qtTrId ("qtn_ener_aps"));
+        batteryImage->setIconSet (ICON_NORMAL);
     }
+    sliderContainer->setVisible (!toggle);
 }
 
 void BatteryWidget::remainingTimeValuesReceived(const QStringList &timeValues)

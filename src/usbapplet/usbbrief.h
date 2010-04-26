@@ -6,21 +6,24 @@
 
 #include <MLocale>
 #include <DcpBrief>
+#include "usbbusinesslogic.h"
 
-class UsbBrief: public DcpBrief {
+class UsbBrief: public DcpBrief
+{
     Q_OBJECT
 
 public:
-    UsbBrief();
-    virtual QString valueText() const;
+    UsbBrief (UsbSettingsLogic *logic);
+    QString valueText () const;
+
+protected:
+    void    retranslateUi ();
 
 public slots:
-    void    settingsChanged (int currentmode);
+    void settingsChanged ();
 
 private:
-    void    retranslateUi();
-    int     m_CurrentMode;
+    UsbSettingsLogic    *m_logic;
 };
-
 
 #endif

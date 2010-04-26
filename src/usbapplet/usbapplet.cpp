@@ -1,63 +1,59 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et sw=4 ts=4 sts=4: */
-
-#include <QDebug>
 #include <MAction>
 #include <DcpWidget>
 #include <MLocale>
 
+#include "usbbusinesslogic.h"
 #include "usbbrief.h"
 #include "usbview.h"
 #include "usbapplet.h"
 
 Q_EXPORT_PLUGIN2(usbapplet, UsbApplet)
 
-void 
+void
 UsbApplet::init (void)
 {
-    m_Brief = NULL;
+    m_logic = new UsbSettingsLogic (this);
+    m_brief = NULL;
 }
 
 DcpWidget *
-UsbApplet::constructWidget (
-        int widgetId)
+UsbApplet::constructWidget (int widgetId)
 {
-    UsbView  *view;
+    Q_UNUSED (widgetId);
 
-    Q_UNUSED(widgetId);
+    UsbView  *view =
+        new UsbView (m_logic);
 
-    view = new UsbView ();
-
-    connect (view,  SIGNAL (settingsChanged (int)), 
-             m_Brief, SLOT (settingsChanged (int)));
+    connect (view,  SIGNAL (settingsChanged ()),
+             m_brief, SLOT (settingsChanged ()));
 
     return view;
 }
 
-QString 
+QString
 UsbApplet::title (void) const
 {
     //% "USB"
     return qtTrId ("qtn_usb_title");
 }
 
-QVector<MAction*> 
-UsbApplet::viewMenuItems (
-        void)
+QVector<MAction*>
+UsbApplet::viewMenuItems ()
 {
     QVector<MAction*> vector;
 
     return vector;
 }
 
-DcpBrief * 
-UsbApplet::constructBrief (
-        int partId)
+DcpBrief *
+UsbApplet::constructBrief (int partId)
 {
-    Q_UNUSED(partId);
-    
-    m_Brief = new UsbBrief();
-    
-    return m_Brief;
+    Q_UNUSED (partId);
+
+    m_brief = new UsbBrief (m_logic);
+
+    return m_brief;
 }
 

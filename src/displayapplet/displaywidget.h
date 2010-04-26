@@ -9,6 +9,7 @@ class MButton;
 class MSlider;
 class MLabel;
 class MContainer;
+class MComboBox;
 class DisplayBusinessLogic;
 
 class DisplayWidget : public DcpWidget
@@ -22,23 +23,18 @@ public:
 protected:
     void initWidget();
 
-private slots:
-    void modify_screenlight_handle (int newValue);
-    void update_onoff_label (bool value);
-
 private:
+    void retranslateUi ();
+
     DisplayBusinessLogic   *m_logic;
     QList<int>              m_brightness_vals;
     QList<int>              m_screenlight_vals;
-    MSlider              *m_brightnessSlider;
-    MSlider              *m_screenlightSlider;
+    MSlider                *m_brightnessSlider;
+    MComboBox              *m_screenlightCombo;
 
-    void retranslateUi ();
-
-    MContainer           *m_brightnessContainer;
-    MContainer           *m_screenlightContainer;
-    MContainer           *m_blankInhibitContainer;
-    MLabel               *m_OnOffLabel;
+    MLabel                 *m_brightnessLabel;
+    MLabel                 *m_screenlightLabel;
+    MLabel                 *m_blankInhibitLabel;
 };
 
 #endif // DISPLAYWIDGET_H
