@@ -6,6 +6,7 @@
 #include "../debug.h"
 
 #include <MStatusIndicatorMenuPluginInterface>
+#include <MApplication>
 #include <MLinearLayoutPolicy>
 #include <MContainer>
 #include <MSlider>
@@ -148,7 +149,6 @@ VolumeBar::overlayChanged (int val)
 void
 VolumeBar::hwKeyEvent (QmKeys::Key key, QmKeys::State state)
 {
-    SYS_DEBUG ("key = %d, state = %d");
     int change_val = 0;
 
     if (state == QmKeys::KeyUp)
@@ -167,6 +167,12 @@ VolumeBar::hwKeyEvent (QmKeys::Key key, QmKeys::State state)
             // no-op for other hw-keys...
             return;
             break;
+    }
+
+    switch (MApplication::instance ()->activeWindow ()
+            ->orientation () == M::Landscape)
+    {
+        change_val *= -1;
     }
 
     int current_volume = (int) m_logic->getVolume ();
