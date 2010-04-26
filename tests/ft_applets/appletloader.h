@@ -5,7 +5,8 @@
 
 #include <QObject>
 #include <QtTest/QtTest>
-#include <mapplication.h>
+#include <MApplication>
+#include <MApplicationWindow>
 
 class Ft_AppletLoader : public QObject
 {
@@ -28,7 +29,8 @@ private slots:
     void testwallpaperapplet ();
 
 private:
-    MApplication      *m_app;
+    MApplication            *m_app;
+    MApplicationWindow      *m_window;
 
     void    DoAppletTest (const char *desktopfile);
 };

@@ -42,6 +42,11 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, system-ui, libduicontrolpanel,
          systemui-applets-l10n-engineering-english
 Description: Battery settings applet.
 
+Package: duistatusindicatormenu-batteryplugin
+Section: misc
+Architecture: any
+Description: A deprecated package
+
 Package: duistatusindicatormenu-volumeplugin
 Section: misc
 Architecture: any
