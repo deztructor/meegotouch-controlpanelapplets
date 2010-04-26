@@ -34,6 +34,8 @@ Ut_UsbSettingsLogic::initTestCase()
     m_Api = new UsbSettingsLogic;
 
     toRestore = m_Api->getUsbSetting ();
+
+    QTest::qWait (150);
 }
 
 void 
