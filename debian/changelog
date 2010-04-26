@@ -1,3 +1,9 @@
+systemui-applets (0.13.3~1ubuntu1) karmic; urgency=low
+
+  * Fixes: NB#165600 - Unable to change the Wall paper. 
+
+ -- László Pere <pipas@pipas.blumsoft.eu>  Mon, 26 Apr 2010 12:49:16 +0200
+
 systemui-applets (0.13.3~1) harmattan; urgency=low
 
   * Volume control updates:

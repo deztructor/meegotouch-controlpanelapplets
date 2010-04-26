@@ -19,9 +19,8 @@
 #define DEBUG
 #include "../debug.h"
 
-static const QString PortraitKey = "/desktop/standard/background/portrait";
-static const QString LandscapeKey = "/desktop/standard/background/landscape";
-static const QString PictureKey = "/picture_filename";
+static const QString PortraitKey = "/desktop/meego/background/landscape";
+static const QString LandscapeKey = "/desktop/meego/background/portrait";
 
 static const QString wallpaperDir = ".wallpapers";
 static const QString destopFileName = "wallpaper.desktop";
@@ -29,8 +28,8 @@ static const QString backupExtension = ".BAK";
 
 WallpaperBusinessLogic::WallpaperBusinessLogic()
 {
-    m_LandscapeGConfItem = new MGConfItem (LandscapeKey + PictureKey);
-    m_PortraitGConfItem = new MGConfItem (PortraitKey + PictureKey);
+    m_LandscapeGConfItem = new MGConfItem (LandscapeKey);
+    m_PortraitGConfItem = new MGConfItem (PortraitKey);
     m_EditedImage = 0;
 }
 
@@ -116,7 +115,7 @@ QStringList
 WallpaperBusinessLogic::availableWallpapers () const
 {
     QStringList list;
-#if 0
+#if 1
     list <<
         "/usr/share/themes/base/meegotouch/images/duiapplicationpage-background.png" <<
         "/usr/share/themes/plankton/meegotouch/images/duiapplicationpage-background.png" <<
