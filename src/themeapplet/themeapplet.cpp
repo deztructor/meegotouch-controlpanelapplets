@@ -12,7 +12,7 @@
 
 Q_EXPORT_PLUGIN2(themeapplet, ThemeApplet)
 
-const QString cssDir = "/usr/share/themes/base/m/mcontrolpanel/style/";
+const QString cssDir = "/usr/share/themes/base/meego/duicontrolpanel/style/";
 
 ThemeApplet::ThemeApplet() :
     m_ThemeBusinessLogic (new ThemeBusinessLogic)

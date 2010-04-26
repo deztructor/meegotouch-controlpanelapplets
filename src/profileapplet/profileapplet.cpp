@@ -16,7 +16,7 @@
 
 Q_EXPORT_PLUGIN2(profileapplet, ProfileApplet)
 
-const QString cssDir = "/usr/share/themes/base/m/mcontrolpanel/style/";
+const QString cssDir = "/usr/share/themes/base/meego/duicontrolpanel/style/";
 
 ProfileApplet::ProfileApplet() :
     m_Api (new ProfileDataInterface)
