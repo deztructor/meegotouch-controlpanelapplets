@@ -11,7 +11,7 @@
 #include "../debug.h"
 
 
-static const QString requiredType = "X-DUI-Metatheme";
+static const QString requiredType = "X-MeeGoTouch-Metatheme";
 static const QString typeKey = "Desktop Entry/Type";
 
 static const QString nameKey = "Desktop Entry/Name";
