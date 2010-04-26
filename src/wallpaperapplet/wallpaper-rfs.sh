@@ -5,3 +5,6 @@
 #
 
 gconftool-2 --recursive-unset /desktop/standard/background
+
+rm -rf $HOME/.wallpapers
+
