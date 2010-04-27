@@ -20,7 +20,7 @@
 
 Q_EXPORT_PLUGIN2(batteryapplet, BatteryApplet)
 
-const QString cssDir = "/usr/share/themes/base/meego/duicontrolpanel/style/";
+const QString cssDir = "/usr/share/themes/base/meegotouch/duicontrolpanel/style/";
 
 BatteryApplet::BatteryApplet ():
 	m_MainWidget (0)
