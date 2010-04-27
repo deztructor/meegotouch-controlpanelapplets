@@ -3,7 +3,7 @@
 #include "displaybusinesslogic.h"
 #include <MGConfItem>
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -55,8 +55,10 @@ DisplayBusinessLogic::brightnessValues ()
 
     // QmDisplayState::setDisplayBrightnessValue accepts values 
     // between 1 and getMaxDisplayBrightnessValue()
-    for (int i = 1; i <= max; ++i)
+    for (int i = 1; i <= max; ++i) {
+        SYS_DEBUG ("BrightnessValues: %d", i);
         values << i;
+    }
 
     return values;
 }
@@ -69,12 +71,15 @@ DisplayBusinessLogic::selectedBrightnessValue ()
 {
     QList<int> values = brightnessValues();
 
+    SYS_DEBUG ("*** getDisplayBrightnessValue() = %d", 
+            m_Display->getDisplayBrightnessValue());
     int index = values.indexOf(m_Display->getDisplayBrightnessValue());
     if (index < 0) {
         index = values.size() / 2;
         setBrightnessValue (values.at(index));
     }
 
+    SYS_DEBUG ("*** index                       = %d", index);
     return index;
 }
 
@@ -132,12 +137,16 @@ DisplayBusinessLogic::blankInhibitValue ()
     return !m_Display->getBlankingWhenCharging();
 }
 
+/*!
+ * \param value The slider value, that starts from 0, the qmsystem value starts
+ *   from 1, so we add +1 to this parameter.
+ */
 void 
 DisplayBusinessLogic::setBrightnessValue (
         int value)
 {
-    SYS_DEBUG ("*** value = %d", value);
-    m_Display->setDisplayBrightnessValue(value);
+    SYS_DEBUG ("*** value + 1 = %d", value + 1);
+    m_Display->setDisplayBrightnessValue(value + 1);
 }
 
 /*!

@@ -2,7 +2,7 @@ systemui-applets (0.13.3~3) harmattan; urgency=low
 
   [ László Pere ]
   * Fixes: NB#165600 - Unable to change the Wall paper. 
-
+  * Fixes: NB#165814 - Problems with setting brightness in Settings
   [ David Kedves ]
   * Remove batteryplugin from source tree
   * Volume control updates:
