@@ -9,6 +9,8 @@
 #define DEBUG
 #include "../debug.h"
 
+static const int loadPicturesDelay = 200;
+
 WallpaperList::WallpaperList (
         WallpaperBusinessLogic *logic,
         QGraphicsItem          *parent) :
@@ -45,7 +47,7 @@ WallpaperList::setDataSourceType (
     setCellCreator (cellCreator);
 
 
-    QTimer::singleShot(1500, this, SLOT(loadPictures()));
+    QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
 }
 
 
@@ -64,8 +66,36 @@ void
 WallpaperList::loadPictures ()
 {
     SYS_DEBUG ("");
-    if (m_ImageLoader == 0)
+
+    /*
+     * We used to get panningStopped() signals when we got hidden, so we will
+     * not initiate loading of the images when we are not visible.
+     */
+    if (m_ImageLoader == 0 || !isVisible())
         return;
 
     m_ImageLoader->loadPictures (firstVisibleItem(), lastVisibleItem());
 }
+
+void
+WallpaperList::hideEvent (
+        QHideEvent *event)
+{
+    /*
+     * When we got hidden we stop all the image loading. We have to give some
+     * CPU for the other page/widget.
+     */
+    m_ImageLoader->stopLoadingPictures();
+}
+
+void 
+WallpaperList::showEvent (
+        QShowEvent *event)
+{
+    /*
+     * When we page back from the other widget we might want to load the images
+     * we stopped loading when we become hidden.
+     */
+    QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
+}
+

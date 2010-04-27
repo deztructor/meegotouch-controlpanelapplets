@@ -30,6 +30,10 @@ public:
 
     void setDataSourceType (WallpaperList::DataSourceType sourceType);
 
+protected:
+    void hideEvent (QHideEvent *event);
+    void showEvent (QShowEvent *event);
+
 private slots:
     void slotItemClicked (const QModelIndex &index);
     void loadPictures ();

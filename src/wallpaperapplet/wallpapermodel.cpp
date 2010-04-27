@@ -7,7 +7,14 @@
 
 #include <QTimer>
 
+#undef DEBUG
 #include <../debug.h>
+
+/*
+ * The intentional delay between the loading of two picture files. This gives a
+ * little chance for other applications.
+ */
+static const int loadPictureDelay = 100;
 
 /******************************************************************************
  * WallpaperImageLoader implementation.
@@ -38,20 +45,21 @@ WallpaperImageLoader::loadPictures (
         }
     }
 
-    if(thumbnailLoadingJobs.count() != 0)
-        QTimer::singleShot(100, this, SLOT(processJobQueue()));
+    if (thumbnailLoadingJobs.count() != 0)
+        QTimer::singleShot(0, this, SLOT(processJobQueue()));
 }
 
 void 
 WallpaperImageLoader::stopLoadingPictures()
 {
+    SYS_DEBUG ("");
     thumbnailLoadingJobs.clear();
 }
 
 void 
 WallpaperImageLoader::processJobQueue ()
 {
-    if(thumbnailLoadingJobs.isEmpty())
+    if (thumbnailLoadingJobs.isEmpty())
         return;
 
     Job job = thumbnailLoadingJobs.takeFirst();
@@ -64,7 +72,7 @@ WallpaperImageLoader::processJobQueue ()
 
     // Continue loading and letting UI thread do something
     if(thumbnailLoadingJobs.count() > 0)
-        QTimer::singleShot(100, this, SLOT(processJobQueue()));
+        QTimer::singleShot(loadPictureDelay, this, SLOT(processJobQueue()));
 }
 
 /******************************************************************************
