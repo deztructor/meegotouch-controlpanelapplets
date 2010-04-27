@@ -15,7 +15,7 @@
 
 Q_EXPORT_PLUGIN2(ledapplet, LedApplet)
 
-const QString cssDir = "/usr/share/themes/base/meego/duicontrolpanel/style/";
+const QString cssDir = "/usr/share/themes/base/meegotouch/duicontrolpanel/style/";
 
 
 LedApplet::LedApplet ()
