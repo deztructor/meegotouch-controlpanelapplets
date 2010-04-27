@@ -42,6 +42,7 @@ protected:
     virtual void wheelEvent (QGraphicsSceneWheelEvent *event);
 
 private slots:
+    void redrawImage ();
     void orientationChanged (M::Orientation orientation);
     void slotDoneActivated ();
     void createContent ();
@@ -54,8 +55,8 @@ private:
 
 private:
     QPointer<WallpaperBusinessLogic>  m_WallpaperBusinessLogic;
-    QPixmap         *m_bgLandscape;
-    QPixmap         *m_bgPortrait;
+    QPixmap          m_bgLandscape;
+    QPixmap          m_bgPortrait;
     MAction         *m_DoneAction;
     bool             m_NoTitlebar;
 

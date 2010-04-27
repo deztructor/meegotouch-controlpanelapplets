@@ -5,6 +5,7 @@
 
 #include <QFileInfo>
 #include <QImage>
+#include <QPixmap>
 
 #define DEBUG
 #include "../debug.h"
@@ -14,6 +15,7 @@ const QString dir = "";
 WallpaperDescriptor::WallpaperDescriptor()
 {
     m_ImageLoaded = false;
+    m_Cached = false;
 }
 
 WallpaperDescriptor::WallpaperDescriptor(
@@ -21,6 +23,7 @@ WallpaperDescriptor::WallpaperDescriptor(
     QObject ()
 {
     m_ImageLoaded = false;
+    m_Cached = false;
     m_Filename = orig.m_Filename;
 }
 
@@ -29,6 +32,7 @@ WallpaperDescriptor::WallpaperDescriptor(
     m_Filename (filename)
 {
     m_ImageLoaded = false;
+    m_Cached = false;
 }
 
 WallpaperDescriptor::~WallpaperDescriptor()
@@ -40,6 +44,7 @@ WallpaperDescriptor::setFilename (
         const QString &filename)
 {
     m_ImageLoaded = false;
+    m_Cached = false;
     m_Filename = filename;
 }
 
@@ -68,19 +73,19 @@ WallpaperDescriptor::extension () const
 void
 WallpaperDescriptor::loadImage ()
 {
-    bool success;
+    QImage image;
+    bool   success;
 
     if (m_ImageLoaded)
         return;
-    SYS_DEBUG ("Loading : %s", SYS_STR(filename()));
+    SYS_DEBUG ("Lom_WallpaperBusinessLogic->editedImage()ading : %s", SYS_STR(filename()));
 
-    success = m_Image.load (filename());
+    success = image.load (filename());
     if (!success) {
         SYS_WARNING ("The image was not loaded from %s", SYS_STR(filename()));
     }
 
-    m_Thumbnail = m_Image.scaled(100, 100, Qt::KeepAspectRatio);
-    m_Image = m_Image.scaled(800, 480, Qt::KeepAspectRatio);
+    m_Thumbnail = image.scaled (100, 100, Qt::KeepAspectRatioByExpanding);
     m_ImageLoaded = true;
 }
 
@@ -90,14 +95,44 @@ WallpaperDescriptor::thumbnail()
     return m_Thumbnail;
 }
 
-QImage 
-WallpaperDescriptor::image()
-{
-    return m_Image;
-}
-
 bool 
 WallpaperDescriptor::isImageLoaded ()
 {
     return m_ImageLoaded;
 }
+
+void 
+WallpaperDescriptor::cache ()
+{
+    if (m_Cached)
+        return;
+
+    m_Pixmap.load (filename());
+    m_Cached = true;
+}
+
+void
+WallpaperDescriptor::unCache ()
+{
+    if (!m_Cached)
+        return;
+
+    m_Pixmap = QPixmap();
+    m_Cached = false;
+}
+
+QPixmap
+WallpaperDescriptor::pixmap ()
+{
+    cache();
+    return m_Pixmap;
+}
+
+QPixmap 
+WallpaperDescriptor::scaled (
+        QSize  size)
+{
+    cache ();
+    return m_Pixmap.scaled (size, Qt::KeepAspectRatioByExpanding);
+}
+

@@ -7,9 +7,9 @@
 #include <QObject>
 #include <QMetaType>
 #include <QImage>
+#include <QPixmap>
 
 class QString;
-
 
 class Q_DECL_EXPORT WallpaperDescriptor : public QObject {
     Q_OBJECT
@@ -28,13 +28,18 @@ public:
     void loadImage ();
     bool isImageLoaded ();
     QImage thumbnail ();
-    QImage image ();
+
+    void cache ();
+    void unCache ();
+    QPixmap pixmap ();
+    QPixmap scaled (QSize size);
 
 private:
     bool        m_ImageLoaded;
     QString     m_Filename;
-    QImage      m_Image;
     QImage      m_Thumbnail;
+    bool        m_Cached;
+    QPixmap     m_Pixmap;
 };
 
 Q_DECLARE_METATYPE(WallpaperDescriptor)

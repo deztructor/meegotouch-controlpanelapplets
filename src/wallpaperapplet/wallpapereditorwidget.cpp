@@ -32,8 +32,6 @@ WallpaperEditorWidget::WallpaperEditorWidget (
         QGraphicsWidget        *parent) :
     DcpWidget (parent),
     m_WallpaperBusinessLogic (wallpaperBusinessLogic),
-    m_bgLandscape (0),
-    m_bgPortrait (0),
     m_DoneAction (0),
     m_NoTitlebar (false)
 {
@@ -72,9 +70,7 @@ WallpaperEditorWidget::paint (
 {
     bool portrait = (geometry().height() > geometry().width());
 
-    if ((m_bgPortrait != 0) && portrait) {
-        painter->drawPixmap (geometry().toRect(), *m_bgPortrait);
-    } else if (m_bgLandscape && ! portrait) {
+    if (portrait) {
         painter->fillRect (
                 -ExtraMargin, -ExtraMargin, 
                 m_Trans.expectedWidth (),
@@ -85,7 +81,19 @@ WallpaperEditorWidget::paint (
                 imageDX(), imageDY(),
                 m_Trans * m_Trans.expectedWidth (),
                 m_Trans * m_Trans.expectedHeight (),
-                *m_bgLandscape);
+                m_bgPortrait);
+    } else if (!portrait) {
+        painter->fillRect (
+                -ExtraMargin, -ExtraMargin, 
+                m_Trans.expectedWidth (),
+                m_Trans.expectedHeight (),
+                QColor ("black"));
+
+        painter->drawPixmap (
+                imageDX(), imageDY(),
+                m_Trans * m_Trans.expectedWidth (),
+                m_Trans * m_Trans.expectedHeight (),
+                m_bgLandscape);
     }
 
     DcpWidget::paint (painter, option, widget);
@@ -99,26 +107,21 @@ WallpaperEditorWidget::createContent ()
     SYS_WARNING ("*** filename = %s", SYS_STR(filename));
 
     /*
-     * If the image is very big the handling might be slow, so we  scale it
+     * If the image is very big the handling might be slow, so we scale it
      * down.
      */
-    QPixmap toCheck (filename);
-    m_bgLandscape = new QPixmap (toCheck.scaled (m_Trans.expectedSize()));
+    m_WallpaperBusinessLogic->editedImage()->cache();
+    m_bgLandscape = m_WallpaperBusinessLogic->editedImage()->scaled (
+            m_LandscapeTrans.expectedSize());
+    m_bgPortrait = m_WallpaperBusinessLogic->editedImage()->scaled (
+            m_PortraitTrans.expectedSize());
 
-    SYS_DEBUG ("size = %dx%d", 
-            m_Trans.expectedWidth(), 
-            m_Trans.expectedHeight());
 
     //this->setContentsMargins (0, 0, 0, 0);
     //this->setWindowFrameMargins (0.0, 0.0, 0.0, 0.0);
 
     this->setMinimumSize (m_Trans.expectedSize());
-
-    /*
-     * We need to update the current page and not just this widget because of
-     * those damn extra margins coming from somewhere.
-     */
-    MApplication::activeApplicationWindow()->currentPage()->update();
+    redrawImage ();
 }
 
 /*
@@ -135,7 +138,7 @@ WallpaperEditorWidget::createActions ()
     MApplicationWindow *window = 
         MApplication::instance()->activeApplicationWindow();
 
-    m_DoneAction = new MAction(
+    m_DoneAction = new MAction (
             "icon-m-framework-done",
             //% "Done"
             qtTrId("qtn_wall_done"), 
@@ -178,12 +181,7 @@ WallpaperEditorWidget::mouseMoveEvent (
         QGraphicsSceneMouseEvent *event)
 {
     m_UserOffset = event->pos() - m_LastClick;
-
-    /*
-     * We need to update the current page and not just this widget because of
-     * those damn extra margins coming from somewhere.
-     */
-    MApplication::activeApplicationWindow()->currentPage()->update();
+    redrawImage ();
 }
 
 void 
@@ -191,12 +189,7 @@ WallpaperEditorWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
 {
     m_Trans.modScale (event->delta());
-
-    /*
-     * We need to update the current page and not just this widget because of
-     * those damn extra margins coming from somewhere.
-     */
-    MApplication::activeApplicationWindow()->currentPage()->update();
+    redrawImage ();
 }
 
 void
@@ -268,6 +261,16 @@ WallpaperEditorWidget::imageDY () const
     retval += m_Trans.y();
 
     return retval;
+}
+
+void 
+WallpaperEditorWidget::redrawImage ()
+{
+    /*
+     * We need to update the current page and not just this widget because of
+     * those damn extra margins coming from somewhere.
+     */
+    MApplication::activeApplicationWindow()->currentPage()->update();
 }
 
 void 

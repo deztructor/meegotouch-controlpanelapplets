@@ -258,18 +258,24 @@ WallpaperBusinessLogic::makeImageFile (
             WallpaperDescriptor  *desc,
             WallpaperITrans      *transformations)
 {
-    QPixmap  pixmap (transformations->expectedSize());
-    QPixmap  original (desc->filename());
-    QPainter painter (&pixmap);
-    qreal    scale = transformations->scale();
+    QPixmap   pixmap (transformations->expectedSize());
+    QPainter  painter (&pixmap);
+    qreal     scale = transformations->scale();
 
+    /*
+     * Let's fill the pixmap with black, so the area not covered by the original
+     * pixmap is initialized.
+     */
     pixmap.fill (QColor("black"));
-    //SYS_DEBUG ("drawPixmap (%d, %d, %d, %d, pixmap)");
+
+    /*
+     * Then we draw the scaled image with the appropriate offset.
+     */
     painter.drawPixmap (
                 transformations->x(), transformations->y(),
                 scale * transformations->expectedWidth (),
                 scale * transformations->expectedHeight (),
-                original);
+                desc->pixmap());
 
     pixmap.save (filePath);
 }
