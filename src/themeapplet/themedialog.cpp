@@ -8,6 +8,7 @@
 #include <MButton>
 #include <QGraphicsLinearLayout>
 #include <MContainer>
+#include <MImageWidget>
 
 //#define DEBUG
 #include "../debug.h"
@@ -19,12 +20,18 @@ ThemeDialog::ThemeDialog (
     m_ThemeBusinessLogic (themeBusinessLogic),
     m_ThemeDesc (themeDesc)
 {  
-    QGraphicsLinearLayout *layout;
+    QGraphicsLinearLayout *buttonLayout, *mainLayout;
     MContainer  *hbox;
     MButton *selectButton;
     MButton *cancelButton;
+    MImageWidget *image1;
 
-    layout = new QGraphicsLinearLayout;
+    mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    buttonLayout = new QGraphicsLinearLayout;
+
+    // An image widget to show some preview screenshot.
+    image1 = new MImageWidget (themeDesc->iconName());
+    mainLayout->addItem (image1);
 
     //% "Select"
     selectButton = new MButton (qtTrId ("qtn_theme_select"));
@@ -35,15 +42,17 @@ ThemeDialog::ThemeDialog (
     cancelButton = new MButton (qtTrId ("qtn_theme_cancel"));
     connect (cancelButton, SIGNAL(clicked()),
             this, SLOT(cancelClicked()));
+    
+    buttonLayout->addItem (selectButton);
+    buttonLayout->setStretchFactor (selectButton, 1);
+    buttonLayout->addItem (cancelButton);
+    buttonLayout->setStretchFactor (cancelButton, 1);
 
-    layout->addItem (selectButton);
-    layout->setStretchFactor (selectButton, 1);
-    layout->addItem (cancelButton);
-    layout->setStretchFactor (cancelButton, 1);
+    mainLayout->addItem (buttonLayout);
     
     hbox = new MContainer;
     hbox->setHeaderVisible (false);
-    hbox->setLayout (layout);
+    hbox->setLayout (mainLayout);
 
     setCentralWidget (hbox);
     setButtonBoxVisible (false);
