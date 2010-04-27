@@ -10,6 +10,7 @@
 #include <usb_moded-dbus.h>
 
 #define DEBUG
+#define WARNING
 #include "../../src/debug.h"
 
 void 
@@ -34,6 +35,8 @@ Ut_UsbSettingsLogic::initTestCase()
     m_Api = new UsbSettingsLogic;
 
     toRestore = m_Api->getUsbSetting ();
+
+    QTest::qWait (150);
 }
 
 void 
@@ -92,7 +95,9 @@ Ut_UsbSettingsLogic::testUsbModedRelation ()
     m_Api->usbModeChange (QString (MODE_OVI_SUITE));
     m_Api->usbModeChange (QString (USB_CONNECTED));
 
-    QTest::qWait (100);
+    QTest::qWait (10);
+
+    SYS_DEBUG ("\nDEBUG spy.count () = %d\n", spy.count ());
 
     QVERIFY (spy.count () == 4);
 

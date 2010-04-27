@@ -1,6 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 #include "appletloader.h"
+
 #include <QTest>
 #include <dcpappletif.h>
 #include <dcpappletmetadata.h>
@@ -37,6 +38,7 @@ Ft_AppletLoader::initTestCase ()
     };
 
     m_app = new MApplication (argc, argv);
+    m_window = new MApplicationWindow;
 }
 
 void
@@ -120,6 +122,30 @@ void
 Ft_AppletLoader::testusbapplet ()
 {
     DoAppletTest ("usbapplet.desktop");
+}
+
+void
+Ft_AppletLoader::testresetapplet ()
+{
+    DoAppletTest ("reset.desktop");
+}
+
+void
+Ft_AppletLoader::testaboutapplet ()
+{
+    DoAppletTest ("about.desktop");
+}
+
+void
+Ft_AppletLoader::testthemeapplet ()
+{
+    DoAppletTest ("theme.desktop");
+}
+
+void
+Ft_AppletLoader::testwallpaperapplet ()
+{
+    DoAppletTest ("wallpaper.desktop");
 }
 
 QTEST_APPLESS_MAIN(Ft_AppletLoader)

@@ -13,7 +13,7 @@
 
 Q_EXPORT_PLUGIN2(wallpaperapplet, WallpaperApplet)
 
-const QString cssDir = "/usr/share/themes/base/m/mcontrolpanel/style/";
+const QString cssDir = "/usr/share/themes/base/meego/duicontrolpanel/style/";
 
 WallpaperApplet::WallpaperApplet() :
     m_WallpaperBusinessLogic (new WallpaperBusinessLogic)

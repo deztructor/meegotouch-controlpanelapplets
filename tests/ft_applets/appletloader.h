@@ -5,8 +5,8 @@
 
 #include <QObject>
 #include <QtTest/QtTest>
-// From MControlPanel
-#include <mapplication.h>
+#include <MApplication>
+#include <MApplicationWindow>
 
 class Ft_AppletLoader : public QObject
 {
@@ -23,10 +23,14 @@ private slots:
     void testledapplet ();
     void testprofileapplet ();
     void testusbapplet ();
-
+    void testresetapplet ();
+    void testaboutapplet ();
+    void testthemeapplet ();
+    void testwallpaperapplet ();
 
 private:
-    MApplication      *m_app;
+    MApplication            *m_app;
+    MApplicationWindow      *m_window;
 
     void    DoAppletTest (const char *desktopfile);
 };
