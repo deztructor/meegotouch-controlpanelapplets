@@ -10,9 +10,6 @@ CONFIG       += plugin \
 PKGCONFIG += dbus-1 usb_moded
 QT += dbus
 
-# FIXME: HACK!!! REMOVE THIS!!!
-message("HACK: fixing usb-moded headers" $$system(cp -f /usr/include/usb-moded/* $$PWD))
-
 contains(cov, true) { 
     message("Coverage options enabled")
     QMAKE_CXXFLAGS += --coverage
