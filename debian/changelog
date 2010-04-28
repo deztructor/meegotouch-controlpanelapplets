@@ -1,4 +1,4 @@
-systemui-applets (0.13.3~3) harmattan; urgency=low
+systemui-applets (0.13.3-1) harmattan; urgency=low
 
   [ László Pere ]
   * Fixes: NB#165600 - Unable to change the Wall paper. 
@@ -11,7 +11,7 @@ systemui-applets (0.13.3~3) harmattan; urgency=low
   * Updated UI for Display applet, Battery applet, USB applet
   * Using usb_moded for usb businesslogic
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 23 Apr 2010 10:18:53 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 28 Apr 2010 09:30:47 +0200
 
 systemui-applets (0.13.2-1) harmattan; urgency=low
 
