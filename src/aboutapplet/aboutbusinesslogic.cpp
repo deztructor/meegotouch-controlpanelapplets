@@ -14,6 +14,8 @@
 #include <QDBusObjectPath>
 #include <QFile>
 
+#define OS_NAME_FALLBACK "MeeGo"
+
 #define DEBUG
 #include "../debug.h"
 
@@ -89,6 +91,37 @@ AboutBusinessLogic::osVersion ()
         line.remove (0, 30);
         line.chop (2);
         retval = line;
+        SYS_DEBUG ("*** line = %s", SYS_STR(line));
+    }
+
+    return retval;
+}
+
+QString
+AboutBusinessLogic::osName ()
+{
+    QFile   file ("/tmp/osso-product-info");
+    QString retval (OS_NAME_FALLBACK);
+    char    buf[1024];
+    QString line;
+    qint64  lineLength;
+
+    if (!file.open (QFile::ReadOnly))
+        return retval;
+
+    for (;;) {
+        lineLength = file.readLine (buf, sizeof (buf));
+        if (lineLength < 0)
+            break;
+        line = buf;
+        if (!line.startsWith ("OSSO_PRODUCT_RELEASE_NAME='"))
+            continue;
+
+        line.remove (0, 27);
+        line.chop (2);
+
+        if (! line.contains ("unknown"))
+            retval = line;
         SYS_DEBUG ("*** line = %s", SYS_STR(line));
     }
 

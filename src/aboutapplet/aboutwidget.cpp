@@ -65,7 +65,7 @@ AboutWidget::labelText()
     QString retval;
 
     retval += "<h2>Name of the product</h2>";
-    retval += "<h2>Maemo 6</h2>";
+    retval += "<h2>" + m_AboutBusinessLogic->osName () + "</h2>";
     retval += "<h2>Version</h2>";
     retval += m_AboutBusinessLogic->osVersion();
     retval += "<h2>Wi-Fi MAC address:</h2>";
