@@ -137,10 +137,7 @@ WallpaperModel::WallpaperModel (
     /*
      * FIXME: Maybe we should delay this?
      */
-    QStringList filenames = logic->availableWallpapers();
-    foreach (QString filename, filenames) {
-        m_DescriptorList << new WallpaperDescriptor (filename);
-    }
+    m_DescriptorList = logic->availableWallpapers();
 }
 
 int 

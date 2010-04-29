@@ -5,16 +5,12 @@
 #include "wallpaperdescriptor.h"
 #include "wallpaperitrans.h"
 
-//#include <QFileInfo>
-//#include <QDir>
-//#include <QFile>
 #include <QString>
 #include <QStringList>
 #include <QProcessEnvironment>
 #include <QPainter>
 
 #include <Tracker>
-//#include <QtTracker/Tracker>
 
 #include <MTheme>
 #include <MGConfItem>
@@ -116,19 +112,19 @@ WallpaperBusinessLogic::setBackground (
  *
  * FIXME: This function needs some polishing.
  */
-QStringList
+QList<WallpaperDescriptor *>
 WallpaperBusinessLogic::availableWallpapers () const
 {
-    QStringList list;
+    QList<WallpaperDescriptor *> list;
     const QString query = 
 "SELECT ?uri ?mime ?height ?width WHERE { "
-" ?some nie:url ?uri ." 
+" ?item nie:url ?uri." 
 
-" ?some nie:mimeType ?mime ." 
-" FILTER regex(?mime, \"image\") ."
+" ?item nie:mimeType ?mime." 
+" FILTER regex(?mime, \"image\")."
 
-"?some nfo:height ?height ."
-"?some nfo:width ?width ."
+"?item nfo:height ?height."
+"?item nfo:width ?width."
 "}"
 ;
     
@@ -138,26 +134,27 @@ WallpaperBusinessLogic::availableWallpapers () const
 
     SYS_WARNING ("*** result.size() = %d", result.size());
     foreach (QStringList partlist, result) {
-        QString url;
+        WallpaperDescriptor *desc;
 
-        url = partlist[0];
         SYS_DEBUG ("*********************************");
-        SYS_DEBUG ("*** url     = %s", SYS_STR(url));
+        SYS_DEBUG ("*** url     = %s", SYS_STR(partlist[FieldUrl]));
 
-        if (url.startsWith("file://"))
-            url.remove (0, 7);
-            
-        list << url;
+        desc = new WallpaperDescriptor;
+        desc->setUrl (partlist[FieldUrl]);
+
+        list << desc;
 
         /*
          * Just to see what we really get.
          */
+        #if 0
         foreach (QString element, partlist) {
             SYS_DEBUG ("*** element[%2d][%2d] = %s", x, y, SYS_STR(element));
             x++;
         }
         y++;
         x = 0;
+        #endif
     }
 
     return list;

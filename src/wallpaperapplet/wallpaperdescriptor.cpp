@@ -3,6 +3,7 @@
 
 #include "wallpaperdescriptor.h"
 
+#include <QUrl>
 #include <QFileInfo>
 #include <QImage>
 #include <QPixmap>
@@ -46,6 +47,28 @@ WallpaperDescriptor::setFilename (
     m_ImageLoaded = false;
     m_Cached = false;
     m_Filename = filename;
+}
+
+void
+WallpaperDescriptor::setUrl (
+        const QString &urlString)
+{
+    QUrl url (urlString);
+    QString  path;
+
+    path = url.encodedPath ();
+    SYS_DEBUG ("*** urlString    = %s", SYS_STR(urlString));
+    SYS_DEBUG ("*** scheme       = %s", SYS_STR(url.scheme()));
+    SYS_DEBUG ("*** path         = %s", SYS_STR(path));
+
+    if (url.scheme() != "file") {
+        SYS_WARNING ("Only local files are supported yet.");
+        return;
+    }
+
+    m_ImageLoaded = false;
+    m_Cached = false;
+    m_Filename = path;
 }
 
 QString

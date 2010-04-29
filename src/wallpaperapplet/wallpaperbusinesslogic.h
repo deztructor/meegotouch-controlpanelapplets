@@ -20,6 +20,12 @@ class WallpaperBusinessLogic : public QObject
     Q_OBJECT
 
 public:
+
+    typedef enum {
+        FieldUrl  = 0,
+        
+    } QueryFields;
+
     WallpaperBusinessLogic ();
     ~WallpaperBusinessLogic ();
 
@@ -27,7 +33,7 @@ public:
     QString WallpaperFileName (bool portrait = false);
     WallpaperDescriptor Wallpaper (bool portrait = false);
 
-    QStringList availableWallpapers () const;
+    QList<WallpaperDescriptor *> availableWallpapers () const;
 
     void setEditedImage (WallpaperDescriptor  *desc);
     WallpaperDescriptor *editedImage ();

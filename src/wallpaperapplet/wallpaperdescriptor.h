@@ -21,6 +21,7 @@ public:
     ~WallpaperDescriptor ();
 
     void setFilename (const QString &filename);
+    void setUrl (const QString &urlString);
     QString filename () const;
     QString basename () const;
     QString extension () const;
