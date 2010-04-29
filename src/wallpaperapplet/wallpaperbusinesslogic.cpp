@@ -6,12 +6,15 @@
 #include "wallpaperitrans.h"
 
 //#include <QFileInfo>
-#include <QDir>
-#include <QFile>
+//#include <QDir>
+//#include <QFile>
 #include <QString>
 #include <QStringList>
 #include <QProcessEnvironment>
 #include <QPainter>
+
+#include <Tracker>
+//#include <QtTracker/Tracker>
 
 #include <MTheme>
 #include <MGConfItem>
@@ -117,32 +120,44 @@ QStringList
 WallpaperBusinessLogic::availableWallpapers () const
 {
     QStringList list;
-#if 1
-    list <<
-        "/usr/share/themes/base/meegotouch/images/duiapplicationpage-background.png" <<
-        "/usr/share/themes/plankton/meegotouch/images/duiapplicationpage-background.png" <<
-        "/usr/share/themes/plankton/meegotouch/images/duiapplicationpage-portrait-background.png" <<
-        "/usr/share/themes/plankton/meegotouch/images/duiapplicationpage-portrait-background.png";
-#endif
-    /*
-     * FIXME:
-     * I have no idea how we sould get the available images, this will do as a
-     * test.
-     */
-    QString             home = getenv("HOME");
-    QString 	        dirname = home + "/MyDocs";
-    QStringList         filterList;
+    const QString query = 
+"SELECT ?uri ?mime ?height ?width WHERE { "
+" ?some nie:url ?uri ." 
 
+" ?some nie:mimeType ?mime ." 
+" FILTER regex(?mime, \"image\") ."
 
-    filterList << "*.jpg" << "*.JPG" << "*.jpeg" << "*.JPEG" << "*.png" <<
-        "*.PNG";
+"?some nfo:height ?height ."
+"?some nfo:width ?width ."
+"}"
+;
+    
+    QVector<QStringList> result = ::tracker()->rawSparqlQuery(query);
+    int x = 0;
+    int y = 0;
 
-    SYS_DEBUG ("*** dirname = %s", SYS_STR(dirname));
+    SYS_WARNING ("*** result.size() = %d", result.size());
+    foreach (QStringList partlist, result) {
+        QString url;
 
-    QDir imageDir (dirname);
-    foreach (QString imageFile, imageDir.entryList(filterList, QDir::Files)) {
-        SYS_DEBUG ("*** imageFile = %s", SYS_STR(imageFile));
-        list << (dirname + "/" + imageFile);
+        url = partlist[0];
+        SYS_DEBUG ("*********************************");
+        SYS_DEBUG ("*** url     = %s", SYS_STR(url));
+
+        if (url.startsWith("file://"))
+            url.remove (0, 7);
+            
+        list << url;
+
+        /*
+         * Just to see what we really get.
+         */
+        foreach (QString element, partlist) {
+            SYS_DEBUG ("*** element[%2d][%2d] = %s", x, y, SYS_STR(element));
+            x++;
+        }
+        y++;
+        x = 0;
     }
 
     return list;

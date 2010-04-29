@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.7.11),
                libmeegotouch-dev (>= 0.20), libqmsystem-dev,
                libprofile-qt-dev (>= 0.13), system-ui-dev (>= 0.15.2),
                libdbus-1-dev, libdbus-qeventloop-dev (>= 1.5),
-               usb-moded-dev
+               usb-moded-dev, libqttracker-dev
 Standards-Version: 3.7.3
 
 Package: systemui-applets-tests
@@ -79,8 +79,8 @@ Description: Theme changing applet.
 Package: duicontrolpanel-wallpaperapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, ${misc:Depends}, libqttracker1pre6, 
+         duicontrolpanel, systemui-applets-l10n-engineering-english
 Description: Desktop wallpaper changing applet.
 
 Package: duicontrolpanel-resetapplet

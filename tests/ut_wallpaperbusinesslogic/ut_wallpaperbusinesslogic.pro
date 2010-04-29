@@ -7,6 +7,12 @@ QT += \
     testlib \
     dbus 
 
+LIBS += \
+    -lqttracker
+
+INCLUDEPATH += \
+    /usr/include/QtTracker 
+
 TEMPLATE = app
 DEFINES += UNIT_TEST
 TARGET = ut_wallpaperbusinesslogic

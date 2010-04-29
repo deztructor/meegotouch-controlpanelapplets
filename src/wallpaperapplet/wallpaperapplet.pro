@@ -5,10 +5,13 @@ CONFIG += plugin \
     silent \
     debug
 
-LIBS += -lduicontrolpanel 
+LIBS += \
+    -lduicontrolpanel \
+    -lqttracker
 
 INCLUDEPATH += \
-    /usr/include/duicontrolpanel 
+    /usr/include/duicontrolpanel \
+    /usr/include/QtTracker 
 
 contains(cov, true) { 
     message("Coverage options enabled")
