@@ -29,6 +29,7 @@ public:
     void initiateBluetoothQueries ();
     void initiatePhoneQueries ();
 
+    QString osName ();
     QString osVersion ();
     QString WiFiAddress (const char *iface);
     QString WiFiAddress ();
