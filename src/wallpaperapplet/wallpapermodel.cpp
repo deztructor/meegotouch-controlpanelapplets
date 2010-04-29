@@ -64,8 +64,8 @@ WallpaperImageLoader::processJobQueue ()
 
     Job job = thumbnailLoadingJobs.takeFirst();
 
-    job.desc->loadImage();
-    //notifyModel(job.row);
+    //job.desc->loadImage();
+    job.desc->initiateThumbnailer ();
 
     WallpaperModel *model = (WallpaperModel*)job.row.model();
     model->imageLoaded (job.row);
@@ -112,9 +112,8 @@ WallpaperContentItemCreator::updateCell (
      * Older libdui (that we use) supports pixmap here, while newer versions has
      * the support for QImage.
      */
-    QPixmap pixmap = QPixmap::fromImage (rowData->thumbnail());
-    contentItem->setPixmap (pixmap);
-    //contentItem->setOptionalPixmap (pixmap);
+    SYS_DEBUG ("Setting pixmap for %s", rowData->title());
+    contentItem->setPixmap (rowData->thumbnailPixmap());
 #else
     contentItem->setImage (rowData->thumbnail());
 #endif

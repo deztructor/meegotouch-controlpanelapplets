@@ -7,6 +7,7 @@
 #include <QFileInfo>
 #include <QImage>
 #include <QPixmap>
+#include <Thumbnailer>
 
 #define DEBUG
 #include "../debug.h"
@@ -75,16 +76,16 @@ void
 WallpaperDescriptor::setUrl (
         const QString &urlString)
 {
-    QUrl url (urlString);
     QString  path;
 
-    path = url.encodedPath ();
+    m_Url.setUrl (urlString);
+    path = m_Url.encodedPath ();
     #if 0
     SYS_DEBUG ("*** urlString    = %s", SYS_STR(urlString));
-    SYS_DEBUG ("*** scheme       = %s", SYS_STR(url.scheme()));
+    SYS_DEBUG ("*** scheme       = %s", SYS_STR(m_Url.scheme()));
     SYS_DEBUG ("*** path         = %s", SYS_STR(path));
     #endif
-    if (url.scheme() != "file") {
+    if (m_Url.scheme() != "file") {
         SYS_WARNING ("Only local files are supported yet.");
         return;
     }
@@ -92,6 +93,8 @@ WallpaperDescriptor::setUrl (
     m_ImageLoaded = false;
     m_Cached = false;
     m_Filename = path;
+
+    //initiateThumbnailer ();
 }
 
 QString
@@ -110,6 +113,7 @@ WallpaperDescriptor::extension () const
     return fileInfo.suffix();
 }
 
+#if 0
 void
 WallpaperDescriptor::loadImage ()
 {
@@ -118,6 +122,7 @@ WallpaperDescriptor::loadImage ()
 
     if (m_ImageLoaded)
         return;
+
     SYS_DEBUG ("Lom_WallpaperBusinessLogic->editedImage()ading : %s", SYS_STR(filename()));
 
     success = image.load (filename());
@@ -125,14 +130,21 @@ WallpaperDescriptor::loadImage ()
         SYS_WARNING ("The image was not loaded from %s", SYS_STR(filename()));
     }
 
-    m_Thumbnail = image.scaled (100, 100, Qt::KeepAspectRatioByExpanding);
+    //m_Thumbnail = image.scaled (100, 100, Qt::KeepAspectRatioByExpanding);
     m_ImageLoaded = true;
 }
+#endif
 
 QImage 
 WallpaperDescriptor::thumbnail()
 {
     return m_Thumbnail;
+}
+
+QPixmap
+WallpaperDescriptor::thumbnailPixmap()
+{
+    return m_ThumbnailPixmap;
 }
 
 bool 
@@ -174,5 +186,73 @@ WallpaperDescriptor::scaled (
 {
     cache ();
     return m_Pixmap.scaled (size, Qt::KeepAspectRatioByExpanding);
+}
+
+void
+WallpaperDescriptor::setMimeType (
+        const QString &mimeType)
+{
+    m_MimeType = mimeType;
+    //initiateThumbnailer ();
+}
+
+void 
+WallpaperDescriptor::initiateThumbnailer ()
+{
+   
+    SYS_DEBUG ("*** MIME    = %s", SYS_STR(m_MimeType));
+    SYS_DEBUG ("*** file    = %s", SYS_STR(m_Filename));
+    if (m_MimeType.isEmpty() || m_Filename.isEmpty())
+        return;
+
+    SYS_DEBUG ("Initiating thumbnailer for %s", SYS_STR(m_Filename));
+    m_Thumbnailer = new Thumbnailer;
+
+    connect (m_Thumbnailer, SIGNAL(thumbnail(QUrl,QUrl,QPixmap,QString)),
+            this, SLOT(thumbnailReady(QUrl,QUrl,QPixmap,QString)) );
+    connect (m_Thumbnailer, SIGNAL(error(QString,QUrl)),
+            this, SLOT(thumbnailError(QString,QUrl)) );
+    connect (m_Thumbnailer, SIGNAL(finished(int)),
+            this, SLOT(thumbnailLoadingFinished(int)));
+
+    QList<QUrl> urisList;
+    QStringList mimeList;
+
+    urisList << m_Url;
+    mimeList << m_MimeType;
+
+    m_Thumbnailer->request (urisList, mimeList, true);
+}
+
+void 
+WallpaperDescriptor::thumbnailReady (
+            QUrl         fileUri, 
+            QUrl         thumbnailUri, 
+            QPixmap      pixmap, 
+            QString      flavor)
+{
+    Q_UNUSED (fileUri);
+    Q_UNUSED (thumbnailUri);
+    Q_UNUSED (flavor);
+
+    SYS_DEBUG ("Got thumbnail for %s",  SYS_STR(m_Filename));
+    m_ThumbnailPixmap = pixmap;
+    m_Thumbnail = pixmap.toImage();
+}
+
+void
+WallpaperDescriptor::thumbnailError (
+            QString      message,
+            QUrl         url)
+{
+    Q_UNUSED (url);
+    SYS_WARNING ("*** message = %s", SYS_STR(message));
+}
+
+void 
+WallpaperDescriptor::thumbnailLoadingFinished (
+            int          left)
+{
+    delete m_Thumbnailer;
 }
 

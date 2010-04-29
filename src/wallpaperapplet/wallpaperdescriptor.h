@@ -8,6 +8,9 @@
 #include <QMetaType>
 #include <QImage>
 #include <QPixmap>
+#include <QUrl>
+#include <QPointer>
+#include <Thumbnailer>
 
 class QString;
 
@@ -27,26 +30,47 @@ public:
     QString title () const;
 
     void setUrl (const QString &urlString);
-    
+
+    void setMimeType (const QString &mimeType);
+
     QString basename () const;
     QString extension () const;
 
-    void loadImage ();
+    //void loadImage ();
     bool isImageLoaded ();
     QImage thumbnail ();
+    QPixmap thumbnailPixmap ();
 
     void cache ();
     void unCache ();
     QPixmap pixmap ();
     QPixmap scaled (QSize size);
 
+public slots:
+    void initiateThumbnailer ();
+
+private slots:
+    void thumbnailReady (
+            QUrl         fileUri, 
+            QUrl         thumbnailUri, 
+            QPixmap      pixmap, 
+            QString      flavor);
+    void thumbnailError (
+            QString      message,
+            QUrl         url);
+    void thumbnailLoadingFinished (
+            int          left);
 private:
-    bool        m_ImageLoaded;
-    QString     m_Filename;
-    QString     m_Title;
-    QImage      m_Thumbnail;
-    bool        m_Cached;
-    QPixmap     m_Pixmap;
+    QPointer<Thumbnailer> m_Thumbnailer;
+    QUrl          m_Url;
+    bool          m_ImageLoaded;
+    QString       m_Filename;
+    QString       m_Title;
+    QString       m_MimeType;
+    QImage        m_Thumbnail;
+    QPixmap       m_ThumbnailPixmap;
+    bool          m_Cached;
+    QPixmap       m_Pixmap;
 };
 
 Q_DECLARE_METATYPE(WallpaperDescriptor)

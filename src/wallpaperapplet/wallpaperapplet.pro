@@ -7,11 +7,13 @@ CONFIG += plugin \
 
 LIBS += \
     -lduicontrolpanel \
-    -lqttracker
+    -lqttracker \
+    -lduithumbnailer
 
 INCLUDEPATH += \
     /usr/include/duicontrolpanel \
-    /usr/include/QtTracker 
+    /usr/include/QtTracker \
+    /usr/include/duithumbnailer 
 
 contains(cov, true) { 
     message("Coverage options enabled")

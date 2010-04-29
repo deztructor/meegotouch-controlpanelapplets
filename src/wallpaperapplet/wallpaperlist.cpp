@@ -35,6 +35,12 @@ void
 WallpaperList::setDataSourceType (
         WallpaperList::DataSourceType sourceType)
 {
+    /*
+     * FIXME: Support for OVI is not implemented yet, so we don't use this.
+     */
+    Q_UNUSED (sourceType);
+
+
     WallpaperContentItemCreator *cellCreator;
     WallpaperModel *model;
 
@@ -81,6 +87,7 @@ void
 WallpaperList::hideEvent (
         QHideEvent *event)
 {
+    Q_UNUSED (event);
     /*
      * When we got hidden we stop all the image loading. We have to give some
      * CPU for the other page/widget.
@@ -92,6 +99,7 @@ void
 WallpaperList::showEvent (
         QShowEvent *event)
 {
+    Q_UNUSED (event);
     /*
      * When we page back from the other widget we might want to load the images
      * we stopped loading when we become hidden.

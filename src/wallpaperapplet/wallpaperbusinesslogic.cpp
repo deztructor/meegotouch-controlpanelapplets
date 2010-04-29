@@ -146,6 +146,7 @@ WallpaperBusinessLogic::availableWallpapers () const
         desc = new WallpaperDescriptor;
         desc->setUrl (partlist[FieldUrl]);
         desc->setTitle (partlist[FieldTitle]);
+        desc->setMimeType (partlist[FieldMime]);
         list << desc;
 
         /*

@@ -24,6 +24,7 @@ public:
     typedef enum {
         FieldUrl  = 0,
         FieldTitle,
+        FieldMime,
     } QueryFields;
 
     WallpaperBusinessLogic ();

@@ -8,10 +8,12 @@ QT += \
     dbus 
 
 LIBS += \
-    -lqttracker
+    -lqttracker \
+    -lduithumbnailer
 
 INCLUDEPATH += \
-    /usr/include/QtTracker 
+    /usr/include/QtTracker \
+    /usr/include/duithumbnailer 
 
 TEMPLATE = app
 DEFINES += UNIT_TEST
