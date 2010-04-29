@@ -23,7 +23,7 @@ public:
 
     typedef enum {
         FieldUrl  = 0,
-        
+        FieldTitle,
     } QueryFields;
 
     WallpaperBusinessLogic ();

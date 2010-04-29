@@ -117,14 +117,18 @@ WallpaperBusinessLogic::availableWallpapers () const
 {
     QList<WallpaperDescriptor *> list;
     const QString query = 
-"SELECT ?uri ?mime ?height ?width WHERE { "
+"SELECT ?uri ?title ?mime ?height ?width WHERE { "
 " ?item nie:url ?uri." 
 
 " ?item nie:mimeType ?mime." 
 " FILTER regex(?mime, \"image\")."
 
-"?item nfo:height ?height."
-"?item nfo:width ?width."
+" ?item nfo:height ?height."
+" ?item nfo:width ?width."
+" FILTER ( ?height > \"300\" )."
+" FILTER ( ?width  > \"300\" )."
+
+" OPTIONAL { ?item nie:title ?title }."
 "}"
 ;
     
@@ -141,13 +145,13 @@ WallpaperBusinessLogic::availableWallpapers () const
 
         desc = new WallpaperDescriptor;
         desc->setUrl (partlist[FieldUrl]);
-
+        desc->setTitle (partlist[FieldTitle]);
         list << desc;
 
         /*
          * Just to see what we really get.
          */
-        #if 0
+        #if 1
         foreach (QString element, partlist) {
             SYS_DEBUG ("*** element[%2d][%2d] = %s", x, y, SYS_STR(element));
             x++;

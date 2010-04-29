@@ -21,8 +21,13 @@ public:
     ~WallpaperDescriptor ();
 
     void setFilename (const QString &filename);
-    void setUrl (const QString &urlString);
     QString filename () const;
+
+    void setTitle (const QString &title);
+    QString title () const;
+
+    void setUrl (const QString &urlString);
+    
     QString basename () const;
     QString extension () const;
 
@@ -38,6 +43,7 @@ public:
 private:
     bool        m_ImageLoaded;
     QString     m_Filename;
+    QString     m_Title;
     QImage      m_Thumbnail;
     bool        m_Cached;
     QPixmap     m_Pixmap;
