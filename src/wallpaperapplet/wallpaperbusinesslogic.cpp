@@ -269,6 +269,7 @@ WallpaperBusinessLogic::writeDestopFiles (
     out << "[DCP Portrait Wallpaper]\n";
     out << "OriginalFile=" << desc->filename() << "\n";
     out << "EditedFile=" << portraitFilePath << "\n";
+    out << "MimeType=" << desc->mimeType() << "\n";
     out << "HorOffset=" << portraitITrans->x() << "\n";
     out << "VertOffset=" << portraitITrans->y() << "\n";
     out << "Scale=" << portraitITrans->scale() << "\n";

@@ -22,6 +22,7 @@ class WallpaperITrans : public QObject
 
 public:
     WallpaperITrans ();
+    WallpaperITrans (const WallpaperITrans &orig);
 
     WallpaperITrans &operator= (const WallpaperITrans &rhs);
     int operator* (const int i);
@@ -32,8 +33,12 @@ public:
     qreal scale () const;
     void modScale (int i);
     
+    void setOffset (const QPointF &offset);
+    void setScale (qreal scale);
+    
     void setExpectedSize (const QSize &size);
     QSize expectedSize () const;
+
     int expectedWidth () const;
     int expectedHeight () const;
 

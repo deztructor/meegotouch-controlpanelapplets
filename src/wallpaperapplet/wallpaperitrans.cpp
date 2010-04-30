@@ -16,6 +16,16 @@ WallpaperITrans::WallpaperITrans () :
 {
 }
 
+WallpaperITrans::WallpaperITrans (
+        const WallpaperITrans &orig)
+{
+    m_Orientation    = orig.m_Orientation;
+    m_Scale          = orig.m_Scale;
+    m_Offset         = orig.m_Offset;
+    m_ExpectedSize   = orig.m_ExpectedSize;
+}
+
+
 WallpaperITrans &
 WallpaperITrans::operator= (
         const WallpaperITrans &rhs)
@@ -79,6 +89,21 @@ WallpaperITrans::setExpectedSize (
         const QSize &size)
 {
     m_ExpectedSize = size;
+}
+#define DEBUG
+#include "../debug.h"
+void
+WallpaperITrans::setOffset (
+        const QPointF &offset)
+{
+    m_Offset = offset;
+}
+
+void 
+WallpaperITrans::setScale (
+        qreal scale)
+{
+    m_Scale = scale;
 }
 
 QSize 

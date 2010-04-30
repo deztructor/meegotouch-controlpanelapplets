@@ -3,6 +3,7 @@
 
 #include "wallpapercurrentdescriptor.h"
 
+#include <QPointF>
 #include <MDesktopEntry>
 
 #define DEBUG
@@ -12,12 +13,15 @@ WallpaperCurrentDescriptor *WallpaperCurrentDescriptor::sm_Instance = 0;
 
 static const QString mainGroupKey = "Desktop Entry";
 static const QString landscapeGroupKey = "DCP Landscape Wallpaper";
+static const QString portraitGroupKey = "DCP Portrait Wallpaper";
 
 static const QString nameKey = "Name";
 static const QString originalFilenameKey = "OriginalFile";
 static const QString editedFilenameKey = "EditedFile";
 static const QString mimeTypeKey = "MimeType";
-
+static const QString horOffsetKey = "HorOffset";
+static const QString vertOffsetKey = "VertOffset";
+static const QString scaleKey = "Scale";
 
 WallpaperCurrentDescriptor *
 WallpaperCurrentDescriptor::instance ()
@@ -32,6 +36,8 @@ WallpaperCurrentDescriptor::instance ()
 WallpaperCurrentDescriptor::WallpaperCurrentDescriptor () :
     m_DesktopEntry (0)
 {
+    m_LandscapeTrans.setOrientation (M::Landscape);
+    m_PortraitTrans.setOrientation (M::Portrait);
 }
 
 bool
@@ -54,20 +60,34 @@ WallpaperCurrentDescriptor::setFromDestopFile (
         goto finalize;
     }
 
+    /*
+     * The edited image file name... FIXME: This is actually depends on the
+     * orientation.
+     */
     if (!getValue(landscapeGroupKey, editedFilenameKey, value)) {
         goto finalize;
     }
     setFilename (value);
     setUrl ("file://" + value);
     
+    /*
+     * MimeType. FIXME: This should not depend on the orientation?
+     */
     if (getValue(landscapeGroupKey, mimeTypeKey, value)) {
         setMimeType (value);
     }
 
+    /*
+     * The name. This actually is all right.
+     */
     if (getValue(mainGroupKey, nameKey, value)) {
         setTitle (value);
     }
-
+    
+    getValue (landscapeGroupKey, originalFilenameKey, m_LandscapeOriginalFile);
+    getValue (portraitGroupKey, originalFilenameKey, m_PortraitOriginalFile);
+    getValue (landscapeGroupKey, m_LandscapeTrans);
+    getValue (portraitGroupKey, m_PortraitTrans);
 
     retval = true;
 
@@ -100,3 +120,90 @@ WallpaperCurrentDescriptor::getValue (
 
     return retval;
 }
+
+bool 
+WallpaperCurrentDescriptor::getValue (
+            const QString   &group,
+            WallpaperITrans &value)
+{
+    bool   retval;
+    qreal  rval1, rval2;
+
+    retval = getValue (group, horOffsetKey, &rval1);
+    if (!retval) {
+        SYS_WARNING ("Key not found %s/%s", 
+                SYS_STR(group), 
+                SYS_STR(horOffsetKey));
+        return retval;
+    }
+    
+    retval = getValue (group, vertOffsetKey, &rval1);
+    if (!retval) {
+        SYS_WARNING ("Key not found %s/%s", 
+                SYS_STR(group), 
+                SYS_STR(vertOffsetKey));
+        return retval;
+    }
+    value.setOffset (QPointF(rval1, rval2));
+    
+    retval = getValue (group, scaleKey, &rval1);
+    if (!retval) {
+        SYS_WARNING ("Key not found %s/%s", 
+                SYS_STR(group), 
+                SYS_STR(scaleKey));
+        return retval;
+    }
+    value.setScale (rval1);
+
+    return retval;
+}
+
+bool
+WallpaperCurrentDescriptor::getValue (
+            const QString &group,
+            const QString &key, 
+            qreal         *value)
+{
+    QString sValue;
+
+    if (!getValue(group, key, sValue)) {
+        *value = 0.0;
+        return false;
+    }
+
+    *value = sValue.toDouble();
+    return true;
+}
+
+WallpaperITrans 
+WallpaperCurrentDescriptor::iTrans (
+        M::Orientation orientation) const
+{
+    switch (orientation) {
+        case M::Portrait:
+            return m_PortraitTrans;
+
+        case M::Landscape:
+            return m_LandscapeTrans;
+    }
+
+    SYS_WARNING ("Unknown orientation: %d", orientation);
+    return m_LandscapeTrans;
+}
+
+QString 
+WallpaperCurrentDescriptor::originalImageFile (
+        M::Orientation orientation) const
+{
+    switch (orientation) {
+        case M::Portrait:
+            return m_PortraitOriginalFile;
+
+        case M::Landscape:
+            return m_LandscapeOriginalFile;
+    }
+
+    SYS_WARNING ("Unknown orientation: %d", orientation);
+    return m_LandscapeOriginalFile;
+}
+

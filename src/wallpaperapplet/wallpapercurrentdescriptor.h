@@ -4,6 +4,7 @@
 #define WALLPAPERCURRENTDESCRIPTOR_H
 
 #include "wallpaperdescriptor.h"
+#include "wallpaperitrans.h"
 
 class MDesktopEntry;
 
@@ -15,20 +16,35 @@ public:
 
     virtual bool isCurrent () const;
     bool setFromDestopFile (QString desktopFileName);
-
+    WallpaperITrans iTrans (M::Orientation orientation) const;
+    QString originalImageFile (M::Orientation orientation) const;
+ 
 protected:
     WallpaperCurrentDescriptor ();
 
 private:
     bool getValue (
-            const QString &group,
-            const QString &key, 
-            QString       &value);
+            const QString   &group,
+            const QString   &key, 
+            QString         &value);
 
+    bool getValue (
+            const QString   &group,
+            WallpaperITrans &value);
+
+    bool getValue (
+            const QString   &group,
+            const QString   &key, 
+            qreal           *value);
+    
 private:
     static WallpaperCurrentDescriptor *sm_Instance;
 
     MDesktopEntry         *m_DesktopEntry;
+    WallpaperITrans        m_LandscapeTrans;
+    WallpaperITrans        m_PortraitTrans;
+    QString                m_LandscapeOriginalFile;
+    QString                m_PortraitOriginalFile;
 };
 
 #endif

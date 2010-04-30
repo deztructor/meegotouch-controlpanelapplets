@@ -2,6 +2,7 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 
 #include "wallpapereditorwidget.h"
+#include "wallpapercurrentdescriptor.h"
 
 #include <QStyle>
 #include <QGraphicsSceneMouseEvent>
@@ -53,7 +54,7 @@ WallpaperEditorWidget::WallpaperEditorWidget (
             SIGNAL(orientationChanged(M::Orientation)),
             this, SLOT(orientationChanged(M::Orientation)));
 
-    m_Trans = MApplication::activeApplicationWindow()->orientation() == 
+    m_Trans = win->orientation() == 
         M::Portrait ? m_PortraitTrans : m_LandscapeTrans;
 }
 
@@ -69,6 +70,11 @@ WallpaperEditorWidget::paint (
         QWidget                           *widget)
 {
     bool portrait = (geometry().height() > geometry().width());
+   
+    SYS_DEBUG ("*** expected = %d, %d", 
+            m_Trans.expectedWidth (),
+            m_Trans.expectedHeight ());
+    SYS_DEBUG ("*** scale    = %g", m_Trans.scale());
 
     if (portrait) {
         painter->fillRect (
@@ -102,24 +108,81 @@ WallpaperEditorWidget::paint (
 void
 WallpaperEditorWidget::createContent ()
 {
-    QString filename = m_WallpaperBusinessLogic->editedImage()->filename();
+    WallpaperDescriptor *desc;
 
-    SYS_WARNING ("*** filename = %s", SYS_STR(filename));
+    desc = m_WallpaperBusinessLogic->editedImage();
+    if (!desc) {
+        SYS_WARNING ("There is no editedimage.");
+        return;
+    }
 
+    if (desc->isCurrent()) {
+        WallpaperCurrentDescriptor *cdesc;
+       
+        cdesc = qobject_cast<WallpaperCurrentDescriptor*> (desc);
+        if (!desc) {
+            SYS_WARNING ("This is the current wallpaper, but its type is"
+                    "not <WallpaperCurrentDescriptor>");
+            goto not_current_wallpaper;
+        }
+        
+        SYS_DEBUG ("This image has already been edited.");
+        SYS_DEBUG ("*** orig landscape       = %s", 
+                SYS_STR(cdesc->originalImageFile (M::Landscape)));
+        SYS_DEBUG ("*** orig portrait        = %s", 
+                SYS_STR(cdesc->originalImageFile (M::Portrait)));
+
+
+        m_LandscapeTrans = cdesc->iTrans (M::Landscape);
+        m_PortraitTrans = cdesc->iTrans (M::Portrait);
+
+        /*
+         * Ooops: we overwrote these values set in the constructor...
+         */
+        MWindow *win = MApplication::activeWindow ();
+
+        m_PortraitTrans.setExpectedSize (win->visibleSceneSize (M::Portrait));
+        m_PortraitTrans.setOrientation (M::Portrait);
+        m_LandscapeTrans.setExpectedSize (win->visibleSceneSize (M::Landscape));
+        m_LandscapeTrans.setOrientation (M::Landscape);
+        
+        /*
+         * new stuff
+         */
+        QPixmap landscapePixmap (cdesc->originalImageFile (M::Landscape));
+        m_bgLandscape = landscapePixmap.scaled (
+                m_LandscapeTrans.expectedSize(), 
+                Qt::KeepAspectRatioByExpanding);
+
+        // FIXME: But most of the times the two images are the same!
+        QPixmap portraitPixmap (cdesc->originalImageFile (M::Landscape));
+        m_bgPortrait = portraitPixmap.scaled (
+                m_PortraitTrans.expectedSize(), 
+                Qt::KeepAspectRatioByExpanding);
+    
+        /*
+         * Need to copy back...
+         */
+        m_Trans = win->orientation() == 
+            M::Portrait ? m_PortraitTrans : m_LandscapeTrans;
+
+        goto finalize;
+    }
+
+not_current_wallpaper:
     /*
+     * Here is what we do when this is not the current image.
      * If the image is very big the handling might be slow, so we scale it
      * down.
      */
-    m_WallpaperBusinessLogic->editedImage()->cache();
-    m_bgLandscape = m_WallpaperBusinessLogic->editedImage()->scaled (
-            m_LandscapeTrans.expectedSize());
-    m_bgPortrait = m_WallpaperBusinessLogic->editedImage()->scaled (
-            m_PortraitTrans.expectedSize());
+    desc->cache();
+    m_bgLandscape = desc->scaled (m_LandscapeTrans.expectedSize());
+    m_bgPortrait = desc->scaled (m_PortraitTrans.expectedSize());
 
 
     //this->setContentsMargins (0, 0, 0, 0);
     //this->setWindowFrameMargins (0.0, 0.0, 0.0, 0.0);
-
+finalize:
     this->setMinimumSize (m_Trans.expectedSize());
     redrawImage ();
 }
