@@ -19,6 +19,11 @@ static const int loadPictureDelay = 100;
 /******************************************************************************
  * WallpaperImageLoader implementation.
  */
+
+/*!
+ * When this slot is called the loading of the thumbnails in a specific
+ * interval will be initated.
+ */
 void
 WallpaperImageLoader::loadPictures (
             const QModelIndex& firstVisibleRow, 
@@ -35,7 +40,11 @@ WallpaperImageLoader::loadPictures (
 
         QVariant data = index.data(Qt::DisplayRole);
         WallpaperDescriptor *desc = data.value<WallpaperDescriptor*>();
-
+        
+        /*
+         * We only create jobs for those items that has no thumbnail in the
+         * memory yet.
+         */
         if (!desc->isThumbnailLoaded()) {
             Job job;
             job.desc = desc;
@@ -63,25 +72,41 @@ WallpaperImageLoader::stopLoadingPictures()
     thumbnailLoadingJobs.clear();
 }
 
+/*!
+ * This slot is called when the loading of a specific thumbnail has been
+ * finished. The thumbnailer is a separate process that caches the created
+ * thumbnails, so the thumbnailing can happen fast (when the thumbnail is
+ * already created and saved) or slow (when the thumbnail has to be created).
+ */
 void
 WallpaperImageLoader::thumbnailLoaded (
         WallpaperDescriptor *desc)
 {
-    SYS_DEBUG ("");
+    /*
+     * The pending jobs are in order, the first initated is at the very first
+     * position of the list. The thumbler answers however might come in a
+     * diefferent order, it is possible, that the generation of some thumbnails
+     * is slower than the others.
+     */
     for (int n = 0; n < thumbnailPendingJobs.size(); ++n) {
-        SYS_DEBUG ("*** n = %d", n);
         if (thumbnailPendingJobs[n].desc == desc) {
             WallpaperModel *model = (WallpaperModel*) 
                 thumbnailPendingJobs[n].row.model();
 
             model->imageLoaded (thumbnailPendingJobs[n].row);
-            SYS_DEBUG ("Removing pending job at %d", n);
             thumbnailPendingJobs.removeAt (n);
+
+            disconnect (desc, 0, this, 0);
             break;
         }
     }
 }
 
+/*!
+ * Processes one thumbnailing job and then calls itself to process the next 
+ * one. While processing the job this method will only initate the thumbnailing,
+ * it will not wait until the actual thumbnail is ready.
+ */
 void 
 WallpaperImageLoader::processJobQueue ()
 {
@@ -130,7 +155,7 @@ WallpaperContentItemCreator::updateCell (
     WallpaperDescriptor *rowData = data.value<WallpaperDescriptor *>();
 
     contentItem->setTitle (rowData->title());
-    contentItem->setSubtitle (rowData->filename());
+    //contentItem->setSubtitle (rowData->filename());
 
 #if 1
     /*
