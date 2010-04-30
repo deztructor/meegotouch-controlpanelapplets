@@ -36,8 +36,7 @@ public:
     QString basename () const;
     QString extension () const;
 
-    //void loadImage ();
-    bool isImageLoaded ();
+    bool isThumbnailLoaded ();
     QImage thumbnail ();
     QPixmap thumbnailPixmap ();
 
@@ -60,6 +59,9 @@ private slots:
             QUrl         url);
     void thumbnailLoadingFinished (
             int          left);
+signals:
+    void thumbnailLoaded (WallpaperDescriptor *desc);
+    
 private:
     QPointer<Thumbnailer> m_Thumbnailer;
     QUrl          m_Url;
@@ -67,6 +69,7 @@ private:
     QString       m_Filename;
     QString       m_Title;
     QString       m_MimeType;
+    bool          m_HasThumbnail;
     QImage        m_Thumbnail;
     QPixmap       m_ThumbnailPixmap;
     bool          m_Cached;

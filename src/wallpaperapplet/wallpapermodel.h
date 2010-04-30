@@ -64,11 +64,13 @@ public slots:
             const QModelIndex& firstVisibleRow, 
             const QModelIndex& lastVisibleRow);
 
-    void processJobQueue();
+    void thumbnailLoaded (WallpaperDescriptor *desc);
+    void processJobQueue ();
     void stopLoadingPictures ();
 
 private:
     QList<Job>  thumbnailLoadingJobs;
+    QList<Job>  thumbnailPendingJobs;
 };
 
 #endif

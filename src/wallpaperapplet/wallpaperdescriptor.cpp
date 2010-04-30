@@ -16,7 +16,7 @@ const QString dir = "";
 
 WallpaperDescriptor::WallpaperDescriptor()
 {
-    m_ImageLoaded = false;
+    m_HasThumbnail = false;
     m_Cached = false;
 }
 
@@ -24,7 +24,7 @@ WallpaperDescriptor::WallpaperDescriptor(
         const WallpaperDescriptor &orig) :
     QObject ()
 {
-    m_ImageLoaded = false;
+    m_HasThumbnail = false;
     m_Cached = false;
     m_Filename = orig.m_Filename;
 }
@@ -33,7 +33,7 @@ WallpaperDescriptor::WallpaperDescriptor(
         const QString &filename) :
     m_Filename (filename)
 {
-    m_ImageLoaded = false;
+    m_HasThumbnail = false;
     m_Cached = false;
 }
 
@@ -45,7 +45,7 @@ void
 WallpaperDescriptor::setFilename (
         const QString &filename)
 {
-    m_ImageLoaded = false;
+    m_HasThumbnail = false;
     m_Cached = false;
     m_Filename = filename;
 }
@@ -90,11 +90,10 @@ WallpaperDescriptor::setUrl (
         return;
     }
 
-    m_ImageLoaded = false;
+    m_HasThumbnail = false;
+    //m_ImageLoaded = false;
     m_Cached = false;
     m_Filename = path;
-
-    //initiateThumbnailer ();
 }
 
 QString
@@ -113,28 +112,6 @@ WallpaperDescriptor::extension () const
     return fileInfo.suffix();
 }
 
-#if 0
-void
-WallpaperDescriptor::loadImage ()
-{
-    QImage image;
-    bool   success;
-
-    if (m_ImageLoaded)
-        return;
-
-    SYS_DEBUG ("Lom_WallpaperBusinessLogic->editedImage()ading : %s", SYS_STR(filename()));
-
-    success = image.load (filename());
-    if (!success) {
-        SYS_WARNING ("The image was not loaded from %s", SYS_STR(filename()));
-    }
-
-    //m_Thumbnail = image.scaled (100, 100, Qt::KeepAspectRatioByExpanding);
-    m_ImageLoaded = true;
-}
-#endif
-
 QImage 
 WallpaperDescriptor::thumbnail()
 {
@@ -148,9 +125,9 @@ WallpaperDescriptor::thumbnailPixmap()
 }
 
 bool 
-WallpaperDescriptor::isImageLoaded ()
+WallpaperDescriptor::isThumbnailLoaded ()
 {
-    return m_ImageLoaded;
+    return m_HasThumbnail;
 }
 
 void 
@@ -193,19 +170,30 @@ WallpaperDescriptor::setMimeType (
         const QString &mimeType)
 {
     m_MimeType = mimeType;
-    //initiateThumbnailer ();
 }
 
+/*!
+ * This function will initiate the thumbnail generation. The thumbnail will be
+ * loaded into the pixmap that is returned by the thumbnailPixmap() function. I
+ * guess the pixmap will notify the 
+ */
 void 
 WallpaperDescriptor::initiateThumbnailer ()
 {
    
-    SYS_DEBUG ("*** MIME    = %s", SYS_STR(m_MimeType));
-    SYS_DEBUG ("*** file    = %s", SYS_STR(m_Filename));
+
     if (m_MimeType.isEmpty() || m_Filename.isEmpty())
         return;
 
+    if (m_Thumbnailer != 0)
+        return;
+
+    if (m_HasThumbnail)
+        return;
+
     SYS_DEBUG ("Initiating thumbnailer for %s", SYS_STR(m_Filename));
+    SYS_DEBUG ("*** MIME    = %s", SYS_STR(m_MimeType));
+    SYS_DEBUG ("*** file    = %s", SYS_STR(m_Filename));
     m_Thumbnailer = new Thumbnailer;
 
     connect (m_Thumbnailer, SIGNAL(thumbnail(QUrl,QUrl,QPixmap,QString)),
@@ -224,6 +212,9 @@ WallpaperDescriptor::initiateThumbnailer ()
     m_Thumbnailer->request (urisList, mimeList, true);
 }
 
+/*!
+ * This slot is called when the thumbnail has been generated.
+ */
 void 
 WallpaperDescriptor::thumbnailReady (
             QUrl         fileUri, 
@@ -236,10 +227,19 @@ WallpaperDescriptor::thumbnailReady (
     Q_UNUSED (flavor);
 
     SYS_DEBUG ("Got thumbnail for %s",  SYS_STR(m_Filename));
+    SYS_DEBUG ("*** thumbnailUri = %s", SYS_STR(thumbnailUri.toString()));
     m_ThumbnailPixmap = pixmap;
     m_Thumbnail = pixmap.toImage();
+    m_HasThumbnail = true;
+
+    emit thumbnailLoaded (this);
 }
 
+/*!
+ * This slot is called when the thumbler has been detected some error. We could
+ * do something, but until we find some smart thing we can do we just print an
+ * error message.
+ */
 void
 WallpaperDescriptor::thumbnailError (
             QString      message,
@@ -249,6 +249,10 @@ WallpaperDescriptor::thumbnailError (
     SYS_WARNING ("*** message = %s", SYS_STR(message));
 }
 
+/*!
+ * Called when the generation of the thumbnail is finished. This is the point
+ * where we can destroy the thumbler object.
+ */
 void 
 WallpaperDescriptor::thumbnailLoadingFinished (
             int          left)

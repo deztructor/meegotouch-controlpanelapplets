@@ -7,7 +7,7 @@
 
 #include <QTimer>
 
-#undef DEBUG
+#define DEBUG
 #include <../debug.h>
 
 /*
@@ -36,7 +36,7 @@ WallpaperImageLoader::loadPictures (
         QVariant data = index.data(Qt::DisplayRole);
         WallpaperDescriptor *desc = data.value<WallpaperDescriptor*>();
 
-        if (!desc->isImageLoaded()) {
+        if (!desc->isThumbnailLoaded()) {
             Job job;
             job.desc = desc;
             job.row = index;
@@ -49,11 +49,37 @@ WallpaperImageLoader::loadPictures (
         QTimer::singleShot(0, this, SLOT(processJobQueue()));
 }
 
+/*!
+ * When this slot is called all the thumbnail loading jobs will be cancelled.
+ * This slot should be called when (1) the panning on the widget has been
+ * initiated and when (2) the widget became hidden. In these cases the loading
+ * of the thumbnails will be initiated again when (1) the panning stops or 
+ * (2) when the widgets shown again.
+ */
 void 
 WallpaperImageLoader::stopLoadingPictures()
 {
     SYS_DEBUG ("");
     thumbnailLoadingJobs.clear();
+}
+
+void
+WallpaperImageLoader::thumbnailLoaded (
+        WallpaperDescriptor *desc)
+{
+    SYS_DEBUG ("");
+    for (int n = 0; n < thumbnailPendingJobs.size(); ++n) {
+        SYS_DEBUG ("*** n = %d", n);
+        if (thumbnailPendingJobs[n].desc == desc) {
+            WallpaperModel *model = (WallpaperModel*) 
+                thumbnailPendingJobs[n].row.model();
+
+            model->imageLoaded (thumbnailPendingJobs[n].row);
+            SYS_DEBUG ("Removing pending job at %d", n);
+            thumbnailPendingJobs.removeAt (n);
+            break;
+        }
+    }
 }
 
 void 
@@ -63,12 +89,11 @@ WallpaperImageLoader::processJobQueue ()
         return;
 
     Job job = thumbnailLoadingJobs.takeFirst();
+    thumbnailPendingJobs.append (job);
+    connect (job.desc, SIGNAL(thumbnailLoaded(WallpaperDescriptor*)),
+            this, SLOT(thumbnailLoaded (WallpaperDescriptor*)));
 
-    //job.desc->loadImage();
     job.desc->initiateThumbnailer ();
-
-    WallpaperModel *model = (WallpaperModel*)job.row.model();
-    model->imageLoaded (job.row);
 
     // Continue loading and letting UI thread do something
     if(thumbnailLoadingJobs.count() > 0)
@@ -112,7 +137,7 @@ WallpaperContentItemCreator::updateCell (
      * Older libdui (that we use) supports pixmap here, while newer versions has
      * the support for QImage.
      */
-    SYS_DEBUG ("Setting pixmap for %s", rowData->title());
+    SYS_DEBUG ("Setting pixmap for %s", SYS_STR(rowData->title()));
     contentItem->setPixmap (rowData->thumbnailPixmap());
 #else
     contentItem->setImage (rowData->thumbnail());
@@ -145,7 +170,6 @@ WallpaperModel::rowCount(
 {
     Q_UNUSED (parent);
     
-    SYS_DEBUG ("Returning %d", m_DescriptorList.size());
     return m_DescriptorList.size();
 }
 
@@ -164,7 +188,6 @@ WallpaperModel::data (
 
     var.setValue (m_DescriptorList[index.row()]);
     
-    SYS_DEBUG ("Returning for %d", index.row());
     return var;
 }
 
@@ -172,7 +195,6 @@ int
 WallpaperModel::columnCount (
         const QModelIndex&) const
 {
-    SYS_DEBUG ("Returning 1");
     return 1;
 }
 
