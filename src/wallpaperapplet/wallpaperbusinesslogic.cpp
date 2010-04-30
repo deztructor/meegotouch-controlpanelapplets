@@ -3,6 +3,7 @@
 
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperdescriptor.h"
+#include "wallpapercurrentdescriptor.h"
 #include "wallpaperitrans.h"
 
 #include <QString>
@@ -15,7 +16,7 @@
 #include <MTheme>
 #include <MGConfItem>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 static const QString PortraitKey = 
@@ -131,7 +132,13 @@ WallpaperBusinessLogic::availableWallpapers () const
 " OPTIONAL { ?item nie:title ?title }."
 "}"
 ;
-    
+
+    WallpaperCurrentDescriptor *currentDesc;
+
+    currentDesc = WallpaperCurrentDescriptor::instance ();
+    if (currentDesc->setFromDestopFile (dirPath() + destopFileName))
+        list << WallpaperCurrentDescriptor::instance ();
+
     QVector<QStringList> result = ::tracker()->rawSparqlQuery(query);
     int x = 0;
     int y = 0;
@@ -216,6 +223,10 @@ WallpaperBusinessLogic::createBackupFiles ()
     makeBackup (desktopPath);
 }
 
+/*
+ * FIXME: This method should and will be moved to the WallpaperCurrentDescriptor
+ * class.
+ */
 void
 WallpaperBusinessLogic::writeDestopFiles (
         WallpaperITrans     *landscapeITrans,
@@ -249,6 +260,7 @@ WallpaperBusinessLogic::writeDestopFiles (
     out << "[DCP Landscape Wallpaper]\n";
     out << "OriginalFile=" << desc->filename() << "\n";
     out << "EditedFile=" << landscapeFilePath << "\n";
+    out << "MimeType=" << desc->mimeType() << "\n";
     out << "HorOffset=" << landscapeITrans->x() << "\n";
     out << "VertOffset=" << landscapeITrans->y() << "\n";
     out << "Scale=" << landscapeITrans->scale() << "\n";

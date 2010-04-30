@@ -28,10 +28,14 @@ public:
 
     void setTitle (const QString &title);
     QString title () const;
+    
+    virtual bool isCurrent () const;
+    //void setCurrent (bool current = true);
 
     void setUrl (const QString &urlString);
 
     void setMimeType (const QString &mimeType);
+    QString mimeType () const;
 
     QString basename () const;
     QString extension () const;
@@ -59,21 +63,22 @@ private slots:
             QUrl         url);
     void thumbnailLoadingFinished (
             int          left);
+
 signals:
     void thumbnailLoaded (WallpaperDescriptor *desc);
     
 private:
     QPointer<Thumbnailer> m_Thumbnailer;
-    QUrl          m_Url;
-    bool          m_ImageLoaded;
-    QString       m_Filename;
-    QString       m_Title;
-    QString       m_MimeType;
-    bool          m_HasThumbnail;
-    QImage        m_Thumbnail;
-    QPixmap       m_ThumbnailPixmap;
-    bool          m_Cached;
-    QPixmap       m_Pixmap;
+    QUrl                  m_Url;
+    QString               m_Filename;
+    QString               m_Title;
+    QString               m_MimeType;
+    bool                  m_HasThumbnail;
+    QImage                m_Thumbnail;
+    QPixmap               m_ThumbnailPixmap;
+    bool                  m_Cached;
+    QPixmap               m_Pixmap;
+    //bool                  m_Current;
 };
 
 Q_DECLARE_METATYPE(WallpaperDescriptor)

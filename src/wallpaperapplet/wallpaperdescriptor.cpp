@@ -14,7 +14,9 @@
 
 const QString dir = "";
 
-WallpaperDescriptor::WallpaperDescriptor()
+WallpaperDescriptor::WallpaperDescriptor() :
+    m_HasThumbnail (false),
+    m_Cached (false)
 {
     m_HasThumbnail = false;
     m_Cached = false;
@@ -22,19 +24,19 @@ WallpaperDescriptor::WallpaperDescriptor()
 
 WallpaperDescriptor::WallpaperDescriptor(
         const WallpaperDescriptor &orig) :
-    QObject ()
+    QObject (),
+    m_HasThumbnail (false),
+    m_Cached (false)
 {
-    m_HasThumbnail = false;
-    m_Cached = false;
     m_Filename = orig.m_Filename;
 }
 
 WallpaperDescriptor::WallpaperDescriptor(
         const QString &filename) :
-    m_Filename (filename)
+    m_Filename (filename),
+    m_HasThumbnail (false),
+    m_Cached (false)
 {
-    m_HasThumbnail = false;
-    m_Cached = false;
 }
 
 WallpaperDescriptor::~WallpaperDescriptor()
@@ -91,7 +93,6 @@ WallpaperDescriptor::setUrl (
     }
 
     m_HasThumbnail = false;
-    //m_ImageLoaded = false;
     m_Cached = false;
     m_Filename = path;
 }
@@ -172,6 +173,12 @@ WallpaperDescriptor::setMimeType (
     m_MimeType = mimeType;
 }
 
+QString
+WallpaperDescriptor::mimeType () const
+{
+    return m_MimeType;
+}
+
 /*!
  * This function will initiate the thumbnail generation. The thumbnail will be
  * loaded into the pixmap that is returned by the thumbnailPixmap() function. I
@@ -180,16 +187,24 @@ WallpaperDescriptor::setMimeType (
 void 
 WallpaperDescriptor::initiateThumbnailer ()
 {
-   
-
-    if (m_MimeType.isEmpty() || m_Filename.isEmpty())
+    if (m_MimeType.isEmpty() || m_Filename.isEmpty()) {
+        SYS_WARNING ("Can not initiate thumbnailer for %s", 
+                SYS_STR(title()));
+        SYS_DEBUG ("*** MIME    = %s", SYS_STR(m_MimeType));
+        SYS_DEBUG ("*** file    = %s", SYS_STR(m_Filename));
         return;
+    }
 
-    if (m_Thumbnailer != 0)
+    if (m_Thumbnailer != 0) {
+        SYS_WARNING ("The thumbnailing already initated for %s", 
+                SYS_STR(title()));
         return;
+    }
 
-    if (m_HasThumbnail)
+    if (m_HasThumbnail) {
+        SYS_WARNING ("Already has a thumbnail for %s", SYS_STR(title()));
         return;
+    }
 
     SYS_DEBUG ("Initiating thumbnailer for %s", SYS_STR(m_Filename));
     SYS_DEBUG ("*** MIME    = %s", SYS_STR(m_MimeType));
@@ -246,7 +261,9 @@ WallpaperDescriptor::thumbnailError (
             QUrl         url)
 {
     Q_UNUSED (url);
-    SYS_WARNING ("*** message = %s", SYS_STR(message));
+    SYS_WARNING ("Failed to thumbnail %s: %s", 
+            SYS_STR(title()),
+            SYS_STR(message));
 }
 
 /*!
@@ -257,6 +274,14 @@ void
 WallpaperDescriptor::thumbnailLoadingFinished (
             int          left)
 {
+    Q_UNUSED (left);
     delete m_Thumbnailer;
 }
+
+bool
+WallpaperDescriptor::isCurrent () const
+{
+    return false;
+}
+
 

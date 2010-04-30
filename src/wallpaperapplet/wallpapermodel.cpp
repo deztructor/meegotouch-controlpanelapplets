@@ -154,8 +154,15 @@ WallpaperContentItemCreator::updateCell (
     QVariant data = index.data(Qt::DisplayRole);
     WallpaperDescriptor *rowData = data.value<WallpaperDescriptor *>();
 
-    contentItem->setTitle (rowData->title());
-    //contentItem->setSubtitle (rowData->filename());
+    if (rowData->isCurrent()) {
+        //% "Current wallpaper"
+        contentItem->setTitle (qtTrId("qtn_wall_current_wallpaper"));
+        contentItem->setSubtitle (rowData->title());
+    } else {
+        contentItem->setTitle (rowData->title());
+        contentItem->setSubtitle ("");
+        //contentItem->setSubtitle (rowData->filename());
+    }
 
 #if 1
     /*
