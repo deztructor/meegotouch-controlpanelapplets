@@ -1,10 +1,11 @@
 #include "volumeoverlay.h"
 #include <MSceneWindow>
 #include <MImageWidget>
+#include <MApplication>
 #include <MSlider>
 #include <QTimer>
 
-#undef DEBUG
+#define DEBUG
 #include "../debug.h"
 
 #define HIDE_TIMEOUT 3000
@@ -38,7 +39,6 @@ VolumeOverlay::constructUi ()
     m_slider->setOrientation (Qt::Vertical);
     m_slider->setMaxLabelIconID (QString ("icon-m-common-volume"));
     m_slider->setMinLabelIconID (QString ("icon-m-common-volume-off"));
-
 
     connect (m_slider, SIGNAL (valueChanged (int)),
              this, SIGNAL (VolumeChanged (int)));

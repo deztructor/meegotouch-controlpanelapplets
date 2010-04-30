@@ -1,3 +1,4 @@
+include(../coverage.pri)
 SRC_PREFIX = ../../src/profileapplet
 STUB_PREFIX = ../stubs
 INCLUDEPATH += $$SRC_PREFIX \

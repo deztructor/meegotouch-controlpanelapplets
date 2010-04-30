@@ -1,6 +1,7 @@
 #ifndef _VOLUMEOVERLAY_H
 #define _VOLUMEOVERLAY_H
 
+#include <MWindow>
 #include <MOverlay>
 #include <QObject>
 

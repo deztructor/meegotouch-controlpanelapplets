@@ -35,12 +35,11 @@ void
 TestWidget::createWidgets ()
 {
     QGraphicsLinearLayout *mainLayout;
-    MLabel              *tLabel;
-    char title[512];
+    MLabel                *tLabel;
+    QString                title;
 
-    sprintf (title, "This is page %d at %p", m_NumId, this);
+    title = QString ("This is page %1 at %2").arg (m_NumId, (quint32) this);
 
-    //MLayout *layout = new MLayout()
     tLabel = new MLabel (title);
     
     m_LocalContainer = createContainer ();

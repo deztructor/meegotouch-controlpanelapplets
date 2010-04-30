@@ -2,7 +2,7 @@
 #include "volumeoverlay.h"
 #include "volumebarlogic.h"
 
-#undef DEBUG
+#define DEBUG
 #include "../debug.h"
 
 #include <MStatusIndicatorMenuPluginInterface>

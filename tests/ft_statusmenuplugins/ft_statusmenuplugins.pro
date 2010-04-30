@@ -1,3 +1,4 @@
+include(../coverage.pri)
 TEMPLATE = app
 QT += testlib
 

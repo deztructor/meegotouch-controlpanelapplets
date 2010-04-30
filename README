@@ -1,21 +1,17 @@
-System User Interface
-=======================
-(old) authors:
-   Ossi Jormakka
-   Matti Katila
-   Carita Kautto
-   Miikka Kulmala
-   Jan Lapinkataja
-   Telle-Tiia Pitkanen
-current authors (/maintainers):
-   Laszlo Pere
-   David Kedves
+System UI applets:
 
-Release
--------
+# UT/FT TESTING:
 
- sb2 -e dpkg-buildpackage -rfakeroot -b
- # Do these in master branch:
+ dpkg-buildpackage -rfakeroot -b; fakeroot dpkg -i ../*deb;
+ testrunner.py -f /usr/share/systemui-applets-tests/tests.xml -o result.xml
+
+# RELEASING:
+
  git tag VERSION
  git push --tags origin master
 
+# TESTING COVERAGE:
+
+ cd tests;
+ gen-coverage.sh;
+ # result'll be available: coverage/index.html

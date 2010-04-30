@@ -1,3 +1,4 @@
+include(../coverage.pri)
 SRC_PREFIX = ../../src/volumebarplugin
 INCLUDEPATH += $$SRC_PREFIX
 

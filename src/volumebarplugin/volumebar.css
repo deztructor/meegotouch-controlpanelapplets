@@ -4,11 +4,6 @@
     padding-top:    18px;
     padding-bottom: 18px;
 
-    /*
-    show-animation: "DuiWidgetSlideInAnimation";
-    hide-animation: "DuiWidgetSlideOutAnimation";
-    */
-
     minimum-size: -1 400;
     preferred-size: -1 -1;
     maximum-size: 100% 100%;
