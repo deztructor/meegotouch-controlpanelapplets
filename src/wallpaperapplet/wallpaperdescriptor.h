@@ -30,7 +30,6 @@ public:
     QString title () const;
     
     virtual bool isCurrent () const;
-    //void setCurrent (bool current = true);
 
     void setUrl (const QString &urlString);
 
@@ -78,7 +77,6 @@ private:
     QPixmap               m_ThumbnailPixmap;
     bool                  m_Cached;
     QPixmap               m_Pixmap;
-    //bool                  m_Current;
 };
 
 Q_DECLARE_METATYPE(WallpaperDescriptor)
