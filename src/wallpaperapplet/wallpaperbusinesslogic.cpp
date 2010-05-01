@@ -18,7 +18,7 @@
 #include <MTheme>
 #include <MGConfItem>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 static const QString PortraitKey = 
@@ -368,7 +368,8 @@ WallpaperBusinessLogic::makeImageFile (
     QPainter  painter (&pixmap);
     qreal     scale = transformations->scale();
     QPixmap   image;
-    
+    qreal     ratio, ratio1;
+
     /*
      * And this is exactly why we should move this kind of stuff into the image
      * descriptor classes.
@@ -382,9 +383,17 @@ WallpaperBusinessLogic::makeImageFile (
         image = desc->pixmap();
     }
 
-    qreal     ratio = 
+    ratio = 
         (qreal) transformations->expectedHeight () / 
         (qreal) image.height();
+
+    ratio1 = 
+        (qreal) transformations->expectedWidth () / 
+        (qreal) image.width();
+    
+    if (ratio1 > ratio)
+        ratio = ratio1;
+
     /*
      * Let's fill the pixmap with black, so the area not covered by the original
      * pixmap is initialized.

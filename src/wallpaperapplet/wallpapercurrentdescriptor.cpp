@@ -7,7 +7,7 @@
 #include <QFileInfo>
 #include <MDesktopEntry>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 WallpaperCurrentDescriptor *WallpaperCurrentDescriptor::sm_Instance = 0;
