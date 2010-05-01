@@ -11,6 +11,7 @@
 #include <QUrl>
 #include <QPointer>
 #include <Thumbnailer>
+#include <MApplication>
 
 class QString;
 
@@ -30,6 +31,9 @@ public:
     QString title () const;
     
     virtual bool isCurrent () const;
+    virtual int version () const;
+    virtual QString suggestedOutputFilename (M::Orientation orientation) const;
+    virtual QString originalImageFile (M::Orientation orientation) const;
 
     void setUrl (const QString &urlString);
 

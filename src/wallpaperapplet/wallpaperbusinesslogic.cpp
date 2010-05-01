@@ -73,7 +73,7 @@ WallpaperBusinessLogic::setBackground (
         WallpaperITrans     *portraitITrans,
         WallpaperDescriptor *desc)
 {
-    SYS_DEBUG ("");
+    SYS_DEBUG ("******** Saving background *********");
     if (desc == 0)
         desc = m_EditedImage;
 
@@ -84,6 +84,7 @@ WallpaperBusinessLogic::setBackground (
     ensureHasDirectory ();
     createBackupFiles ();
     writeDestopFiles (landscapeITrans, portraitITrans, desc);
+    SYS_DEBUG ("****** End saving backgroun ********");
 }
 
 /*!
@@ -236,16 +237,24 @@ WallpaperBusinessLogic::writeDestopFiles (
     Q_ASSERT (landscapeITrans);
     Q_ASSERT (portraitITrans);
     Q_ASSERT (desc);
-
+    /*
+     * These are pretty constants.
+     */
     QString  path = dirPath();
     QString  desktopPath = path + destopFileName;
     QFile    file (desktopPath);
-    QString  basename = desc->basename();
-    QString  portraitFilePath =
-        path + basename + "-portrait." + desc->extension();
-    QString  landscapeFilePath =
-        path + basename + "-landscape." + desc->extension();
 
+    int      version = desc->version () + 1;
+    QString  versionString = QString::number(version);
+    QString  portraitFilePath = path + 
+        desc->suggestedOutputFilename (M::Portrait);
+    QString  landscapeFilePath = path + 
+        desc->suggestedOutputFilename (M::Landscape);
+
+
+    /*
+     * Opening the output file.
+     */
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         SYS_DEBUG ("Opening file %s for writing failed.", SYS_STR(desktopPath));
         return;
@@ -254,11 +263,12 @@ WallpaperBusinessLogic::writeDestopFiles (
     QTextStream out(&file);
     out << "[Desktop Entry]\n";
     out << "Type=WallpaperImage\n";
-    out << "Name=" << basename << "\n";
+    out << "Name=" << desc->title() << "\n";
+    out << "Version=" << QString::number(version) << "\n";
     out << "\n";
 
     out << "[DCP Landscape Wallpaper]\n";
-    out << "OriginalFile=" << desc->filename() << "\n";
+    out << "OriginalFile=" << desc->originalImageFile(M::Landscape) << "\n";
     out << "EditedFile=" << landscapeFilePath << "\n";
     out << "MimeType=" << desc->mimeType() << "\n";
     out << "HorOffset=" << landscapeITrans->x() << "\n";
@@ -267,7 +277,7 @@ WallpaperBusinessLogic::writeDestopFiles (
     out << "\n";
 
     out << "[DCP Portrait Wallpaper]\n";
-    out << "OriginalFile=" << desc->filename() << "\n";
+    out << "OriginalFile=" << desc->originalImageFile(M::Portrait) << "\n";
     out << "EditedFile=" << portraitFilePath << "\n";
     out << "MimeType=" << desc->mimeType() << "\n";
     out << "HorOffset=" << portraitITrans->x() << "\n";

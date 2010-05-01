@@ -284,4 +284,39 @@ WallpaperDescriptor::isCurrent () const
     return false;
 }
 
+int
+WallpaperDescriptor::version () const 
+{
+    return 0;
+}
 
+QString 
+WallpaperDescriptor::suggestedOutputFilename (
+        M::Orientation orientation) const
+{
+    QString retval;
+
+    switch (orientation) {
+        case M::Landscape:
+            retval = "-landscape.";
+            break;
+
+        case M::Portrait:
+            retval = "-portrait.";
+            break;
+    }
+
+    retval = basename() + retval + 
+        QString::number(version()) + "." + extension();
+
+    return retval;
+}
+
+QString 
+WallpaperDescriptor::originalImageFile (
+        M::Orientation orientation) const
+{
+    Q_UNUSED (orientation);
+
+    return filename ();
+}

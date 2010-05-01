@@ -15,10 +15,13 @@ public:
     static WallpaperCurrentDescriptor *instance ();
 
     virtual bool isCurrent () const;
+    virtual int version () const;
+    virtual QString suggestedOutputFilename (M::Orientation orientation) const; 
+    
     bool setFromDestopFile (QString desktopFileName);
     WallpaperITrans iTrans (M::Orientation orientation) const;
     QString originalImageFile (M::Orientation orientation) const;
- 
+    
 protected:
     WallpaperCurrentDescriptor ();
 
@@ -45,6 +48,7 @@ private:
     WallpaperITrans        m_PortraitTrans;
     QString                m_LandscapeOriginalFile;
     QString                m_PortraitOriginalFile;
+    int                    m_Version;
 };
 
 #endif

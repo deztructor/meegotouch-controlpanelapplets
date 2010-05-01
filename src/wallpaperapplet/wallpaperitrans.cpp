@@ -88,10 +88,10 @@ void
 WallpaperITrans::setExpectedSize (
         const QSize &size)
 {
+    SYS_DEBUG ("*** size = %dx%d", size.width(), size.height());
     m_ExpectedSize = size;
 }
-#define DEBUG
-#include "../debug.h"
+
 void
 WallpaperITrans::setOffset (
         const QPointF &offset)

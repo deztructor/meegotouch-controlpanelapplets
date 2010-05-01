@@ -75,26 +75,23 @@ WallpaperEditorWidget::paint (
             m_Trans.expectedWidth (),
             m_Trans.expectedHeight ());
     SYS_DEBUG ("*** scale    = %g", m_Trans.scale());
+    SYS_DEBUG ("*** bgsize   = %dx%d", 
+            m_Trans.expectedWidth (), 
+            m_Trans.expectedHeight ());
+
+    painter->fillRect (
+            -ExtraMargin, -ExtraMargin, 
+            m_Trans.expectedWidth (),
+            m_Trans.expectedHeight (),
+            QColor ("black"));
 
     if (portrait) {
-        painter->fillRect (
-                -ExtraMargin, -ExtraMargin, 
-                m_Trans.expectedWidth (),
-                m_Trans.expectedHeight (),
-                QColor ("black"));
-
         painter->drawPixmap (
                 imageDX(), imageDY(),
                 m_Trans * m_bgPortrait.width (),
                 m_Trans * m_bgPortrait.height (),
                 m_bgPortrait);
     } else if (!portrait) {
-        painter->fillRect (
-                -ExtraMargin, -ExtraMargin, 
-                m_Trans.expectedWidth (),
-                m_Trans.expectedHeight (),
-                QColor ("black"));
-
         painter->drawPixmap (
                 imageDX(), imageDY(),
                 m_Trans * m_bgLandscape.width (),

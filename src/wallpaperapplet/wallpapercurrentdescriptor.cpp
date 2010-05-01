@@ -4,6 +4,7 @@
 #include "wallpapercurrentdescriptor.h"
 
 #include <QPointF>
+#include <QFileInfo>
 #include <MDesktopEntry>
 
 #define DEBUG
@@ -16,6 +17,7 @@ static const QString landscapeGroupKey = "DCP Landscape Wallpaper";
 static const QString portraitGroupKey = "DCP Portrait Wallpaper";
 
 static const QString nameKey = "Name";
+static const QString versionKey = "Version";
 static const QString originalFilenameKey = "OriginalFile";
 static const QString editedFilenameKey = "EditedFile";
 static const QString mimeTypeKey = "MimeType";
@@ -34,7 +36,8 @@ WallpaperCurrentDescriptor::instance ()
 }
 
 WallpaperCurrentDescriptor::WallpaperCurrentDescriptor () :
-    m_DesktopEntry (0)
+    m_DesktopEntry (0),
+    m_Version (0)
 {
     m_LandscapeTrans.setOrientation (M::Landscape);
     m_PortraitTrans.setOrientation (M::Portrait);
@@ -46,11 +49,18 @@ WallpaperCurrentDescriptor::isCurrent () const
     return true;
 }
 
+int
+WallpaperCurrentDescriptor::version () const 
+{
+    return m_Version;
+}
+
 bool 
 WallpaperCurrentDescriptor::setFromDestopFile (
         QString desktopFileName)
 {
     QString        value;
+    qreal          rval;
     bool           retval = false;
 
     SYS_DEBUG ("*** desktopFileName = %s", SYS_STR(desktopFileName));
@@ -84,6 +94,12 @@ WallpaperCurrentDescriptor::setFromDestopFile (
         setTitle (value);
     }
     
+    /*
+     * The version number.
+     */
+    if (getValue(mainGroupKey, versionKey, &rval))
+        m_Version = (int) rval;
+
     getValue (landscapeGroupKey, originalFilenameKey, m_LandscapeOriginalFile);
     getValue (portraitGroupKey, originalFilenameKey, m_PortraitOriginalFile);
     getValue (landscapeGroupKey, m_LandscapeTrans);
@@ -207,3 +223,28 @@ WallpaperCurrentDescriptor::originalImageFile (
     return m_LandscapeOriginalFile;
 }
 
+
+QString
+WallpaperCurrentDescriptor::suggestedOutputFilename (
+        M::Orientation orientation) const
+{
+    QFileInfo fileInfo (originalImageFile(orientation));
+    QString   retval;
+
+    switch (orientation) {
+        case M::Landscape:
+            retval = "-landscape.";
+            break;
+
+        case M::Portrait:
+            retval = "-portrait.";
+            break;
+    }
+
+    SYS_WARNING ("*** original image = %s", 
+            SYS_STR (originalImageFile(orientation)));
+    retval = fileInfo.baseName() + retval + 
+        QString::number(version()) + "." + extension();
+
+    return retval;
+}
