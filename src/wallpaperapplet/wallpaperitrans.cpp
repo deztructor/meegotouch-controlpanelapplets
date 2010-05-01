@@ -7,7 +7,7 @@
 #include <QPixmap>
 #include <QPointF>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 WallpaperITrans::WallpaperITrans () :
@@ -57,16 +57,16 @@ WallpaperITrans::operator+= (
     return *this;
 }
 
-qreal
+int
 WallpaperITrans::x () const
 {
-    return m_Offset.x ();
+    return (int) m_Offset.x ();
 }
 
-qreal
+int
 WallpaperITrans::y () const
 {
-    return m_Offset.y ();
+    return (int) m_Offset.y ();
 }
 
 void

@@ -23,7 +23,7 @@
 #include "mwidgetcreator.h"
 M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 static const int ExtraMargin = 10;
@@ -70,7 +70,8 @@ WallpaperEditorWidget::paint (
         QWidget                           *widget)
 {
     bool portrait = (geometry().height() > geometry().width());
-   
+  
+    #if 0
     SYS_DEBUG ("*** expected = %d, %d", 
             m_Trans.expectedWidth (),
             m_Trans.expectedHeight ());
@@ -78,6 +79,7 @@ WallpaperEditorWidget::paint (
     SYS_DEBUG ("*** bgsize   = %dx%d", 
             m_Trans.expectedWidth (), 
             m_Trans.expectedHeight ());
+    #endif
 
     painter->fillRect (
             -ExtraMargin, -ExtraMargin, 

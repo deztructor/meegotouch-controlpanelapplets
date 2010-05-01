@@ -47,6 +47,9 @@ void
 WallpaperDescriptor::setFilename (
         const QString &filename)
 {
+    SYS_DEBUG ("*** filename = %s", SYS_STR(filename));
+    Q_ASSERT (!filename.isEmpty());
+
     m_HasThumbnail = false;
     m_Cached = false;
     m_Filename = filename;
@@ -134,10 +137,18 @@ WallpaperDescriptor::isThumbnailLoaded ()
 void 
 WallpaperDescriptor::cache ()
 {
+    bool success;
+
     if (m_Cached)
         return;
 
-    m_Pixmap.load (filename());
+    success = m_Pixmap.load (filename());
+    if (!success) {
+        SYS_WARNING ("Loading of %s has been failed.", SYS_STR(filename()));
+        // FIXME: Well, we should not fail for a faulty image file...
+        Q_ASSERT (false);
+    }
+
     m_Cached = true;
 }
 
@@ -284,6 +295,17 @@ WallpaperDescriptor::isCurrent () const
     return false;
 }
 
+/*!
+ * Applications need to listen the wallpaper GConf items, so whenever we save a
+ * file we need to modify the filename of the saved images. We could re-use the
+ * filename, but then the GConf key would not be changed, so the applications
+ * would not be able to recognize the change.
+ * 
+ * For this purpose we use a version number in the filenames. The
+ * WallpaperDescriptor returns one default value for version number, the
+ * WallpaperCurrentDescriptor on the other hand reads the version number from
+ * the desktop file. 
+ */
 int
 WallpaperDescriptor::version () const 
 {

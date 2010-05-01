@@ -73,13 +73,24 @@ WallpaperCurrentDescriptor::setFromDestopFile (
     /*
      * The edited image file name... FIXME: This is actually depends on the
      * orientation.
+     * We should compare these with the values stored in the gconf database.
      */
     if (!getValue(landscapeGroupKey, editedFilenameKey, value)) {
         goto finalize;
     }
+    m_landscapeEditedFile = value;
     setFilename (value);
     setUrl ("file://" + value);
-    
+   
+    /*
+     * The portrait edited file name. 
+     * We should compare these with the values stored in the gconf database.
+     */
+    if (!getValue(portraitGroupKey, editedFilenameKey, value)) {
+        goto finalize;
+    }
+    m_portraitEditedFile = value;
+
     /*
      * MimeType. FIXME: This should not depend on the orientation?
      */
@@ -122,21 +133,18 @@ WallpaperCurrentDescriptor::getValue (
     QString  fullKey = group + "/" + key;
     bool     retval = false;
 
-    if (!m_DesktopEntry) {
-        SYS_WARNING ("The m_DesktopEntry is 0.");
-        return retval;
-    }
+    Q_ASSERT (m_DesktopEntry);
 
     value = m_DesktopEntry->value (fullKey);
     if (value.isEmpty()) {
         SYS_WARNING ("The key %s is not set.", SYS_STR(fullKey));
+        value = "";
     } else {
-        SYS_DEBUG ("key = %s/%s value = %s",
-                SYS_STR (group),
-                SYS_STR (key),
-                SYS_STR (value));
         retval = true;
     }
+
+    SYS_DEBUG ("key = %s/%s value = %s", SYS_STR (group), SYS_STR (key), 
+            SYS_STR (value));
 
     return retval;
 }
@@ -157,7 +165,7 @@ WallpaperCurrentDescriptor::getValue (
         return retval;
     }
     
-    retval = getValue (group, vertOffsetKey, &rval1);
+    retval = getValue (group, vertOffsetKey, &rval2);
     if (!retval) {
         SYS_WARNING ("Key not found %s/%s", 
                 SYS_STR(group), 
@@ -187,11 +195,14 @@ WallpaperCurrentDescriptor::getValue (
     QString sValue;
 
     if (!getValue(group, key, sValue)) {
+        SYS_WARNING ("Key %s/%s not found.", SYS_STR(group), SYS_STR(key));
         *value = 0.0;
         return false;
     }
 
     *value = sValue.toDouble();
+
+    SYS_DEBUG ("Value for %s/%s is %g", SYS_STR(group), SYS_STR(key), *value);
     return true;
 }
 
@@ -252,3 +263,19 @@ WallpaperCurrentDescriptor::suggestedOutputFilename (
 
     return retval;
 }
+
+QString
+WallpaperCurrentDescriptor::editedFilename (
+        M::Orientation orientation) const
+{
+    switch (orientation) {
+        case M::Landscape:
+            return m_landscapeEditedFile;
+
+        case M::Portrait:
+            return m_portraitEditedFile;
+    }
+
+    return QString();
+}
+
