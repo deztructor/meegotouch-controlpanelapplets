@@ -1,13 +1,13 @@
 #VolumeOverlay {
-    padding-left:   18px;
-    padding-right:  18px;
-    padding-top:    18px;
-    padding-bottom: 18px;
+    padding-left:   10px;
+    padding-right:  10px;
+    padding-top:    10px;
+    padding-bottom: 10px;
 
     minimum-size: -1 400;
     preferred-size: -1 -1;
     maximum-size: 100% 100%;
 
-    background-image : "duinotification-event-background" 18px 18px 18px 18px;
+    background-image : "duinotification-event-background" 10px 10px 10px 10px;
 }
 

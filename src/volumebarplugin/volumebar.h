@@ -3,6 +3,8 @@
 
 #include <MWidget>
 
+#undef TEST_OVERLAY
+
 class MSlider;
 class MContainer;
 class VolumeBarLogic;
@@ -27,9 +29,12 @@ private slots:
     void overlayChanged (int val);
     void volumeChanged (quint32 val, quint32 max);
     void hwKeyEvent (QmKeys::Key key, QmKeys::State state);
+#ifdef TEST_OVERLAY
+    void testOverlay ();
+#endif
 
 private:
-    MSlider       *m_bar;
+    MSlider         *m_bar;
     VolumeBarLogic  *m_logic;
     VolumeOverlay   *m_overlay;
     Maemo::QmKeys   *m_hwkeys;

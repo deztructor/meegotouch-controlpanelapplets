@@ -23,11 +23,13 @@ class VolumeOverlay : public MOverlay
     void UpdateVolume (int val, int max);
 
   private slots:
+    void orientationChanged (M::Orientation orientation);
     void hideMe ();
 
   private:
     QTimer        *m_timer;
     MSlider       *m_slider;
+    MWindow       *m_window;
 
     void constructUi ();
 };
