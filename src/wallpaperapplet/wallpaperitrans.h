@@ -28,8 +28,8 @@ public:
     int operator* (const int i);
     WallpaperITrans &operator+= (const QPointF &rsh);
 
-    qreal x () const;
-    qreal y () const;
+    int x () const;
+    int y () const;
     qreal scale () const;
     void modScale (int i);
     

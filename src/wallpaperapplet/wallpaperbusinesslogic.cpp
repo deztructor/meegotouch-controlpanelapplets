@@ -18,7 +18,7 @@
 #include <MTheme>
 #include <MGConfItem>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 static const QString PortraitKey = 
@@ -192,9 +192,10 @@ WallpaperBusinessLogic::availableWallpapers () const
             SYS_DEBUG ("*** element[%2d][%2d] = %s", x, y, SYS_STR(element));
             x++;
         }
-        y++;
         x = 0;
         #endif
+        
+        y++;
     }
 
     return list;
@@ -366,7 +367,21 @@ WallpaperBusinessLogic::makeImageFile (
     QPixmap   pixmap (transformations->expectedSize());
     QPainter  painter (&pixmap);
     qreal     scale = transformations->scale();
-    QPixmap   image = desc->pixmap();
+    QPixmap   image;
+    
+    /*
+     * And this is exactly why we should move this kind of stuff into the image
+     * descriptor classes.
+     */
+    if (desc->isCurrent()) {
+        WallpaperCurrentDescriptor *cdesc;
+        
+        cdesc = qobject_cast<WallpaperCurrentDescriptor*> (desc);
+        image.load (cdesc->originalImageFile (transformations->orientation()));
+    } else {
+        image = desc->pixmap();
+    }
+
     qreal     ratio = 
         (qreal) transformations->expectedHeight () / 
         (qreal) image.height();

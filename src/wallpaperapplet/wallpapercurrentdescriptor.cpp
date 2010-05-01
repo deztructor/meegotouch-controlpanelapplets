@@ -7,7 +7,7 @@
 #include <QFileInfo>
 #include <MDesktopEntry>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 WallpaperCurrentDescriptor *WallpaperCurrentDescriptor::sm_Instance = 0;
@@ -133,23 +133,18 @@ WallpaperCurrentDescriptor::getValue (
     QString  fullKey = group + "/" + key;
     bool     retval = false;
 
-    if (!m_DesktopEntry) {
-        SYS_WARNING ("The m_DesktopEntry is 0.");
-        return retval;
-    }
+    Q_ASSERT (m_DesktopEntry);
 
     value = m_DesktopEntry->value (fullKey);
     if (value.isEmpty()) {
         SYS_WARNING ("The key %s is not set.", SYS_STR(fullKey));
+        value = "";
     } else {
-        #if 0
-        SYS_DEBUG ("key = %s/%s value = %s",
-                SYS_STR (group),
-                SYS_STR (key),
-                SYS_STR (value));
-        #endif
         retval = true;
     }
+
+    SYS_DEBUG ("key = %s/%s value = %s", SYS_STR (group), SYS_STR (key), 
+            SYS_STR (value));
 
     return retval;
 }
@@ -170,7 +165,7 @@ WallpaperCurrentDescriptor::getValue (
         return retval;
     }
     
-    retval = getValue (group, vertOffsetKey, &rval1);
+    retval = getValue (group, vertOffsetKey, &rval2);
     if (!retval) {
         SYS_WARNING ("Key not found %s/%s", 
                 SYS_STR(group), 
@@ -200,11 +195,14 @@ WallpaperCurrentDescriptor::getValue (
     QString sValue;
 
     if (!getValue(group, key, sValue)) {
+        SYS_WARNING ("Key %s/%s not found.", SYS_STR(group), SYS_STR(key));
         *value = 0.0;
         return false;
     }
 
     *value = sValue.toDouble();
+
+    SYS_DEBUG ("Value for %s/%s is %g", SYS_STR(group), SYS_STR(key), *value);
     return true;
 }
 

@@ -47,6 +47,9 @@ void
 WallpaperDescriptor::setFilename (
         const QString &filename)
 {
+    SYS_DEBUG ("*** filename = %s", SYS_STR(filename));
+    Q_ASSERT (!filename.isEmpty());
+
     m_HasThumbnail = false;
     m_Cached = false;
     m_Filename = filename;
@@ -134,10 +137,18 @@ WallpaperDescriptor::isThumbnailLoaded ()
 void 
 WallpaperDescriptor::cache ()
 {
+    bool success;
+
     if (m_Cached)
         return;
 
-    m_Pixmap.load (filename());
+    success = m_Pixmap.load (filename());
+    if (!success) {
+        SYS_WARNING ("Loading of %s has been failed.", SYS_STR(filename()));
+        // FIXME: Well, we should not fail for a faulty image file...
+        Q_ASSERT (false);
+    }
+
     m_Cached = true;
 }
 
