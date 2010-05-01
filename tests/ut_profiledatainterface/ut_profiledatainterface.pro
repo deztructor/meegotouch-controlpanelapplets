@@ -9,7 +9,6 @@ INCLUDEPATH += $$SRC_PREFIX \
 #
 LIBS += -lprofile-qt
 INCLUDEPATH += \
-    /usr/include/duicontrolpanel \
     /usr/include/profile-qt
 
 QT += \
@@ -22,32 +21,19 @@ TARGET = ut_profiledatainterface
 target.path = /usr/lib/systemui-applets-tests
 
 CONFIG += \
-	plugin \
 	gui \
 	meegotouch \
-	duicontrolpanel \
 	debug \
 	silent 
 
 HEADERS += \
     ../../src/debug.h \
     ut_profiledatainterface.h \
-    $$SRC_PREFIX/dcpprofile.h \
-    $$SRC_PREFIX/profileapplet.h \
-    $$SRC_PREFIX/profilebrief.h \
-    $$SRC_PREFIX/profilebuttons.h \
-    $$SRC_PREFIX/profilecontainer.h \
-    $$SRC_PREFIX/profiledatainterface.h \
-    $$SRC_PREFIX/profilewidget.h
+    $$SRC_PREFIX/profiledatainterface.h
 
 SOURCES += \
     ../../src/debug.cpp \
     ut_profiledatainterface.cpp \
-    $$SRC_PREFIX/profileapplet.cpp \
-    $$SRC_PREFIX/profilebrief.cpp \
-    $$SRC_PREFIX/profilebuttons.cpp \
-    $$SRC_PREFIX/profilecontainer.cpp \
-    $$SRC_PREFIX/profiledatainterface.cpp \
-    $$SRC_PREFIX/profilewidget.cpp
+    $$SRC_PREFIX/profiledatainterface.cpp
 
 INSTALLS += target

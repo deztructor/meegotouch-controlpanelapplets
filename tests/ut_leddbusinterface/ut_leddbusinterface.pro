@@ -13,27 +13,19 @@ TARGET = ut_leddbusinterface
 target.path = /usr/lib/systemui-applets-tests
 
 CONFIG += \
-	plugin \
 	gui \
 	meegotouch \
-	duicontrolpanel \
 	debug \
 	silent 
 
 HEADERS += \
     ../../src/debug.h \
     ut_leddbusinterface.h \
-    $$SRC_PREFIX/ledapplet.h \
-    $$SRC_PREFIX/ledbrief.h \
-    $$SRC_PREFIX/leddbusinterface.h \
-    $$SRC_PREFIX/ledwidget.h
+    $$SRC_PREFIX/leddbusinterface.h
 
 SOURCES += \
     ../../src/debug.cpp \
     ut_leddbusinterface.cpp \
-    $$SRC_PREFIX/ledapplet.cpp \
-    $$SRC_PREFIX/ledbrief.cpp \
-    $$SRC_PREFIX/leddbusinterface.cpp \
-    $$SRC_PREFIX/ledwidget.cpp
+    $$SRC_PREFIX/leddbusinterface.cpp
 
 INSTALLS += target

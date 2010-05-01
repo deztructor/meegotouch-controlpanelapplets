@@ -15,28 +15,19 @@ target.path = /usr/lib/systemui-applets-tests
 
 CONFIG += \
 	qmsystem \
-	plugin \
 	gui \
 	meegotouch \
-	duicontrolpanel \
 	debug \
 	silent 
 
 HEADERS += \
     ../../src/debug.h \
     ut_displaybusinesslogic.h \
-    $$SRC_PREFIX/dcpdisplay.h \
-    $$SRC_PREFIX/displayapplet.h \
-    $$SRC_PREFIX/displaybrief.h \
-    $$SRC_PREFIX/displaybusinesslogic.h \
-    $$SRC_PREFIX/displaywidget.h
+    $$SRC_PREFIX/displaybusinesslogic.h
 
 SOURCES += \
     ../../src/debug.cpp \
     ut_displaybusinesslogic.cpp \
-    $$SRC_PREFIX/displayapplet.cpp \
-    $$SRC_PREFIX/displaybrief.cpp \
-    $$SRC_PREFIX/displaybusinesslogic.cpp \
-    $$SRC_PREFIX/displaywidget.cpp
+    $$SRC_PREFIX/displaybusinesslogic.cpp
 
 INSTALLS += target

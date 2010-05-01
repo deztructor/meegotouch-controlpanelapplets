@@ -35,7 +35,7 @@ for T in `ls -d ut_*`; do
     fi
 done
 
-mkdir coverage || true
+mkdir coverage &> /dev/null || rm -f coverage/* &> /dev/null
 bcov-report .bcovdump.all ./coverage
 
 echo "report available in coverage/index.html"
