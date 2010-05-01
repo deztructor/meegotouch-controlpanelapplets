@@ -2,7 +2,7 @@
 #include "volumeoverlay.h"
 #include "volumebarlogic.h"
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 #include <MStatusIndicatorMenuPluginInterface>
@@ -14,6 +14,7 @@
 #include <MLayout>
 #include <MLocale>
 #include <MTheme>
+#include <QTimer>
 
 #include <QGraphicsLinearLayout>
 
@@ -83,6 +84,10 @@ VolumeBar::VolumeBar (MStatusIndicatorMenuInterface &statusIndicatorMenu,
              SIGNAL (keyEvent (QmKeys::Key, QmKeys::State)),
              this,
              SLOT (hwKeyEvent (QmKeys::Key, QmKeys::State)));
+
+#ifdef TEST_OVERLAY
+    QTimer::singleShot (2000, this, SLOT (testOverlay ()));
+#endif
 }
 
 VolumeBar::~VolumeBar ()
@@ -145,6 +150,15 @@ VolumeBar::overlayChanged (int val)
     else
         m_bar->setMinLabelIconID ("icon-m-common-volume-off");
 }
+
+#ifdef TEST_OVERLAY
+void
+VolumeBar::testOverlay ()
+{
+    hwKeyEvent (QmKeys::VolumeUp, QmKeys::KeyDown);
+    QTimer::singleShot (5000, this, SLOT (testOverlay ()));
+}
+#endif
 
 void
 VolumeBar::hwKeyEvent (QmKeys::Key key, QmKeys::State state)
