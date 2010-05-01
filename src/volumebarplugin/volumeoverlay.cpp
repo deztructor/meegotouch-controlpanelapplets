@@ -73,7 +73,7 @@ VolumeOverlay::constructUi ()
 
     setLayout (layout);
 
-    orientationChanged (M::Landscape);
+    orientationChanged (m_window->orientation ());
 }
 
 void
