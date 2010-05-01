@@ -51,9 +51,10 @@ public slots:
 
 private:
     QString dirPath () const;
-    void ensureHasDirectory ();
+    bool ensureHasDirectory ();
     void createBackupFiles ();
-    void writeDestopFiles (
+    void deleteBackupFiles ();
+    bool writeFiles (
         WallpaperITrans     *landscapeITrans,
         WallpaperITrans     *portraitITrans,
         WallpaperDescriptor *desc);

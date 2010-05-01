@@ -16,9 +16,11 @@ public:
 
     virtual bool isCurrent () const;
     virtual int version () const;
+    
     virtual QString suggestedOutputFilename (M::Orientation orientation) const; 
     virtual QString originalImageFile (M::Orientation orientation) const;
-    
+    QString editedFilename (M::Orientation orientation) const;
+
     bool setFromDestopFile (QString desktopFileName);
     WallpaperITrans iTrans (M::Orientation orientation) const;
     
@@ -48,6 +50,8 @@ private:
     WallpaperITrans        m_PortraitTrans;
     QString                m_LandscapeOriginalFile;
     QString                m_PortraitOriginalFile;
+    QString                m_landscapeEditedFile;
+    QString                m_portraitEditedFile;
     int                    m_Version;
 };
 

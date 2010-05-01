@@ -6,6 +6,8 @@
 #include "wallpapercurrentdescriptor.h"
 #include "wallpaperitrans.h"
 
+#include <QDir>
+#include <QFile>
 #include <QString>
 #include <QStringList>
 #include <QProcessEnvironment>
@@ -78,6 +80,8 @@ WallpaperBusinessLogic::setBackground (
         WallpaperITrans     *portraitITrans,
         WallpaperDescriptor *desc)
 {
+    bool success;
+
     SYS_DEBUG ("******** Saving background *********");
     if (desc == 0)
         desc = m_EditedImage;
@@ -86,10 +90,20 @@ WallpaperBusinessLogic::setBackground (
     Q_ASSERT (portraitITrans);
     Q_ASSERT (desc);
 
-    ensureHasDirectory ();
+    success = ensureHasDirectory ();
+    if (!success)
+        return;
+
     createBackupFiles ();
-    writeDestopFiles (landscapeITrans, portraitITrans, desc);
-    
+
+    success = writeFiles (landscapeITrans, portraitITrans, desc);
+    if (!success) {
+        // FIXME: Should restore backup files here.
+        return;
+    }
+   
+    deleteBackupFiles ();
+
     /*
      *
      */
@@ -205,14 +219,15 @@ QString
 WallpaperBusinessLogic::dirPath () const
 {
     QString homeDir (getenv("HOME"));
-    SYS_DEBUG ("*** homeDir     = %s", SYS_STR(homeDir));
     QString dirPath = homeDir + "/" + wallpaperDir + "/";
-    SYS_DEBUG ("*** dirPath     = %s", SYS_STR(dirPath));
 
     return dirPath;
 }
 
-void
+/*!
+ * \returns true if the directory exists or could be created
+ */
+bool
 WallpaperBusinessLogic::ensureHasDirectory ()
 {
     QString path = dirPath();
@@ -220,12 +235,15 @@ WallpaperBusinessLogic::ensureHasDirectory ()
 
     if (dir.exists()) {
         SYS_DEBUG ("Directory %s already exists.", SYS_STR(path));
-        return;
+        return true;
     }
 
     if (!dir.mkpath(path)) {
         SYS_WARNING ("Unable to create %s directory.", SYS_STR(path));
+        return false;
     }
+
+    return true;
 }
 
 void
@@ -233,16 +251,48 @@ WallpaperBusinessLogic::createBackupFiles ()
 {
     QString  path = dirPath();
     QString  desktopPath = path + destopFileName;
-
+    QString  filename;
+    
     makeBackup (desktopPath);
+
+    filename = WallpaperCurrentDescriptor::instance()->editedFilename (
+            M::Portrait);
+    if (!filename.isEmpty())
+        makeBackup (filename);
+
+    filename = WallpaperCurrentDescriptor::instance()->editedFilename (
+            M::Landscape);
+    if (!filename.isEmpty())
+        makeBackup (filename);
 }
 
-/*
+void
+WallpaperBusinessLogic::deleteBackupFiles ()
+{
+    QString     path = dirPath();
+    QDir        dir (path);
+    QStringList nameFilters ("*.BAK");
+
+    dir.setNameFilters (nameFilters);
+    foreach (QString backupFileName, dir.entryList (QDir::Files)) {
+        SYS_DEBUG ("Removing backup file %s", SYS_STR(backupFileName));
+        QFile backupFile (path + backupFileName);
+
+        if (!backupFile.remove()) {
+            SYS_WARNING ("Unable to remove %s backup file.",
+                    SYS_STR((path + backupFileName)));
+        }
+    }
+}
+
+/*!
+ * \returns true if the files could be created and saved.
+ *
  * FIXME: This method should and will be moved to the WallpaperCurrentDescriptor
  * class.
  */
-void
-WallpaperBusinessLogic::writeDestopFiles (
+bool
+WallpaperBusinessLogic::writeFiles (
         WallpaperITrans     *landscapeITrans,
         WallpaperITrans     *portraitITrans,
         WallpaperDescriptor *desc)
@@ -270,7 +320,7 @@ WallpaperBusinessLogic::writeDestopFiles (
      */
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         SYS_DEBUG ("Opening file %s for writing failed.", SYS_STR(desktopPath));
-        return;
+        return false;
     }
 
     QTextStream out(&file);
@@ -303,6 +353,8 @@ WallpaperBusinessLogic::writeDestopFiles (
     
     m_PortraitGConfItem->set (portraitFilePath);
     m_LandscapeGConfItem->set (landscapeFilePath);
+
+    return true;
 }
 
 void
@@ -359,6 +411,7 @@ WallpaperBusinessLogic::makeBackup (
         }
     }
 
+    SYS_DEBUG ("Moving %s -> %s", SYS_STR(filePath), SYS_STR(backupFilePath));
     file.rename (backupFilePath);
 }
 

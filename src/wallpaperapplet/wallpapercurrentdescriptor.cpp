@@ -7,7 +7,7 @@
 #include <QFileInfo>
 #include <MDesktopEntry>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 WallpaperCurrentDescriptor *WallpaperCurrentDescriptor::sm_Instance = 0;
@@ -73,13 +73,24 @@ WallpaperCurrentDescriptor::setFromDestopFile (
     /*
      * The edited image file name... FIXME: This is actually depends on the
      * orientation.
+     * We should compare these with the values stored in the gconf database.
      */
     if (!getValue(landscapeGroupKey, editedFilenameKey, value)) {
         goto finalize;
     }
+    m_landscapeEditedFile = value;
     setFilename (value);
     setUrl ("file://" + value);
-    
+   
+    /*
+     * The portrait edited file name. 
+     * We should compare these with the values stored in the gconf database.
+     */
+    if (!getValue(portraitGroupKey, editedFilenameKey, value)) {
+        goto finalize;
+    }
+    m_portraitEditedFile = value;
+
     /*
      * MimeType. FIXME: This should not depend on the orientation?
      */
@@ -131,10 +142,12 @@ WallpaperCurrentDescriptor::getValue (
     if (value.isEmpty()) {
         SYS_WARNING ("The key %s is not set.", SYS_STR(fullKey));
     } else {
+        #if 0
         SYS_DEBUG ("key = %s/%s value = %s",
                 SYS_STR (group),
                 SYS_STR (key),
                 SYS_STR (value));
+        #endif
         retval = true;
     }
 
@@ -252,3 +265,19 @@ WallpaperCurrentDescriptor::suggestedOutputFilename (
 
     return retval;
 }
+
+QString
+WallpaperCurrentDescriptor::editedFilename (
+        M::Orientation orientation) const
+{
+    switch (orientation) {
+        case M::Landscape:
+            return m_landscapeEditedFile;
+
+        case M::Portrait:
+            return m_portraitEditedFile;
+    }
+
+    return QString();
+}
+
