@@ -1,5 +1,10 @@
 TEMPLATE = subdirs
+
+contains(BUILD_FEATURES,coverage) {
+SUBDIRS = $$system(ls -1d ut_*/)
+} else {
 SUBDIRS = $$system(ls -1d ut_*/ ft_*/)
+}
 
 check.target = check
 check.CONFIG = recursive

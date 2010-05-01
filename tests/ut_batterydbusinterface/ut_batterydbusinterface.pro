@@ -13,34 +13,19 @@ TARGET = ut_batterydbusinterface
 target.path = /usr/lib/systemui-applets-tests
 
 CONFIG += \
-	plugin \
 	gui \
 	meegotouch \
-	duicontrolpanel \
 	debug \
 	silent 
 
 HEADERS += \
     ../../src/debug.h \
     ut_batterydbusinterface.h \
-    $$SRC_PREFIX/batteryapplet.h \
-    $$SRC_PREFIX/batterybrief.h \
-    $$SRC_PREFIX/batterydbusinterface.h \
-    $$SRC_PREFIX/batteryimage.h \
-    $$SRC_PREFIX/batterywidget.h \
-    $$SRC_PREFIX/dcpbattery.h \
-    $$SRC_PREFIX/slidercontainer.h \
-    $$SRC_PREFIX/timecontainer.h
+    $$SRC_PREFIX/batterydbusinterface.h
 
 SOURCES += \
     ../../src/debug.cpp \
     ut_batterydbusinterface.cpp \
-    $$SRC_PREFIX/batteryapplet.cpp \
-    $$SRC_PREFIX/batterybrief.cpp \
-    $$SRC_PREFIX/batterydbusinterface.cpp \
-    $$SRC_PREFIX/batteryimage.cpp \
-    $$SRC_PREFIX/batterywidget.cpp \
-    $$SRC_PREFIX/slidercontainer.cpp \
-    $$SRC_PREFIX/timecontainer.cpp
+    $$SRC_PREFIX/batterydbusinterface.cpp
 
 INSTALLS += target
