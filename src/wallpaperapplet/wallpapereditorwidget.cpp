@@ -85,8 +85,8 @@ WallpaperEditorWidget::paint (
 
         painter->drawPixmap (
                 imageDX(), imageDY(),
-                m_Trans * m_Trans.expectedWidth (),
-                m_Trans * m_Trans.expectedHeight (),
+                m_Trans * m_bgPortrait.width (),
+                m_Trans * m_bgPortrait.height (),
                 m_bgPortrait);
     } else if (!portrait) {
         painter->fillRect (
@@ -97,8 +97,8 @@ WallpaperEditorWidget::paint (
 
         painter->drawPixmap (
                 imageDX(), imageDY(),
-                m_Trans * m_Trans.expectedWidth (),
-                m_Trans * m_Trans.expectedHeight (),
+                m_Trans * m_bgLandscape.width (),
+                m_Trans * m_bgLandscape.height (),
                 m_bgLandscape);
     }
 
