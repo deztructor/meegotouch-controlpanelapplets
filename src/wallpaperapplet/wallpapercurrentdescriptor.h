@@ -17,10 +17,10 @@ public:
     virtual bool isCurrent () const;
     virtual int version () const;
     virtual QString suggestedOutputFilename (M::Orientation orientation) const; 
+    virtual QString originalImageFile (M::Orientation orientation) const;
     
     bool setFromDestopFile (QString desktopFileName);
     WallpaperITrans iTrans (M::Orientation orientation) const;
-    QString originalImageFile (M::Orientation orientation) const;
     
 protected:
     WallpaperCurrentDescriptor ();

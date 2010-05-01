@@ -168,9 +168,9 @@ WallpaperDescriptor::scaled (
 
 void
 WallpaperDescriptor::setMimeType (
-        const QString &mimeType)
+        const QString &newMimeType)
 {
-    m_MimeType = mimeType;
+    m_MimeType = newMimeType;
 }
 
 QString

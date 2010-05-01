@@ -37,7 +37,7 @@ public:
 
     void setUrl (const QString &urlString);
 
-    void setMimeType (const QString &mimeType);
+    void setMimeType (const QString &newMimeType);
     QString mimeType () const;
 
     QString basename () const;

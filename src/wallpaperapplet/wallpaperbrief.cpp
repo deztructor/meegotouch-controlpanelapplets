@@ -13,6 +13,8 @@ WallpaperBrief::WallpaperBrief (
         WallpaperBusinessLogic *businessLogic) :
     m_WallpaperBusinessLogic (businessLogic)
 {
+    connect (businessLogic, SIGNAL(wallpaperChanged()),
+        this, SIGNAL(valuesChanged()));
 }
 
 int
@@ -27,8 +29,8 @@ WallpaperBrief::valueText() const
 {
     Q_ASSERT (m_WallpaperBusinessLogic != 0);
     if (m_WallpaperBusinessLogic->hasWallpaperFileName()) {
-        WallpaperDescriptor desc = m_WallpaperBusinessLogic->Wallpaper();
-        return desc.basename();
+        WallpaperDescriptor *desc = m_WallpaperBusinessLogic->Wallpaper();
+        return desc->title();
     }
      
     //% "None"
@@ -40,8 +42,8 @@ WallpaperBrief::image () const
 {
     Q_ASSERT (m_WallpaperBusinessLogic != 0);
     if (m_WallpaperBusinessLogic->hasWallpaperFileName()) {
-        WallpaperDescriptor desc = m_WallpaperBusinessLogic->Wallpaper();
-        return desc.filename();
+        WallpaperDescriptor *desc = m_WallpaperBusinessLogic->Wallpaper();
+        return desc->filename();
     }
      
     return "";

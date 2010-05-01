@@ -16,7 +16,7 @@
 #include <MTheme>
 #include <MGConfItem>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 static const QString PortraitKey = 
@@ -30,9 +30,14 @@ static const QString backupExtension = ".BAK";
 
 WallpaperBusinessLogic::WallpaperBusinessLogic()
 {
+    WallpaperCurrentDescriptor *currentDesc;
+    
     m_LandscapeGConfItem = new MGConfItem (LandscapeKey);
     m_PortraitGConfItem = new MGConfItem (PortraitKey);
     m_EditedImage = 0;
+
+    currentDesc = WallpaperCurrentDescriptor::instance ();
+    currentDesc->setFromDestopFile (dirPath() + destopFileName);
 }
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
@@ -59,12 +64,12 @@ WallpaperBusinessLogic::WallpaperFileName (
         m_LandscapeGConfItem->value().toString();
 }
 
-WallpaperDescriptor
+WallpaperDescriptor *
 WallpaperBusinessLogic::Wallpaper (
         bool portrait)
 {
-    QString filename = WallpaperFileName (portrait);
-    return WallpaperDescriptor (filename);
+    Q_UNUSED (portrait);
+    return WallpaperCurrentDescriptor::instance ();
 }
 
 void
@@ -84,6 +89,15 @@ WallpaperBusinessLogic::setBackground (
     ensureHasDirectory ();
     createBackupFiles ();
     writeDestopFiles (landscapeITrans, portraitITrans, desc);
+    
+    /*
+     *
+     */
+    WallpaperCurrentDescriptor *currentDesc;
+    currentDesc = WallpaperCurrentDescriptor::instance ();
+    currentDesc->setFromDestopFile (dirPath() + destopFileName);
+    emit wallpaperChanged ();
+
     SYS_DEBUG ("****** End saving backgroun ********");
 }
 
@@ -137,8 +151,7 @@ WallpaperBusinessLogic::availableWallpapers () const
     WallpaperCurrentDescriptor *currentDesc;
 
     currentDesc = WallpaperCurrentDescriptor::instance ();
-    if (currentDesc->setFromDestopFile (dirPath() + destopFileName))
-        list << WallpaperCurrentDescriptor::instance ();
+    list << WallpaperCurrentDescriptor::instance ();
 
     QVector<QStringList> result = ::tracker()->rawSparqlQuery(query);
     int x = 0;

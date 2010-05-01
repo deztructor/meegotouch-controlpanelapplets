@@ -131,6 +131,10 @@ WallpaperCurrentDescriptor::getValue (
     if (value.isEmpty()) {
         SYS_WARNING ("The key %s is not set.", SYS_STR(fullKey));
     } else {
+        SYS_DEBUG ("key = %s/%s value = %s",
+                SYS_STR (group),
+                SYS_STR (key),
+                SYS_STR (value));
         retval = true;
     }
 
