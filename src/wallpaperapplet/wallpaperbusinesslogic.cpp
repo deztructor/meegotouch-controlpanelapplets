@@ -48,32 +48,22 @@ WallpaperBusinessLogic::~WallpaperBusinessLogic()
     delete m_PortraitGConfItem;
 }
 
-bool
-WallpaperBusinessLogic::hasWallpaperFileName (
-        bool     portrait)
-{
-    QString filename = WallpaperFileName(portrait);
-
-    return !filename.isEmpty();
-}
-
-QString
-WallpaperBusinessLogic::WallpaperFileName (
-        bool     portrait)
-{
-    return portrait ? 
-        m_PortraitGConfItem->value().toString() :
-        m_LandscapeGConfItem->value().toString();
-}
-
+/*!
+ * FIXME: This method is deprecated, should use the 
+ * WallpaperCurrentDescriptor::instance () instead.
+ */
 WallpaperDescriptor *
 WallpaperBusinessLogic::Wallpaper (
         bool portrait)
 {
     Q_UNUSED (portrait);
+    SYS_WARNING ("Deprecated method.");
     return WallpaperCurrentDescriptor::instance ();
 }
 
+/*!
+ * A high level method to set the current wallpaper.
+ */
 void
 WallpaperBusinessLogic::setBackground (
         WallpaperITrans     *landscapeITrans,
@@ -126,6 +116,7 @@ WallpaperBusinessLogic::setBackground (
     if (desc == 0)
         desc = m_EditedImage;
 
+    SYS_WARNING ("Deprecated method.");
     Q_ASSERT (m_PortraitGConfItem != 0);
     Q_ASSERT (m_LandscapeGConfItem != 0);
 
@@ -137,8 +128,8 @@ WallpaperBusinessLogic::setBackground (
 
 
 /*!
- * Returns a list of filenames (full path filenames to be precise) of the
- * available wallpapers. These are the raw image files, before they were edited.
+ * Returns a list wallpaper descriptors with the available wallpapers. The
+ * current wallpaper is the first element of the available wallpapers.
  *
  * FIXME: This function needs some polishing.
  */
@@ -201,6 +192,10 @@ WallpaperBusinessLogic::availableWallpapers () const
     return list;
 }
 
+/*!
+ * While a wallpaper image is edited the WallpaperBusinessLogic holds a
+ * descriptor on it. This function is used to set this wallpaper descriptor.
+ */
 void
 WallpaperBusinessLogic::setEditedImage (
         WallpaperDescriptor  *desc)
@@ -209,6 +204,9 @@ WallpaperBusinessLogic::setEditedImage (
     m_EditedImage = desc;
 }
 
+/*!
+ * Returns the wallpaper that is being edited.
+ */
 WallpaperDescriptor *
 WallpaperBusinessLogic::editedImage ()
 {
@@ -216,6 +214,15 @@ WallpaperBusinessLogic::editedImage ()
     return m_EditedImage;
 }
 
+/*********************************************************************************
+ * Low level file handling functions.
+ */
+
+/*!
+ * Returns the directory path that is used to store the information about the
+ * edited wallpaper. This is the data storing directory for the wallpaper
+ * applet.
+ */
 QString
 WallpaperBusinessLogic::dirPath () const
 {
@@ -227,6 +234,8 @@ WallpaperBusinessLogic::dirPath () const
 
 /*!
  * \returns true if the directory exists or could be created
+ *
+ * If the data store directory does not exists this method will create it.
  */
 bool
 WallpaperBusinessLogic::ensureHasDirectory ()
@@ -247,6 +256,10 @@ WallpaperBusinessLogic::ensureHasDirectory ()
     return true;
 }
 
+/*!
+ * Takes the desktop file, the saved landscape image file and the saved portrait
+ * file and moves/renames them to create a backup version of each of them.
+ */
 void
 WallpaperBusinessLogic::createBackupFiles ()
 {
@@ -267,6 +280,10 @@ WallpaperBusinessLogic::createBackupFiles ()
         makeBackup (filename);
 }
 
+/*!
+ * Removes all the files from the applet's data directory that has the file name
+ * extension indicating that it is a backup file.
+ */
 void
 WallpaperBusinessLogic::deleteBackupFiles ()
 {
@@ -371,6 +388,16 @@ WallpaperBusinessLogic::writeFiles (
     return true;
 }
 
+/*!
+ * \param filePath The path of the file to save the image into.
+ * \param desc The image that should be saved.
+ * \param transformations The structure that descibes how to modify the image.
+ *
+ * This is a low level image manupilation method that takes a wallpaper and
+ * saves it into a file with the given manupilations.
+ * 
+ * FIXME: Maybe this method should be moved into some other class?
+ */
 void
 WallpaperBusinessLogic::makeImageFile (
             const QString        &filePath,

@@ -43,6 +43,10 @@ Ut_WallpaperBusinessLogic::cleanupTestCase()
 void
 Ut_WallpaperBusinessLogic::testSimpleQueries ()
 {
+#if 0
+    /*
+     * These are deprecated methods. Will write a real test soon.
+     */
     QString thing;
     bool    bthing;
 
@@ -51,6 +55,7 @@ Ut_WallpaperBusinessLogic::testSimpleQueries ()
 
     bthing = m_Api->hasWallpaperFileName();
     qDebug() << "hasWallpaperFileName is " << (bthing ? "yes" : "no");
+#endif
 }
 
 QTEST_APPLESS_MAIN(Ut_WallpaperBusinessLogic)

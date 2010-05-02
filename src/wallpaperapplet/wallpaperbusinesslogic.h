@@ -29,8 +29,6 @@ public:
     WallpaperBusinessLogic ();
     ~WallpaperBusinessLogic ();
 
-    bool hasWallpaperFileName (bool portrait = false);
-    QString WallpaperFileName (bool portrait = false);
     WallpaperDescriptor *Wallpaper (bool portrait = false);
 
     QList<WallpaperDescriptor *> availableWallpapers () const;

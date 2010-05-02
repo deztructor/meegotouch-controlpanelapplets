@@ -3,6 +3,7 @@
 
 #include "wallpaperbrief.h"
 #include "wallpaperdescriptor.h"
+#include "wallpapercurrentdescriptor.h"
 
 #include <dcpwidgettypes.h>
 
@@ -27,9 +28,9 @@ WallpaperBrief::widgetTypeID() const
 QString 
 WallpaperBrief::valueText() const
 {
-    Q_ASSERT (m_WallpaperBusinessLogic != 0);
-    if (m_WallpaperBusinessLogic->hasWallpaperFileName()) {
-        WallpaperDescriptor *desc = m_WallpaperBusinessLogic->Wallpaper();
+    WallpaperCurrentDescriptor *desc = WallpaperCurrentDescriptor::instance();
+
+    if (desc->valid()) {
         return desc->title();
     }
      
@@ -40,9 +41,10 @@ WallpaperBrief::valueText() const
 QString 
 WallpaperBrief::image () const
 {
-    Q_ASSERT (m_WallpaperBusinessLogic != 0);
-    if (m_WallpaperBusinessLogic->hasWallpaperFileName()) {
-        WallpaperDescriptor *desc = m_WallpaperBusinessLogic->Wallpaper();
+    WallpaperCurrentDescriptor *desc = WallpaperCurrentDescriptor::instance();
+    
+    if (desc->valid()) {
+        // FIXME: We should have a method to get the thumbnail filename
         return desc->filename();
     }
      

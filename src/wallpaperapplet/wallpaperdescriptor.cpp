@@ -398,6 +398,9 @@ WallpaperDescriptor::originalImageFile (
     return filename ();
 }
 
+/*!
+ * FIXME: This function always returns true.
+ */
 bool
 WallpaperDescriptor::valid () const
 {
