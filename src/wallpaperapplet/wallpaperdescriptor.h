@@ -27,9 +27,13 @@ class QString;
 // to paint will not solve the problem.
 #undef USE_PAINTER
 
+/*!
+ * This class is used to represent a potential wallpaper image with all its
+ * attributes. The WallpaperList is using this class to visualize the wallpaper
+ * images.
+ */
 class Q_DECL_EXPORT WallpaperDescriptor : public QObject {
     Q_OBJECT
-
 public:
     WallpaperDescriptor ();
     WallpaperDescriptor (const QString &filename);
@@ -46,6 +50,7 @@ public:
     virtual int version () const;
     virtual QString suggestedOutputFilename (M::Orientation orientation) const;
     virtual QString originalImageFile (M::Orientation orientation) const;
+    virtual bool valid () const;
 
     void setUrl (const QString &urlString);
 

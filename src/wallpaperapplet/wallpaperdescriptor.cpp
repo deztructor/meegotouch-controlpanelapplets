@@ -212,28 +212,27 @@ WallpaperDescriptor::mimeType () const
 void 
 WallpaperDescriptor::initiateThumbnailer ()
 {
+    /*
+     * If some necessary information is missing.
+     */
     if (m_MimeType.isEmpty() || m_Filename.isEmpty()) {
-        SYS_WARNING ("Can not initiate thumbnailer for %s", 
-                SYS_STR(title()));
-        SYS_DEBUG ("*** MIME    = %s", SYS_STR(m_MimeType));
-        SYS_DEBUG ("*** file    = %s", SYS_STR(m_Filename));
         return;
     }
 
+    /*
+     * If the thumbnailer is already initiated.
+     */
     if (m_Thumbnailer != 0) {
-        SYS_WARNING ("The thumbnailing already initated for %s", 
-                SYS_STR(title()));
         return;
     }
 
+    /*
+     * If we already has the thumbnail.
+     */
     if (m_HasThumbnail) {
-        SYS_WARNING ("Already has a thumbnail for %s", SYS_STR(title()));
         return;
     }
 
-    SYS_DEBUG ("Initiating thumbnailer for %s", SYS_STR(m_Filename));
-    SYS_DEBUG ("*** MIME    = %s", SYS_STR(m_MimeType));
-    SYS_DEBUG ("*** file    = %s", SYS_STR(m_Filename));
     m_Thumbnailer = new Thumbnailer;
 
     connect (m_Thumbnailer, SIGNAL(thumbnail(QUrl,QUrl,QPixmap,QString)),
@@ -332,6 +331,9 @@ WallpaperDescriptor::thumbnailLoadingFinished (
     delete m_Thumbnailer;
 }
 
+/*!
+ * \returns true if this is the current wallpaper.
+ */
 bool
 WallpaperDescriptor::isCurrent () const
 {
@@ -355,6 +357,10 @@ WallpaperDescriptor::version () const
     return 0;
 }
 
+/*
+ * Returns a suggested file name that is used when a modified image file is
+ * saved.
+ */
 QString 
 WallpaperDescriptor::suggestedOutputFilename (
         M::Orientation orientation) const
@@ -377,6 +383,12 @@ WallpaperDescriptor::suggestedOutputFilename (
     return retval;
 }
 
+/*
+ * Returns the original image file that was loaded, modified and saved into a
+ * new file. For this class the original filename is the only filename.
+ *
+ * FIXME: What if the original file is deleted?
+ */
 QString 
 WallpaperDescriptor::originalImageFile (
         M::Orientation orientation) const
@@ -384,4 +396,10 @@ WallpaperDescriptor::originalImageFile (
     Q_UNUSED (orientation);
 
     return filename ();
+}
+
+bool
+WallpaperDescriptor::valid () const
+{
+    return true;
 }

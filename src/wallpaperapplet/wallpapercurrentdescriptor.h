@@ -8,6 +8,13 @@
 
 class MDesktopEntry;
 
+/*!
+ * A class that represents the current wallpaper. Holds information about the
+ * modifications the user made and about the saved files created from the
+ * original image by implementing the modifications.
+ *
+ * This class is also a singleton; there can be only one current wallpaper.
+ */
 class Q_DECL_EXPORT WallpaperCurrentDescriptor : public WallpaperDescriptor {
     Q_OBJECT
 
@@ -16,9 +23,10 @@ public:
 
     virtual bool isCurrent () const;
     virtual int version () const;
-    
     virtual QString suggestedOutputFilename (M::Orientation orientation) const; 
     virtual QString originalImageFile (M::Orientation orientation) const;
+    virtual bool valid () const;
+
     QString editedFilename (M::Orientation orientation) const;
 
     bool setFromDestopFile (QString desktopFileName);
@@ -45,6 +53,7 @@ private:
 private:
     static WallpaperCurrentDescriptor *sm_Instance;
 
+    bool                   m_Valid;
     MDesktopEntry         *m_DesktopEntry;
     WallpaperITrans        m_LandscapeTrans;
     WallpaperITrans        m_PortraitTrans;

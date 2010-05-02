@@ -36,6 +36,7 @@ WallpaperCurrentDescriptor::instance ()
 }
 
 WallpaperCurrentDescriptor::WallpaperCurrentDescriptor () :
+    m_Valid (false),
     m_DesktopEntry (0),
     m_Version (0)
 {
@@ -43,18 +44,32 @@ WallpaperCurrentDescriptor::WallpaperCurrentDescriptor () :
     m_PortraitTrans.setOrientation (M::Portrait);
 }
 
+/*!
+ * For this class it is always the current wallpaper.
+ */
 bool
 WallpaperCurrentDescriptor::isCurrent () const
 {
     return true;
 }
 
+/*!
+ * \returns The version number of the wallpaper.
+ *
+ * In order to guaranty that the image file is always created by a new name (so
+ * that the gconf entry change can be recognized) the current wallpaper always
+ * have a version number stored in the desktop file.
+ */
 int
 WallpaperCurrentDescriptor::version () const 
 {
     return m_Version;
 }
 
+/*
+ * Reads the data stored in a desktop wile and initializes the object using the
+ * data found there.
+ */
 bool 
 WallpaperCurrentDescriptor::setFromDestopFile (
         QString desktopFileName)
@@ -121,9 +136,111 @@ WallpaperCurrentDescriptor::setFromDestopFile (
 finalize:
     delete m_DesktopEntry;
     m_DesktopEntry = 0;
+
+    m_Valid = true;
+
     return retval;
 }
 
+
+/*! 
+ * \returns The image transformations for the given orientation.
+ */
+WallpaperITrans 
+WallpaperCurrentDescriptor::iTrans (
+        M::Orientation orientation) const
+{
+    switch (orientation) {
+        case M::Portrait:
+            return m_PortraitTrans;
+
+        case M::Landscape:
+            return m_LandscapeTrans;
+    }
+
+    SYS_WARNING ("Unknown orientation: %d", orientation);
+    return m_LandscapeTrans;
+}
+
+QString 
+WallpaperCurrentDescriptor::originalImageFile (
+        M::Orientation orientation) const
+{
+    switch (orientation) {
+        case M::Portrait:
+            return m_PortraitOriginalFile;
+
+        case M::Landscape:
+            return m_LandscapeOriginalFile;
+    }
+
+    SYS_WARNING ("Unknown orientation: %d", orientation);
+    return m_LandscapeOriginalFile;
+}
+
+/*!
+ * \returns true if the object is properly initialized
+ *
+ * Currently this function will return true only if the object is initialized
+ * from the desktop file. FIXME: Need to enhance to handle the gconf keys!
+ */
+bool
+WallpaperCurrentDescriptor::valid () const
+{
+    return m_Valid;
+}
+
+/*
+ * The current image that is already edited has a different algorythm to
+ * suggest output file names for the edited images.
+ */
+QString
+WallpaperCurrentDescriptor::suggestedOutputFilename (
+        M::Orientation orientation) const
+{
+    QFileInfo fileInfo (originalImageFile(orientation));
+    QString   retval;
+
+    switch (orientation) {
+        case M::Landscape:
+            retval = "-landscape.";
+            break;
+
+        case M::Portrait:
+            retval = "-portrait.";
+            break;
+    }
+
+    SYS_WARNING ("*** original image = %s", 
+            SYS_STR (originalImageFile(orientation)));
+    retval = fileInfo.baseName() + retval + 
+        QString::number(version()) + "." + extension();
+
+    return retval;
+}
+
+/*!
+ * Returns the filenames used when the images was last time saved. These
+ * properties are stored in the desktop file.
+ */
+QString
+WallpaperCurrentDescriptor::editedFilename (
+        M::Orientation orientation) const
+{
+    switch (orientation) {
+        case M::Landscape:
+            return m_landscapeEditedFile;
+
+        case M::Portrait:
+            return m_portraitEditedFile;
+    }
+
+    return QString();
+}
+
+/*!
+ * Low level utility function to read data from the desktop file.
+ */
 bool 
 WallpaperCurrentDescriptor::getValue (
         const QString  &group,
@@ -149,6 +266,9 @@ WallpaperCurrentDescriptor::getValue (
     return retval;
 }
 
+/*!
+ * Low level utility function to read data from the desktop file.
+ */
 bool 
 WallpaperCurrentDescriptor::getValue (
             const QString   &group,
@@ -186,6 +306,9 @@ WallpaperCurrentDescriptor::getValue (
     return retval;
 }
 
+/*!
+ * Low level utility function to read data from the desktop file.
+ */
 bool
 WallpaperCurrentDescriptor::getValue (
             const QString &group,
@@ -205,77 +328,3 @@ WallpaperCurrentDescriptor::getValue (
     SYS_DEBUG ("Value for %s/%s is %g", SYS_STR(group), SYS_STR(key), *value);
     return true;
 }
-
-WallpaperITrans 
-WallpaperCurrentDescriptor::iTrans (
-        M::Orientation orientation) const
-{
-    switch (orientation) {
-        case M::Portrait:
-            return m_PortraitTrans;
-
-        case M::Landscape:
-            return m_LandscapeTrans;
-    }
-
-    SYS_WARNING ("Unknown orientation: %d", orientation);
-    return m_LandscapeTrans;
-}
-
-QString 
-WallpaperCurrentDescriptor::originalImageFile (
-        M::Orientation orientation) const
-{
-    switch (orientation) {
-        case M::Portrait:
-            return m_PortraitOriginalFile;
-
-        case M::Landscape:
-            return m_LandscapeOriginalFile;
-    }
-
-    SYS_WARNING ("Unknown orientation: %d", orientation);
-    return m_LandscapeOriginalFile;
-}
-
-
-QString
-WallpaperCurrentDescriptor::suggestedOutputFilename (
-        M::Orientation orientation) const
-{
-    QFileInfo fileInfo (originalImageFile(orientation));
-    QString   retval;
-
-    switch (orientation) {
-        case M::Landscape:
-            retval = "-landscape.";
-            break;
-
-        case M::Portrait:
-            retval = "-portrait.";
-            break;
-    }
-
-    SYS_WARNING ("*** original image = %s", 
-            SYS_STR (originalImageFile(orientation)));
-    retval = fileInfo.baseName() + retval + 
-        QString::number(version()) + "." + extension();
-
-    return retval;
-}
-
-QString
-WallpaperCurrentDescriptor::editedFilename (
-        M::Orientation orientation) const
-{
-    switch (orientation) {
-        case M::Landscape:
-            return m_landscapeEditedFile;
-
-        case M::Portrait:
-            return m_portraitEditedFile;
-    }
-
-    return QString();
-}
-
