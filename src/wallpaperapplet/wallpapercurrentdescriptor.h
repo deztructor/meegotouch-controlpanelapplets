@@ -30,6 +30,8 @@ public:
     QString editedFilename (M::Orientation orientation) const;
 
     bool setFromDestopFile (QString desktopFileName);
+    QString generateDesktopFile (const QString &path) const;
+
     WallpaperITrans iTrans (M::Orientation orientation) const;
     
 protected:

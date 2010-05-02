@@ -18,7 +18,7 @@
 #include <MTheme>
 #include <MGConfItem>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 static const QString PortraitKey = 
@@ -324,7 +324,20 @@ WallpaperBusinessLogic::writeFiles (
         return false;
     }
 
+    /*
+     * FIXME: This is the new stuff, but in order to use it the current
+     * wallpaper descriptor has to be upgraded with from the arguments of this
+     * method.
+     */
     QTextStream out(&file);
+
+    QString outString = 
+        WallpaperCurrentDescriptor::instance()->generateDesktopFile (path);
+    SYS_DEBUG ("outString = %s", SYS_STR(outString));
+
+    /*
+     * Then this is deprecated.
+     */
     out << "[Desktop Entry]\n";
     out << "Type=WallpaperImage\n";
     out << "Name=" << desc->title() << "\n";
