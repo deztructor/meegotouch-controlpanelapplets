@@ -5,6 +5,7 @@
 #include "wallpapercurrentdescriptor.h"
 
 #include <QStyle>
+#include <QGesture>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneWheelEvent>
 #include <QGraphicsLinearLayout>
@@ -23,7 +24,7 @@
 #include "mwidgetcreator.h"
 M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 static const int ExtraMargin = 10;
@@ -36,14 +37,6 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_DoneAction (0),
     m_NoTitlebar (false)
 {
-    MWindow *win = MApplication::activeWindow ();
-
-    m_PortraitTrans.setExpectedSize (win->visibleSceneSize (M::Portrait));
-    m_PortraitTrans.setOrientation (M::Portrait);
-    m_LandscapeTrans.setExpectedSize (win->visibleSceneSize (M::Landscape));
-    m_LandscapeTrans.setOrientation (M::Landscape);
-
-
     MApplication::activeApplicationWindow()->showFullScreen();
     
     setObjectName ("WallpaperEditorWidget");
@@ -54,8 +47,17 @@ WallpaperEditorWidget::WallpaperEditorWidget (
             SIGNAL(orientationChanged(M::Orientation)),
             this, SLOT(orientationChanged(M::Orientation)));
 
-    m_Trans = win->orientation() == 
-        M::Portrait ? m_PortraitTrans : m_LandscapeTrans;
+    /*
+     * Enabling two finger gestures.
+     */
+    grabGesture(Qt::TapGesture);
+    grabGesture(Qt::TapAndHoldGesture);
+    grabGesture(Qt::PanGesture);
+    grabGesture(Qt::PinchGesture);
+    grabGesture(Qt::SwipeGesture);
+
+    SYS_DEBUG ("Emulating two finger gestures: %s", 
+            SYS_BOOL(MApplication::emulateTwoFingerGestures()));
 }
 
 WallpaperEditorWidget::~WallpaperEditorWidget ()
@@ -101,12 +103,14 @@ WallpaperEditorWidget::paint (
                 m_bgLandscape);
     }
 
-    DcpWidget::paint (painter, option, widget);
+    //DcpWidget::paint (painter, option, widget);
+    MWidget::paint (painter, option, widget);
 }
 
 void
 WallpaperEditorWidget::createContent ()
 {
+    MWindow *win = MApplication::activeWindow ();
     WallpaperDescriptor *desc;
 
     desc = m_WallpaperBusinessLogic->editedImage();
@@ -136,10 +140,9 @@ WallpaperEditorWidget::createContent ()
         m_PortraitTrans = cdesc->iTrans (M::Portrait);
 
         /*
-         * Ooops: we overwrote these values set in the constructor...
+         * Initialization of the image transformations for the current
+         * wallpaper. 
          */
-        MWindow *win = MApplication::activeWindow ();
-
         m_PortraitTrans.setExpectedSize (win->visibleSceneSize (M::Portrait));
         m_PortraitTrans.setOrientation (M::Portrait);
         m_LandscapeTrans.setExpectedSize (win->visibleSceneSize (M::Landscape));
@@ -169,6 +172,18 @@ WallpaperEditorWidget::createContent ()
     }
 
 not_current_wallpaper:
+    /*
+     * Initializing image transformations when editing an image that is not the
+     * current image.
+     */
+    m_PortraitTrans.setExpectedSize (win->visibleSceneSize (M::Portrait));
+    m_PortraitTrans.setOrientation (M::Portrait);
+    m_LandscapeTrans.setExpectedSize (win->visibleSceneSize (M::Landscape));
+    m_LandscapeTrans.setOrientation (M::Landscape);
+    
+    m_Trans = win->orientation() == 
+        M::Portrait ? m_PortraitTrans : m_LandscapeTrans;
+
     /*
      * Here is what we do when this is not the current image.
      * If the image is very big the handling might be slow, so we scale it
@@ -239,18 +254,18 @@ WallpaperEditorWidget::pagePans () const
 }
 
 void 
-WallpaperEditorWidget::mouseMoveEvent (
-        QGraphicsSceneMouseEvent *event)
-{
-    m_UserOffset = event->pos() - m_LastClick;
-    redrawImage ();
-}
-
-void 
 WallpaperEditorWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
 {
     m_Trans.modScale (event->delta());
+    redrawImage ();
+}
+
+void 
+WallpaperEditorWidget::mouseMoveEvent (
+        QGraphicsSceneMouseEvent *event)
+{
+    m_UserOffset = event->pos() - m_LastClick;
     redrawImage ();
 }
 
@@ -354,4 +369,42 @@ WallpaperEditorWidget::orientationChanged (
             this->setMinimumSize (m_Trans.expectedSize());
             break;
     }
+}
+
+/*********************************************************************************
+ * Stuff for the two finger gestures.
+ */
+
+void 
+WallpaperEditorWidget::gestureEvent (
+        QGestureEvent *event)
+{
+    SYS_DEBUG ("");
+    MWidget::gestureEvent (event);
+
+    foreach(QGesture* gesture, event->gestures()) {
+        if (Qt::TapGesture == gesture->gestureType()) {
+            SYS_DEBUG ("Qt::TapGesture");
+        } else if (Qt::TapAndHoldGesture == gesture->gestureType()) {
+            SYS_DEBUG ("Qt::TapAndHoldGesture");
+        } else if (Qt::PanGesture == gesture->gestureType()) {
+            SYS_DEBUG ("Qt::PanGesture");
+        } else if (Qt::PinchGesture == gesture->gestureType()) {
+            SYS_DEBUG ("Qt::PinchGesture");
+        } else if (Qt::SwipeGesture == gesture->gestureType()) {
+            SYS_DEBUG ("Qt::SwipeGesture");
+        } else if (Qt::CustomGesture == gesture->gestureType()) {
+            SYS_DEBUG ("Qt::CustomGesture");
+        }
+    }
+
+#if 0
+     if (QGesture *swipe = event->gesture(Qt::SwipeGesture))
+         swipeTriggered(static_cast<QSwipeGesture *>(swipe));
+     else if (QGesture *pan = event->gesture(Qt::PanGesture))
+         panTriggered(static_cast<QPanGesture *>(pan));
+     if (QGesture *pinch = event->gesture(Qt::PinchGesture))
+         pinchTriggered(static_cast<QPinchGesture *>(pinch));
+     return true;
+#endif
 }

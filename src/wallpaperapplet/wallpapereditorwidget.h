@@ -17,7 +17,13 @@ class MAction;
 class QSize;
 class QPixmap;
 class QPointF;
+class QGestuteEvent;
 
+/*!
+ * -output-level debug
+ * -show-object-names
+ * -emulate-two-finger-gestures
+ */
 class WallpaperEditorWidget : public DcpWidget
 {
     Q_OBJECT
@@ -40,6 +46,7 @@ protected:
     virtual void mouseReleaseEvent (QGraphicsSceneMouseEvent *event);
     virtual void mouseMoveEvent (QGraphicsSceneMouseEvent *event);
     virtual void wheelEvent (QGraphicsSceneWheelEvent *event);
+    virtual void gestureEvent (QGestureEvent *event);
 
 private slots:
     void redrawImage ();
@@ -52,6 +59,7 @@ private:
 
     int  imageDX () const;
     int  imageDY () const;
+
 
 private:
     QPointer<WallpaperBusinessLogic>  m_WallpaperBusinessLogic;

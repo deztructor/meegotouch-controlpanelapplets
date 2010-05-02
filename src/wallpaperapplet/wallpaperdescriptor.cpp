@@ -9,7 +9,7 @@
 #include <QPixmap>
 #include <Thumbnailer>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 const QString dir = "";
