@@ -7,27 +7,38 @@
 #include <QFileInfo>
 #include <QImage>
 #include <QPixmap>
+#include <QPainter>
+
+#include <MTheme>
+
 #include <Thumbnailer>
 
-//#define DEBUG
+#define THUMBNAIL_BG_COLOR "Red"
+
+#define DEBUG
 #include "../debug.h"
 
 const QString dir = "";
 
 WallpaperDescriptor::WallpaperDescriptor() :
     m_HasThumbnail (false),
-    m_Cached (false)
+    m_Cached (false),
+    m_ThumbnailPixmap (100, 100)
 {
-    m_HasThumbnail = false;
-    m_Cached = false;
+    m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
+
+    //QPixmap *pixmap = MTheme::pixmapCopy ("icon-s-status-alarm");
+    //m_ThumbnailPixmap = *pixmap;
 }
 
-WallpaperDescriptor::WallpaperDescriptor(
+WallpaperDescriptor::WallpaperDescriptor (
         const WallpaperDescriptor &orig) :
     QObject (),
     m_HasThumbnail (false),
     m_Cached (false)
 {
+    // FIXME: What about the other fields?!
+    m_ThumbnailPixmap = orig.m_ThumbnailPixmap;
     m_Filename = orig.m_Filename;
 }
 
@@ -35,8 +46,10 @@ WallpaperDescriptor::WallpaperDescriptor(
         const QString &filename) :
     m_Filename (filename),
     m_HasThumbnail (false),
-    m_Cached (false)
+    m_Cached (false),
+    m_ThumbnailPixmap (100, 100)
 {
+    m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
 }
 
 WallpaperDescriptor::~WallpaperDescriptor()
@@ -116,11 +129,13 @@ WallpaperDescriptor::extension () const
     return fileInfo.suffix();
 }
 
+#ifdef SUPPORT_IMAGE_THUMBNAILS
 QImage 
 WallpaperDescriptor::thumbnail()
 {
     return m_Thumbnail;
 }
+#endif
 
 QPixmap
 WallpaperDescriptor::thumbnailPixmap()
@@ -235,7 +250,11 @@ WallpaperDescriptor::initiateThumbnailer ()
     urisList << m_Url;
     mimeList << m_MimeType;
 
+    #ifdef USE_PAINTER
+    m_Thumbnailer->request (urisList, mimeList);
+    #else
     m_Thumbnailer->request (urisList, mimeList, true);
+    #endif
 }
 
 /*!
@@ -254,10 +273,35 @@ WallpaperDescriptor::thumbnailReady (
 
     SYS_DEBUG ("Got thumbnail for %s",  SYS_STR(m_Filename));
     SYS_DEBUG ("*** thumbnailUri = %s", SYS_STR(thumbnailUri.toString()));
-    m_ThumbnailPixmap = pixmap;
-    m_Thumbnail = pixmap.toImage();
-    m_HasThumbnail = true;
 
+    #ifdef USE_PAINTER
+    QPixmap thumb (thumbnailUri.toLocalFile());
+    QPainter painter (&m_ThumbnailPixmap);
+    qreal    ratio1, ratio2, ratio;
+
+    ratio1 = 100.0 / thumb.width ();
+    ratio2 = 100.0 / thumb.height ();
+    ratio = ratio1 > ratio2 ? ratio1 : ratio2;
+
+    SYS_DEBUG ("*** w      = %d", thumb.width());
+    SYS_DEBUG ("*** h      = %d", thumb.height());
+    SYS_DEBUG ("*** ratio1 = %g", ratio1);
+    SYS_DEBUG ("*** ratio2 = %g", ratio2);
+    SYS_DEBUG ("*** ratio  = %g", ratio);
+    painter.drawPixmap (
+                0, 0,
+                thumb.width() * ratio,
+                thumb.height() * ratio,
+                thumb);
+    #else
+    m_ThumbnailPixmap = pixmap;
+    #endif
+
+    #ifdef SUPPORT_IMAGE_THUMBNAILS
+    m_Thumbnail = pixmap.toImage();
+    #endif
+
+    m_HasThumbnail = true;
     emit thumbnailLoaded (this);
 }
 

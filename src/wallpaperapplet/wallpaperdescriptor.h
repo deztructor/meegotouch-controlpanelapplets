@@ -15,6 +15,18 @@
 
 class QString;
 
+// If this macro is defined the class will support the QPixmap class thumbnails.
+// I believe in the current version of the Meego Library it is not necessary,
+// but some versions will need this in order to show the image in the lists.
+#undef SUPPORT_IMAGE_THUMBNAILS
+
+// If this macro is enabled the thumbnail file will be loaded by the class
+// itself. This way we can try to eliminate the aspect ratio distortion, but
+// since the current version of the thumbler does not provide such a flavor (or
+// it is just me who did not find such a flavor) using our own implementation 
+// to paint will not solve the problem.
+#undef USE_PAINTER
+
 class Q_DECL_EXPORT WallpaperDescriptor : public QObject {
     Q_OBJECT
 
@@ -44,7 +56,9 @@ public:
     QString extension () const;
 
     bool isThumbnailLoaded ();
+    #ifdef SUPPORT_IMAGE_THUMBNAILS
     QImage thumbnail ();
+    #endif
     QPixmap thumbnailPixmap ();
 
     void cache ();
@@ -77,10 +91,12 @@ private:
     QString               m_Title;
     QString               m_MimeType;
     bool                  m_HasThumbnail;
-    QImage                m_Thumbnail;
-    QPixmap               m_ThumbnailPixmap;
     bool                  m_Cached;
+    QPixmap               m_ThumbnailPixmap;
     QPixmap               m_Pixmap;
+    #ifdef SUPPORT_IMAGE_THUMBNAILS
+    QImage                m_Thumbnail;
+    #endif
 };
 
 Q_DECLARE_METATYPE(WallpaperDescriptor)

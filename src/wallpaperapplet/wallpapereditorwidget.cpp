@@ -374,7 +374,6 @@ WallpaperEditorWidget::orientationChanged (
 /*********************************************************************************
  * Stuff for the two finger gestures.
  */
-
 void 
 WallpaperEditorWidget::gestureEvent (
         QGestureEvent *event)
