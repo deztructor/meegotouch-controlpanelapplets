@@ -26,20 +26,17 @@ WallpaperDescriptor::WallpaperDescriptor() :
     m_ThumbnailPixmap (100, 100)
 {
     m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
-
-    //QPixmap *pixmap = MTheme::pixmapCopy ("icon-s-status-alarm");
-    //m_ThumbnailPixmap = *pixmap;
 }
 
 WallpaperDescriptor::WallpaperDescriptor (
         const WallpaperDescriptor &orig) :
     QObject (),
-    m_HasThumbnail (false),
     m_Cached (false)
 {
     // FIXME: What about the other fields?!
     m_ThumbnailPixmap = orig.m_ThumbnailPixmap;
-    m_Filename = orig.m_Filename;
+    m_Filename        = orig.m_Filename;
+    m_HasThumbnail    = orig.m_HasThumbnail;
 }
 
 WallpaperDescriptor::WallpaperDescriptor(
@@ -64,8 +61,10 @@ WallpaperDescriptor::setFilename (
     Q_ASSERT (!filename.isEmpty());
 
     m_HasThumbnail = false;
-    m_Cached = false;
-    m_Filename = filename;
+    m_Cached       = false;
+    m_Filename     = filename;
+
+    m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
 }
 
 QString
