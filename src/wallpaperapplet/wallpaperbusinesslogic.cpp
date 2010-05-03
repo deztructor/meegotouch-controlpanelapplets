@@ -22,9 +22,9 @@
 #include "../debug.h"
 
 static const QString PortraitKey = 
-    "/desktop/meego/background/landscape/picture_filename";
-static const QString LandscapeKey = 
     "/desktop/meego/background/portrait/picture_filename";
+static const QString LandscapeKey = 
+    "/desktop/meego/background/landscape/picture_filename";
 
 static const QString wallpaperDir = ".wallpapers";
 static const QString destopFileName = "wallpaper.desktop";
