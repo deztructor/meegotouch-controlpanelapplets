@@ -118,5 +118,5 @@ Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, system-ui,
          systemui-applets-l10n-engineering-english
-Description: LED settings applet.
+Description: LED settings applet. Deprecated and will be removed soon.
 

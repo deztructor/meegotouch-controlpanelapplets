@@ -3,7 +3,6 @@ SUBDIRS = batteryapplet   \
           displayapplet   \
           profileapplet   \
           themeapplet     \
-          ledapplet       \
           testapplet      \
           profileplugin   \
           usbapplet       \

@@ -9,8 +9,7 @@ SOURCEDIR = $$PWD/../src/displayapplet \
             $$PWD/../src/themeapplet \
             $$PWD/../src/wallpaperapplet \
             $$PWD/../src/resetapplet \
-            $$PWD/../src/aboutapplet \
-            $$PWD/../src/ledapplet
+            $$PWD/../src/aboutapplet 
 
 TRANSLATIONDIR = $$PWD
 TRANSLATION_INSTALLDIR = /usr/share/l10n/meegotouch
