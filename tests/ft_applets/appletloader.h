@@ -20,7 +20,6 @@ private slots:
     // The testcases
     void testbatteryapplet ();
     void testdisplayapplet ();
-    void testledapplet ();
     void testprofileapplet ();
     void testusbapplet ();
     void testresetapplet ();
