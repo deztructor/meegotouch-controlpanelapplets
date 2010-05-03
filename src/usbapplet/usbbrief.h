@@ -6,24 +6,24 @@
 
 #include <MLocale>
 #include <DcpBrief>
-#include "usbbusinesslogic.h"
+#include <qmusbmode.h>
 
 class UsbBrief: public DcpBrief
 {
     Q_OBJECT
 
 public:
-    UsbBrief (UsbSettingsLogic *logic);
+    UsbBrief (Maemo::QmUSBMode *logic);
     QString valueText () const;
 
 protected:
     void    retranslateUi ();
 
 public slots:
-    void settingsChanged ();
+    void    settingsChanged ();
 
 private:
-    UsbSettingsLogic    *m_logic;
+    Maemo::QmUSBMode    *m_logic;
 };
 
 #endif

@@ -1,19 +1,20 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et sw=4 ts=4 sts=4: */
 
-#include <MLocale>
-#include <QLocale>
+#include "usbbrief.h"
+
 #include <QVariant>
 #include <QString>
 
+using namespace Maemo;
+
 #define DEBUG
 #include "../debug.h"
-#include "usbbrief.h"
 
-UsbBrief::UsbBrief (UsbSettingsLogic *logic) : DcpBrief (),
+UsbBrief::UsbBrief (Maemo::QmUSBMode *logic) :
     m_logic (logic)
 {
-    connect (m_logic, SIGNAL (currentModeChanged (usb_modes)),
+    connect (m_logic, SIGNAL (modeChanged (Maemo::QmUSBMode::Mode)),
              this, SIGNAL (valuesChanged ()));
 }
 
@@ -36,17 +37,17 @@ UsbBrief::valueText () const
     QString currentSetting; 
 
     // Get the current setting localised string
-    switch (m_logic->getUsbSetting ())
+    switch (m_logic->getDefaultMode ())
     {
-        case USB_OVI_SUITE:
+        case QmUSBMode::OviSuite:
             //% "Ovi Suite mode"
             currentSetting = qtTrId ("qtn_usb_ovi_suite");
             break;
-        case USB_MASS_STORAGE:
+        case QmUSBMode::MassStorage:
             //% "Mass Storage mode"
             currentSetting = qtTrId ("qtn_usb_mass_storage");
             break;
-        case USB_AUTO:
+        case QmUSBMode::Ask:
         default:
             //% "Always ask"
             currentSetting = qtTrId ("qtn_usb_always_ask");
@@ -54,28 +55,26 @@ UsbBrief::valueText () const
     }
 
     // Check the currently active mode
-    switch (m_logic->getCurrentMode ())
+    switch (m_logic->getMode ())
     {
-        case USB_NOTCONNECTED:
+        case QmUSBMode::Disconnected:
             return currentSetting; // just return the current setting value
             break;
-        case USB_MASS_STORAGE:
-        case USB_OVI_SUITE:
-            if (m_logic->getCurrentMode () == m_logic->getUsbSetting ())
+        case QmUSBMode::MassStorage:
+        case QmUSBMode::OviSuite:
+            if (m_logic->getMode () == m_logic->getDefaultMode ())
             {
                 //% "%1 active"
                 return qtTrId ("qtn_usb_active_mode").arg (currentSetting);
             }
-            else if (m_logic->getUsbSetting () == USB_AUTO)
+            else if (m_logic->getDefaultMode () == QmUSBMode::Ask)
             {
                 //% "Always ask - %1 active"
                 return qtTrId ("qtn_usb_ask_active").arg (currentSetting);
             }
             break;
-        case USB_NOOP:
-        case USB_AUTO:
         default:
-            SYS_DEBUG ("What about %d mode?", m_logic->getCurrentMode ());
+            SYS_DEBUG ("What about %d mode?", m_logic->getMode ());
             SYS_DEBUG ("current-setting: %s", SYS_STR (currentSetting));
             break;
     }

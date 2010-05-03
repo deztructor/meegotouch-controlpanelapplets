@@ -4,12 +4,12 @@
 #define USBAPPLET_H
 
 #include <DcpAppletIf>
+#include <qmusbmode.h>
 #include <QObject>
 
 class MAction;
 class DcpWidget;
 class UsbBrief;
-class UsbSettingsLogic;
 
 class UsbApplet : public QObject, public DcpAppletIf 
 {
@@ -20,12 +20,12 @@ public:
     void                init ();
 	DcpWidget          *constructWidget (int widgetId);
     QString             title () const;
-    DcpBrief*           constructBrief (int partId);
-    QVector<MAction*>   viewMenuItems ();
+    DcpBrief           *constructBrief (int partId);
+    QVector<MAction *>  viewMenuItems ();
 
 private:
     UsbBrief           *m_brief;
-    UsbSettingsLogic   *m_logic;
+    Maemo::QmUSBMode   *m_logic;
 };
 
 #endif
