@@ -7,6 +7,7 @@
 #include <mapplication.h>
 #include <mstatusindicatormenuplugininterface.h>
 
+class MApplicationWindow;
 
 class Ft_PluginLoader : public QObject
 {
@@ -20,10 +21,11 @@ private slots:
     // The testcases
 
     void testprofileplugin ();
-    void testvolumeplugin ();
+//    void testvolumeplugin ();
 
 private:
     MApplication                    *m_app;
+    MApplicationWindow              *m_window;
     MStatusIndicatorMenuInterface   *m_smstub;
 
     void    DoPluginTest (const QString &soname);
