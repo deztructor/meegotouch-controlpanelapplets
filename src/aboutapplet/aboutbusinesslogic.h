@@ -8,15 +8,20 @@
 #include <QMap>
 #include <QDBusError>
 #include <QDBusInterface>
+#include <PhoneInfo>
 
 class QDBusObjectPath;
 class QString;
 
+using namespace Cellular;
 
 /*!
  * To test this class under scratchbox1 I had to start the bluetooth daemon:
  * # source /tmp/session_bus_address.user
- * # bluetoothd -n
+ * # bluetoothd -n	
+ *
+ * This class has some code that is commented out. Please leave these there,
+ * when i got information about the IMEI number I will finalize the code.
  */
 class AboutBusinessLogic : public QObject
 {
@@ -40,13 +45,14 @@ public slots:
     void defaultBluetoothAdapterAddressReceived (
             QMap<QString, QVariant> properties);
     void defaultBluetoothAdapterReceived (QDBusObjectPath adapter);
-    void imeiReceived (QString imei);
+    //void imeiReceived (QString imei);
     void DBusMessagingFailure (QDBusError error);
 
 private:
     QPointer<QDBusInterface> m_ManagerDBusIf;
     QPointer<QDBusInterface> m_AdapterDBusIf;
-    QPointer<QDBusInterface> m_ImeiDBusIf;
+    QPointer<PhoneInfo>      m_PhoneInfo;
+    //QPointer<QDBusInterface> m_ImeiDBusIf;
     bool          m_gotBluetoothAddress;
     QString       m_BluetoothAddress;
 
