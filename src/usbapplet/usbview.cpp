@@ -1,17 +1,19 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 
+#include "usbview.h"
+
 #include <QGraphicsLinearLayout>
 #include <MButtonGroup>
 #include <MLocale>
-
-#include "usbview.h"
 
 #define BUTTON_ALWAYS_ASK   0
 #define BUTTON_MASS_STORAGE 1
 #define BUTTON_OVI_SUITE    2
 
-UsbView::UsbView (UsbSettingsLogic *logic) : DcpWidget (),
+using namespace Maemo;
+
+UsbView::UsbView (Maemo::QmUSBMode *logic) :
     m_logic (logic)
 {
     initWidget ();
@@ -47,24 +49,24 @@ UsbView::initWidget ()
         switch (i)
         {
             case BUTTON_MASS_STORAGE:
-                id = USB_MASS_STORAGE;
+                id = (int) QmUSBMode::MassStorage;
                 break;
             case BUTTON_OVI_SUITE:
-                id = USB_OVI_SUITE;
+                id = (int) QmUSBMode::OviSuite;
                 break;
             case BUTTON_ALWAYS_ASK:
             default:
-                id = USB_AUTO;
+                id = (int) QmUSBMode::Ask;
                 break;
         }
 
         button_group->addButton (m_buttons[i], id);
     }
 
-    int current_setting = m_logic->getUsbSetting ();
+    int current_setting = (int) m_logic->getDefaultMode ();
 
     if (button_group->button (current_setting) == 0)
-        button_group->button (USB_AUTO)->setChecked (true);
+        button_group->button ((int) QmUSBMode::Ask)->setChecked (true);
     else
         button_group->button (current_setting)->setChecked (true);
 
@@ -79,7 +81,16 @@ UsbView::initWidget ()
 void
 UsbView::selectionChanged (int id)
 {
-    m_logic->setUsbSetting ((usb_modes) id);
+    QmUSBMode::Mode newmode = (QmUSBMode::Mode) id;
+
+    m_logic->setDefaultMode (newmode);
+
+    /*
+     * If we are connected, and we've changed the default
+     * mode lets activate the selected mode...
+     */
+    if (m_logic->getMode () == QmUSBMode::ChargingOnly)
+        m_logic->setMode (newmode);
 
     emit settingsChanged ();
 }

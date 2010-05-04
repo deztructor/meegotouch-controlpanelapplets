@@ -107,12 +107,6 @@ Ft_AppletLoader::testdisplayapplet ()
 }
 
 void
-Ft_AppletLoader::testledapplet ()
-{
-    DoAppletTest ("ledapplet.desktop");
-}
-
-void
 Ft_AppletLoader::testprofileapplet ()
 {
     DoAppletTest ("profile.desktop");

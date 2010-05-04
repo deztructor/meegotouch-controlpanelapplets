@@ -6,14 +6,14 @@
 #include <MLabel>
 #include <MButton>
 #include <DcpWidget>
-#include "usbbusinesslogic.h"
+#include <qmusbmode.h>
 
 class UsbView : public DcpWidget
 {
     Q_OBJECT
 
 public:
-    UsbView (UsbSettingsLogic *logic);
+    UsbView (Maemo::QmUSBMode *logic);
 
 signals:
     void settingsChanged ();
@@ -27,7 +27,7 @@ protected:
 private:
     void initWidget (void);
 
-    UsbSettingsLogic    *m_logic;
+    Maemo::QmUSBMode    *m_logic;
     MButton             *m_buttons[3];
     MLabel              *m_info_label;
 };

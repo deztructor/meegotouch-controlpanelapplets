@@ -4,17 +4,18 @@
 #include <DcpWidget>
 #include <MLocale>
 
-#include "usbbusinesslogic.h"
 #include "usbbrief.h"
 #include "usbview.h"
 #include "usbapplet.h"
+
+using namespace Maemo;
 
 Q_EXPORT_PLUGIN2(usbapplet, UsbApplet)
 
 void
 UsbApplet::init (void)
 {
-    m_logic = new UsbSettingsLogic (this);
+    m_logic = new QmUSBMode (this);
     m_brief = NULL;
 }
 

@@ -3,12 +3,9 @@ CONFIG       += plugin \
                 gui \
                 meegotouch \
                 duicontrolpanel \
-                link_pkgconfig \
+                qmsystem \
                 silent \
                 debug
-
-PKGCONFIG += dbus-1 usb_moded
-QT += dbus
 
 contains(cov, true) { 
     message("Coverage options enabled")
@@ -21,14 +18,12 @@ OBJECTS_DIR   = .objects
 
 HEADERS +=  \
     ../debug.h \
-    usbbusinesslogic.h \
     usbapplet.h \
     usbbrief.h \
     usbview.h
 
 SOURCES += \
     ../debug.cpp \
-    usbbusinesslogic.cpp \
     usbapplet.cpp \
     usbbrief.cpp \
     usbview.cpp
