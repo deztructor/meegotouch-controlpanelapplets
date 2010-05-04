@@ -13,6 +13,7 @@
 #include <QDBusInterface>
 #include <QDBusObjectPath>
 #include <QFile>
+#include <PhoneInfo>
 
 #define OS_NAME_FALLBACK "MeeGo"
 
@@ -29,10 +30,12 @@
 #define DBUS_BLUEZ_GET_DEFAULT_ADAPTER_METHOD "DefaultAdapter"
 #define DBUS_BLUEZ_GET_PROPERTIES_METHOD "GetProperties"
 
+#if 0
 #define DBUS_SIM_SERVICE "com.nokia.phone.SIM"
 #define DBUS_SIM_SECURITY_OBJECT_PATH "/com/nokia/phone/SIM/security"
 #define DBUS_SIM_SECURITY_INTERFACE "Phone.Sim.Security"
 #define DBUS_SIM_SECURITY_GET_IMEI_METHOD "get_imei"
+#endif
 
 AboutBusinessLogic::AboutBusinessLogic() :
     m_gotBluetoothAddress (false),
@@ -210,6 +213,12 @@ AboutBusinessLogic::IMEI ()
 {
     SYS_DEBUG ("*** m_gotImei             = %s", SYS_BOOL(m_gotImei));
     SYS_DEBUG ("*** m_Imei                = %s", SYS_STR(m_Imei));
+    if (!m_gotImei) {
+        m_Imei = m_PhoneInfo->imeiNumber ();
+        m_gotImei = !m_Imei.isEmpty();
+        SYS_DEBUG ("*** new m_Imei            = %s", SYS_STR(m_Imei));
+    }
+
     return m_Imei;
 }
 
@@ -243,6 +252,8 @@ AboutBusinessLogic::initiateBluetoothQueries ()
 void
 AboutBusinessLogic::initiatePhoneQueries ()
 {
+    m_PhoneInfo = new PhoneInfo;
+#if 0
     QDBusInterface  *m_ImeiDBusIf;
 
     m_ImeiDBusIf = new QDBusInterface (
@@ -256,6 +267,7 @@ AboutBusinessLogic::initiatePhoneQueries ()
             QList<QVariant> (), this,
             SLOT (imeiReceived(QString)),
             SLOT (DBusMessagingFailure (QDBusError)));
+#endif
 }
 
 /*!
@@ -285,6 +297,7 @@ AboutBusinessLogic::defaultBluetoothAdapterReceived (
     delete m_ManagerDBusIf;
 }
 
+#if 0
 /*!
  * Slot that is called when the IMEI value is received through the dbus.
  */
@@ -296,6 +309,7 @@ AboutBusinessLogic::imeiReceived (
     m_Imei = imei;
     delete m_ImeiDBusIf;
 }
+#endif
 
 /*!
  * This slot is called when the address of the default bluetooth adapter has

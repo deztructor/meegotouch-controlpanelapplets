@@ -2,6 +2,7 @@ TEMPLATE = lib
 CONFIG += plugin \
     gui \
     meegotouch \
+    cellular-qt \
     silent \
     debug
 

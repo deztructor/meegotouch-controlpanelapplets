@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.7.11),
                libmeegotouch-dev (>= 0.20), libqmsystem-dev,
                libprofile-qt-dev (>= 0.13), system-ui-dev (>= 0.15.2),
                libdbus-1-dev, libdbus-qeventloop-dev (>= 1.5),
-               libqttracker-dev, libduithumbnailer-dev
+               libqttracker-dev, libduithumbnailer-dev, libcellular-qt-dev
 Standards-Version: 3.7.3
 
 Package: systemui-applets-tests
@@ -95,7 +95,7 @@ Package: duicontrolpanel-aboutapplet
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english
+         systemui-applets-l10n-engineering-english, libcellular-qt1
 Description: The about-product applet that shows device and software
  informations.
 
