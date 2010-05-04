@@ -117,12 +117,14 @@ WallpaperBusinessLogic::setBackground (
         desc = m_EditedImage;
 
     SYS_WARNING ("Deprecated method.");
+#if 0
     Q_ASSERT (m_PortraitGConfItem != 0);
     Q_ASSERT (m_LandscapeGConfItem != 0);
 
     SYS_DEBUG ("*** filename = %s", SYS_STR(desc->filename()));
     m_PortraitGConfItem->set (desc->filename());
     m_LandscapeGConfItem->set (desc->filename());
+#endif
 }
 
 
@@ -166,7 +168,6 @@ WallpaperBusinessLogic::availableWallpapers () const
     foreach (QStringList partlist, result) {
         WallpaperDescriptor *desc;
 
-        SYS_DEBUG ("*********************************");
         SYS_DEBUG ("*** url     = %s", SYS_STR(partlist[FieldUrl]));
 
         desc = new WallpaperDescriptor;
@@ -178,7 +179,7 @@ WallpaperBusinessLogic::availableWallpapers () const
         /*
          * Just to see what we really get.
          */
-        #if 1
+        #if 0
         foreach (QString element, partlist) {
             SYS_DEBUG ("*** element[%2d][%2d] = %s", x, y, SYS_STR(element));
             x++;
@@ -382,6 +383,8 @@ WallpaperBusinessLogic::writeFiles (
     makeImageFile (portraitFilePath, desc, portraitITrans);
     makeImageFile (landscapeFilePath, desc, landscapeITrans);
     
+    SYS_DEBUG ("saving landscape = %s", SYS_STR(landscapeFilePath));
+    SYS_DEBUG ("saving portrait  = %s", SYS_STR(portraitFilePath));
     m_PortraitGConfItem->set (portraitFilePath);
     m_LandscapeGConfItem->set (landscapeFilePath);
 

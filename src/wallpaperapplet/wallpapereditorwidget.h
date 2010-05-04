@@ -46,7 +46,11 @@ protected:
     virtual void mouseReleaseEvent (QGraphicsSceneMouseEvent *event);
     virtual void mouseMoveEvent (QGraphicsSceneMouseEvent *event);
     virtual void wheelEvent (QGraphicsSceneWheelEvent *event);
-    virtual void gestureEvent (QGestureEvent *event);
+
+    bool event (QEvent *e);
+    virtual void pinchGestureEvent (
+            QGestureEvent *event, 
+            QPinchGesture *gesture);
 
 private slots:
     void redrawImage ();
@@ -74,6 +78,7 @@ private:
     WallpaperITrans  m_Trans;
     WallpaperITrans  m_LandscapeTrans;
     WallpaperITrans  m_PortraitTrans;
+    qreal            m_OriginalScaleFactor;
 };
 
 #endif

@@ -5,13 +5,19 @@
 #include "wallpapercurrentdescriptor.h"
 
 #include <QStyle>
-#include <QGesture>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneWheelEvent>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsGridLayout>
 #include <QPixmap>
 #include <QTimer>
+
+#include <QGestureEvent>
+#include <QTapAndHoldGesture>
+#include <QPanGesture>
+#include <QPinchGesture>
+#include <QTapGesture>
+#include <QSwipeGesture>
 
 #include <MLayout>
 #include <MLinearLayoutPolicy>
@@ -21,8 +27,8 @@
 #include <MApplication>
 #include <MApplicationPage>
 
-#include "mwidgetcreator.h"
-M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
+//#include "mwidgetcreator.h"
+//M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
 #define DEBUG
 #include "../debug.h"
@@ -50,11 +56,8 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     /*
      * Enabling two finger gestures.
      */
-    grabGesture(Qt::TapGesture);
-    grabGesture(Qt::TapAndHoldGesture);
-    grabGesture(Qt::PanGesture);
-    grabGesture(Qt::PinchGesture);
-    grabGesture(Qt::SwipeGesture);
+    //setAcceptTouchEvents(true);
+    //grabGesture(Qt::PinchGesture);
 
     SYS_DEBUG ("Emulating two finger gestures: %s", 
             SYS_BOOL(MApplication::emulateTwoFingerGestures()));
@@ -198,6 +201,13 @@ not_current_wallpaper:
     //this->setWindowFrameMargins (0.0, 0.0, 0.0, 0.0);
 finalize:
     this->setMinimumSize (m_Trans.expectedSize());
+
+    /*
+     * Enabling two finger gestures.
+     */
+    setAcceptTouchEvents(true);
+    grabGesture(Qt::PinchGesture);
+
     redrawImage ();
 }
 
@@ -253,57 +263,6 @@ WallpaperEditorWidget::pagePans () const
     return false;
 }
 
-void 
-WallpaperEditorWidget::wheelEvent (
-        QGraphicsSceneWheelEvent *event)
-{
-    m_Trans.modScale (event->delta());
-    redrawImage ();
-}
-
-void 
-WallpaperEditorWidget::mouseMoveEvent (
-        QGraphicsSceneMouseEvent *event)
-{
-    m_UserOffset = event->pos() - m_LastClick;
-    redrawImage ();
-}
-
-void
-WallpaperEditorWidget::mousePressEvent (
-        QGraphicsSceneMouseEvent *event)
-{
-    MApplicationPage  *currentPage;
-
-    SYS_DEBUG ("");
-    currentPage = MApplication::activeApplicationWindow()->currentPage();
-    currentPage->setComponentsDisplayMode (
-            MApplicationPage::AllComponents,
-            MApplicationPageModel::Hide);
-    m_LastClick = event->pos();
-
-    /*
-     * FIXME: We need this, because we just hide the titlebar.
-     */
-    m_LastClick += QPointF (0, 70);
-    m_NoTitlebar = true;
-}
-
-void
-WallpaperEditorWidget::mouseReleaseEvent (
-        QGraphicsSceneMouseEvent *event)
-{
-    MApplicationPage  *currentPage;
-
-    currentPage = MApplication::activeApplicationWindow()->currentPage();
-    currentPage->setComponentsDisplayMode (
-            MApplicationPage::AllComponents,
-            MApplicationPageModel::Show);
-
-    m_Trans += m_UserOffset;
-    m_UserOffset = QPointF();
-    m_NoTitlebar = false;
-}
 
 /*!
  * Returns the X offset where the image should be painted inside the widget. 
@@ -371,39 +330,88 @@ WallpaperEditorWidget::orientationChanged (
     }
 }
 
-/*********************************************************************************
- * Stuff for the two finger gestures.
+/******************************************************************************
+ * Stuff for the normal mouse events.
  */
 void 
-WallpaperEditorWidget::gestureEvent (
-        QGestureEvent *event)
+WallpaperEditorWidget::wheelEvent (
+        QGraphicsSceneWheelEvent *event)
 {
-    SYS_DEBUG ("");
-    MWidget::gestureEvent (event);
+    m_Trans.modScale (event->delta());
+    redrawImage ();
+}
 
-    foreach(QGesture* gesture, event->gestures()) {
-        if (Qt::TapGesture == gesture->gestureType()) {
-            SYS_DEBUG ("Qt::TapGesture");
-        } else if (Qt::TapAndHoldGesture == gesture->gestureType()) {
-            SYS_DEBUG ("Qt::TapAndHoldGesture");
-        } else if (Qt::PanGesture == gesture->gestureType()) {
-            SYS_DEBUG ("Qt::PanGesture");
-        } else if (Qt::PinchGesture == gesture->gestureType()) {
-            SYS_DEBUG ("Qt::PinchGesture");
-        } else if (Qt::SwipeGesture == gesture->gestureType()) {
-            SYS_DEBUG ("Qt::SwipeGesture");
-        } else if (Qt::CustomGesture == gesture->gestureType()) {
-            SYS_DEBUG ("Qt::CustomGesture");
-        }
+void 
+WallpaperEditorWidget::mouseMoveEvent (
+        QGraphicsSceneMouseEvent *event)
+{
+    m_UserOffset = event->pos() - m_LastClick;
+    redrawImage ();
+}
+
+void
+WallpaperEditorWidget::mousePressEvent (
+        QGraphicsSceneMouseEvent *event)
+{
+    MApplicationPage  *currentPage;
+
+    SYS_DEBUG ("");
+    currentPage = MApplication::activeApplicationWindow()->currentPage();
+    currentPage->setComponentsDisplayMode (
+            MApplicationPage::AllComponents,
+            MApplicationPageModel::Hide);
+    m_LastClick = event->pos();
+
+    /*
+     * FIXME: We need this, because we just hide the titlebar.
+     */
+    m_LastClick += QPointF (0, 70);
+    m_NoTitlebar = true;
+}
+
+void
+WallpaperEditorWidget::mouseReleaseEvent (
+        QGraphicsSceneMouseEvent *event)
+{
+    MApplicationPage  *currentPage;
+
+    currentPage = MApplication::activeApplicationWindow()->currentPage();
+    currentPage->setComponentsDisplayMode (
+            MApplicationPage::AllComponents,
+            MApplicationPageModel::Show);
+
+    m_Trans += m_UserOffset;
+    m_UserOffset = QPointF();
+    m_NoTitlebar = false;
+}
+
+/*******************************************************************************
+ * Stuff for the two finger gestures.
+ */
+bool
+WallpaperEditorWidget::event(QEvent *e)
+{
+    if (e->type() == QEvent::TouchBegin) {
+        e->setAccepted(true);
+        return true;
+    }
+    return DcpWidget::event(e);
+}
+
+void 
+WallpaperEditorWidget::pinchGestureEvent (
+            QGestureEvent *event, 
+            QPinchGesture *gesture)
+{
+    Q_UNUSED (event);
+    
+    if (gesture->state() == Qt::GestureStarted) {
+        m_OriginalScaleFactor = m_Trans.scale();
     }
 
-#if 0
-     if (QGesture *swipe = event->gesture(Qt::SwipeGesture))
-         swipeTriggered(static_cast<QSwipeGesture *>(swipe));
-     else if (QGesture *pan = event->gesture(Qt::PanGesture))
-         panTriggered(static_cast<QPanGesture *>(pan));
-     if (QGesture *pinch = event->gesture(Qt::PinchGesture))
-         pinchTriggered(static_cast<QPinchGesture *>(pinch));
-     return true;
-#endif
+    m_Trans.setScale (gesture->scaleFactor() * m_OriginalScaleFactor);
+
+    event->accept(gesture);
+    redrawImage ();
 }
+
