@@ -78,7 +78,9 @@ private:
     WallpaperITrans  m_Trans;
     WallpaperITrans  m_LandscapeTrans;
     WallpaperITrans  m_PortraitTrans;
+    
     qreal            m_OriginalScaleFactor;
+    bool             m_Gesture;
 };
 
 #endif

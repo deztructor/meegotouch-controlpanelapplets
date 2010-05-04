@@ -41,7 +41,8 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     DcpWidget (parent),
     m_WallpaperBusinessLogic (wallpaperBusinessLogic),
     m_DoneAction (0),
-    m_NoTitlebar (false)
+    m_NoTitlebar (false),
+    m_Gesture (false)
 {
     MApplication::activeApplicationWindow()->showFullScreen();
     
@@ -352,6 +353,10 @@ void
 WallpaperEditorWidget::mouseMoveEvent (
         QGraphicsSceneMouseEvent *event)
 {
+    if (m_Gesture)
+        return;
+
+    SYS_DEBUG ("Mouse move");
     m_UserOffset = event->pos() - m_LastClick;
     redrawImage ();
 }
@@ -362,7 +367,14 @@ WallpaperEditorWidget::mousePressEvent (
 {
     MApplicationPage  *currentPage;
 
-    SYS_DEBUG ("");
+    if (m_Gesture)
+        return;
+
+    SYS_DEBUG ("Mouse press");
+    /*
+     * FIXME: Should add a method for this and for the point modification also
+     * has to be done there.
+     */
     currentPage = MApplication::activeApplicationWindow()->currentPage();
     currentPage->setComponentsDisplayMode (
             MApplicationPage::AllComponents,
@@ -381,7 +393,8 @@ WallpaperEditorWidget::mouseReleaseEvent (
         QGraphicsSceneMouseEvent *event)
 {
     MApplicationPage  *currentPage;
-
+    
+    SYS_DEBUG ("Mouse release");
     currentPage = MApplication::activeApplicationWindow()->currentPage();
     currentPage->setComponentsDisplayMode (
             MApplicationPage::AllComponents,
@@ -390,6 +403,8 @@ WallpaperEditorWidget::mouseReleaseEvent (
     m_Trans += m_UserOffset;
     m_UserOffset = QPointF();
     m_NoTitlebar = false;
+    
+    redrawImage ();
 }
 
 /*******************************************************************************
@@ -413,10 +428,31 @@ WallpaperEditorWidget::pinchGestureEvent (
     Q_UNUSED (event);
     
     if (gesture->state() == Qt::GestureStarted) {
+        SYS_DEBUG ("Gesture started");
         m_OriginalScaleFactor = m_Trans.scale();
+        m_LastClick = gesture->centerPoint ();
+        m_Gesture = true;
+        if (!m_NoTitlebar) {
+            MApplicationPage  *currentPage;
+            currentPage = 
+                MApplication::activeApplicationWindow()->currentPage();
+            currentPage->setComponentsDisplayMode (
+                MApplicationPage::AllComponents,
+                MApplicationPageModel::Hide);
+            m_LastClick += QPointF (0, 70);
+            m_NoTitlebar = true;
+        }
+    } else if (gesture->state() == Qt::GestureFinished) {
+        SYS_DEBUG ("Gesture finished");
+        //m_Trans += m_UserOffset;
+        //m_UserOffset = QPointF();
+        //m_NoTitlebar = false;
+        m_Gesture = false;
+    } else {
+        //SYS_DEBUG ("Gesture update");
+        m_Trans.setScale (gesture->scaleFactor() * m_OriginalScaleFactor);
+        m_UserOffset = gesture->centerPoint() - m_LastClick;
     }
-
-    m_Trans.setScale (gesture->scaleFactor() * m_OriginalScaleFactor);
 
     event->accept(gesture);
     redrawImage ();
