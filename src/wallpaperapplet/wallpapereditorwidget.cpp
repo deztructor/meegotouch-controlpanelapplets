@@ -313,6 +313,11 @@ void
 WallpaperEditorWidget::orientationChanged (
         M::Orientation orientation)
 {
+    if (m_Trans.orientation() == orientation) {
+        SYS_WARNING ("This is the old orientation?!");
+        return;
+    }
+
     switch (orientation) {
         case M::Portrait:
             SYS_DEBUG ("Turned to portrait");
@@ -323,11 +328,13 @@ WallpaperEditorWidget::orientationChanged (
 
         case M::Landscape:
             SYS_DEBUG ("Turned to landscape");
-            m_LandscapeTrans = m_Trans;
-            m_Trans = m_PortraitTrans;
+            m_PortraitTrans = m_Trans;
+            m_Trans = m_LandscapeTrans;
             this->setMinimumSize (m_Trans.expectedSize());
             break;
     }
+    
+    redrawImage ();
 }
 
 /******************************************************************************
