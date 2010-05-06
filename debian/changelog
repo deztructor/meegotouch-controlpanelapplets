@@ -1,8 +1,10 @@
-systemui-applets (0.13.4~1) harmattan; urgency=low
+systemui-applets (0.13.4-1) harmattan; urgency=low
 
   * Removed the ledapplet, it is now an empty debian package.
+  * Improvements in wallpaper-applet
+  * Bugfixes for volume-control
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 28 Apr 2010 18:58:40 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 06 May 2010 11:53:35 +0200
 
 systemui-applets (0.13.3-1) harmattan; urgency=low
 
