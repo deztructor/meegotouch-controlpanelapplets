@@ -163,9 +163,9 @@ AboutBusinessLogic::WiFiAddress (
 
 	close (dd);
 
-	sprintf(line, "%02X:%02X:%02X:%02X:%02X:%02X",
-            cMacAddr[0], cMacAddr[1], cMacAddr[2], 
-            cMacAddr[3], cMacAddr[4], cMacAddr[5]);
+	snprintf (line, 18, "%02X:%02X:%02X:%02X:%02X:%02X",
+              cMacAddr[0], cMacAddr[1], cMacAddr[2],
+              cMacAddr[3], cMacAddr[4], cMacAddr[5]);
 
     return line;
 }
