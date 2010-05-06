@@ -5,7 +5,7 @@ Maintainer: David Kedves <dkedves@blumsoft.eu>
 Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.7.11),
                libmeegotouch-dev (>= 0.20), libqmsystem-dev (>= 0.1.64),
                libprofile-qt-dev (>= 0.13), system-ui-dev (>= 0.15.2),
-               libdbus-1-dev, libdbus-qeventloop-dev (>= 1.5),
+               libdbus-1-dev, libdbus-glib-1-dev, libglib2.0-dev,
                libqttracker-dev, libduithumbnailer-dev, libcellular-qt-dev
 Standards-Version: 3.7.3
 
@@ -51,7 +51,7 @@ Package: duistatusindicatormenu-volumeplugin
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends},
-         systemui-applets-l10n-engineering-english, libdbus-qeventloop1,
+         systemui-applets-l10n-engineering-english,
          pulseaudio-module-meego-mainvolume
 Description: Volume status indicator plugin
 

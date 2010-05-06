@@ -10,9 +10,7 @@ CONFIG += plugin \
           qmsystem \
           silent
 
-PKGCONFIG += dbus-1
-
-LIBS += -ldbus-qeventloop
+PKGCONFIG += dbus-1 dbus-glib-1
 
 INCLUDEPATH += \
     /usr/include/dbus-1.0

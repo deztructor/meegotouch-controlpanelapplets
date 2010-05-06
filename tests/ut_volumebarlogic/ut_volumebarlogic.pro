@@ -16,14 +16,10 @@ CONFIG += \
     link_pkgconfig \
 	silent 
 
-PKGCONFIG += dbus-1
-
-LIBS += -ldbus-qeventloop
+PKGCONFIG += dbus-1 dbus-glib-1
 
 INCLUDEPATH += \
-    /usr/include/mstatusindicatormenu \
     /usr/include/dbus-1.0
-
 
 HEADERS += \
     ../../src/debug.h \
