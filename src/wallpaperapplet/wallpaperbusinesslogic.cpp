@@ -155,9 +155,11 @@ WallpaperBusinessLogic::availableWallpapers () const
 "}"
 ;
 
+/*  DEFECT: UNUSED_VALUE
     WallpaperCurrentDescriptor *currentDesc;
 
     currentDesc = WallpaperCurrentDescriptor::instance ();
+ */
     list << WallpaperCurrentDescriptor::instance ();
 
     QVector<QStringList> result = ::tracker()->rawSparqlQuery(query);
