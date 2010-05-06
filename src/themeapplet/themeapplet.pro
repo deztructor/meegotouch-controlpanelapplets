@@ -43,7 +43,7 @@ SOURCES = \
 
 DESTDIR = lib
 rfs.files += theme-rfs.sh
-rfs.path += /etc/osso-rfs-scripts
+rfs.path += $$system(pkg-config --variable osso_rfs_scripts_dir clean-device)
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
