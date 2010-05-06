@@ -8,7 +8,7 @@
 #include <MTheme>
 #include <MAction>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(wallpaperapplet, WallpaperApplet)
@@ -27,7 +27,11 @@ WallpaperApplet::~WallpaperApplet()
 void 
 WallpaperApplet::init()
 {
-    MTheme::loadCSS(cssDir + "wallpaper.css");
+    QString themeFile = cssDir + "wallpaper.css";
+
+    SYS_DEBUG ("Loading theme %s", SYS_STR(themeFile));
+    MTheme::addPixmapDirectory (cssDir, M::Recursive);
+    MTheme::loadCSS (themeFile);
 }
 
 DcpWidget *

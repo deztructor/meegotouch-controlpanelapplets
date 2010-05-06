@@ -33,6 +33,7 @@ HEADERS = \
     wallpaperbusinesslogic.h \
     wallpaperapplet.h \
     wallpaperwidget.h \
+    wallpaperinfoheader.h \
     wallpapereditorwidget.h \
     wallpaperitrans.h \
     wallpaperbrief.h 
@@ -46,22 +47,36 @@ SOURCES = \
     wallpaperbusinesslogic.cpp \
     wallpaperapplet.cpp \
     wallpaperwidget.cpp \
+    wallpaperinfoheader.cpp \
     wallpapereditorwidget.cpp \
     wallpaperitrans.cpp \
     wallpaperbrief.cpp 
 
-css.files = wallpaper.css
 DESTDIR = lib
-rfs.files += wallpaper-rfs.sh
-rfs.path += /etc/osso-rfs-scripts
+target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
+
+rfs.files = wallpaper-rfs.sh
+rfs.path  = /etc/osso-rfs-scripts
+
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
-target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
-css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/duicontrolpanel/style
 
-message("The plugin will be installed to: " $$target.path)
-message("CSS path will be: " $$css.path)
-INSTALLS += target \
-            css \
-	    rfs \
-            desktop
+css.files = wallpaper.css
+css.path = \
+  $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/duicontrolpanel/style
+
+images.files = images/*.png
+images.path  = $$css.path/images
+
+message("target path   :" $$target.path)
+message("rfs path      :" $$rfs.path)
+message("desktop path  :" $$desktop.path)
+message("css path:     :" $$css.path)
+message("images path   :" $$images.path)
+
+INSTALLS += \
+    target \
+    images \
+    css \
+    rfs \
+    desktop

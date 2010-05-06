@@ -3,6 +3,7 @@
 
 #include "wallpapereditorwidget.h"
 #include "wallpapercurrentdescriptor.h"
+#include "wallpaperinfoheader.h"
 
 #include <QStyle>
 #include <QGraphicsSceneMouseEvent>
@@ -27,8 +28,8 @@
 #include <MApplication>
 #include <MApplicationPage>
 
-//#include "mwidgetcreator.h"
-//M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
+#include "mwidgetcreator.h"
+M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
 #define DEBUG
 #include "../debug.h"
@@ -40,6 +41,7 @@ WallpaperEditorWidget::WallpaperEditorWidget (
         QGraphicsWidget        *parent) :
     DcpWidget (parent),
     m_WallpaperBusinessLogic (wallpaperBusinessLogic),
+    m_InfoHeader (0),
     m_DoneAction (0),
     m_NoTitlebar (false),
     m_Gesture (false)
@@ -77,6 +79,8 @@ WallpaperEditorWidget::paint (
 {
     bool portrait = (geometry().height() > geometry().width());
   
+    SYS_DEBUG ("-------------------------------------");
+    SYS_DEBUG ("*** offset   = %d, %d", imageDX(), imageDY());
     #if 0
     SYS_DEBUG ("*** expected = %d, %d", 
             m_Trans.expectedWidth (),
@@ -198,8 +202,6 @@ not_current_wallpaper:
     m_bgPortrait = desc->scaled (m_PortraitTrans.expectedSize());
 
 
-    //this->setContentsMargins (0, 0, 0, 0);
-    //this->setWindowFrameMargins (0.0, 0.0, 0.0, 0.0);
 finalize:
     this->setMinimumSize (m_Trans.expectedSize());
 
@@ -209,7 +211,49 @@ finalize:
     setAcceptTouchEvents(true);
     grabGesture(Qt::PinchGesture);
 
+    createWidgets ();
     redrawImage ();
+}
+
+
+void
+WallpaperEditorWidget::createWidgets ()
+{
+    MLayout               *layout;
+    MLinearLayoutPolicy   *policy;
+    MWidget               *spacer;
+
+    SYS_DEBUG ("");
+    this->setContentsMargins (0, 0, 0, 0);
+    this->setWindowFrameMargins (0.0, 0.0, 0.0, 0.0);
+
+    /*
+     *
+     */
+    layout = new MLayout;
+    policy = new MLinearLayoutPolicy (layout, Qt::Vertical);
+    
+    layout->setContentsMargins (0, 0, 0, 0);
+
+    /*
+     * The information header.
+     */
+    SYS_DEBUG ("Creating WallpaperInfoHeader");
+    m_InfoHeader = new WallpaperInfoHeader;
+    m_InfoHeader->setObjectName ("WallpaperInfoHeader");
+    m_InfoHeader->setSizePolicy (
+            QSizePolicy::Preferred,
+            QSizePolicy::Minimum);
+    policy->addItem (m_InfoHeader);
+    
+    spacer = new MWidget;
+    spacer->setSizePolicy (QSizePolicy::Preferred, QSizePolicy::Expanding);
+    policy->addItem (spacer);
+
+    /*
+     *
+     */
+    setLayout (layout);
 }
 
 /*
@@ -264,6 +308,54 @@ WallpaperEditorWidget::pagePans () const
     return false;
 }
 
+/******************************************************************************
+ * Private low level functions.
+ */
+
+/*!
+ * \returns The offset correction value for the new state.
+ * \param show If the titlebar should be shown or not.
+ *
+ */
+QPointF
+WallpaperEditorWidget::toggleTitlebars (
+        bool       show)
+{
+    MApplicationPage  *currentPage;
+
+    /*
+     * If the requested state is the current state we don't need to hide/show
+     * anything, we just return the correction value.
+     */
+    if (show == !m_NoTitlebar)
+        goto finalize;
+    m_NoTitlebar = !show;
+    
+    /*
+     * We do the showing/hiding here.
+     */
+    currentPage = MApplication::activeApplicationWindow()->currentPage();
+    if (show) {
+        currentPage->setComponentsDisplayMode (
+                MApplicationPage::AllComponents,
+                MApplicationPageModel::Show); 
+        m_InfoHeader->show ();
+    } else {
+        currentPage->setComponentsDisplayMode (
+                MApplicationPage::AllComponents, 
+                MApplicationPageModel::Hide);
+        m_InfoHeader->hide ();
+    }
+        
+finalize:
+    /*
+     * To return the correction value.
+     */
+    if (!show)
+        return QPointF (0, 70);
+
+    return QPointF (0, 0);
+}
 
 /*!
  * Returns the X offset where the image should be painted inside the widget. 
@@ -365,46 +457,28 @@ void
 WallpaperEditorWidget::mousePressEvent (
         QGraphicsSceneMouseEvent *event)
 {
-    MApplicationPage  *currentPage;
-
     if (m_Gesture)
         return;
 
     SYS_DEBUG ("Mouse press");
-    /*
-     * FIXME: Should add a method for this and for the point modification also
-     * has to be done there.
-     */
-    currentPage = MApplication::activeApplicationWindow()->currentPage();
-    currentPage->setComponentsDisplayMode (
-            MApplicationPage::AllComponents,
-            MApplicationPageModel::Hide);
+    toggleTitlebars (false);
     m_LastClick = event->pos();
-
-    /*
-     * FIXME: We need this, because we just hide the titlebar.
-     */
-    m_LastClick += QPointF (0, 70);
-    m_NoTitlebar = true;
+    m_LastClick += toggleTitlebars (false);
 }
 
 void
 WallpaperEditorWidget::mouseReleaseEvent (
         QGraphicsSceneMouseEvent *event)
 {
-    MApplicationPage  *currentPage;
+    Q_UNUSED (event);
     
     SYS_DEBUG ("Mouse release");
-    currentPage = MApplication::activeApplicationWindow()->currentPage();
-    currentPage->setComponentsDisplayMode (
-            MApplicationPage::AllComponents,
-            MApplicationPageModel::Show);
 
     m_Trans += m_UserOffset;
     m_UserOffset = QPointF();
-    m_NoTitlebar = false;
-    
-    redrawImage ();
+    toggleTitlebars (true);
+   
+    //redrawImage ();
 }
 
 /*******************************************************************************
@@ -433,14 +507,7 @@ WallpaperEditorWidget::pinchGestureEvent (
         m_LastClick = gesture->centerPoint ();
         m_Gesture = true;
         if (!m_NoTitlebar) {
-            MApplicationPage  *currentPage;
-            currentPage = 
-                MApplication::activeApplicationWindow()->currentPage();
-            currentPage->setComponentsDisplayMode (
-                MApplicationPage::AllComponents,
-                MApplicationPageModel::Hide);
-            m_LastClick += QPointF (0, 70);
-            m_NoTitlebar = true;
+            m_LastClick += toggleTitlebars (true);
         }
     } else if (gesture->state() == Qt::GestureFinished) {
         SYS_DEBUG ("Gesture finished");
@@ -457,4 +524,5 @@ WallpaperEditorWidget::pinchGestureEvent (
     event->accept(gesture);
     redrawImage ();
 }
+
 

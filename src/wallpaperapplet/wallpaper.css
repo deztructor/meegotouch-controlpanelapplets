@@ -1,17 +1,15 @@
 /* 
  * This CSS file is empty, we can remove it in the future if we are not using
  * it.
- *
- * Actually I'm trying to remove that extra margin, but it seems I'm failing...
  */
-#WallpaperEditorWidget {
-	margin: 0px
+#WallpaperInfoHeader {
+    width:  100%;
+    background-image: "top_fade" 0 0 0 0;
 }
 
-#MApplicationWindow {
-	margin: 0px
+#WallpaperInfoHeaderLabel {
+    color: white;
+    font: "Nokia Sans Wide" 14;
 }
 
-#MApplicationPage {
-	margin: 0px
-}
+

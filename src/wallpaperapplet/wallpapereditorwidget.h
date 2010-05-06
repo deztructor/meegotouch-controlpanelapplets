@@ -18,6 +18,7 @@ class QSize;
 class QPixmap;
 class QPointF;
 class QGestuteEvent;
+class WallpaperInfoHeader;
 
 /*!
  * -output-level debug
@@ -57,30 +58,34 @@ private slots:
     void orientationChanged (M::Orientation orientation);
     void slotDoneActivated ();
     void createContent ();
+    void createWidgets ();
 
 private:
     void createActions ();
-
+    
+    QPointF toggleTitlebars (bool show);
     int  imageDX () const;
     int  imageDY () const;
 
 
 private:
     QPointer<WallpaperBusinessLogic>  m_WallpaperBusinessLogic;
-    QPixmap          m_bgLandscape;
-    QPixmap          m_bgPortrait;
-    MAction         *m_DoneAction;
-    bool             m_NoTitlebar;
 
-    QPointF          m_LastClick;
-    QPointF          m_UserOffset;
+    WallpaperInfoHeader  *m_InfoHeader;
+    QPixmap               m_bgLandscape;
+    QPixmap               m_bgPortrait;
+    MAction              *m_DoneAction;
+    bool                  m_NoTitlebar;
 
-    WallpaperITrans  m_Trans;
-    WallpaperITrans  m_LandscapeTrans;
-    WallpaperITrans  m_PortraitTrans;
+    QPointF               m_LastClick;
+    QPointF               m_UserOffset;
+
+    WallpaperITrans       m_Trans;
+    WallpaperITrans       m_LandscapeTrans;
+    WallpaperITrans       m_PortraitTrans;
     
-    qreal            m_OriginalScaleFactor;
-    bool             m_Gesture;
+    qreal                 m_OriginalScaleFactor;
+    bool                  m_Gesture;
 };
 
 #endif
