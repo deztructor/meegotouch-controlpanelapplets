@@ -102,6 +102,7 @@ sysuid_running ()
 
     if (fgets(line, 255, pipe) == NULL) {
         //qDebug() << "fgets() failed";
+        pclose (pipe);
         return false;
     }
 
