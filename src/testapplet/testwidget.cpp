@@ -36,9 +36,9 @@ TestWidget::createWidgets ()
 {
     QGraphicsLinearLayout *mainLayout;
     MLabel                *tLabel;
-    QString                title;
+    char                   title[512];
 
-    title = QString ("This is page %1 at %2").arg (m_NumId, (quint32) this);
+    sprintf (title, "This is page %d at %p", m_NumId, this);
 
     tLabel = new MLabel (title);
     
