@@ -183,8 +183,8 @@ VolumeBar::hwKeyEvent (QmKeys::Key key, QmKeys::State state)
             break;
     }
 
-    switch (MApplication::instance ()->activeWindow ()
-            ->orientation () == M::Landscape)
+    if (MApplication::instance ()->activeWindow ()
+        ->orientation () == M::Landscape)
     {
         change_val *= -1;
     }

@@ -2,7 +2,6 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 #include "volumebarlogic.h"
 
-#include <dbusconnectioneventloop.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -52,9 +51,10 @@ VolumeBarLogic::VolumeBarLogic () :
 
     DBUS_ERR_CHECK (dbus_err);
 
-    if ((m_dbus_conn != NULL) && 
-        (DBUSConnectionEventLoop::addConnection (m_dbus_conn)))
+    if (m_dbus_conn != NULL)
     {
+        dbus_connection_setup_with_g_main (m_dbus_conn, NULL);
+
         dbus_connection_add_filter (
             m_dbus_conn,
             (DBusHandleMessageFunction) stepsUpdatedSignal,

@@ -19,7 +19,11 @@ Ut_BatteryDbusInterfacePrivate::Ut_BatteryDbusInterfacePrivate () :
     m_PSMAutoValueArrived (false),
     m_ThresholdValueArrived (false),
     m_ThresholdValuesArrived (false),
-    m_RemainingTimeValuesArrived (false)
+    m_RemainingTimeValuesArrived (false),
+    m_PSMAutoValue (false),
+    m_PSMValue (false),
+    m_batteryBarValue (0),
+    m_batteryBarValueReceived (0)
 {
 }
 
@@ -102,6 +106,7 @@ sysuid_running ()
 
     if (fgets(line, 255, pipe) == NULL) {
         //qDebug() << "fgets() failed";
+        pclose (pipe);
         return false;
     }
 

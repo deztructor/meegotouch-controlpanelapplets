@@ -1,8 +1,10 @@
 #ifndef VOLUMEBARLOGIC_H
 #define VOLUMEBARLOGIC_H
 
-#include <dbus/dbus.h>
 #include <QObject>
+#include <glib.h>
+#include <dbus/dbus.h>
+#include <dbus/dbus-glib-lowlevel.h>
 
 class VolumeBarLogic : public QObject
 {
@@ -26,7 +28,7 @@ class VolumeBarLogic : public QObject
         void initValues ();
         void addSignalMatch ();
 
-        DBusConnection          *m_dbus_conn;
+        DBusConnection  *m_dbus_conn;
 
         quint32     m_currentvolume;
         quint32     m_currentmax;
