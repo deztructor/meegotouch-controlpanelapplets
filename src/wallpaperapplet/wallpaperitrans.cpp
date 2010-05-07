@@ -17,7 +17,8 @@ WallpaperITrans::WallpaperITrans () :
 }
 
 WallpaperITrans::WallpaperITrans (
-        const WallpaperITrans &orig)
+        const WallpaperITrans &orig) :
+        QObject ()
 {
     m_Orientation    = orig.m_Orientation;
     m_Scale          = orig.m_Scale;

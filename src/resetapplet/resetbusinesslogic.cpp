@@ -34,7 +34,7 @@ ResetBusinessLogic::~ResetBusinessLogic()
 void
 ResetBusinessLogic::performRestoreSettings ()
 {
-    char *command = "/usr/sbin/clean-device.sh --rfs";
+    char *command = (char *) "/usr/sbin/clean-device.sh --rfs";
     int   retval;
 
     SYS_DEBUG ("*** executing command: %s", command);
@@ -50,7 +50,7 @@ ResetBusinessLogic::performRestoreSettings ()
 void 
 ResetBusinessLogic::performClearData ()
 {
-    char *command = "/usr/sbin/clean-device.sh --cud";
+    char *command = (char *) "/usr/sbin/clean-device.sh --cud";
     int   retval;
 
     SYS_DEBUG ("*** executing command: %s", command);

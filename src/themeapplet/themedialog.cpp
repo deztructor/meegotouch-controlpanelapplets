@@ -88,6 +88,7 @@ void
 ThemeDialog::themeChanged (
         QString themeId)
 {
+    Q_UNUSED(themeId);
     SYS_DEBUG ("*** themeId = %s", SYS_STR(themeId));
     deleteLater();
 }

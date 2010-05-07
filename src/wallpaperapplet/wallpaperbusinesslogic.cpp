@@ -189,7 +189,9 @@ WallpaperBusinessLogic::availableWallpapers () const
     list << WallpaperCurrentDescriptor::instance ();
 
     QVector<QStringList> result = ::tracker()->rawSparqlQuery(query);
+    /*
     int x = 0;
+     */
     int y = 0;
 
     SYS_WARNING ("*** result.size() = %d", result.size());
