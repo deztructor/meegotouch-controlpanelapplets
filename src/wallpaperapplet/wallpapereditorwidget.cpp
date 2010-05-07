@@ -35,6 +35,7 @@ M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 #include "../debug.h"
 
 static const int ExtraMargin = 10;
+static const int TitleBarHeight = 60;
 
 WallpaperEditorWidget::WallpaperEditorWidget (
         WallpaperBusinessLogic *wallpaperBusinessLogic, 
@@ -352,7 +353,7 @@ finalize:
      * To return the correction value.
      */
     if (!show)
-        return QPointF (0, 70);
+        return QPointF (0, TitleBarHeight);
 
     return QPointF (0, 0);
 }
@@ -384,7 +385,7 @@ WallpaperEditorWidget::imageDY () const
     retval -= ExtraMargin;
 
     if (!m_NoTitlebar)
-        retval -= 70;
+        retval -= TitleBarHeight;
 
     retval += m_UserOffset.y();
     retval += m_Trans.y();
