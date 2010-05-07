@@ -7,7 +7,7 @@
 #include <QFileInfo>
 #include <MDesktopEntry>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 WallpaperCurrentDescriptor *WallpaperCurrentDescriptor::sm_Instance = 0;
@@ -133,15 +133,46 @@ WallpaperCurrentDescriptor::setFromDestopFile (
     getValue (portraitGroupKey, m_PortraitTrans);
 
     retval = true;
+    m_Valid = true;
 
 finalize:
     delete m_DesktopEntry;
     m_DesktopEntry = 0;
 
-    m_Valid = true;
-
+    SYS_DEBUG ("returning %s", SYS_BOOL(retval));
     return retval;
 }
+
+bool 
+WallpaperCurrentDescriptor::setFromFilenames  (
+            QString     landscapeFile,
+            QString     portraitFile)
+{
+    SYS_DEBUG ("*** landscapeFile = %s", SYS_STR(landscapeFile));
+    SYS_DEBUG ("*** portraitFile  = %s", SYS_STR(portraitFile));
+    
+    if (landscapeFile.isEmpty())
+        return false;
+
+    QFile lFile (landscapeFile);
+    if (!lFile.exists())
+        return false;
+
+    m_LandscapeTrans = WallpaperITrans();
+    m_PortraitTrans = WallpaperITrans();
+
+    m_LandscapeOriginalFile = landscapeFile;
+    m_PortraitOriginalFile = portraitFile;
+
+    m_landscapeEditedFile = landscapeFile;
+    m_portraitEditedFile = portraitFile;
+
+    setFilename (landscapeFile);
+
+    m_Valid = true;
+    return true;
+}
+
 
 /*!
  * \param path The directory path for the image files.

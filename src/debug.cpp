@@ -55,7 +55,7 @@ SysDebug::sysPrintMsg (
     }
     va_end (args);
 
-    putchar('\n');
+    fprintf(stderr, "\n");
     fflush (stderr);
 }
 

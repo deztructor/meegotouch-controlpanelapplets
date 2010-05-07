@@ -212,6 +212,8 @@ WallpaperDescriptor::mimeType () const
 void 
 WallpaperDescriptor::initiateThumbnailer ()
 {
+    SYS_DEBUG ("*** m_Filename = %s", SYS_STR(m_Filename));
+    SYS_DEBUG ("*** m_MimeType = %s", SYS_STR(m_MimeType));
     /*
      * If some necessary information is missing.
      */
@@ -317,6 +319,22 @@ WallpaperDescriptor::thumbnailError (
     SYS_WARNING ("Failed to thumbnail %s: %s", 
             SYS_STR(title()),
             SYS_STR(message));
+    /*
+     * The thumbnailer failed. Let's see if we can do something about it.
+     * FIXME: In the future maybe the cache should return a boolean and we
+     * could set this descriptor to invalid... 
+     */
+    cache();
+    m_ThumbnailPixmap = m_Pixmap.scaled (100, 100);
+    m_HasThumbnail = true;
+
+    #ifdef SUPPORT_IMAGE_THUMBNAILS
+    m_Thumbnail = pixmap.toImage();
+    #endif
+
+    unCache ();
+    
+    emit thumbnailLoaded (this);
 }
 
 /*!

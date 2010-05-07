@@ -30,16 +30,42 @@ static const QString wallpaperDir = ".wallpapers";
 static const QString destopFileName = "wallpaper.desktop";
 static const QString backupExtension = ".BAK";
 
+static const QString defaultLandscapeImageFile = 
+"/usr/share/themes/base/meegotouch/duihome/images/HomeWallpaperLandscape.png";
+static const QString defaultLandscapeMimeType = "image/png";
+
+static const QString defaultPortraitImageFile = 
+"/usr/share/themes/base/meegotouch/duihome/images/HomeWallpaperPortrait.png";
+
 WallpaperBusinessLogic::WallpaperBusinessLogic()
 {
     WallpaperCurrentDescriptor *currentDesc;
+    QString                     desktopFile = dirPath() + destopFileName;
+    bool                        success;
     
     m_LandscapeGConfItem = new MGConfItem (LandscapeKey);
     m_PortraitGConfItem = new MGConfItem (PortraitKey);
     m_EditedImage = 0;
 
     currentDesc = WallpaperCurrentDescriptor::instance ();
-    currentDesc->setFromDestopFile (dirPath() + destopFileName);
+    success = currentDesc->setFromDestopFile (desktopFile);
+    if (!success) {
+        SYS_DEBUG ("Loading of %s failed. Trying image files from GConf.",
+                SYS_STR(desktopFile));
+        success = currentDesc->setFromFilenames (
+                m_LandscapeGConfItem->value().toString(),
+                m_PortraitGConfItem->value().toString());
+    }
+
+    if (!success) {
+        SYS_DEBUG ("Trying default images.");
+        success = currentDesc->setFromFilenames (
+                defaultLandscapeImageFile,
+                defaultPortraitImageFile);
+        if (success) {
+            currentDesc->setMimeType (defaultLandscapeMimeType);
+        }
+    }
 }
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
