@@ -56,15 +56,6 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     connect(MApplication::activeApplicationWindow(),
             SIGNAL(orientationChanged(M::Orientation)),
             this, SLOT(orientationChanged(M::Orientation)));
-
-    /*
-     * Enabling two finger gestures.
-     */
-    //setAcceptTouchEvents(true);
-    //grabGesture(Qt::PinchGesture);
-
-    SYS_DEBUG ("Emulating two finger gestures: %s", 
-            SYS_BOOL(MApplication::emulateTwoFingerGestures()));
 }
 
 WallpaperEditorWidget::~WallpaperEditorWidget ()
@@ -456,7 +447,6 @@ WallpaperEditorWidget::mouseMoveEvent (
     if (m_Gesture)
         return;
 
-    SYS_DEBUG ("Mouse move");
     m_UserOffset = event->pos() - m_LastClick;
     redrawImage ();
 }
@@ -468,7 +458,6 @@ WallpaperEditorWidget::mousePressEvent (
     if (m_Gesture)
         return;
 
-    SYS_DEBUG ("Mouse press");
     toggleTitlebars (false);
     m_LastClick = event->pos();
     m_LastClick += toggleTitlebars (false);
@@ -480,8 +469,6 @@ WallpaperEditorWidget::mouseReleaseEvent (
 {
     Q_UNUSED (event);
     
-    SYS_DEBUG ("Mouse release");
-
     m_Trans += m_UserOffset;
     m_UserOffset = QPointF();
     toggleTitlebars (true);

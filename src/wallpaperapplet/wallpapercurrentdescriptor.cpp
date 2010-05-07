@@ -261,16 +261,23 @@ WallpaperCurrentDescriptor::valid () const
     return m_Valid;
 }
 
-/*
+/*!
+ * \param orientation Selects which output file we are talking about
+ * \param ver The version number or -1 to use the objects version number.
+ * 
  * The current image that is already edited has a different algorythm to
  * suggest output file names for the edited images.
  */
 QString
 WallpaperCurrentDescriptor::suggestedOutputFilename (
-        M::Orientation orientation) const
+        M::Orientation orientation, 
+        int            ver) const
 {
     QFileInfo fileInfo (originalImageFile(orientation));
     QString   retval;
+
+    if (ver < 0)
+        ver = version();
 
     switch (orientation) {
         case M::Landscape:
@@ -283,7 +290,7 @@ WallpaperCurrentDescriptor::suggestedOutputFilename (
     }
 
     retval = fileInfo.baseName() + retval + 
-        QString::number(version()) + "." + extension();
+        QString::number(ver) + "." + extension();
 
     return retval;
 }
@@ -329,8 +336,11 @@ WallpaperCurrentDescriptor::getValue (
         retval = true;
     }
 
-    SYS_DEBUG ("key = %s/%s value = %s", SYS_STR (group), SYS_STR (key), 
+    #ifdef LOTDEBUG
+    SYS_DEBUG ("key = %s/%s value = %s", 
+            SYS_STR (group), SYS_STR (key), 
             SYS_STR (value));
+    #endif
 
     return retval;
 }
@@ -394,6 +404,8 @@ WallpaperCurrentDescriptor::getValue (
 
     *value = sValue.toDouble();
 
+    #ifdef LOTDEBUG
     SYS_DEBUG ("Value for %s/%s is %g", SYS_STR(group), SYS_STR(key), *value);
+    #endif
     return true;
 }

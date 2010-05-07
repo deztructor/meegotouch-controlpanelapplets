@@ -18,7 +18,7 @@
 #include <MTheme>
 #include <MGConfItem>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 static const QString PortraitKey = 
@@ -181,43 +181,23 @@ WallpaperBusinessLogic::availableWallpapers () const
 "}"
 ;
 
-/*  DEFECT: UNUSED_VALUE
-    WallpaperCurrentDescriptor *currentDesc;
-
-    currentDesc = WallpaperCurrentDescriptor::instance ();
- */
     list << WallpaperCurrentDescriptor::instance ();
 
     QVector<QStringList> result = ::tracker()->rawSparqlQuery(query);
-    /*
-    int x = 0;
-     */
-    int y = 0;
 
-    SYS_WARNING ("*** result.size() = %d", result.size());
+    SYS_DEBUG ("*** result.size() = %d", result.size());
     foreach (QStringList partlist, result) {
         WallpaperDescriptor *desc;
 
+        #ifdef LOTDEBUG
         SYS_DEBUG ("*** url     = %s", SYS_STR(partlist[FieldUrl]));
+        #endif
 
         desc = new WallpaperDescriptor;
         desc->setUrl (partlist[FieldUrl]);
         desc->setTitle (partlist[FieldTitle]);
         desc->setMimeType (partlist[FieldMime]);
-        list << desc;
-
-        /*
-         * Just to see what we really get.
-         */
-        #if 0
-        foreach (QString element, partlist) {
-            SYS_DEBUG ("*** element[%2d][%2d] = %s", x, y, SYS_STR(element));
-            x++;
-        }
-        x = 0;
-        #endif
-        
-        y++;
+        list << desc; 
     }
 
     return list;
@@ -355,13 +335,19 @@ WallpaperBusinessLogic::writeFiles (
     QString  path = dirPath();
     QString  desktopPath = path + destopFileName;
     QFile    file (desktopPath);
+    
+    WallpaperCurrentDescriptor *currentDesc = 
+        WallpaperCurrentDescriptor::instance();
 
-    int      version = desc->version () + 1;
+    // There is of course a reason why we use the version number from the
+    // current descriptor: otherwise the re-editing of the original filename
+    // might end up with the same version number.
+    int      version = currentDesc->version () + 1;
     QString  versionString = QString::number(version);
     QString  portraitFilePath = path + 
-        desc->suggestedOutputFilename (M::Portrait);
+        desc->suggestedOutputFilename (M::Portrait, version);
     QString  landscapeFilePath = path + 
-        desc->suggestedOutputFilename (M::Landscape);
+        desc->suggestedOutputFilename (M::Landscape, version);
 
 
     /*
@@ -379,8 +365,7 @@ WallpaperBusinessLogic::writeFiles (
      */
     QTextStream out(&file);
 
-    QString outString = 
-        WallpaperCurrentDescriptor::instance()->generateDesktopFile (path);
+    QString outString = currentDesc->generateDesktopFile (path);
     SYS_DEBUG ("outString = %s", SYS_STR(outString));
 
     /*

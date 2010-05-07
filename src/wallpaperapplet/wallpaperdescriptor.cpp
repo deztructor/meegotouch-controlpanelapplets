@@ -212,8 +212,10 @@ WallpaperDescriptor::mimeType () const
 void 
 WallpaperDescriptor::initiateThumbnailer ()
 {
+    #ifdef LOTDEBUG
     SYS_DEBUG ("*** m_Filename = %s", SYS_STR(m_Filename));
     SYS_DEBUG ("*** m_MimeType = %s", SYS_STR(m_MimeType));
+    #endif
     /*
      * If some necessary information is missing.
      */
@@ -271,8 +273,10 @@ WallpaperDescriptor::thumbnailReady (
     Q_UNUSED (thumbnailUri);
     Q_UNUSED (flavor);
 
+    #ifdef LOTDEBUG
     SYS_DEBUG ("Got thumbnail for %s",  SYS_STR(m_Filename));
     SYS_DEBUG ("*** thumbnailUri = %s", SYS_STR(thumbnailUri.toString()));
+    #endif
 
     #ifdef USE_PAINTER
     QPixmap thumb (thumbnailUri.toLocalFile());
@@ -283,11 +287,13 @@ WallpaperDescriptor::thumbnailReady (
     ratio2 = 100.0 / thumb.height ();
     ratio = ratio1 > ratio2 ? ratio1 : ratio2;
 
+    #ifdef LOTDEBUG
     SYS_DEBUG ("*** w      = %d", thumb.width());
     SYS_DEBUG ("*** h      = %d", thumb.height());
     SYS_DEBUG ("*** ratio1 = %g", ratio1);
     SYS_DEBUG ("*** ratio2 = %g", ratio2);
     SYS_DEBUG ("*** ratio  = %g", ratio);
+    #endif
     painter.drawPixmap (
                 0, 0,
                 thumb.width() * ratio,
@@ -381,9 +387,13 @@ WallpaperDescriptor::version () const
  */
 QString 
 WallpaperDescriptor::suggestedOutputFilename (
-        M::Orientation orientation) const
+        M::Orientation orientation,
+        int            ver) const
 {
     QString retval;
+
+    if (ver < 0)
+        ver = version ();
 
     switch (orientation) {
         case M::Landscape:
@@ -396,7 +406,7 @@ WallpaperDescriptor::suggestedOutputFilename (
     }
 
     retval = basename() + retval + 
-        QString::number(version()) + "." + extension();
+        QString::number(ver) + "." + extension();
 
     return retval;
 }
