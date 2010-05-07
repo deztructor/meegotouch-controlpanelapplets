@@ -36,7 +36,7 @@ public:
     ~WallpaperEditorWidget ();
 
     virtual bool pagePans () const;
-
+    virtual bool back ();
     virtual void paint (
             QPainter                        *painter,
             const QStyleOptionGraphicsItem  *option,

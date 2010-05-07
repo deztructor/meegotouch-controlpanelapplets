@@ -60,7 +60,6 @@ WallpaperEditorWidget::WallpaperEditorWidget (
 
 WallpaperEditorWidget::~WallpaperEditorWidget ()
 {
-    MApplication::activeApplicationWindow()->showNormal();
 }
 
 void
@@ -290,8 +289,35 @@ WallpaperEditorWidget::slotDoneActivated ()
     ptrans = m_Trans.orientation() == M::Portrait ?
         &m_Trans : &m_PortraitTrans;
 
-    m_WallpaperBusinessLogic->setBackground(ltrans, ptrans);
+    /*
+     * Here we save the settings.
+     */
+    m_WallpaperBusinessLogic->setBackground (ltrans, ptrans);
+    
+    /*
+     * Turning back from fullscreen. This could be done in the destructor, but
+     * that ends up with a segfault in the Qt...
+     */
+    MApplication::activeApplicationWindow()->showNormal();
+
+    /*
+     * We are done with the editing, let's page back to the view where we have
+     * the list.
+     */
+    SYS_DEBUG ("Calling changeWidget()");
     changeWidget (0);
+}
+
+bool 
+WallpaperEditorWidget::back ()
+{
+    /*
+     * Turning back from fullscreen. This could be done in the destructor, but
+     * that ends up with a segfault in the Qt...
+     */
+    MApplication::activeApplicationWindow()->showNormal();
+
+    return DcpWidget::back();
 }
 
 bool 
