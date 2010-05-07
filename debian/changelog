@@ -1,3 +1,12 @@
+systemui-applets (0.13.6-1) harmattan; urgency=low
+
+  * Wallpaper fixes:
+    - a segfault fix
+    - title bar haight has been changed
+  * About applet delayed initialization
+
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 07 May 2010 15:29:01 +0200
+
 systemui-applets (0.13.5-1) harmattan; urgency=low
 
   * Bugfix for testapplet (crash)
