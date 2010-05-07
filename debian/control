@@ -19,7 +19,8 @@ Depends: ${shlibs:Depends}, meegotestrunner, duicontrolpanel-usbapplet,
          duistatusindicatormenu-volumeplugin, duicontrolpanel-displayapplet,
          duicontrolpanel-profileapplet, duistatusindicatormenu-profileplugin,
          duicontrolpanel-themeapplet, duicontrolpanel-wallpaperapplet,
-         duicontrolpanel-resetapplet, testrunner
+         duicontrolpanel-resetapplet, duicontrolpanel-warrantyapplet,
+         testrunner
 XB-Maemo-CI-Packages: system-ui
 XB-Maemo-CI-Stage: fast, staging
 Description: Test package for system-ui applets
@@ -99,6 +100,13 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
          systemui-applets-l10n-engineering-english, libcellular-qt1
 Description: The about-product applet that shows device and software
  informations.
+
+Package: duicontrolpanel-warrantyapplet
+Section: misc
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
+         systemui-applets-l10n-engineering-english
+Description: The warranty applet that shows the warranty information.
 
 Package: duicontrolpanel-testapplet
 Section: misc
