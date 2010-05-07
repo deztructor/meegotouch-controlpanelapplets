@@ -1,11 +1,11 @@
-systemui-applets (0.13.5~1) harmattan; urgency=low
+systemui-applets (0.13.5-1) harmattan; urgency=low
 
   * Bugfix for testapplet (crash)
   * Wallpaper-applet: Use the same bage as duihome as the default one
   * Added warranty applet (not fully working, not yet specified properly)
   * Fixed all the compile warnings
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 07 May 2010 10:18:14 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 07 May 2010 10:26:47 +0200
 
 systemui-applets (0.13.4-1) harmattan; urgency=low
 
