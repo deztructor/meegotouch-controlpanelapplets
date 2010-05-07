@@ -30,28 +30,36 @@
 #define DBUS_BLUEZ_GET_DEFAULT_ADAPTER_METHOD "DefaultAdapter"
 #define DBUS_BLUEZ_GET_PROPERTIES_METHOD "GetProperties"
 
-#if 0
-#define DBUS_SIM_SERVICE "com.nokia.phone.SIM"
-#define DBUS_SIM_SECURITY_OBJECT_PATH "/com/nokia/phone/SIM/security"
-#define DBUS_SIM_SECURITY_INTERFACE "Phone.Sim.Security"
-#define DBUS_SIM_SECURITY_GET_IMEI_METHOD "get_imei"
-#endif
 
 AboutBusinessLogic::AboutBusinessLogic() :
     m_gotBluetoothAddress (false),
     m_gotImei (false)
 {
-    /*
-     * We might want to initiate these late, but the we have to wait for the
-     * answer. Currently this class will collect the data even if the applet 
-     * is not activated by the user.
-     */
-    initiateBluetoothQueries ();
-    initiatePhoneQueries ();
 }
 
 AboutBusinessLogic::~AboutBusinessLogic()
 {
+    if (m_ManagerDBusIf)
+        delete m_ManagerDBusIf;
+    if (m_AdapterDBusIf)
+        delete m_AdapterDBusIf;
+    if (m_PhoneInfo)
+        delete m_PhoneInfo;
+}
+
+/*!
+ * Starts collecting data.
+ */
+void
+AboutBusinessLogic::initiateDataCollection()
+{
+    initiateBluetoothQueries ();
+    initiatePhoneQueries ();
+
+    osName ();
+    osVersion ();
+    WiFiAddress ();
+    IMEI ();
 }
 
 /*!
@@ -79,6 +87,9 @@ AboutBusinessLogic::osVersion ()
     char    buf[1024];
     QString line;
     qint64  lineLength;
+
+    if (!m_OsVersion.isEmpty())
+        return m_OsVersion;
 
     if (!file.open(QFile::ReadOnly)) 
         return retval;
@@ -109,6 +120,9 @@ AboutBusinessLogic::osName ()
     QString line;
     qint64  lineLength;
 
+    if (!m_OsName.isEmpty())
+        return m_OsName;
+
     if (!file.open (QFile::ReadOnly))
         return retval;
 
@@ -128,6 +142,7 @@ AboutBusinessLogic::osName ()
         SYS_DEBUG ("*** line = %s", SYS_STR(line));
     }
 
+    m_OsName = retval;
     return retval;
 }
 
@@ -182,15 +197,20 @@ AboutBusinessLogic::WiFiAddress ()
         "wlan0", "wimax0", NULL
     };
 
+    if (!m_WifiAddress.isEmpty())
+        return m_WifiAddress;
+
     for (int n = 0; interfaceNames[n] != NULL; ++n) {
         retval = WiFiAddress (interfaceNames[n]);
         SYS_DEBUG ("*** %s%s%s address is %s", 
                 TERM_YELLOW, interfaceNames[n], TERM_NORMAL, 
                 SYS_STR(retval));
         if (!retval.isEmpty())
-            return retval;
+            break;
     }
 
+finalize:
+    m_WifiAddress = retval;
     return retval;
 }
 
@@ -213,11 +233,15 @@ AboutBusinessLogic::IMEI ()
 {
     SYS_DEBUG ("*** m_gotImei             = %s", SYS_BOOL(m_gotImei));
     SYS_DEBUG ("*** m_Imei                = %s", SYS_STR(m_Imei));
-    if (!m_gotImei) {
-        m_Imei = m_PhoneInfo->imeiNumber ();
-        m_gotImei = !m_Imei.isEmpty();
-        SYS_DEBUG ("*** new m_Imei            = %s", SYS_STR(m_Imei));
-    }
+    if (m_gotImei) 
+        return m_Imei;
+
+    if (!m_PhoneInfo)
+        initiatePhoneQueries ();
+
+    m_Imei = m_PhoneInfo->imeiNumber ();
+    m_gotImei = true;
+    delete m_PhoneInfo;
 
     return m_Imei;
 }
@@ -253,21 +277,6 @@ void
 AboutBusinessLogic::initiatePhoneQueries ()
 {
     m_PhoneInfo = new PhoneInfo;
-#if 0
-    QDBusInterface  *m_ImeiDBusIf;
-
-    m_ImeiDBusIf = new QDBusInterface (
-            DBUS_SIM_SERVICE, 
-            DBUS_SIM_SECURITY_OBJECT_PATH, 
-            DBUS_SIM_SECURITY_INTERFACE, 
-            QDBusConnection::systemBus ());
-
-    m_ImeiDBusIf->callWithCallback (
-            QString (DBUS_SIM_SECURITY_GET_IMEI_METHOD), 
-            QList<QVariant> (), this,
-            SLOT (imeiReceived(QString)),
-            SLOT (DBusMessagingFailure (QDBusError)));
-#endif
 }
 
 /*!
@@ -297,20 +306,6 @@ AboutBusinessLogic::defaultBluetoothAdapterReceived (
     delete m_ManagerDBusIf;
 }
 
-#if 0
-/*!
- * Slot that is called when the IMEI value is received through the dbus.
- */
-void
-AboutBusinessLogic::imeiReceived (
-        QString imei)
-{
-    m_gotImei = true;
-    m_Imei = imei;
-    delete m_ImeiDBusIf;
-}
-#endif
-
 /*!
  * This slot is called when the address of the default bluetooth adapter has
  * been received.
@@ -324,6 +319,12 @@ AboutBusinessLogic::defaultBluetoothAdapterAddressReceived (
     m_gotBluetoothAddress = true;
     SYS_DEBUG ("address = %s", SYS_STR(m_BluetoothAddress));
     delete m_AdapterDBusIf;
+
+    /*
+     * Currently only the bluetoot address is handled asynchronously, so if we
+     * have it we have them all.
+     */
+    emit ready();
 }
 
 /*!
@@ -336,3 +337,5 @@ AboutBusinessLogic::DBusMessagingFailure (
 {
     SYS_WARNING ("%s: %s", SYS_STR (error.name()), SYS_STR (error.message()));
 }
+
+

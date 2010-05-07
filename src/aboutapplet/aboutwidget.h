@@ -8,6 +8,8 @@
 
 #include "aboutbusinesslogic.h"
 
+class MLabel;
+
 class AboutWidget : public DcpWidget
 {
     Q_OBJECT
@@ -21,8 +23,15 @@ public:
     void createContent ();
     QString labelText();
 
+public slots:
+    void dataReady ();
+
+protected:
+    virtual void retranslateUi ();
+
 private:
     QPointer<AboutBusinessLogic>    m_AboutBusinessLogic;
+    MLabel                         *m_Label1;
 };
 
 #endif

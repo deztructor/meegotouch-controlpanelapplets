@@ -16,9 +16,14 @@ AboutWidget::AboutWidget (
         AboutBusinessLogic     *aboutBusinessLogic, 
         QGraphicsWidget        *parent) :
     DcpWidget (parent),
-    m_AboutBusinessLogic (aboutBusinessLogic)
+    m_AboutBusinessLogic (aboutBusinessLogic),
+    m_Label1 (0)
 {
+    connect (aboutBusinessLogic, SIGNAL(ready()),
+            this, SLOT(dataReady()));
+
     createContent();
+    aboutBusinessLogic->initiateDataCollection();
 }
 
 AboutWidget::~AboutWidget ()
@@ -32,7 +37,6 @@ AboutWidget::createContent ()
     MLayout             *layout;
     MLinearLayoutPolicy *landscapePolicy;
     MLinearLayoutPolicy *portraitPolicy;
-    MLabel              *label1;
 
     layout = new MLayout;
 
@@ -47,10 +51,10 @@ AboutWidget::createContent ()
     /*
      *
      */
-    label1 = new MLabel (labelText());
+    m_Label1 = new MLabel (labelText());
     
-    landscapePolicy->addItem (label1);
-    portraitPolicy->addItem (label1);
+    landscapePolicy->addItem (m_Label1);
+    portraitPolicy->addItem (m_Label1);
 
     layout->setLandscapePolicy (landscapePolicy);
     layout->setPortraitPolicy (portraitPolicy);
@@ -105,5 +109,17 @@ AboutWidget::labelText()
 
 
     return retval;
+}
+
+void
+AboutWidget::retranslateUi ()
+{
+    m_Label1->setText (labelText());
+}
+
+void 
+AboutWidget::dataReady ()
+{
+    m_Label1->setText (labelText());
 }
 

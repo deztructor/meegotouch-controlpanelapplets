@@ -31,8 +31,7 @@ public:
     AboutBusinessLogic ();
     ~AboutBusinessLogic ();
 
-    void initiateBluetoothQueries ();
-    void initiatePhoneQueries ();
+    void initiateDataCollection();
 
     QString osName ();
     QString osVersion ();
@@ -41,23 +40,33 @@ public:
     QString BluetoothAddress ();
     QString IMEI ();
 
+signals:
+    void ready();
+    
 public slots:
     void defaultBluetoothAdapterAddressReceived (
             QMap<QString, QVariant> properties);
     void defaultBluetoothAdapterReceived (QDBusObjectPath adapter);
-    //void imeiReceived (QString imei);
     void DBusMessagingFailure (QDBusError error);
+
+private:
+    void initiateBluetoothQueries ();
+    void initiatePhoneQueries ();
 
 private:
     QPointer<QDBusInterface> m_ManagerDBusIf;
     QPointer<QDBusInterface> m_AdapterDBusIf;
     QPointer<PhoneInfo>      m_PhoneInfo;
-    //QPointer<QDBusInterface> m_ImeiDBusIf;
+    
     bool          m_gotBluetoothAddress;
     QString       m_BluetoothAddress;
 
     bool          m_gotImei;
     QString       m_Imei;
+
+    QString       m_WifiAddress;
+    QString       m_OsName;
+    QString       m_OsVersion;
 };
 
 #endif
