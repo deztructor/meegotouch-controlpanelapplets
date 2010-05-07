@@ -282,8 +282,6 @@ WallpaperCurrentDescriptor::suggestedOutputFilename (
             break;
     }
 
-    SYS_WARNING ("*** original image = %s", 
-            SYS_STR (originalImageFile(orientation)));
     retval = fileInfo.baseName() + retval + 
         QString::number(version()) + "." + extension();
 

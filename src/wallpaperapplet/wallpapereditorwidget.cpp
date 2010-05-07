@@ -31,7 +31,7 @@
 #include "mwidgetcreator.h"
 M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 static const int ExtraMargin = 10;
@@ -80,9 +80,9 @@ WallpaperEditorWidget::paint (
 {
     bool portrait = (geometry().height() > geometry().width());
   
+    #if 0
     SYS_DEBUG ("-------------------------------------");
     SYS_DEBUG ("*** offset   = %d, %d", imageDX(), imageDY());
-    #if 0
     SYS_DEBUG ("*** expected = %d, %d", 
             m_Trans.expectedWidth (),
             m_Trans.expectedHeight ());
@@ -323,6 +323,13 @@ WallpaperEditorWidget::toggleTitlebars (
         bool       show)
 {
     MApplicationPage  *currentPage;
+    /*
+     * This shows 9, 69 and 9, 9 now, but the correct values are 10, 70 and 10,
+     * 10 I believe. FIXME: Sooner or later we have to deal with this. 
+     */
+    QPointF r;
+    r = mapToScene (0, 0);
+    SYS_DEBUG ("r = %g, %g", r.x(), r.y());
 
     /*
      * If the requested state is the current state we don't need to hide/show
@@ -347,7 +354,7 @@ WallpaperEditorWidget::toggleTitlebars (
                 MApplicationPageModel::Hide);
         m_InfoHeader->hide ();
     }
-        
+
 finalize:
     /*
      * To return the correction value.
