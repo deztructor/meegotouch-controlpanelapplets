@@ -6,7 +6,7 @@ CONFIG += plugin \
           silent \
           qmsystem
 
-QT += dbus
+QT += dbus gui
 
 contains(cov, true) { 
     message("Coverage options enabled")

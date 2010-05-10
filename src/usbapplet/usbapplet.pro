@@ -1,10 +1,13 @@
 TEMPLATE      = lib
+
 CONFIG       += plugin \
                 gui \
                 meegotouch \
                 duicontrolpanel \
                 qmsystem \
                 silent
+
+QT += gui
 
 contains(cov, true) { 
     message("Coverage options enabled")
