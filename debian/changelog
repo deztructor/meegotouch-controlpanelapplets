@@ -1,8 +1,8 @@
-systemui-applets (0.13.7-1) harmattan; urgency=low
+systemui-applets (0.13.7~1) harmattan; urgency=low
 
   * Lazy-init in volume-applet (for faster sysuid startup)
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 10 May 2010 12:08:13 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 10 May 2010 12:48:41 +0200
 
 systemui-applets (0.13.6-1) harmattan; urgency=low
 
