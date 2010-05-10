@@ -1,23 +1,22 @@
+TEMPLATE = lib
+
 MOC_DIR = .moc
 MGEN_OUTDIR = .gen
 OBJECTS_DIR = .obj
 
-QT += dbus
-
-LIBS += -lprofile-qt \
-        -lduicontrolpanel
-
-TEMPLATE      = lib
-CONFIG       += \
-                plugin \
+CONFIG       += plugin \
                 gui \
                 meegotouch \
+                duicontrolpanel \
                 system-ui \
                 silent
 
+QT += dbus
+
+LIBS += -lprofile-qt
+
 INCLUDEPATH  += ../profileapplet \
-                /usr/include/profile-qt \
-                /usr/include/duicontrolpanel
+                /usr/include/profile-qt
 
 HEADERS = profileplugin.h \
           profilewidget.h \

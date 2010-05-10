@@ -17,7 +17,6 @@ CONFIG += \
 	qmsystem \
 	gui \
 	meegotouch \
-	debug \
 	silent 
 
 HEADERS += \

@@ -1,17 +1,12 @@
 TEMPLATE = lib
 CONFIG += plugin \
-    gui \
-    meegotouch \
-    cellular-qt \
-    silent \
-    debug
-
-LIBS += -lduicontrolpanel 
+          gui \
+          meegotouch \
+          duicontrolpanel \
+          cellular-qt \
+          silent
 
 QT += dbus
-
-INCLUDEPATH += \
-    /usr/include/duicontrolpanel 
 
 contains(cov, true) { 
     message("Coverage options enabled")

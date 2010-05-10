@@ -23,7 +23,6 @@ target.path = /usr/lib/systemui-applets-tests
 CONFIG += \
 	gui \
 	meegotouch \
-	debug \
 	silent 
 
 HEADERS += \

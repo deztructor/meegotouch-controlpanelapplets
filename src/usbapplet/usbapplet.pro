@@ -4,8 +4,7 @@ CONFIG       += plugin \
                 meegotouch \
                 duicontrolpanel \
                 qmsystem \
-                silent \
-                debug
+                silent
 
 contains(cov, true) { 
     message("Coverage options enabled")
