@@ -22,10 +22,12 @@ class VolumeBarLogic : public QObject
         void stepsUpdated (quint32 value, quint32 maxvalue);
 
     signals:
-        void volumeChanged (quint32 value, quint32 maxvalue);
+        void volumeChanged (quint32 value, quint32 maxvalue, bool init);
+
+    private slots:
+        void initValues ();
 
     private:
-        void initValues ();
         void addSignalMatch ();
 
         DBusConnection  *m_dbus_conn;

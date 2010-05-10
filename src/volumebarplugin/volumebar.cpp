@@ -60,20 +60,11 @@ VolumeBar::VolumeBar (MStatusIndicatorMenuInterface &statusIndicatorMenu,
 
     mainLayout->addItem (container);
 
-    quint32 current_volume = m_logic->getVolume ();
-    if (current_volume > 0)
-        m_bar->setMinLabelIconID ("icon-m-common-volume");
-    else
-        m_bar->setMinLabelIconID ("icon-m-common-volume-off");
-
-    m_bar->setRange (0, (int) m_logic->getMaxVolume () - 1);
-    m_bar->setValue (current_volume);
-
     connect (m_bar, SIGNAL (valueChanged (int)),
              this, SLOT (sliderChanged (int)));
 
-    connect (m_logic, SIGNAL (volumeChanged (quint32, quint32)),
-             this, SLOT (volumeChanged (quint32, quint32)));
+    connect (m_logic, SIGNAL (volumeChanged (quint32, quint32, bool)),
+             this, SLOT (volumeChanged (quint32, quint32, bool)));
 
     connect (m_overlay, SIGNAL (VolumeChanged (int)),
              this, SLOT (overlayChanged (int)));
@@ -119,9 +110,9 @@ VolumeBar::sliderChanged (int val)
 }
 
 void
-VolumeBar::volumeChanged (quint32 val, quint32 max)
+VolumeBar::volumeChanged (quint32 val, quint32 max, bool init)
 {
-    SYS_DEBUG ("val = %d, max = %d", val, max);
+    SYS_DEBUG ("val = %d, max = %d (, init = %s)", val, max, SYS_BOOL (init));
 
     m_bar->blockSignals (true); // to avoid busy loop
 
@@ -129,9 +120,15 @@ VolumeBar::volumeChanged (quint32 val, quint32 max)
     m_bar->setRange (0, (int) max - 1);
     m_bar->setValue ((int) val);
 
-    m_overlay->UpdateVolume ((int) val, (int) max);
-
     m_bar->blockSignals (false);
+
+    if (val > 0)
+        m_bar->setMinLabelIconID ("icon-m-common-volume");
+    else
+        m_bar->setMinLabelIconID ("icon-m-common-volume-off");
+
+    if (init == false)
+        m_overlay->UpdateVolume ((int) val, (int) max);
 }
 
 void

@@ -27,7 +27,7 @@ public:
 private slots:
     void sliderChanged (int val);
     void overlayChanged (int val);
-    void volumeChanged (quint32 val, quint32 max);
+    void volumeChanged (quint32 val, quint32 max, bool init);
     void hwKeyEvent (QmKeys::Key key, QmKeys::State state);
 #ifdef TEST_OVERLAY
     void testOverlay ();
