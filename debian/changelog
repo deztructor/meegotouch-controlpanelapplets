@@ -1,9 +1,9 @@
-systemui-applets (0.13.7~1) harmattan; urgency=low
+systemui-applets (0.13.7-1) harmattan; urgency=low
 
   * Lazy-init in volume-applet (for faster sysuid startup)
   * Fixes: NB#162431 - Status bar is not always displayed (it is too nice)
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 11 May 2010 10:41:43 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 11 May 2010 11:26:49 +0200
 
 systemui-applets (0.13.6-1) harmattan; urgency=low
 
