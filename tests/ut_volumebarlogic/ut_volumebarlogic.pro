@@ -12,7 +12,6 @@ TARGET = ut_volumebarlogic
 target.path = /usr/lib/systemui-applets-tests
 
 CONFIG += \
-	debug \
     link_pkgconfig \
 	silent 
 

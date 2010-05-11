@@ -1,20 +1,21 @@
 TEMPLATE = lib
 CONFIG += plugin \
-    gui \
-    meegotouch \
-    silent \
-    debug
-LIBS += -lduicontrolpanel \
-    -lprofile-qt
-INCLUDEPATH += \ 
-    /usr/include/duicontrolpanel \
-    /usr/include/profile-qt
+          gui \
+          meegotouch \
+          duicontrolpanel \
+          silent
+
+LIBS += -lprofile-qt
+INCLUDEPATH += /usr/include/profile-qt
+
 QT += dbus
+
 contains(cov, true) { 
     message("Coverage options enabled")
     QMAKE_CXXFLAGS += --coverage
     QMAKE_LFLAGS += --coverage
 }
+
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
 HEADERS = \

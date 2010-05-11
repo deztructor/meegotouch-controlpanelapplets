@@ -10,6 +10,8 @@ CONFIG += plugin \
           qmsystem \
           silent
 
+QT += gui
+
 PKGCONFIG += dbus-1 dbus-glib-1
 
 INCLUDEPATH += \

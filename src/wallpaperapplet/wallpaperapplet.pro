@@ -1,17 +1,15 @@
 TEMPLATE = lib
 CONFIG += plugin \
-    gui \
-    meegotouch \
-    silent \
-    debug
+          gui \
+          meegotouch \
+          duicontrolpanel \
+          silent
 
 LIBS += \
-    -lduicontrolpanel \
     -lqttracker \
     -lduithumbnailer
 
 INCLUDEPATH += \
-    /usr/include/duicontrolpanel \
     /usr/include/QtTracker \
     /usr/include/duithumbnailer 
 

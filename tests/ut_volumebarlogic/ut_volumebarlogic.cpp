@@ -59,7 +59,7 @@ Ut_VolumeBarLogic::testSignaling ()
 
     // Whe PulseAudio sends the D-Bus signal about stepcount/currentstep
     // changes logic should emit itself volumeChanged signal
-    QSignalSpy spy (m_Api, SIGNAL (volumeChanged (quint32, quint32)));
+    QSignalSpy spy (m_Api, SIGNAL (volumeChanged (quint32, quint32, bool)));
 
     // Do what PulseAudio do [of course Pa doing this indirectly...]
     m_Api->stepsUpdated (currentstep, stepcount);

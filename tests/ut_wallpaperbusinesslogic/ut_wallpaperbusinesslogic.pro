@@ -26,7 +26,6 @@ CONFIG += \
 	gui \
 	meegotouch \
 	duicontrolpanel \
-	debug \
 	silent 
 
 HEADERS += \

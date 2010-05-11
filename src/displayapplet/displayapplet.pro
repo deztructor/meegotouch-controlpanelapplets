@@ -1,16 +1,13 @@
 TEMPLATE = lib
 CONFIG += plugin \
-    gui \
-    meegotouch \
-    silent \
-    debug \
-    qmsystem
+          gui \
+          meegotouch \
+          duicontrolpanel \
+          silent \
+          qmsystem
 
-LIBS += -lduicontrolpanel
+QT += dbus gui
 
-INCLUDEPATH += /usr/include/duicontrolpanel
-
-QT += dbus
 contains(cov, true) { 
     message("Coverage options enabled")
     QMAKE_CXXFLAGS += --coverage
