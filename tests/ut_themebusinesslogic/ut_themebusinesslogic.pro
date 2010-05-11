@@ -4,20 +4,21 @@ STUB_PREFIX = ../stubs
 INCLUDEPATH += $$SRC_PREFIX \
                $$STUB_PREFIX
 
+CONFIG += \
+	gui \
+	meegotouch \
+	debug \
+	silent 
+
 QT += \
     testlib \
+    gui \
     dbus 
 
 TEMPLATE = app
 DEFINES += UNIT_TEST
 TARGET = ut_themebusinesslogic
 target.path = /usr/lib/systemui-applets-tests
-
-CONFIG += \
-	gui \
-	meegotouch \
-	debug \
-	silent 
 
 HEADERS += \
     ../../src/debug.h \

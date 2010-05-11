@@ -5,7 +5,7 @@ CONFIG += plugin \
           silent \
           duicontrolpanel
 
-QT += dbus
+QT += dbus gui
 
 contains(cov, true) { 
     message("Coverage options enabled")
