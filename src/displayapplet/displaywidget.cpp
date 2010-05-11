@@ -43,17 +43,22 @@ void DisplayWidget::initWidget ()
     m_logic = new DisplayBusinessLogic;
 
     // Brightness
-    QGraphicsLinearLayout *brightnessLayout =
-        new QGraphicsLinearLayout (Qt::Horizontal);
+    MLayout *brightnessLayout = new MLayout;
+
+    MLinearLayoutPolicy *brightnessLandscape =
+        new MLinearLayoutPolicy (brightnessLayout, Qt::Horizontal);
+
+    MLinearLayoutPolicy *brightnessPortrait =
+        new MLinearLayoutPolicy (brightnessLayout, Qt::Vertical);
 
     //% "Brightness"
     m_brightnessLabel = new MLabel (qtTrId ("qtn_disp_bright"));
-    brightnessLayout->addItem (m_brightnessLabel);
-    brightnessLayout->setStretchFactor (m_brightnessLabel, 2);
+    brightnessLandscape->addItem (m_brightnessLabel);
+    brightnessPortrait->addItem (m_brightnessLabel);
 
     m_brightnessSlider = new MSlider;
-    brightnessLayout->addItem (m_brightnessSlider);
-    brightnessLayout->setStretchFactor (m_brightnessSlider, 2);
+    brightnessLandscape->addItem (m_brightnessSlider);
+    brightnessPortrait->addItem (m_brightnessSlider);
 
     m_brightness_vals = m_logic->brightnessValues ();
     m_brightnessSlider->setRange (0, m_brightness_vals.size () - 1);
@@ -62,6 +67,8 @@ void DisplayWidget::initWidget ()
     connect (m_brightnessSlider, SIGNAL (valueChanged (int)),
              m_logic, SLOT (setBrightnessValue (int)));
 
+    brightnessLayout->setLandscapePolicy (brightnessLandscape);
+    brightnessLayout->setPortraitPolicy (brightnessPortrait);
     policy->addItem (brightnessLayout);
 
     // Screen light

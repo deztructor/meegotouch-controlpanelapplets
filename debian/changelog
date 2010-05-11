@@ -1,3 +1,9 @@
+systemui-applets (0.13.8~1) harmattan; urgency=low
+
+  * Display UI layout changes...
+
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 11 May 2010 13:25:43 +0200
+
 systemui-applets (0.13.7-1) harmattan; urgency=low
 
   * Lazy-init in volume-applet (for faster sysuid startup)
