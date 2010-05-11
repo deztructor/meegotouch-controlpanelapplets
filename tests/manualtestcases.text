@@ -26,7 +26,8 @@ ThemeApplet:
 	new theme as it is the current theme.
 
 Wallpaper applet
-    (4) Activate the 'wallpapers' applet from the 'look & feel' category of the
+~~~~~~~~~~~~~~~~
+    (1) Activate the 'wallpapers' applet from the 'look & feel' category of the
         control panel.
 
         Select an item from the list of the available wallpaper. A new page
@@ -44,4 +45,42 @@ Wallpaper applet
 	Check the 'wallpapers' applet. It should show the name and the thumbview
 	of the selected wallpaper.
 
+    (3) To check the editing of an image do the following:
 
+        o Activate the wallpaper applet.
+	o Select an image that is not the current wallpaper.
+	o When the image appears in the editor window check that it fills the
+  	  entire screen (no black background).
+	o Move the image by dragging it around in different directions.
+	o Scale the image with the two-finger gesture.
+	o End up with the editing so that parts of the original image is not on
+	  the screen (for the next test).
+        o Press 'done', then the back button and go back to the desktop screen.
+	o Check if the edited version is shown in the background.
+    
+    (4) To check the re-editing of the image do the following:
+
+        o Perform test (3) to get an edited image that has parts outside the
+	  screen.
+	o Activate the 'wallpapers' applet again.
+	o Activate the current image to edit it.
+	o Move/scale the image to see if the parts that are outside the screen
+	  can be seen again.
+
+    (5) To check the orientation support on the wallpapers applet do the
+        following:
+
+	o Repeat test (3) and (4) while rotating the device between
+  	  landscape/portrait.
+	o Check if the offset and scale is set for portrait/landscape
+	  as it is expected.
+
+    (6) To check the CUD (clean user data) facility of the wallpaper applet do
+        the following.
+
+	o Perform test (3) to get the edited image saved.
+	o Activate the 'reset settings' applet.
+	o Select 'clean user data', then press ok and wait for the reboot.
+	o Check if the default wallpapers shown in the desktop.
+	o Check if the user's ~/.wallpapers directory is removed along with its
+	  content.
