@@ -13,7 +13,9 @@ class MStatusIndicatorMenuInterface;
 
 // For Hw-volume key handling
 #include <qmkeys.h>
+#include <policy/resource-set.h>
 using namespace Maemo;
+using namespace ResourcePolicy;
 
 class VolumeBar : public MWidget
 {
@@ -29,6 +31,8 @@ private slots:
     void overlayChanged (int val);
     void volumeChanged (quint32 val, quint32 max, bool init);
     void hwKeyEvent (QmKeys::Key key, QmKeys::State state);
+    void hwKeyResourceAcquired ();
+    void hwKeyResourceLost ();
 #ifdef TEST_OVERLAY
     void testOverlay ();
 #endif
@@ -38,6 +42,7 @@ private:
     VolumeBarLogic  *m_logic;
     VolumeOverlay   *m_overlay;
     Maemo::QmKeys   *m_hwkeys;
+    ResourceSet     *m_hwkeyResource;
 };
 
 #endif

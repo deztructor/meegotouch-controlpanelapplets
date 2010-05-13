@@ -12,10 +12,14 @@ CONFIG += plugin \
 
 QT += gui
 
-PKGCONFIG += dbus-1 dbus-glib-1
+PKGCONFIG += \
+        dbus-1 \
+        dbus-glib-1 \
+        libresourceqt1
 
 INCLUDEPATH += \
-    /usr/include/dbus-1.0
+    /usr/include/dbus-1.0 \
+    /usr/include/resource/qt4
 
 HEADERS = volumebarplugin.h \
           volumebarlogic.h \

@@ -1,8 +1,11 @@
 systemui-applets (0.13.8~1) harmattan; urgency=low
 
   * Display UI layout changes...
+  * Use resource policy in volume-control
+  * Fixes: NB#168419 - HW Zoom keys shound't launch volume slider while
+                       in camera precapture view
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 11 May 2010 13:25:43 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 13 May 2010 12:08:03 +0200
 
 systemui-applets (0.13.7-1) harmattan; urgency=low
 
