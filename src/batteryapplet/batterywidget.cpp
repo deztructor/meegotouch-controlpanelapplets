@@ -15,7 +15,7 @@
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 
-#undef DEBUG 
+#define DEBUG 
 #include "../debug.h"
 
 /*
@@ -123,14 +123,18 @@ void BatteryWidget::initWidget ()
     // connect the value receive signals
     connect (batteryIf, SIGNAL (remainingTimeValuesReceived (QStringList)),
              this, SLOT (remainingTimeValuesReceived (QStringList)));
+    // Connect the batteryImage
     connect (batteryIf, SIGNAL (batteryCharging (int)),
              batteryImage, SLOT (startCharging (int)));
     connect (batteryIf, SIGNAL (batteryNotCharging ()),
              batteryImage, SLOT (stopCharging ()));
-    connect (batteryIf, SIGNAL (batteryNotCharging ()),
-             batteryIf, SLOT (batteryBarValueRequired ()));
     connect (batteryIf, SIGNAL (batteryBarValueReceived (int)),
              batteryImage, SLOT (updateBatteryLevel (int)));
+    connect (batteryIf, SIGNAL (PSMValueReceived (bool)),
+             batteryImage, SLOT (setPSMValue(bool)));
+
+    connect (batteryIf, SIGNAL (batteryNotCharging ()),
+             batteryIf, SLOT (batteryBarValueRequired ()));
     connect (batteryIf, SIGNAL (PSMValueReceived (bool)),
              this, SLOT (updatePSMButton (bool)));
     connect (batteryIf, SIGNAL (PSMAutoValueReceived (bool)),
@@ -172,6 +176,7 @@ void
 BatteryWidget::PSMButtonReleased ()
 {
     batteryIf->setPSMValue (!PSMButtonToggle);
+    batteryIf->PSMValueRequired ();
 }
 
 void 
@@ -184,11 +189,9 @@ BatteryWidget::updatePSMButton (
     if (toggle) {
         //% "Deactivate power save now"
         PSMButton->setText (qtTrId ("qtn_ener_dps"));
-        batteryImage->setIconSet (ICON_POWERSAVE);
     } else {
         //% "Activate power save now"
         PSMButton->setText (qtTrId ("qtn_ener_aps"));
-        batteryImage->setIconSet (ICON_NORMAL);
     }
     sliderContainer->setVisible (!toggle);
 }

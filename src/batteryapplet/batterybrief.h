@@ -12,19 +12,11 @@ class BatteryBrief: public DcpBrief
     Q_OBJECT
 
 public:
-    BatteryBrief ();
-    ~BatteryBrief ();
-
-    virtual QString valueText() const;
-
-private slots:
-    void batteryCharging (int);
-    void batteryNotCharging ();
-
-private:
-    BatteryDBusInterface  *m_BatteryIf;
-    bool                   m_Charging;
-    bool                   m_NotCharging;
+    /*
+     * We don't want to anything at the second line unless we can show something
+     * meaningful. Actually the UI spec does not specify what to show...
+     */
+    //virtual QString valueText() const;
 };
 
 #endif

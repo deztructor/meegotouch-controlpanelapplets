@@ -7,6 +7,9 @@
 #include <MLabel>
 #include <MLayout>
 
+#define DEBUG 
+#include "../debug.h"
+
 TimeContainer::TimeContainer(
 		const QString  &text, 
 		MImageWidget *image, 

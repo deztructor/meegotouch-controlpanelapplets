@@ -8,42 +8,50 @@
 #include <QMetaType>
 
 class QTimer;
-
-enum BatteryIconType
-{
-    ICON_NORMAL = 0,
-    ICON_POWERSAVE,
-    ICON_CHARGING
-};
-
-Q_DECLARE_METATYPE(BatteryIconType);
+class QStringList;
 
 class BatteryImage : public MImageWidget
 {
     Q_OBJECT
-    Q_ENUMS(BatteryIconType)
+
+    typedef enum {
+        ICON_NORMAL = 0,
+        ICON_POWERSAVE,
+        ICON_CHARGING
+    } BatteryIconType;
+
 
 public:
     BatteryImage (QGraphicsItem *parent = 0);
     ~BatteryImage ();
+    bool charging () const;
 
 public slots:
-    void setIconSet (BatteryIconType type);
     void updateBatteryLevel (int level);
+
     void startCharging (int rate);
     void stopCharging ();
+    void setPSMValue (bool PSMEnabled);
 
 private slots:
-    void updateImage (bool charging = true);
+    void updateImage ();
 
 private:
+    void  setIconSet ();
+
+    void  stopTimer();
+    void  maybeStartTimer();
+    const QPixmap *getPixmap (const QString &name);
+    void loadImages (BatteryImage::BatteryIconType type);
+    
+private:
+    bool                    m_PowerSave;
+    int                     m_ChargingSpeed;
     QTimer                 *m_timer;
     int                     m_batteryLevel;
     QList<const QPixmap *>  m_Images;
 
     BatteryIconType         m_iconCurrentSet;
-
-    void loadImages (BatteryIconType type);
 };
 
 #endif // BATTERYIMAGE_H

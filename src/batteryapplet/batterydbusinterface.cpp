@@ -6,7 +6,7 @@
 #include <QDebug>
 #include <QVariant>
 
-#undef DEBUG
+#define DEBUG
 #include "../debug.h"
 
 BatteryDBusInterface::BatteryDBusInterface ()
