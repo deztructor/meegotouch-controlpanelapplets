@@ -71,10 +71,19 @@ VolumeBar::VolumeBar (MStatusIndicatorMenuInterface &statusIndicatorMenu,
 
     m_hwkeys = new QmKeys (this);
 
-    connect (m_hwkeys,
-             SIGNAL (keyEvent (QmKeys::Key, QmKeys::State)),
-             this,
-             SLOT (hwKeyEvent (QmKeys::Key, QmKeys::State)));
+    m_hwkeyResource = new ResourceSet ("event");
+    m_hwkeyResource->setAlwaysReply ();
+
+    ScaleButtonResource *volumeKeys = new ScaleButtonResource;
+
+    m_hwkeyResource->addResourceObject (volumeKeys);
+
+    connect (m_hwkeyResource, SIGNAL (resourcesGranted (QList<ResourcePolicy::ResourceType>)),
+             this, SLOT (hwKeyResourceAcquired ()));
+    connect (m_hwkeyResource, SIGNAL (lostResources ()),
+             this, SLOT (hwKeyResourceLost ()));
+
+    m_hwkeyResource->acquire ();
 
 #ifdef TEST_OVERLAY
     QTimer::singleShot (2000, this, SLOT (testOverlay ()));
@@ -84,6 +93,8 @@ VolumeBar::VolumeBar (MStatusIndicatorMenuInterface &statusIndicatorMenu,
 VolumeBar::~VolumeBar ()
 {
     //Free the resources here
+    m_hwkeyResource->deleteResource (ScaleButtonType);
+
     delete m_hwkeys;
     m_hwkeys = 0;
 
@@ -127,8 +138,12 @@ VolumeBar::volumeChanged (quint32 val, quint32 max, bool init)
     else
         m_bar->setMinLabelIconID ("icon-m-common-volume-off");
 
+    // Do not show volume overlay on volume-change events,
+    // it is enough to show on hw-key-press events...
+#if 0
     if (init == false)
         m_overlay->UpdateVolume ((int) val, (int) max);
+#endif
 }
 
 void
@@ -200,5 +215,26 @@ VolumeBar::hwKeyEvent (QmKeys::Key key, QmKeys::State state)
     overlayChanged (current_volume);
     // ... and show the overlay
     m_overlay->UpdateVolume (current_volume, max_volume);
+}
+
+void
+VolumeBar::hwKeyResourceAcquired ()
+{
+    SYS_DEBUG ("");
+
+    // Disconnect from everything first
+    m_hwkeys->disconnect ();
+
+    connect (m_hwkeys,
+             SIGNAL (keyEvent (QmKeys::Key, QmKeys::State)),
+             this,
+             SLOT (hwKeyEvent (QmKeys::Key, QmKeys::State)));
+}
+
+void
+VolumeBar::hwKeyResourceLost ()
+{
+    SYS_DEBUG ("");
+    m_hwkeys->disconnect ();
 }
 

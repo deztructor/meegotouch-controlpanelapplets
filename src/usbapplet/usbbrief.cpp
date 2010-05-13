@@ -34,10 +34,29 @@ UsbBrief::retranslateUi ()
 QString
 UsbBrief::valueText () const
 {
+    QmUSBMode::Mode active = m_logic->getMode ();
+    QmUSBMode::Mode setting = m_logic->getDefaultMode ();
+
+    if (setting == QmUSBMode::Ask)
+    {
+        if (active == QmUSBMode::MassStorage)
+            //% "Always ask - %1 active"
+            return qtTrId ("qtn_usb_ask_active").arg (
+            //% "Mass Storage mode"
+                   qtTrId ("qtn_usb_mass_storage"));
+        else if (active == QmUSBMode::OviSuite)
+            //% "Always ask - %1 active"
+            return qtTrId ("qtn_usb_ask_active").arg (
+            //% "Ovi Suite mode"
+                   qtTrId ("qtn_usb_ovi_suite"));
+        else
+            //% "Always ask"
+            return qtTrId ("qtn_usb_always_ask");
+    }
+
     QString currentSetting; 
 
-    // Get the current setting localised string
-    switch (m_logic->getDefaultMode ())
+    switch (setting)
     {
         case QmUSBMode::OviSuite:
             //% "Ovi Suite mode"
@@ -54,31 +73,10 @@ UsbBrief::valueText () const
             break;
     }
 
-    // Check the currently active mode
-    switch (m_logic->getMode ())
-    {
-        case QmUSBMode::Disconnected:
-            return currentSetting; // just return the current setting value
-            break;
-        case QmUSBMode::MassStorage:
-        case QmUSBMode::OviSuite:
-            if (m_logic->getMode () == m_logic->getDefaultMode ())
-            {
-                //% "%1 active"
-                return qtTrId ("qtn_usb_active_mode").arg (currentSetting);
-            }
-            else if (m_logic->getDefaultMode () == QmUSBMode::Ask)
-            {
-                //% "Always ask - %1 active"
-                return qtTrId ("qtn_usb_ask_active").arg (currentSetting);
-            }
-            break;
-        default:
-            SYS_DEBUG ("What about %d mode?", m_logic->getMode ());
-            SYS_DEBUG ("current-setting: %s", SYS_STR (currentSetting));
-            break;
-    }
-
-    return currentSetting;
+    if ((active == setting) && (active != QmUSBMode::Ask))
+        //% "%1 active"
+        return qtTrId ("qtn_usb_active_mode").arg (currentSetting);
+    else
+        return currentSetting;
 }
 
