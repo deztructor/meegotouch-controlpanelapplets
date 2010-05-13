@@ -7,7 +7,6 @@
 #include <MTheme>
 #include <MAction>
 
-//#define DEBUG
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(themeapplet, ThemeApplet)
@@ -26,7 +25,10 @@ ThemeApplet::~ThemeApplet()
 void 
 ThemeApplet::init()
 {
-    MTheme::loadCSS(cssDir + "themeapplet.css");
+    QString themeFile = cssDir + "themeapplet.css";
+
+    SYS_DEBUG ("Loading theme file: %s", SYS_STR(themeFile));
+    MTheme::loadCSS (themeFile);
 }
 
 DcpWidget *
@@ -83,5 +85,6 @@ ThemeApplet::constructBrief (
         int partId)
 {
     Q_UNUSED (partId);
+    SYS_DEBUG ("Creating brief");
     return new ThemeBrief (m_ThemeBusinessLogic);
 }

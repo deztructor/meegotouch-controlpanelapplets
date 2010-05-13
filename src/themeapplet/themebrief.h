@@ -8,6 +8,7 @@
 
 #include "themebusinesslogic.h"
 
+class QString;
 
 class ThemeBrief: public DcpBrief
 {
@@ -19,6 +20,9 @@ public:
     virtual int widgetTypeID() const;
     virtual QString valueText() const;
     virtual QString icon () const;
+
+public slots:
+    void themeChanged (QString themeCodeName);
 
 private:
     QPointer<ThemeBusinessLogic> m_ThemeBusinessLogic;

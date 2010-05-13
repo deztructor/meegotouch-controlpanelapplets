@@ -10,6 +10,8 @@ ThemeBrief::ThemeBrief (
         ThemeBusinessLogic *businessLogic) :
     m_ThemeBusinessLogic (businessLogic)
 {
+    connect (businessLogic, SIGNAL(themeChanged(QString)),
+            this, SLOT(themeChanged(QString)));
 }
 
 int
@@ -36,4 +38,13 @@ ThemeBrief::icon () const
     return m_ThemeBusinessLogic->currentThemeIconName ();
 }
 
+void 
+ThemeBrief::themeChanged (
+        QString themeCodeName)
+{
+    Q_UNUSED (themeCodeName);
+    SYS_DEBUG ("*** themeCodeName = %s", SYS_STR(themeCodeName));
+
+    emit valuesChanged();
+}
 

@@ -28,9 +28,10 @@ void
 WallpaperApplet::init()
 {
     QString themeFile = cssDir + "wallpaper.css";
-
-    SYS_DEBUG ("Loading theme %s", SYS_STR(themeFile));
+   
+    SYS_DEBUG ("Adding pixmap dir %s", SYS_STR(cssDir));
     MTheme::addPixmapDirectory (cssDir, M::Recursive);
+    SYS_DEBUG ("Loading theme %s", SYS_STR(themeFile));
     MTheme::loadCSS (themeFile);
 }
 
@@ -95,5 +96,6 @@ WallpaperApplet::constructBrief (
         int partId)
 {
     Q_UNUSED (partId);
+
     return new WallpaperBrief (m_WallpaperBusinessLogic);
 }

@@ -33,10 +33,13 @@ ThemeContentItem::ThemeContentItem (
      * This is how we set an icon in the contentitem so that oit will not crash
      * on a theme change.
      */
+    SYS_DEBUG ("getting the pixmap: %s",
+            SYS_STR(m_ThemeDescriptor->iconName()));
     const QPixmap *pixmap;
     pixmap = MTheme::pixmapCopy (m_ThemeDescriptor->iconName());
     setPixmap (*pixmap);
-
+    SYS_DEBUG ("*** size = %d, %d", pixmap->width(), pixmap->height());
+    
     connect (this, SIGNAL(clicked()), this, SLOT(slotClicked()));
 }
 

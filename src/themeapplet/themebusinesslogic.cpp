@@ -11,7 +11,6 @@
 #include <MTheme>
 #include <MGConfItem>
 
-#define DEBUG
 #include "../debug.h"
 
 // The directory where all the available themes are installed.
