@@ -138,8 +138,12 @@ VolumeBar::volumeChanged (quint32 val, quint32 max, bool init)
     else
         m_bar->setMinLabelIconID ("icon-m-common-volume-off");
 
+    // Do not show volume overlay on volume-change events,
+    // it is enough to show on hw-key-press events...
+#if 0
     if (init == false)
         m_overlay->UpdateVolume ((int) val, (int) max);
+#endif
 }
 
 void
