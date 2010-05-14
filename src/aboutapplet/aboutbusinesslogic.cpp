@@ -209,7 +209,6 @@ AboutBusinessLogic::WiFiAddress ()
             break;
     }
 
-finalize:
     m_WifiAddress = retval;
     return retval;
 }

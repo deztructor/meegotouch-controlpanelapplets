@@ -123,6 +123,8 @@ VolumeBar::sliderChanged (int val)
 void
 VolumeBar::volumeChanged (quint32 val, quint32 max, bool init)
 {
+    Q_UNUSED (init);
+
     SYS_DEBUG ("val = %d, max = %d (, init = %s)", val, max, SYS_BOOL (init));
 
     m_bar->blockSignals (true); // to avoid busy loop
