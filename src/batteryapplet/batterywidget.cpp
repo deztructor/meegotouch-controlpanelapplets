@@ -28,6 +28,7 @@ TODO list:
 BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
         DcpWidget (parent),
         batteryIf (NULL),
+        m_UILocked (false),
         batteryImage (NULL),
         PSMButton (NULL),
         sliderContainer (NULL),
@@ -40,7 +41,7 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
      * not active. This way we show a value that makes sense even if the DBus
      * interface to the sysuid is not usable.
      */
-    PSMButtonToggle = false;
+    m_PSMButtonToggle = false;
     initWidget();
 }
 
@@ -78,8 +79,12 @@ void BatteryWidget::initWidget ()
             qtTrId ("qtn_ener_st"), new MImageWidget);
                                   //"qgn_ener_standby" ^
 
-    // PSMButton
-    PSMButton = new MButton ;
+    /*
+     * PSMButton is used to immediately turn the power save mode on/off.
+     */
+    PSMButton = new MButton;
+    updatePSMButton ();
+
     connect (PSMButton, SIGNAL (released ()), 
              this, SLOT (PSMButtonReleased ()));
 
@@ -87,7 +92,7 @@ void BatteryWidget::initWidget ()
     sliderContainer = new SliderContainer;
 
     connect (sliderContainer, SIGNAL (PSMAutoToggled (bool)),
-             batteryIf, SLOT (setPSMAutoValue (bool)));
+             this, SLOT (PSMAutoToggled (bool)));
     connect (sliderContainer, SIGNAL (PSMThresholdValueChanged (QString)),
              batteryIf, SLOT (setPSMThresholdValue (QString)));
 
@@ -123,7 +128,10 @@ void BatteryWidget::initWidget ()
     // connect the value receive signals
     connect (batteryIf, SIGNAL (remainingTimeValuesReceived (QStringList)),
              this, SLOT (remainingTimeValuesReceived (QStringList)));
-    // Connect the batteryImage
+
+    /*
+     * Connect the batteryImage slots.
+     */
     connect (batteryIf, SIGNAL (batteryCharging (int)),
              batteryImage, SLOT (startCharging (int)));
     connect (batteryIf, SIGNAL (batteryNotCharging ()),
@@ -136,17 +144,22 @@ void BatteryWidget::initWidget ()
     connect (batteryIf, SIGNAL (batteryNotCharging ()),
              batteryIf, SLOT (batteryBarValueRequired ()));
     connect (batteryIf, SIGNAL (PSMValueReceived (bool)),
-             this, SLOT (updatePSMButton (bool)));
+             this, SLOT (PSMValueReceived (bool)));
+    
+    /*
+     * SliderContainer signals and slots.
+     */
     connect (batteryIf, SIGNAL (PSMAutoValueReceived (bool)),
              sliderContainer, SLOT (initPSMAutoButton (bool)));
     connect (batteryIf, SIGNAL (PSMAutoDisabled ()),
              sliderContainer, SLOT (PSMAutoDisabled ()));
     connect (batteryIf, SIGNAL (PSMThresholdValuesReceived (QStringList)),
              sliderContainer, SLOT (initSlider (QStringList)));
-    connect (batteryIf, SIGNAL (PSMThresholdValuesReceived (QStringList)),
-             batteryIf, SLOT (PSMThresholdValueRequired ()));
     connect (batteryIf, SIGNAL (PSMThresholdValueReceived (QString)),
              sliderContainer, SLOT (updateSlider (QString)));
+    
+    connect (batteryIf, SIGNAL (PSMThresholdValuesReceived (QStringList)),
+             batteryIf, SLOT (PSMThresholdValueRequired ()));
 
     // send value requests over dbus
     batteryIf->remainingTimeValuesRequired ();
@@ -175,25 +188,44 @@ void BatteryWidget::initWidget ()
 void 
 BatteryWidget::PSMButtonReleased ()
 {
-    batteryIf->setPSMValue (!PSMButtonToggle);
-    //batteryIf->PSMValueRequired ();
+    bool newPSMValue = !m_PSMButtonToggle;
+
+    SYS_DEBUG ("Setting PSMvalue to %s", SYS_BOOL(newPSMValue));
+    if (newPSMValue) {
+        m_UILocked = true;
+        sliderContainer->setVisible (!m_PSMButtonToggle);
+        m_UILocked = false;
+    }
+
+    batteryIf->setPSMValue (newPSMValue);
+}
+
+/*!
+ * This slot is called when the psm auto switch is toggled.
+ */
+void
+BatteryWidget::PSMAutoToggled (
+        bool PSMAutoEnabled)
+{
+    SYS_DEBUG ("*** PSMAutoEnabled = %s", SYS_BOOL(PSMAutoEnabled));
+
+    if (m_UILocked) {
+        SYS_WARNING ("The UI is locked.");
+    } else {
+        batteryIf->setPSMAutoValue (PSMAutoEnabled);
+    }
 }
 
 void 
-BatteryWidget::updatePSMButton (
-        bool toggle)
+BatteryWidget::updatePSMButton ()
 {
-    PSMButtonToggle = toggle;
-
-    SYS_DEBUG ("PSMButtonToggle now is %s", PSMButtonToggle ? "on" : "off");
-    if (toggle) {
+    if (m_PSMButtonToggle) {
         //% "Deactivate power save now"
         PSMButton->setText (qtTrId ("qtn_ener_dps"));
     } else {
         //% "Activate power save now"
         PSMButton->setText (qtTrId ("qtn_ener_aps"));
     }
-    sliderContainer->setVisible (!toggle);
 }
 
 void BatteryWidget::remainingTimeValuesReceived(const QStringList &timeValues)
@@ -206,11 +238,31 @@ void BatteryWidget::remainingTimeValuesReceived(const QStringList &timeValues)
     standByTimeContainer->updateTimeLabel (timeValues.at (1));
 }
 
+
+void 
+BatteryWidget::PSMValueReceived (
+        bool PSMEnabled)
+{
+    SYS_DEBUG ("*** PSMEnabled = %s", SYS_BOOL (PSMEnabled));
+
+    if (m_PSMButtonToggle == PSMEnabled) {
+        SYS_DEBUG ("toggle already set");
+        return;
+    }
+    m_PSMButtonToggle = PSMEnabled;
+
+    updatePSMButton ();
+    m_UILocked = true;
+    SYS_DEBUG ("Hiding sliderContainer");
+    sliderContainer->setVisible (!m_PSMButtonToggle);
+    m_UILocked = false;
+}
+
 void 
 BatteryWidget::retranslateUi ()
 {
     // This call will reload the translated text on PSButton
-    updatePSMButton (PSMButtonToggle);
+    updatePSMButton ();
 
     // This call will retranslate the label (infoText)
     sliderContainer->retranslate ();

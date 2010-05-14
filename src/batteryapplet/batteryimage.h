@@ -27,7 +27,10 @@ class QStringList;
  *   n           n         (1) Using the battery.
  *   n           y         (3) Power save mode.
  *   y           n         (2) Charging the battery.
- *   y           y         
+ *   y           y         (2) Charging the battery.
+ *
+ * This is because indicating the charging is more important than indicating the
+ * power save mode, although we could anymate the power save mode icon too.
  */
 class BatteryImage : public MImageWidget
 {

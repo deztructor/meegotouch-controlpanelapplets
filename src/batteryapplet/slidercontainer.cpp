@@ -8,7 +8,7 @@
 #include <MLayout>
 #include <MSlider>
 
-#undef DEBUG 
+#define DEBUG 
 #include "../debug.h"
 
 SliderContainer::SliderContainer (MWidget *parent) :
@@ -212,9 +212,9 @@ SliderContainer::initPSMAutoButton (
 void SliderContainer::PSMAutoDisabled ()
 {
     SYS_DEBUG ("");
-    //m_PSMAutoButton->blockSignals (true);
+    m_PSMAutoButton->blockSignals (true);
     m_PSMAutoButton->setChecked (false);
-    //m_PSMAutoButton->blockSignals (false);
+    m_PSMAutoButton->blockSignals (false);
 }
 
 void SliderContainer::PSMAutoButtonToggled (bool toggle)

@@ -25,17 +25,19 @@ protected:
 
 private slots:
     void PSMButtonReleased();
-    // is this a lefover declaration? it is not implemented!
-    //void updateNotChargingImage(int level);
-    void updatePSMButton(bool toggle);
     void remainingTimeValuesReceived(const QStringList &timeValues);
-
+    void PSMValueReceived (bool PSMEnabled);
+    void PSMAutoToggled (bool PSMAutoEnabled);
+private:
+    void updatePSMButton();
+    
 private:
     BatteryDBusInterface    *batteryIf;
+    bool                     m_UILocked;
     BatteryImage            *batteryImage;
-    MButton               *PSMButton;
+    MButton                 *PSMButton;
     // true means we are believed to be in power save mode
-    bool                     PSMButtonToggle;
+    bool                     m_PSMButtonToggle;
     SliderContainer         *sliderContainer;
     TimeContainer           *standByTimeContainer;
     TimeContainer           *talkTimeContainer;

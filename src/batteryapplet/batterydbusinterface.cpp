@@ -6,7 +6,7 @@
 #include <QDebug>
 #include <QVariant>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 BatteryDBusInterface::BatteryDBusInterface ()
@@ -139,9 +139,10 @@ BatteryDBusInterface::setPSMValue (
 }
 
 void
-BatteryDBusInterface::setPSMAutoValue (bool toggle)
+BatteryDBusInterface::setPSMAutoValue (
+        bool toggle)
 {
-    SYS_DEBUG ("");
+    SYS_DEBUG ("*** toggle = %s", SYS_BOOL(toggle));
 
     m_DbusIf->call (QDBus::NoBlock, QString ("setPSMAutoValue"), toggle);
 }
