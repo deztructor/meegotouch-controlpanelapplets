@@ -123,6 +123,8 @@ VolumeBar::sliderChanged (int val)
 void
 VolumeBar::volumeChanged (quint32 val, quint32 max, bool init)
 {
+    Q_UNUSED (init);
+
     SYS_DEBUG ("val = %d, max = %d (, init = %s)", val, max, SYS_BOOL (init));
 
     m_bar->blockSignals (true); // to avoid busy loop
@@ -193,12 +195,6 @@ VolumeBar::hwKeyEvent (QmKeys::Key key, QmKeys::State state)
             // no-op for other hw-keys...
             return;
             break;
-    }
-
-    if (MApplication::instance ()->activeWindow ()
-        ->orientation () == M::Landscape)
-    {
-        change_val *= -1;
     }
 
     int current_volume = (int) m_logic->getVolume ();
