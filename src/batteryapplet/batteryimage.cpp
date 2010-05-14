@@ -6,7 +6,7 @@
 #include <QStringList>
 #include <MTheme>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 BatteryImage::BatteryImage (QGraphicsItem *parent) :
@@ -15,9 +15,9 @@ BatteryImage::BatteryImage (QGraphicsItem *parent) :
         m_ChargingSpeed (0),
         m_timer (NULL),
         m_batteryLevel (0),
-        m_iconCurrentSet (ICON_NORMAL)
+        m_iconCurrentSet (IconTypeUnset)
 {
-    setImage ("icon-m-energy-management-battery-low");
+    setIconSet ();
 }
 
 void
@@ -78,12 +78,11 @@ BatteryImage::~BatteryImage ()
 void
 BatteryImage::updateBatteryLevel (int level)
 {
+    SYS_DEBUG ("***************************************************");
     SYS_DEBUG ("level = %d", level);
-
     m_batteryLevel = level;
-
-    if (!charging())
-        updateImage ();
+    updateImage ();
+    SYS_DEBUG ("***************************************************");
 }
 
 void
@@ -92,10 +91,10 @@ BatteryImage::setIconSet ()
     BatteryImage::BatteryIconType type;
 
     type = ICON_NORMAL;
-    if (m_PowerSave) {
-        type = ICON_POWERSAVE;
-    } else if (charging()) {
+    if (charging()) {
         type = ICON_CHARGING;
+    } else if (m_PowerSave) {
+        type = ICON_POWERSAVE;
     }
 
     if (m_iconCurrentSet != type) {
@@ -146,37 +145,47 @@ BatteryImage::updateImage ()
         imageIndex = 7;
 }
 
+/*!
+ * \returns true if the image in charging state
+ */
 bool 
 BatteryImage::charging () const
 {
-    return m_ChargingSpeed > 0 && !m_PowerSave;
+    return m_ChargingSpeed > 0 /*&& !m_PowerSave*/;
 }
 
 void
 BatteryImage::startCharging (
 		int rate)
 {
+    SYS_DEBUG ("***************************************************");
     SYS_DEBUG ("*** rate = %d", rate);
     m_ChargingSpeed = rate;
     setIconSet ();
     maybeStartTimer ();
+    SYS_DEBUG ("***************************************************");
 }
 
 void
 BatteryImage::stopCharging ()
 {
+    SYS_DEBUG ("***************************************************");
     m_ChargingSpeed = 0;
     setIconSet ();
-    updateImage ();
+    maybeStartTimer ();
+    SYS_DEBUG ("***************************************************");
 }
 
 void
 BatteryImage::setPSMValue (
         bool    PSMEnabled)
 {
+    SYS_DEBUG ("***************************************************");
     SYS_DEBUG ("*** PSMEnabled = %s", SYS_BOOL(PSMEnabled));
     m_PowerSave = PSMEnabled;
     setIconSet ();
+    maybeStartTimer ();
+    SYS_DEBUG ("***************************************************");
 }
 
 
@@ -184,17 +193,23 @@ void
 BatteryImage::stopTimer ()
 {
     if (m_timer && m_timer->isActive()) {
-        SYS_DEBUG ("Stopping timer");
+        SYS_DEBUG ("STOPPING TIMER");
         m_timer->stop();
     }
 }
 
-void
+/*!
+ * \return true if the animation is ongoing.
+ *
+ * Start the animation if the state of the image requires it. Updates the icon
+ * once if not.
+ */
+bool
 BatteryImage::maybeStartTimer ()
 {
-    if (m_ChargingSpeed <= 0) {
-        SYS_WARNING ("Charging speed not set.");
-        return;
+    if (!charging()) {
+        updateImage ();
+        return false;
     }
 
     if (!m_timer) {
@@ -206,7 +221,10 @@ BatteryImage::maybeStartTimer ()
         stopTimer();
     }
 
+    updateImage ();
+    SYS_DEBUG ("STARTING TIMER");
     m_timer->start (m_ChargingSpeed);
+    return true;
 }
 
 const QPixmap *
@@ -217,8 +235,14 @@ BatteryImage::getPixmap (
 
     SYS_DEBUG ("*** name   = %s", SYS_STR(name));
     pixmap = MTheme::pixmapCopy (name);
-
-    SYS_DEBUG ("*** pixmap = %d, %d", pixmap->width(), pixmap->height());
+    
+    #ifdef DEBUG
+    if (pixmap->width() < 48 ||
+            pixmap->height() < 48) {
+        SYS_WARNING ("Pixmap not loaded? Size: %dx%d", 
+                pixmap->width(), pixmap->height());
+    }
+    #endif
     return pixmap;
 }
 

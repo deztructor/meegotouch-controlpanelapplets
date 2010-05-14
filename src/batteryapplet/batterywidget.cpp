@@ -176,7 +176,7 @@ void
 BatteryWidget::PSMButtonReleased ()
 {
     batteryIf->setPSMValue (!PSMButtonToggle);
-    batteryIf->PSMValueRequired ();
+    //batteryIf->PSMValueRequired ();
 }
 
 void 

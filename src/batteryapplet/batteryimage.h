@@ -10,6 +10,25 @@
 class QTimer;
 class QStringList;
 
+/*!
+ * An animated icon that shows the state of the battery. The icon has free
+ * dictinct states:
+ * (1) Using the battery.
+ * (2) Charging the battery.
+ * (3) Power save mode.
+ *
+ * The state however is controlled by several attributes:
+ * (1) Charging boolean
+ * (2) PSM enabled boolean
+ *
+ * And thus we have four combinations. here is a map that this class implements:
+ * 
+ * Charg.       PSM.       State
+ *   n           n         (1) Using the battery.
+ *   n           y         (3) Power save mode.
+ *   y           n         (2) Charging the battery.
+ *   y           y         
+ */
 class BatteryImage : public MImageWidget
 {
     Q_OBJECT
@@ -17,7 +36,8 @@ class BatteryImage : public MImageWidget
     typedef enum {
         ICON_NORMAL = 0,
         ICON_POWERSAVE,
-        ICON_CHARGING
+        ICON_CHARGING,
+        IconTypeUnset,
     } BatteryIconType;
 
 
@@ -40,7 +60,7 @@ private:
     void  setIconSet ();
 
     void  stopTimer();
-    void  maybeStartTimer();
+    bool  maybeStartTimer();
     const QPixmap *getPixmap (const QString &name);
     void loadImages (BatteryImage::BatteryIconType type);
     
