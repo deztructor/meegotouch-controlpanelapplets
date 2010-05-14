@@ -195,12 +195,6 @@ VolumeBar::hwKeyEvent (QmKeys::Key key, QmKeys::State state)
             break;
     }
 
-    if (MApplication::instance ()->activeWindow ()
-        ->orientation () == M::Landscape)
-    {
-        change_val *= -1;
-    }
-
     int current_volume = (int) m_logic->getVolume ();
     int max_volume = (int) m_logic->getMaxVolume ();
 
