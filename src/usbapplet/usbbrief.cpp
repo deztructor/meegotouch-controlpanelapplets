@@ -18,7 +18,7 @@ UsbBrief::UsbBrief (Maemo::QmUSBMode *logic) :
              this, SIGNAL (valuesChanged ()));
 }
 
-void 
+void
 UsbBrief::settingsChanged ()
 {
     emit valuesChanged ();
@@ -28,7 +28,7 @@ void
 UsbBrief::retranslateUi ()
 {
     // The translated text (valueText) may change...
-    emit valuesChanged (); 
+    emit valuesChanged ();
 }
 
 QString
@@ -54,7 +54,7 @@ UsbBrief::valueText () const
             return qtTrId ("qtn_usb_always_ask");
     }
 
-    QString currentSetting; 
+    QString currentSetting;
 
     switch (setting)
     {
@@ -73,7 +73,9 @@ UsbBrief::valueText () const
             break;
     }
 
-    if ((active == setting) && (active != QmUSBMode::Ask))
+    if ((active == setting) &&
+        ((active == QmUSBMode::OviSuite) ||
+         (active == QmUSBMode::MassStorage)))
         //% "%1 active"
         return qtTrId ("qtn_usb_active_mode").arg (currentSetting);
     else
