@@ -24,7 +24,7 @@ TestWidget::TestWidget (
 {
     createWidgets ();
     retranslateUi ();
-    readLocalThemes ();
+    createButtons ();
 }
 
 TestWidget::~TestWidget ()
@@ -78,8 +78,10 @@ TestWidget::retranslateUi ()
 }
 
 void
-TestWidget::readLocalThemes ()
+TestWidget::createButtons ()
 {
+    int x, y;
+
     Q_ASSERT (m_LocalLayoutPolicy != 0);
     QStringList titleList;
     
@@ -95,10 +97,12 @@ TestWidget::readLocalThemes ()
     int n = 0;
     foreach (QString title, titleList) {
         MButton *button;
-        int x = n / MaxColumns;
-        int y = n % MaxColumns;
+        x = n / MaxColumns;
+        y = n % MaxColumns;
 
         button = new MButton (title);
+        
+        SYS_DEBUG ("Adding page button to %d, %d", x, y);
         m_LocalLayoutPolicy->addItem (button, x, y);
 
         connect (button, SIGNAL(clicked()),
@@ -106,6 +110,18 @@ TestWidget::readLocalThemes ()
 
         ++n;
     }
+
+    MButton *backButton;
+    backButton = new MButton ("Back");
+    
+    connect (backButton, SIGNAL(clicked()),
+            this, SLOT(backClicked()));
+
+    x = n / MaxColumns;
+    y = n % MaxColumns;
+    
+    SYS_DEBUG ("Adding back button to %d, %d", x, y);
+    m_LocalLayoutPolicy->addItem (backButton, x, y);
 }
 
 
@@ -146,3 +162,9 @@ TestWidget::pagingClicked ()
     emit changeWidget (Id);
 }
 
+void 
+TestWidget::backClicked ()
+{
+    SYS_DEBUG ("");
+    back ();
+}

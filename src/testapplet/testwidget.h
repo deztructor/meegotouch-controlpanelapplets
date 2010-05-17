@@ -23,11 +23,12 @@ public:
 
 private slots:
     void pagingClicked ();
+    void backClicked ();
 
 private:
     void createWidgets ();
     MContainer *createContainer ();
-    void readLocalThemes ();
+    void createButtons ();
 
     MContainer                 *m_LocalContainer;
     MGridLayoutPolicy          *m_LocalLayoutPolicy;
