@@ -166,5 +166,5 @@ void
 TestWidget::backClicked ()
 {
     SYS_DEBUG ("");
-    back ();
+    closePage ();
 }
