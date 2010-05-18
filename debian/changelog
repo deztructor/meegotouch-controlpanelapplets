@@ -1,3 +1,9 @@
+systemui-applets (0.13.9~1) harmattan; urgency=low
+
+  * [NEW_VERSION]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 18 May 2010 07:12:59 +0200
+
 systemui-applets (0.13.8-1) harmattan; urgency=low
 
   * Display UI layout changes...
