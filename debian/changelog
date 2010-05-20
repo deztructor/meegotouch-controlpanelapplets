@@ -1,6 +1,6 @@
 systemui-applets (0.13.9~1) harmattan; urgency=low
 
-  * [NEW_VERSION]
+  * Fixes: NB#169777 - Power save mode logic problems
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 18 May 2010 07:12:59 +0200
 
