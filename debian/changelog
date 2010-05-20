@@ -1,9 +1,9 @@
-systemui-applets (0.13.9~1) harmattan; urgency=low
+systemui-applets (0.13.9-1) harmattan; urgency=low
 
   * Fixes: NB#169777 - Power save mode logic problems
   * Turn on word-wrapping for about and warranty applets
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 20 May 2010 10:47:29 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 20 May 2010 13:42:42 +0200
 
 systemui-applets (0.13.8-1) harmattan; urgency=low
 
