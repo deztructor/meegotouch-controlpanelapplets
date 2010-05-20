@@ -52,6 +52,7 @@ AboutWidget::createContent ()
      *
      */
     m_Label1 = new MLabel (labelText());
+    m_Label1->setWordWrap (true);
     
     landscapePolicy->addItem (m_Label1);
     portraitPolicy->addItem (m_Label1);
