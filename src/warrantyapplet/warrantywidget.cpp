@@ -48,6 +48,7 @@ WarrantyWidget::createContent ()
      *
      */
     label1 = new MLabel (labelText());
+    label1->setWordWrap (true);
     
     landscapePolicy->addItem (label1);
     portraitPolicy->addItem (label1);
