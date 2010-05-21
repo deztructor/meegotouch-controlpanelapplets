@@ -57,6 +57,7 @@ void DisplayWidget::initWidget ()
     brightnessPortrait->addItem (m_brightnessLabel);
 
     m_brightnessSlider = new MSlider;
+    m_brightnessSlider->setObjectName("BrightnessSlider");
     brightnessLandscape->addItem (m_brightnessSlider);
     brightnessPortrait->addItem (m_brightnessSlider);
 
@@ -73,6 +74,7 @@ void DisplayWidget::initWidget ()
 
     // Screen light
     m_screenlightCombo = new MComboBox;
+    m_screenlightCombo->setObjectName("ScreenlightCombo");
     //% "Backlight time out"
     m_screenlightCombo->setTitle (qtTrId ("qtn_disp_screenoff"));
 
@@ -103,10 +105,12 @@ void DisplayWidget::initWidget ()
 
     //% "Display stays lit when charging"
     m_blankInhibitLabel = new MLabel (qtTrId ("qtn_disp_screenon"));
+    m_blankInhibitLabel->setObjectName("BlankInhibitLabel");
     blankinhibitLayout->addItem (m_blankInhibitLabel);
 
     // Blank inhibit
     MButton *blankInhibitButton = new MButton;
+    blankInhibitButton->setObjectName("BlankInhibitButton");
     blankInhibitButton->setCheckable (true);
     blankInhibitButton->setViewType (MButton::switchType);
 
