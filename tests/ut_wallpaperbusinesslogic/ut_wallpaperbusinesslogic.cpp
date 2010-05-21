@@ -160,6 +160,10 @@ Ut_WallpaperBusinessLogic::testCurrentWallpaper ()
     QVERIFY (desc->valid());
 }
 
+/*!
+ * Checks the low level WallpaperITrans class, its tag methods and overloaded
+ * operators.
+ */
 void
 Ut_WallpaperBusinessLogic::testITrans ()
 {
@@ -207,6 +211,11 @@ Ut_WallpaperBusinessLogic::testITrans ()
     QVERIFY (trans2 * 2 == 4);
 }
 
+/*!
+ * This function will try to find the first available wallpaper that is not the
+ * current wallpaper and will set it with various image transformations. The
+ * saved images will be loaded to test the availablity and the size.
+ */
 void
 Ut_WallpaperBusinessLogic::testSetWallpapert ()
 {
@@ -283,18 +292,18 @@ Ut_WallpaperBusinessLogic::testSetWallpapert ()
 void
 Ut_WallpaperBusinessLogic::testValidImages ()
 {
-    MGConfItem   *m_LandscapeGConfItem;
-    MGConfItem   *m_PortraitGConfItem;
+    MGConfItem   *landscapeGConfItem;
+    MGConfItem   *portraitGConfItem;
     QString       landscapeFile;
     QString       portraitFile;
     QPixmap       pixmap;
     bool          success;
 
-    m_LandscapeGConfItem = new MGConfItem (LandscapeKey);
-    m_PortraitGConfItem = new MGConfItem (PortraitKey);
+    landscapeGConfItem = new MGConfItem (LandscapeKey);
+    portraitGConfItem = new MGConfItem (PortraitKey);
 
-    landscapeFile = m_LandscapeGConfItem->value().toString();
-    portraitFile = m_PortraitGConfItem->value().toString();
+    landscapeFile = landscapeGConfItem->value().toString();
+    portraitFile = portraitGConfItem->value().toString();
 
     SYS_DEBUG ("*** landscapeFile = %s", SYS_STR(landscapeFile));
     SYS_DEBUG ("*** portraitFile  = %s", SYS_STR(portraitFile));
@@ -313,6 +322,10 @@ Ut_WallpaperBusinessLogic::testValidImages ()
     SYS_DEBUG ("*** landscape size = %dx%d", pixmap.width(), pixmap.height());
     QVERIFY (pixmap.width() == 480);
     QVERIFY (pixmap.height() == 864);
+
+
+    delete landscapeGConfItem;
+    delete portraitGConfItem;
 }
 
 QTEST_APPLESS_MAIN(Ut_WallpaperBusinessLogic)
