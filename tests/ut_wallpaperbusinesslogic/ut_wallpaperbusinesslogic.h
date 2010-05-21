@@ -19,8 +19,9 @@ private slots:
     void initTestCase ();
     void cleanupTestCase ();
 
-    void testSimpleQueries ();
-
+    void testAvailableWallpapers ();
+    void testCurrentWallpaper ();
+    
 private:
     WallpaperBusinessLogic    *m_Api;
     MApplication              *m_App;
