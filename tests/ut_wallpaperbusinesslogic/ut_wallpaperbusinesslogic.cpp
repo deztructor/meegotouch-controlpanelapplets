@@ -6,11 +6,18 @@
 #include "wallpapercurrentdescriptor.h"
 #include "wallpaperitrans.h"
 
+#include <QPixmap>
+
 #include <MApplication>
+#include <MGConfItem>
 
 #define DEBUG
 #include "../../src/debug.h"
 
+static const QString PortraitKey = 
+    "/desktop/meego/background/portrait/picture_filename";
+static const QString LandscapeKey = 
+    "/desktop/meego/background/landscape/picture_filename";
 
 /******************************************************************************
  * Ut_WallpaperBusinessLogic implementation. 
@@ -200,6 +207,113 @@ Ut_WallpaperBusinessLogic::testITrans ()
     QVERIFY (trans2 * 2 == 4);
 }
 
+void
+Ut_WallpaperBusinessLogic::testSetWallpapert ()
+{
+    WallpaperITrans landscapeITrans;
+    WallpaperITrans portraitITrans;
+    QList<WallpaperDescriptor *> availableWallpapers;
+    int n;
+
+    availableWallpapers = m_Api->availableWallpapers ();
+    for (n = 0; n < availableWallpapers.size(); ++n) {
+        if (!availableWallpapers[n]->isCurrent())
+            break;
+    }
+
+    SYS_DEBUG ("*** n = %d", n);
+    if (n == availableWallpapers.size()) {
+        SYS_WARNING ("Only one image?");
+        return;
+    }
+
+    /*
+     * Testing with scale and offset set to the default.
+     */
+    // FIXME: This should not be needed...
+    landscapeITrans.setExpectedSize (QSize(864, 480));
+    portraitITrans.setExpectedSize (QSize(480, 864));
+    m_Api->setBackground (
+            &landscapeITrans,
+            &portraitITrans,
+             availableWallpapers[n]);
+
+    testValidImages ();
+
+    /*
+     * Testing with some arbitrary scale and offset images.
+     */
+    landscapeITrans.setScale (0.3);
+    portraitITrans.setScale (0.2);   
+    landscapeITrans.setOffset (QPointF(10, 20));
+    portraitITrans.setOffset (QPointF(20, 10));
+
+    m_Api->setBackground (
+            &landscapeITrans,
+            &portraitITrans,
+             availableWallpapers[n]);
+    
+    testValidImages ();
+    
+    /*
+     * Also with magnifying and negative offsets.
+     */
+    landscapeITrans.setScale (1.5);
+    portraitITrans.setScale (1.3);   
+    landscapeITrans.setOffset (QPointF(-10, -200));
+    portraitITrans.setOffset (QPointF(-800, -300));
+
+    m_Api->setBackground (
+            &landscapeITrans,
+            &portraitITrans,
+             availableWallpapers[n]);
+    
+    testValidImages ();
+}
+
+/******************************************************************************
+ * Private functions.
+ */
+
+/*!
+ * This low level function will check the GConf database, read the image file
+ * names and see if it is possible to load them. If the images can be loaded the
+ * function will test if the image sizes are correct.
+ */
+void
+Ut_WallpaperBusinessLogic::testValidImages ()
+{
+    MGConfItem   *m_LandscapeGConfItem;
+    MGConfItem   *m_PortraitGConfItem;
+    QString       landscapeFile;
+    QString       portraitFile;
+    QPixmap       pixmap;
+    bool          success;
+
+    m_LandscapeGConfItem = new MGConfItem (LandscapeKey);
+    m_PortraitGConfItem = new MGConfItem (PortraitKey);
+
+    landscapeFile = m_LandscapeGConfItem->value().toString();
+    portraitFile = m_PortraitGConfItem->value().toString();
+
+    SYS_DEBUG ("*** landscapeFile = %s", SYS_STR(landscapeFile));
+    SYS_DEBUG ("*** portraitFile  = %s", SYS_STR(portraitFile));
+
+    QVERIFY (!landscapeFile.isEmpty());
+    QVERIFY (!portraitFile.isEmpty());
+
+    success = pixmap.load (landscapeFile);
+    QVERIFY (success);
+    SYS_DEBUG ("*** landscape size = %dx%d", pixmap.width(), pixmap.height());
+    QVERIFY (pixmap.width() == 864);
+    QVERIFY (pixmap.height() == 480);
+
+    success = pixmap.load (portraitFile);
+    QVERIFY (success);
+    SYS_DEBUG ("*** landscape size = %dx%d", pixmap.width(), pixmap.height());
+    QVERIFY (pixmap.width() == 480);
+    QVERIFY (pixmap.height() == 864);
+}
 
 QTEST_APPLESS_MAIN(Ut_WallpaperBusinessLogic)
 

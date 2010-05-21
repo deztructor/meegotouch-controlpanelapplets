@@ -428,6 +428,9 @@ WallpaperBusinessLogic::makeImageFile (
     QPixmap   image;
     qreal     ratio, ratio1;
 
+    SYS_DEBUG ("*** expectedsize = %dx%d", 
+            transformations->expectedWidth(),
+            transformations->expectedHeight());
     /*
      * And this is exactly why we should move this kind of stuff into the image
      * descriptor classes.
@@ -467,6 +470,7 @@ WallpaperBusinessLogic::makeImageFile (
                 (scale * image.height ()) * ratio,
                 image);
 
+    SYS_DEBUG ("Saving file into %s", SYS_STR(filePath));
     pixmap.save (filePath);
 }
 
