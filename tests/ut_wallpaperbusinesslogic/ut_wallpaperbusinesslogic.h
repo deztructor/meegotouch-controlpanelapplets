@@ -21,6 +21,7 @@ private slots:
 
     void testAvailableWallpapers ();
     void testCurrentWallpaper ();
+    void testITrans ();
     
 private:
     WallpaperBusinessLogic    *m_Api;

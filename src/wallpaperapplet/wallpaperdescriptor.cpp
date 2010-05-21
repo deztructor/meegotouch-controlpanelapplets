@@ -120,6 +120,13 @@ WallpaperDescriptor::basename () const
     return fileInfo.baseName();
 }
 
+/*!
+ * \returns The filename extension of the filename. 
+ *
+ * The filename extension is used when the applet creates a new file to save the
+ * edited image. The edited file will use the same extension used in the
+ * original filename.
+ */
 QString
 WallpaperDescriptor::extension () const 
 {

@@ -4,6 +4,7 @@
 
 #include "wallpaperbusinesslogic.h"
 #include "wallpapercurrentdescriptor.h"
+#include "wallpaperitrans.h"
 
 #include <MApplication>
 
@@ -151,6 +152,54 @@ Ut_WallpaperBusinessLogic::testCurrentWallpaper ()
     QVERIFY (desc->isCurrent());
     QVERIFY (desc->valid());
 }
+
+void
+Ut_WallpaperBusinessLogic::testITrans ()
+{
+    WallpaperITrans trans1, trans2;
+
+    SYS_DEBUG ("Checking default values of WallpaperITrans...");
+    QVERIFY (trans1.x() == 0);
+    QVERIFY (trans1.y() == 0);
+    QVERIFY (trans1.scale() == 1.0);
+    QVERIFY (trans1.orientation() == M::Landscape);
+
+    SYS_DEBUG ("Checking the set functions...");
+    trans2.setOffset (QPointF(10, 11));
+    trans2.setScale (2.0);
+    trans2.setOrientation (M::Portrait);
+    trans2.setExpectedSize (QSize(864, 480));
+
+    QVERIFY (trans2.x() == 10);
+    QVERIFY (trans2.y() == 11);
+    QVERIFY (trans2.scale() == 2.0);
+    QVERIFY (trans2.orientation() == M::Portrait);
+    QVERIFY (trans2.expectedWidth() == 864);
+    QVERIFY (trans2.expectedHeight() == 480);
+
+    SYS_DEBUG ("Testing the copy constructor.");
+    WallpaperITrans trans3 (trans2);
+    QVERIFY (trans3.x() == 10);
+    QVERIFY (trans3.y() == 11);
+    QVERIFY (trans3.scale() == 2.0);
+    QVERIFY (trans3.orientation() == M::Portrait);
+    QVERIFY (trans3.expectedWidth() == 864);
+    QVERIFY (trans3.expectedHeight() == 480);
+
+    SYS_DEBUG ("testing operator=...");
+    trans1 = trans2;
+    QVERIFY (trans1.x() == 10);
+    QVERIFY (trans1.y() == 11);
+    QVERIFY (trans1.scale() == 2.0);
+    QVERIFY (trans1.orientation() == M::Portrait);
+    QVERIFY (trans1.expectedWidth() == 864);
+    QVERIFY (trans1.expectedHeight() == 480);
+
+    SYS_DEBUG ("Testing operator*...");
+    SYS_DEBUG ("*** trans1.scale() = %d", trans2 * 2);
+    QVERIFY (trans2 * 2 == 4);
+}
+
 
 QTEST_APPLESS_MAIN(Ut_WallpaperBusinessLogic)
 
