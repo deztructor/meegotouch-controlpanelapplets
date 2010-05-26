@@ -3,8 +3,10 @@ systemui-applets (0.13.9~2) harmattan; urgency=low
   * Fixes: NB#170573 - Value text of USB item shows 'Always ask - Always ask
     Active' instead of 'Always ask, Mass storage mode/Ovi Suite mode Active'
     when connected in 'Mass storage/Ovi Suite mode'.
+  * Fixes: NB#170685 - Volume slider colors are strange when listening music
+    and receiving call
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 26 May 2010 08:26:41 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 26 May 2010 12:04:00 +0200
 
 systemui-applets (0.13.9-1) harmattan; urgency=low
 
