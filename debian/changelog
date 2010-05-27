@@ -5,8 +5,10 @@ systemui-applets (0.13.9~2) harmattan; urgency=low
     when connected in 'Mass storage/Ovi Suite mode'.
   * Fixes: NB#170685 - Volume slider colors are strange when listening music
     and receiving call
+  * Fixes: NB#170813 - Volume indicator is displayed if SMS notification
+    appears for the first time after start
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 26 May 2010 12:04:00 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 27 May 2010 14:51:47 +0200
 
 systemui-applets (0.13.9-1) harmattan; urgency=low
 
