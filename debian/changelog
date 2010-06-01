@@ -9,7 +9,7 @@ systemui-applets (0.14.1-1) harmattan; urgency=low
     appears for the first time after start
   * Fixes: NB#171609 - Making phone call always shows volumebar 
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 01 Jun 2010 14:26:06 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 01 Jun 2010 15:20:43 +0200
 
 systemui-applets (0.13.9-1) harmattan; urgency=low
 
