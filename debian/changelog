@@ -1,4 +1,4 @@
-systemui-applets (0.13.9~2) harmattan; urgency=low
+systemui-applets (0.14.1-1) harmattan; urgency=low
 
   * Fixes: NB#170573 - Value text of USB item shows 'Always ask - Always ask
     Active' instead of 'Always ask, Mass storage mode/Ovi Suite mode Active'
@@ -7,8 +7,9 @@ systemui-applets (0.13.9~2) harmattan; urgency=low
     and receiving call
   * Fixes: NB#170813 - Volume indicator is displayed if SMS notification
     appears for the first time after start
+  * Fixes: NB#171609 - Making phone call always shows volumebar 
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 27 May 2010 14:51:47 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 01 Jun 2010 10:46:17 +0200
 
 systemui-applets (0.13.9-1) harmattan; urgency=low
 
