@@ -41,6 +41,7 @@ signals:
 
 public:
     QString getCurrentProfileName ();
+    QString getCurrentProfileIconId ();
     int getCurrentProfile ();
     QList<ProfileData> getProfilesData ();
     void setVibration (int id, bool value);

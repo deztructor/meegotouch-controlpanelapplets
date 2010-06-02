@@ -45,6 +45,18 @@ ProfileDataInterface::getCurrentProfileName ()
     return id2Name (prof);
 }
 
+QString 
+ProfileDataInterface::getCurrentProfileIconId ()
+{
+    SYS_DEBUG ("");
+
+    #ifdef USE_TEST_DATA
+    return "Ringing";
+    #endif
+
+    return mapId2IconID (getCurrentProfile());
+}
+
 void 
 ProfileDataInterface::currentProfileNameChanged (
         const QString &prof)

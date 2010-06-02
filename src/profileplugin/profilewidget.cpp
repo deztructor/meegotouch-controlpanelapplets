@@ -52,40 +52,24 @@ ProfileWidget::ProfileWidget (
              this, SLOT (loadTranslation ()));
     loadTranslation ();
 
-    setText(qtTrId ("qtn_prof_silent"));
     setViewType(MButton::iconType);
     setObjectName("StatusIndicatorMenuTopRowExtensionButton");
-    setIconID("icon-m-profile-silent");
     connect(this, SIGNAL(clicked()), this, SLOT(showProfileDialog()));
-
-/*    MApplication  *App = MApplication::instance ();
-
-    Q_UNUSED(statusIndicatorMenu);
-    dataIf = new ProfileDataInterface ();
-
-    QGraphicsLinearLayout *mainLayout =
-        new QGraphicsLinearLayout (Qt::Vertical);
-
-    setLayout (mainLayout);
-    mainLayout->setContentsMargins (0, 0, 0, 0);
-
-    connect (App, SIGNAL (localeSettingsChanged ()),
-             this, SLOT (loadTranslation ()));
-    loadTranslation ();
-
-    // Create a container for the profiles
-    initProfileButtons ();
-
     connect (dataIf, SIGNAL (currentProfile (int)),
-             profileButtons, SLOT (selectProfile (int)));
-
-    mainLayout->addItem (profileButtons);*/
+             this, SLOT (profileChanged ()));
+    profileChanged();
 }
 
 ProfileWidget::~ProfileWidget ()
 {
     delete dataIf;
     dataIf = NULL;
+}
+
+void ProfileWidget::profileChanged()
+{
+    setText(dataIf->getCurrentProfileName());
+    setIconID(dataIf->getCurrentProfileIconId());
 }
 
 void ProfileWidget::showProfileDialog()
@@ -99,11 +83,9 @@ void ProfileWidget::showProfileDialog()
     connect (dataIf, SIGNAL (currentProfile (int)),
              profileButtons, SLOT (selectProfile (int)));
 
-SYS_DEBUG("running");
     // Show the dialog
     dialog->exec();
 
-SYS_DEBUG("runningover");
     // Hide the status indicator menu
     if (MStatusIndicatorMenuInterface *menu = plugin->statusIndicatorMenuInterface())
     {

@@ -31,6 +31,12 @@ private slots:
      */
     void showProfileDialog();
 
+    /*!
+     * \brief Changes the button according to current profile
+     */
+    void profileChanged();
+
+
 
     /*!
      * \brief A slot for reloading the translations on locale-change
