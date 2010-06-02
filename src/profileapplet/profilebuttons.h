@@ -3,11 +3,11 @@
 #ifndef PROFILEBUTTONS_H
 #define PROFILEBUTTONS_H
 
-#include <MContainer>
+#include <MWidget>
 
 class MButtonGroup;
 
-class ProfileButtons : public MContainer
+class ProfileButtons : public MWidget
 {
     Q_OBJECT
 
@@ -28,7 +28,7 @@ signals:
 
 private:
     void addButton(QString iconID, QString name, int id, bool checked);
-    void setLayout();
+    void createLayout();
 
 private:
     MButtonGroup *m_Buttons;

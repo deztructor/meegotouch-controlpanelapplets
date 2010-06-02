@@ -17,6 +17,7 @@
 #include "profilewidget.h"
 #include "profiledatainterface.h"
 #include "profilebuttons.h"
+#include "profileplugin.h"
 
 #undef DEBUG
 #include "../debug.h"
@@ -31,17 +32,17 @@
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 #include <MLocale>
-#include <MStatusIndicatorMenuPluginInterface>
+#include <MStatusIndicatorMenuExtensionInterface>
 
 #include <QGraphicsLinearLayout>
 
 #define SYSTEMUI_TRANSLATION "systemui-applets"
 
 ProfileWidget::ProfileWidget (
-    MStatusIndicatorMenuInterface *statusIndicatorMenu,
+    ProfilePlugin *profilePlugin,
     QGraphicsItem *parent) :
         MButton (parent),
-        statusIndicatorMenu (statusIndicatorMenu),
+        plugin (profilePlugin),
         dataIf (0),
         profileButtons (0)
 {
@@ -50,9 +51,6 @@ ProfileWidget::ProfileWidget (
     connect (App, SIGNAL (localeSettingsChanged ()),
              this, SLOT (loadTranslation ()));
     loadTranslation ();
-    connect (dataIf, SIGNAL (currentProfile (int)),
-             profileButtons, SLOT (selectProfile (int)));
-
 
     setText(qtTrId ("qtn_prof_silent"));
     setViewType(MButton::iconType);
@@ -97,13 +95,19 @@ void ProfileWidget::showProfileDialog()
 
     initProfileButtons();
     dialog->setCentralWidget(profileButtons);
+    profileButtons->connect(profileButtons, SIGNAL(profileSelected(int)), dialog, SLOT(accept()));
+    connect (dataIf, SIGNAL (currentProfile (int)),
+             profileButtons, SLOT (selectProfile (int)));
 
+SYS_DEBUG("running");
     // Show the dialog
     dialog->exec();
 
+SYS_DEBUG("runningover");
     // Hide the status indicator menu
-    if(statusIndicatorMenu) {
-        statusIndicatorMenu->hideStatusIndicatorMenu();
+    if (MStatusIndicatorMenuInterface *menu = plugin->statusIndicatorMenuInterface())
+    {
+        menu->hideStatusIndicatorMenu();
     }
 }
 void
@@ -120,8 +124,6 @@ ProfileWidget::initProfileButtons ()
     }
     profileButtons->init (map, dataIf->getCurrentProfile ());
 
-    connect (profileButtons, SIGNAL (headerClicked ()),
-             this, SLOT (showProfileModificationPage ()));
     connect (profileButtons, SIGNAL (profileSelected (int)),
              dataIf, SLOT (setProfile (int)));
 }
@@ -155,8 +157,6 @@ ProfileWidget::retranslateUi ()
         return;
 
     SYS_DEBUG ("");
-
-    profileButtons->setTitle (qtTrId ("qtn_prof_profile"));
 
     QMap<int, QString> map;
     QList<ProfileDataInterface::ProfileData> l = dataIf->getProfilesData ();

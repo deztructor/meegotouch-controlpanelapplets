@@ -36,7 +36,7 @@ MStatusIndicatorMenuInterface *ProfilePlugin::statusIndicatorMenuInterface() con
 // Methods derived from MApplicationExtensionInterface
 bool ProfilePlugin::initialize(const QString &)
 {
-    profile = new ProfileWidget(statusIndicatorMenu);
+    profile = new ProfileWidget(this);
 
     return true;
 }

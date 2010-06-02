@@ -6,6 +6,7 @@
 class MStatusIndicatorMenuInterface;
 class ProfileDataInterface;
 class ProfileButtons;
+class ProfilePlugin;
 
 /*!
  * The Profile widget makes it possible to select the currently
@@ -16,7 +17,7 @@ class ProfileWidget : public MButton
     Q_OBJECT
 
 public:
-    ProfileWidget (MStatusIndicatorMenuInterface *statusIndicatorMenu,
+    ProfileWidget (ProfilePlugin *plugin,
                    QGraphicsItem *parent = NULL);
     virtual ~ProfileWidget ();
     /*!
@@ -44,7 +45,7 @@ private:
 
 private:
     //! Interface for controlling the status indicator menu
-    MStatusIndicatorMenuInterface *statusIndicatorMenu;
+    ProfilePlugin *plugin;
 
     //! Profile data If to receive information about possible profiles
     ProfileDataInterface            *dataIf;

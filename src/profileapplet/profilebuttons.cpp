@@ -8,6 +8,7 @@
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 #include <MGridLayoutPolicy>
+#include <QGraphicsLinearLayout>
 
 #undef DEBUG
 #include "../debug.h"
@@ -16,7 +17,7 @@ static const int nButtonColumns = 2;
 
 ProfileButtons::ProfileButtons (
         MWidget *parent) :
-    MContainer (parent),
+    MWidget (parent),
     m_Buttons (0)
 {
 }
@@ -41,7 +42,7 @@ ProfileButtons::init (
         addButton (data.value(id).first, data.value(id).second ,id, (currentId == id));
         SYS_DEBUG ("id = %d, value = %s", id, SYS_STR (data.value (id)));
     }
-    setLayout();
+    createLayout();
 }
 
 void
@@ -107,37 +108,17 @@ ProfileButtons::selectedProfileName ()
  * buttons from m_Buttons and sets a portrait and a landscape layout for them.
  */
 void 
-ProfileButtons::setLayout ()
+ProfileButtons::createLayout ()
 {
-    MLayout              *layout;
-    MLinearLayoutPolicy  *landscapePolicy;
-    MGridLayoutPolicy    *portraitPolicy;
+    QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(Qt::Vertical);
     QList<MButton*>       buttonList = m_Buttons->buttons();
-    int                     col = 0;
-    int                     row = 0;
-
-    layout = new MLayout();
-
-    landscapePolicy = new MLinearLayoutPolicy(layout, Qt::Vertical);
-    layout->setLandscapePolicy(landscapePolicy); // ownership transferred
-
-    portraitPolicy = new MGridLayoutPolicy(layout);
-    layout->setPortraitPolicy(portraitPolicy); // ownership transferred
 
     // Storing the buttons in the layout. 
     for (int i = 0; i < buttonList.size(); ++i) {
-        SYS_DEBUG ("Adding button at %d, %d", col, row);
-        landscapePolicy->addItem (buttonList[i]);
-        portraitPolicy->addItem(buttonList[i], row, col);
-
-        ++col;
-        if (col >= nButtonColumns) {
-            ++row;
-            col = 0;
-        }
+        layout->addItem (buttonList[i]);
     }
 
-    centralWidget()->setLayout (layout);
+    setLayout (layout);
 }
 
 void
