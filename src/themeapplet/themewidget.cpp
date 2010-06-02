@@ -21,7 +21,8 @@ ThemeWidget::ThemeWidget (
     DcpWidget (parent),
     m_ThemeBusinessLogic (themeBusinessLogic),
     m_ThemeListModel(0),
-    m_List(0)
+    m_List(0),
+    m_OviItem(0)
 {
     createWidgets ();
     retranslateUi ();
@@ -42,7 +43,13 @@ ThemeWidget::createWidgets ()
     ThemeCellCreator *cellCreator = new ThemeCellCreator();
     m_List->setCellCreator(cellCreator);
 
+    m_OviItem = new MContentItem(MContentItem::IconAndSingleTextLabel);
+    const QPixmap *oviIcon = MTheme::pixmap("icon-m-common-ovi-store");
+    m_OviItem->setPixmap(*oviIcon);
+    m_OviItem->setObjectName("OviItem");
+
     mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    mainLayout->addItem (m_OviItem);
     mainLayout->addItem (m_List);
 
     this->setLayout (mainLayout);
@@ -51,6 +58,8 @@ ThemeWidget::createWidgets ()
 void
 ThemeWidget::retranslateUi ()
 {
+    //% "Get more from Ovi Store"
+    m_OviItem->setTitle(qtTrId("qtn_teme_store"));
 }
 
 /**

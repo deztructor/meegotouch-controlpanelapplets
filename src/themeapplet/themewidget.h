@@ -37,6 +37,7 @@ private:
     ThemeListModel *m_ThemeListModel;
     QList<ThemeDescriptor *> m_ThemeDescList;
     MList *m_List;
+    MContentItem *m_OviItem;
 };
 
 #endif
