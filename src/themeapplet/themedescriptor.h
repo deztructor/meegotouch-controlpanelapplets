@@ -36,7 +36,7 @@ private:
     QString           m_CodeName;
     QString           m_Name;
     QString           m_IconName;
-    MDesktopEntry  *m_DesktopEntry;
+    MDesktopEntry    *m_DesktopEntry;
 };
 
 #endif

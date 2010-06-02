@@ -19,10 +19,10 @@ HEADERS = \
     themedescriptor.h \
     themebusinesslogic.h \
     themeapplet.h \
-    themelistcontainer.h \
+    themelistmodel.h \
     themewidget.h \
     themebrief.h \
-    themecontentitem.h \
+    themecellcreator.h \
     themedialog.h
 
 SOURCES = \
@@ -30,10 +30,10 @@ SOURCES = \
     themedescriptor.cpp \
     themebusinesslogic.cpp \
     themeapplet.cpp \
-    themelistcontainer.cpp \
+    themelistmodel.cpp \
     themewidget.cpp \
     themebrief.cpp \
-    themecontentitem.cpp \
+    themecellcreator.cpp \
     themedialog.cpp
 
 DESTDIR = lib

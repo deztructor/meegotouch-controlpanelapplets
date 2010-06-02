@@ -4,14 +4,15 @@
 #define THEMEWIDGET_H
 
 #include <QPointer>
+#include <QModelIndex>
 #include <MContentItem>
 #include <dcpwidget.h>
 
 #include "themebusinesslogic.h"
 #include "themedescriptor.h"
+#include "themelistmodel.h"
 
-class ThemeListContainer;
-class MContainer;
+class MList;
 
 class ThemeWidget : public DcpWidget
 {
@@ -25,22 +26,17 @@ public:
 
     void retranslateUi ();
 
-    typedef enum {
-        ThemeLocal,
-        ThemeOvi
-    } ThemeCategoryId;
-
 private slots:
-    void themeActivated(ThemeDescriptor *themeDescr);
+    void themeActivated(const QModelIndex &index);
 
 private:
     void createWidgets ();
-    MContainer *createContainer (ThemeWidget::ThemeCategoryId category);
     void readLocalThemes ();
 
     QPointer<ThemeBusinessLogic>  m_ThemeBusinessLogic;
-    ThemeListContainer           *m_LocalContainer;
-    ThemeListContainer           *m_OviContainer;
+    ThemeListModel *m_ThemeListModel;
+    QList<ThemeDescriptor *> m_ThemeDescList;
+    MList *m_List;
 };
 
 #endif
