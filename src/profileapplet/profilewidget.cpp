@@ -57,7 +57,7 @@ ProfileWidget::initWidget ()
 void 
 ProfileWidget::initProfiles ()
 {
-    QMap<int, QString> map;
+    QMap<int, QPair<QString, QString> > map;
     QList<ProfileDataInterface::ProfileData> l = m_ProfileIf->getProfilesData();
     
     SYS_DEBUG ("We have %d profiles.", l.count());
@@ -67,7 +67,7 @@ ProfileWidget::initProfiles ()
         ProfileDataInterface::ProfileData d = l.at(i);
         ProfileContainer* cont = new ProfileContainer(
             d.profileId,
-            d.profileName,
+            d.visualData.second,
             d.volumeLevel,
             d.vibrationEnabled);
         connect (cont, SIGNAL(sliderValueChanged(int)), 
@@ -76,7 +76,7 @@ ProfileWidget::initProfiles ()
                 this, SLOT(vibrationChanged(bool)));
         m_Containers.insert(d.profileId, cont);
 
-        map.insert(d.profileId, d.profileName);
+        map.insert(d.profileId, d.visualData);
     }
 
     m_ProfileButtons->init (map, m_ProfileIf->getCurrentProfile());
@@ -258,9 +258,9 @@ ProfileWidget::retranslateUi ()
         ProfileDataInterface::ProfileData d = l.at (i);
 
         // Update the containers title field
-        m_Containers.value (d.profileId)->setTitle (d.profileName);
+        m_Containers.value (d.profileId)->setTitle (d.visualData.second);
 
-        map.insert(d.profileId, d.profileName);
+        map.insert(d.profileId, d.visualData.second);
     }
 
     // Re-translate the profile buttons

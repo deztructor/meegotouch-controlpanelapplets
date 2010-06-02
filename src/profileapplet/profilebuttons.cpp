@@ -28,7 +28,7 @@ ProfileButtons::~ProfileButtons()
 
 void 
 ProfileButtons::init (
-        QMap<int, QString> data, 
+        QMap<int, QPair<QString, QString> > data, 
         int currentId)
 {
     m_Buttons = new MButtonGroup();
@@ -38,7 +38,7 @@ ProfileButtons::init (
     QList<int> ids = data.keys();
     for (int i = 0; i < data.count(); ++i) {
         int id = ids.at(i);
-        addButton (data.value(id), id, (currentId == id));
+        addButton (data.value(id).first, data.value(id).second ,id, (currentId == id));
         SYS_DEBUG ("id = %d, value = %s", id, SYS_STR (data.value (id)));
     }
     setLayout();
@@ -46,11 +46,12 @@ ProfileButtons::init (
 
 void
 ProfileButtons::addButton (
+        QString   iconId,
         QString   name, 
         int       id, 
         bool      checked)
 {
-    MButton *button = new MButton (name);
+    MButton *button = new MButton (iconId, name);
     button->setCheckable (true);
     button->setChecked (checked);
     m_Buttons->addButton (button, id);
@@ -117,7 +118,7 @@ ProfileButtons::setLayout ()
 
     layout = new MLayout();
 
-    landscapePolicy = new MLinearLayoutPolicy(layout, Qt::Horizontal);
+    landscapePolicy = new MLinearLayoutPolicy(layout, Qt::Vertical);
     layout->setLandscapePolicy(landscapePolicy); // ownership transferred
 
     portraitPolicy = new MGridLayoutPolicy(layout);
