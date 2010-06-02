@@ -3,7 +3,7 @@ systemui-applets (0.14.2~1) harmattan; urgency=low
   * Drop volume-control from this package
     (moved to system-ui)
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 02 Jun 2010 09:27:51 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 02 Jun 2010 12:55:44 +0200
 
 systemui-applets (0.14.1-1) harmattan; urgency=low
 
