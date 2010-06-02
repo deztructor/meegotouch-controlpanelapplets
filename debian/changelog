@@ -1,3 +1,9 @@
+systemui-applets (0.14.2~1) harmattan; urgency=low
+
+  *  [NEW VERSION]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 02 Jun 2010 09:27:51 +0200
+
 systemui-applets (0.14.1-1) harmattan; urgency=low
 
   * Fixes: NB#170573 - Value text of USB item shows 'Always ask - Always ask
