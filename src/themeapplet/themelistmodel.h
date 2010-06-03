@@ -24,7 +24,7 @@ class ThemeListModel : public QAbstractListModel
         int rowCount(const QModelIndex &parent = QModelIndex()) const;
         QVariant data(const QModelIndex &index, int role=Qt::DisplayRole) const;
         void setThemeList(const QList<ThemeDescriptor *> &themeList);
-        QModelIndex indexOfCodeName(const QString &codeName);
+        QModelIndex indexOfCodeName(const QString &codeName) const;
 
     private:
         QList<QStringList> m_Rows;
