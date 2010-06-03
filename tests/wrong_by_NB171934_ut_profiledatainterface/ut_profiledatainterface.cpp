@@ -64,8 +64,10 @@ Ut_ProfileDataInterface::testGetProfilesData ()
 
     foreach (ProfileDataInterface::ProfileData item, list) {
         qDebug() << "----------------------------------------------";
-        qDebug() << "profile[" << n << "].name        = " <<
-            item.profileName;
+        qDebug() << "profile[" << n << "].visualData.second        = " <<
+            item.visualData.second;
+        qDebug() << "profile[" << n << "].visualData.first        = " <<
+            item.visualData.first;
         qDebug() << "profile[" << n << "].id          = " <<
             item.profileId;
         qDebug() << "profile[" << n << "].volumeLevel = " <<
@@ -120,7 +122,7 @@ Ut_ProfileDataInterface::testSetVibration ()
     list = m_Api->getProfilesData ();
     foreach (ProfileDataInterface::ProfileData item, list) {
         if (item.vibrationEnabled)
-            qDebug() << "Vibration for " << item.profileName << " is " <<
+            qDebug() << "Vibration for " << item.visualData.second << " is " <<
                 (item.vibrationEnabled ? "enabled" : "disabled") <<
                 "(should be disabled)";
 
@@ -138,7 +140,7 @@ Ut_ProfileDataInterface::testSetVibration ()
     list = m_Api->getProfilesData ();
     foreach (ProfileDataInterface::ProfileData item, list) {
         if (!item.vibrationEnabled)
-            qDebug() << "Vibration for " << item.profileName << " is " <<
+            qDebug() << "Vibration for " << item.visualData.second << " is " <<
                 (item.vibrationEnabled ? "enabled" : "disabled") <<
                 "(should be enabled)";
 

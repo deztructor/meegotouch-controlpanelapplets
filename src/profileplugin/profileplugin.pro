@@ -31,7 +31,7 @@ SOURCES = profileplugin.cpp \
           ../debug.cpp
 
 desktop_entry.path = /usr/share/meegotouch/applicationextensions
-desktop_entry.files = *.desktop
+desktop_entry.files = statusindicatormenu-profile.desktop
 
 TARGET        = $$qtLibraryTarget(statusindicatormenu-profile)
 DESTDIR       = lib

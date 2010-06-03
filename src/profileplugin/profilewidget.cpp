@@ -46,6 +46,7 @@ ProfileWidget::ProfileWidget (
         dataIf (0),
         profileButtons (0)
 {
+    SYS_DEBUG ("");
     MApplication  *App = MApplication::instance ();
     dataIf = new ProfileDataInterface ();
     connect (App, SIGNAL (localeSettingsChanged ()),
@@ -62,6 +63,7 @@ ProfileWidget::ProfileWidget (
 
 ProfileWidget::~ProfileWidget ()
 {
+    SYS_DEBUG ("");
     delete dataIf;
     dataIf = NULL;
 }
@@ -80,9 +82,6 @@ void ProfileWidget::showProfileDialog()
     initProfileButtons();
     dialog->setCentralWidget(profileButtons);
     profileButtons->connect(profileButtons, SIGNAL(profileSelected(int)), dialog, SLOT(accept()));
-    connect (dataIf, SIGNAL (currentProfile (int)),
-             profileButtons, SLOT (selectProfile (int)));
-
     // Show the dialog
     dialog->exec();
 
@@ -95,6 +94,8 @@ void ProfileWidget::showProfileDialog()
 void
 ProfileWidget::initProfileButtons ()
 {
+    if (profileButtons)
+        return;
     profileButtons = new ProfileButtons ();
     //% "Profiles"
     QMap<int, QPair<QString, QString> > map;
@@ -106,6 +107,8 @@ ProfileWidget::initProfileButtons ()
     }
     profileButtons->init (map, dataIf->getCurrentProfile ());
 
+    connect (dataIf, SIGNAL (currentProfile (int)),
+             profileButtons, SLOT (selectProfile (int)));
     connect (profileButtons, SIGNAL (profileSelected (int)),
              dataIf, SLOT (setProfile (int)));
 }

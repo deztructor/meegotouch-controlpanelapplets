@@ -1,1 +1,2 @@
-usr/lib/meegotouch/statusindicatormenuplugins/libprofile.so
+usr/lib/meegotouch/applicationextensions/libstatusindicatormenu-profile.so
+usr/share/meegotouch/applicationextensions/statusindicatormenu-profile.desktop
