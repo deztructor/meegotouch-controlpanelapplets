@@ -18,8 +18,10 @@ private slots:
     void cleanup ();
     void initTestCase ();
     void cleanupTestCase ();
+    // The testcases
 
     void testprofileplugin ();
+//    void testvolumeplugin ();
 
 private:
     MApplication                    *m_app;
