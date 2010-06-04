@@ -1,4 +1,4 @@
-systemui-applets (0.14.2~1) harmattan; urgency=low
+systemui-applets (0.14.3~1) harmattan; urgency=low
 
   [ David Kedves ]
   * Drop volume-control from this package
@@ -8,7 +8,10 @@ systemui-applets (0.14.2~1) harmattan; urgency=low
   * Theme applet ui update.
     Fixes: NB#170758 - Indicating the selected Theme item is incorrect
 
- -- Viktor Nagy <viktor.nagy@blumsoft.eu>  Thu, 03 Jun 2010 11:12:13 +0200
+  [ David Kedves ]
+  * Version bump
+
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 04 Jun 2010 11:46:21 +0200
 
 systemui-applets (0.14.1-1) harmattan; urgency=low
 

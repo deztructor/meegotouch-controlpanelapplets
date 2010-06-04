@@ -150,7 +150,8 @@ ProfileButtons::retranslate (QMap<int, QString> data)
     for (int i = 0; i < data.count(); ++i)
     {
         int id = ids.at (i);
-        m_Buttons->button (id)->setText (data.value (id));
+        if (m_Buttons->button (id) != 0)
+            m_Buttons->button (id)->setText (data.value (id));
     }
 }
 
