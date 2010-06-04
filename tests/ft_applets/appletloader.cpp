@@ -8,11 +8,7 @@
 #include <dcpbrief.h>
 #include <dcpwidget.h>
 
-#ifndef DCP_APPLET_LOADER_DEPRECATED
-#include <dcpappletloader.h>
-#else
 #include <dcpappletplugin.h>
-#endif
 
 #define DESKTOP_PATH "/usr/lib/duicontrolpanel/"
 
@@ -52,15 +48,11 @@ Ft_AppletLoader::cleanupTestCase ()
  * described in the deaktop file.
  */
 void
-Ft_AppletLoader::DoAppletTest (const char *desktopfile)
+Ft_AppletLoader::DoAppletTest (const char *desktopfile, bool hasBrief)
 {
     DcpAppletMetadata metadata(QString (DESKTOP_PATH) + QString (desktopfile));
 
-#ifndef DCP_APPLET_LOADER_DEPRECATED
-    DcpAppletLoader loader (&metadata);
-#else
     DcpAppletPlugin loader (&metadata);
-#endif
 
     /*
      * Getting the DcpAppletIf applet interface object. Checking if the applet
@@ -78,8 +70,12 @@ Ft_AppletLoader::DoAppletTest (const char *desktopfile)
      * Checking if the applet brief is constructed.
      */
     DcpBrief *brief = applet->constructBrief ();
-    QVERIFY2(brief, 
+    if (hasBrief)
+        QVERIFY2(brief, 
 		    "Error when creating brief widget");
+    else
+        QVERIFY2(!brief, 
+		    "This applet should not have a Brief");
 
     /*
      * Checking if the the main view (the applet widget) is constructed. FIXME:
@@ -97,49 +93,49 @@ Ft_AppletLoader::DoAppletTest (const char *desktopfile)
 void
 Ft_AppletLoader::testbatteryapplet ()
 {
-    DoAppletTest ("battery.desktop");
+    DoAppletTest ("battery.desktop", true);
 }
 
 void
 Ft_AppletLoader::testdisplayapplet ()
 {
-    DoAppletTest ("display.desktop");
+    DoAppletTest ("display.desktop", true);
 }
 
 void
 Ft_AppletLoader::testprofileapplet ()
 {
-    DoAppletTest ("profile.desktop");
+    DoAppletTest ("profile.desktop", false);
 }
 
 void
 Ft_AppletLoader::testusbapplet ()
 {
-    DoAppletTest ("usbapplet.desktop");
+    DoAppletTest ("usbapplet.desktop", true);
 }
 
 void
 Ft_AppletLoader::testresetapplet ()
 {
-    DoAppletTest ("reset.desktop");
+    DoAppletTest ("reset.desktop", true);
 }
 
 void
 Ft_AppletLoader::testaboutapplet ()
 {
-    DoAppletTest ("about.desktop");
+    DoAppletTest ("about.desktop", true);
 }
 
 void
 Ft_AppletLoader::testthemeapplet ()
 {
-    DoAppletTest ("theme.desktop");
+    DoAppletTest ("theme.desktop", true);
 }
 
 void
 Ft_AppletLoader::testwallpaperapplet ()
 {
-    DoAppletTest ("wallpaper.desktop");
+    DoAppletTest ("wallpaper.desktop", true);
 }
 
 QTEST_APPLESS_MAIN(Ft_AppletLoader)
