@@ -60,10 +60,6 @@ QString ProfileApplet::title() const
 QVector<MAction*> ProfileApplet::viewMenuItems()
 {
     QVector<MAction*> vector;
-    //% "Help"
-    MAction* helpAction = new MAction (qtTrId ("qtn_comm_help"), pageMain ());
-    vector.append(helpAction);
-    helpAction->setLocation(MAction::ApplicationMenuLocation);
     return vector;
 }
 
@@ -72,5 +68,5 @@ ProfileApplet::constructBrief (
         int partId)
 {
     Q_UNUSED (partId);
-    return new ProfileBrief (m_Api);
+    return 0;
 }
