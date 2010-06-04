@@ -26,7 +26,6 @@ public:
     struct ProfileData {
         ProfileId                 profileId;
         QPair<QString, QString>   visualData;       /*< IconId, profilenam(translated) pair */
-        int                       volumeLevel;
         bool                      vibrationEnabled;
         bool                      isActive;
     };
@@ -37,7 +36,6 @@ public:
 signals:
     void currentProfile (int id);
     void vibrationValue (int id, bool value);
-    void volumeLevel (int id, int value);
 
 public:
     QString getCurrentProfileName ();
@@ -45,7 +43,6 @@ public:
     int getCurrentProfile ();
     QList<ProfileData> getProfilesData ();
     void setVibration (int id, bool value);
-    void setVolumeLevel (int id, int value);
 
 public slots:
     void setProfile (int value);
@@ -54,7 +51,6 @@ private slots:
     void currentProfileNameChanged (const QString &prof);
 
 private:
-    int checkSilent (int id, int level);
     static ProfileId mapId (const QString &id);
     static QString mapId (int id);
     static QString id2Name (const QString &id);

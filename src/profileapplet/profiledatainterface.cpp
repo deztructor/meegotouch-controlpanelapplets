@@ -93,9 +93,7 @@ ProfileDataInterface::getProfilesData ()
         d.profileId = mapId (id);
         d.visualData.first = mapId2IconID (d.profileId);
         d.visualData.second = id2Name (id);
-        d.volumeLevel = checkSilent (
-                d.profileId, m_ProfileAPI->volumeLevel(id));
-        d.vibrationEnabled = m_ProfileAPI->isVibrationEnabled (id);
+       d.vibrationEnabled = m_ProfileAPI->isVibrationEnabled (id);
         data.append(d);
     }
     SYS_DEBUG ("data.count () = %d", data.count ());
@@ -109,7 +107,6 @@ ProfileDataInterface::getProfilesData ()
         d.profileId = ProfileIdRinging;
         d.visualData.second = "Ringing";
         d.visualData.first = "ringing-icon";
-        d.volumeLevel = 10;
         d.vibrationEnabled = false;
         data.append (d);
     } {
@@ -119,7 +116,6 @@ ProfileDataInterface::getProfilesData ()
         d.profileId = ProfileIdSilent;
         d.visualData.second= "Silent";
         d.visualData.first = "silent-icon";
-        d.volumeLevel = 0;
         d.vibrationEnabled = true;
         data.append (d);
     } {
@@ -129,7 +125,6 @@ ProfileDataInterface::getProfilesData ()
         d.profileId = ProfileIdBeep;
         d.visualData.second = "Beep";
         d.visualData.first = "beep-icon";
-        d.volumeLevel = 10;
         d.vibrationEnabled = false;
         data.append (d);
     } {
@@ -139,7 +134,6 @@ ProfileDataInterface::getProfilesData ()
         d.profileId = ProfileIdLoud;
         d.visualData.second = "Loud";
         d.visualData.first = "lound-icon";
-        d.volumeLevel = 100;
         d.vibrationEnabled = false;
         data.append (d);
     }
@@ -173,32 +167,6 @@ ProfileDataInterface::setVibration (
         SYS_WARNING ("Failed setting the vibration.");
         // TODO: what??
     }
-}
-
-void 
-ProfileDataInterface::setVolumeLevel (
-        int   id, 
-        int   value)
-{
-    SYS_DEBUG ("id = %d, value = %d", id, value);
-
-    bool success = m_ProfileAPI->setVolumeLevel(mapId(id), value);
-    if (!success) {
-        SYS_WARNING ("Failed setting volume level");
-        // TODO: what??
-    }
-}
-
-int 
-ProfileDataInterface::checkSilent (
-        int   id, 
-        int   level)
-{
-    if (id == ProfileIdSilent) {
-        level = -1;
-    }
-
-    return level;
 }
 
 QString ProfileDataInterface::mapId2IconID (int id)
