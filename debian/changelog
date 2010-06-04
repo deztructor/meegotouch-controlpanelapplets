@@ -1,4 +1,4 @@
-systemui-applets (0.14.3~1) harmattan; urgency=low
+systemui-applets (0.14.3-1) harmattan; urgency=low
 
   [ Viktor Nagy ]
   * Theme applet ui update.
@@ -9,7 +9,7 @@ systemui-applets (0.14.3~1) harmattan; urgency=low
   * Fixes: NB#172483 - Random sysuid crash found during swapping windows
     from one to other
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 04 Jun 2010 11:49:10 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 04 Jun 2010 12:23:25 +0200
 
 systemui-applets (0.14.1-1) harmattan; urgency=low
 
