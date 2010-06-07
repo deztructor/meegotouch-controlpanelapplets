@@ -76,8 +76,8 @@ ThemeBusinessLogic::currentThemeIconName () const
 
 
 /*!
- * Returns all the available themes. Please note, that some of these themes
- * might be hidden/invisible.
+ * Returns all the available themes. 
+ * Invisible themes are filtered out.
  */
 QList<ThemeDescriptor *>
 ThemeBusinessLogic::availableThemes () const
@@ -96,7 +96,7 @@ ThemeBusinessLogic::availableThemes () const
                 themeDirName + "/" + themeFile,
                 themeFile);
 
-        if (descr->isValid())
+        if (descr->isValid() && descr->isVisible())
             retval << descr;
         else
             delete descr;
