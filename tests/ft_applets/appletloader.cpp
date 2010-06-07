@@ -4,17 +4,12 @@
 
 #include <QTest>
 #include <dcpappletif.h>
-#include <dcpappletmetadata.h>
 #include <dcpbrief.h>
 #include <dcpwidget.h>
 
-#ifndef DCP_APPLET_LOADER_DEPRECATED
-#include <dcpappletloader.h>
-#else
-#include <dcpappletplugin.h>
-#endif
+#define APPLET_PATH "/usr/lib/duicontrolpanel/applets/"
 
-#define DESKTOP_PATH "/usr/lib/duicontrolpanel/"
+#undef TEST_NEW_TITLE_METHODS
 
 void
 Ft_AppletLoader::init ()
@@ -28,15 +23,16 @@ Ft_AppletLoader::cleanup ()
     // Drop the (tested) objects
 }
 
-void
-Ft_AppletLoader::initTestCase ()
-{
-    int argc = 1;
-    char *argv[] = {
+static int argc = 1;
+static char *argv[] =
+    {
         (char *) "./ft_dcpapplets",
         NULL
     };
 
+void
+Ft_AppletLoader::initTestCase ()
+{
     m_app = new MApplication (argc, argv);
     m_window = new MApplicationWindow;
 }
@@ -48,47 +44,62 @@ Ft_AppletLoader::cleanupTestCase ()
 }
 
 /*!
- * This function will do the basic loading/unloading tests on the applet variant
- * described in the deaktop file.
+ * This function will do the basic loading/unloading tests on the applet.
  */
 void
-Ft_AppletLoader::DoAppletTest (const char *desktopfile)
+Ft_AppletLoader::DoAppletTest (const char *soname)
 {
-    DcpAppletMetadata metadata(QString (DESKTOP_PATH) + QString (desktopfile));
+    QPluginLoader loader;
 
-#ifndef DCP_APPLET_LOADER_DEPRECATED
-    DcpAppletLoader loader (&metadata);
-#else
-    DcpAppletPlugin loader (&metadata);
-#endif
+    loader.setFileName (QString (APPLET_PATH) + QString (soname));
+    loader.setLoadHints (QLibrary::ResolveAllSymbolsHint);
 
     /*
      * Getting the DcpAppletIf applet interface object. Checking if the applet
      * loaded, the type of the applet interface is right.
      */
-    DcpAppletIf *applet = loader.applet ();
-    QVERIFY2(applet, qPrintable (loader.errorMsg ()));
+    QVERIFY2 (loader.load (), qPrintable (loader.errorString ()));
+
+    DcpAppletIf *applet = qobject_cast<DcpAppletIf *>(loader.instance ());
+
+    QVERIFY (applet != 0);
 
     /*
-     * Checking if the applet has a non-empty title string.
+     * Do initialization... in the same way how controlpanel doing:
      */
-    QVERIFY(! applet->title ().isEmpty ());
+    applet->init ();
+
+#ifndef TEST_NEW_TITLE_METHODS
+    QVERIFY (! applet->title ().isEmpty ());
+#endif
 
     /*
      * Checking if the applet brief is constructed.
      */
     DcpBrief *brief = applet->constructBrief ();
-    QVERIFY2(brief, 
-		    "Error when creating brief widget");
+    QVERIFY2 (brief, "Error when creating brief widget");
+
+#ifdef TEST_NEW_TITLE_METHODS
+    /*
+     * Checking if the applet has a non-empty title string.
+     */
+    QVERIFY (! brief->titleText ().isEmpty ());
+#endif
 
     /*
      * Checking if the the main view (the applet widget) is constructed. FIXME:
      * We should call the getMainWidgetId here, but I'm not sure how it is done
      * after the refactoring.
      */
-    MWidget *widget = applet->constructWidget (0);
-    QVERIFY2(widget, 
-		    "Error when creating applet's main widget");
+    DcpWidget *widget = applet->constructWidget (0);
+    QVERIFY2 (widget, "Error when creating applet's main widget");
+
+#ifdef TEST_NEW_TITLE_METHODS
+    /*
+     * Check if the applet widget has a non-empty title string.
+     */
+    QVERIFY (! widget->title ().isEmpty ());
+#endif
 
     delete widget;
     delete brief;
@@ -97,49 +108,55 @@ Ft_AppletLoader::DoAppletTest (const char *desktopfile)
 void
 Ft_AppletLoader::testbatteryapplet ()
 {
-    DoAppletTest ("battery.desktop");
+    DoAppletTest ("libbatteryapplet.so");
 }
 
 void
 Ft_AppletLoader::testdisplayapplet ()
 {
-    DoAppletTest ("display.desktop");
+    DoAppletTest ("libdisplayapplet.so");
 }
 
 void
 Ft_AppletLoader::testprofileapplet ()
 {
-    DoAppletTest ("profile.desktop");
+    DoAppletTest ("libprofileapplet.so");
 }
 
 void
 Ft_AppletLoader::testusbapplet ()
 {
-    DoAppletTest ("usbapplet.desktop");
+    DoAppletTest ("libusbapplet.so");
 }
 
 void
 Ft_AppletLoader::testresetapplet ()
 {
-    DoAppletTest ("reset.desktop");
+    DoAppletTest ("libresetapplet.so");
 }
 
 void
 Ft_AppletLoader::testaboutapplet ()
 {
-    DoAppletTest ("about.desktop");
+    DoAppletTest ("libaboutapplet.so");
 }
 
 void
 Ft_AppletLoader::testthemeapplet ()
 {
-    DoAppletTest ("theme.desktop");
+    DoAppletTest ("libthemeapplet.so");
 }
 
 void
 Ft_AppletLoader::testwallpaperapplet ()
 {
-    DoAppletTest ("wallpaper.desktop");
+    DoAppletTest ("libwallpaperapplet.so");
+}
+
+void
+Ft_AppletLoader::testwarrantyapplet ()
+{
+    DoAppletTest ("libwarrantyapplet.so");
 }
 
 QTEST_APPLESS_MAIN(Ft_AppletLoader)

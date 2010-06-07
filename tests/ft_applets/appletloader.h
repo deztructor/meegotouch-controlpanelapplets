@@ -17,7 +17,7 @@ private slots:
     void cleanup ();
     void initTestCase ();
     void cleanupTestCase ();
-    // The testcases
+
     void testbatteryapplet ();
     void testdisplayapplet ();
     void testprofileapplet ();
@@ -26,12 +26,13 @@ private slots:
     void testaboutapplet ();
     void testthemeapplet ();
     void testwallpaperapplet ();
+    void testwarrantyapplet ();
 
 private:
     MApplication            *m_app;
     MApplicationWindow      *m_window;
 
-    void    DoAppletTest (const char *desktopfile);
+    void    DoAppletTest (const char *soname);
 };
 
 #endif
