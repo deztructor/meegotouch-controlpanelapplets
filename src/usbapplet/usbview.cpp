@@ -1,10 +1,12 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
-
 #include "usbview.h"
 
 #include <QGraphicsLinearLayout>
+#include <MLabel>
+#include <MButton>
 #include <MButtonGroup>
+#include <MNotification>
 #include <MLocale>
 
 #define BUTTON_ALWAYS_ASK   0
@@ -23,7 +25,6 @@ void
 UsbView::initWidget ()
 {
     QGraphicsLinearLayout   *layout;
-    MButtonGroup            *button_group;
 
 // Creating the main layout
     layout = new QGraphicsLinearLayout (Qt::Vertical);
@@ -36,8 +37,8 @@ UsbView::initWidget ()
     layout->addItem (m_info_label);
 
 // Creating, filling and adding the mode-list
-    button_group = new MButtonGroup ();
-    button_group->setExclusive (true);
+    m_btn_group = new MButtonGroup ();
+    m_btn_group->setExclusive (true);
 
     for (int i = 0; i < 3; i++)
     {
@@ -60,17 +61,17 @@ UsbView::initWidget ()
                 break;
         }
 
-        button_group->addButton (m_buttons[i], id);
+        m_btn_group->addButton (m_buttons[i], id);
     }
 
     int current_setting = (int) m_logic->getDefaultMode ();
 
-    if (button_group->button (current_setting) == 0)
-        button_group->button ((int) QmUSBMode::Ask)->setChecked (true);
+    if (m_btn_group->button (current_setting) == 0)
+        m_btn_group->button ((int) QmUSBMode::Ask)->setChecked (true);
     else
-        button_group->button (current_setting)->setChecked (true);
+        m_btn_group->button (current_setting)->setChecked (true);
 
-    connect (button_group, SIGNAL (buttonClicked (int)),
+    connect (m_btn_group, SIGNAL (buttonClicked (int)),
              this, SLOT (selectionChanged (int)));
 
     setLayout (layout);
@@ -82,6 +83,44 @@ void
 UsbView::selectionChanged (int id)
 {
     QmUSBMode::Mode newmode = (QmUSBMode::Mode) id;
+    QmUSBMode::Mode active = m_logic->getMode ();
+
+    /*
+     * If we are connected and some mode active, then
+     * show an error message and set the mode back
+     * to original
+     */
+    if ((active == QmUSBMode::MassStorage) ||
+        (active == QmUSBMode::OviSuite))
+    {
+        m_btn_group->blockSignals (true);
+
+        /*
+         * Set checked on the previously active button
+         */
+        int current_setting = (int) m_logic->getDefaultMode ();
+
+        if (m_btn_group->button (current_setting) == 0)
+            m_btn_group->button ((int) QmUSBMode::Ask)->setChecked (true);
+        else
+            m_btn_group->button (current_setting)->setChecked (true);
+
+        m_btn_group->blockSignals (false);
+
+        /*
+         * Create the error notification
+         */
+        MNotification error (MNotification::DeviceErrorEvent,
+                             "",
+//% "You cannot change USB mode while USB is connecting.<br/>Eject USB device first, and then change setting."
+                             qtTrId ("qtn_usb_change_incorrect"));
+        /*
+         * And show it
+         */
+        error.publish ();
+
+        return;
+    }
 
     m_logic->setDefaultMode (newmode);
 

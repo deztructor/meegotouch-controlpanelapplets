@@ -3,10 +3,12 @@
 #ifndef USBVIEW_H
 #define USBVIEW_H
 
-#include <MLabel>
-#include <MButton>
 #include <DcpWidget>
 #include <qmusbmode.h>
+
+class MLabel;
+class MButton;
+class MButtonGroup;
 
 class UsbView : public DcpWidget
 {
@@ -29,6 +31,7 @@ private:
 
     Maemo::QmUSBMode    *m_logic;
     MButton             *m_buttons[3];
+    MButtonGroup        *m_btn_group;
     MLabel              *m_info_label;
 };
 
