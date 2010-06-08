@@ -71,12 +71,13 @@ Ut_ThemeBusinessLogic::cleanupTestCase()
 void 
 Ut_ThemeBusinessLogic::testThemeDescriptorInvalid()
 {
-    ThemeDescriptor  desc ("no_such_a_file", "name");
+    const QString codeName = "CodeName";
+    ThemeDescriptor  desc ("no_such_a_file", codeName);
 
-    QVERIFY (!desc.valid());
+    QVERIFY (!desc.isValid());
     QVERIFY (!desc.isVisible());
     QVERIFY (desc.name().isEmpty());
-    QVERIFY (desc.codeName().isEmpty());
+    QVERIFY (desc.codeName() == codeName);
     QVERIFY (desc.iconName().isEmpty());
 }
 
