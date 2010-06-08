@@ -67,6 +67,10 @@ private:
     MGConfItem   *m_LandscapeGConfItem;
     MGConfItem   *m_PortraitGConfItem;
     QPointer<WallpaperDescriptor> m_EditedImage;
+#ifdef UNIT_TEST
+    friend class Ut_WallpaperBusinessLogic;
+    friend class Ft_WallpaperBusinessLogic;
+#endif
 };
 
 #endif
