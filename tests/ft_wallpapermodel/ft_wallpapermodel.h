@@ -9,6 +9,7 @@
 class MApplication;
 class WallpaperBusinessLogic;
 class WallpaperModel;
+class WallpaperDescriptor;
 
 class SignalSink : public QObject
 {
@@ -37,8 +38,11 @@ private slots:
     void cleanupTestCase ();
 
     void testRowsColumns ();
-    
+    void testData ();
+
 private:
+    bool isWallpaperDescriptorValid (WallpaperDescriptor *desc);
+    
     WallpaperBusinessLogic    *m_BusinessLogic;
     WallpaperModel            *m_Model;
     MApplication              *m_App;
