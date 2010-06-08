@@ -5,6 +5,8 @@
 #include "themedescriptor.h"
 
 #include <MApplication>
+#include <MTheme>
+#include <QPixmap>
 
 #define DEBUG
 #include "../../src/debug.h"
@@ -99,20 +101,7 @@ Ft_ThemeBusinessLogic::testAvailableThemes ()
     QVERIFY (list.size() > 0);
 
     foreach (ThemeDescriptor *desc, list) {
-        #if 0
-        qDebug() << "--------------------------------------";
-        qDebug() << "*** name      = " << desc->name();
-        qDebug() << "*** codeName  = " << desc->codeName();
-        qDebug() << "*** iconName  = " << desc->iconName();
-        qDebug() << "*** isValid   = " << (desc->isValid() ? "yes" : "no");
-        qDebug() << "*** isVisible = " << (desc->isVisible() ? "yes" : "no");
-        #endif
-
-        QVERIFY (desc->isValid());
-        QVERIFY (!desc->name().isEmpty());
-        QVERIFY (!desc->codeName().isEmpty());
-        QVERIFY (!desc->iconName().isEmpty());
-	    QVERIFY (desc->isVisible());
+        checkDescriptorIsValid (desc);
     }
 }
 
@@ -139,6 +128,66 @@ Ft_ThemeBusinessLogic::testChangeTheme ()
         QVERIFY (m_Priv->m_ThemeCodeName == desc->codeName());
     }
 }
+
+void 
+Ft_ThemeBusinessLogic::checkDescriptorIsValid (
+        ThemeDescriptor *desc)
+{
+    QString name, codeName, iconName;
+    bool    valid, visible;
+
+    QVERIFY (desc != 0);
+
+    name = desc->name ();
+    codeName = desc->codeName ();
+    iconName = desc->iconName ();
+    valid = desc->isValid ();
+    visible = desc->isVisible ();
+
+    SYS_DEBUG ("--------------------------------------");
+    SYS_DEBUG ("*** name      = %s", SYS_STR (name));
+    SYS_DEBUG ("*** codeName  = %s", SYS_STR (desc->codeName()));
+    SYS_DEBUG ("*** iconName  = %s", SYS_STR (desc->iconName()));
+    SYS_DEBUG ("*** isValid   = %s", SYS_BOOL(valid));
+    SYS_DEBUG ("*** isVisible = %s", SYS_BOOL (visible));
+
+    /*
+     * The descriptor has to be valid and visible.
+     */
+    QVERIFY (valid);
+    QVERIFY (visible);
+    
+    // Checking the name.
+    QVERIFY (!name.isEmpty());
+    QVERIFY (!name.startsWith(" "));
+    QVERIFY (!name.endsWith(" "));
+
+    QVERIFY (!codeName.isEmpty());
+    QVERIFY (!codeName.startsWith(" "));
+    QVERIFY (!codeName.endsWith(" "));
+    QVERIFY (!codeName.contains("\""));
+
+    QVERIFY (!iconName.isEmpty());
+    QVERIFY (!iconName.startsWith(" "));
+    QVERIFY (!iconName.endsWith(" "));
+    QVERIFY (!iconName.contains("\""));
+
+    MTheme  *theme = MTheme::instance();
+    QPixmap *pixmap = theme->pixmapCopy (iconName);
+    if (pixmap->width() < 64 ||
+            pixmap->height() < 64) {
+        SYS_WARNING (
+"\n"
+"----------------------------------------------------------------------------\n"
+"                         Theme Icon Warning \n"
+"The theme icon %s has the size %dx%d while it should be \n"
+"at least 64x64. This is probably a bug in the theme daemon. We are not \n"
+"reporting failure now, because this is a known bug in the theme daemon. \n"
+"----------------------------------------------------------------------------\n"
+       , SYS_STR(iconName), pixmap->width(), pixmap->height());
+    }
+}
+
 
 QTEST_APPLESS_MAIN(Ft_ThemeBusinessLogic)
 

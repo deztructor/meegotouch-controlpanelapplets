@@ -9,6 +9,7 @@
 
 class MApplication;
 class ThemeBusinessLogic;
+class ThemeDescriptor;
 
 class FtThemeBusinessLogicPrivate : public QObject 
 {
@@ -39,6 +40,8 @@ private slots:
     void testChangeTheme ();
 
 private:
+    void checkDescriptorIsValid (ThemeDescriptor *desc);
+
     FtThemeBusinessLogicPrivate *m_Priv;
     MApplication              *m_App;
     ThemeBusinessLogic          *m_Api;
