@@ -24,13 +24,20 @@ static const QString LandscapeKey =
  */
 SignalSink::SignalSink ()
 {
+    reset ();
+}
 
+void 
+SignalSink::reset ()
+{
+    m_WallpaperChangedCame = false;
 }
 
 void 
 SignalSink::wallpaperChanged ()
 {
     SYS_DEBUG ("");
+    m_WallpaperChangedCame = true;
 }
 
 /******************************************************************************
@@ -71,6 +78,18 @@ Ft_WallpaperBusinessLogic::cleanupTestCase()
     delete m_Api;
 }
 
+void
+Ft_WallpaperBusinessLogic::testCreateDirectory ()
+{
+    QString path;
+
+    path = m_Api->dirPath();
+    m_Api->ensureHasDirectory ();
+
+    QDir outputDir (path);
+    QVERIFY (outputDir.exists());
+}
+
 /*!
  * Gets the list of the available wallpapers, checks if the list is not empty,
  * then goes through the potential wallpapers and checks if all of them has the
@@ -108,6 +127,11 @@ Ft_WallpaperBusinessLogic::testAvailableWallpapers ()
         originalp = desc->originalImageFile (M::Portrait);
         originall = desc->originalImageFile (M::Landscape);
 
+        #if 0
+        /*
+         * These might prove usefull in the future, but obviously generate too
+         * much output.
+         */
         SYS_DEBUG ("*********** available wallpaper #%3d ****************", n);
         SYS_DEBUG ("*** filename   = %s", SYS_STR(filename));
         SYS_DEBUG ("*** title      = %s", SYS_STR(title));
@@ -118,7 +142,7 @@ Ft_WallpaperBusinessLogic::testAvailableWallpapers ()
         SYS_DEBUG ("*** suggestedl = %s", SYS_STR(suggestedl));
         SYS_DEBUG ("*** originalp  = %s", SYS_STR(originalp));
         SYS_DEBUG ("*** originall  = %s", SYS_STR(originall));
-
+        #endif
         QVERIFY (!filename.isEmpty());
         QVERIFY (!title.isEmpty());
         QVERIFY (!basename.isEmpty());
@@ -157,6 +181,11 @@ Ft_WallpaperBusinessLogic::testCurrentWallpaper ()
     originalp = desc->originalImageFile (M::Portrait);
     originall = desc->originalImageFile (M::Landscape);
 
+    #if 0
+    /*
+     * These might prove usefull in the future, but obviously generate too much
+     * output.
+     */
     SYS_DEBUG ("*********** current wallpaper ***********************");
     SYS_DEBUG ("*** filename   = %s", SYS_STR(filename));
     SYS_DEBUG ("*** title      = %s", SYS_STR(title));
@@ -167,6 +196,7 @@ Ft_WallpaperBusinessLogic::testCurrentWallpaper ()
     SYS_DEBUG ("*** suggestedl = %s", SYS_STR(suggestedl));
     SYS_DEBUG ("*** originalp  = %s", SYS_STR(originalp));
     SYS_DEBUG ("*** originall  = %s", SYS_STR(originall));
+    #endif
 
     QVERIFY (!filename.isEmpty());
     QVERIFY (!title.isEmpty());
@@ -210,15 +240,18 @@ Ft_WallpaperBusinessLogic::testSetWallpapert ()
     /*
      * Testing with scale and offset set to the default.
      */
-    // FIXME: This should not be needed...
+    // FIXME: setExpectedSize? This should not be needed...
     landscapeITrans.setExpectedSize (QSize(864, 480));
     portraitITrans.setExpectedSize (QSize(480, 864));
+    m_SignalSink.reset ();
     m_Api->setBackground (
             &landscapeITrans,
             &portraitITrans,
              availableWallpapers[n]);
 
+    // Testing if the images are valid and we got a signal about the change.
     testValidImages ();
+    QVERIFY (m_SignalSink.m_WallpaperChangedCame);
 
     /*
      * Testing with some arbitrary scale and offset images.
@@ -228,12 +261,15 @@ Ft_WallpaperBusinessLogic::testSetWallpapert ()
     landscapeITrans.setOffset (QPointF(10, 20));
     portraitITrans.setOffset (QPointF(20, 10));
 
+    m_SignalSink.reset ();
     m_Api->setBackground (
             &landscapeITrans,
             &portraitITrans,
              availableWallpapers[n]);
     
+    // Testing if the images are valid and we got a signal about the change.
     testValidImages ();
+    QVERIFY (m_SignalSink.m_WallpaperChangedCame);
     
     /*
      * Also with magnifying and negative offsets.
@@ -243,12 +279,15 @@ Ft_WallpaperBusinessLogic::testSetWallpapert ()
     landscapeITrans.setOffset (QPointF(-10, -200));
     portraitITrans.setOffset (QPointF(-800, -300));
 
+    m_SignalSink.reset ();
     m_Api->setBackground (
             &landscapeITrans,
             &portraitITrans,
              availableWallpapers[n]);
     
+    // Testing if the images are valid and we got a signal about the change.
     testValidImages ();
+    QVERIFY (m_SignalSink.m_WallpaperChangedCame);
 }
 
 /******************************************************************************

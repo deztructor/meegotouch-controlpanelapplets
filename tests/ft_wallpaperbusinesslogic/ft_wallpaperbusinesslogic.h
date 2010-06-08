@@ -16,8 +16,13 @@ Q_OBJECT
 public:
     SignalSink ();
 
+    void reset ();
+    
 public slots:
     void wallpaperChanged ();
+
+public:
+    bool   m_WallpaperChangedCame;
 };
 
 class Ft_WallpaperBusinessLogic : public QObject 
@@ -30,6 +35,7 @@ private slots:
     void initTestCase ();
     void cleanupTestCase ();
 
+    void testCreateDirectory ();
     void testAvailableWallpapers ();
     void testCurrentWallpaper ();
     void testSetWallpapert ();

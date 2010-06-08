@@ -18,7 +18,7 @@
 #include <MTheme>
 #include <MGConfItem>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 static const QString PortraitKey = 
