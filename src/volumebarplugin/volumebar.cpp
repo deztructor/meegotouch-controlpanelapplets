@@ -32,7 +32,6 @@ VolumeBar::VolumeBar (MStatusIndicatorMenuInterface &statusIndicatorMenu,
     Q_UNUSED(statusIndicatorMenu)
 
     m_logic = new VolumeBarLogic;
-    m_overlay = new VolumeOverlay;
 
     QGraphicsLinearLayout *mainLayout =
         new QGraphicsLinearLayout (Qt::Vertical);
@@ -66,9 +65,6 @@ VolumeBar::VolumeBar (MStatusIndicatorMenuInterface &statusIndicatorMenu,
     connect (m_logic, SIGNAL (volumeChanged (quint32, quint32, bool)),
              this, SLOT (volumeChanged (quint32, quint32, bool)));
 
-    connect (m_overlay, SIGNAL (VolumeChanged (int)),
-             this, SLOT (overlayChanged (int)));
-
     m_hwkeys = new QmKeys (this);
 
     m_hwkeyResource = new ResourceSet ("event");
@@ -84,10 +80,6 @@ VolumeBar::VolumeBar (MStatusIndicatorMenuInterface &statusIndicatorMenu,
              this, SLOT (hwKeyResourceLost ()));
 
     m_hwkeyResource->acquire ();
-
-#ifdef TEST_OVERLAY
-    QTimer::singleShot (2000, this, SLOT (testOverlay ()));
-#endif
 }
 
 VolumeBar::~VolumeBar ()
@@ -98,11 +90,14 @@ VolumeBar::~VolumeBar ()
     delete m_hwkeys;
     m_hwkeys = 0;
 
+    if (m_overlay != 0)
+    {
+        delete m_overlay;
+        m_overlay = 0;
+    }
+
     delete m_logic;
     m_logic = 0;
-
-    delete m_overlay;
-    m_overlay = 0;
 }
 
 void
@@ -114,10 +109,6 @@ VolumeBar::sliderChanged (int val)
         m_bar->setMinLabelIconID ("icon-m-common-volume");
     else
         m_bar->setMinLabelIconID ("icon-m-common-volume-off");
-
-#if defined (i386) && defined (DEBUG)
-    m_overlay->UpdateVolume (val, (int) m_logic->getMaxVolume ());
-#endif
 }
 
 void
@@ -139,13 +130,6 @@ VolumeBar::volumeChanged (quint32 val, quint32 max, bool init)
         m_bar->setMinLabelIconID ("icon-m-common-volume");
     else
         m_bar->setMinLabelIconID ("icon-m-common-volume-off");
-
-    // Do not show volume overlay on volume-change events,
-    // it is enough to show on hw-key-press events...
-#if 0
-    if (init == false)
-        m_overlay->UpdateVolume ((int) val, (int) max);
-#endif
 }
 
 void
@@ -164,15 +148,6 @@ VolumeBar::overlayChanged (int val)
     else
         m_bar->setMinLabelIconID ("icon-m-common-volume-off");
 }
-
-#ifdef TEST_OVERLAY
-void
-VolumeBar::testOverlay ()
-{
-    hwKeyEvent (QmKeys::VolumeUp, QmKeys::KeyDown);
-    QTimer::singleShot (5000, this, SLOT (testOverlay ()));
-}
-#endif
 
 void
 VolumeBar::hwKeyEvent (QmKeys::Key key, QmKeys::State state)
@@ -209,6 +184,15 @@ VolumeBar::hwKeyEvent (QmKeys::Key key, QmKeys::State state)
 
     // This sets the volume and update the slider ...
     overlayChanged (current_volume);
+
+    if (m_overlay == 0)
+    {
+        m_overlay = new VolumeOverlay;
+
+        connect (m_overlay, SIGNAL (VolumeChanged (int)),
+                 this, SLOT (overlayChanged (int)));
+    }
+
     // ... and show the overlay
     m_overlay->UpdateVolume (current_volume, max_volume);
 }

@@ -3,8 +3,6 @@
 
 #include <MWidget>
 
-#undef TEST_OVERLAY
-
 class MSlider;
 class MContainer;
 class VolumeBarLogic;
@@ -33,9 +31,6 @@ private slots:
     void hwKeyEvent (QmKeys::Key key, QmKeys::State state);
     void hwKeyResourceAcquired ();
     void hwKeyResourceLost ();
-#ifdef TEST_OVERLAY
-    void testOverlay ();
-#endif
 
 private:
     MSlider         *m_bar;
