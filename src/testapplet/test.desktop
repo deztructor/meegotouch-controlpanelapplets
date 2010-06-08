@@ -3,7 +3,6 @@ Type=DUIApplet
 Name=Test applet
 # It is not official
 X-logical-id=qtn_test_test
-# ?? qtn_sett_main_profile
 X-translation-catalog=systemui-applets
 Icon=
 Exec=
