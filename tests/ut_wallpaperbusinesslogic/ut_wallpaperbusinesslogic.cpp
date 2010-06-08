@@ -78,7 +78,7 @@ Ut_WallpaperBusinessLogic::testDirPath ()
 
     SYS_DEBUG ("*** dirPath() = %s", SYS_STR(path));
     QVERIFY (!path.isEmpty());
-    QVERIFY (path.startsWith("/home"));
+    QVERIFY (path.startsWith("/home") || path.startsWith("/root"));
     QVERIFY (path.endsWith("/"));
 }
 
