@@ -129,6 +129,10 @@ Ft_ThemeBusinessLogic::testChangeTheme ()
     }
 }
 
+/*
+ * Tests if the theme descriptor is indeed valid, visible and it has the
+ * properties that we can use to represent the theme.
+ */
 void 
 Ft_ThemeBusinessLogic::checkDescriptorIsValid (
         ThemeDescriptor *desc)
@@ -143,13 +147,15 @@ Ft_ThemeBusinessLogic::checkDescriptorIsValid (
     iconName = desc->iconName ();
     valid = desc->isValid ();
     visible = desc->isVisible ();
-
+    
+    #if 0
     SYS_DEBUG ("--------------------------------------");
     SYS_DEBUG ("*** name      = %s", SYS_STR (name));
     SYS_DEBUG ("*** codeName  = %s", SYS_STR (desc->codeName()));
     SYS_DEBUG ("*** iconName  = %s", SYS_STR (desc->iconName()));
     SYS_DEBUG ("*** isValid   = %s", SYS_BOOL(valid));
     SYS_DEBUG ("*** isVisible = %s", SYS_BOOL (visible));
+    #endif
 
     /*
      * The descriptor has to be valid and visible.
@@ -186,6 +192,8 @@ Ft_ThemeBusinessLogic::checkDescriptorIsValid (
 "----------------------------------------------------------------------------\n"
        , SYS_STR(iconName), pixmap->width(), pixmap->height());
     }
+
+    delete pixmap;
 }
 
 
