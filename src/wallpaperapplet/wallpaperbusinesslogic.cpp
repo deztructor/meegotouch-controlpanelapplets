@@ -32,10 +32,11 @@ static const QString backupExtension = ".BAK";
 
 static const QString defaultLandscapeImageFile = 
 "/usr/share/themes/base/meegotouch/duihome/images/HomeWallpaperLandscape.png";
-static const QString defaultLandscapeMimeType = "image/png";
 
 static const QString defaultPortraitImageFile = 
 "/usr/share/themes/base/meegotouch/duihome/images/HomeWallpaperPortrait.png";
+
+static const QString defaultLandscapeMimeType = "image/png";
 
 WallpaperBusinessLogic::WallpaperBusinessLogic()
 {

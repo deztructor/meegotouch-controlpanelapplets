@@ -155,8 +155,6 @@ Ut_WallpaperDescriptor::testThumbnailing ()
 {
     createDescriptor ();
     m_SignalSink.reset ();
-    // This migh t be a bug!
-    //m_Desc->setFilename ("NoSuchAFile.png");
 
     /*
      * Let's see if the desscriptor does initiate the thumbnailing when a proper
