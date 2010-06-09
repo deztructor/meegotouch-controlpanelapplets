@@ -3,8 +3,9 @@ systemui-applets (0.14.6~1) harmattan; urgency=low
   * Fixes: NB#170735 - No Error message shown if user tries to change the
                        USB mode in USB setting view, while the USB cable is
                        connecting with the device.
+  * Partially fixes: NB#171105 - Translation Broken in Profiles
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 08 Jun 2010 09:12:57 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 09 Jun 2010 18:32:30 +0200
 
 systemui-applets (0.14.5-1) harmattan; urgency=low
 
