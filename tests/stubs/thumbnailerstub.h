@@ -41,6 +41,7 @@ public:
     void reset ();
     void sendFinished ();
     void sendThumbnail ();
+    void sendError ();
     
     bool request (
             QList<QUrl> &uris, 

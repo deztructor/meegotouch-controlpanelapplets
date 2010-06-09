@@ -35,6 +35,7 @@ WallpaperDescriptor::WallpaperDescriptor (
     m_ThumbnailPixmap = orig.m_ThumbnailPixmap;
     m_Filename        = orig.m_Filename;
     m_HasThumbnail    = orig.m_HasThumbnail;
+    m_Url             = orig.m_Url;
 }
 
 WallpaperDescriptor::WallpaperDescriptor(
@@ -45,6 +46,7 @@ WallpaperDescriptor::WallpaperDescriptor(
     m_ThumbnailPixmap (100, 100)
 {
     m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
+    m_Url = QUrl::fromLocalFile (filename);
 }
 
 WallpaperDescriptor::~WallpaperDescriptor()
@@ -61,6 +63,7 @@ WallpaperDescriptor::setFilename (
     m_HasThumbnail = false;
     m_Cached       = false;
     m_Filename     = filename;
+    m_Url          = QUrl::fromLocalFile (filename);
 
     m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
 }
@@ -106,8 +109,8 @@ WallpaperDescriptor::setUrl (
     }
 
     m_HasThumbnail = false;
-    m_Cached = false;
-    m_Filename = path;
+    m_Cached       = false;
+    m_Filename     = path;
 }
 
 QString
@@ -164,8 +167,8 @@ WallpaperDescriptor::cache ()
     success = m_Pixmap.load (filename());
     if (!success) {
         SYS_WARNING ("Loading of %s has been failed.", SYS_STR(filename()));
-        // FIXME: Well, we should not fail for a faulty image file...
-        Q_ASSERT (false);
+        m_Cached = false;
+        return;
     }
 
     m_Cached = true;
@@ -336,6 +339,13 @@ WallpaperDescriptor::thumbnailError (
      * could set this descriptor to invalid... 
      */
     cache();
+    if (!m_Cached) {
+        m_HasThumbnail = false;
+        m_ThumbnailPixmap = QPixmap (100, 100);
+        m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
+        return;
+    }
+
     m_ThumbnailPixmap = m_Pixmap.scaled (100, 100);
     m_HasThumbnail = true;
 

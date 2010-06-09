@@ -16,10 +16,8 @@
  * In the functional tests 
  */
 #if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
-#  warning Using the stub....
 #  include "thumbnailerstub.h"
 #else
-# warning Using the original
 #  include <Thumbnailer>
 #endif
 

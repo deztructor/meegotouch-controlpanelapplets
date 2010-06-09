@@ -66,6 +66,15 @@ Thumbnailer::sendThumbnail ()
     emit thumbnail (m_Url, tumbnailUrl, pixmap, m_Flavor);
 }
 
+void
+Thumbnailer::sendError ()
+{
+    QString message ("Emulated error message Thumbnailer stub.");
+
+    SYS_DEBUG ("Sending error: %s", SYS_STR(message));
+    emit error (message, m_Url);
+}
+
 bool
 Thumbnailer::request (
             QList<QUrl> &uris, 

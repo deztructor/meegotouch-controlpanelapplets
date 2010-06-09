@@ -51,10 +51,17 @@ private slots:
     void cleanupTestCase ();
 
     void testDefaults ();
+    void testConstructors ();
+    void testFilenames ();
     void testThumbnailing ();
-
+    void testThumbnailingByFilename ();
+    void testThumbnailingWithoutData ();
+    void testThumbnailingFailure ();
+    
 private:
     void createDescriptor ();
+    void dropDescriptor ();
+
     MApplication              *m_App;
     SignalSink                 m_SignalSink;
     WallpaperDescriptor       *m_Desc;
