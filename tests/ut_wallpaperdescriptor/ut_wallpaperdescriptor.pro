@@ -18,7 +18,7 @@ INCLUDEPATH += \
 
 TEMPLATE = app
 DEFINES += UNIT_TEST
-TARGET = ut_wallpaperbusinesslogic
+TARGET = ut_wallpaperdescriptor
 target.path = /usr/lib/systemui-applets-tests
 
 CONFIG += \
@@ -29,9 +29,9 @@ CONFIG += \
 	silent 
 
 HEADERS += \
-   $$STUB_PREFIX/thumbnailerstub.h \
+    $$STUB_PREFIX/thumbnailerstub.h \
     ../../src/debug.h \
-    ut_wallpaperbusinesslogic.h \
+    ut_wallpaperdescriptor.h \
     $$SRC_PREFIX/wallpaperapplet.h \
     $$SRC_PREFIX/wallpaperbrief.h \
     $$SRC_PREFIX/wallpaperbusinesslogic.h \
@@ -47,7 +47,7 @@ HEADERS += \
 SOURCES += \
     $$STUB_PREFIX/thumbnailerstub.cpp \
     ../../src/debug.cpp \
-    ut_wallpaperbusinesslogic.cpp \
+    ut_wallpaperdescriptor.cpp \
     $$SRC_PREFIX/wallpaperapplet.cpp \
     $$SRC_PREFIX/wallpaperbrief.cpp \
     $$SRC_PREFIX/wallpaperbusinesslogic.cpp \

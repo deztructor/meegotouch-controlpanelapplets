@@ -11,8 +11,6 @@
 
 #include <MTheme>
 
-#include <Thumbnailer>
-
 #define THUMBNAIL_BG_COLOR "Red"
 
 #define DEBUG
@@ -244,8 +242,8 @@ WallpaperDescriptor::initiateThumbnailer ()
         return;
     }
 
+    SYS_DEBUG ("Creating the thumbnailer and connecting to its signals.");
     m_Thumbnailer = new Thumbnailer;
-
     connect (m_Thumbnailer, SIGNAL(thumbnail(QUrl,QUrl,QPixmap,QString)),
             this, SLOT(thumbnailReady(QUrl,QUrl,QPixmap,QString)) );
     connect (m_Thumbnailer, SIGNAL(error(QString,QUrl)),

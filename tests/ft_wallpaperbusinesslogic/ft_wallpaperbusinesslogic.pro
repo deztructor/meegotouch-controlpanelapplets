@@ -17,7 +17,10 @@ INCLUDEPATH += \
     /usr/include/duithumbnailer 
 
 TEMPLATE = app
-DEFINES += UNIT_TEST
+DEFINES += \
+	UNIT_TEST \
+	FUNCTIONAL_TEST
+
 TARGET = ft_wallpaperbusinesslogic
 target.path = /usr/lib/systemui-applets-tests
 

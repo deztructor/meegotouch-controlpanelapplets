@@ -10,8 +10,18 @@
 #include <QPixmap>
 #include <QUrl>
 #include <QPointer>
-#include <Thumbnailer>
 #include <MApplication>
+
+/*
+ * In the functional tests 
+ */
+#if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
+#  warning Using the stub....
+#  include "thumbnailerstub.h"
+#else
+# warning Using the original
+#  include <Thumbnailer>
+#endif
 
 class QString;
 
@@ -103,6 +113,10 @@ private:
     QPixmap               m_Pixmap;
     #ifdef SUPPORT_IMAGE_THUMBNAILS
     QImage                m_Thumbnail;
+    #endif
+
+    #ifdef UNIT_TEST
+    friend class Ut_WallpaperDescriptor;
     #endif
 };
 
