@@ -8,8 +8,12 @@ QT += \
     dbus 
 
 TEMPLATE = app
-DEFINES += UNIT_TEST
-TARGET = ut_batterydbusinterface
+
+DEFINES += \
+	UNIT_TEST \
+	FUNCTIONAL_TEST
+
+TARGET = ft_batterydbusinterface
 target.path = /usr/lib/systemui-applets-tests
 
 CONFIG += \
@@ -19,12 +23,12 @@ CONFIG += \
 
 HEADERS += \
     ../../src/debug.h \
-    ut_batterydbusinterface.h \
+    ft_batterydbusinterface.h \
     $$SRC_PREFIX/batterydbusinterface.h
 
 SOURCES += \
     ../../src/debug.cpp \
-    ut_batterydbusinterface.cpp \
+    ft_batterydbusinterface.cpp \
     $$SRC_PREFIX/batterydbusinterface.cpp
 
 INSTALLS += target

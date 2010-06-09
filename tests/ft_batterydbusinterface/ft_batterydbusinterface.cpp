@@ -1,6 +1,6 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et sw=4 ts=4 sts=4: */
-#include "ut_batterydbusinterface.h"
+#include "ft_batterydbusinterface.h"
 #include "batterydbusinterface.h"
 #include <MApplication>
 #include <QString>
@@ -12,9 +12,9 @@
 const int oneStepWaiting = 100;
 
 /******************************************************************************
- * Ut_BatteryDbusInterfacePrivate implementation.
+ * Ft_BatteryDbusInterfacePrivate implementation.
  */
-Ut_BatteryDbusInterfacePrivate::Ut_BatteryDbusInterfacePrivate () :
+Ft_BatteryDbusInterfacePrivate::Ft_BatteryDbusInterfacePrivate () :
     m_PSMValueArrived (false),
     m_PSMValue (false),
     m_PSMAutoValueArrived (false),
@@ -28,7 +28,7 @@ Ut_BatteryDbusInterfacePrivate::Ut_BatteryDbusInterfacePrivate () :
 }
 
 void
-Ut_BatteryDbusInterfacePrivate::PSMValueReceived (
+Ft_BatteryDbusInterfacePrivate::PSMValueReceived (
         bool PSMValue)
 {
     m_PSMValueArrived = true;
@@ -36,7 +36,7 @@ Ut_BatteryDbusInterfacePrivate::PSMValueReceived (
 }
 
 void
-Ut_BatteryDbusInterfacePrivate::PSMAutoValueReceived (
+Ft_BatteryDbusInterfacePrivate::PSMAutoValueReceived (
         bool PSMAutoValue)
 {
     m_PSMAutoValueArrived = true;
@@ -44,7 +44,7 @@ Ut_BatteryDbusInterfacePrivate::PSMAutoValueReceived (
 }
 
 void
-Ut_BatteryDbusInterfacePrivate::PSMThresholdValueReceived (
+Ft_BatteryDbusInterfacePrivate::PSMThresholdValueReceived (
         QString ThresholdValue)
 {
     m_ThresholdValueArrived = true;
@@ -52,7 +52,7 @@ Ut_BatteryDbusInterfacePrivate::PSMThresholdValueReceived (
 }
 
 void
-Ut_BatteryDbusInterfacePrivate::PSMThresholdValuesReceived (
+Ft_BatteryDbusInterfacePrivate::PSMThresholdValuesReceived (
         QStringList ThresholdValues)
 {
     m_ThresholdValuesArrived = true;
@@ -60,7 +60,7 @@ Ut_BatteryDbusInterfacePrivate::PSMThresholdValuesReceived (
 }
 
 void
-Ut_BatteryDbusInterfacePrivate::remainingTimeValuesReceived (
+Ft_BatteryDbusInterfacePrivate::remainingTimeValuesReceived (
         QStringList RemainingTimeValues)
 {
     m_RemainingTimeValuesArrived = true;
@@ -68,7 +68,7 @@ Ut_BatteryDbusInterfacePrivate::remainingTimeValuesReceived (
 }
 
 void
-Ut_BatteryDbusInterfacePrivate::batteryBarValueReceived (
+Ft_BatteryDbusInterfacePrivate::batteryBarValueReceived (
         int batteryBarValue)
 {
     m_batteryBarValueReceived = true;
@@ -76,15 +76,15 @@ Ut_BatteryDbusInterfacePrivate::batteryBarValueReceived (
 }
 
 /******************************************************************************
- * Ut_BatteryDbusInterface implementation. 
+ * Ft_BatteryDbusInterface implementation. 
  */
 void 
-Ut_BatteryDbusInterface::init()
+Ft_BatteryDbusInterface::init()
 {
 }
 
 void 
-Ut_BatteryDbusInterface::cleanup()
+Ft_BatteryDbusInterface::cleanup()
 {
 }
 
@@ -150,17 +150,17 @@ waitForSysuidRunning ()
     #endif
 }
 
-void 
-Ut_BatteryDbusInterface::initTestCase()
-{
+static int argc = 1;
+static char* app_name = (char*) "./Ft_BatteryDbusInterface";
 
-    int argc = 1;
-    char* app_name = (char*) "./Ut_BatteryDbusInterface";
+void 
+Ft_BatteryDbusInterface::initTestCase()
+{
     app = new MApplication(argc, &app_name);
 
     waitForSysuidRunning();
 
-    m_priv = new Ut_BatteryDbusInterfacePrivate;
+    m_priv = new Ft_BatteryDbusInterfacePrivate;
     m_BatteryDBusInterface = new BatteryDBusInterface;
 
     /*
@@ -193,7 +193,7 @@ Ut_BatteryDbusInterface::initTestCase()
 }
 
 void 
-Ut_BatteryDbusInterface::cleanupTestCase()
+Ft_BatteryDbusInterface::cleanupTestCase()
 {
     delete m_priv;
     m_priv = 0;
@@ -208,7 +208,7 @@ Ut_BatteryDbusInterface::cleanupTestCase()
 
 
 void 
-Ut_BatteryDbusInterface::testGetPSMValue ()
+Ft_BatteryDbusInterface::testGetPSMValue ()
 {
     bool success;
 
@@ -220,7 +220,7 @@ Ut_BatteryDbusInterface::testGetPSMValue ()
 }
 
 void 
-Ut_BatteryDbusInterface::testGetPSMAutoValue ()
+Ft_BatteryDbusInterface::testGetPSMAutoValue ()
 {
     bool success;
 
@@ -232,7 +232,7 @@ Ut_BatteryDbusInterface::testGetPSMAutoValue ()
 }
 
 void 
-Ut_BatteryDbusInterface::testGetThresholdValue ()
+Ft_BatteryDbusInterface::testGetThresholdValue ()
 {
     bool success;
 
@@ -244,7 +244,7 @@ Ut_BatteryDbusInterface::testGetThresholdValue ()
 }
 
 void 
-Ut_BatteryDbusInterface::testGetThresholdValues ()
+Ft_BatteryDbusInterface::testGetThresholdValues ()
 {
     bool success;
     int  n = 0;
@@ -260,7 +260,7 @@ Ut_BatteryDbusInterface::testGetThresholdValues ()
 }
 
 void 
-Ut_BatteryDbusInterface::testGetRemainingTimeValues ()
+Ft_BatteryDbusInterface::testGetRemainingTimeValues ()
 {
     bool success;
     int  n = 0;
@@ -276,7 +276,7 @@ Ut_BatteryDbusInterface::testGetRemainingTimeValues ()
 }
 
 void 
-Ut_BatteryDbusInterface::testGetBatteryBarValue ()
+Ft_BatteryDbusInterface::testGetBatteryBarValue ()
 {
     bool success;
 
@@ -291,7 +291,7 @@ Ut_BatteryDbusInterface::testGetBatteryBarValue ()
  * Helper function to wait a boolean to become true using some timeout.
  */
 bool 
-Ut_BatteryDbusInterface::waitforit (
+Ft_BatteryDbusInterface::waitforit (
         const QString &name, 
         bool          *what)
 {
@@ -320,4 +320,4 @@ Ut_BatteryDbusInterface::waitforit (
     }
 }
 
-QTEST_APPLESS_MAIN(Ut_BatteryDbusInterface)
+QTEST_APPLESS_MAIN(Ft_BatteryDbusInterface)
