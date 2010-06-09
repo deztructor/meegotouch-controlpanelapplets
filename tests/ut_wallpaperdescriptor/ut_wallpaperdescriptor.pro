@@ -25,7 +25,7 @@ CONFIG += \
 	plugin \
 	gui \
 	meegotouch \
-	duicontrolpanel 
+	duicontrolpanel \
 	silent 
 
 HEADERS += \
