@@ -21,18 +21,6 @@ public:
 
     void reset ();
     
-signals:
-    void thumbnailReady (
-            QUrl         fileUri, 
-            QUrl         thumbnailUri, 
-            QPixmap      pixmap, 
-            QString      flavor);
-    void thumbnailError (
-            QString      message,
-            QUrl         url);
-    void thumbnailLoadingFinished (
-            int          left);
-
 public slots:
     void thumbnailLoaded (WallpaperDescriptor *desc);
 

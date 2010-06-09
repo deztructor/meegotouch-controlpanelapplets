@@ -176,24 +176,6 @@ Ft_WallpaperDescriptor::createDescriptor ()
             m_Desc, SIGNAL (thumbnailLoaded (WallpaperDescriptor *)),
             &m_SignalSink, SLOT (thumbnailLoaded (WallpaperDescriptor *)));
     QVERIFY (connectSuccess);
-
-    /*
-     * Checking if the slots are there.
-     */
-    connectSuccess = connect (
-            &m_SignalSink, SIGNAL(thumbnailReady(QUrl, QUrl, QPixmap, QString)),
-            m_Desc, SLOT (thumbnailReady(QUrl, QUrl, QPixmap, QString)));
-    QVERIFY (connectSuccess);
-    
-    connectSuccess = connect (
-            &m_SignalSink, SIGNAL(thumbnailError(QString, QUrl)),
-            m_Desc, SLOT (thumbnailError(QString, QUrl)));
-    QVERIFY (connectSuccess);
-
-    connectSuccess = connect (
-            &m_SignalSink, SIGNAL(thumbnailLoadingFinished(int)),
-            m_Desc, SLOT (thumbnailLoadingFinished(int)));
-    QVERIFY (connectSuccess);
 }
 
 QTEST_APPLESS_MAIN(Ft_WallpaperDescriptor)
