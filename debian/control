@@ -5,9 +5,8 @@ Maintainer: David Kedves <dkedves@blumsoft.eu>
 Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.7.11),
                libmeegotouch-dev (>= 0.20), libqmsystem-dev (>= 0.1.64),
                libprofile-qt-dev (>= 0.13), system-ui-dev (>= 0.15.2),
-               libdbus-1-dev, libdbus-glib-1-dev, libglib2.0-dev,
                libqttracker-dev, libduithumbnailer-dev, libcellular-qt-dev,
-               clean-device-dev, libresourceqt-dev
+               clean-device-dev
 Standards-Version: 3.8.0
 
 Package: systemui-applets-tests
@@ -52,10 +51,7 @@ Description: A deprecated package
 Package: duistatusindicatormenu-volumeplugin
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends},
-         systemui-applets-l10n-engineering-english,
-         pulseaudio-module-meego-mainvolume
-Description: Volume status indicator plugin
+Description: Dummy package: volumecontrol ui has been moved to system-ui
 
 Package: duicontrolpanel-displayapplet
 Section: misc
