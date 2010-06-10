@@ -123,6 +123,8 @@ void DisplayWidget::initWidget ()
 
     policy->addItem (blankinhibitLayout);
 
+    policy->addStretch ();
+
     setLayout (mainLayout);
 }
 

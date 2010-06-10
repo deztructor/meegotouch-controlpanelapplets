@@ -2,7 +2,7 @@
 Type=DUIApplet
 Name=Profile
 X-logical-id=qtn_prof_profile
-X-translation-catalog=systemui-applets
+X-translation-catalog=profiles
 Icon=
 Exec=
 
