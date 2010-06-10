@@ -30,5 +30,8 @@ public:
 private:
     QPointer<ThemeWidget> m_MainWidget;
     QPointer<ThemeBusinessLogic> m_ThemeBusinessLogic;
+    #ifdef UNIT_TEST
+    friend class Ut_ThemeApplet;
+    #endif
 };
 #endif
