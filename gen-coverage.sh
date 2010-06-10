@@ -15,15 +15,14 @@ if test "x$SBOX_USE_CCACHE" = xyes; then
 	export SBOX_USE_CCACHE=no
 fi
 
-if [ -f Makefile ]; then
-    make distclean
-fi
-
 rm -fr ./coverage/*
 
-qmake DCP_BUILD_FEATURES=coverage
+echo "qmake BUILD_FEATURES=coverage"
+qmake BUILD_FEATURES=coverage
+
+echo "make coverage"
 make clean
 make coverage
-ls -lh 
-./coverage/index.html
+
+ls -lh ./coverage/index.html
 
