@@ -154,9 +154,13 @@ WallpaperCurrentDescriptor::setFromFilenames  (
     if (landscapeFile.isEmpty())
         return false;
 
+#if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
+#  warning This should be stubbed or something
+#else
     QFile lFile (landscapeFile);
     if (!lFile.exists())
         return false;
+#endif
 
     m_LandscapeTrans = WallpaperITrans();
     m_PortraitTrans = WallpaperITrans();

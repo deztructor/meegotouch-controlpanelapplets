@@ -29,6 +29,8 @@ public:
 
 private:
     QPointer<BatteryWidget> m_MainWidget;
-
+    #ifdef UNIT_TEST
+    friend class Ut_BatteryApplet;
+    #endif
 };
-#endif // BATTERYAPPLET_H
+#endif
