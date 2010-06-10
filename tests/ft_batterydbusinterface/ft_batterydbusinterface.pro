@@ -1,4 +1,6 @@
 include(../coverage.pri)
+include(../check.pri)
+
 SRC_PREFIX = ../../src/batteryapplet
 STUB_PREFIX = ../stubs
 INCLUDEPATH += $$SRC_PREFIX \

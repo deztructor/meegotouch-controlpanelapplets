@@ -1,4 +1,6 @@
 include(../coverage.pri)
+include(../check.pri)
+
 SRC_PREFIX = ../../src/wallpaperapplet
 STUB_PREFIX = ../stubs
 INCLUDEPATH += $$SRC_PREFIX \
@@ -61,3 +63,6 @@ SOURCES += \
     $$SRC_PREFIX/wallpaperwidget.cpp
 
 INSTALLS += target
+
+MOC_DIR=./.tmp
+

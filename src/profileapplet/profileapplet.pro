@@ -1,3 +1,5 @@
+include(../coverage.pri)
+
 TEMPLATE = lib
 CONFIG += plugin \
           gui \
@@ -9,13 +11,6 @@ LIBS += -lprofile-qt
 INCLUDEPATH += /usr/include/profile-qt
 
 QT += dbus
-
-contains(cov, true) { 
-    message("Coverage options enabled")
-    QMAKE_CXXFLAGS += --coverage
-    QMAKE_LFLAGS += --coverage
-}
-
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
 HEADERS = \

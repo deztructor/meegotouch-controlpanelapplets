@@ -1,15 +1,11 @@
+include(../coverage.pri)
+
 TEMPLATE = lib
 CONFIG += plugin \
           gui \
           meegotouch \
           duicontrolpanel \
           silent
-
-contains(cov, true) { 
-    message("Coverage options enabled")
-    QMAKE_CXXFLAGS += --coverage
-    QMAKE_LFLAGS += --coverage
-}
 
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
