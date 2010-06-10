@@ -5,7 +5,7 @@
 #include <QPluginLoader>
 #include <QtTest/QtTest>
 #include <mapplication.h>
-#include <mstatusindicatormenuplugininterface.h>
+#include <mstatusindicatormenuextensioninterface.h>
 
 class MApplicationWindow;
 

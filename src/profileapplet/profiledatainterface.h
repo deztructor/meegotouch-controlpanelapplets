@@ -5,6 +5,7 @@
 #define PROFILEDATAINTERFACE_H
 
 #include <QObject>
+#include <QPair>
 class Profile;
 
 class ProfileDataInterface : public QObject
@@ -23,11 +24,11 @@ public:
     };
 
     struct ProfileData {
-        ProfileId  profileId;
-        QString    profileName;
-        int        volumeLevel;
-        bool       vibrationEnabled;
-        bool       isActive;
+        ProfileId                 profileId;
+        QPair<QString, QString>   visualData;       /*< IconId, profilenam(translated) pair */
+        int                       volumeLevel;
+        bool                      vibrationEnabled;
+        bool                      isActive;
     };
 
     ProfileDataInterface ();
@@ -40,6 +41,7 @@ signals:
 
 public:
     QString getCurrentProfileName ();
+    QString getCurrentProfileIconId ();
     int getCurrentProfile ();
     QList<ProfileData> getProfilesData ();
     void setVibration (int id, bool value);
@@ -56,6 +58,7 @@ private:
     static ProfileId mapId (const QString &id);
     static QString mapId (int id);
     static QString id2Name (const QString &id);
+    static QString mapId2IconID (int id);
 
 private:
     Profile *m_ProfileAPI;
