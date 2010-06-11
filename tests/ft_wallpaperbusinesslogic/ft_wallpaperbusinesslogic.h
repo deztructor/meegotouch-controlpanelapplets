@@ -35,7 +35,6 @@ private slots:
     void initTestCase ();
     void cleanupTestCase ();
 
-    void testEditedImage ();
     void testCreateDirectory ();
     void testAvailableWallpapers ();
     void testCurrentWallpaper ();

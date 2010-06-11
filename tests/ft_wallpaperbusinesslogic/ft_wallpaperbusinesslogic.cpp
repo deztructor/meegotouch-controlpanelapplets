@@ -90,17 +90,6 @@ Ft_WallpaperBusinessLogic::testCreateDirectory ()
     QVERIFY (outputDir.exists());
 }
 
-void
-Ft_WallpaperBusinessLogic::testEditedImage ()
-{
-    WallpaperDescriptor desc;
-
-    m_Api->setEditedImage (&desc);
-    QVERIFY (m_Api->editedImage() == &desc);
-
-    m_Api->setEditedImage (0);
-    QVERIFY (m_Api->editedImage() == 0);
-}
 
 /*!
  * Gets the list of the available wallpapers, checks if the list is not empty,

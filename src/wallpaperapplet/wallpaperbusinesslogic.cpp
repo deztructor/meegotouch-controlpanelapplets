@@ -229,7 +229,8 @@ void
 WallpaperBusinessLogic::setEditedImage (
         WallpaperDescriptor  *desc)
 {
-    SYS_DEBUG ("*** desc = %s", SYS_STR(desc->filename()));
+    SYS_DEBUG ("*** desc = %s", 
+            desc ? SYS_STR(desc->filename()) : "NULL");
     m_EditedImage = desc;
 }
 
@@ -239,7 +240,8 @@ WallpaperBusinessLogic::setEditedImage (
 WallpaperDescriptor *
 WallpaperBusinessLogic::editedImage ()
 {
-    SYS_DEBUG ("*** m_EditedImage = %s", SYS_STR(m_EditedImage->filename()));
+    SYS_DEBUG ("*** m_EditedImage = %s", 
+            m_EditedImage ? SYS_STR(m_EditedImage->filename()) : "NULL");
     return m_EditedImage;
 }
 

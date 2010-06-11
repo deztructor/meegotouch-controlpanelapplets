@@ -21,6 +21,8 @@ private slots:
 
     void testGConfItems ();
     void testDirPath ();
+    void testEditedImage ();
+    void testAvailableWallpapers ();
     void testITrans ();
 
 private:

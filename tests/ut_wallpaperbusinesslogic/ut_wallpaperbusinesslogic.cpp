@@ -82,6 +82,83 @@ Ut_WallpaperBusinessLogic::testDirPath ()
     QVERIFY (path.endsWith("/"));
 }
 
+void
+Ut_WallpaperBusinessLogic::testEditedImage ()
+{
+    WallpaperDescriptor desc;
+
+    m_Api->setEditedImage (&desc);
+    QVERIFY (m_Api->editedImage() == &desc);
+
+    m_Api->setEditedImage (0);
+    QVERIFY (m_Api->editedImage() == 0);
+}
+
+/*
+ * The tracker is stubbed, so we can test the available wllpapers. It is only
+ * the current wallpaper singleton, we have to do something with that too...
+ */
+void
+Ut_WallpaperBusinessLogic::testAvailableWallpapers ()
+{
+    QList<WallpaperDescriptor *> availableWallpapers;
+    int n;
+
+    availableWallpapers = m_Api->availableWallpapers ();
+    /*
+     * There should be at least one available wallpaper, that is the current
+     * wallpaper.
+     */
+    SYS_DEBUG ("We have %d available wallpapers.", availableWallpapers.size());
+    QVERIFY (availableWallpapers.size() > 0);
+
+    n = 0;
+    foreach (WallpaperDescriptor *desc, availableWallpapers) {
+        QString   filename, title, basename;
+        QString   extension, mimetype;
+        QString   suggestedp, suggestedl;
+        QString   originalp, originall;
+
+        filename = desc->filename ();
+        title = desc->title ();
+        basename = desc->basename ();
+        extension = desc->extension ();
+        mimetype = desc->mimeType ();
+        suggestedp = desc->suggestedOutputFilename (M::Portrait);
+        suggestedl = desc->suggestedOutputFilename (M::Landscape);
+        originalp = desc->originalImageFile (M::Portrait);
+        originall = desc->originalImageFile (M::Landscape);
+
+        #if 0
+        /*
+         * These might prove usefull in the future, but obviously generate too
+         * much output.
+         */
+        SYS_DEBUG ("*********** available wallpaper #%3d ****************", n);
+        SYS_DEBUG ("*** filename   = %s", SYS_STR(filename));
+        SYS_DEBUG ("*** title      = %s", SYS_STR(title));
+        SYS_DEBUG ("*** basename   = %s", SYS_STR(basename));
+        SYS_DEBUG ("*** mimetype   = %s", SYS_STR(mimetype));
+        SYS_DEBUG ("*** extension  = %s", SYS_STR(extension));
+        SYS_DEBUG ("*** suggestedp = %s", SYS_STR(suggestedp));
+        SYS_DEBUG ("*** suggestedl = %s", SYS_STR(suggestedl));
+        SYS_DEBUG ("*** originalp  = %s", SYS_STR(originalp));
+        SYS_DEBUG ("*** originall  = %s", SYS_STR(originall));
+        #endif
+        QVERIFY (!filename.isEmpty());
+        QVERIFY (!title.isEmpty());
+        QVERIFY (!basename.isEmpty());
+        QVERIFY (!mimetype.isEmpty());
+        QVERIFY (!suggestedp.isEmpty());
+        QVERIFY (!suggestedl.isEmpty());
+        QVERIFY (!originalp.isEmpty());
+        QVERIFY (!originall.isEmpty());
+
+        ++n;
+    }
+}
+
+
 /*!
  * Checks the low level WallpaperITrans class, its tag methods and overloaded
  * operators.
