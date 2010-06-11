@@ -43,6 +43,15 @@ Tracker::rawSparqlQuery (
     QVector<QStringList> retval;
     
     SYS_DEBUG ("*** query = %s", SYS_STR(query));
+
+    QStringList list1;
+    list1 << 
+        "file:///NoDir/NoSuchFile.png" <<
+        "The image title1" <<
+        "image/png" <<
+        "300" << "200";
+
+    retval << list1;
     return retval;
 }
 

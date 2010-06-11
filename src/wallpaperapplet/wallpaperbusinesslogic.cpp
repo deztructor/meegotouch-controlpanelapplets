@@ -26,7 +26,8 @@
 #include <MTheme>
 #include <MGConfItem>
 
-#undef DEBUG
+#define LOTDEBUG
+#define DEBUG
 #include "../debug.h"
 
 static const QString PortraitKey = 
@@ -200,6 +201,14 @@ WallpaperBusinessLogic::availableWallpapers () const
 
         #ifdef LOTDEBUG
         SYS_DEBUG ("*** url     = %s", SYS_STR(partlist[FieldUrl]));
+
+        for (int n = 0; n < partlist.size(); ++n) {
+            SYS_DEBUG ("partlist[%d] = %s", n, SYS_STR(partlist[n]));
+        }
+
+        SYS_DEBUG ("*** url     = %s", SYS_STR(partlist[FieldUrl]));
+
+        SYS_DEBUG ("");
         #endif
 
         desc = new WallpaperDescriptor;
