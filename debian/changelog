@@ -1,11 +1,17 @@
 systemui-applets (0.14.6~1) harmattan; urgency=low
 
+  [ David Kedves ]
   * Fixes: NB#170735 - No Error message shown if user tries to change the
                        USB mode in USB setting view, while the USB cable is
                        connecting with the device.
   * Partially fixed NB#171105 - Translation Broken in Profiles
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 10 Jun 2010 09:07:08 +0200
+  [ Sandor Pinter ]
+  * Changing profile dcp applet according to lates UI-spec
+  * Changing profile statusindicatormenu
+  * Finetune the fix for NB#171105
+
+ -- Sandor Pinter <sandor.pinter@blumsoft.eu>  Fri, 11 Jun 2010 13:46:10 +0200
 
 systemui-applets (0.14.5-1) harmattan; urgency=low
 
