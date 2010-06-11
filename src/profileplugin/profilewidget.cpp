@@ -17,11 +17,13 @@
 #include "profilewidget.h"
 #include "profiledatainterface.h"
 #include "profilebuttons.h"
+#include "profileplugin.h"
 
 #undef DEBUG
 #include "../debug.h"
 
 #include <MButton>
+#include <MDialog>
 #include <MButtonGroup>
 #include <MApplication>
 #include <MContainer>
@@ -30,80 +32,87 @@
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 #include <MLocale>
-#include <MStatusIndicatorMenuPluginInterface>
+#include <MStatusIndicatorMenuExtensionInterface>
 
 #include <QGraphicsLinearLayout>
 
-#define SYSTEMUI_TRANSLATION "systemui-applets"
+static const char *systemui_translation = "systemui-applets.qm";
+static const char *profiles_translation = "profiles";
 
 ProfileWidget::ProfileWidget (
-    MStatusIndicatorMenuInterface &statusIndicatorMenu,
+    ProfilePlugin *profilePlugin,
     QGraphicsItem *parent) :
-        MWidget (parent),
-        statusIndicatorMenu (statusIndicatorMenu),
+        MButton (parent),
+        plugin (profilePlugin),
         dataIf (0),
         profileButtons (0)
 {
+    SYS_DEBUG ("");
     MApplication  *App = MApplication::instance ();
-
-    Q_UNUSED(statusIndicatorMenu);
     dataIf = new ProfileDataInterface ();
-
-    QGraphicsLinearLayout *mainLayout =
-        new QGraphicsLinearLayout (Qt::Vertical);
-
-    setLayout (mainLayout);
-    mainLayout->setContentsMargins (0, 0, 0, 0);
-
     connect (App, SIGNAL (localeSettingsChanged ()),
              this, SLOT (loadTranslation ()));
     loadTranslation ();
 
-    // Create a container for the profiles
-    initProfileButtons ();
-
+    setViewType(MButton::iconType);
+    setObjectName("StatusIndicatorMenuTopRowExtensionButton");
+    connect(this, SIGNAL(clicked()), this, SLOT(showProfileDialog()));
     connect (dataIf, SIGNAL (currentProfile (int)),
-             profileButtons, SLOT (selectProfile (int)));
-
-    mainLayout->addItem (profileButtons);
+             this, SLOT (profileChanged ()));
+    profileChanged();
 }
 
 ProfileWidget::~ProfileWidget ()
 {
+    SYS_DEBUG ("");
     delete dataIf;
     dataIf = NULL;
 }
 
+void ProfileWidget::profileChanged()
+{
+    setText(dataIf->getCurrentProfileName());
+    setIconID(dataIf->getCurrentProfileIconId());
+}
+
+void ProfileWidget::showProfileDialog()
+{
+    // Create a dialog for choosing the profile
+    //% "Select Profile"
+    MDialog* dialog = new MDialog(qtTrId("qtn_prof_select"), M::NoStandardButton);
+
+    initProfileButtons();
+    dialog->setCentralWidget(profileButtons);
+    profileButtons->connect(profileButtons, SIGNAL(profileSelected(int)), dialog, SLOT(accept()));
+    // Show the dialog
+    dialog->exec();
+
+    // Hide the status indicator menu
+    if (MStatusIndicatorMenuInterface *menu = plugin->statusIndicatorMenuInterface())
+    {
+        menu->hideStatusIndicatorMenu();
+    }
+}
 void
 ProfileWidget::initProfileButtons ()
 {
+    if (profileButtons)
+        return;
     profileButtons = new ProfileButtons ();
     //% "Profiles"
-    profileButtons->setTitle (qtTrId ("qtn_prof_profile"));
-    QMap<int, QString> map;
+    QMap<int, QPair<QString, QString> > map;
     QList<ProfileDataInterface::ProfileData> l = dataIf->getProfilesData ();
 
     for (int i = 0; i < l.count (); ++i) {
         ProfileDataInterface::ProfileData d = l.at (i);
-        map.insert (d.profileId, d.profileName);
+        map.insert (d.profileId, d.visualData);
     }
     profileButtons->init (map, dataIf->getCurrentProfile ());
 
-    connect (profileButtons, SIGNAL (headerClicked ()),
-             this, SLOT (showProfileModificationPage ()));
+    connect (dataIf, SIGNAL (currentProfile (int)),
+             profileButtons, SLOT (selectProfile (int)));
     connect (profileButtons, SIGNAL (profileSelected (int)),
              dataIf, SLOT (setProfile (int)));
-}
-
-void
-ProfileWidget::showProfileModificationPage ()
-{
-    // instantiate the interface
-    DuiControlPanelIf cpIf;
-    // check the interface is valid
-    if (!cpIf.isValid ())
-        return;
-    cpIf.appletPage ("Profile");
 }
 
 void
@@ -121,8 +130,8 @@ ProfileWidget::loadTranslation ()
     SYS_DEBUG ("Language changed to '%s'",
                SYS_STR (locale.language ()));
 
-    locale.installTrCatalog (SYSTEMUI_TRANSLATION ".qm");
-    locale.installTrCatalog (SYSTEMUI_TRANSLATION);
+    locale.installTrCatalog (systemui_translation);
+    locale.installTrCatalog (profiles_translation);
     MLocale::setDefault (locale);
 
     running = false;
@@ -136,14 +145,12 @@ ProfileWidget::retranslateUi ()
 
     SYS_DEBUG ("");
 
-    profileButtons->setTitle (qtTrId ("qtn_prof_profile"));
-
     QMap<int, QString> map;
     QList<ProfileDataInterface::ProfileData> l = dataIf->getProfilesData ();
 
     for (int i = 0; i < l.count (); ++i) {
         ProfileDataInterface::ProfileData d = l.at (i);
-        map.insert (d.profileId, d.profileName);
+        map.insert (d.profileId, d.visualData.second);
     }
     // Update the profile names [dataIf will returns a localised lists]
     profileButtons->retranslate (map);

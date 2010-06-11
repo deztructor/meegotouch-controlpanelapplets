@@ -17,7 +17,6 @@ HEADERS = \
     ../debug.h \
     profileapplet.h \
     profilewidget.h \
-    profilebrief.h \
     profilecontainer.h \
     profilebuttons.h \
     profiledatainterface.h
@@ -25,7 +24,6 @@ SOURCES = \
     ../debug.cpp \
     profileapplet.cpp \
     profilewidget.cpp \
-    profilebrief.cpp \
     profilecontainer.cpp \
     profilebuttons.cpp \
     profiledatainterface.cpp

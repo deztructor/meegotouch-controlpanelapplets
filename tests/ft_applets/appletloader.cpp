@@ -47,7 +47,7 @@ Ft_AppletLoader::cleanupTestCase ()
  * This function will do the basic loading/unloading tests on the applet.
  */
 void
-Ft_AppletLoader::DoAppletTest (const char *soname)
+Ft_AppletLoader::DoAppletTest (const char *soname, bool hasBrief)
 {
     QPluginLoader loader;
 
@@ -77,14 +77,20 @@ Ft_AppletLoader::DoAppletTest (const char *soname)
      * Checking if the applet brief is constructed.
      */
     DcpBrief *brief = applet->constructBrief ();
-    QVERIFY2 (brief, "Error when creating brief widget");
-
+    if (hasBrief)
+    {
+        QVERIFY2(brief, 
+		    "Error when creating brief widget");
 #ifdef TEST_NEW_TITLE_METHODS
-    /*
-     * Checking if the applet has a non-empty title string.
-     */
-    QVERIFY (! brief->titleText ().isEmpty ());
+        /*
+         * Checking if the applet has a non-empty title string.
+         */
+        QVERIFY (! brief->titleText ().isEmpty ());
 #endif
+    }
+    else
+        QVERIFY2(!brief, 
+		    "This applet should not have a Brief");
 
     /*
      * Checking if the the main view (the applet widget) is constructed. FIXME:
@@ -108,55 +114,55 @@ Ft_AppletLoader::DoAppletTest (const char *soname)
 void
 Ft_AppletLoader::testbatteryapplet ()
 {
-    DoAppletTest ("libbatteryapplet.so");
+    DoAppletTest ("libbatteryapplet.so", true);
 }
 
 void
 Ft_AppletLoader::testdisplayapplet ()
 {
-    DoAppletTest ("libdisplayapplet.so");
+    DoAppletTest ("libdisplayapplet.so", true);
 }
 
 void
 Ft_AppletLoader::testprofileapplet ()
 {
-    DoAppletTest ("libprofileapplet.so");
+    DoAppletTest ("libprofileapplet.so", false);
 }
 
 void
 Ft_AppletLoader::testusbapplet ()
 {
-    DoAppletTest ("libusbapplet.so");
+    DoAppletTest ("libusbapplet.so", true);
 }
 
 void
 Ft_AppletLoader::testresetapplet ()
 {
-    DoAppletTest ("libresetapplet.so");
+    DoAppletTest ("libresetapplet.so", true);
 }
 
 void
 Ft_AppletLoader::testaboutapplet ()
 {
-    DoAppletTest ("libaboutapplet.so");
+    DoAppletTest ("libaboutapplet.so", true);
 }
 
 void
 Ft_AppletLoader::testthemeapplet ()
 {
-    DoAppletTest ("libthemeapplet.so");
+    DoAppletTest ("libthemeapplet.so", true);
 }
 
 void
 Ft_AppletLoader::testwallpaperapplet ()
 {
-    DoAppletTest ("libwallpaperapplet.so");
+    DoAppletTest ("libwallpaperapplet.so", true);
 }
 
 void
 Ft_AppletLoader::testwarrantyapplet ()
 {
-    DoAppletTest ("libwarrantyapplet.so");
+    DoAppletTest ("libwarrantyapplet.so", true);
 }
 
 QTEST_APPLESS_MAIN(Ft_AppletLoader)

@@ -4,55 +4,41 @@
 #ifndef PROFILECONTAINER_H
 #define PROFILECONTAINER_H
 
-#include <MContainer>
+#include <MWidget>
 
-class MLabel;
 class MButton;
-class MSlider;
-class MImageWidget;
+class MLabel;
 
 /*!
- * A widget that shows and controls the basic properties of a profile: the mute
- * state, the volume level and the vibration on/off property.
+ * A widget that shows and controls a profile's vibration on/off
+ * property.
  */
-class ProfileContainer: public MContainer
+class ProfileContainer: public MWidget
 {
     Q_OBJECT
+    Q_PROPERTY(bool checked READ isChecked WRITE setChecked)
 
 public:
     ProfileContainer(
             int            id, 
             const QString &title, 
-            int            level, 
             bool           vibra, 
             MWidget     *parent = 0);
     ~ProfileContainer ();
 
-    void setLevel (int value);
-    void setVibration (bool enabled);
     int id ();
-    void retranslateUi ();
+    bool isChecked() const;
+    void setChecked(bool buttonChecked);
+    void setText(const QString &text);
+    QString text() const;
 
 signals:
-    void sliderValueChanged (int newValue);
-    void vibrationChanged (bool enabled);
-
-private slots:
-    void slotSliderValueChanged (int newValue); 
-    void slotVibrationSwitchToggled (bool toggle);
-    
-private:
-    void setLayout();
+    void toggled(bool checked);
 
 private:
-    MSlider         *m_Slider;
-    MButton         *m_VibrationSwitch;
-    MLabel          *m_VibrationLabel;
-    MLabel          *m_OnOffLabel;
-    MLabel          *m_NoRingLabel;
-    MImageWidget    *m_Img;
-    int                m_Level;
-    const int          m_ProfileId;
+    const int      m_ProfileId;
+    MButton        *m_Button;
+    MLabel         *m_Label;
 };
 
 #endif

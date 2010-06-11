@@ -45,6 +45,18 @@ ProfileDataInterface::getCurrentProfileName ()
     return id2Name (prof);
 }
 
+QString 
+ProfileDataInterface::getCurrentProfileIconId ()
+{
+    SYS_DEBUG ("");
+
+    #ifdef USE_TEST_DATA
+    return "Ringing";
+    #endif
+
+    return mapId2IconID (getCurrentProfile());
+}
+
 void 
 ProfileDataInterface::currentProfileNameChanged (
         const QString &prof)
@@ -79,10 +91,9 @@ ProfileDataInterface::getProfilesData ()
         //get name...
         QString id = ids.at(i);
         d.profileId = mapId (id);
-        d.profileName = id2Name (id);
-        d.volumeLevel = checkSilent (
-                d.profileId, m_ProfileAPI->volumeLevel(id));
-        d.vibrationEnabled = m_ProfileAPI->isVibrationEnabled (id);
+        d.visualData.first = mapId2IconID (d.profileId);
+        d.visualData.second = id2Name (id);
+       d.vibrationEnabled = m_ProfileAPI->isVibrationEnabled (id);
         data.append(d);
     }
     SYS_DEBUG ("data.count () = %d", data.count ());
@@ -94,8 +105,8 @@ ProfileDataInterface::getProfilesData ()
         //get name...
         QString id ("ringing");
         d.profileId = ProfileIdRinging;
-        d.profileName = "Ringing";
-        d.volumeLevel = 10;
+        d.visualData.second = "Ringing";
+        d.visualData.first = "ringing-icon";
         d.vibrationEnabled = false;
         data.append (d);
     } {
@@ -103,8 +114,8 @@ ProfileDataInterface::getProfilesData ()
         //get name...
         QString id ("silent");
         d.profileId = ProfileIdSilent;
-        d.profileName = "Silent";
-        d.volumeLevel = 0;
+        d.visualData.second= "Silent";
+        d.visualData.first = "silent-icon";
         d.vibrationEnabled = true;
         data.append (d);
     } {
@@ -112,8 +123,8 @@ ProfileDataInterface::getProfilesData ()
         //get name...
         QString id ("beep");
         d.profileId = ProfileIdBeep;
-        d.profileName = "Beep";
-        d.volumeLevel = 10;
+        d.visualData.second = "Beep";
+        d.visualData.first = "beep-icon";
         d.vibrationEnabled = false;
         data.append (d);
     } {
@@ -121,8 +132,8 @@ ProfileDataInterface::getProfilesData ()
         //get name...
         QString id ("loud");
         d.profileId = ProfileIdLoud;
-        d.profileName = "Loud";
-        d.volumeLevel = 100;
+        d.visualData.second = "Loud";
+        d.visualData.first = "lound-icon";
         d.vibrationEnabled = false;
         data.append (d);
     }
@@ -158,32 +169,27 @@ ProfileDataInterface::setVibration (
     }
 }
 
-void 
-ProfileDataInterface::setVolumeLevel (
-        int   id, 
-        int   value)
+QString ProfileDataInterface::mapId2IconID (int id)
 {
-    SYS_DEBUG ("id = %d, value = %d", id, value);
+    QString iconId = "";
 
-    bool success = m_ProfileAPI->setVolumeLevel(mapId(id), value);
-    if (!success) {
-        SYS_WARNING ("Failed setting volume level");
-        // TODO: what??
-    }
-}
-
-int 
-ProfileDataInterface::checkSilent (
-        int   id, 
-        int   level)
-{
-    if (id == ProfileIdSilent) {
-        level = -1;
+    switch (id) {
+        case ProfileIdRinging:
+            iconId = QString("icon-m-common-volume");
+            break;
+        case ProfileIdSilent:
+            iconId = QString("icon-m-profile-silent");
+            break;
+        case ProfileIdBeep:
+            iconId = QString("icon-m-profile-beep");
+            break;
+        case ProfileIdLoud:
+            iconId = QString("icon-m-profile-loud");
+            break;
     }
 
-    return level;
+    return iconId;
 }
-
 QString 
 ProfileDataInterface::id2Name (
         const QString &id)

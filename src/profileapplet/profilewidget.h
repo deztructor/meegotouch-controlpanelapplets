@@ -24,19 +24,14 @@ public:
     virtual ~ProfileWidget();
 
     void retranslateUi ();
-    QString currentProfile();
 
 protected:
     void initWidget();
 
 private slots:
-    void initProfiles ();
-    void setProfile (int profileId);
-    void setVolume (int profileId, int level);
-    void setVibration (int profileId, bool enabled);
+   void initProfiles();
+   void setVibration (int profileId, bool enabled);
 
-    void profileSelected (int id);
-    void sliderValueChanged (int index);
     void vibrationChanged (bool enabled);
 
 private:
@@ -44,9 +39,6 @@ private:
 
 private:
     QPointer<ProfileDataInterface>   m_ProfileIf;
-    ProfileButtons                  *m_ProfileButtons;
     QHash<int, ProfileContainer*>    m_Containers;
-    MLabel                        *m_currentHeader;
-    MLabel                        *m_settingsHeader;
 };
 #endif

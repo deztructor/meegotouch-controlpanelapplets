@@ -1,23 +1,23 @@
 #ifndef PROFILEWIDGET_H
 #define PROFILEWIDGET_H
 
-#include <MWidget>
+#include <MButton>
 
-class MApplicationPage;
 class MStatusIndicatorMenuInterface;
 class ProfileDataInterface;
 class ProfileButtons;
+class ProfilePlugin;
 
 /*!
  * The Profile widget makes it possible to select the currently
  * active profile.
  */
-class ProfileWidget : public MWidget
+class ProfileWidget : public MButton
 {
     Q_OBJECT
 
 public:
-    ProfileWidget (MStatusIndicatorMenuInterface &statusIndicatorMenu,
+    ProfileWidget (ProfilePlugin *plugin,
                    QGraphicsItem *parent = NULL);
     virtual ~ProfileWidget ();
     /*!
@@ -27,9 +27,16 @@ public:
 
 private slots:
     /*!
-     * \brief A slot for showing the profile mcontrolpanel plugin
+     * \brief Shows the profile dialog
      */
-    void showProfileModificationPage ();
+    void showProfileDialog();
+
+    /*!
+     * \brief Changes the button according to current profile
+     */
+    void profileChanged();
+
+
 
     /*!
      * \brief A slot for reloading the translations on locale-change
@@ -44,7 +51,7 @@ private:
 
 private:
     //! Interface for controlling the status indicator menu
-    MStatusIndicatorMenuInterface &statusIndicatorMenu;
+    ProfilePlugin *plugin;
 
     //! Profile data If to receive information about possible profiles
     ProfileDataInterface            *dataIf;

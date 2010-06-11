@@ -8,7 +8,7 @@
 
 using namespace QTest;
 
-#define LIBDIR "/usr/lib/meegotouch/statusindicatormenuplugins/"
+#define LIBDIR "/usr/lib/meegotouch/applicationextensions/"
 
 void
 Ft_PluginLoader::init ()
@@ -52,14 +52,17 @@ Ft_PluginLoader::DoPluginTest (const QString &soname)
     QPluginLoader  loader (QString (LIBDIR) + soname);
     QObject       *object = loader.instance ();
 
-    MStatusIndicatorMenuPluginInterface* plugin =
-        qobject_cast<MStatusIndicatorMenuPluginInterface *> (object);
+    MStatusIndicatorMenuExtensionInterface* plugin =
+        qobject_cast<MStatusIndicatorMenuExtensionInterface *> (object);
 
     QVERIFY(plugin);
 
     qWait (150);
+    QVERIFY2(plugin->initialize ("Habla"),
+             "Error at plugin initialization");
 
-    QVERIFY2(plugin->constructWidget (*m_smstub),
+
+    QVERIFY2(plugin->widget (),
              "Error at plugin widget construction");
 
     qWait (150);
@@ -70,7 +73,7 @@ Ft_PluginLoader::DoPluginTest (const QString &soname)
 void
 Ft_PluginLoader::testprofileplugin ()
 {
-    DoPluginTest ("libprofile.so");
+    DoPluginTest ("libstatusindicatormenu-profile.so");
 }
 
 QTEST_APPLESS_MAIN(Ft_PluginLoader)

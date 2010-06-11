@@ -32,7 +32,11 @@ SOURCES = profileplugin.cpp \
           ../profileapplet/profilebuttons.cpp \
           ../debug.cpp
 
-TARGET        = $$qtLibraryTarget(profile)
+desktop_entry.path = /usr/share/meegotouch/applicationextensions
+desktop_entry.files = statusindicatormenu-profile.desktop
+
+TARGET        = $$qtLibraryTarget(statusindicatormenu-profile)
 DESTDIR       = lib
-target.path += /usr/lib/meegotouch/statusindicatormenuplugins
-INSTALLS +=  target
+target.path += /usr/lib/meegotouch/applicationextensions
+INSTALLS +=  target \
+        desktop_entry
