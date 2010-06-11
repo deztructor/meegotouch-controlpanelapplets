@@ -47,15 +47,17 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_NoTitlebar (false),
     m_Gesture (false)
 {
-    MApplication::activeApplicationWindow()->showFullScreen();
+    if (MApplication::activeApplicationWindow())
+        MApplication::activeApplicationWindow()->showFullScreen();
     
     setObjectName ("WallpaperEditorWidget");
     QTimer::singleShot (0, this, SLOT(createContent()));
     createActions ();
 
-    connect(MApplication::activeApplicationWindow(),
-            SIGNAL(orientationChanged(M::Orientation)),
-            this, SLOT(orientationChanged(M::Orientation)));
+    if (MApplication::activeApplicationWindow())
+        connect(MApplication::activeApplicationWindow(),
+                SIGNAL(orientationChanged(M::Orientation)),
+                this, SLOT(orientationChanged(M::Orientation)));
 }
 
 WallpaperEditorWidget::~WallpaperEditorWidget ()
@@ -261,6 +263,10 @@ WallpaperEditorWidget::createActions ()
     MApplicationWindow *window = 
         MApplication::instance()->activeApplicationWindow();
 
+    // FIXME: What to do then?
+    if (!window)
+        return;
+
     m_DoneAction = new MAction (
             "icon-m-framework-done",
             //% "Done"
@@ -298,7 +304,8 @@ WallpaperEditorWidget::slotDoneActivated ()
      * Turning back from fullscreen. This could be done in the destructor, but
      * that ends up with a segfault in the Qt...
      */
-    MApplication::activeApplicationWindow()->showNormal();
+    if (MApplication::activeApplicationWindow())
+        MApplication::activeApplicationWindow()->showNormal();
 
     /*
      * We are done with the editing, let's page back to the view where we have
@@ -315,7 +322,8 @@ WallpaperEditorWidget::back ()
      * Turning back from fullscreen. This could be done in the destructor, but
      * that ends up with a segfault in the Qt...
      */
-    MApplication::activeApplicationWindow()->showNormal();
+    if (MApplication::activeApplicationWindow())
+        MApplication::activeApplicationWindow()->showNormal();
 
     return DcpWidget::back();
 }
@@ -359,17 +367,23 @@ WallpaperEditorWidget::toggleTitlebars (
     /*
      * We do the showing/hiding here.
      */
-    currentPage = MApplication::activeApplicationWindow()->currentPage();
-    if (show) {
-        currentPage->setComponentsDisplayMode (
-                MApplicationPage::AllComponents,
-                MApplicationPageModel::Show); 
-        m_InfoHeader->show ();
-    } else {
-        currentPage->setComponentsDisplayMode (
-                MApplicationPage::AllComponents, 
-                MApplicationPageModel::Hide);
-        m_InfoHeader->hide ();
+    if (MApplication::activeApplicationWindow())
+        currentPage = MApplication::activeApplicationWindow()->currentPage();
+    else 
+        currentPage = 0;
+
+    if (currentPage) {
+        if (show) {
+            currentPage->setComponentsDisplayMode (
+                    MApplicationPage::AllComponents,
+                    MApplicationPageModel::Show); 
+            m_InfoHeader->show ();
+        } else {
+            currentPage->setComponentsDisplayMode (
+                    MApplicationPage::AllComponents, 
+                    MApplicationPageModel::Hide);
+            m_InfoHeader->hide ();
+        }
     }
 
 finalize:
@@ -424,7 +438,8 @@ WallpaperEditorWidget::redrawImage ()
      * We need to update the current page and not just this widget because of
      * those damn extra margins coming from somewhere.
      */
-    MApplication::activeApplicationWindow()->currentPage()->update();
+    if (MApplication::activeApplicationWindow())
+        MApplication::activeApplicationWindow()->currentPage()->update();
 }
 
 void 

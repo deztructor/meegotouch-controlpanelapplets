@@ -41,7 +41,7 @@ WallpaperApplet::pageMain(
 {
     SYS_DEBUG ("widgetId = %d", widgetId);
     switch (widgetId) {
-        case 0:
+        case MainWidget:
             if (m_MainWidget == 0) 
                 m_MainWidget = new WallpaperWidget (m_WallpaperBusinessLogic);
             return m_MainWidget;

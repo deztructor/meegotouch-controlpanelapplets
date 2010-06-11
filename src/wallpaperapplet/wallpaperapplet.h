@@ -22,6 +22,11 @@ public:
     WallpaperApplet ();
     ~WallpaperApplet ();
 
+    typedef enum {
+        MainWidget    = 0,
+        EditorWidget  = 1,
+    } WindowID;
+
     virtual void init();
     virtual DcpWidget *constructWidget (int widgetId);
     virtual DcpWidget *pageMain (int widgetId);

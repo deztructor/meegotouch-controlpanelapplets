@@ -3,6 +3,7 @@
 #include "ut_wallpaperapplet.h"
 #include "wallpaperapplet.h"
 #include "wallpaperwidget.h"
+#include "wallpapereditorwidget.h"
 
 #include <MApplication>
 #include <MAction>
@@ -61,15 +62,19 @@ Ut_WallpaperApplet::testTitle ()
 void
 Ut_WallpaperApplet::testConstructWidget ()
 {
-    DcpWidget *widget;
+    DcpWidget *widget, *editorWidget;
     bool       backAccepted;
 
     /*
      * Testing if the applet creates a widget the first time.
      */
-    widget = m_Applet->constructWidget (0);
+    widget = m_Applet->constructWidget (WallpaperApplet::MainWidget);
     QVERIFY (widget);
     QVERIFY (m_Applet->m_MainWidget == widget);
+    
+    editorWidget = m_Applet->constructWidget (WallpaperApplet::EditorWidget);
+    QVERIFY (editorWidget);
+    QVERIFY (m_Applet->m_EditorWidget == editorWidget);
     
     /*
      * Testing if the widget accepts the back. Our applets always accept back.
@@ -77,11 +82,22 @@ Ut_WallpaperApplet::testConstructWidget ()
     backAccepted = widget->back();
     QVERIFY (backAccepted);
 
+    backAccepted = editorWidget->back();
+    QVERIFY (backAccepted);
+
     /*
      * Testing if the applet knows about the destruction of the widget.
      */
+    delete editorWidget;
+    QVERIFY (!m_Applet->m_EditorWidget);
+
     delete widget;
     QVERIFY (!m_Applet->m_MainWidget);
+
+    /*
+     * For an invalid window ID we expect the null pointer. ;)
+     */
+    QVERIFY (!m_Applet->constructWidget(WallpaperApplet::EditorWidget + 1));
 }
 
 void 
