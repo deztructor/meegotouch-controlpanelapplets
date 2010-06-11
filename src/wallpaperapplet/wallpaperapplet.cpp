@@ -46,7 +46,7 @@ WallpaperApplet::pageMain(
                 m_MainWidget = new WallpaperWidget (m_WallpaperBusinessLogic);
             return m_MainWidget;
 
-        case 1:
+        case EditorWidget:
             if (m_EditorWidget == 0)
                 m_EditorWidget = new WallpaperEditorWidget (
                         m_WallpaperBusinessLogic);
