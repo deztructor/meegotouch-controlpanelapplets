@@ -57,7 +57,8 @@ private slots:
     void testThumbnailingByFilename ();
     void testThumbnailingWithoutData ();
     void testThumbnailingFailure ();
-    
+    void testFromFileNames ();
+
 private:
     void createDescriptor ();
     void dropDescriptor ();

@@ -1,3 +1,9 @@
+
+contains(BUILD_FEATURES,coverage) {
+	QMAKE_EXTRA_TARGETS += coverage
+	coverage.commands = $$system(true)
+}
+
 LANGUAGES =
 CATALOGNAME = systemui-applets
 SOURCEDIR = $$PWD/../src/displayapplet \

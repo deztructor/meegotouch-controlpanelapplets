@@ -1,3 +1,5 @@
+include(../coverage.pri)
+
 TEMPLATE = lib
 
 MOC_DIR = .moc

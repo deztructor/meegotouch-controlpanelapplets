@@ -1,9 +1,12 @@
 TEMPLATE = subdirs
 
+#
+# Aha!
+#
 contains(BUILD_FEATURES,coverage) {
-SUBDIRS = $$system(ls -1d ut_*/)
+	SUBDIRS = $$system(ls -1d ut_*/)
 } else {
-SUBDIRS = $$system(ls -1d ut_*/ ft_*/)
+	SUBDIRS = $$system(ls -1d ut_*/ ft_*/)
 }
 
 check.target = check
@@ -14,12 +17,13 @@ check-xml.target = check-xml
 check-xml.CONFIG = recursive
 QMAKE_EXTRA_TARGETS += check-xml
 
-QMAKE_CLEAN += **/*.log.xml **/*.log coverage.out
+QMAKE_CLEAN += **/*.log.xml **/*.log 
 
-coverage.target = coverage
-coverage.depends = clean
-coverage.CONFIG = recursive
-QMAKE_EXTRA_TARGETS += coverage
+contains(BUILD_FEATURES,coverage) {
+  QMAKE_EXTRA_TARGETS += coverage
+  coverage.target = coverage
+  coverage.CONFIG = recursive
+}
 
 support_files.commands += $$PWD/gen-tests-xml.sh > $$OUT_PWD/tests.xml
 support_files.target = support_files

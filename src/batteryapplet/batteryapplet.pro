@@ -1,3 +1,5 @@
+include(../coverage.pri)
+
 TEMPLATE = lib
 CONFIG += plugin \
           gui \

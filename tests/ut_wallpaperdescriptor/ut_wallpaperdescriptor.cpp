@@ -272,6 +272,61 @@ Ut_WallpaperDescriptor::testThumbnailingFailure ()
 }
 
 void
+Ut_WallpaperDescriptor::testFromFileNames ()
+{
+    QString file1 ("nolandscapefile.png");
+    QString file2 ("noportraitfile.png");
+    WallpaperCurrentDescriptor *curr = WallpaperCurrentDescriptor::instance();
+
+    curr->setFromFilenames (file1, file2);
+
+    /*
+     * When set from filenames all these properties should have the same value.
+     * This is the situation when the current wallpaper is set from the gconf
+     * items.
+     */
+    QString originalPortrait  = curr->originalImageFile (M::Portrait);
+    QString originalLandscape = curr->originalImageFile (M::Landscape);
+    QVERIFY (originalPortrait == file2);
+    QVERIFY (originalLandscape == file1);
+
+    QString suggestedPortrait = curr->suggestedOutputFilename (M::Portrait);
+    QString suggestedLandscape = curr->suggestedOutputFilename (M::Landscape);
+    QVERIFY (suggestedPortrait != suggestedLandscape);
+    QVERIFY (!suggestedPortrait.contains("/"));
+    QVERIFY (!suggestedLandscape.contains("/"));
+    
+    QString editedPortrait = curr->editedFilename (M::Portrait);
+    QString editedLandscape = curr->editedFilename (M::Landscape);
+    SYS_DEBUG ("*** = %s", SYS_STR(editedPortrait));
+    SYS_DEBUG ("*** = %s", SYS_STR(editedLandscape));
+    QVERIFY (editedPortrait == file2);
+    QVERIFY (editedLandscape == file1);
+
+    QString desktopString = curr->generateDesktopFile ("ThisIsThePath");
+    SYS_DEBUG ("*** = %s", SYS_STR(desktopString));
+    // FIXME: We obviously should do a much 
+
+    /*
+     * When set from image file names the image transformations should be all
+     * default.
+     */
+    WallpaperITrans trans1 = curr->iTrans (M::Portrait);
+    WallpaperITrans trans2 = curr->iTrans (M::Landscape);
+
+    QVERIFY (trans1.scale() == 1.0);
+    QVERIFY (trans1.x() == 0);
+    QVERIFY (trans1.y() == 0);
+    
+    QVERIFY (trans2.scale() == 1.0);
+    QVERIFY (trans2.x() == 0);
+    QVERIFY (trans2.y() == 0);
+}
+
+/******************************************************************************
+ * Low level test programs.
+ */
+void
 Ut_WallpaperDescriptor::dropDescriptor ()
 {
     if (m_Desc) {
