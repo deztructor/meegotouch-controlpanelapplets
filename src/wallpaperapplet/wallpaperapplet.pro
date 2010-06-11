@@ -1,11 +1,12 @@
 include(../coverage.pri)
 
 TEMPLATE = lib
+MOC_DIR = .moc
 CONFIG += plugin \
           gui \
           meegotouch \
           duicontrolpanel \
-          silent
+	  silent
 
 LIBS += \
     -lqttracker \

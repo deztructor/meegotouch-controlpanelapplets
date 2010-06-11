@@ -3,20 +3,13 @@ include(../check.pri)
 
 SRC_PREFIX = ../../src/wallpaperapplet
 STUB_PREFIX = ../stubs
-INCLUDEPATH += $$SRC_PREFIX \
-               $$STUB_PREFIX
+INCLUDEPATH += \
+	$$SRC_PREFIX \
+        $$STUB_PREFIX
 
 QT += \
     testlib \
     dbus 
-
-LIBS += \
-    -lqttracker \
-    -lduithumbnailer
-
-INCLUDEPATH += \
-    /usr/include/QtTracker \
-    /usr/include/duithumbnailer 
 
 TEMPLATE = app
 DEFINES += UNIT_TEST
@@ -32,6 +25,7 @@ CONFIG += \
 
 HEADERS += \
     $$STUB_PREFIX/thumbnailerstub.h \
+    $$STUB_PREFIX/trackerstub.h \
     ../../src/debug.h \
     ut_wallpaperdescriptor.h \
     $$SRC_PREFIX/wallpaperapplet.h \
@@ -48,6 +42,7 @@ HEADERS += \
 
 SOURCES += \
     $$STUB_PREFIX/thumbnailerstub.cpp \
+    $$STUB_PREFIX/trackerstub.cpp \
     ../../src/debug.cpp \
     ut_wallpaperdescriptor.cpp \
     $$SRC_PREFIX/wallpaperapplet.cpp \
@@ -64,5 +59,5 @@ SOURCES += \
 
 INSTALLS += target
 
-MOC_DIR=./.tmp
+MOC_DIR=./.moc
 

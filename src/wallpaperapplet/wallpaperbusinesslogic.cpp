@@ -13,7 +13,15 @@
 #include <QProcessEnvironment>
 #include <QPainter>
 
-#include <Tracker>
+/*
+ * In the functional tests we use the real thing, in the unit tests we use the
+ * stubbed version. 
+ */
+#if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
+#  include "trackerstub.h"
+#else
+#  include <Tracker>
+#endif
 
 #include <MTheme>
 #include <MGConfItem>

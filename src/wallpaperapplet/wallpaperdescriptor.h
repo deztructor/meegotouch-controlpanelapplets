@@ -13,7 +13,8 @@
 #include <MApplication>
 
 /*
- * In the functional tests 
+ * In the functional tests we use the real thing, in the unit tests we use the
+ * stubbed version. 
  */
 #if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
 #  include "thumbnailerstub.h"

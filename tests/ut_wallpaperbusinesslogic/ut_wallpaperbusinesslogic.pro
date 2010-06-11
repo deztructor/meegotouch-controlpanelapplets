@@ -10,14 +10,6 @@ QT += \
     testlib \
     dbus 
 
-LIBS += \
-    -lqttracker \
-    -lduithumbnailer
-
-INCLUDEPATH += \
-    /usr/include/QtTracker \
-    /usr/include/duithumbnailer 
-
 TEMPLATE = app
 DEFINES += UNIT_TEST
 TARGET = ut_wallpaperbusinesslogic
@@ -31,7 +23,8 @@ CONFIG += \
 	silent 
 
 HEADERS += \
-   $$STUB_PREFIX/thumbnailerstub.h \
+    $$STUB_PREFIX/thumbnailerstub.h \
+    $$STUB_PREFIX/trackerstub.h \
     ../../src/debug.h \
     ut_wallpaperbusinesslogic.h \
     $$SRC_PREFIX/wallpaperapplet.h \
@@ -48,6 +41,7 @@ HEADERS += \
 
 SOURCES += \
     $$STUB_PREFIX/thumbnailerstub.cpp \
+    $$STUB_PREFIX/trackerstub.cpp \
     ../../src/debug.cpp \
     ut_wallpaperbusinesslogic.cpp \
     $$SRC_PREFIX/wallpaperapplet.cpp \
