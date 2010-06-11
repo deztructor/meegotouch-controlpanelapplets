@@ -32,7 +32,7 @@ private:
     MApplication            *m_app;
     MApplicationWindow      *m_window;
 
-    void    DoAppletTest (const char *soname);
+    void    DoAppletTest (const char *desktopfile, bool hasBrief);
 };
 
 #endif

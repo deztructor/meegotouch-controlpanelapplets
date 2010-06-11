@@ -36,7 +36,8 @@
 
 #include <QGraphicsLinearLayout>
 
-#define SYSTEMUI_TRANSLATION "systemui-applets"
+static const char *systemui_translation = "systemui-applets.qm";
+static const char *profiles_translation = "profiles";
 
 ProfileWidget::ProfileWidget (
     ProfilePlugin *profilePlugin,
@@ -77,6 +78,7 @@ void ProfileWidget::profileChanged()
 void ProfileWidget::showProfileDialog()
 {
     // Create a dialog for choosing the profile
+    //% "Select Profile"
     MDialog* dialog = new MDialog(qtTrId("qtn_prof_select"), M::NoStandardButton);
 
     initProfileButtons();
@@ -128,8 +130,8 @@ ProfileWidget::loadTranslation ()
     SYS_DEBUG ("Language changed to '%s'",
                SYS_STR (locale.language ()));
 
-    locale.installTrCatalog (SYSTEMUI_TRANSLATION ".qm");
-    locale.installTrCatalog (SYSTEMUI_TRANSLATION);
+    locale.installTrCatalog (systemui_translation);
+    locale.installTrCatalog (profiles_translation);
     MLocale::setDefault (locale);
 
     running = false;

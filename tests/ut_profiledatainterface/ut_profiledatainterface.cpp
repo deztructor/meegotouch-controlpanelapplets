@@ -70,8 +70,6 @@ Ut_ProfileDataInterface::testGetProfilesData ()
             item.visualData.first;
         qDebug() << "profile[" << n << "].id          = " <<
             item.profileId;
-        qDebug() << "profile[" << n << "].volumeLevel = " <<
-            item.volumeLevel;
         qDebug() << "profile[" << n << "].vibrationEnabled = " <<
             (item.vibrationEnabled ? "yes" : "no");
 

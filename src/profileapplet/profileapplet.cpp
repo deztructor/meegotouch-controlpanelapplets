@@ -2,7 +2,6 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 #include "profileapplet.h"
 #include "profilewidget.h"
-#include "profilebrief.h"
 #include "profiledatainterface.h"
 
 #include "dcpprofile.h"
@@ -60,10 +59,6 @@ QString ProfileApplet::title() const
 QVector<MAction*> ProfileApplet::viewMenuItems()
 {
     QVector<MAction*> vector;
-    //% "Help"
-    MAction* helpAction = new MAction (qtTrId ("qtn_comm_help"), pageMain ());
-    vector.append(helpAction);
-    helpAction->setLocation(MAction::ApplicationMenuLocation);
     return vector;
 }
 
@@ -72,5 +67,5 @@ ProfileApplet::constructBrief (
         int partId)
 {
     Q_UNUSED (partId);
-    return new ProfileBrief (m_Api);
+    return 0;
 }
