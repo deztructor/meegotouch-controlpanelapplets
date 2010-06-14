@@ -4,7 +4,7 @@ Name=Battery
 Icon=
 Exec=
 X-logical-id=qtn_ener_battery
-X-translation-catalog=systemui-applets
+X-translation-catalog=energy
 
 [DUI]
 X-DUIApplet-Applet=libbatteryapplet.so
