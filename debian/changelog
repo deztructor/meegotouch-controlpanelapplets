@@ -11,7 +11,7 @@ systemui-applets (0.14.6-2) harmattan; urgency=low
   [ Sandor Pinter ]
   * Changing profile dcp applet according to lates UI-spec
   * Changing profile statusindicatormenu
-  * Finetune the fix for NB#171105
+  * Fixes: NB#171105 - Translation Broken in Profiles
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 14 Jun 2010 14:51:08 +0200
 
