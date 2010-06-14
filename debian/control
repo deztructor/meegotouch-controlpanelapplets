@@ -19,7 +19,7 @@ Depends: ${shlibs:Depends}, meegotestrunner, duicontrolpanel-usbapplet,
          duicontrolpanel-profileapplet, duistatusindicatormenu-profileplugin,
          duicontrolpanel-themeapplet, duicontrolpanel-wallpaperapplet,
          duicontrolpanel-resetapplet, duicontrolpanel-warrantyapplet,
-         testrunner
+         testrunner, duihomescreen
 XB-Maemo-CI-Packages: system-ui
 XB-Maemo-CI-Stage: fast, staging
 Description: Test package for system-ui applets
