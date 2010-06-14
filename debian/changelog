@@ -1,11 +1,5 @@
 systemui-applets (0.14.6-2) harmattan; urgency=low
 
-  * Version bump...
-
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 14 Jun 2010 14:19:31 +0200
-
-systemui-applets (0.14.6-1) harmattan; urgency=low
-
   [ David Kedves ]
   * Fixes: NB#170735 - No Error message shown if user tries to change the
                        USB mode in USB setting view, while the USB cable is
@@ -19,7 +13,7 @@ systemui-applets (0.14.6-1) harmattan; urgency=low
   * Changing profile statusindicatormenu
   * Finetune the fix for NB#171105
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 14 Jun 2010 11:56:54 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 14 Jun 2010 14:51:08 +0200
 
 systemui-applets (0.14.5-1) harmattan; urgency=low
 
