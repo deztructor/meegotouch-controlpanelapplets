@@ -5,13 +5,15 @@ systemui-applets (0.14.6~1) harmattan; urgency=low
                        USB mode in USB setting view, while the USB cable is
                        connecting with the device.
   * Partially fixed NB#171105 - Translation Broken in Profiles
+  * Fixes: NB#173930 - Translation broken in USB
+  * Fixes: NB#173960 - Translations Broken in Battery settings
 
   [ Sandor Pinter ]
   * Changing profile dcp applet according to lates UI-spec
   * Changing profile statusindicatormenu
   * Finetune the fix for NB#171105
 
- -- Sandor Pinter <sandor.pinter@blumsoft.eu>  Fri, 11 Jun 2010 13:46:10 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 14 Jun 2010 11:49:56 +0200
 
 systemui-applets (0.14.5-1) harmattan; urgency=low
 
