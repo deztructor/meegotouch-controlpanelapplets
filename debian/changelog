@@ -1,3 +1,9 @@
+systemui-applets (0.14.6-2) harmattan; urgency=low
+
+  * Version bump...
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 14 Jun 2010 14:19:31 +0200
+
 systemui-applets (0.14.6-1) harmattan; urgency=low
 
   [ David Kedves ]
