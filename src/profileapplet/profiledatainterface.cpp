@@ -10,7 +10,7 @@
 #if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
 #  include "profilestub.h"
 #else
-#  include <profile>
+#  include <Profile>
 #endif
 
 #include <QStringList>
@@ -18,8 +18,6 @@
 
 #undef DEBUG
 #include "../debug.h"
-
-//#define USE_TEST_DATA
 
 using namespace ProfileName;
 
@@ -47,10 +45,6 @@ ProfileDataInterface::getCurrentProfileName ()
     SYS_DEBUG ("");
     QString prof = m_ProfileAPI->activeProfile();
 
-    #ifdef USE_TEST_DATA
-    return "Ringing";
-    #endif
-
     return id2Name (prof);
 }
 
@@ -58,10 +52,6 @@ QString
 ProfileDataInterface::getCurrentProfileIconId ()
 {
     SYS_DEBUG ("");
-
-    #ifdef USE_TEST_DATA
-    return "Ringing";
-    #endif
 
     return mapId2IconID (getCurrentProfile());
 }
@@ -79,9 +69,7 @@ ProfileDataInterface::getCurrentProfile ()
     SYS_DEBUG ("");
 
     QString prof = m_ProfileAPI->activeProfile();
-    #ifdef USE_TEST_DATA
-    return ProfileIdRinging;
-    #endif
+    
     return mapId (prof);
 }
 
@@ -106,47 +94,6 @@ ProfileDataInterface::getProfilesData ()
         data.append(d);
     }
     SYS_DEBUG ("data.count () = %d", data.count ());
-
-    #ifdef USE_TEST_DATA
-    SYS_WARNING ("Adding test data.");
-    {
-        ProfileDataInterface::ProfileData d;
-        //get name...
-        QString id ("ringing");
-        d.profileId = ProfileIdRinging;
-        d.visualData.second = "Ringing";
-        d.visualData.first = "ringing-icon";
-        d.vibrationEnabled = false;
-        data.append (d);
-    } {
-        ProfileDataInterface::ProfileData d;
-        //get name...
-        QString id ("silent");
-        d.profileId = ProfileIdSilent;
-        d.visualData.second= "Silent";
-        d.visualData.first = "silent-icon";
-        d.vibrationEnabled = true;
-        data.append (d);
-    } {
-        ProfileDataInterface::ProfileData d;
-        //get name...
-        QString id ("beep");
-        d.profileId = ProfileIdBeep;
-        d.visualData.second = "Beep";
-        d.visualData.first = "beep-icon";
-        d.vibrationEnabled = false;
-        data.append (d);
-    } {
-        ProfileDataInterface::ProfileData d;
-        //get name...
-        QString id ("loud");
-        d.profileId = ProfileIdLoud;
-        d.visualData.second = "Loud";
-        d.visualData.first = "lound-icon";
-        d.vibrationEnabled = false;
-        data.append (d);
-    }
-    #endif
 
     return data;
 }
