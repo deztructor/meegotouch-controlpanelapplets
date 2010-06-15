@@ -10,7 +10,7 @@
 #include <MGridLayoutPolicy>
 #include <QGraphicsLinearLayout>
 
-#undef DEBUG
+#define DEBUG
 #include "../debug.h"
 
 static const int nButtonColumns = 2;
@@ -20,10 +20,12 @@ ProfileButtons::ProfileButtons (
     MWidget (parent),
     m_Buttons (0)
 {
+    SYS_DEBUG ("");
 }
 
 ProfileButtons::~ProfileButtons()
 {
+    SYS_DEBUG ("");
 }
 
 
@@ -32,6 +34,7 @@ ProfileButtons::init (
         QMap<int, QPair<QString, QString> > data, 
         int currentId)
 {
+    SYS_DEBUG ("");
     m_Buttons = new MButtonGroup();
     connect (m_Buttons, SIGNAL(buttonClicked(int)), 
             this, SIGNAL(profileSelected(int)));
@@ -40,11 +43,13 @@ ProfileButtons::init (
     for (int i = 0; i < data.count(); ++i) {
         int id = ids.at(i);
         addButton (data.value(id).first, data.value(id).second ,id, (currentId == id));
-        SYS_DEBUG ("id = %d, value = %s", id, SYS_STR (data.value (id)));
     }
     createLayout();
 }
 
+/*!
+ *
+ */
 void
 ProfileButtons::addButton (
         QString   iconId,
@@ -52,7 +57,14 @@ ProfileButtons::addButton (
         int       id, 
         bool      checked)
 {
-    MButton *button = new MButton (iconId, name);
+    MButton *button;
+    SYS_DEBUG ("*** iconId  = %s", SYS_STR(iconId));
+    SYS_DEBUG ("*** name    = %s", SYS_STR(name));
+    SYS_DEBUG ("*** id      = %d", id);
+    SYS_DEBUG ("*** checked = %s", SYS_BOOL(checked));
+    
+    Q_ASSERT (m_Buttons);
+    button = new MButton (iconId, name);
     button->setCheckable (true);
     button->setChecked (checked);
     m_Buttons->addButton (button, id);
@@ -93,6 +105,7 @@ ProfileButtons::selectProfile (
 QString 
 ProfileButtons::selectedProfileName ()
 {
+    SYS_DEBUG ("");
     if (m_Buttons == NULL)
         return QString ("");
 
@@ -110,6 +123,7 @@ ProfileButtons::selectedProfileName ()
 void 
 ProfileButtons::createLayout ()
 {
+    SYS_DEBUG ("");
     QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(Qt::Vertical);
     QList<MButton*>       buttonList = m_Buttons->buttons();
 
@@ -124,6 +138,7 @@ ProfileButtons::createLayout ()
 void
 ProfileButtons::retranslate (QMap<int, QString> data)
 {
+    SYS_DEBUG ("");
     if (m_Buttons == 0)
         return;
 

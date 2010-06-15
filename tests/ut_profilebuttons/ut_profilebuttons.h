@@ -10,6 +10,17 @@
 class ProfileButtons;
 class MApplication;
 
+class SignalSink : public QObject
+{
+Q_OBJECT
+public slots:
+    void profileSelected (int id);
+
+signals:
+    bool selectProfile (int id);
+    friend class Ut_ProfileButtons;
+};
+
 class Ut_ProfileButtons : public QObject 
 {
 Q_OBJECT
@@ -20,9 +31,12 @@ private slots:
     void initTestCase ();
     void cleanupTestCase ();
 
+    void testInit ();
+    
 private:
     MApplication              *m_App;
     ProfileButtons            *m_Buttons;
+    SignalSink                 m_SignalSink;
 };
 
 #endif

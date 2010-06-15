@@ -32,7 +32,9 @@ private:
 
 private:
     MButtonGroup *m_Buttons;
-
+    #ifdef UNIT_TEST
+    friend class Ut_ProfileButtons;
+    #endif
 };
 
-#endif // PROFILEBUTTONS_H
+#endif 
