@@ -4,16 +4,16 @@ TEMPLATE = lib
 CONFIG += plugin \
           gui \
           meegotouch \
+          qmsystem \
           silent \
           duicontrolpanel
 
-QT += dbus gui
-
-contains(cov, true) { 
+contains(cov, true) {
     message("Coverage options enabled")
     QMAKE_CXXFLAGS += --coverage
     QMAKE_LFLAGS += --coverage
 }
+
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
 HEADERS =                  \
@@ -21,20 +21,20 @@ HEADERS =                  \
     batteryapplet.h        \
     batterywidget.h        \
     batterybrief.h         \
-    batterydbusinterface.h \    
+    batterybusinesslogic.h \
     timecontainer.h        \
     slidercontainer.h      \
     dcpbattery.h           \
     batteryimage.h
 
-SOURCES =                  \
-    ../debug.cpp           \
-    batteryapplet.cpp \
-    batterywidget.cpp \
-    batterybrief.cpp \
-    batterydbusinterface.cpp \    
-    timecontainer.cpp \
-    slidercontainer.cpp \
+SOURCES =                    \
+    ../debug.cpp             \
+    batteryapplet.cpp        \
+    batterywidget.cpp        \
+    batterybrief.cpp         \
+    batterybusinesslogic.cpp \
+    timecontainer.cpp        \
+    slidercontainer.cpp      \
     batteryimage.cpp
 
 css.files = batteryapplet.css

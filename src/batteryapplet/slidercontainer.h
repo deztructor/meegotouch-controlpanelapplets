@@ -25,7 +25,7 @@ protected:
 
 public slots:
     void initSlider (const QStringList &values);
-    void updateSlider (const QString &value);
+    void updateSlider (const int value);
     void initPSMAutoButton (bool toggle);
     void PSMAutoDisabled ();
 
@@ -35,7 +35,7 @@ private slots:
 
 signals:
     void PSMAutoToggled (bool);
-    void PSMThresholdValueChanged (QString);
+    void PSMThresholdValueChanged (int);
 
 private:
     MButton               *m_PSMAutoButton;

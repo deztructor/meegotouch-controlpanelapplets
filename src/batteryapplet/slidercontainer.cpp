@@ -113,14 +113,13 @@ SliderContainer::initSlider (
  * the slider accordingly.
  */
 void 
-SliderContainer::updateSlider (
-        const QString &value)
+SliderContainer::updateSlider (int value)
 {
-    SYS_DEBUG ("value = %s", SYS_STR (value));
+    SYS_DEBUG ("value = %d", value);
 
     // Store the actual value for later
     // (eg for the case when slider isn't ready yet...)
-    m_SliderValue = m_SliderValues.indexOf (value);
+    m_SliderValue = m_SliderValues.indexOf (QString (value));
 
     // Slider not yet created:
     if (m_PSMSlider == 0)
@@ -146,7 +145,7 @@ SliderContainer::sliderValueChanged (
     m_SliderValue = value;
     
     updateSliderValueLabel ();
-    emit PSMThresholdValueChanged (m_SliderValues.at (value));
+    emit PSMThresholdValueChanged (m_SliderValues.at (value).toInt ());
 }
 
 void 
