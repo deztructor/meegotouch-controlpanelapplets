@@ -64,7 +64,8 @@ DisplayBusinessLogic::brightnessValues ()
 }
 
 /*!
- * Returns the current brighness value for the screen.
+ * Returns the current brighness value for the screen. Ooops, this function
+ * actually returns the index. FIXME: Should be checked and renamed.
  */
 int
 DisplayBusinessLogic::selectedBrightnessValue ()

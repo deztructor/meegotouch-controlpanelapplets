@@ -42,7 +42,7 @@ Ut_DisplayBusinessLogic::cleanupTestCase()
 
 /*!
  * Tests if there are available brightness values and if the current brightness
- * value found as an available value.
+ * value index found as an available value.
  *
  * This function also stores the max and min values for the brighness in the
  * m_MaxBrightness and m_MinBrightness tag variables.
@@ -51,21 +51,17 @@ void
 Ut_DisplayBusinessLogic::testGetBrightnessValues ()
 {
     QList<int> values = m_Api->brightnessValues();
+    // This is actually an index?
     int        current = m_Api->selectedBrightnessValue();
-    bool       foundCurrent = false;
     int        n = 0;
 
     QVERIFY (values.size() != 0);
 
     m_MinBrightness = m_MaxBrightness = values[0];
 
+    qDebug() << "current = " << current;
     foreach (int value, values) {
-        if (value == current) {
-            qDebug() << "brightnessvalue[" << n << "] = " << value << "CURRENT";
-            foundCurrent = true;
-        } else {
-            qDebug() << "brightnessvalue[" << n << "] = " << value;
-        }
+        qDebug() << "brightnessvalue[" << n << "] = " << value;
 
         if (value < m_MinBrightness)
             m_MinBrightness = value;
@@ -74,8 +70,8 @@ Ut_DisplayBusinessLogic::testGetBrightnessValues ()
 
         ++n;
     }
-    
-    QVERIFY (foundCurrent);
+   
+    QVERIFY (current >= 0 && current < values.size());
     QVERIFY (m_MinBrightness < m_MaxBrightness);
 }
 

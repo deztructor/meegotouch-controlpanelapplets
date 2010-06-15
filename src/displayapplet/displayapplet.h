@@ -27,5 +27,8 @@ public:
 private:
     QPointer<DisplayWidget> m_MainWidget;
 
+    #ifdef UNIT_TEST
+    friend class Ut_DisplayApplet;
+    #endif
 };
 #endif // DISPLAYAPPLET_H

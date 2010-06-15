@@ -1,6 +1,7 @@
 include(../coverage.pri)
 include(../check.pri)
 
+MOC_DIR = .moc
 SRC_PREFIX = ../../src/themeapplet
 STUB_PREFIX = ../stubs
 INCLUDEPATH += $$SRC_PREFIX \

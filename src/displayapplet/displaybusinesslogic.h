@@ -3,7 +3,15 @@
 #ifndef DISPLAYBUSINESSLOGIC_H
 #define DISPLAYBUSINESSLOGIC_H
 
-#include <qmsystem/qmdisplaystate.h>
+/*
+ * In the functional tests we use the real thing, in the unit tests we use the
+ * stubbed version. 
+ */
+#if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
+#  include "qmdisplaystatestub.h"
+#else
+#  include <qmsystem/qmdisplaystate.h>
+#endif
 
 #include <QObject>
 
@@ -33,7 +41,7 @@ public slots:
 
 private: 
     QmDisplayState *m_Display;
-    MGConfItem   *m_possibleDimValues;
+    MGConfItem     *m_possibleDimValues;
 
 };
 
