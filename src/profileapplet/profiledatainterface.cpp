@@ -3,7 +3,16 @@
 
 #include "profiledatainterface.h"
 
-#include <Profile>
+/*
+ * In the functional tests we use the real thing, in the unit tests we use the
+ * stubbed version. 
+ */
+#if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
+#  include "profilestub.h"
+#else
+#  include <profile>
+#endif
+
 #include <QStringList>
 #include <QList>
 

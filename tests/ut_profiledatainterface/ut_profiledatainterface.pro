@@ -6,13 +6,6 @@ STUB_PREFIX = ../stubs
 INCLUDEPATH += $$SRC_PREFIX \
                $$STUB_PREFIX
 
-#
-# Surely we can do better than this!
-#
-LIBS += -lprofile-qt
-INCLUDEPATH += \
-    /usr/include/profile-qt
-
 QT += \
     testlib \
     dbus 
@@ -28,11 +21,13 @@ CONFIG += \
 	silent 
 
 HEADERS += \
+    $$STUB_PREFIX/profilestub.h \
     ../../src/debug.h \
     ut_profiledatainterface.h \
     $$SRC_PREFIX/profiledatainterface.h
 
 SOURCES += \
+    $$STUB_PREFIX/profilestub.cpp \
     ../../src/debug.cpp \
     ut_profiledatainterface.cpp \
     $$SRC_PREFIX/profiledatainterface.cpp

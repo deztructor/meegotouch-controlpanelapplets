@@ -44,10 +44,10 @@ ProfileApplet::constructWidget (
 
 DcpWidget* ProfileApplet::pageMain()
 {
-    if (main == NULL)
-        main = new ProfileWidget(m_Api);
+    if (m_MainWidget == NULL)
+        m_MainWidget = new ProfileWidget(m_Api);
 
-    return main;
+    return m_MainWidget;
 }
 
 QString ProfileApplet::title() const

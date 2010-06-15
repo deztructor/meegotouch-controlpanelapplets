@@ -21,12 +21,12 @@ Ut_ProfileDataInterface::cleanup()
 {
 }
 
+static int argc = 1;
+static char* app_name = (char*) "./Ut_ProfileDataInterface";
 
 void 
 Ut_ProfileDataInterface::initTestCase()
 {
-    int argc = 1;
-    char* app_name = (char*) "./Ut_ProfileDataInterface";
 
     m_App = new MApplication (argc, &app_name);
     m_Api = new ProfileDataInterface;
@@ -35,8 +35,8 @@ Ut_ProfileDataInterface::initTestCase()
 void 
 Ut_ProfileDataInterface::cleanupTestCase()
 {
-    delete m_App;
     delete m_Api;
+    m_App->deleteLater();
 }
 
 /*!

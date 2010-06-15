@@ -1,7 +1,7 @@
 TEMPLATE = subdirs
 
 #
-# Aha!
+# The coverage target will not build the functional tests.
 #
 contains(BUILD_FEATURES,coverage) {
 	SUBDIRS = $$system(ls -1d ut_*/)

@@ -28,7 +28,11 @@ public:
     virtual DcpBrief* constructBrief(int partId);
 
 private:
-    QPointer<ProfileWidget> main;
+    QPointer<ProfileWidget> m_MainWidget;
     QPointer<ProfileDataInterface> m_Api;
+
+    #ifdef UNIT_TEST
+    friend class Ut_ProfileApplet;
+    #endif
 };
-#endif // PROFILEAPPLET_H
+#endif 
