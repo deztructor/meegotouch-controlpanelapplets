@@ -11,6 +11,8 @@ CONFIG += \
 	gui \
 	meegotouch \
 	debug \
+	plugin \
+	duicontrolpanel \
 	silent 
 
 QT += \
@@ -20,19 +22,25 @@ QT += \
 
 TEMPLATE = app
 DEFINES += UNIT_TEST
-TARGET = ut_themebusinesslogic
+TARGET = ut_themewidget
 target.path = /usr/lib/systemui-applets-tests
 
 HEADERS += \
     ../../src/debug.h \
-    ut_themebusinesslogic.h \
+    ut_themewidget.h \
     $$SRC_PREFIX/themebusinesslogic.h \
-    $$SRC_PREFIX/themedescriptor.h
+    $$SRC_PREFIX/themedescriptor.h \
+    $$SRC_PREFIX/themelistmodel.h \
+    $$SRC_PREFIX/themecellcreator.h \
+    $$SRC_PREFIX/themedialog.h
 
 SOURCES += \
     ../../src/debug.cpp \
-    ut_themebusinesslogic.cpp \
+    ut_themewidget.cpp \
     $$SRC_PREFIX/themebusinesslogic.cpp \
-    $$SRC_PREFIX/themedescriptor.cpp
+    $$SRC_PREFIX/themedescriptor.cpp \
+    $$SRC_PREFIX/themelistmodel.cpp \
+    $$SRC_PREFIX/themecellcreator.cpp \
+    $$SRC_PREFIX/themedialog.cpp
 
 INSTALLS += target
