@@ -28,13 +28,23 @@ ProfileButtons::~ProfileButtons()
     SYS_DEBUG ("");
 }
 
-
+/*!
+ * This method will initialize the button group by adding the buttons. The map
+ * parameter will hold a map with the integer profile ID and a pair of icon IDs
+ * and profile names.
+ */
 void 
 ProfileButtons::init (
         QMap<int, QPair<QString, QString> > data, 
         int currentId)
 {
     SYS_DEBUG ("");
+
+    /*
+     * Creating the button group. FIXME: This method does two separate things;
+     * it creates widgets and sets layouts but it also initializes the widgets
+     * with input data. Maybe it would be clearer to separate these things.
+     */
     m_Buttons = new MButtonGroup();
     connect (m_Buttons, SIGNAL(buttonClicked(int)), 
             this, SIGNAL(profileSelected(int)));
@@ -42,35 +52,16 @@ ProfileButtons::init (
     QList<int> ids = data.keys();
     for (int i = 0; i < data.count(); ++i) {
         int id = ids.at(i);
-        addButton (data.value(id).first, data.value(id).second ,id, (currentId == id));
+        addButton (
+                data.value(id).first, 
+                data.value(id).second,
+                id, (currentId == id));
     }
     createLayout();
 }
 
 /*!
- *
- */
-void
-ProfileButtons::addButton (
-        QString   iconId,
-        QString   name, 
-        int       id, 
-        bool      checked)
-{
-    MButton *button;
-    SYS_DEBUG ("*** iconId  = %s", SYS_STR(iconId));
-    SYS_DEBUG ("*** name    = %s", SYS_STR(name));
-    SYS_DEBUG ("*** id      = %d", id);
-    SYS_DEBUG ("*** checked = %s", SYS_BOOL(checked));
-    
-    Q_ASSERT (m_Buttons);
-    button = new MButton (iconId, name);
-    button->setCheckable (true);
-    button->setChecked (checked);
-    m_Buttons->addButton (button, id);
-}
-
-/*!
+ * \param id The numerical ID of the profile to select.
  * \returns true if the button for the profile has been found.
  */
 bool 
@@ -117,8 +108,32 @@ ProfileButtons::selectedProfileName ()
 }
 
 /*!
- * Creates the layout for the profile buttons. Takes the profile selection
- * buttons from m_Buttons and sets a portrait and a landscape layout for them.
+ * \param languageInfo A map with profile IDs and profile names
+ *
+ * With this method it is possible to change the button texts. The argument is a
+ * map with profile IDs and UI strings that will represent the profiles with the
+ * given IDs.
+ */
+void
+ProfileButtons::retranslate (
+        QMap<int, QString> languageInfo)
+{
+    SYS_DEBUG ("");
+    if (m_Buttons == 0)
+        return;
+
+    QList<int> ids = languageInfo.keys();
+
+    for (int i = 0; i < languageInfo.count(); ++i)
+    {
+        int id = ids.at (i);
+        if (m_Buttons->button (id) != 0)
+            m_Buttons->button (id)->setText (languageInfo.value (id));
+    }
+}
+
+/*!
+ * Creates the layout for the profile buttons. 
  */
 void 
 ProfileButtons::createLayout ()
@@ -135,20 +150,31 @@ ProfileButtons::createLayout ()
     setLayout (layout);
 }
 
+/*!
+ * \param iconId Logical ID string for the icon representing the profile
+ * \param name profile name UI string
+ * \param id The profile ID for the new button
+ * \param checked If the button will be representing the selected profile
+ *
+ * This low level method will be used to add a new button to the button group.
+ */
 void
-ProfileButtons::retranslate (QMap<int, QString> data)
+ProfileButtons::addButton (
+        QString   iconId,
+        QString   name, 
+        int       id, 
+        bool      checked)
 {
-    SYS_DEBUG ("");
-    if (m_Buttons == 0)
-        return;
-
-    QList<int> ids = data.keys();
-
-    for (int i = 0; i < data.count(); ++i)
-    {
-        int id = ids.at (i);
-        if (m_Buttons->button (id) != 0)
-            m_Buttons->button (id)->setText (data.value (id));
-    }
+    MButton *button;
+    SYS_DEBUG ("*** iconId  = %s", SYS_STR(iconId));
+    SYS_DEBUG ("*** name    = %s", SYS_STR(name));
+    SYS_DEBUG ("*** id      = %d", id);
+    SYS_DEBUG ("*** checked = %s", SYS_BOOL(checked));
+    
+    Q_ASSERT (m_Buttons);
+    button = new MButton (iconId, name);
+    button->setCheckable (true);
+    button->setChecked (checked);
+    m_Buttons->addButton (button, id);
 }
 

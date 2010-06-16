@@ -7,18 +7,23 @@
 
 class MButtonGroup;
 
+/*!
+ * A buttog group widget that holds a button for every available profile. This
+ * class is able to get profile data, change the button texts when the
+ * retranslation is reguired and emit/get signals about the activation and the
+ * selection changes. 
+ */
 class ProfileButtons : public MWidget
 {
     Q_OBJECT
 
 public:
     ProfileButtons (MWidget *parent = 0);
-    virtual ~ProfileButtons();
+    virtual ~ProfileButtons ();
 
     void init (QMap<int, QPair<QString, QString> > data, int currentId);
-    QString selectedProfileName();
-
-    void retranslate (QMap<int, QString> data);
+    QString selectedProfileName ();
+    void retranslate (QMap<int, QString> languageInfo);
 
 public slots:
     bool selectProfile(int id);
