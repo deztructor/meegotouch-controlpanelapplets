@@ -84,3 +84,114 @@ Wallpaper applet
 	o Check if the default wallpapers shown in the desktop.
 	o Check if the user's ~/.wallpapers directory is removed along with its
 	  content.
+
+ 
+
+Sound Settings: 
+    (1) Personalize ringtones by changing the current tone with a new one.
+      * Activate the 'sounds/Tones' applet from 'Look and Feel' category of 
+        Settings application.
+      * Select Ringingtone from the list, a new page with  My Music and Ovi 
+        store options and list of all available tones should be shown.
+      * Select an item from the list of tones, preview of the sound should be 
+        played.
+      * Tap on back button, the applet should page back to 'Sound' settings 
+        main view saving the selected tone.
+      * Check the value text on the 'Ringingtone' item, the value text should 
+        be the name of the tone which is saved in previous step.
+      * Receive a incoming call and verify if the ringtone is the one which is 
+        set in the above steps.
+
+    (2) Personalize Internet call alert by changing the current tone with a new
+        one.
+      * Activate the 'sounds/Tones' applet from 'Look and Feel' category of 
+        Settings application.
+      * Select Internet call alert from the list, a new page with  My Music and
+        Ovi store options and list of all available tones should be shown.
+      * Select an item from the list of tones, preview of the sound should be 
+        played.
+      * Tap on back button, the applet should page back to 'Sound' settings 
+        main view saving the selected tone.
+      * Check the value text on the 'Internet call alert' item, the value text 
+        should be the name of the tone which is saved in previous step.
+      * Receive a internet call and verify if the call tone is the one which is
+        set in the above steps.
+
+    (3) Personalize email tone by changing the current tone with a new one.
+      * Activate the 'sounds/Tones' applet from 'Look and Feel' category of 
+        Settings application.
+      * Select Emailtone from the list, a new page with  My Music and Ovi 
+        store options and list of all available tones should be shown. 
+      * Select an item from the list of tones, preview of the sound should be 
+        played.
+      * Tap on back button, the applet should page back to 'Sound' settings 
+        main view saving the selected tone.  
+      * Check the value text on the 'Emailtone' item, the value text should be
+        the name of the tone which is saved in previous step. 
+      * Receive a Email and verify if 'Emailtone' is the one which is set in 
+        the above steps.
+
+    (4) Personalize Message alert tone by changing the current tone with a new one.
+    * Activate the 'sounds/Tones' applet from 'Look and Feel' category of Settings application.
+    * Select Message alert tone from the list, a new page with  My Music and Ovi store options and list of all available tones should be shown.
+    * Select an item from the list of tones, preview of the sound should be played.
+    * Tap on back button, the applet should page back to 'Sound' settings main view saving the selected tone.
+    * Check the value text on the 'Message alert tone' item, the value text should be the name of the tone which is saved in previous step.
+    * Receive a 'Message alert tone' call and verify if the alert tone is the one which is set in the above steps.
+
+ 
+    (5) Personalize chat alert tone by changing the current tone with a new one.
+    * Activate the 'sounds/Tones' applet from 'Look and Feel' category of Settings application.
+    * Select chat alert tone from the list, a new page with  My Music and Ovi store options and list of all available tones should be shown.
+    * Select an item from the list of tones, preview of the sound should be played.
+    * Tap on back button, the applet should page back to 'Sound' settings main view saving the selected tone.
+    * Check the value text on the 'Chat ' item, the value text should be the name of the tone which is saved in previous step.
+    * Receive a chat event and verify if the alert tone is the one which is set in the above steps
+
+ 
+    (6) Personalize Calendar alarm tone by changing the current tone with a new one.
+    * Activate the 'sounds/Tones' applet from 'Look and Feel' category of Settings application.
+    * Select calendar alarm tone from the list, a new page with  My Music and Ovi store options and list of all available tones should be shown.
+    * Select an item from the list of tones, preview of the sound should be played.
+    * Tap on back button, the applet should page back to 'Sound' settings main view saving the selected tone.
+    * Check the value text on the 'calendar alarm tone' item, the value text should be the name of the tone which is saved in previous step.
+    * Receive a calendar alarm and verify if the alarm tone is the one which is set in the above steps.
+
+
+    (7) Check the preview the sound level while adjusting the volume control
+    * Activate the 'sounds/Tones' applet from 'Look and Feel' category of Settings application.
+    * Hold down the finger for 0.6 seconds on volume slider, so that the slider value does not change verify if playback is started.
+    * Move the slider, and verify if the playback continues.
+    * Once the playback is started, it should continue as long as user holds finger down, and the volume level of
+      the playback should be changed based on the moving of the slider.
+
+
+    (8) Checking sound level of hardware Key tones,System sounds,Touch screen tones and Touch screen vibration .
+    * Activate the 'sounds/Tones' applet from 'Look and Feel' category of Settings application.
+    * Tap on 'Key tones', a dialog with list of different sound levels should come up.
+    * Select a level, dialog should close and the selected level should be set as the value text of the item.
+    * Repeat the above steps for remaining three feedback tones.
+
+
+    (9) Personalize tones for various features by changing the current tone with a new music item from MyMusic store.
+    * Activate the 'sounds/Tones' applet from 'Look and Feel' category of Settings application. 
+    *  Select calendar alarm tone from the list, a new page with  My Music and Ovi store options and list of all available tones should be shown. 
+    *  Tap on My music, Page with list of all music items available in the device should be shown.
+    *  Select a music item from the list, music item should start a sound preview.(Second tapping on the same music item should stop the preview while the music is playing.) 
+    *  Tap on Back button, the applet should page back to 'Calendar alarm tone' settings view saving the selected tone.  
+    *  Check the value text on the 'current tone' item, the value text should be the name of the music item which is saved in previous step.
+    *  Tap on back button.Receive a calendar alarm and verify if the alarm tone is the one which is set in the above steps.
+    * Repeat the above steps for all the other feature tones like Ringing,Message alert,Email alert and Chat alert.
+
+ 
+
+    (10) Personalize tones for various features by changing the current tone with a newly download music item from OVI store.
+    * Activate the 'sounds/Tones' applet from 'Look and Feel' category of Settings application. 
+    *  Select calendar alarm tone from the list, a new page with  My Music and Ovi store options and list of all available tones should be shown. 
+    *  Tap on 'Get more from Ovi store'. 
+    *  Download a music item from the list and select it. 
+    *  Tap on Back button, the applet should page back to 'Calendar alarm tone' settings view saving the selected tone.  
+    *  Check the value text on the 'current tone' item, the value text should be the name of the music item which is saved in previous step. 
+    *  Tap on back button.Receive a calendar alarm and verify if the alarm tone is the one which is set in the above steps.
+    * Repeat the above steps for all the other feature tones like Ringing,Message alert,Email alert and Chat alert. 
+
