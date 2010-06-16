@@ -4,7 +4,6 @@
 #include "themedescriptor.h"
 
 #include <QString>
-//#include <QFile>
 
 #if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
 #  include "mdesktopentrystub.h"
@@ -32,11 +31,12 @@ ThemeDescriptor::ThemeDescriptor (
     m_DesktopEntry (0)
 {
     QString indexFileName (directoryPath + "/index.theme");
-    //QFile indexFile(indexFileName);
 
-    //if (!indexFile.exists())
-    //    return;
-
+    /*
+     * If the theme index file is missing the MDesktopEntry will report an
+     * invalid desktop file, so we don't have to check if the directory actually
+     * holds an index file.
+     */
     m_DesktopEntry = new MDesktopEntry (indexFileName);
     if (!m_DesktopEntry->isValid())
         return;
@@ -77,30 +77,47 @@ ThemeDescriptor::~ThemeDescriptor ()
         delete m_DesktopEntry;
 }
 
+/*!
+ * Returns true if the theme is valid, false if the desktop file is missing, the
+ * format of the desktop file is invalid or the theme has some property not set
+ * in theme desktop file.
+ */
 bool
 ThemeDescriptor::isValid () const
 {
     return m_Valid;
 }
 
+/*!
+ * Returns true if the theme is visible according to the desktop file.
+ */
 bool
 ThemeDescriptor::isVisible () const
 {
     return m_Visible;
 }
 
+/*!
+ * Returns the name of the theme as it is registered in the desktop file.
+ */
 QString
 ThemeDescriptor::name() const
 {
     return m_Name;
 }
 
+/*!
+ * Returns the code name (directory basename) for the theme.
+ */
 QString
 ThemeDescriptor::codeName() const
 {
     return m_CodeName;
 }
 
+/*!
+ * Returns the symbolic icon name for the theme.
+ */
 QString
 ThemeDescriptor::iconName() const
 {
