@@ -10,7 +10,7 @@ X-translation-catalog=systemui-applets
 X-DUIApplet-Applet=libdisplayapplet.so
 
 [DCP]
-Category= Look & Feel
+Category=qtn_sett_main_data
 Order=1
 WidgetType=Label
 
