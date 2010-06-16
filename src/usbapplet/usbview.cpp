@@ -74,6 +74,8 @@ UsbView::initWidget ()
     connect (m_btn_group, SIGNAL (buttonClicked (int)),
              this, SLOT (selectionChanged (int)));
 
+    layout->addStretch ();
+
     setLayout (layout);
 
     retranslateUi ();

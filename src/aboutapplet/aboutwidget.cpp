@@ -3,8 +3,7 @@
 
 #include "aboutwidget.h"
 
-#include <MLayout>
-#include <MLinearLayoutPolicy>
+#include <QGraphicsLinearLayout>
 #include <MLabel>
 #include <MDialog>
 #include <MMessageBox>
@@ -34,31 +33,18 @@ AboutWidget::~AboutWidget ()
 void
 AboutWidget::createContent ()
 {
-    MLayout             *layout;
-    MLinearLayoutPolicy *landscapePolicy;
-    MLinearLayoutPolicy *portraitPolicy;
+    QGraphicsLinearLayout   *layout;
 
-    layout = new MLayout;
-
-    /*
-     * I only added two policies, so that later we can use a separate layout for
-     * portrait/landscape orientation. FIXME: We might want to remove one of
-     * these when the UI spec. is finalized.
-     */
-    landscapePolicy = new MLinearLayoutPolicy (layout, Qt::Vertical);
-    portraitPolicy = new MLinearLayoutPolicy (layout, Qt::Vertical);
+    layout = new QGraphicsLinearLayout (Qt::Vertical);
 
     /*
      *
      */
-    m_Label1 = new MLabel (labelText());
+    m_Label1 = new MLabel (labelText ());
     m_Label1->setWordWrap (true);
     
-    landscapePolicy->addItem (m_Label1);
-    portraitPolicy->addItem (m_Label1);
-
-    layout->setLandscapePolicy (landscapePolicy);
-    layout->setPortraitPolicy (portraitPolicy);
+    layout->addItem (m_Label1);
+    layout->addStretch ();
 
     setLayout (layout);
 }

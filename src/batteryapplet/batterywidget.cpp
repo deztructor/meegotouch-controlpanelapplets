@@ -24,6 +24,7 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
         m_logic (0),
         m_UILocked (false),
         batteryImage (0),
+        m_MainLayout (0),
         PSMButton (0),
         sliderContainer (0),
         standByTimeContainer (0),
@@ -94,10 +95,10 @@ void BatteryWidget::initWidget ()
              m_logic, SLOT (setPSMThresholdValue (int)));
 
     // mainContainer
-    MLayout *orientationLayout = new MLayout;
+    m_MainLayout = new MLayout;
 
     MGridLayoutPolicy *landscapeLayoutPolicy =
-        new MGridLayoutPolicy (orientationLayout);
+        new MGridLayoutPolicy (m_MainLayout);
     landscapeLayoutPolicy->addItem (talkTimeContainer, 0, 0);
     landscapeLayoutPolicy->addItem (standByTimeContainer, 0, 1);
     landscapeLayoutPolicy->setColumnStretchFactor (0, 2);
@@ -105,10 +106,10 @@ void BatteryWidget::initWidget ()
     landscapeLayoutPolicy->addItem (sliderContainer, 1, 0, 1, 2);
     landscapeLayoutPolicy->addItem (PSMButton, 2, 0, 1, 2);
     landscapeLayoutPolicy->setSpacing (10);
-    orientationLayout->setLandscapePolicy (landscapeLayoutPolicy);
+    m_MainLayout->setLandscapePolicy (landscapeLayoutPolicy);
 
     MLinearLayoutPolicy *portraitLayoutPolicy =
-        new MLinearLayoutPolicy (orientationLayout, Qt::Vertical);
+        new MLinearLayoutPolicy (m_MainLayout, Qt::Vertical);
     portraitLayoutPolicy->addItem (talkTimeContainer, Qt::AlignLeft);
     portraitLayoutPolicy->addItem (standByTimeContainer, Qt::AlignLeft);
     portraitLayoutPolicy->setStretchFactor (talkTimeContainer, 2);
@@ -116,11 +117,11 @@ void BatteryWidget::initWidget ()
     portraitLayoutPolicy->addItem (sliderContainer, Qt::AlignLeft);
     portraitLayoutPolicy->addItem (PSMButton, Qt::AlignCenter);
     portraitLayoutPolicy->setSpacing (10);
-    orientationLayout->setPortraitPolicy (portraitLayoutPolicy);
+    m_MainLayout->setPortraitPolicy (portraitLayoutPolicy);
 
     MContainer *mainContainer = new MContainer;
     mainContainer->setHeaderVisible (false);
-    mainContainer->centralWidget ()->setLayout (orientationLayout);
+    mainContainer->centralWidget ()->setLayout (m_MainLayout);
 
     // connect the value receive signals
     connect (m_logic, SIGNAL (remainingTimeValuesChanged (QStringList)),
@@ -156,9 +157,11 @@ void BatteryWidget::initWidget ()
     // mainLayout
     QGraphicsLinearLayout *mainLayout =
         new QGraphicsLinearLayout (Qt::Vertical);
+
     mainLayout->setContentsMargins (0, 0, 0, 0);
     mainLayout->addItem (mainContainer);
-    this->setLayout (mainLayout);
+    mainLayout->addStretch ();
+    setLayout (mainLayout);
 
     // Initialize the values from the business logic
     QTimer::singleShot (0, m_logic, SLOT (requestValues ()));
@@ -243,6 +246,8 @@ BatteryWidget::PSMValueReceived (
     SYS_DEBUG ("Hiding sliderContainer");
     sliderContainer->setVisible (!m_PSMButtonToggle);
     m_UILocked = false;
+
+    m_MainLayout->invalidate ();
 }
 
 void 
