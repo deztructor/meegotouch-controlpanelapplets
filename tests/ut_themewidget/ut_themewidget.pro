@@ -28,6 +28,7 @@ target.path = /usr/lib/systemui-applets-tests
 HEADERS += \
     ../../src/debug.h \
     ut_themewidget.h \
+    $$STUB_PREFIX/mdesktopentrystub.h \
     $$SRC_PREFIX/themebusinesslogic.h \
     $$SRC_PREFIX/themedescriptor.h \
     $$SRC_PREFIX/themelistmodel.h \
@@ -37,6 +38,7 @@ HEADERS += \
 SOURCES += \
     ../../src/debug.cpp \
     ut_themewidget.cpp \
+    $$STUB_PREFIX/mdesktopentrystub.cpp \
     $$SRC_PREFIX/themebusinesslogic.cpp \
     $$SRC_PREFIX/themedescriptor.cpp \
     $$SRC_PREFIX/themelistmodel.cpp \

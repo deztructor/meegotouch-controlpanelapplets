@@ -23,11 +23,69 @@
 #define __MDESKTOPENTRYSTUB_H__
 
 #include <QObject>
-#include <QString>
+#include <QFlags>
 
+/*
+ * We return an invalid MDesktopEntry for this. Actually any values that are not
+ * enlisted below would suffice.
+ */
+#define DIRNAMEDesktopFileMissing  "/nosuchfile"
+#define CODENAMEDesktopFileMissing "nosuchentry"
+
+/*
+ * With this we return strings for every keys.
+ */
+#define DIRNAMEDesktopFilePerfect  "/usr/share/themes/plankton"
+#define CODENAMEDesktopFilePerfect "plankton"
+#define NAMEDesktopFilePerfect "DesktopFilePerfectName"
+#define ICONDesktopFilePerfect "DesktopFilePerfectIcon"
+
+/*
+ * For these we return strings that represent a hidden theme; all strings are
+ * valid, but the theme is hidden.
+ */
+#define DIRNAMEDesktopFileHidden  "/usr/share/themes/base"
+#define CODENAMEDesktopFileHidden "base"
+#define NAMEDesktopFileHidden "DesktopFileHiddenName"
+#define ICONDesktopFileHidden "DesktopFileHiddenIcon"
+
+/*
+ * For these all the keys will hold no value, we return the empty string.
+ */
+#define DIRNAMEDesktopFileEmpty  "/usr/share/themes/dui"
+#define CODENAMEDesktopFileEmpty "dui"
+
+class QString;
+
+/*!
+ * This file contains the definition for a simulated MDesktopentry database that
+ * holds simulated values for some desktop files.
+ */
 class MDesktopEntry: public QObject 
 {
 Q_OBJECT
+public:
+    MDesktopEntry (const QString &filePath);
+
+    bool isValid ();
+
+    typedef enum {
+        DesktopFileMissing = -1,
+        DesktopFilePerfect = 0,
+        DesktopFileHidden  = 1,
+        DesktopFileEmpty   = 2,
+    } DesktopID;
+
+    //QString value (const QString &group, const QString &key) const;
+    QString value (const QString &key) const;
+
+private:
+    QString getValueForType () const;
+    QString getValueForName () const;
+    QString getValueForIcon () const;
+    QString getValueForVisible () const;
+
+    QString   m_FilePath;
 };
 
 #endif

@@ -28,6 +28,7 @@ CONFIG += \
 HEADERS += \
     ../../src/debug.h \
     ut_themeapplet.h \
+    $$STUB_PREFIX/mdesktopentrystub.h \
     $$SRC_PREFIX/themeapplet.h \
     $$SRC_PREFIX/themebrief.h \
     $$SRC_PREFIX/themebusinesslogic.h \
@@ -40,6 +41,7 @@ HEADERS += \
 SOURCES += \
     ../../src/debug.cpp \
     ut_themeapplet.cpp \
+    $$STUB_PREFIX/mdesktopentrystub.cpp \
     $$SRC_PREFIX/themeapplet.cpp \
     $$SRC_PREFIX/themebrief.cpp \
     $$SRC_PREFIX/themebusinesslogic.cpp \

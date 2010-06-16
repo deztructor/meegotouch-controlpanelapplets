@@ -4,10 +4,15 @@
 #include "themedescriptor.h"
 
 #include <QString>
-#include <QFile>
-#include <MDesktopEntry>
+//#include <QFile>
 
-//#define DEBUG
+#if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
+#  include "mdesktopentrystub.h"
+#else
+#  include <MDesktopEntry>
+#endif
+
+#define DEBUG
 #include "../debug.h"
 
 
@@ -27,18 +32,19 @@ ThemeDescriptor::ThemeDescriptor (
     m_DesktopEntry (0)
 {
     QString indexFileName (directoryPath + "/index.theme");
-    QFile indexFile(indexFileName);
+    //QFile indexFile(indexFileName);
 
-    if (!indexFile.exists())
-        return;
+    //if (!indexFile.exists())
+    //    return;
 
     m_DesktopEntry = new MDesktopEntry (indexFileName);
     if (!m_DesktopEntry->isValid())
         return;
 
     if (m_DesktopEntry->value(typeKey) != requiredType) {
-        SYS_DEBUG ("The type not right: '%s'", 
-                SYS_STR(m_DesktopEntry->value(typeKey)));
+        SYS_DEBUG ("The type not right: '%s', should be '%s'", 
+                SYS_STR(m_DesktopEntry->value(typeKey)),
+                SYS_STR(requiredType));
         return;
     }
 

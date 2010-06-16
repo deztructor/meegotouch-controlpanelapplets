@@ -20,21 +20,19 @@ QT += \
 
 TEMPLATE = app
 DEFINES += UNIT_TEST
-TARGET = ut_themebusinesslogic
+TARGET = ut_themedescriptor
 target.path = /usr/lib/systemui-applets-tests
 
 HEADERS += \
     ../../src/debug.h \
-    ut_themebusinesslogic.h \
+    ut_themedescriptor.h \
     $$STUB_PREFIX/mdesktopentrystub.h \
-    $$SRC_PREFIX/themebusinesslogic.h \
     $$SRC_PREFIX/themedescriptor.h
 
 SOURCES += \
     ../../src/debug.cpp \
-    ut_themebusinesslogic.cpp \
+    ut_themedescriptor.cpp \
     $$STUB_PREFIX/mdesktopentrystub.cpp \
-    $$SRC_PREFIX/themebusinesslogic.cpp \
     $$SRC_PREFIX/themedescriptor.cpp
 
 INSTALLS += target

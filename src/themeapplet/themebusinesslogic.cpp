@@ -4,18 +4,19 @@
 #include "themebusinesslogic.h"
 #include "themedescriptor.h"
 
-#include <QDir>
-#include <QFile>
+#include <MGConfItem>
+#include <MTheme>
+
 #include <QString>
 #include <QStringList>
-#include <MTheme>
-#include <MGConfItem>
+#include <QDir>
+#include <QFile>
 
 #include "../debug.h"
 
 // The directory where all the available themes are installed.
 static const QString themeDirName ("/usr/share/themes");
-// The GCon key where meegotouch expects us to place the theme name.
+// The GConf key where meegotouch expects us to place the theme name.
 static const QString themeGConfKey ("/meegotouch/theme/name");
 
 /*!
