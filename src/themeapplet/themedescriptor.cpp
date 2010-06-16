@@ -15,8 +15,8 @@ static const QString requiredType = "X-MeeGoTouch-Metatheme";
 static const QString typeKey = "Desktop Entry/Type";
 
 static const QString nameKey = "Desktop Entry/Name";
-static const QString iconNameKey = "X-DUI-Metatheme/X-Icon";
-static const QString visibleKey = "X-DUI-Metatheme/X-Visible";
+static const QString iconNameKey = "X-MeeGoTouch-Metatheme/X-Icon";
+static const QString visibleKey = "X-MeeGoTouch-Metatheme/X-Visible";
 
 ThemeDescriptor::ThemeDescriptor (
         const QString &directoryPath,
