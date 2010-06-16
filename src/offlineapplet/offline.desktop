@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=DUIApplet
+Name=OfflineButton
+Icon=
+Exec=
+X-logical-id=qtn_sett_main_display
+X-translation-catalog=offline
+
+[DUI]
+X-DUIApplet-Applet=libofflineapplet.so
+
+[DCP]
+Category= Connectivity
+Order=1
+WidgetType= Button
+

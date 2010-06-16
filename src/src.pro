@@ -9,4 +9,5 @@ SUBDIRS = batteryapplet   \
           wallpaperapplet \
           resetapplet     \
           aboutapplet     \
-          warrantyapplet
+          warrantyapplet  \
+          offlineapplet
