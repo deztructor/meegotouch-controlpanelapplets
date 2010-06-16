@@ -201,6 +201,8 @@ SliderContainer::initPSMAutoButton (
     SYS_DEBUG ("toggle = %s", SYS_BOOL (toggle));
 
     m_PSMAutoButton->setChecked (toggle);
+
+    toggleSliderExistence (toggle);
 }
 
 /*

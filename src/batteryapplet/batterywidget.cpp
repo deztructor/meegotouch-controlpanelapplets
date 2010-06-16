@@ -262,8 +262,6 @@ BatteryWidget::retranslateUi ()
     talkTimeContainer->setText(qtTrId ("qtn_ener_tt"));
     standByTimeContainer->setText (qtTrId ("qtn_ener_st"));
 
-    // This call will reload timelabels on timercontainers
-    // TODO: FIXME: XXX!!!
-    // m_logic->remainingTimeValuesRequired ();
+    m_logic->remainingTimeValuesRequired ();
 }
 
