@@ -45,6 +45,7 @@ QmDisplayState::set(
         DisplayState state)
 {
     m_State = state;
+    return true;
 }
 
 int

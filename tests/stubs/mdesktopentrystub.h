@@ -76,7 +76,6 @@ public:
         DesktopFileEmpty   = 2,
     } DesktopID;
 
-    //QString value (const QString &group, const QString &key) const;
     QString value (const QString &key) const;
 
 private:

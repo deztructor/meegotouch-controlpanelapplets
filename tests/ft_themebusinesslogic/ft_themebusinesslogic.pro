@@ -18,7 +18,10 @@ QT += \
     dbus 
 
 TEMPLATE = app
-DEFINES += UNIT_TEST
+DEFINES += \
+    UNIT_TEST \
+    FUNCTIONAL_TEST
+
 TARGET = ft_themebusinesslogic
 target.path = /usr/lib/systemui-applets-tests
 

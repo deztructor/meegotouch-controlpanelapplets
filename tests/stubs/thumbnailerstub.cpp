@@ -87,6 +87,11 @@ Thumbnailer::request (
 {
     SYS_DEBUG ("Request came.");
 
+    Q_UNUSED (sendPixmap);
+    Q_UNUSED (scheduler);
+    Q_UNUSED (autoCancel);
+    Q_UNUSED (sendRemainingSignals);
+
     for (int n = 0; n < uris.size(); ++n) {
         SYS_DEBUG ("*** url [%d] = %s", n, SYS_STR(uris[n].toString()));
         SYS_DEBUG ("*** mime[%d] = %s", n, SYS_STR(mimeTypes[n]));

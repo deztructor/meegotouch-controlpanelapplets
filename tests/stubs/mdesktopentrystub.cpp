@@ -118,22 +118,6 @@ MDesktopEntry::isValid ()
     return false;
 }
 
-#if 0
-QString 
-MDesktopEntry::value (
-        const QString &group, 
-        const QString &key) const
-{
-    QString value;
-
-    SYS_DEBUG ("*** getting %s/%s", SYS_STR(group), SYS_STR(key));
-    if (group == "Desktop Entry" &&
-            key == "Type")
-        value = getValueForType (); 
-    return value;
-}
-#endif
-
 QString 
 MDesktopEntry::value (
         const QString &key) const
