@@ -171,17 +171,10 @@ SliderContainer::toggleSliderExistence (
             connect (m_PSMSlider, SIGNAL (valueChanged (int)),
                     this, SLOT (sliderValueChanged (int)));
 
-            if (m_SliderValue < 0)
+            if (m_SliderValue >= 0)
             {
-                m_SliderValue = 0;
-                /*
-                 * Set some default value [the smaller one]
-                 * if nothing set yet...
-                 */
-                sliderValueChanged (0);
+                m_PSMSlider->setValue (m_SliderValue);
             }
-
-            m_PSMSlider->setValue (m_SliderValue);
             /*
              *
              */
