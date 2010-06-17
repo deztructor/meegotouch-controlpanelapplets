@@ -162,7 +162,8 @@ Ut_BatteryBusinessLogic::testPSMThresholdValue ()
     /* Test the setter function */
     m_logic->setPSMThresholdValue (40);
     QCOMPARE (gQmDeviceModeStub->stubCallCount ("setPSMBatteryMode"), 1);
-    QCOMPARE (gQmDeviceModeStub->stubLastParameters<int> (0), 40);
+    QCOMPARE (gQmDeviceModeStub->stubLastCallTo (
+                "setPSMBatteryMode").parameter<int> (0), 40);
 
     /* Test the GConf reader function */
     testCase = CASE_STRINGLIST;
