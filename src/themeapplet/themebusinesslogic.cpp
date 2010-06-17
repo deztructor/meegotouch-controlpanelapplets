@@ -12,7 +12,16 @@
 #include <QDir>
 #include <QFile>
 
+#define DEBUG
 #include "../debug.h"
+
+#if !defined(UNIT_TEST) || defined(FUNCTIONAL_TEST)
+#  define entryList(themeDir, filters) \
+      themeDir.entryList (filters)
+#else
+#  include "qdirstub.h"
+#endif
+
 
 // The directory where all the available themes are installed.
 static const QString themeDirName ("/usr/share/themes");
@@ -75,7 +84,6 @@ ThemeBusinessLogic::currentThemeIconName () const
     return retval;
 }
 
-
 /*!
  * Returns all the available themes. 
  * Invisible themes are filtered out.
@@ -86,7 +94,7 @@ ThemeBusinessLogic::availableThemes () const
     QList<ThemeDescriptor *> retval;
     QDir themeDir (themeDirName);
 
-    foreach (QString themeFile, themeDir.entryList (QDir::Dirs)) {
+    foreach (QString themeFile, entryList (themeDir, QDir::Dirs)) {
         ThemeDescriptor *descr;
 
         if (themeFile == "." || 

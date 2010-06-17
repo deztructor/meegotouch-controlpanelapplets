@@ -3,14 +3,13 @@
 #include "ut_themebusinesslogic.h"
 #include "themebusinesslogic.h"
 #include "themedescriptor.h"
+#include "mdesktopentrystub.h"
 
 #include <MApplication>
 #include <MTheme>
 
 #define DEBUG
 #include "../../src/debug.h"
-
-static const int themeWaitMSec = 1000;
 
 /******************************************************************************
  * Ut_ThemeBusinessLogicPrivate implementation. 
@@ -68,18 +67,31 @@ Ut_ThemeBusinessLogic::cleanupTestCase()
     delete m_Priv;
 }
 
-void 
-Ut_ThemeBusinessLogic::testThemeDescriptorInvalid()
+/*!
+ * This method will test the available themes stubbed, exactly as it is in the 
+ * qdirstub.h and in the mdesktopentrystub databse.
+ */
+void
+Ut_ThemeBusinessLogic::testAvailableThemes ()
 {
-    const QString codeName = "CodeName";
-    ThemeDescriptor  desc ("no_such_a_file", codeName);
+    QList<ThemeDescriptor *> list = m_Api->availableThemes ();
+    ThemeDescriptor *desc;
 
-    QVERIFY (!desc.isValid());
-    QVERIFY (!desc.isVisible());
-    QVERIFY (desc.name().isEmpty());
-    QVERIFY (desc.codeName() == codeName);
-    QVERIFY (desc.iconName().isEmpty());
+    /*
+     * In the mdesktopentrystub implementation currently there is this much 
+     * available valid and visible themes.
+     */
+    SYS_DEBUG ("*** we have %d valid themes.", list.size());
+    QVERIFY (list.size() == 2);
+    desc = list[0];
+
+    QVERIFY(desc->isValid());
+    QVERIFY(desc->isVisible());
+    QVERIFY(desc->name() == NAMEDesktopFilePerfect);
+    QVERIFY(desc->codeName() == CODENAMEDesktopFilePerfect);
+    QVERIFY(desc->iconName() == ICONDesktopFilePerfect);
 }
+
 
 /*!
  * Checks if the information on the current theme is available and valid.
@@ -88,13 +100,23 @@ void
 Ut_ThemeBusinessLogic::testCurrentTheme ()
 {
     QString themeCodeName;
+    QString themeName;
+    QString themeIconName;
 
+    // We are stubbed, how can we test??
     themeCodeName = m_Api->currentThemeCodeName ();
+    themeName = m_Api->currentThemeName ();
+    themeIconName = m_Api->currentThemeIconName();
+    
     SYS_DEBUG ("*** currentThemeCodeName() = %s", SYS_STR(themeCodeName));
+    SYS_DEBUG ("*** currentThemeName()     = %s", SYS_STR(themeName));
+    SYS_DEBUG ("*** currentThemeIconName() = %s", SYS_STR(themeIconName));
+
     QVERIFY (!themeCodeName.isEmpty());
     QVERIFY (themeCodeName == MTheme::instance()->currentTheme());
+    QVERIFY (themeName == NAMEDesktopFileCurrent);
+    QVERIFY (themeIconName == ICONDesktopFileCurrent);
 }
-
 
 QTEST_APPLESS_MAIN(Ut_ThemeBusinessLogic)
 

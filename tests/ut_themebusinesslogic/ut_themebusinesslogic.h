@@ -24,6 +24,7 @@ public:
     QString m_ThemeCodeName;
 };
 
+
 class Ut_ThemeBusinessLogic : public QObject 
 {
 Q_OBJECT
@@ -35,8 +36,7 @@ private slots:
     void cleanupTestCase ();
 
     void testCurrentTheme ();
-    void testThemeDescriptorInvalid ();
-    
+    void testAvailableThemes ();
 private:
     UtThemeBusinessLogicPrivate *m_Priv;
     MApplication              *m_App;

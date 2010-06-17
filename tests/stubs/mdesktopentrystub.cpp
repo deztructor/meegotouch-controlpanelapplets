@@ -22,8 +22,9 @@
 
 #include <QString>
 #include <QStringList>
+#include <MTheme>
 
-#define DEBUG
+#undef DEBUG
 #include "../../src/debug.h"
 
 /******************************************************************************
@@ -41,10 +42,28 @@ initFileSystem ()
 
     SYS_DEBUG ("Initializing file system.");
     fileSystemFiles <<
-        "/usr/share/themes/plankton/index.theme" <<
-        "/usr/share/themes/base/index.theme" <<
-        "/usr/share/themes/devel/index.theme" <<
-        "/usr/share/themes/dui/index.theme";
+        QString(DIRNAMEDesktopFilePerfect) + "/index.theme" <<
+        QString(DIRNAMEDesktopFileHidden) + "/index.theme" <<
+        QString(DIRNAMEDesktopFileEmpty) + "/index.theme";
+
+    /*
+     * The third is actually a simulated fake for the current theme.
+     */
+    MTheme *theme = MTheme::instance();
+    QString themeName = theme->currentTheme();
+
+    fileSystemFiles << 
+        QString("/usr/share/themes/") + themeName + "/index.theme";
+
+    fileSystemInitialized = true;
+
+    #ifdef DEBUG
+    int n;
+    foreach (QString debugString, fileSystemFiles) {
+        SYS_DEBUG ("fileSystemFiles[%d] = %s", n, SYS_STR(debugString));
+        ++n;
+    }
+    #endif
 }
 
 MDesktopEntry::DesktopID
@@ -56,6 +75,7 @@ getDesktopID (
     initFileSystem ();
 
     retval = (MDesktopEntry::DesktopID) fileSystemFiles.indexOf (filePath);
+    SYS_DEBUG ("*****************************************************");
     SYS_DEBUG ("*** filePath = %s", SYS_STR(filePath));
     SYS_DEBUG ("*** retval   = %d", retval);
 
@@ -75,9 +95,13 @@ getDesktopID (
         case MDesktopEntry::DesktopFileEmpty:
             SYS_DEBUG ("MDesktopEntry::DesktopFileEmpty");
             break;
+        
+        case MDesktopEntry::DesktopFileCurrent:
+            SYS_DEBUG ("MDesktopEntry::DesktopFileCurrent");
+            break;
 
         default:
-            SYS_DEBUG ("Unhandled case");
+            SYS_WARNING ("Unhandled case: %d", retval);
     }
     
     return retval;
@@ -112,6 +136,7 @@ MDesktopEntry::isValid ()
         case DesktopFilePerfect:
         case DesktopFileHidden:
         case DesktopFileEmpty:
+        case DesktopFileCurrent:
             return true;
     }
 
@@ -158,6 +183,7 @@ MDesktopEntry::getValueForType () const
 
         case DesktopFilePerfect:
         case DesktopFileHidden:
+        case DesktopFileCurrent:
             retval = "X-MeeGoTouch-Metatheme";
             break;
         
@@ -194,6 +220,10 @@ MDesktopEntry::getValueForName () const
         case DesktopFileEmpty:
             // All strings are empty
             break;
+        
+        case DesktopFileCurrent:
+            retval = NAMEDesktopFileCurrent;
+            break;
     }
 
     SYS_DEBUG ("Returning %s", SYS_STR(retval));
@@ -223,6 +253,10 @@ MDesktopEntry::getValueForIcon () const
         
         case MDesktopEntry::DesktopFileEmpty:
             // All strings are empty
+            break;
+
+        case MDesktopEntry::DesktopFileCurrent:
+            retval = ICONDesktopFileCurrent;
             break;
 
         default:
@@ -256,6 +290,10 @@ MDesktopEntry::getValueForVisible () const
         
         case MDesktopEntry::DesktopFileEmpty:
             // All strings are empty
+            break;
+        
+        case MDesktopEntry::DesktopFileCurrent:
+            retval = "true";
             break;
     }
 

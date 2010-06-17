@@ -27,6 +27,7 @@ HEADERS += \
     ../../src/debug.h \
     ut_themebusinesslogic.h \
     $$STUB_PREFIX/mdesktopentrystub.h \
+    $$STUB_PREFIX/qdirstub.h \
     $$SRC_PREFIX/themebusinesslogic.h \
     $$SRC_PREFIX/themedescriptor.h
 

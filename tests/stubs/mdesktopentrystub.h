@@ -35,8 +35,8 @@
 /*
  * With this we return strings for every keys.
  */
-#define DIRNAMEDesktopFilePerfect  "/usr/share/themes/plankton"
-#define CODENAMEDesktopFilePerfect "plankton"
+#define DIRNAMEDesktopFilePerfect  "/usr/share/themes/planktonfake"
+#define CODENAMEDesktopFilePerfect "planktonfake"
 #define NAMEDesktopFilePerfect "DesktopFilePerfectName"
 #define ICONDesktopFilePerfect "DesktopFilePerfectIcon"
 
@@ -44,16 +44,22 @@
  * For these we return strings that represent a hidden theme; all strings are
  * valid, but the theme is hidden.
  */
-#define DIRNAMEDesktopFileHidden  "/usr/share/themes/base"
-#define CODENAMEDesktopFileHidden "base"
+#define DIRNAMEDesktopFileHidden  "/usr/share/themes/basefake"
+#define CODENAMEDesktopFileHidden "basefake"
 #define NAMEDesktopFileHidden "DesktopFileHiddenName"
 #define ICONDesktopFileHidden "DesktopFileHiddenIcon"
 
 /*
  * For these all the keys will hold no value, we return the empty string.
  */
-#define DIRNAMEDesktopFileEmpty  "/usr/share/themes/dui"
-#define CODENAMEDesktopFileEmpty "dui"
+#define DIRNAMEDesktopFileEmpty  "/usr/share/themes/duifake"
+#define CODENAMEDesktopFileEmpty "duifake"
+
+/*
+ *
+ */
+#define NAMEDesktopFileCurrent "DesktopFileCurrentName"
+#define ICONDesktopFileCurrent "DesktopFileCurrentIcon"
 
 class QString;
 
@@ -74,6 +80,7 @@ public:
         DesktopFilePerfect = 0,
         DesktopFileHidden  = 1,
         DesktopFileEmpty   = 2,
+        DesktopFileCurrent = 3,
     } DesktopID;
 
     QString value (const QString &key) const;

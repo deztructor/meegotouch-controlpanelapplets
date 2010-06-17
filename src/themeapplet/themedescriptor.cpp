@@ -32,6 +32,8 @@ ThemeDescriptor::ThemeDescriptor (
 {
     QString indexFileName (directoryPath + "/index.theme");
 
+    SYS_DEBUG ("*** indexFileName = %s", SYS_STR(indexFileName));
+
     /*
      * If the theme index file is missing the MDesktopEntry will report an
      * invalid desktop file, so we don't have to check if the directory actually

@@ -5,10 +5,10 @@
 
 #include <QList>
 #include <QObject>
+#include <QDir>
 
 class QString;
 class ThemeDescriptor;
-
 class ThemeBusinessLogic : public QObject
 {
     Q_OBJECT
