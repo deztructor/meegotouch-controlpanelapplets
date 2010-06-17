@@ -57,22 +57,13 @@ QString
 AboutApplet::title() const
 {
     //% "About product"
-    return qtTrId ("qtn_about_product"); // not official
+    return qtTrId ("qtn_prod_about_product");
 }
 
 QVector<MAction*>
 AboutApplet::viewMenuItems()
 {
-    MAction            *helpAction;
     QVector<MAction*>   vector;
-
-    SYS_DEBUG ("");
-    helpAction = new MAction (
-            //% "Help"
-            qtTrId ("qtn_comm_help"), 
-            pageMain (0));
-    helpAction->setLocation (MAction::ApplicationMenuLocation);
-    vector.append(helpAction);
 
     return vector;
 }

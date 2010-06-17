@@ -1,18 +1,13 @@
 [Desktop Entry]
 Type=DUIApplet
 Name=About product
-Icon=
-Exec=
-X-logical-id=qtn_rset_about_product
-X-translation-catalog=systemui-applets
+X-logical-id=qtn_prod_about_product
+X-translation-catalog=about-product
 
 [DUI]
 X-DUIApplet-Applet=libaboutapplet.so
-X-DUIApplet-ImageLandscape=Widget_landscape_weather.png
-X-DUIApplet-ImagePortrait=Widget_portrait_weather.png
 
 [DCP]
 Category=qtn_sett_main_data
 Order=1
 WidgetType=Label
-

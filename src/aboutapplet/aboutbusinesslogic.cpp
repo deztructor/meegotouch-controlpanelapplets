@@ -83,7 +83,7 @@ QString
 AboutBusinessLogic::osVersion ()
 {
     QFile   file("/tmp/osso-product-info");
-    QString retval;
+    QString retval ("-");
     char    buf[1024];
     QString line;
     qint64  lineLength;
@@ -115,10 +115,13 @@ QString
 AboutBusinessLogic::osName ()
 {
     QFile   file ("/tmp/osso-product-info");
-    QString retval (OS_NAME_FALLBACK);
+    QString retval;
     char    buf[1024];
     QString line;
     qint64  lineLength;
+
+    //% "MeeGo"
+    retval = qtTrId ("qtn_prod_sw_version");
 
     if (!m_OsName.isEmpty())
         return m_OsName;

@@ -16,8 +16,10 @@ systemui-applets (0.14.7~1) harmattan; urgency=low
   * Fixes: NB#175377 - Clear device dialog not a query but a normal dialog
   * Fixes: NB#175370 - Reset settings dialog is not a query but a normal
     dialog
+  * About applet: logical id fixes
+  * About applet: added nokia-logo
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 17 Jun 2010 20:14:14 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 17 Jun 2010 21:18:15 +0200
 
 systemui-applets (0.14.6-2) harmattan; urgency=low
 

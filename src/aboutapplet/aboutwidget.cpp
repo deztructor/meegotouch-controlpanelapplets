@@ -4,25 +4,24 @@
 #include "aboutwidget.h"
 
 #include <QGraphicsLinearLayout>
+#include <MImageWidget>
 #include <MLabel>
-#include <MDialog>
-#include <MMessageBox>
 
 #define DEBUG
 #include "../debug.h"
 
 AboutWidget::AboutWidget (
-        AboutBusinessLogic     *aboutBusinessLogic, 
+        AboutBusinessLogic     *aboutBusinessLogic,
         QGraphicsWidget        *parent) :
     DcpWidget (parent),
     m_AboutBusinessLogic (aboutBusinessLogic),
     m_Label1 (0)
 {
-    connect (aboutBusinessLogic, SIGNAL(ready()),
-            this, SLOT(dataReady()));
+    connect (aboutBusinessLogic, SIGNAL (ready ()),
+             this, SLOT (dataReady ()));
 
-    createContent();
-    aboutBusinessLogic->initiateDataCollection();
+    createContent ();
+    aboutBusinessLogic->initiateDataCollection ();
 }
 
 AboutWidget::~AboutWidget ()
@@ -34,15 +33,20 @@ void
 AboutWidget::createContent ()
 {
     QGraphicsLinearLayout   *layout;
+    MImageWidget            *logo;
 
     layout = new QGraphicsLinearLayout (Qt::Vertical);
 
-    /*
-     *
-     */
+    logo = new MImageWidget ("icon-l-about-nokia-logo");
+    logo->setZoomFactor (1.0);
+
+    layout->addItem (logo);
+    // FIXME: why this is not working???
+    layout->setAlignment (logo, Qt::AlignLeft);
+
     m_Label1 = new MLabel (labelText ());
     m_Label1->setWordWrap (true);
-    
+
     layout->addItem (m_Label1);
     layout->addStretch ();
 
@@ -55,16 +59,21 @@ AboutWidget::labelText()
 {
     QString retval;
 
-    retval += "<h2>Name of the product</h2>";
-    retval += "<h2>" + m_AboutBusinessLogic->osName () + "</h2>";
-    retval += "<h2>Version</h2>";
+    retval += "<h3>Name of the product</h3>";
+    retval += "<h3>" + m_AboutBusinessLogic->osName () + "</h3>";
+    //% "Version"
+    retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_version"));
     retval += m_AboutBusinessLogic->osVersion();
-    retval += "<h2>Wi-Fi MAC address:</h2>";
+    //% "WLAN MAC address
+    retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_wlan_mac_address"));
     retval += m_AboutBusinessLogic->WiFiAddress ();
-    retval += "<h2>Bluetooth address:</h2>";
+    //% "Bluetooth address"
+    retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_bt_address"));
     retval += m_AboutBusinessLogic->BluetoothAddress ();
-    retval += "<h2>IMEI:</h2>";
+    //% "IMEI"
+    retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_imei"));
     retval += m_AboutBusinessLogic->IMEI ();
+    retval += "<hr />";
     retval += "<p>This product includes certain free/open source software</p>";
     retval += "<p>The exact terms of the licenses, disclaimers, "
               "aknowledgements and notices are provided in the "
@@ -93,20 +102,18 @@ AboutWidget::labelText()
               "trademarks or registered trademarks in the United States "
               "and/or other countries.</p>";
 
-
-
     return retval;
 }
 
 void
 AboutWidget::retranslateUi ()
 {
-    m_Label1->setText (labelText());
+    m_Label1->setText (labelText ());
 }
 
 void 
 AboutWidget::dataReady ()
 {
-    m_Label1->setText (labelText());
+    m_Label1->setText (labelText ());
 }
 
