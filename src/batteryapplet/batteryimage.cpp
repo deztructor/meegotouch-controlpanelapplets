@@ -17,6 +17,7 @@ BatteryImage::BatteryImage (QGraphicsItem *parent) :
         m_batteryLevel (0),
         m_iconCurrentSet (IconTypeUnset)
 {
+    setZoomFactor (1.0);
     setIconSet ();
 }
 
@@ -237,8 +238,8 @@ BatteryImage::getPixmap (
     pixmap = MTheme::pixmapCopy (name);
     
     #ifdef DEBUG
-    if (pixmap->width() < 48 ||
-            pixmap->height() < 48) {
+    if (pixmap->width() < 32 ||
+        pixmap->height() < 32) {
         SYS_WARNING ("Pixmap not loaded? Size: %dx%d", 
                 pixmap->width(), pixmap->height());
     }

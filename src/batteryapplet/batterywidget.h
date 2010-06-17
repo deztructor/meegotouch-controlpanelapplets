@@ -6,7 +6,8 @@
 #include "dcpwidget.h"
 
 class MButton;
-class BatteryDBusInterface;
+class MLayout;
+class BatteryBusinessLogic;
 class BatteryImage;
 class SliderContainer;
 class TimeContainer;
@@ -18,31 +19,32 @@ class BatteryWidget : public DcpWidget
 public:
     BatteryWidget (QGraphicsWidget *parent = 0);
     ~BatteryWidget ();
-    bool back();
+    bool back ();
 
 protected:
     void initWidget();
 
 private slots:
     void PSMButtonReleased();
-    void remainingTimeValuesReceived(const QStringList &timeValues);
+    void remainingTimeValuesReceived (const QStringList &timeValues);
     void PSMValueReceived (bool PSMEnabled);
     void PSMAutoToggled (bool PSMAutoEnabled);
+
 private:
-    void updatePSMButton();
-    
-private:
-    BatteryDBusInterface    *batteryIf;
+    void updatePSMButton ();
+    void retranslateUi ();
+
+    BatteryBusinessLogic    *m_logic;
     bool                     m_UILocked;
     BatteryImage            *batteryImage;
     MButton                 *PSMButton;
+    MLayout                 *m_MainLayout;
     // true means we are believed to be in power save mode
     bool                     m_PSMButtonToggle;
     SliderContainer         *sliderContainer;
     TimeContainer           *standByTimeContainer;
     TimeContainer           *talkTimeContainer;
 
-    void    retranslateUi ();
-
 };
+
 #endif // BATTERYWIDGET_H

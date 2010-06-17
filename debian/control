@@ -39,7 +39,7 @@ Description: USB applet for the control panel application
 Package: duicontrolpanel-batteryapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, system-ui, libduicontrolpanel,
+Depends: ${shlibs:Depends}, ${misc:Depends}, libduicontrolpanel,
          systemui-applets-l10n-engineering-english
 Description: Battery settings applet.
 
@@ -57,7 +57,7 @@ Package: duicontrolpanel-displayapplet
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         system-ui, systemui-applets-l10n-engineering-english
+         systemui-applets-l10n-engineering-english
 Description: Display settings applet.
 
 Package: duicontrolpanel-profileapplet
@@ -121,7 +121,5 @@ Description: Profile status indicator menu plugin.
 Package: duicontrolpanel-ledapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, system-ui,
-         systemui-applets-l10n-engineering-english
 Description: LED settings applet. Deprecated and will be removed soon.
 

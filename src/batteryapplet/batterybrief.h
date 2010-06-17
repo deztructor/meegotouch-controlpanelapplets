@@ -5,8 +5,6 @@
 
 #include "dcpbrief.h"
 
-class BatteryDBusInterface;
-
 class BatteryBrief: public DcpBrief
 {
     Q_OBJECT

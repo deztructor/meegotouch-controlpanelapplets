@@ -2,12 +2,13 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 #include "batterywidget.h"
 #include "batteryimage.h"
-#include "batterydbusinterface.h"
+#include "batterybusinesslogic.h"
 #include "dcpbattery.h"
 #include "slidercontainer.h"
 #include "timecontainer.h"
 
 #include <QGraphicsLinearLayout>
+#include <QTimer>
 
 #include <MButton>
 #include <MContainer>
@@ -15,25 +16,19 @@
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 
-#define DEBUG 
+#define DEBUG
 #include "../debug.h"
-
-/*
-TODO list:
-1) what is the correct interval for updating the battery image when charging? Is there a difference between
-   USB and normal charging?
-
-*/
 
 BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
         DcpWidget (parent),
-        batteryIf (NULL),
+        m_logic (0),
         m_UILocked (false),
-        batteryImage (NULL),
-        PSMButton (NULL),
-        sliderContainer (NULL),
-        standByTimeContainer (NULL),
-        talkTimeContainer (NULL)
+        batteryImage (0),
+        m_MainLayout (0),
+        PSMButton (0),
+        sliderContainer (0),
+        standByTimeContainer (0),
+        talkTimeContainer (0)
 {
     SYS_DEBUG ("Starting in %p", this);
     /*
@@ -42,15 +37,18 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
      * interface to the sysuid is not usable.
      */
     m_PSMButtonToggle = false;
-    initWidget();
+
+    initWidget ();
 }
 
 BatteryWidget::~BatteryWidget ()
 {
     SYS_DEBUG ("Destroying %p", this);
-    if (batteryIf) {
-        delete batteryIf;
-        batteryIf = NULL;
+
+    if (m_logic)
+    {
+        delete m_logic;
+        m_logic = 0;
     }
 }
 
@@ -62,8 +60,8 @@ bool BatteryWidget::back ()
 void BatteryWidget::initWidget ()
 {
     SYS_DEBUG ("Start");
-    // proxy for dbus interface on remote object
-    batteryIf = new BatteryDBusInterface;
+    // instantiate the batterybusinesslogic
+    m_logic = new BatteryBusinessLogic;
 
     // battery image
     batteryImage = new BatteryImage;
@@ -85,7 +83,7 @@ void BatteryWidget::initWidget ()
     PSMButton = new MButton;
     updatePSMButton ();
 
-    connect (PSMButton, SIGNAL (released ()), 
+    connect (PSMButton, SIGNAL (released ()),
              this, SLOT (PSMButtonReleased ()));
 
     // sliderContainer
@@ -93,14 +91,14 @@ void BatteryWidget::initWidget ()
 
     connect (sliderContainer, SIGNAL (PSMAutoToggled (bool)),
              this, SLOT (PSMAutoToggled (bool)));
-    connect (sliderContainer, SIGNAL (PSMThresholdValueChanged (QString)),
-             batteryIf, SLOT (setPSMThresholdValue (QString)));
+    connect (sliderContainer, SIGNAL (PSMThresholdValueChanged (int)),
+             m_logic, SLOT (setPSMThresholdValue (int)));
 
     // mainContainer
-    MLayout *orientationLayout = new MLayout;
+    m_MainLayout = new MLayout;
 
     MGridLayoutPolicy *landscapeLayoutPolicy =
-        new MGridLayoutPolicy (orientationLayout);
+        new MGridLayoutPolicy (m_MainLayout);
     landscapeLayoutPolicy->addItem (talkTimeContainer, 0, 0);
     landscapeLayoutPolicy->addItem (standByTimeContainer, 0, 1);
     landscapeLayoutPolicy->setColumnStretchFactor (0, 2);
@@ -108,10 +106,10 @@ void BatteryWidget::initWidget ()
     landscapeLayoutPolicy->addItem (sliderContainer, 1, 0, 1, 2);
     landscapeLayoutPolicy->addItem (PSMButton, 2, 0, 1, 2);
     landscapeLayoutPolicy->setSpacing (10);
-    orientationLayout->setLandscapePolicy (landscapeLayoutPolicy);
+    m_MainLayout->setLandscapePolicy (landscapeLayoutPolicy);
 
     MLinearLayoutPolicy *portraitLayoutPolicy =
-        new MLinearLayoutPolicy (orientationLayout, Qt::Vertical);
+        new MLinearLayoutPolicy (m_MainLayout, Qt::Vertical);
     portraitLayoutPolicy->addItem (talkTimeContainer, Qt::AlignLeft);
     portraitLayoutPolicy->addItem (standByTimeContainer, Qt::AlignLeft);
     portraitLayoutPolicy->setStretchFactor (talkTimeContainer, 2);
@@ -119,62 +117,54 @@ void BatteryWidget::initWidget ()
     portraitLayoutPolicy->addItem (sliderContainer, Qt::AlignLeft);
     portraitLayoutPolicy->addItem (PSMButton, Qt::AlignCenter);
     portraitLayoutPolicy->setSpacing (10);
-    orientationLayout->setPortraitPolicy (portraitLayoutPolicy);
+    m_MainLayout->setPortraitPolicy (portraitLayoutPolicy);
 
     MContainer *mainContainer = new MContainer;
     mainContainer->setHeaderVisible (false);
-    mainContainer->centralWidget ()->setLayout (orientationLayout);
+    mainContainer->centralWidget ()->setLayout (m_MainLayout);
 
     // connect the value receive signals
-    connect (batteryIf, SIGNAL (remainingTimeValuesReceived (QStringList)),
+    connect (m_logic, SIGNAL (remainingTimeValuesChanged (QStringList)),
              this, SLOT (remainingTimeValuesReceived (QStringList)));
 
     /*
      * Connect the batteryImage slots.
      */
-    connect (batteryIf, SIGNAL (batteryCharging (int)),
+    connect (m_logic, SIGNAL (batteryCharging (int)),
              batteryImage, SLOT (startCharging (int)));
-    connect (batteryIf, SIGNAL (batteryNotCharging ()),
-             batteryImage, SLOT (stopCharging ()));
-    connect (batteryIf, SIGNAL (batteryBarValueReceived (int)),
+    connect (m_logic, SIGNAL (batteryBarValueReceived (int)),
              batteryImage, SLOT (updateBatteryLevel (int)));
-    connect (batteryIf, SIGNAL (PSMValueReceived (bool)),
-             batteryImage, SLOT (setPSMValue(bool)));
+    connect (m_logic, SIGNAL (PSMValueReceived (bool)),
+             batteryImage, SLOT (setPSMValue (bool)));
 
-    connect (batteryIf, SIGNAL (batteryNotCharging ()),
-             batteryIf, SLOT (batteryBarValueRequired ()));
-    connect (batteryIf, SIGNAL (PSMValueReceived (bool)),
+    connect (m_logic, SIGNAL (PSMValueReceived (bool)),
              this, SLOT (PSMValueReceived (bool)));
-    
-    /*
-     * SliderContainer signals and slots.
-     */
-    connect (batteryIf, SIGNAL (PSMAutoValueReceived (bool)),
-             sliderContainer, SLOT (initPSMAutoButton (bool)));
-    connect (batteryIf, SIGNAL (PSMAutoDisabled ()),
-             sliderContainer, SLOT (PSMAutoDisabled ()));
-    connect (batteryIf, SIGNAL (PSMThresholdValuesReceived (QStringList)),
-             sliderContainer, SLOT (initSlider (QStringList)));
-    connect (batteryIf, SIGNAL (PSMThresholdValueReceived (QString)),
-             sliderContainer, SLOT (updateSlider (QString)));
-    
-    connect (batteryIf, SIGNAL (PSMThresholdValuesReceived (QStringList)),
-             batteryIf, SLOT (PSMThresholdValueRequired ()));
 
-    // send value requests over dbus
-    batteryIf->remainingTimeValuesRequired ();
-    batteryIf->batteryBarValueRequired ();
-    batteryIf->batteryChargingStateRequired ();
-    batteryIf->PSMValueRequired ();
-    batteryIf->PSMAutoValueRequired ();
-    batteryIf->PSMThresholdValuesRequired ();
+    /*
+     * SliderContainer signals and slots,
+     * and initialization
+     */
+#if 0
+    // XXX: This signal never been called :-S
+    connect (m_logic, SIGNAL (PSMAutoDisabled ()),
+             sliderContainer, SLOT (PSMAutoDisabled ()));
+#endif
+
+    sliderContainer->initPSMAutoButton (m_logic->PSMAutoValue ());
+    sliderContainer->initSlider (m_logic->PSMThresholdValues ());
+    sliderContainer->updateSlider (m_logic->PSMThresholdValue ());
 
     // mainLayout
     QGraphicsLinearLayout *mainLayout =
         new QGraphicsLinearLayout (Qt::Vertical);
+
     mainLayout->setContentsMargins (0, 0, 0, 0);
     mainLayout->addItem (mainContainer);
-    this->setLayout (mainLayout);
+    mainLayout->addStretch ();
+    setLayout (mainLayout);
+
+    // Initialize the values from the business logic
+    QTimer::singleShot (0, m_logic, SLOT (requestValues ()));
 
     SYS_DEBUG ("End");
 }
@@ -197,7 +187,7 @@ BatteryWidget::PSMButtonReleased ()
         m_UILocked = false;
     }
 
-    batteryIf->setPSMValue (newPSMValue);
+    m_logic->setPSMValue (newPSMValue);
 }
 
 /*!
@@ -212,7 +202,7 @@ BatteryWidget::PSMAutoToggled (
     if (m_UILocked) {
         SYS_WARNING ("The UI is locked.");
     } else {
-        batteryIf->setPSMAutoValue (PSMAutoEnabled);
+        m_logic->setPSMAutoValue (PSMAutoEnabled);
     }
 }
 
@@ -256,6 +246,8 @@ BatteryWidget::PSMValueReceived (
     SYS_DEBUG ("Hiding sliderContainer");
     sliderContainer->setVisible (!m_PSMButtonToggle);
     m_UILocked = false;
+
+    m_MainLayout->invalidate ();
 }
 
 void 
@@ -270,7 +262,6 @@ BatteryWidget::retranslateUi ()
     talkTimeContainer->setText(qtTrId ("qtn_ener_tt"));
     standByTimeContainer->setText (qtTrId ("qtn_ener_st"));
 
-    // This call will reload timelabels on timercontainers
-    batteryIf->remainingTimeValuesRequired ();
+    m_logic->remainingTimeValuesRequired ();
 }
 
