@@ -65,6 +65,16 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
         success = currentDesc->setFromFilenames (
                 m_LandscapeGConfItem->value().toString(),
                 m_PortraitGConfItem->value().toString());
+        /*
+         * FIXME: Now, this is serious. We have the images set in gconf items,
+         * we managed to load them but we don't know the mimetype. Fortunatelly
+         * this can happen only in the unit test, because the gcon value is
+         * always properly set by us or not set at all. But this might be
+         * changed in the future. See NB#174943 for details.
+         */
+        if (success) {
+            currentDesc->setMimeType (defaultLandscapeMimeType);
+        }
     }
 
     if (!success) {
