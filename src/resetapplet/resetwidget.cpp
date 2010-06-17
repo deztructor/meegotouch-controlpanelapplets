@@ -84,6 +84,7 @@ ResetWidget::restoreActivated ()
 
     SYS_DEBUG ("");
     dialog = new MMessageBox ("", question, M::YesButton | M::NoButton);
+    dialog->setTitleBarVisible (false);
     
     retval = dialog->exec();
     switch (retval) {
@@ -114,6 +115,7 @@ ResetWidget::clearActivated ()
 
     SYS_DEBUG ("");
     dialog = new MMessageBox ("", question, M::YesButton | M::NoButton);
+    dialog->setTitleBarVisible (false);
     
     retval = dialog->exec();
     switch (retval) {

@@ -13,8 +13,11 @@ systemui-applets (0.14.7~1) harmattan; urgency=low
   * Fixed battery-applet ui initialization [slider value not initialized]
   * Fixed the battery-applet icon-sizing issue
   * Fixed the usb-applets layout
+  * Fixes: NB#175377 - Clear device dialog not a query but a normal dialog
+  * Fixes: NB#175370 - Reset settings dialog is not a query but a normal
+    dialog
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 17 Jun 2010 15:48:13 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 17 Jun 2010 20:14:14 +0200
 
 systemui-applets (0.14.6-2) harmattan; urgency=low
 

@@ -24,8 +24,8 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
         m_logic (0),
         m_UILocked (false),
         batteryImage (0),
-        m_MainLayout (0),
         PSMButton (0),
+        m_MainLayout (0),
         sliderContainer (0),
         standByTimeContainer (0),
         talkTimeContainer (0)
