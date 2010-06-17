@@ -4,7 +4,7 @@ Name=Display
 Icon=
 Exec=
 X-logical-id=qtn_disp_display
-X-translation-catalog=systemui-applets
+X-translation-catalog=display
 
 [DUI]
 X-DUIApplet-Applet=libdisplayapplet.so

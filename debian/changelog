@@ -18,8 +18,9 @@ systemui-applets (0.14.7~1) harmattan; urgency=low
     dialog
   * About applet: logical id fixes
   * About applet: added nokia-logo
+  * Display applet: load the correct translation catalogue
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 17 Jun 2010 21:18:15 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 17 Jun 2010 21:23:54 +0200
 
 systemui-applets (0.14.6-2) harmattan; urgency=low
 
