@@ -7,9 +7,9 @@ contains(BUILD_FEATURES,coverage) {
 	#
 	# Sometimes it is good to disable all but one unit tests.
 	#
-	SUBDIRS = ut_wallpapercurrentdescriptor
+	#SUBDIRS = ut_wallpapercurrentdescriptor
 	#SUBDIRS =  $$system(ls -1d ut_wallpaper*/)
-	#SUBDIRS = $$system(ls -1d ut_*/)
+	SUBDIRS = $$system(ls -1d ut_*/)
 } else {
 	SUBDIRS = $$system(ls -1d ut_*/ ft_*/)
 }

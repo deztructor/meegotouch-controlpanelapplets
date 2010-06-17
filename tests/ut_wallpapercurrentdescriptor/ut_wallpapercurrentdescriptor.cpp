@@ -109,6 +109,36 @@ Ut_WallpaperCurrentDescriptor::testFromDesktopFileInvalid ()
 }
 
 void
+Ut_WallpaperCurrentDescriptor::testFromDesktopFile ()
+{
+    bool success;
+
+    createDescriptor ();
+
+    success = m_Desc->setFromDestopFile (WALLPAPER_DESKTOP_FILE_PERFECT);
+    QVERIFY (success);
+    QVERIFY (m_Desc->valid());
+    QVERIFY (!m_Desc->m_DesktopEntry);
+    
+    QString originalPortrait  = m_Desc->originalImageFile (M::Portrait);
+    QString originalLandscape = m_Desc->originalImageFile (M::Landscape);
+    QVERIFY (originalPortrait == WALLPAPER_PORTRAIT_ORIGINALFILE);
+    QVERIFY (originalLandscape == WALLPAPER_LANDSCAPE_ORIGINALFILE);
+    
+    QString editedPortrait = m_Desc->editedFilename (M::Portrait);
+    QString editedLandscape = m_Desc->editedFilename (M::Landscape);
+    QVERIFY (editedPortrait == WALLPAPER_PORTRAIT_EDITEDFILE);
+    QVERIFY (editedLandscape == WALLPAPER_LANDSCAPE_EDITEDFILE);
+    
+    /*
+     * We could add more checks here, we have some other fields...
+     */
+
+
+    dropDescriptor ();
+}
+
+void
 Ut_WallpaperCurrentDescriptor::testFromFileNames ()
 {
     QString file1 ("nolandscapefile.png");
@@ -141,8 +171,9 @@ Ut_WallpaperCurrentDescriptor::testFromFileNames ()
     QVERIFY (editedLandscape == file1);
 
     QString desktopString = curr->generateDesktopFile ("ThisIsThePath");
-    SYS_DEBUG ("*** = %s", SYS_STR(desktopString));
+    // SYS_DEBUG ("*** = %s", SYS_STR(desktopString));
     // FIXME: We obviously should do a much 
+    QVERIFY (!desktopString.isEmpty());
 
     /*
      * When set from image file names the image transformations should be all

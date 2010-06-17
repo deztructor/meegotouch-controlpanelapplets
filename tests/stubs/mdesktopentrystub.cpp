@@ -55,8 +55,15 @@ initFileSystem ()
     fileSystemFiles << 
         QString("/usr/share/themes/") + themeName + "/index.theme";
 
-    fileSystemInitialized = true;
+    /*
+     * Here is a perfect desktop file for the wallpaper unit tests.
+     */
+    fileSystemFiles << 
+        WALLPAPER_DESKTOP_FILE_PERFECT;
 
+    /*
+     * If we need to see what exactly we have in this simulated file system.
+     */
     #ifdef DEBUG
     int n;
     foreach (QString debugString, fileSystemFiles) {
@@ -64,6 +71,8 @@ initFileSystem ()
         ++n;
     }
     #endif
+    
+    fileSystemInitialized = true;
 }
 
 MDesktopEntry::DesktopID
@@ -75,6 +84,8 @@ getDesktopID (
     initFileSystem ();
 
     retval = (MDesktopEntry::DesktopID) fileSystemFiles.indexOf (filePath);
+
+    #if 0
     SYS_DEBUG ("*****************************************************");
     SYS_DEBUG ("*** filePath = %s", SYS_STR(filePath));
     SYS_DEBUG ("*** retval   = %d", retval);
@@ -100,10 +111,15 @@ getDesktopID (
             SYS_DEBUG ("MDesktopEntry::DesktopFileCurrent");
             break;
 
+        case MDesktopEntry::WallpaperdesktopFilePerfect:
+            SYS_DEBUG ("MDesktopEntry::WallpaperdesktopFilePerfect");
+            break;
+
         default:
             SYS_WARNING ("Unhandled case: %d", retval);
     }
-    
+    #endif
+
     return retval;
 }
 
@@ -137,6 +153,7 @@ MDesktopEntry::isValid ()
         case DesktopFileHidden:
         case DesktopFileEmpty:
         case DesktopFileCurrent:
+        case WallpaperdesktopFilePerfect:
             return true;
     }
 
@@ -147,17 +164,22 @@ QString
 MDesktopEntry::value (
         const QString &key) const
 {
-    QString value;
+    QString   value;
+    DesktopID id;
+    
+    id = getDesktopID (m_FilePath);
 
     SYS_DEBUG ("*** getting %s", SYS_STR(key));
-    if (key == "Desktop Entry/Type")
-        value = getValueForType (); 
+    if (id == WallpaperdesktopFilePerfect)
+        value = getValueForWallp (id, key);
+    else if (key == "Desktop Entry/Type")
+        value = getValueForType (id); 
     else if (key == "Desktop Entry/Name")
-        value = getValueForName (); 
+        value = getValueForName (id); 
     else if (key == "X-MeeGoTouch-Metatheme/X-Icon")
-        value = getValueForIcon (); 
+        value = getValueForIcon (id); 
     else if (key == "X-MeeGoTouch-Metatheme/X-Visible")
-        value = getValueForVisible (); 
+        value = getValueForVisible (id); 
     else {
         SYS_WARNING ("Key not suported: %s", SYS_STR(key));
     }
@@ -169,13 +191,11 @@ MDesktopEntry::value (
  * Private functions.
  */
 QString 
-MDesktopEntry::getValueForType () const
+MDesktopEntry::getValueForType (
+        DesktopID id) const
 {
     QString retval;
-    DesktopID id;
 
-    id = getDesktopID (m_FilePath);
-    
     switch (id) {
         case DesktopFileMissing:
             // The empty string
@@ -197,12 +217,10 @@ MDesktopEntry::getValueForType () const
 }
 
 QString 
-MDesktopEntry::getValueForName () const
+MDesktopEntry::getValueForName (
+        DesktopID id) const
 {
     QString retval;
-    DesktopID id;
-
-    id = getDesktopID (m_FilePath);
     
     switch (id) {
         case DesktopFileMissing:
@@ -231,12 +249,10 @@ MDesktopEntry::getValueForName () const
 }
 
 QString 
-MDesktopEntry::getValueForIcon () const
+MDesktopEntry::getValueForIcon (
+        DesktopID id) const
 {
     QString retval;
-    DesktopID id;
-
-    id = getDesktopID (m_FilePath);
     
     switch (id) {
         case MDesktopEntry::DesktopFileMissing:
@@ -268,13 +284,11 @@ MDesktopEntry::getValueForIcon () const
 }
 
 QString 
-MDesktopEntry::getValueForVisible () const
+MDesktopEntry::getValueForVisible (
+        DesktopID id) const
 {
     QString retval;
-    DesktopID id;
 
-    id = getDesktopID (m_FilePath);
-    
     switch (id) {
         case MDesktopEntry::DesktopFileMissing:
             // The empty string
@@ -298,5 +312,41 @@ MDesktopEntry::getValueForVisible () const
     }
 
     SYS_DEBUG ("Returning %s", SYS_STR(retval));
+    return retval;
+}
+
+QString 
+MDesktopEntry::getValueForWallp (
+        DesktopID       id, 
+        const QString  &key) const
+{
+    QString     retval;
+    QStringList keysAndValues;
+    int         index;
+
+    keysAndValues <<
+        "DCP Landscape Wallpaper/EditedFile" << WALLPAPER_LANDSCAPE_EDITEDFILE <<
+        "DCP Portrait Wallpaper/EditedFile"  << WALLPAPER_PORTRAIT_EDITEDFILE <<
+        "DCP Landscape Wallpaper/MimeType"   << WALLPAPER_MIMETYPE <<
+        "Desktop Entry/Name"                 << WALLPAPER_NAME <<
+        "Desktop Entry/Version"              << WALLPAPER_VERSION <<
+        "DCP Landscape Wallpaper/OriginalFile" << WALLPAPER_LANDSCAPE_ORIGINALFILE <<
+        "DCP Portrait Wallpaper/OriginalFile" << WALLPAPER_PORTRAIT_ORIGINALFILE <<
+        "DCP Landscape Wallpaper/HorOffset"  << WALLPAPER_LANDSCAPE_HOROFFSET <<
+        "DCP Landscape Wallpaper/VertOffset" << WALLPAPER_LANDSCAPE_VERTOFFSET <<
+        "DCP Portrait Wallpaper/HorOffset" << WALLPAPER_PORTRAIT_HOROFFSET <<
+        "DCP Portrait Wallpaper/VertOffset" << WALLPAPER_PORTRAIT_VERTOFFSET <<
+        "DCP Landscape Wallpaper/Scale" << WALLPAPER_LANDSCAPE_SCALE <<
+        "DCP Portrait Wallpaper/Scale" << WALLPAPER_PORTRAIT_SCALE;
+
+
+    index = keysAndValues.indexOf (key);
+    if (index >= 0) {
+        retval = keysAndValues[index + 1];
+    } else {
+        SYS_WARNING ("Key not supported: %s", SYS_STR(key));
+        Q_ASSERT (!retval.isEmpty());
+    }
+
     return retval;
 }

@@ -53,6 +53,7 @@ private slots:
 
     void testDefaults ();
     void testFromDesktopFileInvalid ();
+    void testFromDesktopFile ();
     void testFromFileNames ();
 
 private:

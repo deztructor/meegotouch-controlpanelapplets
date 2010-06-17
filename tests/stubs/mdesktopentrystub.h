@@ -66,6 +66,23 @@
  */
 #define WALLPAPER_DESKTOPFILE_MISSING "/no_such_a_dir/nor_the_file.desktop"
 
+/*
+ *
+ */
+#define WALLPAPER_DESKTOP_FILE_PERFECT "/simulated/wallpaper/file.desktop"
+#define WALLPAPER_LANDSCAPE_EDITEDFILE "/somewhere/WallpaperLandscapeEditedFile"
+#define WALLPAPER_PORTRAIT_EDITEDFILE  "/somewhere/WallpaperLandscapeEditedFile"
+#define WALLPAPER_MIMETYPE "image/jpeg"
+#define WALLPAPER_NAME "Wallpaper name/title"
+#define WALLPAPER_VERSION "27"
+#define WALLPAPER_LANDSCAPE_ORIGINALFILE "/usr/share/LandscapeOriginalFile"
+#define WALLPAPER_PORTRAIT_ORIGINALFILE "/usr/share/PortraitOriginalFile"
+#define WALLPAPER_LANDSCAPE_HOROFFSET "10"
+#define WALLPAPER_LANDSCAPE_VERTOFFSET "9"
+#define WALLPAPER_PORTRAIT_HOROFFSET "8"
+#define WALLPAPER_PORTRAIT_VERTOFFSET "7"
+#define WALLPAPER_LANDSCAPE_SCALE "0.9"
+#define WALLPAPER_PORTRAIT_SCALE "1.1"
 
 class QString;
 
@@ -87,16 +104,17 @@ public:
         DesktopFileHidden  = 1,
         DesktopFileEmpty   = 2,
         DesktopFileCurrent = 3,
+        WallpaperdesktopFilePerfect = 4,
     } DesktopID;
 
     QString value (const QString &key) const;
 
 private:
-    QString getValueForType () const;
-    QString getValueForName () const;
-    QString getValueForIcon () const;
-    QString getValueForVisible () const;
-
+    QString getValueForType    (DesktopID id) const;
+    QString getValueForName    (DesktopID id) const;
+    QString getValueForIcon    (DesktopID id) const;
+    QString getValueForVisible (DesktopID id) const;
+    QString getValueForWallp   (DesktopID id, const QString &key) const;
     QString   m_FilePath;
 };
 
