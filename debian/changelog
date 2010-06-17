@@ -10,12 +10,11 @@ systemui-applets (0.14.7~1) harmattan; urgency=low
   * Rewritten business logic (no more uses the sysuid d-bus api)
   * Fixes: NB#172929 - Battery applet should stop animating once battery
                        is full
-  * FIXME: CHECKTHIS:
-    battery-applet ui initialization [slider value not initialized]
+  * Fixed battery-applet ui initialization [slider value not initialized]
   * Fixed the battery-applet icon-sizing issue
   * Fixed the usb-applets layout
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 16 Jun 2010 17:26:34 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 17 Jun 2010 15:48:13 +0200
 
 systemui-applets (0.14.6-2) harmattan; urgency=low
 

@@ -33,15 +33,14 @@ public:
     BatteryBusinessLogic (QObject *parent = 0);
     ~BatteryBusinessLogic ();
 
-    void setPSMThresholdValue (int percentage);
-    void setPSMValue (bool enabled);
-    void setPSMAutoValue (bool toggle);
-
     QStringList PSMThresholdValues ();
     int PSMThresholdValue ();
     bool PSMAutoValue ();
 
 public slots:
+    void setPSMThresholdValue (int percentage);
+    void setPSMValue (bool enabled);
+    void setPSMAutoValue (bool toggle);
     void requestValues ();
     void remainingTimeValuesRequired ();
 

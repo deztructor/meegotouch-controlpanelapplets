@@ -21,7 +21,7 @@
 #include <QVariant>
 #include <QString>
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -91,10 +91,8 @@ BatteryBusinessLogic::requestValues ()
 void
 BatteryBusinessLogic::setPSMThresholdValue (int percentage)
 {
-    SYS_DEBUG ("val = %d", percentage); // XXX
     bool ret;
     ret = m_devicemode->setPSMBatteryMode (percentage);
-    SYS_DEBUG ("after-set re-queried value = %d", m_devicemode->getPSMBatteryMode ()); // XXX
 
     if (! ret)
         SYS_WARNING (" failed to set (precentage = %d)", percentage);
@@ -103,7 +101,6 @@ BatteryBusinessLogic::setPSMThresholdValue (int percentage)
 int
 BatteryBusinessLogic::PSMThresholdValue ()
 {
-    SYS_DEBUG ("ret = %d",  m_devicemode->getPSMBatteryMode ()); // XXX: REMOVETHIS
     return m_devicemode->getPSMBatteryMode ();
 }
 

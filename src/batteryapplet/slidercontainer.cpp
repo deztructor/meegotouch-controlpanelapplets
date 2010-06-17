@@ -8,7 +8,7 @@
 #include <MLayout>
 #include <MSlider>
 
-#define DEBUG 
+#undef DEBUG
 #include "../debug.h"
 
 SliderContainer::SliderContainer (MWidget *parent) :
@@ -68,7 +68,7 @@ void SliderContainer::setLayout()
     m_PsmValueLabel = new MLabel;
     m_PsmValueLabel->setObjectName ("psmValueLabel");
     labelLayoutPolicy->addItem (m_PsmValueLabel, Qt::AlignLeft);
-    
+
     /*
      * Adding the labels to the upper horizontal part.
      */
@@ -83,11 +83,11 @@ void SliderContainer::setLayout()
     // m_PSMAutoButton->setObjectName ("PSMAutoButton");
     hpolicy->addItem (m_PSMAutoButton, Qt::AlignRight | Qt::AlignVCenter);
 
-   
+
     m_LayoutPolicy->addItem (hlayout);
 
     centralWidget ()->setLayout (layout);
-    
+
     retranslate ();
 }
 
@@ -95,7 +95,7 @@ void SliderContainer::setLayout()
  * This is in fact not an initialization function, the backend calls it to set
  * the slider values.
  */
-void 
+void
 SliderContainer::initSlider (
         const QStringList &values)
 {
@@ -112,7 +112,7 @@ SliderContainer::initSlider (
  * This slot is called when the backend returns the PSM value so we have to set
  * the slider accordingly.
  */
-void 
+void
 SliderContainer::updateSlider (int value)
 {
     SYS_DEBUG ("value = %d", value);
@@ -120,6 +120,17 @@ SliderContainer::updateSlider (int value)
     // Store the actual value for later
     // (eg for the case when slider isn't ready yet...)
     m_SliderValue = m_SliderValues.indexOf (QString (value));
+
+    // We don't like the invalid values, init if we have
+    // the valid values (m_SliderValues)
+    if ((m_SliderValue < 0) && (m_SliderValues.count () > 0))
+    {
+        // The first one is the lowest value...
+        m_SliderValue = 0;
+        // ... also emit the ValueChanged signal to set some
+        // valid value in backend too:
+        emit PSMThresholdValueChanged (m_SliderValues.at (0).toInt ());
+    }
 
     // Slider not yet created:
     if (m_PSMSlider == 0)
@@ -135,7 +146,7 @@ SliderContainer::updateSlider (int value)
  * value has been changed by the applet to show the value that came from the
  * backend.
  */
-void 
+void
 SliderContainer::sliderValueChanged (
         int value)
 {
@@ -143,17 +154,17 @@ SliderContainer::sliderValueChanged (
     SYS_DEBUG ("*** value  = %d", value);
 
     m_SliderValue = value;
-    
+
     updateSliderValueLabel ();
     emit PSMThresholdValueChanged (m_SliderValues.at (value).toInt ());
 }
 
-void 
+void
 SliderContainer::toggleSliderExistence (
         bool toggle)
 {
     SYS_DEBUG ("");
-    
+
     if (toggle == m_SliderExists)
         return;
     m_SliderExists = toggle;
@@ -163,7 +174,7 @@ SliderContainer::toggleSliderExistence (
             m_PSMSlider = new MSlider;
             SYS_DEBUG ("Connecting %p->valueChanged", m_PSMSlider);
             SYS_DEBUG ("m_SliderValue = %d", m_SliderValue);
-            
+
             m_PSMSlider->setOrientation (Qt::Horizontal);
             m_PSMSlider->setHandleLabelVisible (false);
             m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
@@ -227,14 +238,12 @@ SliderContainer::updateSliderValueLabel ()
         m_PsmValueLabel->setText (qtTrId ("qtn_comm_settings_off"));
     }
 
-    if (m_SliderExists && 
-            m_SliderValue >= 0 && 
+    if (m_SliderExists &&
+            m_SliderValue >= 0 &&
             m_SliderValue < m_SliderValues.size()) {
         m_PsmValueLabel->setText (QString ("%1%").arg (
                     m_SliderValues[m_SliderValue]));
     }
-
-    SYS_DEBUG ("text = %s", SYS_STR (m_PsmValueLabel->text ()));
 }
 
 QSizeF
