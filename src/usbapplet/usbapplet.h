@@ -17,10 +17,10 @@ class UsbApplet : public QObject, public DcpAppletIf
 	Q_INTERFACES (DcpAppletIf)
 
 public:
-    void                init ();
-	DcpWidget          *constructWidget (int widgetId);
-    QString             title () const;
-    DcpBrief           *constructBrief (int partId);
+    virtual void        init ();
+	virtual DcpWidget  *constructWidget (int widgetId);
+    virtual QString     title () const;
+    virtual DcpBrief   *constructBrief (int partId);
     QVector<MAction *>  viewMenuItems ();
 
 private:

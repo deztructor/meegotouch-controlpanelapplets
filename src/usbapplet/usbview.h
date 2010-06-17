@@ -9,6 +9,7 @@
 class MLabel;
 class MButton;
 class MButtonGroup;
+class MNotification;
 
 class UsbView : public DcpWidget
 {
@@ -16,6 +17,7 @@ class UsbView : public DcpWidget
 
 public:
     UsbView (Maemo::QmUSBMode *logic);
+    ~UsbView ();
 
 signals:
     void settingsChanged ();
@@ -33,6 +35,7 @@ private:
     MButton             *m_buttons[3];
     MButtonGroup        *m_btn_group;
     MLabel              *m_info_label;
+    MNotification       *m_error;
 };
 
 #endif

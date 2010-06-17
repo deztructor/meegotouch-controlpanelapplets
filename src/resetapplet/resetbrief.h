@@ -17,6 +17,7 @@ public:
     ResetBrief (ResetBusinessLogic *businessLogic);
 
     virtual QString valueText() const;
+    virtual int widgetTypeID() const;
 
 private:
     QPointer<ResetBusinessLogic> m_ResetBusinessLogic;

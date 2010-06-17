@@ -6,8 +6,6 @@
 
 #include "dcpdisplay.h"
 #include <dcpwidget.h>
-#include <dcpwidgettypes.h>
-
 
 #include <QtGui>
 #include <QtPlugin>
@@ -24,7 +22,6 @@ Q_EXPORT_PLUGIN2(displayapplet, DisplayApplet)
 void 
 DisplayApplet::init()
 {
-    SYS_DEBUG ("");
 }
 
 DcpWidget* DisplayApplet::constructWidget(int widgetId)

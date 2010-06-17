@@ -17,6 +17,7 @@ public:
     WarrantyBrief (WarrantyBusinessLogic *businessLogic);
 
     virtual QString valueText() const;
+    virtual int widgetTypeID() const;
 
 private:
     QPointer<WarrantyBusinessLogic> m_WarrantyBusinessLogic;

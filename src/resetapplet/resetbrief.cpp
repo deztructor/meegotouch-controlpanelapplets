@@ -2,7 +2,6 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 
 #include "resetbrief.h"
-
 #include <dcpwidgettypes.h>
 
 #define DEBUG
@@ -14,21 +13,15 @@ ResetBrief::ResetBrief (
 {
 }
 
+int
+ResetBrief::widgetTypeID() const
+{
+    return DcpWidgetType::Label;
+}
+
 QString 
 ResetBrief::valueText() const
 {
-    #if 0
-    Q_ASSERT (m_WallpaperBusinessLogic != 0);
-
-    if (m_WallpaperBusinessLogic->hasWallpaperFileName()) {
-        WallpaperDescriptor desc = m_WallpaperBusinessLogic->Wallpaper();
-        return desc.basename();
-    }
-     
-    //% "None"
-    return qtTrId("wallpaper_none");
-    #endif
-
     return "";
 }
 

@@ -17,7 +17,6 @@ ThemeBrief::ThemeBrief (
 int
 ThemeBrief::widgetTypeID() const
 {
-    SYS_DEBUG ("");
     return DcpWidgetType::Image;
 }
 

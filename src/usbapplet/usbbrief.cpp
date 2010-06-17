@@ -5,6 +5,7 @@
 
 #include <QVariant>
 #include <QString>
+#include <dcpwidgettypes.h>
 
 using namespace Maemo;
 
@@ -16,6 +17,12 @@ UsbBrief::UsbBrief (Maemo::QmUSBMode *logic) :
 {
     connect (m_logic, SIGNAL (modeChanged (Maemo::QmUSBMode::Mode)),
              this, SIGNAL (valuesChanged ()));
+}
+
+int
+UsbBrief::widgetTypeID() const
+{
+    return DcpWidgetType::Label;
 }
 
 void

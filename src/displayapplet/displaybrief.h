@@ -15,6 +15,8 @@ public:
      * meaningful. Actually the UI spec does not specify what to show...
      */
     //virtual QString valueText() const;
+
+    virtual int widgetTypeID() const;
 };
 
 #endif // DISPLAYBRIEF

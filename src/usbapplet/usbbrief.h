@@ -15,6 +15,7 @@ class UsbBrief: public DcpBrief
 public:
     UsbBrief (Maemo::QmUSBMode *logic);
     QString valueText () const;
+    virtual int widgetTypeID() const;
 
 protected:
     void    retranslateUi ();

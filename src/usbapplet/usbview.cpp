@@ -16,9 +16,20 @@
 using namespace Maemo;
 
 UsbView::UsbView (Maemo::QmUSBMode *logic) :
-    m_logic (logic)
+    m_logic (logic),
+    m_error (0)
 {
     initWidget ();
+}
+
+UsbView::~UsbView ()
+{
+    if (m_error != 0)
+    {
+        m_error->remove ();
+        delete m_error;
+        m_error = 0;
+    }
 }
 
 void
@@ -88,6 +99,23 @@ UsbView::selectionChanged (int id)
     QmUSBMode::Mode active = m_logic->getMode ();
 
     /*
+     * Do nothing if we just tapped on the
+     * currently selected one...
+     */
+    if ((int) active == id)
+        return;
+
+    /*
+     * First remove the old error notification
+     */
+    if (m_error != 0)
+    {
+        m_error->remove ();
+        delete m_error;
+        m_error = 0;
+    }
+
+    /*
      * If we are connected and some mode active, then
      * show an error message and set the mode back
      * to original
@@ -112,14 +140,15 @@ UsbView::selectionChanged (int id)
         /*
          * Create the error notification
          */
-        MNotification error (MNotification::DeviceErrorEvent,
-                             "",
+        m_error = new MNotification (
+            MNotification::DeviceErrorEvent,
 //% "You cannot change USB mode while USB is connecting.<br/>Eject USB device first, and then change setting."
-                             qtTrId ("qtn_usb_change_incorrect"));
+            "", QString ("<p>%1</p>").arg (qtTrId ("qtn_usb_change_incorrect")));
+
         /*
          * And show it
          */
-        error.publish ();
+        m_error->publish ();
 
         return;
     }

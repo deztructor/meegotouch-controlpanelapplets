@@ -13,6 +13,7 @@ class TestBrief: public DcpBrief
 public:
     TestBrief ();
     virtual QString valueText() const;
+    virtual int widgetTypeID() const;
 };
 
 #endif

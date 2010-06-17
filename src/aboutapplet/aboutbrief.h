@@ -17,6 +17,7 @@ public:
     AboutBrief (AboutBusinessLogic *businessLogic);
 
     virtual QString valueText() const;
+    virtual int widgetTypeID() const;
 
 private:
     QPointer<AboutBusinessLogic> m_AboutBusinessLogic;
