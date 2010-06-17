@@ -5,7 +5,12 @@
 
 #include <QPointF>
 #include <QFileInfo>
-#include <MDesktopEntry>
+
+#if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
+#  include "mdesktopentrystub.h"
+#else
+#  include <MDesktopEntry>
+#endif
 
 #define DEBUG
 #include "../debug.h"
@@ -43,6 +48,11 @@ WallpaperCurrentDescriptor::WallpaperCurrentDescriptor () :
 {
     m_LandscapeTrans.setOrientation (M::Landscape);
     m_PortraitTrans.setOrientation (M::Portrait);
+}
+
+WallpaperCurrentDescriptor::~WallpaperCurrentDescriptor ()
+{
+    WallpaperCurrentDescriptor::sm_Instance = 0;
 }
 
 /*!

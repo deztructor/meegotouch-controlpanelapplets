@@ -3,7 +3,6 @@
 #include "ut_wallpaperdescriptor.h"
 
 #include "wallpaperdescriptor.h"
-#include "wallpapercurrentdescriptor.h"
 #include "wallpaperitrans.h"
 
 #include <QPixmap>

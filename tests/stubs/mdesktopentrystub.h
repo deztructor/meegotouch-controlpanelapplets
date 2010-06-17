@@ -56,10 +56,16 @@
 #define CODENAMEDesktopFileEmpty "duifake"
 
 /*
- *
+ * These will be used to emulate the current theme whatever is its name.
  */
 #define NAMEDesktopFileCurrent "DesktopFileCurrentName"
 #define ICONDesktopFileCurrent "DesktopFileCurrentIcon"
+
+/*
+ * 
+ */
+#define WALLPAPER_DESKTOPFILE_MISSING "/no_such_a_dir/nor_the_file.desktop"
+
 
 class QString;
 

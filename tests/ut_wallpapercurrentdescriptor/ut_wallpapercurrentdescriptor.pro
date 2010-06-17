@@ -14,7 +14,7 @@ QT += \
 
 TEMPLATE = app
 DEFINES += UNIT_TEST
-TARGET = ut_wallpaperdescriptor
+TARGET = ut_wallpapercurrentdescriptor
 target.path = /usr/lib/systemui-applets-tests
 
 CONFIG += \
@@ -27,16 +27,22 @@ CONFIG += \
 HEADERS += \
     $$STUB_PREFIX/thumbnailerstub.h \
     $$STUB_PREFIX/trackerstub.h \
+    $$STUB_PREFIX/mdesktopentrystub.h \
     ../../src/debug.h \
-    ut_wallpaperdescriptor.h \
-    $$SRC_PREFIX/wallpaperdescriptor.h 
+    ut_wallpapercurrentdescriptor.h \
+    $$SRC_PREFIX/wallpaperitrans.h \
+    $$SRC_PREFIX/wallpaperdescriptor.h \
+    $$SRC_PREFIX/wallpapercurrentdescriptor.h 
 
 SOURCES += \
     $$STUB_PREFIX/thumbnailerstub.cpp \
     $$STUB_PREFIX/trackerstub.cpp \
+    $$STUB_PREFIX/mdesktopentrystub.cpp \
     ../../src/debug.cpp \
-    ut_wallpaperdescriptor.cpp \
-    $$SRC_PREFIX/wallpaperdescriptor.cpp 
+    ut_wallpapercurrentdescriptor.cpp \
+    $$SRC_PREFIX/wallpaperitrans.cpp \
+    $$SRC_PREFIX/wallpaperdescriptor.cpp \
+    $$SRC_PREFIX/wallpapercurrentdescriptor.cpp 
 
 INSTALLS += target
 

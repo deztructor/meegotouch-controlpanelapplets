@@ -19,6 +19,8 @@ class Q_DECL_EXPORT WallpaperCurrentDescriptor : public WallpaperDescriptor {
     Q_OBJECT
 
 public:
+    ~WallpaperCurrentDescriptor ();
+    
     static WallpaperCurrentDescriptor *instance ();
 
     virtual bool isCurrent () const;
@@ -70,6 +72,9 @@ private:
     QString                m_landscapeEditedFile;
     QString                m_portraitEditedFile;
     int                    m_Version;
+    #ifdef UNIT_TEST
+    friend class Ut_WallpaperCurrentDescriptor;
+    #endif
 };
 
 #endif
