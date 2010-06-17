@@ -9,7 +9,7 @@ CONFIG       += plugin \
                 qmsystem \
                 silent
 
-QT += gui
+QT += gui dbus
 
 MOC_DIR	      = .moc
 OBJECTS_DIR   = .objects
