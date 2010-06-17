@@ -91,6 +91,12 @@ Ut_WallpaperDescriptor::testDefaults ()
     QVERIFY (m_Desc->isCurrent() == false);
     QVERIFY (m_Desc->version() == 0);
 
+    /*
+     * This function always return true, only the inherited
+     * WallpaperCurrentDescriptor has tests in it.
+     */
+    QVERIFY (m_Desc->valid());
+
     dropDescriptor ();    
 }
 
@@ -122,6 +128,10 @@ Ut_WallpaperDescriptor::testConstructors ()
     QVERIFY (desc2.m_Url.toString() == "file:///nodir/NoSuchFile.png");
 }
 
+/*!
+ * Checking if the descriptor is created from a filename the various filename
+ * properties are properly returned.
+ */
 void
 Ut_WallpaperDescriptor::testFilenames ()
 {
@@ -139,7 +149,6 @@ Ut_WallpaperDescriptor::testFilenames ()
     // Now this is important!
     QVERIFY (landscape != portrait);
 }
-
 
 /*!
  * When the descriptor has an url and a mime type it should be able to initiate
@@ -176,6 +185,13 @@ Ut_WallpaperDescriptor::testThumbnailing ()
     QVERIFY (m_Desc->isThumbnailLoaded());
     QVERIFY (m_SignalSink.m_ThumbnailLoaded);
     QVERIFY (m_Desc->m_Thumbnailer == 0);
+
+    /*
+     * This is actually a different subject, but we can test the title here.
+     */
+    QVERIFY (m_Desc->title() == "NoSuchAFile");
+    m_Desc->setTitle ("The Title");
+    QVERIFY (m_Desc->title() == "The Title");
 
     dropDescriptor ();    
 }
@@ -257,6 +273,8 @@ Ut_WallpaperDescriptor::testThumbnailingFailure ()
 
     QVERIFY (m_Desc->m_Thumbnailer != 0);
     QVERIFY (m_Desc->m_Thumbnailer->m_RequestCame);
+    QVERIFY (m_Desc->m_MimeType == "image/png");
+    QVERIFY (m_Desc->mimeType() == "image/png");
 
     /*
      * Ok, now we emulate the case when the thumbnail creation is finished.
@@ -270,7 +288,21 @@ Ut_WallpaperDescriptor::testThumbnailingFailure ()
 
     dropDescriptor ();    
 }
+void
+Ut_WallpaperDescriptor::testCache ()
+{
+    createDescriptor ();
 
+    // FIXME: Actually to cache the wallpaper image we would need to stub
+    // QPixmap and with that we would achieve nothing. Maybe when we will have
+    // some meaningfull bugs to test we do the sub.
+    m_Desc->unCache();
+    QVERIFY (!m_Desc->m_Cached);
+
+    dropDescriptor ();
+}
+
+#if 0
 void
 Ut_WallpaperDescriptor::testFromFileNames ()
 {
@@ -322,6 +354,7 @@ Ut_WallpaperDescriptor::testFromFileNames ()
     QVERIFY (trans2.x() == 0);
     QVERIFY (trans2.y() == 0);
 }
+#endif
 
 /******************************************************************************
  * Low level test programs.

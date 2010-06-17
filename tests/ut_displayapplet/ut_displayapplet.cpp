@@ -72,7 +72,7 @@ Ut_DisplayApplet::testConstructWidget ()
     widget = m_Applet->constructWidget (0);
     QVERIFY (widget);
     QVERIFY (m_Applet->m_MainWidget == widget);
-    
+
     /*
      * Testing if the widget accepts the back. Our applets always accept back.
      */

@@ -31,6 +31,9 @@ private:
 
     QPointer<WallpaperBusinessLogic>   m_WallpaperBusinessLogic;
     WallpaperList                     *m_ImageList;
+    #ifdef UNIT_TEST
+    friend class Ut_DisplayApplet;
+    #endif
 };
 
 #endif

@@ -441,8 +441,9 @@ WallpaperDescriptor::originalImageFile (
     return filename ();
 }
 
-/*!
- * FIXME: This function always returns true.
+/*
+ * This function always return true, only the inherited
+ * WallpaperCurrentDescriptor has tests in it.
  */
 bool
 WallpaperDescriptor::valid () const
