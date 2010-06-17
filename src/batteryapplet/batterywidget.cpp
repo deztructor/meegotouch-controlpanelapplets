@@ -144,12 +144,6 @@ void BatteryWidget::initWidget ()
      * SliderContainer signals and slots,
      * and initialization
      */
-#if 0
-    // XXX: This signal never been called :-S
-    connect (m_logic, SIGNAL (PSMAutoDisabled ()),
-             sliderContainer, SLOT (PSMAutoDisabled ()));
-#endif
-
     sliderContainer->initPSMAutoButton (m_logic->PSMAutoValue ());
     sliderContainer->initSlider (m_logic->PSMThresholdValues ());
     sliderContainer->updateSlider (m_logic->PSMThresholdValue ());
@@ -203,6 +197,16 @@ BatteryWidget::PSMAutoToggled (
         SYS_WARNING ("The UI is locked.");
     } else {
         m_logic->setPSMAutoValue (PSMAutoEnabled);
+
+        if (PSMAutoEnabled)
+        {
+            /*
+             * QmSystem returns 0 when PSMAuto is disabled,
+             * so when we're enabling it, we've to re-query
+             * the proper value
+             */
+            sliderContainer->updateSlider (m_logic->PSMThresholdValue ());
+        }
     }
 }
 

@@ -170,7 +170,9 @@ SliderContainer::toggleSliderExistence (
 
             connect (m_PSMSlider, SIGNAL (valueChanged (int)),
                     this, SLOT (sliderValueChanged (int)));
-            if (m_SliderValue >= 0) {
+
+            if (m_SliderValue >= 0)
+            {
                 m_PSMSlider->setValue (m_SliderValue);
             }
             /*
@@ -205,19 +207,6 @@ SliderContainer::initPSMAutoButton (
     toggleSliderExistence (toggle);
 }
 
-/*
- * Now I wonder why do we need this. I think however we need to emit the signal,
- * so the slider will be removed when the PSM is activated so the automatic PSM
- * is disabled...
- */
-void SliderContainer::PSMAutoDisabled ()
-{
-    SYS_DEBUG ("");
-    m_PSMAutoButton->blockSignals (true);
-    m_PSMAutoButton->setChecked (false);
-    m_PSMAutoButton->blockSignals (false);
-}
-
 void SliderContainer::PSMAutoButtonToggled (bool toggle)
 {
     SYS_DEBUG ("toggle = %s", SYS_BOOL (toggle));
@@ -235,7 +224,7 @@ SliderContainer::updateSliderValueLabel ()
 {
     if (!m_SliderExists) {
         //% "Off"
-        m_PsmValueLabel->setText (qtTrId ("qtn_comm_off"));
+        m_PsmValueLabel->setText (qtTrId ("qtn_comm_settings_off"));
     }
 
     if (m_SliderExists && 
@@ -244,6 +233,8 @@ SliderContainer::updateSliderValueLabel ()
         m_PsmValueLabel->setText (QString ("%1%").arg (
                     m_SliderValues[m_SliderValue]));
     }
+
+    SYS_DEBUG ("text = %s", SYS_STR (m_PsmValueLabel->text ()));
 }
 
 QSizeF
