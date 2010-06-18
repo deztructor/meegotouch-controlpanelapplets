@@ -7,7 +7,7 @@
 
 #include <QTimer>
 
-//#define DEBUG
+#define DEBUG
 #include <../debug.h>
 
 /*
@@ -50,11 +50,11 @@ WallpaperImageLoader::loadPictures (
             job.desc = desc;
             job.row = index;
 
-            thumbnailLoadingJobs << job;
+            m_ThumbnailLoadingJobs << job;
         }
     }
 
-    if (thumbnailLoadingJobs.count() != 0)
+    if (m_ThumbnailLoadingJobs.count() != 0)
         QTimer::singleShot(0, this, SLOT(processJobQueue()));
 }
 
@@ -69,7 +69,7 @@ void
 WallpaperImageLoader::stopLoadingPictures()
 {
     SYS_DEBUG ("");
-    thumbnailLoadingJobs.clear();
+    m_ThumbnailLoadingJobs.clear();
 }
 
 /*!
@@ -88,13 +88,13 @@ WallpaperImageLoader::thumbnailLoaded (
      * diefferent order, it is possible, that the generation of some thumbnails
      * is slower than the others.
      */
-    for (int n = 0; n < thumbnailPendingJobs.size(); ++n) {
-        if (thumbnailPendingJobs[n].desc == desc) {
+    for (int n = 0; n < m_ThumbnailPendingJobs.size(); ++n) {
+        if (m_ThumbnailPendingJobs[n].desc == desc) {
             WallpaperModel *model = (WallpaperModel*) 
-                thumbnailPendingJobs[n].row.model();
+                m_ThumbnailPendingJobs[n].row.model();
 
-            model->imageLoaded (thumbnailPendingJobs[n].row);
-            thumbnailPendingJobs.removeAt (n);
+            model->imageLoaded (m_ThumbnailPendingJobs[n].row);
+            m_ThumbnailPendingJobs.removeAt (n);
 
             disconnect (desc, 0, this, 0);
             break;
@@ -110,18 +110,19 @@ WallpaperImageLoader::thumbnailLoaded (
 void 
 WallpaperImageLoader::processJobQueue ()
 {
-    if (thumbnailLoadingJobs.isEmpty())
+    if (m_ThumbnailLoadingJobs.isEmpty())
         return;
 
-    Job job = thumbnailLoadingJobs.takeFirst();
-    thumbnailPendingJobs.append (job);
+    SYS_DEBUG ("Initiating Thumbnailer");
+    Job job = m_ThumbnailLoadingJobs.takeFirst();
+    m_ThumbnailPendingJobs.append (job);
     connect (job.desc, SIGNAL(thumbnailLoaded(WallpaperDescriptor*)),
             this, SLOT(thumbnailLoaded (WallpaperDescriptor*)));
 
     job.desc->initiateThumbnailer ();
 
     // Continue loading and letting UI thread do something
-    if(thumbnailLoadingJobs.count() > 0)
+    if(m_ThumbnailLoadingJobs.count() > 0)
         QTimer::singleShot(loadPictureDelay, this, SLOT(processJobQueue()));
 }
 

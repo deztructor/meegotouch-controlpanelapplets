@@ -23,7 +23,7 @@
 #include <QString>
 #include <QStringList>
 
-#define DEBUG
+#undef DEBUG
 #include "../../src/debug.h"
 
 Thumbnailer::Thumbnailer ()

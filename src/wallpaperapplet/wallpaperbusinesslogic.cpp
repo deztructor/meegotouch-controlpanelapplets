@@ -26,8 +26,8 @@
 #include <MTheme>
 #include <MGConfItem>
 
-#define LOTDEBUG
-#define DEBUG
+//#define LOTDEBUG
+//#define DEBUG
 #include "../debug.h"
 
 static const QString PortraitKey = 

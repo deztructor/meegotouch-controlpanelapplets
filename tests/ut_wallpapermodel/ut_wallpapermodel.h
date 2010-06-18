@@ -24,6 +24,8 @@ private slots:
 
     void testRowsColumns ();
     void testData ();
+    void testCellCreator ();
+    void testImageLoader ();
 
 private:
     bool isWallpaperDescriptorValid (WallpaperDescriptor *desc);

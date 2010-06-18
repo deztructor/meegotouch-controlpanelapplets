@@ -23,7 +23,7 @@
 #include <QString>
 #include <QStringList>
 
-#define DEBUG
+#undef DEBUG
 #include "../../src/debug.h"
 
 Tracker::Tracker ()
@@ -36,6 +36,15 @@ Tracker::~Tracker ()
     SYS_DEBUG ("Destructor : %p", this);
 }
 
+/*!
+ * Returns a list of images in a simulated Tracker query, used in the wallpaper
+ * applet to enumerate a list of possible wallpapers.
+ *
+ * Please note that this method should return at least two items, so there will
+ * be 3 item in the list together with the current wallpaper. This way we will
+ * have a first item, a last item and also a middle item that has the 
+ * MContentItem::SingleColumnCenter visual style.
+ */
 QVector<QStringList>
 Tracker::rawSparqlQuery (
         const QString &query)
@@ -50,8 +59,17 @@ Tracker::rawSparqlQuery (
         "The image title1" <<
         "image/png" <<
         "300" << "200";
+    
+    QStringList list2;
+    list2 << 
+        "file:///AnotherSimulatedDir/WithASimulatedFile.gif" <<
+        "The image title2" <<
+        "image/gif" <<
+        "864" << "480";
 
-    retval << list1;
+    retval << 
+        list1 <<
+        list2;
     return retval;
 }
 

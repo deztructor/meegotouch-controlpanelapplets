@@ -69,8 +69,11 @@ public slots:
     void stopLoadingPictures ();
 
 private:
-    QList<Job>  thumbnailLoadingJobs;
-    QList<Job>  thumbnailPendingJobs;
+    QList<Job>  m_ThumbnailLoadingJobs;
+    QList<Job>  m_ThumbnailPendingJobs;
+    #ifdef UNIT_TEST
+    friend class Ut_WallpaperModel;
+    #endif
 };
 
 #endif

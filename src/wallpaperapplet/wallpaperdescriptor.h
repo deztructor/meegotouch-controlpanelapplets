@@ -117,6 +117,7 @@ private:
     #ifdef UNIT_TEST
     friend class Ut_WallpaperDescriptor;
     friend class Ft_WallpaperDescriptor;
+    friend class Ut_WallpaperModel;
     #endif
 };
 
