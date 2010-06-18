@@ -22,8 +22,11 @@ private slots:
     void testTitle ();
     void testMenu ();
     void testConstructWidget ();
-    void testBrief ();
-    void testSetToggle ();
+    void testBriefConstruct();
+    void testCurrentText ();
+    void testBriefInit ();
+    void testBriefValueText ();
+    void testBriefSetToggle ();
 
 private:
     OfflineApplet             *m_Applet;

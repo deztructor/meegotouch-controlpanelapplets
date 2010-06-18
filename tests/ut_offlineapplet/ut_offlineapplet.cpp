@@ -59,47 +59,11 @@ Ut_OfflineApplet::testConstructWidget ()
 {
     DcpWidget* widget = m_Applet->constructWidget(1);
     QVERIFY (!widget);
-}
-
-void 
-Ut_OfflineApplet::testBrief ()
-{    
-    DcpBrief* widget;
-
-    gQmDeviceModeStub->stubReset ();
-
-    gQmDeviceModeStub->stubSetReturnValue<Maemo::QmDeviceMode::DeviceMode> (
-        "getMode", Maemo::QmDeviceMode::Normal);
-    widget = m_Applet->constructBrief(1);
-    QVERIFY (widget);
-    QCOMPARE (int(widget->widgetTypeID()), int(DcpWidgetType::Button));
-    QCOMPARE (widget->valueText(), qtTrId("qtn_offl_activate"));
     delete widget;
-
-    gQmDeviceModeStub->stubSetReturnValue<Maemo::QmDeviceMode::DeviceMode> (
-        "getMode", Maemo::QmDeviceMode::Flight);
-    widget = m_Applet->constructBrief(1);
-    QVERIFY (widget);
-    QCOMPARE (int(widget->widgetTypeID()), int(DcpWidgetType::Button));
-    QCOMPARE (widget->valueText(), qtTrId("qtn_offl_deactivate"));
-
-    OfflineBrief *brief = dynamic_cast<OfflineBrief*> (widget);
-    QVERIFY (brief);
-
-    SignalChecker m_sChecker(brief);
-    m_sChecker.addSignalChecker(signalValuesChanged);
-
-    m_sChecker.increaseSigCounter(signalValuesChanged);
-    brief->devModeChanged(Maemo::QmDeviceMode::Flight);
-    QCOMPARE (widget->valueText(), qtTrId("qtn_offl_deactivate"));
-    m_sChecker.check();
-
-    m_sChecker.increaseSigCounter(signalValuesChanged);
-    brief->devModeChanged(Maemo::QmDeviceMode::Normal);
-    QCOMPARE (widget->valueText(), qtTrId("qtn_offl_activate"));
 }
+
 void 
-Ut_OfflineApplet::testSetToggle ()
+Ut_OfflineApplet::testBriefConstruct ()
 {
     DcpBrief* widget;
 
@@ -108,32 +72,112 @@ Ut_OfflineApplet::testSetToggle ()
     gQmDeviceModeStub->stubSetReturnValue<Maemo::QmDeviceMode::DeviceMode> (
         "getMode", Maemo::QmDeviceMode::Normal);
     widget = m_Applet->constructBrief(1);
+
     QVERIFY (widget);
     QCOMPARE (int(widget->widgetTypeID()), int(DcpWidgetType::Button));
-    QCOMPARE (widget->valueText(), qtTrId("qtn_offl_activate"));
+    QVERIFY(dynamic_cast<OfflineBrief*> (widget));
+    delete widget;
+}
 
-    OfflineBrief *brief = dynamic_cast<OfflineBrief*> (widget);
+void 
+Ut_OfflineApplet::testCurrentText ()
+{
+    OfflineBrief brief;
 
+    brief.m_LastMode = Maemo::QmDeviceMode::Normal;
+    QCOMPARE (brief.currentText(), qtTrId("qtn_offl_activate"));
+
+    brief.m_LastMode = Maemo::QmDeviceMode::Flight;
+    QCOMPARE (brief.currentText(), qtTrId("qtn_offl_deactivate"));
+
+    brief.m_LastMode = Maemo::QmDeviceMode::Error;
+    QVERIFY (brief.currentText().isEmpty());
+}
+
+
+void 
+Ut_OfflineApplet::testBriefInit ()
+{
+    OfflineBrief *brief;
+
+    gQmDeviceModeStub->stubReset ();
+
+    gQmDeviceModeStub->stubSetReturnValue<Maemo::QmDeviceMode::DeviceMode> (
+        "getMode", Maemo::QmDeviceMode::Normal);
+
+    brief = new OfflineBrief();
     QVERIFY (brief);
+    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
+    delete brief;
+
+    gQmDeviceModeStub->stubSetReturnValue<Maemo::QmDeviceMode::DeviceMode> (
+        "getMode", Maemo::QmDeviceMode::Flight);
+    brief = new OfflineBrief();
+    QVERIFY (brief);
+    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
+    delete brief;
+}
+
+void 
+Ut_OfflineApplet::testBriefValueText ()
+{    
+    OfflineBrief *brief;
+
+    gQmDeviceModeStub->stubReset ();
+    gQmDeviceModeStub->stubSetReturnValue<Maemo::QmDeviceMode::DeviceMode> (
+        "getMode", Maemo::QmDeviceMode::Normal);
+
+    brief = new OfflineBrief();
+    QVERIFY (brief);
+    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
+
+    SignalChecker m_sChecker(brief);
+    m_sChecker.addSignalChecker(signalValuesChanged);
+
+    m_sChecker.increaseSigCounter(signalValuesChanged);
+    brief->devModeChanged(Maemo::QmDeviceMode::Flight);
+    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
+    m_sChecker.check();
+
+    m_sChecker.increaseSigCounter(signalValuesChanged);
+    brief->devModeChanged(Maemo::QmDeviceMode::Normal);
+    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
+    delete brief;
+}
+void 
+Ut_OfflineApplet::testBriefSetToggle ()
+{
+    OfflineBrief *brief;
+
+    gQmDeviceModeStub->stubReset ();
+    gQmDeviceModeStub->stubSetReturnValue<Maemo::QmDeviceMode::DeviceMode> (
+        "getMode", Maemo::QmDeviceMode::Normal);
+
+    brief = new OfflineBrief();
+    QVERIFY (brief);
+    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
+
     SignalChecker m_sChecker(brief);
     m_sChecker.addSignalChecker(signalValuesChanged);
 
     // This should not change the text
     brief->setToggle(true);
-    QCOMPARE (widget->valueText(), qtTrId("qtn_offl_activate"));
+    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
     QCOMPARE (gQmDeviceModeStub->stubCallCount("setMode"), 1);
     QCOMPARE (gQmDeviceModeStub->stubLastParameters<Maemo::QmDeviceMode::DeviceMode> (0), Maemo::QmDeviceMode::Flight); 
 
     m_sChecker.increaseSigCounter(signalValuesChanged);
     brief->devModeChanged(Maemo::QmDeviceMode::Flight);
-    QCOMPARE (widget->valueText(), qtTrId("qtn_offl_deactivate"));
+    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
     m_sChecker.check();
 
     // This should not change the text
     brief->setToggle(true);
-    QCOMPARE (widget->valueText(), qtTrId("qtn_offl_deactivate"));
+    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
     QCOMPARE (gQmDeviceModeStub->stubCallCount("setMode"), 2);
-    QCOMPARE (gQmDeviceModeStub->stubLastParameters<Maemo::QmDeviceMode::DeviceMode> (0), Maemo::QmDeviceMode::Normal); 
+    QCOMPARE (gQmDeviceModeStub->stubLastParameters<Maemo::QmDeviceMode::DeviceMode> (0), Maemo::QmDeviceMode::Normal);
+
+    delete brief;
 }
 
 QTEST_APPLESS_MAIN(Ut_OfflineApplet)
