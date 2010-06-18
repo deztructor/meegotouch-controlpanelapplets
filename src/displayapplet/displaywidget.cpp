@@ -13,6 +13,8 @@
 #include <MLabel>
 #include <MLayout>
 #include <MSlider>
+#include <MWidget>
+#include <MStylableWidget>
 #include <MLinearLayoutPolicy>
 #include <QGraphicsLinearLayout>
 
@@ -21,6 +23,7 @@ DisplayWidget::DisplayWidget (QGraphicsWidget *parent) :
         m_logic (NULL)
 {
     setReferer (DcpDisplay::None);
+    setContentsMargins (0, 0, 0, 0);
     initWidget ();
 }
 
@@ -33,16 +36,14 @@ void DisplayWidget::initWidget ()
 {
     SYS_DEBUG ("");
 
-    MLayout               *mainLayout;
-    MLinearLayoutPolicy   *policy;
-
-    mainLayout = new MLayout;
-    policy     = new MLinearLayoutPolicy (mainLayout, Qt::Vertical);
-    mainLayout->setPolicy (policy);
+    QGraphicsLinearLayout *mainLayout =
+        new QGraphicsLinearLayout (Qt::Vertical);
+    mainLayout->setSpacing (0.); 
 
     m_logic = new DisplayBusinessLogic;
 
     // Brightness
+    MWidget *brightness = new MStylableWidget;
     MLayout *brightnessLayout = new MLayout;
 
     MLinearLayoutPolicy *brightnessLandscape =
@@ -53,12 +54,14 @@ void DisplayWidget::initWidget ()
 
     //% "Brightness"
     m_brightnessLabel = new MLabel (qtTrId ("qtn_disp_bright"));
+    m_brightnessLabel->setObjectName ("CommonSingleTitle");
     brightnessLandscape->addItem (m_brightnessLabel);
     brightnessPortrait->addItem (m_brightnessLabel);
 
     m_brightnessSlider = new MSlider;
     m_brightnessSlider->setObjectName("BrightnessSlider");
     brightnessLandscape->addItem (m_brightnessSlider);
+    brightnessLandscape->setAlignment (m_brightnessSlider, Qt::AlignVCenter);
     brightnessPortrait->addItem (m_brightnessSlider);
 
     m_brightness_vals = m_logic->brightnessValues ();
@@ -70,11 +73,15 @@ void DisplayWidget::initWidget ()
 
     brightnessLayout->setLandscapePolicy (brightnessLandscape);
     brightnessLayout->setPortraitPolicy (brightnessPortrait);
-    policy->addItem (brightnessLayout);
+
+    brightness->setObjectName ("CommonPanel");
+    brightness->setLayout (brightnessLayout);
+    mainLayout->addItem (brightness);
 
     // Screen light
     m_screenlightCombo = new MComboBox;
-    m_screenlightCombo->setObjectName("ScreenlightCombo");
+    m_screenlightCombo->setObjectName ("ScreenlightCombo");
+    m_screenlightCombo->setContentsMargins (0, 0, 0, 0);
     //% "Backlight time out"
     m_screenlightCombo->setTitle (qtTrId ("qtn_disp_screenoff"));
 
@@ -98,14 +105,15 @@ void DisplayWidget::initWidget ()
     connect (m_screenlightCombo, SIGNAL (currentIndexChanged (int)),
              m_logic, SLOT (setScreenLightTimeouts (int)));
 
-    policy->addItem (m_screenlightCombo);
+    mainLayout->addItem (m_screenlightCombo);
 
+    MWidget *displayon = new MStylableWidget;
     QGraphicsLinearLayout *blankinhibitLayout =
         new QGraphicsLinearLayout (Qt::Horizontal);
 
     //% "Display stays lit when charging"
     m_blankInhibitLabel = new MLabel (qtTrId ("qtn_disp_screenon"));
-    m_blankInhibitLabel->setObjectName("BlankInhibitLabel");
+    m_blankInhibitLabel->setObjectName("CommonSingleTitle");
     blankinhibitLayout->addItem (m_blankInhibitLabel);
 
     // Blank inhibit
@@ -115,15 +123,18 @@ void DisplayWidget::initWidget ()
     blankInhibitButton->setViewType (MButton::switchType);
 
     blankinhibitLayout->addItem (blankInhibitButton);
+    blankinhibitLayout->setAlignment (blankInhibitButton, Qt::AlignVCenter);
 
     connect (blankInhibitButton, SIGNAL (toggled (bool)),
              m_logic, SLOT (setBlankInhibitValue (bool)));
 
     blankInhibitButton->setChecked (m_logic->blankInhibitValue ());
 
-    policy->addItem (blankinhibitLayout);
+    displayon->setObjectName ("CommonPanel");
+    displayon->setLayout (blankinhibitLayout);
+    mainLayout->addItem (displayon);
 
-    policy->addStretch ();
+    mainLayout->addStretch ();
 
     setLayout (mainLayout);
 }

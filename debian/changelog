@@ -20,8 +20,9 @@ systemui-applets (0.14.7~1) harmattan; urgency=low
   * About applet: added nokia-logo
   * Display applet: load the correct translation catalogue
   * USB applet fixes: notification handling improved...
+  * Display applet: layout fixes...
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 17 Jun 2010 22:04:03 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 18 Jun 2010 14:05:50 +0200
 
 systemui-applets (0.14.6-2) harmattan; urgency=low
 

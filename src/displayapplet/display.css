@@ -1,0 +1,8 @@
+#ScreenlightCombo {
+    /* From #CommonPanel, but apparently needed only for new theme..
+     *
+    background-image : meegotouch-panel-background $CORNER_MARGINS;
+     */
+
+    padding-left : $PADDING_LARGE;
+}
