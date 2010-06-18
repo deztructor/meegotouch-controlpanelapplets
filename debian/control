@@ -29,6 +29,13 @@ Section: devel
 Architecture: all
 Description: Engineering English translations for system-ui packages.
 
+Package: duicontrolpanel-offlineapplet
+Section: misc
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libduicontrolpanel,
+         systemui-applets-l10n-engineering-english
+Description: Offline settings applet.
+
 Package: duicontrolpanel-usbapplet
 Section: misc
 Architecture: any
