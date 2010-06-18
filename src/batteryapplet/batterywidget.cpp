@@ -81,6 +81,7 @@ void BatteryWidget::initWidget ()
      * PSMButton is used to immediately turn the power save mode on/off.
      */
     PSMButton = new MButton;
+    PSMButton->setObjectName ("PSMButton");
     updatePSMButton ();
 
     connect (PSMButton, SIGNAL (released ()),
