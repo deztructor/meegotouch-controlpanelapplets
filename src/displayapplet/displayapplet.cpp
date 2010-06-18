@@ -7,9 +7,7 @@
 #include "dcpdisplay.h"
 #include <dcpwidget.h>
 
-#include <QtGui>
 #include <QtPlugin>
-#include <QDebug>
 
 #include <MTheme>
 #include <MAction>
@@ -22,6 +20,7 @@ Q_EXPORT_PLUGIN2(displayapplet, DisplayApplet)
 void 
 DisplayApplet::init()
 {
+    MTheme::loadCSS (QString (CSSDIR) + "display.css");
 }
 
 DcpWidget* DisplayApplet::constructWidget(int widgetId)

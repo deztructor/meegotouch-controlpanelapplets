@@ -64,7 +64,7 @@ AboutWidget::labelText()
     //% "Version"
     retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_version"));
     retval += m_AboutBusinessLogic->osVersion();
-    //% "WLAN MAC address
+    //% "WLAN MAC address"
     retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_wlan_mac_address"));
     retval += m_AboutBusinessLogic->WiFiAddress ();
     //% "Bluetooth address"
