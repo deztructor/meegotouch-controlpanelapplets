@@ -86,6 +86,9 @@ private:
     
     qreal                 m_OriginalScaleFactor;
     bool                  m_Gesture;
+    #ifdef UNIT_TEST
+    friend class Ut_WallpaperEditorWidget;
+    #endif
 };
 
 #endif

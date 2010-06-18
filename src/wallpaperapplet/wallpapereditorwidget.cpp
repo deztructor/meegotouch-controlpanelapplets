@@ -111,7 +111,7 @@ WallpaperEditorWidget::paint (
 void
 WallpaperEditorWidget::createContent ()
 {
-    MWindow *win = MApplication::activeWindow ();
+    MWindow             *win = MApplication::activeWindow ();
     WallpaperDescriptor *desc;
 
     desc = m_WallpaperBusinessLogic->editedImage();
@@ -166,8 +166,12 @@ WallpaperEditorWidget::createContent ()
         /*
          * Need to copy back...
          */
-        m_Trans = win->orientation() == 
-            M::Portrait ? m_PortraitTrans : m_LandscapeTrans;
+        if (win) {
+            m_Trans = win->orientation() == 
+                        M::Portrait ? m_PortraitTrans : m_LandscapeTrans;
+        } else {
+            SYS_WARNING ("We have biiig problem! Only in tests though...");
+        }
 
         goto finalize;
     }
@@ -181,9 +185,12 @@ not_current_wallpaper:
     m_PortraitTrans.setOrientation (M::Portrait);
     m_LandscapeTrans.setExpectedSize (win->visibleSceneSize (M::Landscape));
     m_LandscapeTrans.setOrientation (M::Landscape);
-    
-    m_Trans = win->orientation() == 
-        M::Portrait ? m_PortraitTrans : m_LandscapeTrans;
+    if (win) {    
+        m_Trans = win->orientation() == 
+            M::Portrait ? m_PortraitTrans : m_LandscapeTrans;
+    } else {
+        SYS_WARNING ("We have biiig problem! Only in tests though...");
+    }
 
     /*
      * Here is what we do when this is not the current image.
