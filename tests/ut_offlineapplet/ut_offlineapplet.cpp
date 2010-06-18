@@ -10,6 +10,7 @@
 #define DEBUG
 #include "../../src/debug.h"
 
+static const char *signalValuesChanged = SIGNAL(valuesChanged());
 
 /******************************************************************************
  * Ut_offlineApplet implementation. 
@@ -83,17 +84,17 @@ Ut_OfflineApplet::testBrief ()
     QCOMPARE (widget->valueText(), qtTrId("qtn_offl_deactivate"));
 
     OfflineBrief *brief = dynamic_cast<OfflineBrief*> (widget);
-
     QVERIFY (brief);
-    SignalChecker m_sChecker(brief);
-    m_sChecker.addSignalChecker(SIGNAL(valuesChanged()));
 
-    m_sChecker.increaseSigCounter(SIGNAL(valuesChanged()));
+    SignalChecker m_sChecker(brief);
+    m_sChecker.addSignalChecker(signalValuesChanged);
+
+    m_sChecker.increaseSigCounter(signalValuesChanged);
     brief->devModeChanged(Maemo::QmDeviceMode::Flight);
     QCOMPARE (widget->valueText(), qtTrId("qtn_offl_deactivate"));
     m_sChecker.check();
 
-    m_sChecker.increaseSigCounter(SIGNAL(valuesChanged()));
+    m_sChecker.increaseSigCounter(signalValuesChanged);
     brief->devModeChanged(Maemo::QmDeviceMode::Normal);
     QCOMPARE (widget->valueText(), qtTrId("qtn_offl_activate"));
 }
@@ -115,7 +116,7 @@ Ut_OfflineApplet::testSetToggle ()
 
     QVERIFY (brief);
     SignalChecker m_sChecker(brief);
-    m_sChecker.addSignalChecker(SIGNAL(valuesChanged()));
+    m_sChecker.addSignalChecker(signalValuesChanged);
 
     // This should not change the text
     brief->setToggle(true);
@@ -123,7 +124,7 @@ Ut_OfflineApplet::testSetToggle ()
     QCOMPARE (gQmDeviceModeStub->stubCallCount("setMode"), 1);
     QCOMPARE (gQmDeviceModeStub->stubLastParameters<Maemo::QmDeviceMode::DeviceMode> (0), Maemo::QmDeviceMode::Flight); 
 
-    m_sChecker.increaseSigCounter(SIGNAL(valuesChanged()));
+    m_sChecker.increaseSigCounter(signalValuesChanged);
     brief->devModeChanged(Maemo::QmDeviceMode::Flight);
     QCOMPARE (widget->valueText(), qtTrId("qtn_offl_deactivate"));
     m_sChecker.check();
