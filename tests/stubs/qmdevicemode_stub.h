@@ -33,10 +33,27 @@ class QmDeviceModeStub : public StubBase
 {
 public:
     virtual Maemo::QmDeviceMode::PSMState getPSMState (); 
+    virtual bool setMode (Maemo::QmDeviceMode::DeviceMode mode);
+    virtual Maemo::QmDeviceMode::DeviceMode getMode (); 
     virtual void setPSMState (Maemo::QmDeviceMode::PSMState state);
     virtual int getPSMBatteryMode ();
     virtual void setPSMBatteryMode (int percentages);
 };
+
+bool
+QmDeviceModeStub::setMode (Maemo::QmDeviceMode::DeviceMode mode)
+{
+    QList<ParameterBase*> params;
+    params.append (new Parameter<Maemo::QmDeviceMode::DeviceMode> (mode));
+    stubMethodEntered ("setMode", params);
+    return true;
+}
+Maemo::QmDeviceMode::DeviceMode
+QmDeviceModeStub::getMode ()
+{
+    stubMethodEntered ("getMode");
+    return stubReturnValue<Maemo::QmDeviceMode::DeviceMode> ("getMode");
+}
 
 Maemo::QmDeviceMode::PSMState
 QmDeviceModeStub::getPSMState ()
@@ -119,6 +136,13 @@ QmDeviceMode::setPSMBatteryMode (int percentages)
     return true;
 }
 
+QmDeviceMode::DeviceMode QmDeviceMode::getMode() const{
+    return gQmDeviceModeStub->getMode ();
+}
+
+bool QmDeviceMode::setMode(QmDeviceMode::DeviceMode mode){
+    return gQmDeviceModeStub->setMode (mode);
+}
 } /* namespace Maemo */
 
 #endif

@@ -22,6 +22,10 @@ private slots:
 private:
     Maemo::QmDeviceMode::DeviceMode m_LastMode;
     Maemo::QmDeviceMode *m_DevMode;
+#ifdef UNIT_TEST
+    friend class Ut_OfflineApplet;
+#endif
+
 };
 
 

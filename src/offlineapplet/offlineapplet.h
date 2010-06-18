@@ -17,5 +17,6 @@ public:
     virtual QString title() const;
     virtual QVector<MAction *> viewMenuItems();
     virtual DcpBrief* constructBrief(int);
+
 };
 #endif // OFFLINEAPPLET_H

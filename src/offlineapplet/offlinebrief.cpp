@@ -18,6 +18,7 @@ OfflineBrief::~OfflineBrief()
 {
     delete m_DevMode;
 }
+
 void OfflineBrief::devModeChanged(Maemo::QmDeviceMode::DeviceMode mode)
 {
     SYS_DEBUG("newmode %d", mode);
