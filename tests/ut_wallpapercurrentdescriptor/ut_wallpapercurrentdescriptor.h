@@ -59,7 +59,7 @@ private slots:
 private:
     void createDescriptor ();
     void dropDescriptor ();
-
+    QString wallpaperDesktopFileName ();
     MApplication                  *m_App;
     SignalSink                     m_SignalSink;
     WallpaperCurrentDescriptor    *m_Desc;

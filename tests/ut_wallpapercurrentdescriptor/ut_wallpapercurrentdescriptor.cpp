@@ -115,7 +115,7 @@ Ut_WallpaperCurrentDescriptor::testFromDesktopFile ()
 
     createDescriptor ();
 
-    success = m_Desc->setFromDestopFile (WALLPAPER_DESKTOP_FILE_PERFECT);
+    success = m_Desc->setFromDestopFile (wallpaperDesktopFileName());
     QVERIFY (success);
     QVERIFY (m_Desc->valid());
     QVERIFY (!m_Desc->m_DesktopEntry);
@@ -240,6 +240,21 @@ Ut_WallpaperCurrentDescriptor::createDescriptor ()
             m_Desc, SLOT (thumbnailLoadingFinished(int)));
     QVERIFY (connectSuccess);
 }
+
+/*
+ * Returns the same absolute file name the wallpaperbusinesslogic uses to access
+ * the saved desktop file. This file is simulated in the mdesktopentrystub wit a
+ * perfect content.
+ */
+QString
+Ut_WallpaperCurrentDescriptor::wallpaperDesktopFileName ()
+{
+    QString retval = 
+        QString(getenv("HOME")) + "/.wallpapers/wallpaper.desktop";
+
+    return retval;
+}
+
 
 QTEST_APPLESS_MAIN(Ut_WallpaperCurrentDescriptor)
 

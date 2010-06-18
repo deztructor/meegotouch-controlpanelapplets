@@ -56,10 +56,15 @@ initFileSystem ()
         QString("/usr/share/themes/") + themeName + "/index.theme";
 
     /*
-     * Here is a perfect desktop file for the wallpaper unit tests.
+     * Here is a perfect desktop file for the wallpaper unit tests. We simulate
+     * a perfect desktop file with the same name the WallpaperBusinessLogic will
+     * use to find the file. This way the WallpaperBusinessLogic can be tested
+     * with a simulated content without any file  manipulation.
      */
+    QString desktopfile = 
+        QString(getenv("HOME")) + "/.wallpapers/wallpaper.desktop";
     fileSystemFiles << 
-        WALLPAPER_DESKTOP_FILE_PERFECT;
+        desktopfile;
 
     /*
      * If we need to see what exactly we have in this simulated file system.

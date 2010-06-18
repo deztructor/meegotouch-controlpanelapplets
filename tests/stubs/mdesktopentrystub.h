@@ -67,9 +67,10 @@
 #define WALLPAPER_DESKTOPFILE_MISSING "/no_such_a_dir/nor_the_file.desktop"
 
 /*
- *
+ * The content of a perfectly shaped desktop file containing information about
+ * the saved wallpaper. the filename is calculated from the users home directory
+ * name in the initFileSystem() function.
  */
-#define WALLPAPER_DESKTOP_FILE_PERFECT "/simulated/wallpaper/file.desktop"
 #define WALLPAPER_LANDSCAPE_EDITEDFILE "/somewhere/WallpaperLandscapeEditedFile"
 #define WALLPAPER_PORTRAIT_EDITEDFILE  "/somewhere/WallpaperLandscapeEditedFile"
 #define WALLPAPER_MIMETYPE "image/jpeg"
