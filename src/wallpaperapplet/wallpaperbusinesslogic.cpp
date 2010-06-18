@@ -95,19 +95,6 @@ WallpaperBusinessLogic::~WallpaperBusinessLogic()
 }
 
 /*!
- * FIXME: This method is deprecated, should use the 
- * WallpaperCurrentDescriptor::instance () instead.
- */
-WallpaperDescriptor *
-WallpaperBusinessLogic::Wallpaper (
-        bool portrait)
-{
-    Q_UNUSED (portrait);
-    SYS_WARNING ("Deprecated method.");
-    return WallpaperCurrentDescriptor::instance ();
-}
-
-/*!
  * A high level method to set the current wallpaper.
  */
 void
@@ -148,32 +135,8 @@ WallpaperBusinessLogic::setBackground (
     currentDesc->setFromDestopFile (dirPath() + destopFileName);
     emit wallpaperChanged ();
 
-    SYS_DEBUG ("****** End saving backgroun ********");
+    SYS_DEBUG ("****** End saving background ********");
 }
-
-/*!
- * This function does not support image manipulatios, it is deprecated.
- * FIXME: To remove this function.
- */
-void
-WallpaperBusinessLogic::setBackground (
-        WallpaperDescriptor *desc)
-{
-    if (desc == 0)
-        desc = m_EditedImage;
-
-    SYS_WARNING ("Deprecated method.");
-#if 0
-    Q_ASSERT (m_PortraitGConfItem != 0);
-    Q_ASSERT (m_LandscapeGConfItem != 0);
-
-    SYS_DEBUG ("*** filename = %s", SYS_STR(desc->filename()));
-    m_PortraitGConfItem->set (desc->filename());
-    m_LandscapeGConfItem->set (desc->filename());
-#endif
-}
-
-
 
 /*!
  * Returns a list wallpaper descriptors with the available wallpapers. The

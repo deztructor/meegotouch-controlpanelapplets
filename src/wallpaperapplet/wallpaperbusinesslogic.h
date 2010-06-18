@@ -29,8 +29,6 @@ public:
     WallpaperBusinessLogic ();
     ~WallpaperBusinessLogic ();
 
-    WallpaperDescriptor *Wallpaper (bool portrait = false);
-
     QList<WallpaperDescriptor *> availableWallpapers () const;
 
     void setEditedImage (WallpaperDescriptor  *desc);
@@ -43,9 +41,6 @@ public:
 
 signals:
     void wallpaperChanged ();
-
-public slots:
-    void setBackground (WallpaperDescriptor *desc = 0);
 
 private:
     QString dirPath () const;
