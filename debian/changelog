@@ -21,8 +21,9 @@ systemui-applets (0.14.7~1) harmattan; urgency=low
   * Display applet: load the correct translation catalogue
   * USB applet fixes: notification handling improved...
   * Display applet: layout fixes...
+  * Fixes: NB#174999 - Status menu is closes after selecting the profile.
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 18 Jun 2010 14:05:50 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 21 Jun 2010 11:19:13 +0200
 
 systemui-applets (0.14.6-2) harmattan; urgency=low
 
