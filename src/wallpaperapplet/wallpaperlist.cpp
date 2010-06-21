@@ -17,6 +17,7 @@ WallpaperList::WallpaperList (
     MList (parent),
     m_BusinessLogic (logic),
     m_ImageLoader (new WallpaperImageLoader),
+    m_Model (0),
     m_DataSourceType (WallpaperList::DataSourceUnknown)
 {
     connect (this, SIGNAL(itemClicked(const QModelIndex &)),
@@ -35,25 +36,18 @@ void
 WallpaperList::setDataSourceType (
         WallpaperList::DataSourceType sourceType)
 {
-    /*
-     * FIXME: Support for OVI is not implemented yet, so we don't use this.
-     */
-    Q_UNUSED (sourceType);
-
-
     WallpaperContentItemCreator *cellCreator;
-    WallpaperModel *model;
 
     Q_ASSERT (m_DataSourceType == DataSourceUnknown);
     
-    model = new WallpaperModel (m_BusinessLogic);
-    setItemModel (model);
+    m_Model = new WallpaperModel (m_BusinessLogic);
+    setItemModel (m_Model);
 
     cellCreator = new WallpaperContentItemCreator;
     setCellCreator (cellCreator);
 
-
     QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
+    m_DataSourceType = sourceType;
 }
 
 

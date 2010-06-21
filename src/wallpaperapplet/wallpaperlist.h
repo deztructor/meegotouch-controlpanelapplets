@@ -10,6 +10,7 @@ class QGraphicsItem;
 class WallpaperDescriptor;
 class WallpaperBusinessLogic;
 class WallpaperImageLoader;
+class WallpaperModel;
 
 /*!
  * A list widget that shows a list of the available wallpapers.
@@ -44,7 +45,11 @@ signals:
 private:
     WallpaperBusinessLogic *m_BusinessLogic;
     WallpaperImageLoader   *m_ImageLoader;
+    WallpaperModel         *m_Model;
     DataSourceType          m_DataSourceType;
+    #ifdef UNIT_TEST
+    friend class Ut_WallpaperList;
+    #endif
 };
 
 #endif

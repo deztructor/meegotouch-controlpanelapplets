@@ -73,6 +73,7 @@ private:
     QList<Job>  m_ThumbnailPendingJobs;
     #ifdef UNIT_TEST
     friend class Ut_WallpaperModel;
+    friend class Ut_WallpaperList;
     #endif
 };
 
