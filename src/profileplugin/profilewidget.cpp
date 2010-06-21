@@ -86,6 +86,13 @@ void ProfileWidget::showProfileDialog()
     initProfileButtons();
     dialog->setCentralWidget(profileButtons);
     profileButtons->connect(profileButtons, SIGNAL(profileSelected(int)), dialog, SLOT(accept()));
+
+    // Hide the status indicator menu
+    if (MStatusIndicatorMenuInterface *menu = plugin->statusIndicatorMenuInterface())
+    {
+        menu->hideStatusIndicatorMenu();
+    }
+
     // Show the dialog
     dialog->exec();
 }
