@@ -52,6 +52,7 @@ Tracker::rawSparqlQuery (
     QVector<QStringList> retval;
     
     SYS_DEBUG ("*** query = %s", SYS_STR(query));
+    Q_UNUSED (query);
 
     QStringList list1;
     list1 << 

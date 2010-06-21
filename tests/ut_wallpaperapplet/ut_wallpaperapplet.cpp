@@ -1,12 +1,17 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et sw=4 ts=4 sts=4: */
 #include "ut_wallpaperapplet.h"
+#include "mdesktopentrystub.h"
 #include "wallpaperapplet.h"
 #include "wallpaperwidget.h"
 #include "wallpapereditorwidget.h"
+#include "wallpaperbrief.h"
+
+#include <dcpwidgettypes.h>
 
 #include <MApplication>
 #include <MAction>
+
 #include <QVector>
 
 #define DEBUG
@@ -112,8 +117,19 @@ void
 Ut_WallpaperApplet::testConstructbrief ()
 {
     DcpBrief *brief1 = m_Applet->constructBrief(0);
+    QString   valueText;
+    QString   imageFilename;
 
     QVERIFY (brief1);
+    QVERIFY (brief1->widgetTypeID() == DcpWidgetType::Image);
+    
+    valueText = brief1->valueText();
+    QVERIFY (valueText == WALLPAPER_NAME);
+    
+    imageFilename = brief1->image();
+    QVERIFY (!imageFilename.isEmpty());
+    SYS_DEBUG ("*** imageFilename = %s", SYS_STR(imageFilename));
+
     delete brief1;
 }
 
