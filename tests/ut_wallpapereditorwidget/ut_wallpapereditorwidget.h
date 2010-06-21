@@ -31,6 +31,7 @@ private slots:
     void testCreateContentFail ();
     void testCreateContentCurrent ();
     void testCreateContentNonCurrent ();
+    void testMouseEvents ();
     
 private:
     void createObjects (DescriptorType descType = DescriptorNone);
