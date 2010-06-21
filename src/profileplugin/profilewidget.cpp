@@ -87,12 +87,19 @@ void ProfileWidget::showProfileDialog()
     dialog->setCentralWidget(profileButtons);
     profileButtons->connect(profileButtons, SIGNAL(profileSelected(int)), dialog, SLOT(accept()));
 
+#if 0
     // Hide the status indicator menu
     if (MStatusIndicatorMenuInterface *menu = plugin->statusIndicatorMenuInterface())
     {
         menu->hideStatusIndicatorMenu();
     }
 
+    // Needed because the dialog will be shown on the hidden status-menu-window :-S
+    dialog->setSystemModal(true);
+#endif
+    // FIXME ^^ Not possible with the current meegotouch/window-manager,
+    // a dialog only shown without a parent (transient) window if it is 
+    // a system-modal one... so i had to uncomment these ^^^ [dkedves]
     // Show the dialog
     dialog->exec();
 }

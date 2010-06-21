@@ -23,7 +23,7 @@ systemui-applets (0.14.7~1) harmattan; urgency=low
   * Display applet: layout fixes...
   * Fixes: NB#174999 - Status menu is closes after selecting the profile.
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 21 Jun 2010 11:19:13 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 21 Jun 2010 14:52:26 +0200
 
 systemui-applets (0.14.6-2) harmattan; urgency=low
 
