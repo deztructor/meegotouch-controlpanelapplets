@@ -9,8 +9,10 @@ INCLUDEPATH += $$SRC_PREFIX \
 CONFIG += \
 	gui \
 	meegotouch \
-	cellular-qt \
+	mobility \
 	silent 
+
+MOBILITY += systeminfo
 
 QT += \
     testlib \

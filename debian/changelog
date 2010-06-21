@@ -16,14 +16,15 @@ systemui-applets (0.14.7~1) harmattan; urgency=low
   * Fixes: NB#175377 - Clear device dialog not a query but a normal dialog
   * Fixes: NB#175370 - Reset settings dialog is not a query but a normal
     dialog
-  * About applet: logical id fixes
-  * About applet: added nokia-logo
+  * About applet: logical id fixes [some ids defined, but not yet available]
+  * About applet: added nokia-logo [works only with the new theme...]
+  * About applet: use Qt Mobility to fetch the version informations 
   * Display applet: load the correct translation catalogue
   * USB applet fixes: notification handling improved...
   * Display applet: layout fixes...
   * Fixes: NB#174999 - Status menu is closes after selecting the profile.
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 21 Jun 2010 14:52:26 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 21 Jun 2010 16:42:17 +0200
 
 systemui-applets (0.14.6-2) harmattan; urgency=low
 

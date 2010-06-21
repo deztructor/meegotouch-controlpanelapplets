@@ -8,12 +8,10 @@
 #include <QMap>
 #include <QDBusError>
 #include <QDBusInterface>
-#include <PhoneInfo>
 
+class QSystemDeviceInfo;
 class QDBusObjectPath;
 class QString;
-
-using namespace Cellular;
 
 /*!
  * To test this class under scratchbox1 I had to start the bluetooth daemon:
@@ -51,22 +49,15 @@ public slots:
 
 private:
     void initiateBluetoothQueries ();
-    void initiatePhoneQueries ();
 
 private:
-    QPointer<QDBusInterface> m_ManagerDBusIf;
-    QPointer<QDBusInterface> m_AdapterDBusIf;
-    QPointer<PhoneInfo>      m_PhoneInfo;
+    QPointer<QDBusInterface>    m_ManagerDBusIf;
+    QPointer<QDBusInterface>    m_AdapterDBusIf;
     
     bool          m_gotBluetoothAddress;
     QString       m_BluetoothAddress;
-
-    bool          m_gotImei;
-    QString       m_Imei;
-
     QString       m_WifiAddress;
-    QString       m_OsName;
-    QString       m_OsVersion;
+    QString       m_Imei;
 };
 
 #endif

@@ -5,10 +5,11 @@ CONFIG += plugin \
           gui \
           meegotouch \
           duicontrolpanel \
-          cellular-qt \
+          mobility \
           silent
 
 QT += dbus
+MOBILITY += systeminfo
 
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
