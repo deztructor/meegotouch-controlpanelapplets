@@ -28,11 +28,10 @@ private slots:
     virtual void createContent ();
 
 private:
-
     QPointer<WallpaperBusinessLogic>   m_WallpaperBusinessLogic;
     WallpaperList                     *m_ImageList;
     #ifdef UNIT_TEST
-    friend class Ut_DisplayApplet;
+    friend class Ut_WallpaperWidget;
     #endif
 };
 

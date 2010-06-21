@@ -28,7 +28,7 @@ WallpaperWidget::WallpaperWidget (
      * that.
      */
     //createContent ();
-    QTimer::singleShot(500, this, SLOT(createContent()));
+    QTimer::singleShot(100, this, SLOT(createContent()));
 }
 
 WallpaperWidget::~WallpaperWidget ()
