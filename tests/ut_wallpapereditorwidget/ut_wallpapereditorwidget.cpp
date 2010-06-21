@@ -5,6 +5,13 @@
 #include "wallpapereditorwidget.h"
 #include "wallpapercurrentdescriptor.h"
 
+/*
+ * We are reading data from this stub, we have some definition there we can use
+ * in the test. This way the stub might be changed and these tests will
+ * hopefully not fail.
+ */
+#include "mdesktopentrystub.h"
+
 #include <MApplication>
 #include <QList>
 
@@ -44,37 +51,91 @@ Ut_WallpaperEditorWidget::cleanupTestCase()
     m_App->deleteLater ();
 }
 
+/*
+ * We crate the widget with no wallpaperdescriptor set to be under editing. In
+ * this case the widget will not be able to do anything. In normal use this
+ * scenario can not happen, but we need to test it anyway. 
+ */
 void 
-Ut_WallpaperEditorWidget::testCreateContent ()
+Ut_WallpaperEditorWidget::testCreateContentFail ()
 {
-    /*
-     * First we crate the widget with no wallpaperdescriptor set to be under
-     * editing. In this case the widget will not be able to do anything. In
-     * normal use this scenario can not happen, but we need to test it anyway. 
-     */
     createObjects ();
     QVERIFY (!m_Widget->m_InfoHeader);
     QVERIFY (!m_Widget->m_DoneAction);
     QVERIFY (m_Widget->back());
     QVERIFY (!m_Widget->pagePans());
     dropObjects ();
+}
 
+void 
+Ut_WallpaperEditorWidget::testCreateContentCurrent ()
+{
+    /*
+     * We crate the editor widget with the current wallpaper descriptor. The
+     * data is coming from the mdesktopentrystub.
+     */
     createObjects (DescriptorCurrent);
+
+    /*
+     * Checking the offsets here.
+     */
     SYS_DEBUG ("imageDX() = %d", m_Widget->imageDX());
     SYS_DEBUG ("imageDY() = %d", m_Widget->imageDY());
+    // Checking the offset if they are properly calculated. Please note that the
+    // -10 is because of the unknown border (should be fixed) and the
+    // -70 is because of the window titlebar height (should not be literal).
+    QVERIFY (m_Widget->imageDX() == WALLPAPER_LANDSCAPE_HOROFFSET_NUM - 10);
+    QVERIFY (m_Widget->imageDY() == WALLPAPER_LANDSCAPE_VERTOFFSET_NUM - 70);
+
+    /*
+     * We send the same orientation again. The editor widget should ignore this
+     * one, it sets the orientation that is already set.
+     */
     m_Widget->orientationChanged (M::Landscape);
+    // The offsets sould remain the same.
     SYS_DEBUG ("imageDX() = %d", m_Widget->imageDX());
     SYS_DEBUG ("imageDY() = %d", m_Widget->imageDY());
+    QVERIFY (m_Widget->imageDX() == WALLPAPER_LANDSCAPE_HOROFFSET_NUM - 10);
+    QVERIFY (m_Widget->imageDY() == WALLPAPER_LANDSCAPE_VERTOFFSET_NUM - 70);
+
+    /*
+     * Changing the orientation, checking if the offset is handled properly.
+     */
     m_Widget->orientationChanged (M::Portrait);
     SYS_DEBUG ("imageDX() = %d", m_Widget->imageDX());
     SYS_DEBUG ("imageDY() = %d", m_Widget->imageDY());
-    dropObjects ();
+    QVERIFY (m_Widget->imageDX() == WALLPAPER_PORTRAIT_HOROFFSET_NUM - 10);
+    QVERIFY (m_Widget->imageDY() == WALLPAPER_PORTRAIT_VERTOFFSET_NUM - 70);
 
+    /*
+     * Destroying the widget.
+     */
+    dropObjects ();
+}
+
+void 
+Ut_WallpaperEditorWidget::testCreateContentNonCurrent ()
+{
     createObjects (DescriptorNotCurrent);
+    /* 
+     * Checking the offsets. Please check the comments in 
+     * testCreateContentCurrent() for details.
+     */
     SYS_DEBUG ("imageDX() = %d", m_Widget->imageDX());
     SYS_DEBUG ("imageDY() = %d", m_Widget->imageDY());
-    dropObjects ();
+    QVERIFY (m_Widget->imageDX() ==  - 10);
+    QVERIFY (m_Widget->imageDY() ==  - 70);
 
+    /*
+     * Changing the orientation, checking if the offset is handled properly.
+     */
+    m_Widget->orientationChanged (M::Portrait);
+    SYS_DEBUG ("imageDX() = %d", m_Widget->imageDX());
+    SYS_DEBUG ("imageDY() = %d", m_Widget->imageDY());
+    QVERIFY (m_Widget->imageDX() == - 10);
+    QVERIFY (m_Widget->imageDY() == - 70);
+
+    dropObjects ();
 }
 
 /******************************************************************************

@@ -28,7 +28,9 @@ private slots:
     void initTestCase ();
     void cleanupTestCase ();
 
-    void testCreateContent ();
+    void testCreateContentFail ();
+    void testCreateContentCurrent ();
+    void testCreateContentNonCurrent ();
     
 private:
     void createObjects (DescriptorType descType = DescriptorNone);
