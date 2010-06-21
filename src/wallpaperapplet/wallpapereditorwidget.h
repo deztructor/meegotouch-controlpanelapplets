@@ -76,6 +76,7 @@ private:
     QPixmap               m_bgPortrait;
     MAction              *m_DoneAction;
     bool                  m_NoTitlebar;
+    M::Orientation        m_Orientation;
 
     QPointF               m_LastClick;
     QPointF               m_UserOffset;

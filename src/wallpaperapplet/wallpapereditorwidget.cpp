@@ -47,17 +47,24 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_NoTitlebar (false),
     m_Gesture (false)
 {
-    if (MApplication::activeApplicationWindow())
-        MApplication::activeApplicationWindow()->showFullScreen();
+    MWindow *win = MApplication::activeWindow ();
+
+    if (win)
+        win->showFullScreen();
     
     setObjectName ("WallpaperEditorWidget");
     QTimer::singleShot (0, this, SLOT(createContent()));
     createActions ();
 
-    if (MApplication::activeApplicationWindow())
-        connect(MApplication::activeApplicationWindow(),
-                SIGNAL(orientationChanged(M::Orientation)),
+    if (win) {
+        m_Orientation = win->orientation();
+        connect (win, SIGNAL(orientationChanged(M::Orientation)),
                 this, SLOT(orientationChanged(M::Orientation)));
+    } else {
+        SYS_WARNING ("We have a problem: We don't know the orientation! "
+                    "Only in tests though...");
+        m_Orientation = M::Landscape;
+    }
 }
 
 WallpaperEditorWidget::~WallpaperEditorWidget ()
@@ -166,12 +173,8 @@ WallpaperEditorWidget::createContent ()
         /*
          * Need to copy back...
          */
-        if (win) {
-            m_Trans = win->orientation() == 
-                        M::Portrait ? m_PortraitTrans : m_LandscapeTrans;
-        } else {
-            SYS_WARNING ("We have biiig problem! Only in tests though...");
-        }
+        m_Trans = m_Orientation == M::Portrait ? 
+            m_PortraitTrans : m_LandscapeTrans;
 
         goto finalize;
     }
@@ -185,12 +188,12 @@ not_current_wallpaper:
     m_PortraitTrans.setOrientation (M::Portrait);
     m_LandscapeTrans.setExpectedSize (win->visibleSceneSize (M::Landscape));
     m_LandscapeTrans.setOrientation (M::Landscape);
-    if (win) {    
-        m_Trans = win->orientation() == 
-            M::Portrait ? m_PortraitTrans : m_LandscapeTrans;
-    } else {
-        SYS_WARNING ("We have biiig problem! Only in tests though...");
-    }
+
+    /*
+     * Need to copy back.
+     */
+    m_Trans = m_Orientation == M::Portrait ? 
+        m_PortraitTrans : m_LandscapeTrans;
 
     /*
      * Here is what we do when this is not the current image.
@@ -453,7 +456,7 @@ void
 WallpaperEditorWidget::orientationChanged (
         M::Orientation orientation)
 {
-    if (m_Trans.orientation() == orientation) {
+    if (m_Orientation == orientation) {
         SYS_WARNING ("This is the old orientation?!");
         return;
     }
@@ -474,6 +477,7 @@ WallpaperEditorWidget::orientationChanged (
             break;
     }
     
+    m_Orientation = orientation;
     redrawImage ();
 }
 

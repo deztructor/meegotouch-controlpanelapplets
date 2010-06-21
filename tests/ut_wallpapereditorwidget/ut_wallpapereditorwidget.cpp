@@ -48,7 +48,9 @@ void
 Ut_WallpaperEditorWidget::testCreateContent ()
 {
     /*
-     * FIXME: I'm working here, this test is not finalized.
+     * First we crate the widget with no wallpaperdescriptor set to be under
+     * editing. In this case the widget will not be able to do anything. In
+     * normal use this scenario can not happen, but we need to test it anyway. 
      */
     createObjects ();
     QVERIFY (!m_Widget->m_InfoHeader);
