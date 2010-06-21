@@ -76,11 +76,14 @@ ResetWidget::restoreActivated ()
     MDialog   *dialog;
     int        retval;
 
-    //% "<p align=\"left\">Restore original settings?</p>"
-    //% "<p align=\"left\">The device will reboot, temporarily disabling all "
-    //% "functions, including emergency calls. User created-content "
-    //% "will be unaffected.</p>"
-    QString    question = qtTrId("qtn_rset_restore_query");
+    //% "Restore original settings? The device will reboot, temporarily "
+    //% "disabling all functions, including emergency calls. "
+    //% "User created-content will be unaffected."
+    QString    question = QString ("<p align=\"left\">") + 
+                          qtTrId("qtn_rset_restore_query") + "</p>";
+    // It is a bit ugly, but translations contains \n stuffs:
+    question.replace ("\\n", "<br>");
+    question.replace ("\n", "<br>");
 
     SYS_DEBUG ("");
     dialog = new MMessageBox ("", question, M::YesButton | M::NoButton);
@@ -108,10 +111,13 @@ ResetWidget::clearActivated ()
     MDialog   *dialog;
     int        retval;
 
-    //% "<p align=\"left\">Clear all user data?</p>"
-    //% "<p align=\"left\">The device will reboot, temporarily disabling all "
-    //% "functions, including emergency calls.</p>"
-    QString    question = qtTrId("qtn_rset_clear_query");
+    //% "Clear all user data and restore original settings? "
+    //% "The device will reboot, temporarily disabling all "
+    //% "functions, including emergency calls."
+    QString    question = QString ("<p align=\"left\">") + 
+                          qtTrId("qtn_rset_clear_query") + "</p>";
+    question.replace ("\\n", "<br>");
+    question.replace ("\n", "<br>");
 
     SYS_DEBUG ("");
     dialog = new MMessageBox ("", question, M::YesButton | M::NoButton);
