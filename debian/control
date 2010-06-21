@@ -5,8 +5,8 @@ Maintainer: David Kedves <dkedves@blumsoft.eu>
 Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.7.11),
                libmeegotouch-dev (>= 0.20), libqmsystem-dev (>= 0.1.64),
                libprofile-qt-dev (>= 0.13), system-ui-dev (>= 0.16),
-               libqttracker-dev, libduithumbnailer-dev, clean-device-dev,
-               libqtm-dev
+               libqttracker-dev, libduithumbnailer-dev, libcellular-qt-dev,
+               clean-device-dev
 Standards-Version: 3.8.0
 
 Package: systemui-applets-tests
@@ -19,8 +19,8 @@ Depends: ${shlibs:Depends}, meegotestrunner, duicontrolpanel-usbapplet,
          duicontrolpanel-profileapplet, duistatusindicatormenu-profileplugin,
          duicontrolpanel-themeapplet, duicontrolpanel-wallpaperapplet,
          duicontrolpanel-resetapplet, duicontrolpanel-warrantyapplet,
-         testrunner
-XB-Maemo-CI-Packages: systemui-applets-tests
+         testrunner, duihomescreen
+XB-Maemo-CI-Packages: system-ui
 XB-Maemo-CI-Stage: fast, staging
 Description: Test package for system-ui applets
 
@@ -93,7 +93,7 @@ Package: duicontrolpanel-aboutapplet
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english
+         systemui-applets-l10n-engineering-english, libcellular-qt1
 Description: The about-product applet that shows device and software
  informations.
 

@@ -13,9 +13,7 @@
 #include <QDBusInterface>
 #include <QDBusObjectPath>
 #include <QFile>
-#include <QSystemInfo>
-
-QTM_USE_NAMESPACE
+#include <PhoneInfo>
 
 #define OS_NAME_FALLBACK "MeeGo"
 
@@ -34,7 +32,8 @@ QTM_USE_NAMESPACE
 
 
 AboutBusinessLogic::AboutBusinessLogic() :
-    m_gotBluetoothAddress (false)
+    m_gotBluetoothAddress (false),
+    m_gotImei (false)
 {
 }
 
@@ -44,6 +43,8 @@ AboutBusinessLogic::~AboutBusinessLogic()
         delete m_ManagerDBusIf;
     if (m_AdapterDBusIf)
         delete m_AdapterDBusIf;
+    if (m_PhoneInfo)
+        delete m_PhoneInfo;
 }
 
 /*!
@@ -53,6 +54,7 @@ void
 AboutBusinessLogic::initiateDataCollection()
 {
     initiateBluetoothQueries ();
+    initiatePhoneQueries ();
 
     osName ();
     osVersion ();
@@ -60,25 +62,91 @@ AboutBusinessLogic::initiateDataCollection()
     IMEI ();
 }
 
+/*!
+ * Returns the version number of the operating system (Maemo version).
+-16-3:~# cat /tmp/osso-product-info 
+or 
+-16-3:~# cat /tmp/osso-product-info
+OSSO_PRODUCT_HARDWARE='<unknown>'
+OSSO_PRODUCT_NAME='<unknown>'
+OSSO_PRODUCT_FULL_NAME='<unknown>'
+OSSO_PRODUCT_RELEASE_NAME='<unknown>'
+OSSO_PRODUCT_RELEASE_FULL_NAME='<unknown>'
+OSSO_PRODUCT_RELEASE_VERSION='0.2010.16-3.REQ.243168'
+OSSO_PRODUCT_WLAN_CHANNEL='<unknown>'
+OSSO_PRODUCT_KEYBOARD='<unknown>'
+OSSO_PRODUCT_REGION='<unknown>'
+OSSO_PRODUCT_SHORT_NAME='<unknown>'
+OSSO_VERSION='RX-71+RM-581+RM-660+RM-680+RM-696_HARMATTAN_0.2010.16-3.REQ.243168_PR_MR0'
+ */
 QString 
 AboutBusinessLogic::osVersion ()
 {
-    QtMobility::QSystemInfo sysinfo;
-    SYS_DEBUG ("fw version = %s", SYS_STR (sysinfo.version (QSystemInfo::Firmware)));
+    QFile   file("/tmp/osso-product-info");
+    QString retval ("-");
+    char    buf[1024];
+    QString line;
+    qint64  lineLength;
 
-    return sysinfo.version (QSystemInfo::Firmware);
+    if (!m_OsVersion.isEmpty())
+        return m_OsVersion;
+
+    if (!file.open(QFile::ReadOnly)) 
+        return retval;
+
+    for (;;) {
+        lineLength = file.readLine(buf, sizeof(buf));
+        if (lineLength < 0) 
+            break;
+        line = buf;
+        if (!line.startsWith ("OSSO_PRODUCT_RELEASE_VERSION='"))
+            continue;
+        
+        line.remove (0, 30);
+        line.chop (2);
+        retval = line;
+        SYS_DEBUG ("*** line = %s", SYS_STR(line));
+    }
+
+    return retval;
 }
 
 QString
 AboutBusinessLogic::osName ()
 {
-    QtMobility::QSystemDeviceInfo deviceinfo;
-    QString OsName (deviceinfo.productName ());
+    QFile   file ("/tmp/osso-product-info");
+    QString retval;
+    char    buf[1024];
+    QString line;
+    qint64  lineLength;
 
-    if (OsName.isNull () || OsName.isEmpty ())
-        OsName = OS_NAME_FALLBACK;
+    //% "MeeGo"
+    retval = qtTrId ("qtn_prod_sw_version");
 
-    return OsName;
+    if (!m_OsName.isEmpty())
+        return m_OsName;
+
+    if (!file.open (QFile::ReadOnly))
+        return retval;
+
+    for (;;) {
+        lineLength = file.readLine (buf, sizeof (buf));
+        if (lineLength < 0)
+            break;
+        line = buf;
+        if (!line.startsWith ("OSSO_PRODUCT_RELEASE_NAME='"))
+            continue;
+
+        line.remove (0, 27);
+        line.chop (2);
+
+        if (! line.contains ("unknown"))
+            retval = line;
+        SYS_DEBUG ("*** line = %s", SYS_STR(line));
+    }
+
+    m_OsName = retval;
+    return retval;
 }
 
 /*! 
@@ -165,17 +233,17 @@ AboutBusinessLogic::BluetoothAddress ()
 QString 
 AboutBusinessLogic::IMEI ()
 {
+    SYS_DEBUG ("*** m_gotImei             = %s", SYS_BOOL(m_gotImei));
     SYS_DEBUG ("*** m_Imei                = %s", SYS_STR(m_Imei));
-
-    if ((! m_Imei.isNull ()) && (! m_Imei.isEmpty ()))
+    if (m_gotImei) 
         return m_Imei;
 
-    QtMobility::QSystemDeviceInfo deviceinfo;
+    if (!m_PhoneInfo)
+        initiatePhoneQueries ();
 
-    m_Imei = deviceinfo.imei ();
-    /* XXX: FIXME: maybe use these ... */
-    SYS_DEBUG ("Manufacturer = %s", SYS_STR (deviceinfo.manufacturer ()));
-    SYS_DEBUG ("Product name = %s", SYS_STR (deviceinfo.productName ()));
+    m_Imei = m_PhoneInfo->imeiNumber ();
+    m_gotImei = true;
+    delete m_PhoneInfo;
 
     return m_Imei;
 }
@@ -201,6 +269,16 @@ AboutBusinessLogic::initiateBluetoothQueries ()
             QList<QVariant> (), this,
             SLOT (defaultBluetoothAdapterReceived(QDBusObjectPath)),
             SLOT (DBusMessagingFailure (QDBusError)));
+}
+
+/*!
+ * Initiate all the necessary queries through the dbus to get the IMAI address
+ * of the phone.
+ */
+void
+AboutBusinessLogic::initiatePhoneQueries ()
+{
+    m_PhoneInfo = new PhoneInfo;
 }
 
 /*!
