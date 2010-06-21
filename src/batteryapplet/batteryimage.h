@@ -73,8 +73,10 @@ private:
     QTimer                 *m_timer;
     int                     m_batteryLevel;
     QList<const QPixmap *>  m_Images;
-
     BatteryIconType         m_iconCurrentSet;
+    #ifdef UNIT_TEST
+    friend class Ut_BatteryImage;
+    #endif
 };
 
-#endif // BATTERYIMAGE_H
+#endif
