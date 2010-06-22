@@ -4,7 +4,7 @@ Name=Reset settings
 Icon=
 Exec=
 X-logical-id=qtn_rset_reset_settings
-X-translation-catalog=systemui-applets
+X-translation-catalog=reset
 
 [DUI]
 X-DUIApplet-Applet=libresetapplet.so

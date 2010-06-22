@@ -13,17 +13,19 @@ systemui-applets (0.14.7~1) harmattan; urgency=low
   * Fixed battery-applet ui initialization [slider value not initialized]
   * Fixed the battery-applet icon-sizing issue
   * Fixed the usb-applets layout
-  * Fixes: NB#175377 - Clear device dialog not a query but a normal dialog
-  * Fixes: NB#175370 - Reset settings dialog is not a query but a normal
-    dialog
   * About applet: logical id fixes
   * About applet: added nokia-logo
   * Display applet: load the correct translation catalogue
   * USB applet fixes: notification handling improved...
   * Display applet: layout fixes...
   * Fixes: NB#174999 - Status menu is closes after selecting the profile.
+  * ResetApplet: use the real translation
+  * ResetApplet: fixed the text truncation issue...
+  * Fixes: NB#175377 - Clear device dialog not a query but a normal dialog
+  * Fixes: NB#175370 - Reset settings dialog is not a query but a normal
+    dialog
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 21 Jun 2010 14:52:26 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 21 Jun 2010 22:03:00 +0200
 
 systemui-applets (0.14.6-2) harmattan; urgency=low
 
