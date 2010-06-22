@@ -74,6 +74,7 @@ private:
     int                     m_batteryLevel;
     QList<const QPixmap *>  m_Images;
     BatteryIconType         m_iconCurrentSet;
+    int                     m_ImageIndex;
     #ifdef UNIT_TEST
     friend class Ut_BatteryImage;
     #endif

@@ -60,32 +60,82 @@ Ut_BatteryImage::testLoadImages ()
 
     image->loadImages (BatteryImage::ICON_NORMAL);
     QVERIFY (image->m_Images.size() == 10);
+    // We need to wait until the theme daemon loads the icon.
+    QTest::qWait (1000);
     for (int n = 0; n < 10; ++n) {
         const QPixmap  *pixmap;
         pixmap = image->m_Images[n];
         SYS_DEBUG ("image[%d] size is %d, %d", n, 
                 pixmap->width(), pixmap->height());
+        QVERIFY (pixmap->width () >= 48);
+        QVERIFY (pixmap->height () >= 48);
     }
     
     image->loadImages (BatteryImage::ICON_POWERSAVE);
     QVERIFY (image->m_Images.size() == 10);
+    // We need to wait until the theme daemon loads the icon.
+    QTest::qWait (1000);
     for (int n = 0; n < 10; ++n) {
         const QPixmap  *pixmap;
         pixmap = image->m_Images[n];
         SYS_DEBUG ("image[%d] size is %d, %d", n, 
                 pixmap->width(), pixmap->height());
+        QVERIFY (pixmap->width () >= 48);
+        QVERIFY (pixmap->height () >= 48);
     }
     
     image->loadImages (BatteryImage::ICON_CHARGING);
     QVERIFY (image->m_Images.size() == 10);
+    // We need to wait until the theme daemon loads the icon.
+    QTest::qWait (1000);
     for (int n = 0; n < 10; ++n) {
         const QPixmap  *pixmap;
         pixmap = image->m_Images[n];
         SYS_DEBUG ("image[%d] size is %d, %d", n, 
                 pixmap->width(), pixmap->height());
+        QVERIFY (pixmap->width () >= 48);
+        QVERIFY (pixmap->height () >= 48);
     }
 
     delete image;
+}
+
+void 
+Ut_BatteryImage::testAnimation ()
+{
+    BatteryImage *image = new BatteryImage;
+
+    /*
+     * Creating the image that shows the non-charging non-psm state and testing
+     * if it follows the battery level.
+     */
+    image->stopCharging ();
+    QVERIFY (image->m_ChargingSpeed == 0);
+    QVERIFY (!animationIsOngoing(image));
+    QVERIFY (image->m_iconCurrentSet == BatteryImage::ICON_NORMAL);
+
+    for (int n = 9; n > 0; --n) {
+        image->updateBatteryLevel (n);
+        QVERIFY (image->m_batteryLevel == n);
+        QVERIFY (image->m_ImageIndex == n);
+        QVERIFY (image->m_iconCurrentSet == BatteryImage::ICON_NORMAL);
+    }
+
+
+    delete image;
+}
+
+/******************************************************************************
+ * Low level helper functions.
+ */
+bool 
+Ut_BatteryImage::animationIsOngoing (
+        BatteryImage *image)
+{
+    if (!image->m_timer)
+        return false;
+
+    return image->m_timer->isActive ();
 }
 
 QTEST_APPLESS_MAIN (Ut_BatteryImage);

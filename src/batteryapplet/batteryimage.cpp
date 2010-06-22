@@ -15,7 +15,8 @@ BatteryImage::BatteryImage (QGraphicsItem *parent) :
         m_ChargingSpeed (0),
         m_timer (NULL),
         m_batteryLevel (0),
-        m_iconCurrentSet (IconTypeUnset)
+        m_iconCurrentSet (IconTypeUnset),
+        m_ImageIndex (-1)
 {
     setZoomFactor (1.0);
     setIconSet ();
@@ -28,7 +29,7 @@ BatteryImage::loadImages (
     if (!m_Images.isEmpty ()) {
         // Release the pixmaps
         foreach (const QPixmap *icon, m_Images)
-            delete icon;
+            MTheme::instance ()->releasePixmap (icon);
         
         m_Images.clear ();
     }
@@ -67,8 +68,7 @@ BatteryImage::~BatteryImage ()
     delete m_timer;
     m_timer = NULL;
 
-    if (! m_Images.isEmpty ())
-    {
+    if (!m_Images.isEmpty ()) {
         // Release the pixmaps
         foreach (const QPixmap *icon, m_Images)
             MTheme::instance ()->releasePixmap (icon);
@@ -109,7 +109,8 @@ BatteryImage::setIconSet ()
 void
 BatteryImage::updateImage ()
 {
-    static int imageIndex = m_batteryLevel;
+    if (m_ImageIndex == -1)
+        m_ImageIndex = m_batteryLevel;
 
     //SYS_DEBUG ("*** m_batteryLevel = %d", m_batteryLevel);
     /*
@@ -117,33 +118,32 @@ BatteryImage::updateImage ()
      * battery level.
      */
     if (charging()) {
-        imageIndex++;
+        m_ImageIndex++;
         // Cumulative charging indicator
-        if (imageIndex >= m_Images.size ())
-            imageIndex = m_batteryLevel;
+        if (m_ImageIndex >= m_Images.size ())
+            m_ImageIndex = m_batteryLevel;
     } else {
-        imageIndex = m_batteryLevel;
+        m_ImageIndex = m_batteryLevel;
     }
 
-    //SYS_DEBUG ("*** image at   = %p", m_Images[imageIndex]);
     /*
      * A last check...
      */
-    if (imageIndex < 0 || imageIndex >= m_Images.size()) {
+    if (m_ImageIndex < 0 || m_ImageIndex >= m_Images.size()) {
         SYS_WARNING ("Wrong index %d, should be between 0 and %d",
-                imageIndex, m_Images.size());
+                m_ImageIndex, m_Images.size());
         return;
     }
 
-    SYS_DEBUG ("*** imageIndex = %d", imageIndex);
-    setPixmap (*(m_Images.at (imageIndex)));
+    SYS_DEBUG ("*** m_ImageIndex = %d", m_ImageIndex);
+    setPixmap (*(m_Images.at (m_ImageIndex)));
 
     // When the battery is almost loaded we can not animate, so I hacked
     // this here.
     if (charging() && 
-            imageIndex + 1 == m_Images.size () && 
+            m_ImageIndex + 1 == m_Images.size () && 
             m_batteryLevel + 1 == m_Images.size ())
-        imageIndex = 7;
+        m_ImageIndex = 7;
 }
 
 /*!
@@ -234,16 +234,7 @@ BatteryImage::getPixmap (
 {
     const QPixmap  *pixmap;
 
-    SYS_DEBUG ("*** name   = %s", SYS_STR(name));
-    pixmap = MTheme::pixmapCopy (name);
-    
-    #ifdef DEBUG
-    if (pixmap->width() < 32 ||
-        pixmap->height() < 32) {
-        SYS_WARNING ("Pixmap not loaded? Size: %dx%d", 
-                pixmap->width(), pixmap->height());
-    }
-    #endif
+    pixmap = MTheme::pixmap (name);
     return pixmap;
 }
 

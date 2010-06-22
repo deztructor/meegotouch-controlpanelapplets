@@ -25,6 +25,7 @@
 #include <QObject>
 
 class MApplication;
+class BatteryImage;
 
 class Ut_BatteryImage : public QObject
 {
@@ -37,10 +38,10 @@ private slots:
     void cleanupTestCase();
 
     void testLoadImages ();
-
+    void testAnimation ();
 private:
-    MApplication              *m_App;
-    //BatteryBusinessLogic    *m_logic;
+    bool animationIsOngoing (BatteryImage *image);
+    MApplication            *m_App;
 };
 
 #endif
