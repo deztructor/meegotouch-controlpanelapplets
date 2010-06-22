@@ -104,6 +104,8 @@ void
 Ut_BatteryImage::testAnimation ()
 {
     BatteryImage *image = new BatteryImage;
+    bool          indexUsed[10];
+    int           level;
 
     /*
      * Creating the image that shows the non-charging non-psm state and testing
@@ -114,13 +116,72 @@ Ut_BatteryImage::testAnimation ()
     QVERIFY (!animationIsOngoing(image));
     QVERIFY (image->m_iconCurrentSet == BatteryImage::ICON_NORMAL);
 
-    for (int n = 9; n > 0; --n) {
+    for (int n = 9; n >= 0; --n) {
         image->updateBatteryLevel (n);
         QVERIFY (image->m_batteryLevel == n);
         QVERIFY (image->m_ImageIndex == n);
         QVERIFY (image->m_iconCurrentSet == BatteryImage::ICON_NORMAL);
     }
 
+    /*
+     * Checking the battery animation from level 0 to level 9
+     */
+    image->updateBatteryLevel (0);
+    image->startCharging(10);
+    QVERIFY (image->m_ChargingSpeed == 10);
+    QVERIFY (animationIsOngoing(image));
+    QVERIFY (image->m_iconCurrentSet == BatteryImage::ICON_CHARGING);
+
+    // rsetting array
+    for (int n = 0; n < 10; ++n)
+        indexUsed[n] = false;
+    // Gathering data
+    for (int w = 0; w < 30; ++w) {
+        indexUsed[image->m_ImageIndex] = true;
+        QTest::qWait (9);
+    }
+    // Checking the values.
+    for (int n = 0; n < 10; ++n) {
+        QVERIFY (indexUsed[n]);
+    }
+    
+    /*
+     * Checking the cumulative charging indicator. It is a bit tricky.
+     */
+    for (level = 1; level < 5; ++level) {
+        image->updateBatteryLevel (level);
+        // Resetting the array
+        for (int n = 0; n < 10; ++n)
+            indexUsed[n] = false;
+        // Gathering data
+        for (int w = 0; w < 30; ++w) {
+            indexUsed[image->m_ImageIndex] = true;
+            QTest::qWait (9);
+        }
+
+        // checking the values.
+        for (int n = 0; n < 10; ++n) {
+            int shouldBeTrue;
+
+            shouldBeTrue = n >= level;
+            QVERIFY (indexUsed[n] == shouldBeTrue);
+        }
+    }
+
+    /*
+     * Checking the power save mode, with and without charging. When the
+     * charging is ongoing the image will show the charging even in powersave
+     * mode.
+     */
+    image->setPSMValue (true);
+    image->updateBatteryLevel (2);
+    QVERIFY (animationIsOngoing(image));
+    QVERIFY (image->m_iconCurrentSet == BatteryImage::ICON_CHARGING);
+
+    image->stopCharging ();
+    QVERIFY (!animationIsOngoing(image));
+    QVERIFY (image->m_iconCurrentSet == BatteryImage::ICON_POWERSAVE);
+    QVERIFY (image->m_ImageIndex == 2);
 
     delete image;
 }

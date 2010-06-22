@@ -39,6 +39,7 @@ private slots:
 
     void testLoadImages ();
     void testAnimation ();
+
 private:
     bool animationIsOngoing (BatteryImage *image);
     MApplication            *m_App;

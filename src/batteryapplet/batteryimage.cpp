@@ -77,13 +77,12 @@ BatteryImage::~BatteryImage ()
 }
 
 void
-BatteryImage::updateBatteryLevel (int level)
+BatteryImage::updateBatteryLevel (
+        int level)
 {
-    SYS_DEBUG ("***************************************************");
     SYS_DEBUG ("level = %d", level);
     m_batteryLevel = level;
     updateImage ();
-    SYS_DEBUG ("***************************************************");
 }
 
 void
@@ -135,7 +134,7 @@ BatteryImage::updateImage ()
         return;
     }
 
-    SYS_DEBUG ("*** m_ImageIndex = %d", m_ImageIndex);
+    //SYS_DEBUG ("*** m_ImageIndex = %d", m_ImageIndex);
     setPixmap (*(m_Images.at (m_ImageIndex)));
 
     // When the battery is almost loaded we can not animate, so I hacked
@@ -159,34 +158,27 @@ void
 BatteryImage::startCharging (
 		int rate)
 {
-    SYS_DEBUG ("***************************************************");
     SYS_DEBUG ("*** rate = %d", rate);
     m_ChargingSpeed = rate;
     setIconSet ();
     maybeStartTimer ();
-    SYS_DEBUG ("***************************************************");
 }
 
 void
 BatteryImage::stopCharging ()
 {
-    SYS_DEBUG ("***************************************************");
     m_ChargingSpeed = 0;
     setIconSet ();
-    maybeStartTimer ();
-    SYS_DEBUG ("***************************************************");
 }
 
 void
 BatteryImage::setPSMValue (
         bool    PSMEnabled)
 {
-    SYS_DEBUG ("***************************************************");
     SYS_DEBUG ("*** PSMEnabled = %s", SYS_BOOL(PSMEnabled));
     m_PowerSave = PSMEnabled;
     setIconSet ();
     maybeStartTimer ();
-    SYS_DEBUG ("***************************************************");
 }
 
 
