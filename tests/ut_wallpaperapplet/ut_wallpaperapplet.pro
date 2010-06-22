@@ -31,6 +31,7 @@ HEADERS += \
     $$STUB_PREFIX/thumbnailerstub.h \
     $$STUB_PREFIX/trackerstub.h \
     $$STUB_PREFIX/mdesktopentrystub.h \
+    $$STUB_PREFIX/filesystemstub.h \    
     ../../src/debug.h \
     ut_wallpaperapplet.h \
     $$SRC_PREFIX/wallpaperapplet.h \
@@ -49,6 +50,7 @@ SOURCES += \
     $$STUB_PREFIX/thumbnailerstub.cpp \
     $$STUB_PREFIX/trackerstub.cpp \
     $$STUB_PREFIX/mdesktopentrystub.cpp \
+    $$STUB_PREFIX/filesystemstub.cpp \
     ../../src/debug.cpp \
     ut_wallpaperapplet.cpp \
     $$SRC_PREFIX/wallpaperapplet.cpp \

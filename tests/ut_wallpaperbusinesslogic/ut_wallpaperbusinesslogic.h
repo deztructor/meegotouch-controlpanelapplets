@@ -24,7 +24,8 @@ private slots:
     void testEditedImage ();
     void testAvailableWallpapers ();
     void testITrans ();
-
+    void testCreateDirectory ();
+    void testBackupFiles ();
 private:
     WallpaperBusinessLogic    *m_Api;
     MApplication              *m_App;

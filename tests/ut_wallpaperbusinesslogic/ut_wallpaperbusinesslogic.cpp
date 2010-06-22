@@ -1,10 +1,12 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et sw=4 ts=4 sts=4: */
+#include "filesystemstub.h"
 #include "ut_wallpaperbusinesslogic.h"
 
 #include "wallpaperbusinesslogic.h"
 #include "wallpapercurrentdescriptor.h"
 #include "wallpaperitrans.h"
+
 
 #include <QPixmap>
 
@@ -210,12 +212,44 @@ Ut_WallpaperBusinessLogic::testITrans ()
     QVERIFY (trans2 * 2 == 4);
 }
 
+void
+Ut_WallpaperBusinessLogic::testCreateDirectory ()
+{
+    m_Api->ensureHasDirectory ();
+    m_Api->ensureHasDirectory ();
+
+    QString dirPath = m_Api->dirPath ();
+    QDirStub dir (dirPath);
+    QVERIFY (dir.exists());
+}
+
+void
+Ut_WallpaperBusinessLogic::testBackupFiles ()
+{
+    QFileStub desktopFile(m_Api->dirPath() + "wallpaper.desktop");
+    desktopFile.open (QIODevice::WriteOnly);
+
+    QFileStub desktopFileBak (m_Api->dirPath() + "wallpaper.desktop.BAK");
+
+    /*
+     *
+     */
+    m_Api->createBackupFiles ();
+
+    SYS_DEBUG ("*** desktopfile.exists = %s", 
+            SYS_BOOL(desktopFile.exists()));
+    SYS_DEBUG ("*** backupfile.exists  = %s", 
+            SYS_BOOL(desktopFileBak.exists()));
+    QVERIFY (!desktopFile.exists());
+    QVERIFY (desktopFileBak.exists());
+
+    m_Api->deleteBackupFiles ();
+    QVERIFY (!desktopFileBak.exists());
+}
 
 /******************************************************************************
  * Private functions.
  */
-
-
 QTEST_APPLESS_MAIN(Ut_WallpaperBusinessLogic)
 
 

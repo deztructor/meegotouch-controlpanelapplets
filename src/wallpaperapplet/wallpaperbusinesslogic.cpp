@@ -1,27 +1,33 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 
-#include "wallpaperbusinesslogic.h"
-#include "wallpaperdescriptor.h"
-#include "wallpapercurrentdescriptor.h"
-#include "wallpaperitrans.h"
-
-#include <QDir>
-#include <QFile>
-#include <QString>
-#include <QStringList>
-#include <QProcessEnvironment>
-#include <QPainter>
-
 /*
  * In the functional tests we use the real thing, in the unit tests we use the
  * stubbed version. 
  */
 #if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
 #  include "trackerstub.h"
+#  include "filesystemstub.h"
+   typedef QDirStub WallpaperDir;
+   typedef QFileStub WallpaperFile;
 #else
 #  include <Tracker>
+#  include <QDir>
+#  include <QFile>
+   typedef QDir WallpaperDir;
+   typedef QFile WallpaperFile;
 #endif
+
+
+#include "wallpaperbusinesslogic.h"
+#include "wallpaperdescriptor.h"
+#include "wallpapercurrentdescriptor.h"
+#include "wallpaperitrans.h"
+
+#include <QString>
+#include <QStringList>
+#include <QProcessEnvironment>
+#include <QPainter>
 
 #include <MTheme>
 #include <MGConfItem>
@@ -245,7 +251,7 @@ bool
 WallpaperBusinessLogic::ensureHasDirectory ()
 {
     QString path = dirPath();
-    QDir    dir (path);
+    WallpaperDir  dir (path);
 
     if (dir.exists()) {
         SYS_DEBUG ("Directory %s already exists.", SYS_STR(path));
@@ -291,14 +297,14 @@ WallpaperBusinessLogic::createBackupFiles ()
 void
 WallpaperBusinessLogic::deleteBackupFiles ()
 {
-    QString     path = dirPath();
-    QDir        dir (path);
-    QStringList nameFilters ("*.BAK");
+    QString       path = dirPath();
+    WallpaperDir  dir (path);
+    QStringList   nameFilters ("*.BAK");
 
     dir.setNameFilters (nameFilters);
-    foreach (QString backupFileName, dir.entryList (QDir::Files)) {
+    foreach (QString backupFileName, dir.entryList (WallpaperDir::Files)) {
         SYS_DEBUG ("Removing backup file %s", SYS_STR(backupFileName));
-        QFile backupFile (path + backupFileName);
+        WallpaperFile backupFile (path + backupFileName);
 
         if (!backupFile.remove()) {
             SYS_WARNING ("Unable to remove %s backup file.",
@@ -325,9 +331,9 @@ WallpaperBusinessLogic::writeFiles (
     /*
      * These are pretty constants.
      */
-    QString  path = dirPath();
-    QString  desktopPath = path + destopFileName;
-    QFile    file (desktopPath);
+    QString       path = dirPath();
+    QString       desktopPath = path + destopFileName;
+    WallpaperFile file (desktopPath);
     
     WallpaperCurrentDescriptor *currentDesc = 
         WallpaperCurrentDescriptor::instance();
@@ -476,8 +482,8 @@ WallpaperBusinessLogic::makeBackup (
         const QString &filePath)
 {
     QString  backupFilePath = filePath + backupExtension;
-    QFile    file (filePath);
-    QFile    backupFile (backupFilePath);
+    WallpaperFile    file (filePath);
+    WallpaperFile    backupFile (backupFilePath);
 
     if (!file.exists())
         return;
