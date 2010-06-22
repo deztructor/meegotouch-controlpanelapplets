@@ -3,19 +3,13 @@
 #ifndef BATTERYBRIEF_H
 #define BATTERYBRIEF_H
 
-#include "dcpbrief.h"
+#include <dcpbrief.h>
 
 class BatteryBrief: public DcpBrief
 {
     Q_OBJECT
 
 public:
-    /*
-     * We don't want to anything at the second line unless we can show something
-     * meaningful. Actually the UI spec does not specify what to show...
-     */
-    //virtual QString valueText() const;
-
     virtual int widgetTypeID() const;
 };
 

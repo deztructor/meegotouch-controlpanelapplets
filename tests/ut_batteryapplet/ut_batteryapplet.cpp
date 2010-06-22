@@ -3,7 +3,9 @@
 #include "ut_batteryapplet.h"
 #include "batteryapplet.h"
 #include "batterywidget.h"
+#include "batterybrief.h"
 
+#include <dcpwidgettypes.h>
 #include <MApplication>
 #include <MAction>
 #include <QVector>
@@ -96,8 +98,11 @@ void
 Ut_BatteryApplet::testConstructbrief ()
 {
     DcpBrief *brief1 = m_Applet->constructBrief();
+    int       widgetType;
 
     QVERIFY (brief1);
+    widgetType = brief1->widgetTypeID ();
+    QVERIFY (widgetType == DcpWidgetType::Label);
     delete brief1;
 }
 

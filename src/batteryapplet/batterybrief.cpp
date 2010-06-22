@@ -6,18 +6,6 @@
 #define DEBUG
 #include "../debug.h"
 
-
-/*
- * We don't want to anything at the second line unless we can show something
- * meaningful. Actually the UI spec does not specify what to show...
- */
-#if 0
-QString BatteryBrief::valueText() const
-{
-    return "Implemented";
-}
-#endif
-
 int
 BatteryBrief::widgetTypeID() const
 {
