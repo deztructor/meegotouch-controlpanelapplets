@@ -6,6 +6,7 @@
 #include "themedescriptor.h"
 
 #include <MApplication>
+#include <MGConfItem>
 #include <MTheme>
 
 #ifndef MDESKTOPENTRY_STUB_H
@@ -15,6 +16,21 @@
 #define DEBUG
 #include "../../src/debug.h"
 
+/******************************************************************************
+ * Fake MGconfItem implementation. 
+ */
+QString  GConfLastKey;
+QString  GConfLastValue;
+
+void
+MGConfItem::set (
+        const QVariant &val)
+{
+    GConfLastKey   = key();
+    GConfLastValue = val.toString();
+    SYS_DEBUG ("*** value = %s", SYS_STR(val.toString()));
+    SYS_DEBUG ("*** key   = %s", SYS_STR(key()));
+}
 
 /******************************************************************************
  * Ut_ThemeBusinessLogicPrivate implementation. 
@@ -121,6 +137,16 @@ Ut_ThemeBusinessLogic::testCurrentTheme ()
     QVERIFY (themeCodeName == MTheme::instance()->currentTheme());
     QVERIFY (themeName == NAMEDesktopFileCurrent);
     QVERIFY (themeIconName == ICONDesktopFileCurrent);
+}
+
+void
+Ut_ThemeBusinessLogic::testSetTheme ()
+{
+    QString fakeName = "FakeThemeCodeName";
+
+    m_Api->changeTheme (fakeName);
+    QVERIFY (GConfLastKey == "/meegotouch/theme/name");
+    QVERIFY (GConfLastValue == fakeName);
 }
 
 QTEST_APPLESS_MAIN(Ut_ThemeBusinessLogic)

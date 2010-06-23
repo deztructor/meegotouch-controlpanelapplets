@@ -37,6 +37,8 @@ private slots:
 
     void testCurrentTheme ();
     void testAvailableThemes ();
+    void testSetTheme ();
+    
 private:
     UtThemeBusinessLogicPrivate *m_Priv;
     MApplication                *m_App;

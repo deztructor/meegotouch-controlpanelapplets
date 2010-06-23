@@ -4,7 +4,10 @@
 #include "themeapplet.h"
 #include "themewidget.h"
 
-#include "dcpbrief.h"
+#include "themebrief.h"
+
+#include <dcpwidgettypes.h>
+#include <dcpbrief.h>
 
 #include <mdesktopentry.h>
 #include <MApplication>
@@ -98,9 +101,22 @@ Ut_ThemeApplet::testMenuItems ()
 void 
 Ut_ThemeApplet::testConstructbrief ()
 {
-    DcpBrief *brief1 = m_Applet->constructBrief(0);
+    ThemeBrief *brief1 = (ThemeBrief *) m_Applet->constructBrief(0);
+    QString   iconName;
+    QString   text;
 
     QVERIFY (brief1);
+    QVERIFY (brief1->widgetTypeID() == DcpWidgetType::Image);
+
+    iconName = brief1->icon ();
+    QVERIFY (!iconName.isEmpty());
+
+    text = brief1->valueText ();
+    QVERIFY (!text.isEmpty());
+
+    brief1->themeChanged ("");
+    // FIXME: Why does this method has an argument, it must be some leftover
+    // code. Also: we should check if the signal is emitted.
     delete brief1;
 }
 
