@@ -6,11 +6,7 @@
 #include <QPointF>
 #include <QFileInfo>
 
-#if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
-#  include "mdesktopentrystub.h"
-#else
-#  include <MDesktopEntry>
-#endif
+#include <mdesktopentry.h>
 
 #define DEBUG
 #include "../debug.h"

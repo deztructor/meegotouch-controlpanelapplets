@@ -1,17 +1,12 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
-
 #include "themedescriptor.h"
 
 #include <QString>
-
-#if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
-#  include "mdesktopentrystub.h"
-#else
-#  include <MDesktopEntry>
-#endif
+#include <mdesktopentry.h>
 
 #define DEBUG
+#define WARNING
 #include "../debug.h"
 
 
@@ -40,13 +35,21 @@ ThemeDescriptor::ThemeDescriptor (
      * holds an index file.
      */
     m_DesktopEntry = new MDesktopEntry (indexFileName);
-    if (!m_DesktopEntry->isValid())
+    SYS_DEBUG ("m_DesktopEntry = %p");
+    if (!m_DesktopEntry->isValid()) {
+        SYS_DEBUG ("m_DesktopEntry = %p");
+        delete m_DesktopEntry;
+        m_DesktopEntry = 0;
+        SYS_WARNING ("MDesktopEntry is invalid.");
         return;
+    }
 
     if (m_DesktopEntry->value(typeKey) != requiredType) {
         SYS_DEBUG ("The type not right: '%s', should be '%s'", 
                 SYS_STR(m_DesktopEntry->value(typeKey)),
                 SYS_STR(requiredType));
+        delete m_DesktopEntry;
+        m_DesktopEntry = 0;
         return;
     }
 
@@ -57,6 +60,13 @@ ThemeDescriptor::ThemeDescriptor (
     
     m_Valid = true;
 }
+
+ThemeDescriptor::~ThemeDescriptor ()
+{
+    if (m_DesktopEntry)
+        delete m_DesktopEntry;
+}
+
 
 bool 
 ThemeDescriptor::operator== (
@@ -71,12 +81,6 @@ ThemeDescriptor::operator== (
 {
     return m_Valid && 
         (m_CodeName == name || m_Name == name);
-}
-
-ThemeDescriptor::~ThemeDescriptor ()
-{
-    if (m_DesktopEntry)
-        delete m_DesktopEntry;
 }
 
 /*!

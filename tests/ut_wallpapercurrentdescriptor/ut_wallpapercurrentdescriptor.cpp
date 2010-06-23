@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et sw=4 ts=4 sts=4: */
 #include "ut_wallpapercurrentdescriptor.h"
-#include "mdesktopentrystub.h"
+#include "mdesktopentry.h"
 #include "wallpapercurrentdescriptor.h"
 #include "wallpaperitrans.h"
 
@@ -243,8 +243,8 @@ Ut_WallpaperCurrentDescriptor::createDescriptor ()
 
 /*
  * Returns the same absolute file name the wallpaperbusinesslogic uses to access
- * the saved desktop file. This file is simulated in the mdesktopentrystub wit a
- * perfect content.
+ * the saved desktop file. This file is simulated in the mdesktopentry stub with
+ * a perfect content.
  */
 QString
 Ut_WallpaperCurrentDescriptor::wallpaperDesktopFileName ()

@@ -6,6 +6,7 @@
 
 #include "dcpbrief.h"
 
+#include <mdesktopentry.h>
 #include <MApplication>
 #include <MAction>
 #include <QVector>

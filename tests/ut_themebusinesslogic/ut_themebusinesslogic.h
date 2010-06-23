@@ -39,7 +39,7 @@ private slots:
     void testAvailableThemes ();
 private:
     UtThemeBusinessLogicPrivate *m_Priv;
-    MApplication              *m_App;
+    MApplication                *m_App;
     ThemeBusinessLogic          *m_Api;
 };
 

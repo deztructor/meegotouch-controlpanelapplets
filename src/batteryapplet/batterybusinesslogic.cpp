@@ -228,6 +228,7 @@ BatteryBusinessLogic::PSMStateChanged (Maemo::QmDeviceMode::PSMState state)
 void
 BatteryBusinessLogic::batteryRemCapacityChanged (int percentage, int bars)
 {
+    Q_UNUSED (bars);
     SYS_DEBUG ("percentage = %d, bars = %d [max = %d]",
                percentage, bars, m_battery->getMaxBars ());
     // XXX: FIXME: maybe we can drop batteryBarValue and use 'bars' parameter..

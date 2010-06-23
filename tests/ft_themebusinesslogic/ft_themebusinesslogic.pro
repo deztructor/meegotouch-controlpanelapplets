@@ -3,8 +3,9 @@ include(../check.pri)
 
 SRC_PREFIX = ../../src/themeapplet
 STUB_PREFIX = ../stubs
-INCLUDEPATH += $$SRC_PREFIX \
-               $$STUB_PREFIX
+
+INCLUDEPATH += \
+    $$SRC_PREFIX 
 
 CONFIG += \
 	gui \

@@ -4,7 +4,7 @@
 #ifndef __QDIRSTUB_FOR_THEME__
 #define __QDIRSTUB_FOR_THEME__
 
-#include "mdesktopentrystub.h"
+#include "mdesktopentry.h"
 
 QStringList 
 entryList (

@@ -1,13 +1,13 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et sw=4 ts=4 sts=4: */
 #include "ut_themedescriptor.h"
+#include "mdesktopentry.h"
 #include "themedescriptor.h"
-#include "mdesktopentrystub.h"
 
 #include <MApplication>
 #include <MTheme>
 
-//#define DEBUG
+#define DEBUG
 #include "../../src/debug.h"
 
 /******************************************************************************

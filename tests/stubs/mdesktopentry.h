@@ -19,11 +19,19 @@
 **
 ****************************************************************************/
 
-#ifndef __MDESKTOPENTRYSTUB_H__
-#define __MDESKTOPENTRYSTUB_H__
+#ifndef MDESKTOPENTRY_H_
+#define MDESKTOPENTRY_H_
+#define MDESKTOPENTRY_STUB_H
 
 #include <QObject>
 #include <QFlags>
+
+#ifdef FUNCTIONAL_TEST
+#  error "This header should not be used in functional tests."
+#endif
+#ifndef UNIT_TEST
+#  error "This header should be used only in unit tests."
+#endif
 
 /*
  * We return an invalid MDesktopEntry for this. Actually any values that are not
@@ -104,8 +112,9 @@ class MDesktopEntry: public QObject
 Q_OBJECT
 public:
     MDesktopEntry (const QString &filePath);
+    ~MDesktopEntry ();
 
-    bool isValid ();
+    bool isValid () const;
 
     typedef enum {
         DesktopFileMissing = -1,
@@ -126,6 +135,9 @@ private:
     QString getValueForWallp   (DesktopID id, const QString &key) const;
     QString   m_FilePath;
 };
-
+#else
+#  ifndef MDESKTOPENTRY_STUB_H
+#  error "The MDESKTOPENTRY_H_ is defined but the MDESKTOPENTRY_STUB_H is not. This means a foreign mdesktopentry.h was already loaded!"
+#  endif
 #endif
 

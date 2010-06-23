@@ -10,7 +10,7 @@
  * in the test. This way the stub might be changed and these tests will
  * hopefully not fail.
  */
-#include "mdesktopentrystub.h"
+#include "mdesktopentry.h"
 
 #include <MApplication>
 #include <QList>
@@ -76,7 +76,7 @@ Ut_WallpaperEditorWidget::testCreateContentCurrent ()
 {
     /*
      * We crate the editor widget with the current wallpaper descriptor. The
-     * data is coming from the mdesktopentrystub.
+     * data is coming from the mdesktopentry stub.
      */
     createObjects (DescriptorCurrent);
 

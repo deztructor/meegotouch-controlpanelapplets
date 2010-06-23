@@ -4,9 +4,10 @@ include(../check.pri)
 SRC_PREFIX = ../../src/wallpaperapplet
 STUB_PREFIX = ../stubs
 
-INCLUDEPATH += \
+INCLUDEPATH = \
+        $$STUB_PREFIX \
 	$$SRC_PREFIX \
-        $$STUB_PREFIX
+	$$INCLUDEPATH
 
 QT += \
     	testlib \
@@ -30,7 +31,7 @@ CONFIG += \
 HEADERS += \
     $$STUB_PREFIX/thumbnailerstub.h \
     $$STUB_PREFIX/trackerstub.h \
-    $$STUB_PREFIX/mdesktopentrystub.h \
+    $$STUB_PREFIX/mdesktopentry.h \
     $$STUB_PREFIX/filesystemstub.h \    
     ../../src/debug.h \
     ut_wallpaperapplet.h \
@@ -49,7 +50,7 @@ HEADERS += \
 SOURCES += \
     $$STUB_PREFIX/thumbnailerstub.cpp \
     $$STUB_PREFIX/trackerstub.cpp \
-    $$STUB_PREFIX/mdesktopentrystub.cpp \
+    $$STUB_PREFIX/mdesktopentry.cpp \
     $$STUB_PREFIX/filesystemstub.cpp \
     ../../src/debug.cpp \
     ut_wallpaperapplet.cpp \

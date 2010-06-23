@@ -1,15 +1,20 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et sw=4 ts=4 sts=4: */
 #include "ut_themebusinesslogic.h"
+#include "mdesktopentry.h"
 #include "themebusinesslogic.h"
 #include "themedescriptor.h"
-#include "mdesktopentrystub.h"
 
 #include <MApplication>
 #include <MTheme>
 
+#ifndef MDESKTOPENTRY_STUB_H
+# error "The MDesktopEntry class is not stubbed, can't continue."
+#endif
+
 #define DEBUG
 #include "../../src/debug.h"
+
 
 /******************************************************************************
  * Ut_ThemeBusinessLogicPrivate implementation. 
@@ -69,7 +74,7 @@ Ut_ThemeBusinessLogic::cleanupTestCase()
 
 /*!
  * This method will test the available themes stubbed, exactly as it is in the 
- * qdirstub.h and in the mdesktopentrystub databse.
+ * qdirstub.h and in the mdesktopentry stub databse.
  */
 void
 Ut_ThemeBusinessLogic::testAvailableThemes ()
@@ -78,7 +83,7 @@ Ut_ThemeBusinessLogic::testAvailableThemes ()
     ThemeDescriptor *desc;
 
     /*
-     * In the mdesktopentrystub implementation currently there is this much 
+     * In the mdesktopentry stub implementation currently there is this much 
      * available valid and visible themes.
      */
     SYS_DEBUG ("*** we have %d valid themes.", list.size());

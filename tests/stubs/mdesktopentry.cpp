@@ -18,13 +18,14 @@
 ** of this file.
 **
 ****************************************************************************/
-#include "mdesktopentrystub.h"
+#include "mdesktopentry.h"
 
 #include <QString>
 #include <QStringList>
 #include <MTheme>
 
-#undef DEBUG
+#define DEBUG
+#define WARNING
 #include "../../src/debug.h"
 
 /******************************************************************************
@@ -136,15 +137,21 @@ MDesktopEntry::MDesktopEntry (
 {
     initFileSystem ();
 
+    SYS_DEBUG ("*** this     = %p", this);
     SYS_DEBUG ("*** filePath = %s", SYS_STR(filePath));
     m_FilePath = filePath;
 }
 
+MDesktopEntry::~MDesktopEntry ()
+{
+    SYS_DEBUG ("*** this     = %p", this);
+}
 
 bool
-MDesktopEntry::isValid ()
+MDesktopEntry::isValid () const
 {
     DesktopID id;
+    bool      retval = false;
 
     id = getDesktopID (m_FilePath);
     SYS_DEBUG ("*** filePath = %s", SYS_STR(m_FilePath));
@@ -152,17 +159,19 @@ MDesktopEntry::isValid ()
 
     switch (id) {
         case DesktopFileMissing:
-            return false;
+            break;
 
         case DesktopFilePerfect:
         case DesktopFileHidden:
         case DesktopFileEmpty:
         case DesktopFileCurrent:
         case WallpaperdesktopFilePerfect:
-            return true;
+            retval = true;
+            break;
     }
 
-    return false;
+    SYS_DEBUG ("*** retval   = %s", SYS_BOOL(retval));
+    return retval;
 }
 
 QString 
