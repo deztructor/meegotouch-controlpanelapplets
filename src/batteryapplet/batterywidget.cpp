@@ -159,7 +159,7 @@ void BatteryWidget::initWidget ()
     setLayout (mainLayout);
 
     // Initialize the values from the business logic
-    QTimer::singleShot (0, m_logic, SLOT (requestValues ()));
+    m_logic->requestValues ();
 
     SYS_DEBUG ("End");
 }
