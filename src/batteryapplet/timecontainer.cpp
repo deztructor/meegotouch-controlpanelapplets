@@ -42,12 +42,14 @@ void TimeContainer::updateTimeLabel (const QString &value)
     if (m_TimeLabel == NULL)
         return;
 
-    if (value.toInt() == 0) { // a text, not minute value
+    bool isInt;
+    int minutes = value.toInt (&isInt);
+
+    if (isInt == false)
+    { // a text, not minute value
         m_TimeLabel->setText (value);
         return;
     }
-
-    int minutes = value.toInt();
 
     QString time;
 
@@ -63,8 +65,9 @@ void TimeContainer::updateTimeLabel (const QString &value)
     }
     else
     {
+        int hours = minutes / 60;
         //% "%1 hours"
-        time = qtTrId ("qtn_ener_stest_hours").arg (minutes / 60);
+        time = qtTrId ("qtn_ener_stest_hours", hours).arg (hours);
     }
     
     m_TimeLabel->setText (time);
