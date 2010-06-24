@@ -3,3 +3,5 @@ usr/share/themes/base/meegotouch/duicontrolpanel/style/wallpaper.css
 usr/share/themes/base/meegotouch/duicontrolpanel/style/images/top_fade.png
 usr/lib/duicontrolpanel/applets/libwallpaperapplet.so
 etc/osso-rfs-scripts/wallpaper-rfs.sh
+usr/share/wallpaper
+usr/share/backup-framework/applications/wallpaper.conf

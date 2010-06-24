@@ -53,6 +53,12 @@ target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 rfs.files = wallpaper-rfs.sh
 rfs.path  = $$system(pkg-config --variable osso_rfs_scripts_dir clean-device)
 
+backup.files = wallpaper.conf
+backup.path  = /usr/share/backup-framework/applications/
+
+backupscripts.files = wallpaper-backup wallpaper-restore
+backupscripts.path  = $$(DEBIAN_DESTDIR)/usr/share/wallpaper/
+
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 
@@ -63,15 +69,20 @@ css.path = \
 images.files = images/*.png
 images.path  = $$css.path/images
 
-message("target path   :" $$target.path)
-message("rfs path      :" $$rfs.path)
-message("desktop path  :" $$desktop.path)
-message("css path:     :" $$css.path)
-message("images path   :" $$images.path)
+message("target path         :" $$target.path)
+message("rfs path            :" $$rfs.path)
+message("desktop path        :" $$desktop.path)
+message("css path:           :" $$css.path)
+message("images path         :" $$images.path)
+message("backup conf path    :" $$backup.path)
+message("backup scripts path :" $$backups.path)
 
 INSTALLS += \
     target \
     images \
     css \
     rfs \
-    desktop
+    desktop \
+    backupscripts \
+    backup
+

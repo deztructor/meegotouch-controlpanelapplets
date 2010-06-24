@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# We do not care about parameters yet
+
+WALLPAPER_HOME=$HOME/.wallpapers
+BACKUP=$HOME/.wallpapersbackup
+
+rm -rf $WALLPAPER_HOME
+
+if test -d $BACKUP; then
+    cp -a $BACKUP $WALLPAPER_HOME || exit 2
+fi
+
+exit 0
+
