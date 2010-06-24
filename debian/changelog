@@ -1,4 +1,4 @@
-systemui-applets (0.14.9~1) harmattan; urgency=low
+systemui-applets (0.14.9-1) harmattan; urgency=low
 
   [ David Kedves ]
   * Fixes: NB#176448 - [Estimated time] Should be in hours if > 1 hour
@@ -6,7 +6,7 @@ systemui-applets (0.14.9~1) harmattan; urgency=low
   [ Sandor Pinter ]
   * Adding backup support for wallpaper applet
 
- -- Sandor Pinter <sandor.pinter@blumsoft.eu>  Thu, 24 Jun 2010 13:37:31 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 24 Jun 2010 14:45:51 +0200
 
 systemui-applets (0.14.8-1) harmattan; urgency=low
 
