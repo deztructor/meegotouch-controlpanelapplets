@@ -16,7 +16,7 @@
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
@@ -87,13 +87,24 @@ void BatteryWidget::initWidget ()
     connect (PSMButton, SIGNAL (released ()),
              this, SLOT (PSMButtonReleased ()));
 
-    // sliderContainer
+    /*
+     * sliderContainer
+     */
     sliderContainer = new SliderContainer;
+
+    /*
+     * SliderContainer signals and slots,
+     * and initialization
+     */
+    sliderContainer->initPSMAutoButton (m_logic->PSMAutoValue ());
+    sliderContainer->initSlider (m_logic->PSMThresholdValues ());
+    sliderContainer->updateSlider (m_logic->PSMThresholdValue ());
 
     connect (sliderContainer, SIGNAL (PSMAutoToggled (bool)),
              this, SLOT (PSMAutoToggled (bool)));
     connect (sliderContainer, SIGNAL (PSMThresholdValueChanged (int)),
-             m_logic, SLOT (setPSMThresholdValue (int)));
+             m_logic, SLOT (setPSMThresholdValue (int)),
+             Qt::DirectConnection);
 
     // mainContainer
     m_MainLayout = new MLayout;
@@ -140,14 +151,6 @@ void BatteryWidget::initWidget ()
 
     connect (m_logic, SIGNAL (PSMValueReceived (bool)),
              this, SLOT (PSMValueReceived (bool)));
-
-    /*
-     * SliderContainer signals and slots,
-     * and initialization
-     */
-    sliderContainer->initPSMAutoButton (m_logic->PSMAutoValue ());
-    sliderContainer->initSlider (m_logic->PSMThresholdValues ());
-    sliderContainer->updateSlider (m_logic->PSMThresholdValue ());
 
     // mainLayout
     QGraphicsLinearLayout *mainLayout =

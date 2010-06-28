@@ -41,10 +41,10 @@ private:
     MSlider               *m_PSMSlider;
     MLabel                *m_AutoPSMLabel;
     MLabel                *m_PsmValueLabel;
-    QStringList              m_SliderValues;
-    int                      m_SliderValue;
+    QStringList            m_SliderValues;
+    int                    m_SliderValue;
     MLinearLayoutPolicy   *m_LayoutPolicy;
-    bool                     m_SliderExists;
+    bool                   m_SliderExists;
     
     void    setLayout();
     void    toggleSliderExistence (bool toggle);

@@ -1,9 +1,13 @@
 systemui-applets (0.14.10-1~unreleased) harmattan; urgency=low
 
+  [ Robert Manner ]
   * Fixes: NB#174929 - Presenting order of setting items on Look & Feel
     is incorrect
 
- -- Robert Manner <robert.manner@blumsoft.eu>  Thu, 24 Jun 2010 15:21:39 +0200
+  [ David Kedves ]
+  * Fixes: NB#173717 - Auto active power save mode set psm_threshold wrongly
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 28 Jun 2010 13:55:04 +0200
 
 systemui-applets (0.14.9-1) harmattan; urgency=low
 

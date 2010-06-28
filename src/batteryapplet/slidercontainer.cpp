@@ -94,12 +94,12 @@ void SliderContainer::setLayout()
 /*!
  * This is in fact not an initialization function, the backend calls it to set
  * the slider values.
+ * Must be called before updateSlider!
  */
 void
 SliderContainer::initSlider (
         const QStringList &values)
 {
-    SYS_DEBUG ("*** m_SliderValue = %d", m_SliderValue);
     m_SliderValues = values;
 
     if (m_PSMSlider)
@@ -115,28 +115,26 @@ SliderContainer::initSlider (
 void
 SliderContainer::updateSlider (int value)
 {
-    SYS_DEBUG ("value = %d", value);
+    SYS_DEBUG ("*** value = %d", value);
 
     // Store the actual value for later
     // (eg for the case when slider isn't ready yet...)
-    m_SliderValue = m_SliderValues.indexOf (QString (value));
-
-    // We don't like the invalid values, init if we have
-    // the valid values (m_SliderValues)
-    if ((m_SliderValue < 0) && (m_SliderValues.count () > 0))
-    {
-        // The first one is the lowest value...
-        m_SliderValue = 0;
-        // ... also emit the ValueChanged signal to set some
-        // valid value in backend too:
-        emit PSMThresholdValueChanged (m_SliderValues.at (0).toInt ());
-    }
+    m_SliderValue = m_SliderValues.indexOf (QString ("%1").arg (value));
 
     // Slider not yet created:
     if (m_PSMSlider == 0)
         return;
 
-    m_PSMSlider->setValue (m_SliderValue);
+    if (m_SliderValue >= 0)
+        m_PSMSlider->setValue (m_SliderValue);
+#ifdef DEBUG
+    else
+    {
+        SYS_WARNING ("ERROR: got an invalid PSM value: %d", value);
+        foreach (QString str, m_SliderValues)
+            SYS_DEBUG ("Available slider value: %s", SYS_STR (str));
+    }
+#endif
 
     updateSliderValueLabel ();
 }
@@ -179,16 +177,19 @@ SliderContainer::toggleSliderExistence (
             m_PSMSlider->setHandleLabelVisible (false);
             m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
 
-            connect (m_PSMSlider, SIGNAL (valueChanged (int)),
-                    this, SLOT (sliderValueChanged (int)));
-
-            if (m_SliderValue >= 0)
-            {
-                m_PSMSlider->setValue (m_SliderValue);
-            }
             /*
-             *
+             * Set the slider value if available...
              */
+            if (m_SliderValue >= 0)
+                m_PSMSlider->setValue (m_SliderValue);
+
+            /*
+             * .. and after connect the slidervalue changed signal
+             */
+            connect (m_PSMSlider, SIGNAL (valueChanged (int)),
+                    this, SLOT (sliderValueChanged (int)),
+                    Qt::DirectConnection);
+
             m_LayoutPolicy->addItem (m_PSMSlider);
         }
     } else {
