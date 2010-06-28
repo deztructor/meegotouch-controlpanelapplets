@@ -2,7 +2,7 @@ Source: systemui-applets
 Section: devel
 Priority: optional
 Maintainer: David Kedves <dkedves@blumsoft.eu>
-Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.7.11),
+Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.8.0),
                libmeegotouch-dev (>= 0.20), libqmsystem-dev (>= 0.1.64),
                libprofile-qt-dev (>= 0.13), system-ui-dev (>= 0.16),
                libqttracker-dev, libduithumbnailer-dev, libcellular-qt-dev,
