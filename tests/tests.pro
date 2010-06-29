@@ -9,7 +9,7 @@ contains(BUILD_FEATURES,coverage) {
 	#
 	#SUBDIRS =  ut_aboutapplet
 	#SUBDIRS =  $$system(ls -1d ut_wallpaper*/)
-	SUBDIRS = $$system(ls -1d ut_*/)
+	SUBDIRS = $$system(./unit_tests.sh)
 } else {
 	SUBDIRS = $$system(ls -1d ut_*/ ft_*/)
 }
