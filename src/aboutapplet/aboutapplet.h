@@ -31,5 +31,8 @@ public:
 private:
     QPointer<AboutWidget>        m_MainWidget;
     QPointer<AboutBusinessLogic> m_AboutBusinessLogic;
+    #ifdef UNIT_TEST
+    friend class Ut_AboutApplet;
+    #endif
 };
 #endif
