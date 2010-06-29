@@ -4,12 +4,15 @@
 #include "displaybusinesslogic.h"
 #include "dcpdisplay.h"
 
-#undef DEBUG
+#define DEBUG
 #include "../debug.h"
 
 #include <MButton>
-#include <MComboBox>
 #include <MContainer>
+#include <MContentItem>
+#include <MPopupList>
+#include <QStringList>
+#include <QStringListModel>
 #include <MLabel>
 #include <MLayout>
 #include <MSlider>
@@ -54,7 +57,7 @@ void DisplayWidget::initWidget ()
 
     //% "Brightness"
     m_brightnessLabel = new MLabel (qtTrId ("qtn_disp_bright"));
-    m_brightnessLabel->setObjectName ("CommonSingleTitle");
+    m_brightnessLabel->setObjectName ("ContentItemTitle");
     brightnessLandscape->addItem (m_brightnessLabel);
     brightnessPortrait->addItem (m_brightnessLabel);
 
@@ -78,34 +81,29 @@ void DisplayWidget::initWidget ()
     brightness->setLayout (brightnessLayout);
     mainLayout->addItem (brightness);
 
-    // Screen light
-    m_screenlightCombo = new MComboBox;
-    m_screenlightCombo->setObjectName ("ScreenlightCombo");
-    m_screenlightCombo->setContentsMargins (0, 0, 0, 0);
-    //% "Backlight time out"
-    m_screenlightCombo->setTitle (qtTrId ("qtn_disp_screenoff"));
-
     m_screenlight_vals = m_logic->screenLightsValues ();
 
-    for (int i = 0; i < m_screenlight_vals.size (); i++)
+    // Screen dim timeout selector
+    m_screenTimeout = new MContentItem (MContentItem::TwoTextLabels);
+    m_screenTimeout->setObjectName ("ScreenTimeout");
+    //% "Backlight time out"
+    m_screenTimeout->setTitle (qtTrId ("qtn_disp_screenoff"));
     {
-        int value = m_screenlight_vals.at (i);
+        int value = m_screenlight_vals.at (
+                        m_logic->selectedScreenLightsValue ());
         QString str = (value < 60) ?
                       //% "%1 seconds"
                       qtTrId ("qtn_comm_time_second") :
                       //% "%1 minutes"
-                      qtTrId ("qtn_comm_time_minute");
+                      qtTrId ("qtn_comm_time_minute", value / 60);
         if (value >= 60)
             value /= 60;
-        SYS_DEBUG ("ADD: NUM = %d, STR = %s", value, SYS_STR (str.arg (value)));
-        m_screenlightCombo->insertItem (i, str.arg (value));
+        m_screenTimeout->setSubtitle (str.arg (value));
     }
-    m_screenlightCombo->setCurrentIndex (m_logic->selectedScreenLightsValue ());
+    connect (m_screenTimeout, SIGNAL (clicked ()),
+             this, SLOT (screenTimeoutClicked ()));
 
-    connect (m_screenlightCombo, SIGNAL (currentIndexChanged (int)),
-             m_logic, SLOT (setScreenLightTimeouts (int)));
-
-    mainLayout->addItem (m_screenlightCombo);
+    mainLayout->addItem (m_screenTimeout);
 
     MWidget *displayon = new MStylableWidget;
     QGraphicsLinearLayout *blankinhibitLayout =
@@ -113,7 +111,7 @@ void DisplayWidget::initWidget ()
 
     //% "Display stays lit when charging"
     m_blankInhibitLabel = new MLabel (qtTrId ("qtn_disp_screenon"));
-    m_blankInhibitLabel->setObjectName("CommonSingleTitle");
+    m_blankInhibitLabel->setObjectName("ContentItemTitle");
     blankinhibitLayout->addItem (m_blankInhibitLabel);
 
     // Blank inhibit
@@ -140,8 +138,14 @@ void DisplayWidget::initWidget ()
 }
 
 void
-DisplayWidget::retranslateUi ()
+DisplayWidget::screenTimeoutClicked ()
 {
+    MPopupList *popuplist = new MPopupList;
+    QStringListModel *model = new QStringListModel;
+    QStringList timeoutVals;
+
+    popuplist->setTitle (qtTrId ("qtn_disp_screenoff"));
+
     for (int i = 0; i < m_screenlight_vals.size (); i++)
     {
         int value = m_screenlight_vals.at (i);
@@ -149,12 +153,53 @@ DisplayWidget::retranslateUi ()
                       //% "%1 seconds"
                       qtTrId ("qtn_comm_time_second") :
                       //% "%1 minutes"
-                      qtTrId ("qtn_comm_time_minute");
+                      qtTrId ("qtn_comm_time_minute", value / 60);
         if (value >= 60)
             value /= 60;
-        m_screenlightCombo->setItemText (i, str.arg (value));
+
+        timeoutVals << str.arg (value);
     }
 
+    model->setStringList (timeoutVals);
+
+    popuplist->setItemModel (model);
+
+    const QModelIndex selected (
+        model->index (m_logic->selectedScreenLightsValue ()));
+
+    popuplist->setCurrentIndex (selected);
+    popuplist->scrollTo (selected);
+
+    if ((popuplist->exec () == MDialog::Accepted)
+        && popuplist->currentIndex ().isValid ())
+    {
+        int newIndex = popuplist->currentIndex ().row ();
+        SYS_DEBUG ("Selected: %d", newIndex);
+
+        m_screenTimeout->setSubtitle (timeoutVals.at (newIndex));
+        m_logic->setScreenLightTimeouts (newIndex);
+    }
+
+    popuplist->deleteLater ();
+}
+
+void
+DisplayWidget::retranslateUi ()
+{
+    {
+        int value = m_screenlight_vals.at (
+                        m_logic->selectedScreenLightsValue ());
+        QString str = (value < 60) ?
+                      //% "%1 seconds"
+                      qtTrId ("qtn_comm_time_second") :
+                      //% "%1 minutes"
+                      qtTrId ("qtn_comm_time_minute", value / 60);
+        if (value >= 60)
+            value /= 60;
+        m_screenTimeout->setSubtitle (str.arg (value));
+    }
+
+    m_screenTimeout->setTitle (qtTrId ("qtn_disp_screenoff"));
     m_brightnessLabel->setText (qtTrId ("qtn_disp_bright"));
     m_blankInhibitLabel->setText (qtTrId ("qtn_disp_screenon"));
 }
