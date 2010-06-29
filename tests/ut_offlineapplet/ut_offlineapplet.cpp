@@ -1,7 +1,10 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et sw=4 ts=4 sts=4: */
-#include <DcpWidgetTypes>
+
 #include "ut_offlineapplet.h"
+#include <DcpWidgetTypes>
+#include <DcpWidget>
+
 #include "offlineapplet.h"
 #include "offlinebrief.h"
 #include "qmdevicemode_stub.h"
@@ -59,7 +62,6 @@ Ut_OfflineApplet::testConstructWidget ()
 {
     DcpWidget* widget = m_Applet->constructWidget(1);
     QVERIFY (!widget);
-    delete widget;
 }
 
 void 
