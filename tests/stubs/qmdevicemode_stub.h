@@ -23,7 +23,7 @@
 #include "stubbase.h"
 /*
  * XXX: This stub contains only those methods which are 
- * used by the  DeviceModeBusinessLogic class ...
+ * used by the BatteryBusinessLogic class ...
  */
 
 /*

@@ -17,6 +17,7 @@
 #include <MLinearLayoutPolicy>
 
 #undef DEBUG
+#define WARNING
 #include "../debug.h"
 
 BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
@@ -33,8 +34,7 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
     SYS_DEBUG ("Starting in %p", this);
     /*
      * One can assume, that when the applet is started the power save mode is
-     * not active. This way we show a value that makes sense even if the DBus
-     * interface to the sysuid is not usable.
+     * not active.
      */
     m_PSMButtonToggle = false;
 
@@ -170,21 +170,16 @@ void BatteryWidget::initWidget ()
 /*!
  * This function is called when the user clicked on the 'power save mode' button
  * that activates and disactivates the power saving mode. The function will call
- * the battery interface, but the UI will be changed only when the sysuid
- * reports the change.
+ * the battery interface, but the UI will be changed only when the power save
+ * mode really changed...
  */
 void 
 BatteryWidget::PSMButtonReleased ()
 {
     bool newPSMValue = !m_PSMButtonToggle;
+    SYS_DEBUG ("Setting PSMvalue to %s", SYS_BOOL (newPSMValue));
 
-    SYS_DEBUG ("Setting PSMvalue to %s", SYS_BOOL(newPSMValue));
-    if (newPSMValue) {
-        m_UILocked = true;
-        sliderContainer->setVisible (!m_PSMButtonToggle);
-        m_UILocked = false;
-    }
-
+    // UI will change only in PSMValueReceived slot...
     m_logic->setPSMValue (newPSMValue);
 }
 
@@ -251,11 +246,36 @@ BatteryWidget::PSMValueReceived (
 
     updatePSMButton ();
     m_UILocked = true;
-    SYS_DEBUG ("Hiding sliderContainer");
-    sliderContainer->setVisible (!m_PSMButtonToggle);
-    m_UILocked = false;
 
+    if (!PSMEnabled)
+    {
+        if (m_MainLayout->portraitPolicy () != 0)
+        {
+            MLinearLayoutPolicy *policy =
+                static_cast<MLinearLayoutPolicy*> (m_MainLayout->portraitPolicy ());
+            // Add sliderContainer before the PSMButton
+            policy->insertItem (policy->indexOf (PSMButton), sliderContainer);
+        }
+        if (m_MainLayout->landscapePolicy () != 0)
+        {
+            MGridLayoutPolicy *policy =
+                static_cast<MGridLayoutPolicy*> (m_MainLayout->landscapePolicy ());
+            policy->addItem (sliderContainer, 1, 0, 1, 2);
+        }
+        sliderContainer->setVisible (true);
+    }
+    else
+    {
+        sliderContainer->setVisible (false);
+
+        if (m_MainLayout->landscapePolicy () != 0)
+            m_MainLayout->landscapePolicy ()->removeItem (sliderContainer);
+        if (m_MainLayout->portraitPolicy () != 0)
+            m_MainLayout->portraitPolicy ()->removeItem (sliderContainer);
+    }
     m_MainLayout->invalidate ();
+
+    m_UILocked = false;
 }
 
 void 

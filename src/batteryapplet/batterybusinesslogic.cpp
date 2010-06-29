@@ -121,8 +121,13 @@ BatteryBusinessLogic::setPSMValue (bool enabled)
         Maemo::QmDeviceMode::PSMStateOn :
         Maemo::QmDeviceMode::PSMStateOff);
 
-    if (! ret)
-        SYS_WARNING (" failed to set (enabled = %s)", SYS_BOOL (enabled));
+    if (ret)
+    {
+        // Change succeed, we don't need to wait for QmSystem
+        // reply, we can emit the PSMValueChanged asap to
+        // update the UI.
+        emit PSMValueReceived (enabled);
+    }
 }
 
 void

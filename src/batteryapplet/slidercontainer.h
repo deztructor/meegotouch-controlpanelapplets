@@ -19,10 +19,6 @@ public:
     ~SliderContainer ();
     void retranslate ();
 
-protected:
-    QSizeF sizeHint (Qt::SizeHint which,
-                     const QSizeF &constraint = QSizeF ()) const;
-
 public slots:
     void initSlider (const QStringList &values);
     void updateSlider (const int value);

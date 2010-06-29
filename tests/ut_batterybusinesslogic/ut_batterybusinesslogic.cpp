@@ -182,16 +182,27 @@ Ut_BatteryBusinessLogic::testPSMValue ()
     QCOMPARE (gQmDeviceModeStub->stubCallCount ("setPSMState"), 1);
     QCOMPARE (gQmDeviceModeStub->stubLastParameters<Maemo::QmDeviceMode::PSMState> (0),
               Maemo::QmDeviceMode::PSMStateOn);
+    /* tests whether PSMValueReceived signal emitted after a succesfully
+     * mode change [stub always succeed]... */
+    QTest::qWait (10);
+    QCOMPARE (sig_psmvalue.count (), 1);
+    QCOMPARE (sig_psmvalue.takeFirst ().at (0).toBool (), true);
+    sig_psmvalue.clear ();
 
     m_logic->setPSMValue (false);
     QCOMPARE (gQmDeviceModeStub->stubCallCount ("setPSMState"), 2);
     QCOMPARE (gQmDeviceModeStub->stubLastParameters<Maemo::QmDeviceMode::PSMState> (0),
               Maemo::QmDeviceMode::PSMStateOff);
-
+    /* tests whether PSMValueReceived signal emitted after a succesfully
+     * mode change [stub always succeed]... */
+    QTest::qWait (10);
+    QCOMPARE (sig_psmvalue.count (), 1);
+    QCOMPARE (sig_psmvalue.takeFirst ().at (0).toBool (), false);
     sig_psmvalue.clear ();
+
     /* test the slot of qmdevicemode signal... */
     m_logic->PSMStateChanged (Maemo::QmDeviceMode::PSMStateOn);
-    QTest::qWait (20);
+    QTest::qWait (10);
     QCOMPARE (sig_psmvalue.count (), 1);
     QCOMPARE (sig_psmvalue.takeFirst ().at (0).toBool (), true);
 }

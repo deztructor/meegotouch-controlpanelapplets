@@ -6,8 +6,9 @@ systemui-applets (0.14.10-1~unreleased) harmattan; urgency=low
 
   [ David Kedves ]
   * Fixes: NB#173717 - Auto active power save mode set psm_threshold wrongly
+  * Fixes: NB#177154 - Update the UI properly on PSMValueChanged signal
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 28 Jun 2010 13:55:04 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 29 Jun 2010 23:08:00 +0200
 
 systemui-applets (0.14.9-1) harmattan; urgency=low
 
