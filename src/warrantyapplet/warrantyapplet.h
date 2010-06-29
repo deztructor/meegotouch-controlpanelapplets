@@ -31,5 +31,8 @@ public:
 private:
     QPointer<WarrantyWidget>        m_MainWidget;
     QPointer<WarrantyBusinessLogic> m_WarrantyBusinessLogic;
+    #ifdef UNIT_TEST
+    friend class Ut_WarrantyApplet;
+    #endif
 };
 #endif
