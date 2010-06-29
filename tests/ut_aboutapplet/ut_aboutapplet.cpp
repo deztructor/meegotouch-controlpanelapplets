@@ -39,8 +39,31 @@ void
 Ut_AboutApplet::initTestCase()
 {
     m_App = new MApplication (argc, &app_name);
-    m_Applet = new AboutApplet;
     
+    /*
+     * We create an AboutApplet here. The applet will create a businesslogic,
+     * for which we check that the data collection is not started.
+     */
+    m_Applet = new AboutApplet;
+    QVERIFY (m_Applet->m_AboutBusinessLogic);
+    QVERIFY (!m_Applet->m_AboutBusinessLogic->m_ManagerDBusIf);
+    QVERIFY (!m_Applet->m_AboutBusinessLogic->m_AdapterDBusIf);
+    QVERIFY (!m_Applet->m_AboutBusinessLogic->m_PhoneInfo);
+    
+    /*
+     * We are not testing the AboutBusinesslogic here, so the following lines
+     * act as a kind of mocking, the aboutbusinesslogic will not initiate
+     * outside communication if it has the data already.
+     */
+    m_Applet->m_AboutBusinessLogic->m_gotBluetoothAddress = true;
+    m_Applet->m_AboutBusinessLogic->m_BluetoothAddress = "fakeBluetooth";
+    m_Applet->m_AboutBusinessLogic->m_gotImei = true;
+    m_Applet->m_AboutBusinessLogic->m_Imei = "FakeImei";
+    m_Applet->m_AboutBusinessLogic->m_WifiAddress = "FakeWifi";
+    m_Applet->m_AboutBusinessLogic->m_OsName = "FakeOsName";
+    m_Applet->m_AboutBusinessLogic->m_OsVersion = "FakeOsVersion";
+
+
     QVERIFY (!m_Applet->m_MainWidget);
     m_Applet->init ();
     
@@ -67,16 +90,23 @@ Ut_AboutApplet::testTitle ()
 void
 Ut_AboutApplet::testConstructWidget ()
 {
-    DcpWidget *widget;
+    AboutWidget *widget;
     bool       backAccepted;
 
     /*
      * Testing if the applet creates a widget the first time.
      */
-    widget = m_Applet->constructWidget (0);
+    widget = (AboutWidget *) m_Applet->constructWidget (0);
     QVERIFY (widget);
     QVERIFY (m_Applet->m_MainWidget == widget);
-    
+    QVERIFY (!m_Applet->constructWidget (1));
+
+    /*
+     * FIXME: These are not much checking, more like coverage making calls.
+     */
+    widget->retranslateUi ();
+    widget->dataReady ();
+
     /*
      * Testing if the widget accepts the back. Our applets always accept back.
      */

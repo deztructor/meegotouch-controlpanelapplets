@@ -32,6 +32,9 @@ protected:
 private:
     QPointer<AboutBusinessLogic>    m_AboutBusinessLogic;
     MLabel                         *m_Label1;
+    #ifdef UNIT_TEST
+    friend class Ut_AboutApplet;
+    #endif
 };
 
 #endif

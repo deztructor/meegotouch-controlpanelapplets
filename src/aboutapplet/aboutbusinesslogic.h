@@ -67,6 +67,10 @@ private:
     QString       m_WifiAddress;
     QString       m_OsName;
     QString       m_OsVersion;
+    #ifdef UNIT_TEST
+    friend class Ut_AboutBusinessLogic;
+    friend class Ut_AboutApplet;
+    #endif
 };
 
 #endif

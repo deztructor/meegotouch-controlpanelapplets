@@ -105,6 +105,7 @@ AboutBusinessLogic::osVersion ()
         line.remove (0, 30);
         line.chop (2);
         retval = line;
+        m_OsVersion = retval;
         SYS_DEBUG ("*** line = %s", SYS_STR(line));
     }
 
@@ -256,7 +257,8 @@ AboutBusinessLogic::IMEI ()
 void
 AboutBusinessLogic::initiateBluetoothQueries ()
 {
-    QDBusInterface  *m_ManagerDBusIf;
+    if (m_ManagerDBusIf)
+        return;
 
     m_ManagerDBusIf = new QDBusInterface (
             DBUS_BLUEZ_SERVICE, 
