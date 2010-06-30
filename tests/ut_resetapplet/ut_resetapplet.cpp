@@ -12,6 +12,7 @@
 #include <mdesktopentry.h>
 #include <MApplication>
 #include <MAction>
+#include <MDialog>
 #include <QVector>
 
 #define DEBUG
@@ -21,8 +22,7 @@
  * Stubbing the system() C library function here.
  */
 static QString lastExecutedCommand;
-// So we get a better coverage.
-static int     commandSuccess = 3;
+static int     commandSuccess;
 
 int
 system (
@@ -32,6 +32,24 @@ system (
 
     lastExecutedCommand = command;
     return commandSuccess;
+}
+
+static bool dialogAnswerYes = false;
+static bool dialogAnswerNo = false;
+static bool dialogExecuted = false;
+
+int 
+MDialog::exec (MWindow *window)
+{
+    SYS_DEBUG ("");
+    dialogExecuted = true;
+
+    if (dialogAnswerYes)
+        return M::YesButton;
+    if (dialogAnswerNo)
+        return M::NoButton;
+
+    return 0;
 }
 
 /******************************************************************************
@@ -83,13 +101,19 @@ Ut_ResetApplet::testTitle ()
 void
 Ut_ResetApplet::testConstructWidget ()
 {
-    DcpWidget *widget;
-    bool       backAccepted;
+    ResetWidget *widget;
+    bool         backAccepted;
+
+    /*
+     * We check if we got a NULL pointer for the invalid window ID.
+     */
+    widget = (ResetWidget *) m_Applet->constructWidget (3);
+    QVERIFY (!widget);
 
     /*
      * Testing if the applet creates a widget the first time.
      */
-    widget = m_Applet->constructWidget (0);
+    widget = (ResetWidget *) m_Applet->constructWidget (0);
     QVERIFY (widget);
     QVERIFY (m_Applet->m_MainWidget == widget);
     
@@ -98,6 +122,50 @@ Ut_ResetApplet::testConstructWidget ()
      */
     backAccepted = widget->back();
     QVERIFY (backAccepted);
+
+    /*
+     * Testing the ResetWidget. We could write a separate unit test, but it
+     * would be very primitive...
+     */
+    // Restore with 'no' as answer.
+    lastExecutedCommand = "";
+    commandSuccess = 0;
+    dialogAnswerYes = false;
+    dialogAnswerNo = true;
+    dialogExecuted = false;
+    widget->restoreActivated ();
+    QVERIFY (lastExecutedCommand == "");
+    QVERIFY (dialogExecuted);
+    
+    // Restore with 'yes' as answer.
+    lastExecutedCommand = "";
+    commandSuccess = 0;
+    dialogAnswerYes = true;
+    dialogAnswerNo = false;
+    dialogExecuted = false;
+    widget->restoreActivated ();
+    QVERIFY (lastExecutedCommand == "/usr/sbin/clean-device.sh --rfs");
+    QVERIFY (dialogExecuted);
+    
+    // Clear with 'no' as answer.
+    lastExecutedCommand = "";
+    commandSuccess = 0;
+    dialogAnswerYes = false;
+    dialogAnswerNo = true;
+    dialogExecuted = false;
+    widget->clearActivated ();
+    QVERIFY (lastExecutedCommand == "");
+    QVERIFY (dialogExecuted);
+    
+    // Clear with 'yes' as answer.
+    lastExecutedCommand = "";
+    commandSuccess = 0;
+    dialogAnswerYes = true;
+    dialogAnswerNo = false;
+    dialogExecuted = false;
+    widget->clearActivated ();
+    QVERIFY (lastExecutedCommand == "/usr/sbin/clean-device.sh --cud");
+    QVERIFY (dialogExecuted);
 
     /*
      * Testing if the applet knows about the destruction of the widget.
@@ -143,6 +211,9 @@ Ut_ResetApplet::testConstructbrief ()
 void 
 Ut_ResetApplet::testResetBusinessLogic ()
 {
+    // So we get a better coverage we use an error code sometimes.
+    commandSuccess = 3;
+
     m_Applet->m_ResetBusinessLogic->performRestoreSettings ();
     QVERIFY (lastExecutedCommand == "/usr/sbin/clean-device.sh --rfs");
 

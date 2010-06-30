@@ -26,6 +26,9 @@ private slots:
 
 private:
     QPointer<ResetBusinessLogic>    m_ResetBusinessLogic;
+    #ifdef UNIT_TEST
+    friend class Ut_ResetApplet;
+    #endif
 };
 
 #endif
