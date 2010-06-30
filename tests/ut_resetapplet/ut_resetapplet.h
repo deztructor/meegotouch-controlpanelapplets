@@ -24,7 +24,7 @@ private slots:
     void testConstructWidget ();
     void testMenuItems ();
     void testConstructbrief ();
-
+    void testResetBusinessLogic ();
 private:
     MApplication              *m_App;
     ResetApplet               *m_Applet;

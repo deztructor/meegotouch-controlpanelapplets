@@ -19,6 +19,7 @@ ResetApplet::ResetApplet() :
 
 ResetApplet::~ResetApplet() 
 {
+    delete m_ResetBusinessLogic;
 }
 
 void 

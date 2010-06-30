@@ -17,6 +17,22 @@
 #define DEBUG
 #include "../../src/debug.h"
 
+/******************************************************************************
+ * Stubbing the system() C library function here.
+ */
+static QString lastExecutedCommand;
+// So we get a better coverage.
+static int     commandSuccess = 3;
+
+int
+system (
+        const char *command)
+{
+    SYS_DEBUG ("*** command = %s", command);
+
+    lastExecutedCommand = command;
+    return commandSuccess;
+}
 
 /******************************************************************************
  * Ut_ResetApplet implementation. 
@@ -119,6 +135,20 @@ Ut_ResetApplet::testConstructbrief ()
     delete brief1;
 }
 
+/*!
+ * Testing the whole functionality of the ResetBusinesslogic. We could write a
+ * separate unit test for this class, but it is very primitive, so we just do
+ * the job here.
+ */
+void 
+Ut_ResetApplet::testResetBusinessLogic ()
+{
+    m_Applet->m_ResetBusinessLogic->performRestoreSettings ();
+    QVERIFY (lastExecutedCommand == "/usr/sbin/clean-device.sh --rfs");
+
+    m_Applet->m_ResetBusinessLogic->performClearData ();
+    QVERIFY (lastExecutedCommand == "/usr/sbin/clean-device.sh --cud");
+}
 
 QTEST_APPLESS_MAIN(Ut_ResetApplet)
 

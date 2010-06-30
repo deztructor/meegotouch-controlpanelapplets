@@ -8,20 +8,8 @@
 #define DEBUG
 #include "../debug.h"
 
-static const QString autolockGConKey = 
-    "/system/osso/dsm/locks/devicelock_autolock_timeout";
-
 ResetBusinessLogic::ResetBusinessLogic()
 {
-    MGConfItem   gconfItem (autolockGConKey);
-    QString      value = gconfItem.value().toString();
-
-    /*
-     * Well, I'm not sure how to interpret this value, but the 
-     * duicontrolpanel-devicelockapplet is not available for my meego target 
-     * yet.
-     */
-    SYS_DEBUG ("*** autolockValue = %s", SYS_STR(value));
 }
 
 ResetBusinessLogic::~ResetBusinessLogic()
