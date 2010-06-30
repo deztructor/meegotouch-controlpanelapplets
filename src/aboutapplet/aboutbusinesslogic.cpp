@@ -32,6 +32,7 @@
 
 
 AboutBusinessLogic::AboutBusinessLogic() :
+    m_PhoneInfo (NULL),
     m_gotBluetoothAddress (false),
     m_gotImei (false)
 {
