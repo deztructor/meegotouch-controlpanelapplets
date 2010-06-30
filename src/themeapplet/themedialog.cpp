@@ -34,12 +34,12 @@ ThemeDialog::ThemeDialog (
     mainLayout->addItem (image1);
 
     //% "Select"
-    selectButton = new MButton (qtTrId ("qtn_theme_select"));
+    selectButton = new MButton (qtTrId ("qtn_teme_select"));
     connect (selectButton, SIGNAL(clicked()),
             this, SLOT(acceptClicked()));
     
     //% "Cancel"
-    cancelButton = new MButton (qtTrId ("qtn_theme_cancel"));
+    cancelButton = new MButton (qtTrId ("qtn_comm_cancel"));
     connect (cancelButton, SIGNAL(clicked()),
             this, SLOT(cancelClicked()));
     

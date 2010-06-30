@@ -62,8 +62,8 @@ ThemeApplet::constructWidget (
 QString
 ThemeApplet::title() const
 {
-    //% "Themes"
-    return qtTrId ("qtn_theme_theme"); // This is not official logical id
+    //% "Theme"
+    return qtTrId ("qtn_teme_theme"); // This is not official logical id
 }
 
 QVector<MAction*>

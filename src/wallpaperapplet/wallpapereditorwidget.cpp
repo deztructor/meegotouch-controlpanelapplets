@@ -280,7 +280,7 @@ WallpaperEditorWidget::createActions ()
     m_DoneAction = new MAction (
             "icon-m-framework-done",
             //% "Done"
-            qtTrId("qtn_wall_done"), 
+            qtTrId("qtn_comm_command_done"),
             this);
     m_DoneAction->setLocation(MAction::ToolBarLocation);
     window->addAction(m_DoneAction);

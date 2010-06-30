@@ -1,9 +1,8 @@
 [Desktop Entry]
 Type=DUIApplet
 Name=Theme
-# It is not official
-X-logical-id=qtn_theme_theme
-X-translation-catalog=systemui-applets
+X-logical-id=qtn_teme_theme
+X-translation-catalog=theme
 Icon=
 Exec=
 
