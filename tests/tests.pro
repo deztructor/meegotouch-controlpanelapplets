@@ -7,7 +7,7 @@ contains(BUILD_FEATURES,coverage) {
 	#
 	# Sometimes it is good to disable all but one unit tests.
 	#
-	#SUBDIRS =  ut_aboutapplet
+	#SUBDIRS =  ut_usbapplet
 	#SUBDIRS =  $$system(ls -1d ut_wallpaper*/)
 	SUBDIRS = $$system(./unit_tests.sh)
 } else {

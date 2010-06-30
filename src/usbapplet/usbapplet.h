@@ -3,9 +3,12 @@
 #ifndef USBAPPLET_H
 #define USBAPPLET_H
 
+#include <QObject>
+#include <QPointer>
 #include <DcpAppletIf>
 #include <qmusbmode.h>
-#include <QObject>
+
+#include "usbview.h"
 
 class MAction;
 class DcpWidget;
@@ -24,8 +27,12 @@ public:
     QVector<MAction *>  viewMenuItems ();
 
 private:
+    QPointer<UsbView>   m_MainWidget;
     UsbBrief           *m_brief;
     Maemo::QmUSBMode   *m_logic;
+    #ifdef UNIT_TEST
+    friend class Ut_UsbApplet;
+    #endif
 };
 
 #endif

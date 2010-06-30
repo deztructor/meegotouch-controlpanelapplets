@@ -73,7 +73,6 @@ UsbBrief::valueText () const
             //% "Mass Storage mode"
             currentSetting = qtTrId ("qtn_usb_mass_storage");
             break;
-        case QmUSBMode::Ask:
         default:
             //% "Always ask"
             currentSetting = qtTrId ("qtn_usb_always_ask");

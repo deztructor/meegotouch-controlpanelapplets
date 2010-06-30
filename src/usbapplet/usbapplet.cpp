@@ -24,13 +24,13 @@ UsbApplet::constructWidget (int widgetId)
 {
     Q_UNUSED (widgetId);
 
-    UsbView  *view =
-        new UsbView (m_logic);
+    if (!m_MainWidget) {
+        m_MainWidget = new UsbView (m_logic);
+        connect (m_MainWidget,  SIGNAL (settingsChanged ()),
+                m_brief, SLOT (settingsChanged ()));
+    }
 
-    connect (view,  SIGNAL (settingsChanged ()),
-             m_brief, SLOT (settingsChanged ()));
-
-    return view;
+    return m_MainWidget;
 }
 
 QString

@@ -36,6 +36,9 @@ private:
     MButtonGroup        *m_btn_group;
     MLabel              *m_info_label;
     MNotification       *m_error;
+    #ifdef UNIT_TEST
+    friend class Ut_UsbApplet;
+    #endif
 };
 
 #endif

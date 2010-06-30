@@ -25,6 +25,9 @@ public slots:
 
 private:
     Maemo::QmUSBMode    *m_logic;
+    #ifdef UNIT_TEST
+    friend class Ut_UsbApplet;
+    #endif
 };
 
 #endif
