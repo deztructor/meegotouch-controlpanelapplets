@@ -3,8 +3,11 @@ include(../check.pri)
 
 SRC_PREFIX = ../../src/displayapplet
 STUB_PREFIX = ../stubs
-INCLUDEPATH += $$SRC_PREFIX \
-               $$STUB_PREFIX
+
+INCLUDEPATH = \
+        $$STUB_PREFIX \
+	$$SRC_PREFIX \
+	$$INCLUDEPATH
 
 CONFIG += \
 	qmsystem \
@@ -23,13 +26,13 @@ TARGET = ut_displaybusinesslogic
 target.path = /usr/lib/systemui-applets-tests
 
 HEADERS += \
-    $$STUB_PREFIX/qmdisplaystatestub.h \
+    $$STUB_PREFIX/qmdisplaystate.h \
     ../../src/debug.h \
     ut_displaybusinesslogic.h \
     $$SRC_PREFIX/displaybusinesslogic.h
 
 SOURCES += \
-    $$STUB_PREFIX/qmdisplaystatestub.cpp \
+    $$STUB_PREFIX/qmdisplaystate.cpp \
     ../../src/debug.cpp \
     ut_displaybusinesslogic.cpp \
     $$SRC_PREFIX/displaybusinesslogic.cpp

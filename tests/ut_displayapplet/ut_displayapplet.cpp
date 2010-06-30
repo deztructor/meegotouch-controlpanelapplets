@@ -3,8 +3,10 @@
 #include "ut_displayapplet.h"
 #include "displayapplet.h"
 #include "displaywidget.h"
+#include "displaybrief.h"
 
-#include "dcpbrief.h"
+#include <dcpwidgettypes.h>
+#include <dcpbrief.h>
 
 #include <MApplication>
 #include <MAction>
@@ -97,9 +99,11 @@ Ut_DisplayApplet::testMenuItems ()
 void 
 Ut_DisplayApplet::testConstructbrief ()
 {
-    DcpBrief *brief1 = m_Applet->constructBrief(0);
+    DisplayBrief *brief1 = (DisplayBrief *) m_Applet->constructBrief(0);
 
     QVERIFY (brief1);
+    QVERIFY (brief1->widgetTypeID() == DcpWidgetType::Label);
+
     delete brief1;
 }
 

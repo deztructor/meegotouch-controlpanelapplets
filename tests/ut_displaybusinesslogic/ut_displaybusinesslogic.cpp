@@ -3,11 +3,50 @@
 #include "ut_displaybusinesslogic.h"
 #include "displaybusinesslogic.h"
 
+#ifndef QMDISPLAYSTATE_STUB_H
+#  error "QmDisplayState should be stubbed, can nopt continue."
+#endif
+
 #include <MApplication>
+#include <MGConfItem>
+
 #include <QList>
+#include <QVariant>
 
 #define DEBUG
 #include "../../src/debug.h"
+
+/******************************************************************************
+ * Stubbing the MGConfItem.
+ */
+static bool dimTimeoutsExist = true;
+
+QVariant
+MGConfItem::value () const
+{
+    SYS_DEBUG ("*** key() = %s", SYS_STR(key()));
+
+    if (key() != "/system/osso/dsm/display/possible_display_dim_timeouts") {
+        SYS_DEBUG ("%s ???", SYS_STR(key()));
+        goto return_invalid;
+    }
+
+    if (dimTimeoutsExist) {
+        QList<QVariant> list;
+
+        list << 
+            QVariant (15) << 
+            QVariant (30) << 
+            QVariant (60) << 
+            QVariant (120) <<
+            QVariant (180);
+
+        return QVariant (list);
+    }
+
+return_invalid:
+    return QVariant ();
+}
 
 /******************************************************************************
  * Ut_DisplayBusinessLogic implementation. 
@@ -123,16 +162,50 @@ Ut_DisplayBusinessLogic::testSetBrightness ()
     qDebug() << "Max brightness = " << m_MaxBrightness;
 
     m_Api->setBrightnessValue (m_MinBrightness);
-    QTest::qWait (500);
     value = m_Api->selectedBrightnessValue();
     qDebug() << "brightness = " << value;
     //QVERIFY (m_Api->selectedBrightnessValue() == m_MinBrightness);
     
     m_Api->setBrightnessValue (m_MaxBrightness);
-    QTest::qWait (500);
     value = m_Api->selectedBrightnessValue();
     qDebug() << "brightness = " << value;
     //QVERIFY (m_Api->selectedBrightnessValue() == m_MaxBrightness);
 }
+
+/*!
+ * Testing the setBlankInhibitValue() method. It is just inverting the argument
+ * and sends to the backend.
+ */
+void
+Ut_DisplayBusinessLogic::testSetBlankInhibitValue ()
+{
+    m_Api->setBlankInhibitValue (true);
+    QVERIFY (m_Api->m_Display->getBlankingWhenCharging() == false);
+
+    m_Api->setBlankInhibitValue (false);
+    QVERIFY (m_Api->m_Display->getBlankingWhenCharging() == true);
+
+    m_Api->setBlankInhibitValue (true);
+    QVERIFY (m_Api->m_Display->getBlankingWhenCharging() == false);
+}
+
+/*!
+ * testing the screenLightsValues() method. This method has a built in fallback
+ * list, we stub the same and we check if it returns the right list.
+ */
+void
+Ut_DisplayBusinessLogic::testScreenLightsValues ()
+{
+    QList<int> list1, list2;
+
+    dimTimeoutsExist = true;
+    list1 = m_Api->screenLightsValues ();
+    
+    dimTimeoutsExist = false;
+    list2 = m_Api->screenLightsValues ();
+
+    QVERIFY (list1 == list2);
+}
+
 
 QTEST_APPLESS_MAIN(Ut_DisplayBusinessLogic)

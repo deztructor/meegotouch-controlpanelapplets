@@ -3,15 +3,7 @@
 #ifndef DISPLAYBUSINESSLOGIC_H
 #define DISPLAYBUSINESSLOGIC_H
 
-/*
- * In the functional tests we use the real thing, in the unit tests we use the
- * stubbed version. 
- */
-#if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
-#  include "qmdisplaystatestub.h"
-#else
-#  include <qmsystem/qmdisplaystate.h>
-#endif
+#include <qmdisplaystate.h>
 
 #include <QObject>
 
@@ -37,12 +29,14 @@ public slots:
     void setBrightnessValue(int value);
     void setScreenLightTimeouts (int index);
     void setBlankInhibitValue(bool value);
-    void toggleDisplay(bool toggle);
+    //void toggleDisplay(bool toggle);
 
 private: 
     QmDisplayState *m_Display;
     MGConfItem     *m_possibleDimValues;
-
+    #ifdef UNIT_TEST
+    friend class Ut_DisplayBusinessLogic;
+    #endif
 };
 
 #endif

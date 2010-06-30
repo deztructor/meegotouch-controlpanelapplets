@@ -8,7 +8,7 @@ contains(BUILD_FEATURES,coverage) {
 	# Sometimes it is good to disable all but one unit tests.
 	#
 	#SUBDIRS =  ut_resetapplet
-	#SUBDIRS =  $$system(ls -1d ut_wallpaper*/)
+	#SUBDIRS =  $$system(ls -1d ut_display*/)
 	SUBDIRS = $$system(./unit_tests.sh)
 } else {
 	SUBDIRS = $$system(ls -1d ut_*/ ft_*/)

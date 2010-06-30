@@ -18,7 +18,7 @@
 ** of this file.
 **
 ****************************************************************************/
-#include "qmdisplaystatestub.h"
+#include "qmdisplaystate.h"
 
 #define DEBUG
 #include "../../src/debug.h"
@@ -41,9 +41,10 @@ QmDisplayState::~QmDisplayState ()
 }
 
 bool
-QmDisplayState::set(
+QmDisplayState::set (
         DisplayState state)
 {
+    SYS_DEBUG ("*** state = %d", state);
     m_State = state;
     return true;
 }
@@ -51,6 +52,7 @@ QmDisplayState::set(
 int
 QmDisplayState::getMaxDisplayBrightnessValue ()
 {
+    SYS_DEBUG ("*** returning 10");
     return 10;
 }
 
@@ -64,19 +66,15 @@ QmDisplayState::getDisplayBrightnessValue()
 int 
 QmDisplayState::getDisplayDimTimeout()
 {
+    SYS_DEBUG ("returning %d", m_DisplayDimTimeout);
     return m_DisplayDimTimeout;
-}
-
-bool
-QmDisplayState::getBlankingWhenCharging()
-{
-    return m_BlankingWhenCharging;
 }
 
 void
 QmDisplayState::setDisplayBrightnessValue(
         int brightness)
 {
+    SYS_DEBUG ("** brightness = %d", brightness);
     m_DisplayBrightnessValue = brightness;
 }
 
@@ -84,6 +82,7 @@ void
 QmDisplayState::setDisplayDimTimeout(
         int timeout)
 {
+    SYS_DEBUG ("*** timeout = %d", timeout);
     m_DisplayDimTimeout = timeout;
 }
 
@@ -91,6 +90,7 @@ void
 QmDisplayState::setDisplayBlankTimeout(
         int timeout)
 {
+    SYS_DEBUG ("*** timeout = %d", timeout);
     m_DisplayBlankTimeout = timeout;
 }
 
@@ -98,6 +98,14 @@ void
 QmDisplayState::setBlankingWhenCharging(
         bool blanking)
 {
+    SYS_DEBUG ("*** blanking = %s", SYS_BOOL(blanking));
     m_BlankingWhenCharging = blanking;
+}
+
+bool
+QmDisplayState::getBlankingWhenCharging()
+{
+    SYS_DEBUG ("returning %s", SYS_BOOL(m_BlankingWhenCharging));
+    return m_BlankingWhenCharging;
 }
 

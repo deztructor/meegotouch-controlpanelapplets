@@ -23,7 +23,9 @@ private slots:
     void testGetBrightnessValues ();
     void testLightTimeouts ();
     void testSetBrightness ();
-    
+    void testSetBlankInhibitValue ();
+    void testScreenLightsValues ();
+
 private:
     MApplication       *m_App;
     DisplayBusinessLogic *m_Api;

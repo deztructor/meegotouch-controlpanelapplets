@@ -19,8 +19,13 @@
 **
 ****************************************************************************/
 
-#ifndef __QMDISPLAYSTUB_H__
-#define __QMDISPLAYSTUB_H__
+#ifndef QMDISPLAYSTATE_H
+#define QMDISPLAYSTATE_H
+#define QMDISPLAYSTATE_STUB_H
+
+#ifndef UNIT_TEST
+#  error "This header should be only used in unit tests."
+#endif
 
 #include <QObject>
 

@@ -31,6 +31,7 @@ DisplayBusinessLogic::~DisplayBusinessLogic ()
     m_possibleDimValues = 0;
 }
 
+#if 0
 void
 DisplayBusinessLogic::toggleDisplay (
         bool toggle)
@@ -41,6 +42,7 @@ DisplayBusinessLogic::toggleDisplay (
 
     m_Display->set (state);
 }
+#endif
 
 /*!
  * Returns a list of brightness values the underlying hw system accepts.
