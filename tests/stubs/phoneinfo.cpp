@@ -5,7 +5,21 @@
 
 #include <QString>
 
+#define DEBUG
+#define WARNING
+#include "../../src/debug.h"
+
 using namespace Cellular;
+
+PhoneInfo::PhoneInfo ()
+{
+    SYS_DEBUG ("Creating %p", this);
+}
+
+PhoneInfo::~PhoneInfo ()
+{
+    SYS_DEBUG ("Destroying %p", this);
+}
 
 QString 
 PhoneInfo::imeiNumber() const

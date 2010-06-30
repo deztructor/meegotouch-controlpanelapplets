@@ -13,7 +13,7 @@
 #include <QDBusInterface>
 #include <QDBusObjectPath>
 #include <QFile>
-#include <PhoneInfo>
+#include "phoneinfo.h"
 
 #define OS_NAME_FALLBACK "MeeGo"
 
@@ -246,6 +246,7 @@ AboutBusinessLogic::IMEI ()
     m_Imei = m_PhoneInfo->imeiNumber ();
     m_gotImei = true;
     delete m_PhoneInfo;
+    m_PhoneInfo = NULL;
 
     return m_Imei;
 }
@@ -282,6 +283,7 @@ void
 AboutBusinessLogic::initiatePhoneQueries ()
 {
     m_PhoneInfo = new PhoneInfo;
+    SYS_DEBUG ("*** created %p", (void *)m_PhoneInfo);
 }
 
 /*!

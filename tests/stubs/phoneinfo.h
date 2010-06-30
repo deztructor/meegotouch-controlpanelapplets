@@ -4,8 +4,14 @@
 #define PHONEINFO_H
 #define PHONEINFO_STUBBED_H
 
-#include <QObject>
+#ifndef UNIT_TEST
+#  error "This header should be used only in unit tests."
+#endif
+#ifdef FUNCTIONAL_TEST
+#  error "This header should not be used in a functional test."
+#endif
 
+#include <QObject>
 #define FAKE_IMEI_NUMBER "FakeImeiNumber"
 
 class QString;
@@ -15,6 +21,8 @@ namespace Cellular
     class PhoneInfo : public QObject {
         Q_OBJECT
         public:
+            PhoneInfo ();
+            ~PhoneInfo ();
             QString imeiNumber() const;
     };
 }

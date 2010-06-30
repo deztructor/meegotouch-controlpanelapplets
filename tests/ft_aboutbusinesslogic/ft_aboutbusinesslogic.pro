@@ -3,14 +3,16 @@ include(../check.pri)
 
 SRC_PREFIX = ../../src/aboutapplet
 STUB_PREFIX = ../stubs
-INCLUDEPATH += $$SRC_PREFIX \
-               $$STUB_PREFIX
+
+INCLUDEPATH += \
+    $$SRC_PREFIX 
 
 CONFIG += \
 	gui \
 	meegotouch \
-	cellular-qt \
-	silent 
+	cellular-qt 
+
+	#silent
 
 QT += \
     testlib \
@@ -18,7 +20,11 @@ QT += \
     gui
 
 TEMPLATE = app
-DEFINES += UNIT_TEST
+
+DEFINES += \
+    UNIT_TEST \
+    FUNCTIONAL_TEST	
+
 TARGET = ft_aboutbusinesslogic
 target.path = /usr/lib/systemui-applets-tests
 

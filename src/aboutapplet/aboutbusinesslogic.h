@@ -8,7 +8,7 @@
 #include <QMap>
 #include <QDBusError>
 #include <QDBusInterface>
-#include <PhoneInfo>
+#include "phoneinfo.h"
 
 class QDBusObjectPath;
 class QString;

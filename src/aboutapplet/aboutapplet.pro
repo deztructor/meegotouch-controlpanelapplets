@@ -5,8 +5,9 @@ CONFIG += plugin \
           gui \
           meegotouch \
           duicontrolpanel \
-          cellular-qt \
-          silent
+          cellular-qt 
+
+          #silent
 
 QT += dbus
 
