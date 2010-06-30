@@ -10,8 +10,9 @@ systemui-applets (0.14.10-1~unreleased) harmattan; urgency=low
   * Fixes: NB#177148 - Items in Display applet are not aligned properly
   * Use the correct translation and logical ids in theme applet
   * Use the correct translation and logical ids in wallpaper applet
+  * Fixes: NB#177003 - Do not load engineering englishes by hand...
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 30 Jun 2010 12:15:51 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 30 Jun 2010 12:58:27 +0200
 
 systemui-applets (0.14.9-1) harmattan; urgency=low
 
