@@ -38,7 +38,6 @@
 
 #include <QGraphicsLinearLayout>
 
-static const char *systemui_translation = "systemui-applets.qm";
 static const char *profiles_translation = "profiles";
 
 ProfileWidget::ProfileWidget (
@@ -141,7 +140,6 @@ ProfileWidget::loadTranslation ()
     SYS_DEBUG ("Language changed to '%s'",
                SYS_STR (locale.language ()));
 
-    locale.installTrCatalog (systemui_translation);
     locale.installTrCatalog (profiles_translation);
     MLocale::setDefault (locale);
 
