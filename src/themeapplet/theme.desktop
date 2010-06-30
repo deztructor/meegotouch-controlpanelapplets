@@ -2,7 +2,7 @@
 Type=DUIApplet
 Name=Theme
 X-logical-id=qtn_teme_theme
-X-translation-catalog=systemui-applets
+X-translation-catalog=theme
 Icon=
 Exec=
 
