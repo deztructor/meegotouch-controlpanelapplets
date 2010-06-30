@@ -1,16 +1,13 @@
 [Desktop Entry]
 Type=DUIApplet
-Name=Wallpapers
-# It is not official
-X-logical-id=qtn_theme_wallpaper
-X-translation-catalog=systemui-applets
+Name=Wallpaper
+X-logical-id=qtn_wall_wallpaper
+X-translation-catalog=wallpaper
 Icon=
 Exec=
 
 [DUI]
 X-DUIApplet-Applet=libwallpaperapplet.so
-X-DUIApplet-ImageLandscape=Widget_landscape_NOT_DEFINED.png
-X-DUIApplet-ImagePortrait=Widget_portrait_NOT_DEFINED.png
 
 [DCP]
 Category=qtn_sett_main_look

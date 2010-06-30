@@ -69,8 +69,8 @@ WallpaperApplet::constructWidget (
 QString
 WallpaperApplet::title() const
 {
-    //% "Wallpapers"
-    return qtTrId ("qtn_theme_wallpaper"); // This is not official logical id
+    //% "Wallpaper"
+    return qtTrId ("qtn_wall_wallpaper");
 }
 
 QVector<MAction*>
