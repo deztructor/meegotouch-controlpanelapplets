@@ -15,6 +15,8 @@ systemui-applets (0.14.10-1~unreleased) harmattan; urgency=low
   [ Laszlo Pere ]
   * Fixes: NB#172929 - Battery applet in Settings->Device system->Battery 
     should stop animating once battery is full
+  * Fixes: NB#177846 - Profile status indicator menu plug-in doesn't close 
+    status menu
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 30 Jun 2010 12:58:27 +0200
 
