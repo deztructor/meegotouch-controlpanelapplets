@@ -10,9 +10,11 @@ INCLUDEPATH += \
 CONFIG += \
 	gui \
 	meegotouch \
-	cellular-qt 
-
+	cellular-qt \
+    link_pkgconfig
 	#silent
+
+PKGCONFIG += sysinfo
 
 QT += \
     testlib \

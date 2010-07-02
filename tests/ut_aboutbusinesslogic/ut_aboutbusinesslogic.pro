@@ -14,7 +14,10 @@ CONFIG += \
 	gui \
 	meegotouch \
 	debug \
-	silent 
+    link_pkgconfig \
+	silent
+
+PKGCONFIG += sysinfo
 
 QT += \
     testlib \

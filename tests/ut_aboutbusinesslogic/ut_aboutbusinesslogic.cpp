@@ -12,12 +12,14 @@
 #include <QMap>
 #include <QString>
 #include <QVariant>
+#include <QByteArray>
 
 #include <MApplication>
 
 #define DEBUG
 #include "../../src/debug.h"
 
+#if 0
 /******************************************************************************
  * Stubbing QFile.
  */
@@ -56,6 +58,41 @@ QIODevice::readLine (
     //SYS_DEBUG ("*** retval  = %lld", retval);
     return retval;
 }
+#endif
+/******************************************************************************
+ * Stubbing the sysinfo
+ */
+extern "C" {
+
+int
+sysinfo_init (struct system_config **sc_out)
+{
+    Q_UNUSED (sc_out);
+    return 0;
+}
+
+void
+sysinfo_finish (struct system_config *sc)
+{
+    Q_UNUSED (sc);
+}
+
+char *sysinfo_get_value_retval = 0;
+
+int
+sysinfo_get_value (struct system_config *sc, const char *key,
+                   uint8_t **val_out, unsigned long *len_out)
+{
+    Q_UNUSED (sc);
+
+    SYS_DEBUG ("key = %s", key);
+    *val_out = (uint8_t *) qstrdup (sysinfo_get_value_retval);
+    *len_out = (unsigned long) qstrlen (sysinfo_get_value_retval);
+
+    return 0;
+}
+
+};
 
 /******************************************************************************
  * Stubbing the dbus interface.
@@ -70,6 +107,10 @@ QDBusAbstractInterface::callWithCallback (
         const char              *returnMethod, 
         const char              *errorMethod)
 {
+    Q_UNUSED (args);
+    Q_UNUSED (receiver);
+    Q_UNUSED (errorMethod);
+
     SYS_DEBUG ("*** method       = %s", SYS_STR(method));
     SYS_DEBUG ("*** returnMethod = %s", returnMethod);
 
@@ -132,10 +173,12 @@ Ut_AboutBusinessLogic::testOsName ()
 {
     QString name;
 
+    m_Api = new AboutBusinessLogic;
+
+#if 0
     /*
      * Simulating unsuccessfull file open.
      */
-    m_Api = new AboutBusinessLogic;
     fileOpenSuccess = false;
     name = m_Api->osName();
     SYS_DEBUG ("*** osName (nofile) = %s", SYS_STR(name));
@@ -165,6 +208,10 @@ Ut_AboutBusinessLogic::testOsName ()
     name = m_Api->osName();
     SYS_DEBUG ("*** osName (rightfile) = %s", SYS_STR(name));
     QVERIFY (name == "fakeOsName");
+#endif
+
+    name = m_Api->osName();
+    QCOMPARE (name, QString ("qtn_prod_sw_version"));
     delete m_Api;
 }
 
@@ -173,10 +220,12 @@ Ut_AboutBusinessLogic::testOsVersion ()
 {
     QString name;
 
+    m_Api = new AboutBusinessLogic;
+
+#if 0
     /*
      * Simulating unsuccessfull file open.
      */
-    m_Api = new AboutBusinessLogic;
     fileOpenSuccess = false;
     name = m_Api->osVersion();
     SYS_DEBUG ("*** osVersion (nofile) = %s", SYS_STR(name));
@@ -207,6 +256,13 @@ Ut_AboutBusinessLogic::testOsVersion ()
     name = m_Api->osVersion();
     SYS_DEBUG ("*** osName (rightfile) = %s", SYS_STR(name));
     QVERIFY (name == "fakeOsVersion");
+#endif
+
+    sysinfo_get_value_retval = (char *) "HARDWARE_PROGRAM_VERSION13";
+    name = m_Api->osVersion();
+
+    QCOMPARE (name, QString ("VERSION13"));
+
     delete m_Api;
 }
 

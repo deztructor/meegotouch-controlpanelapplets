@@ -6,13 +6,14 @@
 #include <net/if.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
+#include <sysinfo.h>
 
+#include <QByteArray>
 #include <QString>
 #include <QStringList>
 #include <QtDBus>
 #include <QDBusInterface>
 #include <QDBusObjectPath>
-#include <QFile>
 #include "phoneinfo.h"
 
 #define OS_NAME_FALLBACK "MeeGo"
@@ -63,51 +64,47 @@ AboutBusinessLogic::initiateDataCollection()
     IMEI ();
 }
 
-/*!
- * Returns the version number of the operating system (Maemo version).
--16-3:~# cat /tmp/osso-product-info 
-or 
--16-3:~# cat /tmp/osso-product-info
-OSSO_PRODUCT_HARDWARE='<unknown>'
-OSSO_PRODUCT_NAME='<unknown>'
-OSSO_PRODUCT_FULL_NAME='<unknown>'
-OSSO_PRODUCT_RELEASE_NAME='<unknown>'
-OSSO_PRODUCT_RELEASE_FULL_NAME='<unknown>'
-OSSO_PRODUCT_RELEASE_VERSION='0.2010.16-3.REQ.243168'
-OSSO_PRODUCT_WLAN_CHANNEL='<unknown>'
-OSSO_PRODUCT_KEYBOARD='<unknown>'
-OSSO_PRODUCT_REGION='<unknown>'
-OSSO_PRODUCT_SHORT_NAME='<unknown>'
-OSSO_VERSION='RX-71+RM-581+RM-660+RM-680+RM-696_HARMATTAN_0.2010.16-3.REQ.243168_PR_MR0'
- */
 QString 
 AboutBusinessLogic::osVersion ()
 {
-    QFile   file("/tmp/osso-product-info");
-    QString retval ("-");
-    char    buf[1024];
-    QString line;
-    qint64  lineLength;
+    QString retval = "-";
+    const char *key = "/device/sw-release-ver";
+    /*
+     * INFO: maybe imei number could be fetched in the same
+     * way (key for imei : /certs/npc/esn/gsm )
+     */
 
     if (!m_OsVersion.isEmpty())
         return m_OsVersion;
 
-    if (!file.open(QFile::ReadOnly)) 
-        return retval;
 
-    for (;;) {
-        lineLength = file.readLine(buf, sizeof(buf));
-        if (lineLength < 0) 
-            break;
-        line = buf;
-        if (!line.startsWith ("OSSO_PRODUCT_RELEASE_VERSION='"))
-            continue;
-        
-        line.remove (0, 30);
-        line.chop (2);
-        retval = line;
-        m_OsVersion = retval;
-        SYS_DEBUG ("*** line = %s", SYS_STR(line));
+    SYS_DEBUG ("init");
+    struct system_config *sc = 0;
+    if (sysinfo_init (&sc) == 0)
+    {
+        uint8_t *data = 0;
+        unsigned long size = 0;
+        if ((sysinfo_get_value (sc, key, &data, &size) == 0) && (data != 0))
+        {
+            char *fw_version = new char[size+2];
+            qstrncpy (fw_version, (const char *) data, size + 1);
+            delete data;
+
+            retval = QString (fw_version);
+            delete[] fw_version;
+            /* 
+             * The fw-version format is something like that:
+             * SupportedHWID_PROGRAM_ReleaseVersion_suffixes
+             *
+             * Try to get only the version number:
+             */
+            int index = retval.indexOf ('_', retval.indexOf ('_') + 1) + 1;
+            if (index > 0)
+                retval = retval.mid (index);
+
+            m_OsVersion = retval;
+        }
+        sysinfo_finish (sc);
     }
 
     return retval;
@@ -116,36 +113,17 @@ AboutBusinessLogic::osVersion ()
 QString
 AboutBusinessLogic::osName ()
 {
-    QFile   file ("/tmp/osso-product-info");
-    QString retval;
-    char    buf[1024];
-    QString line;
-    qint64  lineLength;
-
     //% "MeeGo"
-    retval = qtTrId ("qtn_prod_sw_version");
+    QString retval = qtTrId ("qtn_prod_sw_version");
 
     if (!m_OsName.isEmpty())
         return m_OsName;
 
-    if (!file.open (QFile::ReadOnly))
-        return retval;
-
-    for (;;) {
-        lineLength = file.readLine (buf, sizeof (buf));
-        if (lineLength < 0)
-            break;
-        line = buf;
-        if (!line.startsWith ("OSSO_PRODUCT_RELEASE_NAME='"))
-            continue;
-
-        line.remove (0, 27);
-        line.chop (2);
-
-        if (! line.contains ("unknown"))
-            retval = line;
-        SYS_DEBUG ("*** line = %s", SYS_STR(line));
-    }
+    /*
+     * TODO: Implement something here...
+     * [but currently there is no way to get the
+     *  software name... ]
+     */
 
     m_OsName = retval;
     return retval;

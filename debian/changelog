@@ -11,6 +11,7 @@ systemui-applets (0.14.10-1~unreleased) harmattan; urgency=low
   * Use the correct translation and logical ids in theme applet
   * Use the correct translation and logical ids in wallpaper applet
   * Fixes: NB#177003 - Do not load engineering englishes by hand...
+  * Fixes: NB#177572 - Failed to display the software version
 
   [ Laszlo Pere ]
   * Fixes: NB#172929 - Battery applet in Settings->Device system->Battery 
@@ -20,7 +21,7 @@ systemui-applets (0.14.10-1~unreleased) harmattan; urgency=low
   * Fixes: NB#177984 - systemui-applets depends on deprecated 
     libduithumbnailer0.
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 30 Jun 2010 12:58:27 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 02 Jul 2010 16:04:21 +0200
 
 systemui-applets (0.14.9-1) harmattan; urgency=low
 

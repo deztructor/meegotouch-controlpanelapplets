@@ -6,9 +6,9 @@ SRC_PREFIX = ../../src/aboutapplet
 STUB_PREFIX = ../stubs
 
 INCLUDEPATH = \
-        $$STUB_PREFIX \
-	$$SRC_PREFIX \
-	$$INCLUDEPATH
+    $$STUB_PREFIX \
+    $$SRC_PREFIX \
+    $$INCLUDEPATH
 
 QT += \
     testlib \
@@ -17,17 +17,20 @@ QT += \
 TEMPLATE = app
 
 DEFINES += \
-	UNIT_TEST 
+    UNIT_TEST 
 
 TARGET = ut_aboutapplet
 target.path = /usr/lib/systemui-applets-tests
 
 CONFIG += \
-	gui \
-	meegotouch \
-	plugin \
-	duicontrolpanel \
-	silent 
+    gui \
+    meegotouch \
+    plugin \
+    duicontrolpanel \
+    link_pkgconfig \
+    silent 
+
+PKGCONFIG += sysinfo
 
 HEADERS += \
     $$STUB_PREFIX/mdesktopentry.h \
