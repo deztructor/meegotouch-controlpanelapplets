@@ -167,9 +167,6 @@ BatteryBusinessLogic::PSMAutoValue ()
     return PSMAutoKey.value ().toBool ();
 }
 
-/*!
- * 
- */
 void
 BatteryBusinessLogic::remainingTimeValuesRequired ()
 {
@@ -202,6 +199,12 @@ finalize:
     emit remainingTimeValuesChanged (values);
 }
 
+/*!
+ * We have three functions her that notify us about the changes in the charging
+ * state. We use all of the three slots the same way, but we keep them
+ * separately so we can actually see why do we need to recalculate the charging
+ * info.
+ */
 void
 BatteryBusinessLogic::batteryChargerEvent (
         Maemo::QmBattery::ChargerType type)
@@ -210,7 +213,6 @@ BatteryBusinessLogic::batteryChargerEvent (
 
     SYS_DEBUG ("");
     recalculateChargingInfo ();
-    //chargingStateChanged (m_battery->getChargingState ());
 }
 
 void
@@ -218,39 +220,9 @@ BatteryBusinessLogic::chargingStateChanged (
         Maemo::QmBattery::ChargingState state)
 {
     Q_UNUSED (state);
+    
     SYS_DEBUG ("");
     recalculateChargingInfo ();
-    #if 0
-    int rate = 0;
-
-    /*
-     * No animation needed when battery is full
-     */
-    if (m_battery->getBatteryState () != QmBattery::StateFull) {
-        switch (state) {
-            case QmBattery::StateCharging:
-                rate = animation_rate_charging_usb;
-
-                if (m_battery->getChargerType () == QmBattery::Wall)
-                    rate = animation_rate_charging_wall;
-
-                break;
-
-            case QmBattery::StateNotCharging:
-            case QmBattery::StateChargingFailed:
-            default:
-                break;
-        }
-    }
-
-    SYS_DEBUG ("Emitting batteryCharging(%d)", rate);
-    emit batteryCharging (rate);
-
-    SYS_DEBUG ("Emitting batteryBarValueReceived(%d)", batteryBarValue (-1));
-    emit batteryBarValueReceived (batteryBarValue (-1));
-
-    remainingTimeValuesRequired ();
-    #endif
 }
 
 void 
@@ -258,6 +230,8 @@ BatteryBusinessLogic::batteryStateChanged (
         Maemo::QmBattery::BatteryState batteryState)
 {
     Q_UNUSED (batteryState);
+    
+    SYS_DEBUG ("");
     recalculateChargingInfo ();
 }
 
