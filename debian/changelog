@@ -1,4 +1,4 @@
-systemui-applets (0.14.10-1~unreleased) harmattan; urgency=low
+systemui-applets (0.14.10-1) harmattan; urgency=low
 
   [ Robert Manner ]
   * Fixes: NB#174929 - Presenting order of setting items on Look & Feel
@@ -21,7 +21,7 @@ systemui-applets (0.14.10-1~unreleased) harmattan; urgency=low
   * Fixes: NB#177984 - systemui-applets depends on deprecated 
     libduithumbnailer0.
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 02 Jul 2010 16:04:21 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 02 Jul 2010 22:40:12 +0200
 
 systemui-applets (0.14.9-1) harmattan; urgency=low
 
