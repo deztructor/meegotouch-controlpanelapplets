@@ -44,8 +44,8 @@ ThemeWidget::createWidgets ()
     m_List->setCellCreator(cellCreator);
 
     m_OviItem = new MContentItem(MContentItem::IconAndSingleTextLabel);
-    const QPixmap *oviIcon = MTheme::pixmap("icon-m-common-ovi-store");
-    m_OviItem->setPixmap(*oviIcon);
+    // This icon is currently missing, see NB#175015
+    m_OviItem->setImageID ("icon-m-common-ovi-store");
     m_OviItem->setObjectName("OviItem");
 
     mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
