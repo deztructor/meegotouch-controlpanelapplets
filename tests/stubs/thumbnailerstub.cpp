@@ -19,12 +19,14 @@
 **
 ****************************************************************************/
 #include "thumbnailerstub.h"
+using namespace Thumbnails;
 
 #include <QString>
 #include <QStringList>
 
 #undef DEBUG
 #include "../../src/debug.h"
+
 
 Thumbnailer::Thumbnailer ()
 {

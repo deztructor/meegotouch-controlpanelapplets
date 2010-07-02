@@ -22,6 +22,8 @@
 #  include <Thumbnailer>
 #endif
 
+using namespace Thumbnails;
+
 class QString;
 
 // If this macro is defined the class will support the QPixmap class thumbnails.

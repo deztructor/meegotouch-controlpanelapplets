@@ -13,11 +13,11 @@ QT += \
 
 LIBS += \
     -lqttracker \
-    -lduithumbnailer
+    -lthumbnailer
 
 INCLUDEPATH += \
     /usr/include/QtTracker \
-    /usr/include/duithumbnailer 
+    /usr/include/thumbnailer 
 
 TEMPLATE = app
 DEFINES += \

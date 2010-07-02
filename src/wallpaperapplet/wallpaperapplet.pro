@@ -10,11 +10,11 @@ CONFIG += plugin \
 
 LIBS += \
     -lqttracker \
-    -lduithumbnailer
+    -lthumbnailer
 
 INCLUDEPATH += \
     /usr/include/QtTracker \
-    /usr/include/duithumbnailer 
+    /usr/include/thumbnailer 
 
 MOC_DIR = .moc
 OBJECTS_DIR = .objects

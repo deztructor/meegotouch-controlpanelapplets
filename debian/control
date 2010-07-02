@@ -5,7 +5,7 @@ Maintainer: David Kedves <dkedves@blumsoft.eu>
 Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.8.0),
                libmeegotouch-dev (>= 0.20), libqmsystem-dev (>= 0.1.64),
                libprofile-qt-dev (>= 0.13), system-ui-dev (>= 0.16),
-               libqttracker-dev, libduithumbnailer-dev, libcellular-qt-dev,
+               libqttracker-dev, libthumbnailer-dev, libcellular-qt-dev,
                clean-device-dev
 Standards-Version: 3.8.0
 
@@ -85,7 +85,7 @@ Package: duicontrolpanel-wallpaperapplet
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libqttracker1pre6, 
-         tumbler, libduithumbnailer0, duicontrolpanel, 
+         tumbler, libthumbnailer0, duicontrolpanel, 
          systemui-applets-l10n-engineering-english
 Description: Desktop wallpaper changing applet.
 

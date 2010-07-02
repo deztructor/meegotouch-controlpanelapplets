@@ -17,6 +17,8 @@ systemui-applets (0.14.10-1~unreleased) harmattan; urgency=low
     should stop animating once battery is full
   * Fixes: NB#177846 - Profile status indicator menu plug-in doesn't close 
     status menu
+  * Fixes: NB#177984 - systemui-applets depends on deprecated 
+    libduithumbnailer0.
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 30 Jun 2010 12:58:27 +0200
 

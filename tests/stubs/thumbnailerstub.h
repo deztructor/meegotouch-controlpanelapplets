@@ -30,6 +30,7 @@
 class QStringList;
 class QString;
 
+namespace Thumbnails {
 class Thumbnailer : public QObject 
 {
 Q_OBJECT
@@ -70,4 +71,5 @@ public:
     QUrl     m_Url;
     QString  m_Flavor;
 };
+} //namespace
 #endif
