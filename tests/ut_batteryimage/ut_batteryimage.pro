@@ -4,8 +4,12 @@ include(../check.pri)
 MOC_DIR = .moc
 SRC_PREFIX = ../../src/batteryapplet
 STUB_PREFIX = ../stubs
-INCLUDEPATH += $$SRC_PREFIX \
-               $$STUB_PREFIX
+
+INCLUDEPATH = \
+        $$STUB_PREFIX \
+	$$SRC_PREFIX \
+	$$INCLUDEPATH
+
 QT += testlib
 
 TEMPLATE = app
@@ -18,7 +22,7 @@ target.path = /usr/lib/systemui-applets-tests
 CONFIG += \
     qmsystem \
     meegotouch \
-	silent 
+    silent 
 
 HEADERS += \
     ut_batteryimage.h \

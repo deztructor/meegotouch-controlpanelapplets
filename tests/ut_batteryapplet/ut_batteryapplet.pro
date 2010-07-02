@@ -1,10 +1,15 @@
 include(../coverage.pri)
 include(../check.pri)
 
+MOC_DIR = .moc
 SRC_PREFIX = ../../src/batteryapplet
 STUB_PREFIX = ../stubs
-INCLUDEPATH += $$SRC_PREFIX \
-               $$STUB_PREFIX
+
+INCLUDEPATH = \
+        $$STUB_PREFIX \
+	$$SRC_PREFIX \
+	$$INCLUDEPATH
+
 QT += \
     testlib
 
@@ -19,12 +24,13 @@ target.path = /usr/lib/systemui-applets-tests
 CONFIG += \
 	gui \
 	meegotouch \
-    qmsystem \
 	plugin \
 	duicontrolpanel \
 	silent 
 
 HEADERS += \
+    $$STUB_PREFIX/qmbattery.h \
+    $$STUB_PREFIX/qmdevicemode.h \
     ../../src/debug.h \
     ut_batteryapplet.h \
     $$SRC_PREFIX/batteryapplet.h \
@@ -37,6 +43,8 @@ HEADERS += \
     $$SRC_PREFIX/timecontainer.h
 
 SOURCES += \
+    $$STUB_PREFIX/qmbattery.cpp \
+    $$STUB_PREFIX/qmdevicemode.cpp \
     ../../src/debug.cpp \
     ut_batteryapplet.cpp \
     $$SRC_PREFIX/batteryapplet.cpp \

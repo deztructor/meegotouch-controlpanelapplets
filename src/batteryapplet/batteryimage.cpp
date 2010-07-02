@@ -79,12 +79,19 @@ BatteryImage::~BatteryImage ()
     }
 }
 
+/*!
+ * Updates the battery energy level, stores the current level and updates the
+ * image if it is necessary
+ */
 void
 BatteryImage::updateBatteryLevel (
         int level)
 {
     SYS_DEBUG ("level = %d", level);
+    if (m_batteryLevel == level)
+        return;
     m_batteryLevel = level;
+
     updateImage ();
 }
 

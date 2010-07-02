@@ -1,3 +1,5 @@
+/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
+/* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 /****************************************************************************
 **
 ** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
@@ -21,8 +23,38 @@
 
 #include <QtTest/QtTest>
 #include <QObject>
+#include <QStringList>
 
 #include <batterybusinesslogic.h>
+class SignalSink : public QObject 
+{
+    Q_OBJECT
+public:
+    SignalSink ();
+    
+    void reset ();
+    void print ();
+    bool chargingWithAnimation (int animationRate);
+    bool notCharging ();
+    bool hasBarValue (int barValue);
+    bool hasRemainingTimes (bool charging);
+    
+public slots:
+    void remainingTimeValuesChanged (QStringList values);
+    void batteryCharging (int animationRate);
+    void batteryBarValueReceived (int barValue);
+    void PSMValueReceived (bool PSMValue);
+
+public:
+    bool        m_PSMValue;
+    bool        m_PSMValueReceived;
+    QStringList m_RemainingTimeValues;
+    bool        m_RemainingTimeValuesReceived;
+    int         m_AnimationRate;
+    bool        m_AnimationRateReceived;
+    int         m_BarValue;
+    bool        m_BarValueReceived;
+};
 
 class Ut_BatteryBusinessLogic : public QObject
 {
@@ -34,17 +66,15 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
-    void testRequestValues ();
-    void testPSMThresholdValue ();
-    void testPSMValue ();
     void testPSMAutoValue ();
-    void testRemainingTimeVals ();
-    void testChargingStateChanged ();
-    void testRemCapacityChange ();
-    void testBatteryBarValues ();
+    void testPSMValue ();
+    void testSpontaneousPSMValue ();
+    void testSpontaneousChargerEvent ();
+    void testSpontaneousChargingComplete ();
 
 private:
-    BatteryBusinessLogic    *m_logic;
+    BatteryBusinessLogic    *m_Logic;
+    SignalSink               m_SignalSink;
 };
 
 #endif

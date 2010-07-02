@@ -4,9 +4,18 @@ include(../check.pri)
 SRC_PREFIX = ../../src/offlineapplet
 STUB_PREFIX = ../stubs
 TOOLS_PREFIX = ../tools
-INCLUDEPATH += $$SRC_PREFIX \
-               $$STUB_PREFIX \
-               $$TOOLS_PREFIX
+
+#
+# Sorry I made a qmdevicemode.h in the stub directory that causes some problems.
+# FIXME: I need a better solution for this...
+#
+INCLUDEPATH = \
+	/usr/include/qmsystem/ \
+	$$INCLUDEPATH \
+        $$STUB_PREFIX \
+	$$SRC_PREFIX \
+        $$TOOLS_PREFIX
+
 QT += \
     testlib
 

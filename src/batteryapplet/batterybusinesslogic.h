@@ -1,3 +1,5 @@
+/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
+/* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 /****************************************************************************
 **
 ** Copyright (C) 2010 Nokia Corporation and/or its subsidiary (-ies).
@@ -24,6 +26,8 @@
 
 #include <qmdevicemode.h>
 #include <qmbattery.h>
+
+using namespace Maemo;
 
 class BatteryBusinessLogic : public QObject
 {
@@ -52,17 +56,21 @@ signals:
     void PSMValueReceived (bool enabled);
 
 private slots:
-    void batteryRemCapacityChanged (int percentage, int bars);
     void batteryChargerEvent (Maemo::QmBattery::ChargerType type);
     void chargingStateChanged (Maemo::QmBattery::ChargingState state);
+    void batteryStateChanged (Maemo::QmBattery::BatteryState batteryState);
+    void batteryRemCapacityChanged (int percentage, int bars);
     void PSMStateChanged (Maemo::QmDeviceMode::PSMState state);
 
 private:
     int batteryBarValue (int percentage);
+    void recalculateChargingInfo ();
+    bool realyCharging();
 
-    bool                     m_initialized;
-    Maemo::QmBattery        *m_battery;
-    Maemo::QmDeviceMode     *m_devicemode;
+    bool              m_initialized;
+    QmBattery        *m_battery;
+    QmDeviceMode     *m_devicemode;
+    int               m_ChargingRate;
 
 #ifdef UNIT_TEST
     friend class Ut_BatteryBusinessLogic;

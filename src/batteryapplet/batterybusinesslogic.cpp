@@ -1,3 +1,5 @@
+/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
+/* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 /****************************************************************************
 **
 ** Copyright (C) 2010 Nokia Corporation and/or its subsidiary (-ies).
@@ -21,7 +23,7 @@
 #include <QVariant>
 #include <QString>
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -34,23 +36,26 @@ static const int animation_rate_charging_usb  = 500;
 static const int animation_rate_charging_wall = 250;
 
 
-BatteryBusinessLogic::BatteryBusinessLogic (QObject *parent)
+BatteryBusinessLogic::BatteryBusinessLogic (
+        QObject *parent)
     : QObject (parent),
-    m_initialized (false)
+    m_initialized (false),
+    m_ChargingRate (-1)
 {
-    m_battery = new Maemo::QmBattery (this);
-    m_devicemode = new Maemo::QmDeviceMode (this);
+    m_battery    = new QmBattery (this);
+    m_devicemode = new QmDeviceMode (this);
 }
 
 BatteryBusinessLogic::~BatteryBusinessLogic ()
 {
-
 }
 
 /*
  * This function does the initialization and signal
  * connection to QmBattery and QmDeviceMode, and emits
  * all the signals with the current values...
+ *
+ * FIXME: This function should be called realize(9 or something...
  */
 void
 BatteryBusinessLogic::requestValues ()
@@ -60,32 +65,40 @@ BatteryBusinessLogic::requestValues ()
 
     m_initialized = true;
 
-    connect (m_battery,
-             SIGNAL (chargerEvent (Maemo::QmBattery::ChargerType)),
-             this,
-             SLOT (batteryChargerEvent (Maemo::QmBattery::ChargerType)));
-    connect (m_battery,
-             SIGNAL (chargingStateChanged  (Maemo::QmBattery::ChargingState)),
-             this,
-             SLOT (chargingStateChanged (Maemo::QmBattery::ChargingState)));
+    SYS_DEBUG ("Connecting to the signals of the QmBattery class");
+    connect (
+        m_battery, SIGNAL(chargerEvent(Maemo::QmBattery::ChargerType)),
+        this, SLOT(batteryChargerEvent(Maemo::QmBattery::ChargerType)));
+    connect (
+        m_battery, SIGNAL(chargingStateChanged(Maemo::QmBattery::ChargingState)),
+        this, SLOT(chargingStateChanged(Maemo::QmBattery::ChargingState)));
+    connect (
+        m_battery, SIGNAL(batteryStateChanged(Maemo::QmBattery::BatteryState)),
+        this, SLOT (batteryStateChanged(Maemo::QmBattery::BatteryState)));
+
     // This will emit the batteryCharging signal,
     // and the remainingTimeValuesChanged signal
     chargingStateChanged (m_battery->getChargingState ());
 
-    connect (m_battery,
-             SIGNAL (batteryRemainingCapacityChanged (int, int)),
-             this,
-             SLOT (batteryRemCapacityChanged (int, int)));
+    /*
+     * We have two signals showing that the battery energy level has been
+     * changed. We listen both of these signals.
+     */
+    SYS_DEBUG ("Connecting to the signals of the QmBattery class");
+    connect (m_battery, SIGNAL (batteryRemainingCapacityChanged (int, int)),
+            this, SLOT (batteryRemCapacityChanged (int, int)));
+
 
     // batteryBarValueReceived also emitted by chargingStateChanged ^^^
-
+    // FIXME: Why?
     connect (m_devicemode,
              SIGNAL (devicePSMStateChanged (Maemo::QmDeviceMode::PSMState)),
-             this,
-             SLOT (PSMStateChanged (Maemo::QmDeviceMode::PSMState)));
+             this, SLOT (PSMStateChanged (Maemo::QmDeviceMode::PSMState)));
 
+    SYS_DEBUG ("Emitting PSMValueReceived(%s)",
+            SYS_BOOL(m_devicemode->getPSMState () == QmDeviceMode::PSMStateOn));
     emit PSMValueReceived (m_devicemode->getPSMState () ==
-                           Maemo::QmDeviceMode::PSMStateOn);
+                           QmDeviceMode::PSMStateOn);
 }
 
 void
@@ -113,133 +126,168 @@ BatteryBusinessLogic::PSMThresholdValues ()
 }
 
 void
-BatteryBusinessLogic::setPSMValue (bool enabled)
+BatteryBusinessLogic::setPSMValue (
+        bool enabled)
 {
     bool ret;
     ret = m_devicemode->setPSMState (
         enabled ?
-        Maemo::QmDeviceMode::PSMStateOn :
-        Maemo::QmDeviceMode::PSMStateOff);
+        QmDeviceMode::PSMStateOn :
+        QmDeviceMode::PSMStateOff);
 
-    if (ret)
-    {
-        // Change succeed, we don't need to wait for QmSystem
-        // reply, we can emit the PSMValueChanged asap to
-        // update the UI.
+    if (ret) {
+        // Change succeed, we don't need to wait for QmSystem reply, we can emit
+        // the PSMValueChanged asap to update the UI.
+        SYS_DEBUG ("Emitting PSMValueReceived(%s)", SYS_BOOL(enabled));
         emit PSMValueReceived (enabled);
     }
 }
 
+/*!
+ * Sets the PSMAutoValue, a boolean that sets if the device should go into power
+ * save mode automatically. This function only changes a value in the GConf
+ * database.
+ */
 void
-BatteryBusinessLogic::setPSMAutoValue (bool toggle)
+BatteryBusinessLogic::setPSMAutoValue (
+        bool toggle)
 {
     MGConfItem PSMAutoKey (psm_auto_key);
-
     PSMAutoKey.set (toggle);
 }
 
+/*!
+ * Reads the PSMAuto value, a boolean that sets if the device should go into
+ * power save mode automatically. This method is only reads the GConf database.
+ */
 bool
 BatteryBusinessLogic::PSMAutoValue ()
 {
     MGConfItem PSMAutoKey (psm_auto_key);
-
     return PSMAutoKey.value ().toBool ();
 }
 
+/*!
+ * 
+ */
 void
 BatteryBusinessLogic::remainingTimeValuesRequired ()
 {
-    QStringList values;
+    QmBattery::RemainingTimeMode mode;
+    QStringList                  values;
 
-    if (m_battery->getChargingState () == Maemo::QmBattery::StateCharging)
-    {
+    if (realyCharging()) {
         //% "Charging"
         values << qtTrId ("qtn_ener_charging") 
                << qtTrId ("qtn_ener_charging");
+        goto finalize;
     }
-    else
-    {
-        Maemo::QmDeviceMode::PSMState state = m_devicemode->getPSMState ();
-        Maemo::QmBattery::RemainingTimeMode mode;
-        switch (state)
-        {
-            case Maemo::QmDeviceMode::PSMStateOn:
-                mode = Maemo::QmBattery::PowersaveMode;
-                break;
 
-            case Maemo::QmDeviceMode::PSMStateOff:
-            default:
-                mode = Maemo::QmBattery::NormalMode;
-                break;
-        }
-        values << QString ("%1").arg (m_battery->getRemainingTalkTime (mode) / 60)
+    switch (m_devicemode->getPSMState ()) {
+        case QmDeviceMode::PSMStateOn:
+            mode = QmBattery::PowersaveMode;
+            break;
+
+        case QmDeviceMode::PSMStateOff:
+        default:
+             mode = QmBattery::NormalMode;
+             break;
+    }
+    
+    values << QString ("%1").arg (m_battery->getRemainingTalkTime (mode) / 60)
            << QString ("%1").arg (m_battery->getRemainingIdleTime (mode) / 60);
-    }
 
+finalize:
+    SYS_DEBUG ("Emitting remainingTimeValuesChanged()");
     emit remainingTimeValuesChanged (values);
 }
 
 void
-BatteryBusinessLogic::batteryChargerEvent (Maemo::QmBattery::ChargerType type)
+BatteryBusinessLogic::batteryChargerEvent (
+        Maemo::QmBattery::ChargerType type)
 {
     Q_UNUSED (type);
 
-    chargingStateChanged (m_battery->getChargingState ());
+    SYS_DEBUG ("");
+    recalculateChargingInfo ();
+    //chargingStateChanged (m_battery->getChargingState ());
 }
 
 void
-BatteryBusinessLogic::chargingStateChanged (Maemo::QmBattery::ChargingState state)
+BatteryBusinessLogic::chargingStateChanged (
+        Maemo::QmBattery::ChargingState state)
 {
+    Q_UNUSED (state);
+    SYS_DEBUG ("");
+    recalculateChargingInfo ();
+    #if 0
     int rate = 0;
 
     /*
      * No animation needed when battery is full
      */
-    if (m_battery->getBatteryState () != Maemo::QmBattery::StateFull)
-    {
-        switch (state)
-        {
-            case Maemo::QmBattery::StateCharging:
+    if (m_battery->getBatteryState () != QmBattery::StateFull) {
+        switch (state) {
+            case QmBattery::StateCharging:
                 rate = animation_rate_charging_usb;
 
-                if (m_battery->getChargerType () == Maemo::QmBattery::Wall)
+                if (m_battery->getChargerType () == QmBattery::Wall)
                     rate = animation_rate_charging_wall;
 
                 break;
 
-            case Maemo::QmBattery::StateNotCharging:
-            case Maemo::QmBattery::StateChargingFailed:
+            case QmBattery::StateNotCharging:
+            case QmBattery::StateChargingFailed:
             default:
                 break;
         }
     }
 
+    SYS_DEBUG ("Emitting batteryCharging(%d)", rate);
     emit batteryCharging (rate);
+
+    SYS_DEBUG ("Emitting batteryBarValueReceived(%d)", batteryBarValue (-1));
     emit batteryBarValueReceived (batteryBarValue (-1));
+
     remainingTimeValuesRequired ();
+    #endif
 }
 
-void
-BatteryBusinessLogic::PSMStateChanged (Maemo::QmDeviceMode::PSMState state)
+void 
+BatteryBusinessLogic::batteryStateChanged (
+        Maemo::QmBattery::BatteryState batteryState)
 {
-    bool enabled = false;
+    Q_UNUSED (batteryState);
+    recalculateChargingInfo ();
+}
 
-    if (state == Maemo::QmDeviceMode::PSMStateOn)
-        enabled = true;
-
+/*!
+ * This slot will be called when the device power save mode is changed. The
+ * method will send the PSMValueReceived() signal.
+ */
+void
+BatteryBusinessLogic::PSMStateChanged (
+        Maemo::QmDeviceMode::PSMState state)
+{
+    bool enabled = state == QmDeviceMode::PSMStateOn;
+    
+    SYS_DEBUG ("Emitting PSMValueReceived (%s)", SYS_BOOL(enabled));
     emit PSMValueReceived (enabled);
 }
 
 void
-BatteryBusinessLogic::batteryRemCapacityChanged (int percentage, int bars)
+BatteryBusinessLogic::batteryRemCapacityChanged (
+		int percentage, 
+		int bars)
 {
     Q_UNUSED (bars);
-    SYS_DEBUG ("percentage = %d, bars = %d [max = %d]",
+    SYS_DEBUG ("**** percentage = %d, bars = %d [max = %d]",
                percentage, bars, m_battery->getMaxBars ());
+
     // XXX: FIXME: maybe we can drop batteryBarValue and use 'bars' parameter..
-
+    SYS_DEBUG ("Emitting batteryBarValueReceived(%d)",
+            batteryBarValue (percentage));
     emit batteryBarValueReceived (batteryBarValue (percentage));
-
     remainingTimeValuesRequired ();
 }
 
@@ -292,3 +340,78 @@ BatteryBusinessLogic::batteryBarValue (int percentage)
     return index;
 }
 
+/*!
+ * This function is called whenever some change is detected around the battery
+ * and its charger. This method will try to find out if the battery is actually
+ * charging and if it is the method will calculate the charging animation speed.
+ *
+ * What we managed to find aboput the charging is:
+ * 1) The battery is not charging (despite any other info returned) if the
+ *    battery is full. See NB#172929 for further details.
+ */
+void
+BatteryBusinessLogic::recalculateChargingInfo ()
+{
+    QmBattery::ChargingState chargingState;
+    QmBattery::BatteryState  batteryState;
+    QmBattery::ChargerType   chargerType;
+    bool                     charging;
+    int                      chargingRate;
+   
+    chargerType = m_battery->getChargerType ();
+    chargingState = m_battery->getChargingState ();
+    batteryState = m_battery->getBatteryState ();
+
+    /*
+     * Carefully calculating the charging rate, the animation rate of the
+     * charging indicator.
+     */
+    charging = 
+        batteryState != QmBattery::StateFull &&
+        chargerType != QmBattery::None &&
+        chargingState != QmBattery::StateNotCharging &&
+        chargingState != QmBattery::StateChargingFailed;
+
+    chargingRate = 0;
+    if (charging) 
+        chargingRate = chargerType == QmBattery::Wall ?
+            animation_rate_charging_wall : animation_rate_charging_usb;
+
+    SYS_DEBUG ("*** charging      = %s", SYS_BOOL(charging));
+    SYS_DEBUG ("*** chargingRate  = %d", chargingRate);
+
+    if (chargingRate == m_ChargingRate) 
+        return;
+
+    /*
+     * If the charging rate has been changed we need to notify the ui with a
+     * signal.
+     */
+    SYS_DEBUG ("*** chargingRate %d -> %d", m_ChargingRate, chargingRate);
+    m_ChargingRate = chargingRate;       
+    SYS_DEBUG ("Emitting batteryCharging(%d)", m_ChargingRate);
+    emit batteryCharging (m_ChargingRate);
+
+    /*
+     * Then we need to notify everyone about the bar value. 
+     * FIXME: Why exactly do we need that?
+     */
+    SYS_DEBUG ("Emitting batteryBarValueReceived(%d)", batteryBarValue (-1));
+    emit batteryBarValueReceived (batteryBarValue (-1));
+
+    /*
+     * And the remaining time values has to be recalculated.
+     */
+    remainingTimeValuesRequired ();
+}
+
+/*!
+ * Returns true if the businesslogic decided that the battery is actually
+ * charging. Please check the documentation of recalculateChargingInfo() for
+ * further information.
+ */
+bool
+BatteryBusinessLogic::realyCharging ()
+{
+    return m_ChargingRate != 0;
+}

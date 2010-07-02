@@ -4,8 +4,12 @@ include(../check.pri)
 MOC_DIR = .moc
 SRC_PREFIX = ../../src/batteryapplet
 STUB_PREFIX = ../stubs
-INCLUDEPATH += $$SRC_PREFIX \
-               $$STUB_PREFIX
+
+INCLUDEPATH = \
+        $$STUB_PREFIX \
+	$$SRC_PREFIX \
+	$$INCLUDEPATH
+
 QT += testlib
 
 TEMPLATE = app
@@ -16,22 +20,21 @@ TARGET = ut_batterybusinesslogic
 target.path = /usr/lib/systemui-applets-tests
 
 CONFIG += \
-    qmsystem \
     meegotouch \
-	silent 
+    silent 
 
 HEADERS += \
+    $$SRC_PREFIX/../debug.h \ 
+    $$STUB_PREFIX/qmbattery.h \
+    $$STUB_PREFIX/qmdevicemode.h \
     ut_batterybusinesslogic.h \
-    $$SRC_PREFIX/batterybusinesslogic.h \
-    $$SRC_PREFIX/../debug.h \
-    $$STUB_PREFIX/stubbase.h \
-    $$STUB_PREFIX/qmbattery_stub.h \
-    $$STUB_PREFIX/qmdevicemode_stub.h
+    $$SRC_PREFIX/batterybusinesslogic.h
 
 SOURCES += \
-    ut_batterybusinesslogic.cpp \
-    $$SRC_PREFIX/batterybusinesslogic.cpp \
     $$SRC_PREFIX/../debug.cpp \
-    $$STUB_PREFIX/stubbase.cpp
+    $$STUB_PREFIX/qmbattery.cpp \
+    $$STUB_PREFIX/qmdevicemode.cpp \
+    ut_batterybusinesslogic.cpp \
+    $$SRC_PREFIX/batterybusinesslogic.cpp
 
 INSTALLS += target

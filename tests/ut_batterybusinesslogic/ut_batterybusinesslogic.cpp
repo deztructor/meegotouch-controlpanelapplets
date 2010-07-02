@@ -1,3 +1,5 @@
+/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
+/* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 /****************************************************************************
 **
 ** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
@@ -25,26 +27,194 @@
 /*
  * Include the stubs here:
  */
-#include "qmbattery_stub.h"
-#include "qmdevicemode_stub.h"
+#include "qmbattery.h"
+#include "qmdevicemode.h"
+#ifndef QMDEVICEMODE_STUBBED_H
+#  error "QmDeviceMode is not stubbed, can't continue."
+#endif
+#ifndef QMBATTERY_STUBBED_H
+#  error "QmBattery is not stubbed, can't continue."
+#endif
 
-QVariant GconfItemSet;
-
-void MGConfItem::set (const QVariant &val)
+/******************************************************************************
+ * SignalSink implementation. 
+ */
+SignalSink::SignalSink () :
+    QObject ()
 {
-    GconfItemSet = val;
+    reset ();
 }
 
-enum _testCase
+
+void
+SignalSink::reset ()
 {
+    m_PSMValue = false;
+    m_PSMValueReceived = false;
+    m_RemainingTimeValues.clear();
+    m_RemainingTimeValuesReceived = false;
+    m_AnimationRate = -1;
+    m_AnimationRateReceived = false;
+    m_BarValue = -1;
+    m_BarValueReceived = false;
+}
+
+void
+SignalSink::print ()
+{
+    SYS_DEBUG ("*** m_PSMValueReceived            = %s", SYS_BOOL (m_PSMValueReceived));
+    if (m_PSMValueReceived) {
+        SYS_DEBUG ("*** m_PSMValue                    = %s", SYS_BOOL (m_PSMValue));
+    }
+
+    SYS_DEBUG ("*** m_RemainingTimeValuesReceived = %s", 
+            SYS_BOOL(m_RemainingTimeValuesReceived));
+    if (m_RemainingTimeValuesReceived) {
+        int   n = 0;
+        foreach (QString value, m_RemainingTimeValues) {
+            SYS_DEBUG ("*** m_RemainingTimeValues[%2d]     = %s", 
+                    n, SYS_STR(value));
+            n++;
+        }
+    }
+
+    SYS_DEBUG ("*** m_AnimationRateReceived       = %s", 
+            SYS_BOOL(m_AnimationRateReceived));
+    if (m_AnimationRateReceived) {
+        SYS_DEBUG ("*** m_AnimationRate               = %d", m_AnimationRate);
+    }
+
+    SYS_DEBUG ("*** m_BarValueReceived            = %s", SYS_BOOL(m_BarValueReceived));
+    if (m_BarValueReceived) {
+        SYS_DEBUG ("*** m_BarValue                    = %d", m_BarValue);
+    }
+}
+
+bool 
+SignalSink::chargingWithAnimation (
+        int animationRate)
+{
+    return m_AnimationRateReceived && m_AnimationRate == animationRate;
+}
+
+bool 
+SignalSink::notCharging ()
+{
+    return m_AnimationRateReceived && m_AnimationRate == 0;
+}
+
+
+bool 
+SignalSink::hasBarValue (
+        int barValue)
+{
+    return m_BarValueReceived && m_BarValue == barValue;
+}
+
+/*!
+ * \param charging If the sink should have information sho
+ */
+bool
+SignalSink::hasRemainingTimes (
+        bool   charging)
+{
+    if (charging)
+        return m_RemainingTimeValuesReceived &&
+            m_RemainingTimeValues.size() == 2 &&
+            m_RemainingTimeValues[0] == "qtn_ener_charging" &&
+            m_RemainingTimeValues[1] == "qtn_ener_charging";
+
+    return m_RemainingTimeValuesReceived && 
+        m_RemainingTimeValues.size() == 2 && 
+        m_RemainingTimeValues[0] != "qtn_ener_charging" && 
+        m_RemainingTimeValues[1] != "qtn_ener_charging";
+}
+
+void
+SignalSink::remainingTimeValuesChanged (
+        QStringList values)
+{
+    int   n = 0;
+    foreach (QString value, values) {
+        SYS_DEBUG ("*** values[%d] = %s", n, SYS_STR(value));
+        n++;
+    }
+
+    m_RemainingTimeValues = values;
+    m_RemainingTimeValuesReceived = true;
+}
+ 
+void
+SignalSink::batteryCharging (
+        int animationRate)
+{
+    SYS_DEBUG ("*** animationRate = %d", animationRate);
+    m_AnimationRate = animationRate;
+    m_AnimationRateReceived = true;
+}
+
+void 
+SignalSink::batteryBarValueReceived (
+        int barValue)
+{
+    SYS_DEBUG ("*** barValue = %d", barValue);
+    m_BarValue = barValue;
+    m_BarValueReceived = true;
+}
+
+void
+SignalSink::PSMValueReceived (
+        bool PSMValue)
+{
+    SYS_DEBUG ("*** PSMValue = %s", SYS_BOOL(PSMValue));
+    m_PSMValue = PSMValue;
+    m_PSMValueReceived = true;
+}
+
+/******************************************************************************
+ * Stubbing MGConfItem class.
+ */
+
+// The GConf key and value for the PSMAuto settings (I guess this states if the
+// device whould or should not go automatically into the PSM mode.
+static const char *psmAutoKey =
+    "/system/osso/dsm/energymanagement/enable_power_saving";
+static bool psmAutoValue = false;
+
+
+static QString lastGConfKey;
+QVariant GconfItemSet;
+
+enum _testCase {
     CASE_BOOL,
     CASE_STRINGLIST
 } testCase;
 
-QVariant MGConfItem::value () const
+void
+MGConfItem::set (
+        const QVariant &val)
 {
-    switch (testCase)
-    {
+    SYS_DEBUG ("*** key = %s", SYS_STR(key()));
+    lastGConfKey = key();
+
+    if (key() == psmAutoKey) {
+        psmAutoValue = val.toBool();
+    }
+
+    GconfItemSet = val;
+}
+
+QVariant 
+MGConfItem::value () const
+{
+    SYS_DEBUG ("*** key = %s", SYS_STR(key()));
+    lastGConfKey = key();
+    
+    if (key() == psmAutoKey) {
+        return QVariant (psmAutoValue);
+    }
+
+    switch (testCase) {
         case CASE_BOOL:
             return QVariant (true);
             break;
@@ -60,35 +230,63 @@ QVariant MGConfItem::value () const
     return QVariant ();
 }
 
+/******************************************************************************
+ * Ut_BatteryBusinessLogic implements the unit test.
+ */
+
 /*
  * These are run before and after every test case
  */
 void Ut_BatteryBusinessLogic::init ()
 {
-    /* Reset and set default return values to QmDeviceMode stub */
-    gQmDeviceModeStub->stubReset ();
-    gQmDeviceModeStub->stubSetReturnValue<int> ("getPSMBatteryMode", 10);
-    gQmDeviceModeStub->stubSetReturnValue<Maemo::QmDeviceMode::PSMState> (
-        "getPSMState", Maemo::QmDeviceMode::PSMStateOff);
-    /* Reset and set default return values to QmBattery stub */
-    gQmBatteryStub->stubReset ();
-    gQmBatteryStub->stubSetReturnValue<Maemo::QmBattery::ChargerType> (
-        "getChargerType", Maemo::QmBattery::None);
-    gQmBatteryStub->stubSetReturnValue<Maemo::QmBattery::ChargingState> (
-        "getChargingState", Maemo::QmBattery::StateNotCharging);
-    gQmBatteryStub->stubSetReturnValue<Maemo::QmBattery::BatteryState> (
-        "getBatteryState", Maemo::QmBattery::StateOK);
-    gQmBatteryStub->stubSetReturnValue<int> ("getRemainingTalkTime", 120);
-    gQmBatteryStub->stubSetReturnValue<int> ("getRemainingIdleTime", 240);
-    gQmBatteryStub->stubSetReturnValue<int> ("getRemainingCapacityPct", 44);
-    gQmBatteryStub->stubSetReturnValue<int> ("getMaxBars", 10);
+    bool connectSuccess;
+   
+    SYS_DEBUG ("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    SYS_DEBUG ("+++ Initializing test +++++++++++++++++++++++++++++++++++++");
+    SYS_DEBUG ("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    /*
+     * Creating the new businesslogic.
+     */
+    m_Logic = new BatteryBusinessLogic (this);
 
-    m_logic = new BatteryBusinessLogic;
+    /*
+     * Conencting to its signals.
+     */
+    connectSuccess = connect (
+            m_Logic, SIGNAL (remainingTimeValuesChanged (QStringList)),
+            &m_SignalSink, SLOT (remainingTimeValuesChanged (QStringList)));
+    QVERIFY (connectSuccess);
+    
+    connectSuccess = connect (
+            m_Logic, SIGNAL (batteryCharging (int)),
+            &m_SignalSink, SLOT (batteryCharging (int)));
+    QVERIFY (connectSuccess);
+    
+    connectSuccess = connect (
+            m_Logic, SIGNAL (batteryBarValueReceived(int)),
+            &m_SignalSink, SLOT (batteryBarValueReceived(int)));
+    QVERIFY (connectSuccess);
+    
+    connectSuccess = connect (
+            m_Logic, SIGNAL (PSMValueReceived(bool)),
+            &m_SignalSink, SLOT (PSMValueReceived(bool)));
+    QVERIFY (connectSuccess);
+
+    /*
+     * Now that we connected the signals we can initialize the whole
+     * businesslogic.
+     */
+    QVERIFY (!m_Logic->m_initialized);
+    m_Logic->requestValues();
+    QVERIFY (m_Logic->m_initialized);
+    // One more time to check if it causes some problems...
+    m_Logic->requestValues();
+    QVERIFY (m_Logic->m_initialized);
 }
 
 void Ut_BatteryBusinessLogic::cleanup ()
 {
-    delete m_logic;
+    delete m_Logic;
 }
 
 /*
@@ -103,271 +301,177 @@ Ut_BatteryBusinessLogic::cleanupTestCase ()
 {
 }
 
-void
-Ut_BatteryBusinessLogic::testRequestValues ()
-{
-    QSignalSpy sig_charging (m_logic, SIGNAL (batteryCharging (int)));
-    QSignalSpy sig_timevals (m_logic, SIGNAL (remainingTimeValuesChanged (QStringList)));
-    QSignalSpy sig_battbars (m_logic, SIGNAL (batteryBarValueReceived (int)));
-    QSignalSpy sig_psmvalue (m_logic, SIGNAL (PSMValueReceived (bool)));
-
-    QList<QVariant> arguments;
-
-    m_logic->requestValues ();
-
-    /*
-     * Wait for a little... [signals needs some time...]
-     */
-    QTest::qWait (100);
-
-    /* check for "batteryCharging (0)" */
-    QVERIFY (sig_charging.count () > 0);
-    arguments = sig_charging.takeFirst ();
-    QCOMPARE (arguments.at (0).toInt (), 0);
-
-    /* check for remainingTimeValuesChanged ("100", "200") */
-    QVERIFY (sig_timevals.count () > 0);
-    arguments = sig_timevals.takeFirst ();
-    QStringList values = arguments.at (0).toStringList ();
-
-    QCOMPARE (values.at (0), QString ("2")); /* 120 secs */
-    QCOMPARE (values.at (1), QString ("4")); /* 240 secs */
-
-    /* check for batteryBarValueReceived (X?) */
-    QVERIFY (sig_battbars.count () > 0);
-    arguments = sig_battbars.takeFirst ();
-    QCOMPARE (arguments.at (0).toInt (),
-              m_logic->batteryBarValue (44));
-
-    QVERIFY (sig_psmvalue.count () > 0);
-    arguments = sig_psmvalue.takeFirst ();
-    QCOMPARE (arguments.at (0).toBool (), false);
-
-    /* call requestValues () again... should not do anything... */
-    sig_psmvalue.clear ();
-    m_logic->requestValues ();
-
-    QTest::qWait (10);
-
-    QVERIFY (sig_psmvalue.count () == 0);
-}
-
-void
-Ut_BatteryBusinessLogic::testPSMThresholdValue ()
-{
-    /* Test the getter function first */
-    gQmDeviceModeStub->stubSetReturnValue<int> ("getPSMBatteryMode", 10);
-    QCOMPARE (m_logic->PSMThresholdValue (), 10);
-
-    /* Test the setter function */
-    m_logic->setPSMThresholdValue (40);
-    QCOMPARE (gQmDeviceModeStub->stubCallCount ("setPSMBatteryMode"), 1);
-    QCOMPARE (gQmDeviceModeStub->stubLastCallTo (
-                "setPSMBatteryMode").parameter<int> (0), 40);
-
-    /* Test the GConf reader function */
-    testCase = CASE_STRINGLIST;
-    QStringList result = m_logic->PSMThresholdValues ();
-    QCOMPARE (result.at (0), QString ("10"));
-    QCOMPARE (result.at (1), QString ("20"));
-    QCOMPARE (result.at (2), QString ("30"));
-}
-
-void
-Ut_BatteryBusinessLogic::testPSMValue ()
-{
-    QSignalSpy sig_psmvalue (m_logic, SIGNAL (PSMValueReceived (bool)));
-
-    m_logic->setPSMValue (true);
-    QCOMPARE (gQmDeviceModeStub->stubCallCount ("setPSMState"), 1);
-    QCOMPARE (gQmDeviceModeStub->stubLastParameters<Maemo::QmDeviceMode::PSMState> (0),
-              Maemo::QmDeviceMode::PSMStateOn);
-    /* tests whether PSMValueReceived signal emitted after a succesfully
-     * mode change [stub always succeed]... */
-    QTest::qWait (10);
-    QCOMPARE (sig_psmvalue.count (), 1);
-    QCOMPARE (sig_psmvalue.takeFirst ().at (0).toBool (), true);
-    sig_psmvalue.clear ();
-
-    m_logic->setPSMValue (false);
-    QCOMPARE (gQmDeviceModeStub->stubCallCount ("setPSMState"), 2);
-    QCOMPARE (gQmDeviceModeStub->stubLastParameters<Maemo::QmDeviceMode::PSMState> (0),
-              Maemo::QmDeviceMode::PSMStateOff);
-    /* tests whether PSMValueReceived signal emitted after a succesfully
-     * mode change [stub always succeed]... */
-    QTest::qWait (10);
-    QCOMPARE (sig_psmvalue.count (), 1);
-    QCOMPARE (sig_psmvalue.takeFirst ().at (0).toBool (), false);
-    sig_psmvalue.clear ();
-
-    /* test the slot of qmdevicemode signal... */
-    m_logic->PSMStateChanged (Maemo::QmDeviceMode::PSMStateOn);
-    QTest::qWait (10);
-    QCOMPARE (sig_psmvalue.count (), 1);
-    QCOMPARE (sig_psmvalue.takeFirst ().at (0).toBool (), true);
-}
-
-void
+/*!
+ * Reads and sets the PSMAuto value in the simulated GConf database.
+ */
+void 
 Ut_BatteryBusinessLogic::testPSMAutoValue ()
 {
-    m_logic->setPSMAutoValue (true);
-    QCOMPARE (GconfItemSet, QVariant (true));
+    bool value;
+    bool newValue;
 
-    m_logic->setPSMAutoValue (false);
-    QCOMPARE (GconfItemSet, QVariant (false));
+    value = m_Logic->PSMAutoValue ();
+    QCOMPARE (value, psmAutoValue);
+    QVERIFY  (lastGConfKey == psmAutoKey);
 
-    testCase = CASE_BOOL;
-    QCOMPARE (m_logic->PSMAutoValue (), true);
+    newValue = !value;
+    m_Logic->setPSMAutoValue (newValue);
+    QCOMPARE (psmAutoValue, newValue);
+    QVERIFY  (lastGConfKey == psmAutoKey);
 }
 
-void
-Ut_BatteryBusinessLogic::testRemainingTimeVals ()
+/*!
+ * Turns on and off the power save mode then checks if the businesslogic set the
+ * state in the QmDeviceMode stub and sent a signal about the change.
+ */
+void 
+Ut_BatteryBusinessLogic::testPSMValue ()
 {
-    QSignalSpy sig_timevals (m_logic, SIGNAL (remainingTimeValuesChanged (QStringList)));
+    bool newValue;
+    SYS_DEBUG ("");
+    
+    newValue = true;
+    m_SignalSink.reset();
+    m_Logic->setPSMValue (newValue);
+    QVERIFY (m_Logic->m_devicemode->getPSMState() == QmDeviceMode::PSMStateOn);
+    QVERIFY (m_SignalSink.m_PSMValueReceived);
+    QVERIFY (m_SignalSink.m_PSMValue == newValue);
 
-    /* Charging */
-    gQmBatteryStub->stubSetReturnValue<Maemo::QmBattery::ChargingState> (
-        "getChargingState", Maemo::QmBattery::StateCharging);
-    m_logic->remainingTimeValuesRequired ();
+    newValue = false;
+    m_SignalSink.reset();
+    m_Logic->setPSMValue (newValue);
+    QVERIFY (m_Logic->m_devicemode->getPSMState() == QmDeviceMode::PSMStateOff);
+    QVERIFY (m_SignalSink.m_PSMValueReceived);
+    QVERIFY (m_SignalSink.m_PSMValue == newValue);
 
-    QCOMPARE (sig_timevals.count (), 1);
-    QCOMPARE (sig_timevals.takeFirst (). at (0).toStringList (). at (0),
-              qtTrId ("qtn_ener_charging"));
-
-    sig_timevals.clear ();
-
-    /* Not charging: power-save */
-    gQmBatteryStub->stubSetReturnValue<Maemo::QmBattery::ChargingState> (
-        "getChargingState", Maemo::QmBattery::StateNotCharging);
-    gQmDeviceModeStub->stubSetReturnValue<Maemo::QmDeviceMode::PSMState> (
-        "getPSMState", Maemo::QmDeviceMode::PSMStateOn);
-
-    m_logic->remainingTimeValuesRequired ();
-
-    QCOMPARE (sig_timevals.count (), 1);
-    QCOMPARE (gQmBatteryStub->stubLastCall ().parameter
-               <Maemo::QmBattery::RemainingTimeMode> (0),
-              Maemo::QmBattery::PowersaveMode);
-
-    sig_timevals.clear ();
-
-    /* Not charging, and not power-save */
-    gQmBatteryStub->stubSetReturnValue<Maemo::QmBattery::ChargingState> (
-        "getChargingState", Maemo::QmBattery::StateNotCharging);
-    gQmDeviceModeStub->stubSetReturnValue<Maemo::QmDeviceMode::PSMState> (
-        "getPSMState", Maemo::QmDeviceMode::PSMStateOff);
-
-    m_logic->remainingTimeValuesRequired ();
-
-    QCOMPARE (sig_timevals.count (), 1);
-    QCOMPARE (gQmBatteryStub->stubLastCall ().parameter
-               <Maemo::QmBattery::RemainingTimeMode> (0),
-              Maemo::QmBattery::NormalMode);
 }
 
-void
-Ut_BatteryBusinessLogic::testChargingStateChanged ()
+/*!
+ * This test will check that when the device changes the power save mode
+ * spontaneously (so that the change is not initiated by the
+ * BatteryBusinessLogic), the businesslogic will sense it and will send the
+ * proper signal.
+ */
+void 
+Ut_BatteryBusinessLogic::testSpontaneousPSMValue ()
 {
-    QSignalSpy sig_charging (m_logic, SIGNAL (batteryCharging (int)));
-
-    gQmBatteryStub->stubSetReturnValue<Maemo::QmBattery::ChargingState> (
-        "getChargingState", Maemo::QmBattery::StateCharging);
-
-    /* Charger type Wall */
-    gQmBatteryStub->stubSetReturnValue<Maemo::QmBattery::ChargerType> (
-        "getChargerType", Maemo::QmBattery::Wall);
-
-    m_logic->batteryChargerEvent (Maemo::QmBattery::Wall);
-
-    QTest::qWait (20);
-
-    QVERIFY (sig_charging.count () > 0);
-    QList<QVariant> arguments = sig_charging.takeFirst ();
-    /* wall charger -> rate = 250 msec */
-    QCOMPARE (arguments.at (0).toInt (), 250);
-
-    sig_charging.clear ();
-
-    /* Charget type USB */
-    gQmBatteryStub->stubSetReturnValue<Maemo::QmBattery::ChargerType> (
-        "getChargerType", Maemo::QmBattery::USB_500mA);
-
-    m_logic->batteryChargerEvent (Maemo::QmBattery::USB_500mA);
-
-    QTest::qWait (20);
-
-    QVERIFY (sig_charging.count () > 0);
-    arguments = sig_charging.takeFirst ();
-    /* usb charger -> rate = 500 msec */
-    QCOMPARE (arguments.at (0).toInt (), 500);
-
-    sig_charging.clear ();
-
-    /* Charging failed */
-    gQmBatteryStub->stubSetReturnValue<Maemo::QmBattery::ChargingState> (
-        "getChargingState", Maemo::QmBattery::StateChargingFailed);
-    gQmBatteryStub->stubSetReturnValue<Maemo::QmBattery::ChargerType> (
-        "getChargerType", Maemo::QmBattery::USB_500mA);
-
-    m_logic->batteryChargerEvent (Maemo::QmBattery::USB_500mA);
-
-    QTest::qWait (20);
-
-    QVERIFY (sig_charging.count () > 0);
-    arguments = sig_charging.takeFirst ();
-    /* charging failed -> rate = 0 [no animation] */
-    QCOMPARE (arguments.at (0).toInt (), 0);
-
+    /*
+     * So we know we start from this state.
+     */
+    m_Logic->m_devicemode->setPSMState (QmDeviceMode::PSMStateOff);
+    
+    m_SignalSink.reset();
+    m_Logic->m_devicemode->setPSMState (QmDeviceMode::PSMStateOn);
+    QVERIFY (m_SignalSink.m_PSMValueReceived);
+    QVERIFY (m_SignalSink.m_PSMValue == true);
+    
+    m_SignalSink.reset();
+    m_Logic->m_devicemode->setPSMState (QmDeviceMode::PSMStateOff);
+    QVERIFY (m_SignalSink.m_PSMValueReceived);
+    QVERIFY (m_SignalSink.m_PSMValue == false);
 }
 
-void
-Ut_BatteryBusinessLogic::testRemCapacityChange ()
+/*!
+ * Testing connecting/disconnecting chargers. Please note that this test will
+ * not modify the setChargingState, it will remain QmBattery::StateCharging, and
+ * we actually test if our businesslogic can tolerate this kind of behaviour.
+ */
+void 
+Ut_BatteryBusinessLogic::testSpontaneousChargerEvent ()
 {
-    QSignalSpy sig_battbar (m_logic, SIGNAL (batteryBarValueReceived (int)));
-    QSignalSpy sig_remtime (m_logic, SIGNAL (remainingTimeValuesChanged (QStringList)));
+    // Just to be sure we are in a known state.
+    m_Logic->m_battery->connectCharger (QmBattery::None);
+    m_Logic->m_battery->modifyBatteryState (QmBattery::StateOK, 50);
+    m_Logic->m_battery->setChargingState (QmBattery::StateCharging);
 
-    m_logic->batteryRemCapacityChanged (0, 0);
 
-    QTest::qWait (20);
+    SYS_DEBUG ("**********************************************************");
+    SYS_DEBUG ("*** Connecting 500mA charger                           ***");
+    SYS_DEBUG ("**********************************************************");
+    m_SignalSink.reset();
+    m_Logic->m_battery->connectCharger (QmBattery::USB_500mA);
 
-    QCOMPARE (sig_remtime.count (), 1);
-    QCOMPARE (sig_battbar.count (), 1);
+    m_SignalSink.print();
+    QVERIFY (m_SignalSink.chargingWithAnimation(500));
+    QVERIFY (m_SignalSink.hasBarValue(5));
+    QVERIFY (m_SignalSink.hasRemainingTimes(true));
+    
 
-    QCOMPARE (sig_battbar.takeFirst ().at (0).toInt (),
-              m_logic->batteryBarValue (0));
+    SYS_DEBUG ("**********************************************************");
+    SYS_DEBUG ("*** Disconnecting charger                              ***");
+    SYS_DEBUG ("**********************************************************");
+    m_SignalSink.reset();
+    m_Logic->m_battery->connectCharger (QmBattery::None);
+
+    m_SignalSink.print();
+    QVERIFY (m_SignalSink.notCharging());
+    QVERIFY (m_SignalSink.hasRemainingTimes(false));
+    
+
+    SYS_DEBUG ("**********************************************************");
+    SYS_DEBUG ("*** Connecting wall charger                            ***");
+    SYS_DEBUG ("**********************************************************");
+    m_SignalSink.reset();
+    m_Logic->m_battery->connectCharger (QmBattery::Wall);
+
+    m_SignalSink.print();
+    QVERIFY (m_SignalSink.chargingWithAnimation(250));
+    QVERIFY (m_SignalSink.hasBarValue(5));
+    QVERIFY (m_SignalSink.hasRemainingTimes(true));
+    
+    
+    SYS_DEBUG ("**********************************************************");
+    SYS_DEBUG ("*** Disconnecting charger                              ***");
+    SYS_DEBUG ("**********************************************************");
+    m_SignalSink.reset();
+    m_Logic->m_battery->connectCharger (QmBattery::None);
+
+    m_SignalSink.print();
+    QVERIFY (m_SignalSink.notCharging());
+    QVERIFY (m_SignalSink.hasRemainingTimes(false));
 }
 
-void
-Ut_BatteryBusinessLogic::testBatteryBarValues ()
+/*!
+ * This test will check what happens when the charger is connected and the
+ * battery gets fully charged, then it looses the fully charged state.
+ * Plase note that the chargingstate will not change. The test will check if the
+ * businesslogic can tolerate such a behaviour.
+ */
+void 
+Ut_BatteryBusinessLogic::testSpontaneousChargingComplete ()
 {
-    /* Test invalid values: */
-    QVERIFY (m_logic->batteryBarValue (111) == 2);
+    // Just to be sure we are in a known state. We are charging...
+    m_Logic->m_battery->modifyBatteryState (QmBattery::StateOK, 50);
+    m_Logic->m_battery->connectCharger (QmBattery::Wall);
+    m_Logic->m_battery->setChargingState (QmBattery::StateCharging);
 
-    gQmBatteryStub->stubSetReturnValue<int> ("getRemainingCapacityPct", -1);
-    QVERIFY (m_logic->batteryBarValue (-1) == 0);
-    QVERIFY (gQmBatteryStub->stubLastCall ().name () == "getRemainingCapacityPct");
+    /*
+     * Checking NB#172929 -  Battery applet in Settings->Device system->Battery 
+     * should stop animating once battery is full
+     */
+    SYS_DEBUG ("**********************************************************");
+    SYS_DEBUG ("*** The battery got charged.                           ***");
+    SYS_DEBUG ("**********************************************************");
+    m_SignalSink.reset();
+    m_Logic->m_battery->modifyBatteryState (QmBattery::StateFull, 98);
+    
+    m_SignalSink.print();
+    QVERIFY (m_SignalSink.notCharging());
+    QVERIFY (m_SignalSink.hasRemainingTimes(false));
+    QVERIFY (m_SignalSink.hasBarValue(9));
 
-    /* Test percentage values in valid range
-       >= 84 */
-    QVERIFY (m_logic->batteryBarValue (99) == 9);
-    /* 73 <= value < 84 */
-    QVERIFY (m_logic->batteryBarValue (77) == 8);
-    /* 62 <= value < 73 */
-    QVERIFY (m_logic->batteryBarValue (66) == 7);
-    /* 51 <= value < 62 */
-    QVERIFY (m_logic->batteryBarValue (55) == 6);
-    /* 39 <= value < 51 */
-    QVERIFY (m_logic->batteryBarValue (44) == 5);
-    /* 28 <= value < 39 */
-    QVERIFY (m_logic->batteryBarValue (33) == 4);
-    /* 17 <= value < 28 */
-    QVERIFY (m_logic->batteryBarValue (22) == 3);
-    /*  5 <= value < 17 */
-    QVERIFY (m_logic->batteryBarValue (11) == 2);
-    /*  0 <  value < 5 */
-    QVERIFY (m_logic->batteryBarValue (3)  == 1);
-    /* 0 */
-    QVERIFY (m_logic->batteryBarValue (0)  == 0);
+    SYS_DEBUG ("**********************************************************");
+    SYS_DEBUG ("*** The battery is loosing charge.                     ***");
+    SYS_DEBUG ("**********************************************************");
+    m_SignalSink.reset();
+    m_Logic->m_battery->modifyBatteryState (QmBattery::StateOK, 4);
+    
+    m_SignalSink.print();
+    QVERIFY (m_SignalSink.chargingWithAnimation(250));
+    QVERIFY (m_SignalSink.hasBarValue(1));
+    QVERIFY (m_SignalSink.hasRemainingTimes(true));
 }
+
+
 
 QTEST_MAIN (Ut_BatteryBusinessLogic);
