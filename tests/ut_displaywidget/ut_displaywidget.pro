@@ -21,19 +21,21 @@ QT += \
 
 TEMPLATE = app
 DEFINES += UNIT_TEST
-TARGET = ut_displaybusinesslogic
+TARGET = ut_displaywidget
 target.path = /usr/lib/systemui-applets-tests
 
 HEADERS += \
     $$STUB_PREFIX/qmdisplaystate.h \
     ../../src/debug.h \
-    ut_displaybusinesslogic.h \
-    $$SRC_PREFIX/displaybusinesslogic.h
+    ut_displaywidget.h \
+    $$SRC_PREFIX/displaybusinesslogic.h \
+    $$SRC_PREFIX/displaywidget.h
 
 SOURCES += \
     $$STUB_PREFIX/qmdisplaystate.cpp \
     ../../src/debug.cpp \
-    ut_displaybusinesslogic.cpp \
+    ut_displaywidget.cpp \
     $$SRC_PREFIX/displaybusinesslogic.cpp
+    $$SRC_PREFIX/displaywidget.cpp
 
 INSTALLS += target
