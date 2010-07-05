@@ -7,11 +7,30 @@
 #include "themedescriptor.h"
 
 #include <MApplication>
+#include <MDialog>
 #include <MTheme>
+
+#include <QModelIndex>
+#include <QVariant>
 
 #define DEBUG
 #include "../../src/debug.h"
 
+/******************************************************************************
+ * Stubbing the MDialog, so the UI will not be really shown.
+ */
+QString lastDialogTitle;
+
+void
+MDialog::appear (
+        MSceneWindow::DeletionPolicy policy)
+{
+    SYS_DEBUG ("----------------------------------------------------------");
+    SYS_DEBUG ("*** this    = %p", this);
+    SYS_DEBUG ("*** title   = %s", SYS_STR(title()));
+
+    lastDialogTitle = title();
+}
 /******************************************************************************
  * Ut_ThemeWidget implementation. 
  */
@@ -33,17 +52,60 @@ void
 Ut_ThemeWidget::initTestCase()
 {
     m_App = new MApplication (argc, &app_name);
-    /*
-     * FIXME: First I have to stub the themedescriptor somehow.
-     */
+    m_ThemeBusinessLogic = new ThemeBusinessLogic;
+    m_ThemeWidget = new ThemeWidget (m_ThemeBusinessLogic);
 }
 
 void 
 Ut_ThemeWidget::cleanupTestCase()
 {
+    delete m_ThemeWidget;
+    delete m_ThemeBusinessLogic;
+
     m_App->deleteLater ();
 }
 
+/*!
+ * This test will call the themeActivated() method of the widget with each and
+ * every one of the rows found in the model. Then the method will check that the
+ * widget shown a dialog. This test is using a simple MDialog stub found in this
+ * source file.
+ */
+void 
+Ut_ThemeWidget::testThemeActivated ()
+{
+    QModelIndex      index;
+    QVariant         data;
+    QStringList      stringList;
+    QString          name;
+    int              rows;
+
+    rows = m_ThemeWidget->m_ThemeListModel->rowCount (index);
+
+    SYS_DEBUG ("*** rows    = %d", rows);
+    for (int n = 0; n < rows; ++n) {
+        index = m_ThemeWidget->m_ThemeListModel->index (n, 0);
+        data = index.data();
+        stringList = data.value<QStringList>();
+
+        QVERIFY (stringList.size() >= 2);
+        name = stringList[1];
+        SYS_DEBUG ("*** name = %s", SYS_STR(name));
+        #ifdef LOTDEBUG
+        SYS_DEBUG ("--------------------------------------------------");
+        foreach (QString sval, stringList) {
+            SYS_DEBUG ("*** sval = %s", SYS_STR(sval));
+        }
+        #endif
+
+        QVERIFY (index.isValid ());
+        QVERIFY (index.column() == 0);
+        QVERIFY (index.row() == n);
+
+        m_ThemeWidget->themeActivated (index);
+        QVERIFY (lastDialogTitle == name);
+    }
+}
 
 QTEST_APPLESS_MAIN(Ut_ThemeWidget)
 

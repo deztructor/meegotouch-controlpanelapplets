@@ -13,6 +13,7 @@
 #include <MApplication>
 #include <MApplicationWindow>
 
+#define DEBUG
 #include "../debug.h"
 
 ThemeWidget::ThemeWidget (
@@ -92,9 +93,7 @@ ThemeWidget::readLocalThemes ()
 void 
 ThemeWidget::themeActivated (const QModelIndex &index)
 {
-    qDebug() << "YYY";
     ThemeDialog *dialog;
-    SYS_DEBUG ("Theme '%s' activated", SYS_STR(themeDescr->name()));
 
     QStringList row = m_ThemeListModel->data(index).value<QStringList>();
     QString codeName = row[ThemeColumnCodeName];
@@ -107,7 +106,7 @@ ThemeWidget::themeActivated (const QModelIndex &index)
     }
 
     if (descr == 0) {
-        SYS_CRITICAL("codename not found: %s", codename.data());
+        SYS_CRITICAL("codename not found: %s", SYS_STR(codeName));
         return;
     }
 

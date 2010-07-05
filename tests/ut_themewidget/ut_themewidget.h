@@ -6,10 +6,13 @@
 
 #include <QtTest/QtTest>
 #include <QObject>
+#include <QPointer>
+#include "themebusinesslogic.h"
+#include "themewidget.h"
 
 class MApplication;
 class ThemeWidget;
-class ThemeBusinessLogic;
+
 
 class Ut_ThemeWidget : public QObject 
 {
@@ -21,9 +24,11 @@ private slots:
     void initTestCase ();
     void cleanupTestCase ();
 
+    void testThemeActivated ();
 private:
     MApplication                 *m_App;
-    ThemeBusinessLogic          *m_Api;
+    QPointer<ThemeBusinessLogic>  m_ThemeBusinessLogic;
+    QPointer<ThemeWidget>         m_ThemeWidget;
 };
 
 #endif

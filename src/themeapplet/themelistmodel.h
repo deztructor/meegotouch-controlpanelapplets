@@ -6,6 +6,9 @@
 
 class ThemeDescriptor;
 
+/*
+ * FIXME: This swhould be inside the class namespace.
+ */
 enum ThemeColumnIndex {
     ThemeColumnCodeName = 0,
     ThemeColumnName,
@@ -27,6 +30,10 @@ class ThemeListModel : public QAbstractListModel
         QModelIndex indexOfCodeName(const QString &codeName) const;
 
     private:
+	/*
+	 * FIXME: This model should hold theme descriptors instead of just
+	 * strings. This is not robust enough!
+	 */
         QList<QStringList> m_Rows;
 };
 

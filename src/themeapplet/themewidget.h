@@ -34,10 +34,13 @@ private:
     void readLocalThemes ();
 
     QPointer<ThemeBusinessLogic>  m_ThemeBusinessLogic;
-    ThemeListModel *m_ThemeListModel;
-    QList<ThemeDescriptor *> m_ThemeDescList;
-    MList *m_List;
-    MContentItem *m_OviItem;
+    ThemeListModel               *m_ThemeListModel;
+    QList<ThemeDescriptor *>      m_ThemeDescList;
+    MList                        *m_List;
+    MContentItem                 *m_OviItem;
+    #ifdef UNIT_TEST
+    friend class Ut_ThemeWidget;
+    #endif
 };
 
 #endif

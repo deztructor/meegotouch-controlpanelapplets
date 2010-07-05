@@ -1,5 +1,7 @@
 #include "themelistmodel.h"
 #include "themedescriptor.h"
+
+#define DEBUG
 #include "../debug.h"
 
 ThemeListModel::ThemeListModel(QObject *parent)
@@ -14,8 +16,14 @@ ThemeListModel::rowCount(const QModelIndex &parent) const
     return m_Rows.size();
 }
 
+/*!
+ * FIXME: It is unclear why do we decided to return an unintialized QVariant
+ * when the role is not Qt::DisplayRole!
+ */
 QVariant
-ThemeListModel::data(const QModelIndex &index, int role) const
+ThemeListModel::data (
+		const QModelIndex &index, 
+		int                role) const
 {    
     if (role == Qt::DisplayRole) {
         QStringList row = m_Rows[index.row()];
