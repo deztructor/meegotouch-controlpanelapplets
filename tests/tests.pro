@@ -7,7 +7,7 @@ contains(BUILD_FEATURES,coverage) {
 	#
 	# Sometimes it is good to disable all but one unit tests.
 	#
-	#SUBDIRS =  ut_themewidget
+	#SUBDIRS =  ut_themedialog
 	SUBDIRS =  $$system(ls -1d ut_theme*/)
 	#SUBDIRS = $$system(./unit_tests.sh)
 } else {

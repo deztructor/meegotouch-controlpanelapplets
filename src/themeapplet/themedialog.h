@@ -10,6 +10,7 @@
 class ThemeBusinessLogic;
 class ThemeDescriptor;
 class QString;
+class MButton;
 
 class ThemeDialog: public MDialog
 {
@@ -29,6 +30,11 @@ private slots:
 private:
     QPointer<ThemeBusinessLogic>  m_ThemeBusinessLogic;
     ThemeDescriptor              *m_ThemeDesc;
+    MButton                      *m_SelectButton;
+    MButton                      *m_CancelButton;
+    #ifdef UNIT_TEST
+    friend class Ut_ThemeDialog;
+    #endif
 };
 
 #endif
