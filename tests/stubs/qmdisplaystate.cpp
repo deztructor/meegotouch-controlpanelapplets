@@ -56,18 +56,14 @@ QmDisplayState::getMaxDisplayBrightnessValue ()
     return 10;
 }
 
+/*!
+ * The default brightnessvalue is 1, the smallest accepted value.
+ */
 int 
 QmDisplayState::getDisplayBrightnessValue()
 {
     SYS_DEBUG ("returning %d", m_DisplayBrightnessValue);
     return m_DisplayBrightnessValue;
-}
-
-int 
-QmDisplayState::getDisplayDimTimeout()
-{
-    SYS_DEBUG ("returning %d", m_DisplayDimTimeout);
-    return m_DisplayDimTimeout;
 }
 
 void
@@ -76,6 +72,13 @@ QmDisplayState::setDisplayBrightnessValue(
 {
     SYS_DEBUG ("** brightness = %d", brightness);
     m_DisplayBrightnessValue = brightness;
+}
+
+int 
+QmDisplayState::getDisplayDimTimeout()
+{
+    SYS_DEBUG ("returning %d", m_DisplayDimTimeout);
+    return m_DisplayDimTimeout;
 }
 
 void

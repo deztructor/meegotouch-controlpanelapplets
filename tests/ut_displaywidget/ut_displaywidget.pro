@@ -12,6 +12,8 @@ INCLUDEPATH = \
 CONFIG += \
 	gui \
 	meegotouch \
+	plugin \
+	duicontrolpanel \
 	silent 
 
 QT += \
@@ -35,7 +37,7 @@ SOURCES += \
     $$STUB_PREFIX/qmdisplaystate.cpp \
     ../../src/debug.cpp \
     ut_displaywidget.cpp \
-    $$SRC_PREFIX/displaybusinesslogic.cpp
+    $$SRC_PREFIX/displaybusinesslogic.cpp \
     $$SRC_PREFIX/displaywidget.cpp
 
 INSTALLS += target

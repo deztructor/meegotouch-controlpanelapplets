@@ -20,7 +20,7 @@ public:
     virtual ~DisplayBusinessLogic();
 
     QList<int> brightnessValues();
-    int selectedBrightnessValue();
+    int selectedBrightnessValueIndex ();
     QList<int> screenLightsValues();
     int selectedScreenLightsValue();
     bool blankInhibitValue();
@@ -29,7 +29,6 @@ public slots:
     void setBrightnessValue(int value);
     void setScreenLightTimeouts (int index);
     void setBlankInhibitValue(bool value);
-    //void toggleDisplay(bool toggle);
 
 private: 
     QmDisplayState *m_Display;

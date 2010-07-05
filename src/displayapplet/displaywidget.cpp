@@ -69,7 +69,7 @@ void DisplayWidget::initWidget ()
 
     m_brightness_vals = m_logic->brightnessValues ();
     m_brightnessSlider->setRange (0, m_brightness_vals.size () - 1);
-    m_brightnessSlider->setValue (m_logic->selectedBrightnessValue ());
+    m_brightnessSlider->setValue (m_logic->selectedBrightnessValueIndex ());
 
     connect (m_brightnessSlider, SIGNAL (valueChanged (int)),
              m_logic, SLOT (setBrightnessValue (int)));
@@ -115,18 +115,18 @@ void DisplayWidget::initWidget ()
     blankinhibitLayout->addItem (m_blankInhibitLabel);
 
     // Blank inhibit
-    MButton *blankInhibitButton = new MButton;
-    blankInhibitButton->setObjectName("BlankInhibitButton");
-    blankInhibitButton->setCheckable (true);
-    blankInhibitButton->setViewType (MButton::switchType);
+    m_blankInhibitButton = new MButton;
+    m_blankInhibitButton->setObjectName("BlankInhibitButton");
+    m_blankInhibitButton->setCheckable (true);
+    m_blankInhibitButton->setViewType (MButton::switchType);
 
-    blankinhibitLayout->addItem (blankInhibitButton);
-    blankinhibitLayout->setAlignment (blankInhibitButton, Qt::AlignVCenter);
+    blankinhibitLayout->addItem (m_blankInhibitButton);
+    blankinhibitLayout->setAlignment (m_blankInhibitButton, Qt::AlignVCenter);
 
-    connect (blankInhibitButton, SIGNAL (toggled (bool)),
+    connect (m_blankInhibitButton, SIGNAL (toggled (bool)),
              m_logic, SLOT (setBlankInhibitValue (bool)));
 
-    blankInhibitButton->setChecked (m_logic->blankInhibitValue ());
+    m_blankInhibitButton->setChecked (m_logic->blankInhibitValue ());
 
     displayon->setObjectName ("CommonPanel");
     displayon->setLayout (blankinhibitLayout);

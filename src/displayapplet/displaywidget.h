@@ -34,10 +34,13 @@ private:
     QList<int>              m_screenlight_vals;
     MSlider                *m_brightnessSlider;
     MContentItem           *m_screenTimeout;
-
+    MButton                *m_blankInhibitButton;
     MLabel                 *m_brightnessLabel;
     MLabel                 *m_screenlightLabel;
     MLabel                 *m_blankInhibitLabel;
+    #ifdef UNIT_TEST
+    friend class Ut_DisplayWidget;
+    #endif
 };
 
 #endif // DISPLAYWIDGET_H

@@ -3,7 +3,7 @@
 #include "displaybusinesslogic.h"
 #include <MGConfItem>
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -31,19 +31,6 @@ DisplayBusinessLogic::~DisplayBusinessLogic ()
     m_possibleDimValues = 0;
 }
 
-#if 0
-void
-DisplayBusinessLogic::toggleDisplay (
-        bool toggle)
-{
-    SYS_DEBUG ("*** toggle = %s", toggle ? "true" : "false");
-    QmDisplayState::DisplayState state = 
-        (toggle ? QmDisplayState::On : QmDisplayState::Off);
-
-    m_Display->set (state);
-}
-#endif
-
 /*!
  * Returns a list of brightness values the underlying hw system accepts.
  */
@@ -58,7 +45,7 @@ DisplayBusinessLogic::brightnessValues ()
     // QmDisplayState::setDisplayBrightnessValue accepts values 
     // between 1 and getMaxDisplayBrightnessValue()
     for (int i = 1; i <= max; ++i) {
-        SYS_DEBUG ("BrightnessValues: %d", i);
+        SYS_DEBUG ("*** BrightnessValues[%d] = %d", i - 1, i);
         values << i;
     }
 
@@ -70,14 +57,17 @@ DisplayBusinessLogic::brightnessValues ()
  * actually returns the index. FIXME: Should be checked and renamed.
  */
 int
-DisplayBusinessLogic::selectedBrightnessValue ()
+DisplayBusinessLogic::selectedBrightnessValueIndex ()
 {
     QList<int> values = brightnessValues();
+    int        index;
 
     SYS_DEBUG ("*** getDisplayBrightnessValue() = %d", 
             m_Display->getDisplayBrightnessValue());
-    int index = values.indexOf(m_Display->getDisplayBrightnessValue());
+    
+    index = values.indexOf(m_Display->getDisplayBrightnessValue());
     if (index < 0) {
+        SYS_WARNING ("Value not in available values list.");
         index = values.size() / 2;
         setBrightnessValue (values.at(index));
     }
@@ -117,6 +107,10 @@ DisplayBusinessLogic::screenLightsValues ()
     return values;
 }
 
+/*!
+ * FIXME: The name of the method should be modified: this method actually
+ * returns the index of the screen dim timeout value.
+ */
 int 
 DisplayBusinessLogic::selectedScreenLightsValue ()
 {
