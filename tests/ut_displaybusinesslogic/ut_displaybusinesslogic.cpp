@@ -90,8 +90,7 @@ void
 Ut_DisplayBusinessLogic::testGetBrightnessValues ()
 {
     QList<int> values = m_Api->brightnessValues();
-    // This is actually an index?
-    int        current = m_Api->selectedBrightnessValue();
+    int        current = m_Api->selectedBrightnessValueIndex();
     int        n = 0;
 
     QVERIFY (values.size() != 0);
@@ -162,13 +161,15 @@ Ut_DisplayBusinessLogic::testSetBrightness ()
     qDebug() << "Max brightness = " << m_MaxBrightness;
 
     m_Api->setBrightnessValue (m_MinBrightness);
-    value = m_Api->selectedBrightnessValue();
+    value = m_Api->selectedBrightnessValueIndex();
     qDebug() << "brightness = " << value;
+    // FIXME: This test is not complete!
     //QVERIFY (m_Api->selectedBrightnessValue() == m_MinBrightness);
     
     m_Api->setBrightnessValue (m_MaxBrightness);
-    value = m_Api->selectedBrightnessValue();
+    value = m_Api->selectedBrightnessValueIndex();
     qDebug() << "brightness = " << value;
+    // FIXME: This test is not complete!
     //QVERIFY (m_Api->selectedBrightnessValue() == m_MaxBrightness);
 }
 
