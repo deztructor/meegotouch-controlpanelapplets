@@ -4,6 +4,7 @@
 #include "wallpaperdescriptor.h"
 
 #include <QUrl>
+#include <QDir>
 #include <QFileInfo>
 #include <QImage>
 #include <QPixmap>
@@ -13,7 +14,7 @@
 
 #define THUMBNAIL_BG_COLOR "Red"
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 const QString dir = "";
@@ -84,10 +85,14 @@ WallpaperDescriptor::setTitle (
 QString
 WallpaperDescriptor::title () const
 {
-    if (m_Title.isEmpty())
-        return basename ();
+    QString retval;
 
-    return m_Title;
+    retval = m_Title;
+    if (retval.isEmpty())
+        retval = basename ();
+
+    SYS_DEBUG ("Returning %s", SYS_STR(retval));
+    return retval;
 }
 
 void
@@ -95,16 +100,12 @@ WallpaperDescriptor::setUrl (
         const QString &urlString)
 {
     QString  path;
-    QString  decoded;
 
     m_Url.setEncodedUrl (urlString.toAscii());
     path = m_Url.path();
-    decoded = path.toUtf8();
 
     #if 1
     SYS_DEBUG ("---------------------------------------------------");
-    qDebug() << "path = " << path;
-    SYS_DEBUG ("*** mystuff      = %s", SYS_STR(decoded));
     SYS_DEBUG ("*** urlString    = %s", SYS_STR(urlString));
     SYS_DEBUG ("*** scheme       = %s", SYS_STR(m_Url.scheme()));
     SYS_DEBUG ("*** path         = %s", SYS_STR(path));
@@ -166,13 +167,29 @@ void
 WallpaperDescriptor::cache ()
 {
     bool success;
+    #if 0
+    /*
+     * This is just a drill.
+     */
+        QDir dir ("/home/pipas/MyDocs/");
+        SYS_DEBUG ("--------------- List by Qt ----------------------");
+        foreach (QString fileName, dir.entryList (QDir::Files)) {
+            SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
+        }
+        SYS_DEBUG ("--------------- List by Shell -------------------");
+        system ("ls -lh /home/pipas/MyDocs/ | cat");
+    #endif
 
     if (m_Cached)
         return;
 
     success = m_Pixmap.load (filename());
     if (!success) {
-        SYS_WARNING ("Loading of %s has been failed.", SYS_STR(filename()));
+        QFile file (filename());
+        
+        SYS_WARNING ("Loading of %s has been failed: %m", SYS_STR(filename()));
+        SYS_WARNING ("*** exists = %s", SYS_BOOL(file.exists()));
+        
         m_Cached = false;
         return;
     }

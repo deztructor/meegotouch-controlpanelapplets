@@ -7,7 +7,7 @@
 
 #include <QTimer>
 
-#define DEBUG
+//#define DEBUG
 #include <../debug.h>
 
 /*

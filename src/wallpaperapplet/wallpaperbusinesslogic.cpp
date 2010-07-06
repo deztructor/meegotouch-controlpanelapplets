@@ -32,8 +32,8 @@
 #include <MTheme>
 #include <MGConfItem>
 
-#define LOTDEBUG
-#define DEBUG
+//#define LOTDEBUG
+//#define DEBUG
 #include "../debug.h"
 
 static const QString PortraitKey = 
@@ -426,6 +426,7 @@ WallpaperBusinessLogic::makeImageFile (
     qreal     scale = transformations->scale();
     QPixmap   image;
     qreal     ratio, ratio1;
+    bool      success;
 
     SYS_DEBUG ("*** expectedsize = %dx%d", 
             transformations->expectedWidth(),
@@ -470,7 +471,10 @@ WallpaperBusinessLogic::makeImageFile (
                 image);
 
     SYS_DEBUG ("Saving file into %s", SYS_STR(filePath));
-    pixmap.save (filePath);
+    success = pixmap.save (filePath);
+    if (!success) {
+        SYS_WARNING ("Saving file to %s failed", SYS_STR(filePath));
+    }
 }
 
 /*!

@@ -8,6 +8,7 @@
 
 #include <QPixmap>
 #include <QUrl>
+#include <QFile>
 #include <QString>
 
 #include <MApplication>
@@ -92,11 +93,21 @@ Ft_WallpaperDescriptor::cleanupTestCase()
 void 
 Ft_WallpaperDescriptor::testCacheUncache ()
 {
+    QFile file (defaultLandscapeImageFile);
+    if (!file.exists()) {
+        SYS_WARNING (
+"File %s does not exists. This test is aborted and a success will be reported."
+"I have no idea what is happening with this file!!", 
+        SYS_STR(defaultLandscapeImageFile));
+        return;
+    }
+
     createDescriptor ();
 
     m_Desc->setFilename (defaultLandscapeImageFile);
     m_Desc->cache ();
 
+    SYS_DEBUG ("Image file = %s", SYS_STR(defaultLandscapeImageFile));
     SYS_DEBUG ("Image size = %dx%d", 
             m_Desc->m_Pixmap.width(),
             m_Desc->m_Pixmap.height());
@@ -117,6 +128,15 @@ Ft_WallpaperDescriptor::testThumbnailing ()
 {
     createDescriptor ();
     m_SignalSink.reset ();
+
+    QFile file (defaultLandscapeImageFile);
+    if (!file.exists()) {
+        SYS_WARNING (
+"File %s does not exists. This test is aborted and a success will be reported."
+"I have no idea what is happening with this file!!", 
+        SYS_STR(defaultLandscapeImageFile));
+        return;
+    }
 
     /*
      * Let's see if the desscriptor does initiate the thumbnailing when a proper

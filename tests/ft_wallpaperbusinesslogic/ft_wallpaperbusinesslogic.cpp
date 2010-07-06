@@ -326,14 +326,14 @@ Ft_WallpaperBusinessLogic::testValidImages ()
     QVERIFY (!portraitFile.isEmpty());
 
     success = pixmap.load (landscapeFile);
-    QVERIFY (success);
     SYS_DEBUG ("*** landscape size = %dx%d", pixmap.width(), pixmap.height());
+    QVERIFY (success);
     QVERIFY (pixmap.width() == 864);
     QVERIFY (pixmap.height() == 480);
 
     success = pixmap.load (portraitFile);
+    SYS_DEBUG ("*** portrait size = %dx%d", pixmap.width(), pixmap.height());
     QVERIFY (success);
-    SYS_DEBUG ("*** landscape size = %dx%d", pixmap.width(), pixmap.height());
     QVERIFY (pixmap.width() == 480);
     QVERIFY (pixmap.height() == 864);
 

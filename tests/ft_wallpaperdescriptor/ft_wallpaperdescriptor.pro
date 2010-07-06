@@ -35,7 +35,6 @@ CONFIG += \
 	silent 
 
 HEADERS += \
-    $$STUB_PREFIX/thumbnailerstub.h \
     ../../src/debug.h \
     ft_wallpaperdescriptor.h \
     $$SRC_PREFIX/wallpaperapplet.h \
@@ -51,7 +50,6 @@ HEADERS += \
     $$SRC_PREFIX/wallpaperwidget.h
 
 SOURCES += \
-    $$STUB_PREFIX/thumbnailerstub.cpp \
     ../../src/debug.cpp \
     ft_wallpaperdescriptor.cpp \
     $$SRC_PREFIX/wallpaperapplet.cpp \
