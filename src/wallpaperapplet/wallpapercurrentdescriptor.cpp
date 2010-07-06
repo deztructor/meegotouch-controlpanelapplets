@@ -285,10 +285,20 @@ WallpaperCurrentDescriptor::suggestedOutputFilename (
 {
     QFileInfo fileInfo (originalImageFile(orientation));
     QString   retval;
+    QString   outputExtension;
 
     if (ver < 0)
         ver = version();
 
+    /*
+     * There are some extensions we can not support for writing.
+     */
+    outputExtension = extension();
+    if (QString::compare(outputExtension, "gif", Qt::CaseInsensitive) == 0 ||
+        QString::compare(outputExtension, "bpm", Qt::CaseInsensitive) == 0 ||
+        QString::compare(outputExtension, "pgm", Qt::CaseInsensitive) == 0)
+        outputExtension = "jpeg";
+    
     switch (orientation) {
         case M::Landscape:
             retval = "-landscape.";
@@ -300,7 +310,7 @@ WallpaperCurrentDescriptor::suggestedOutputFilename (
     }
 
     retval = fileInfo.baseName() + retval + 
-        QString::number(ver) + "." + extension();
+        QString::number(ver) + "." + outputExtension;
 
     return retval;
 }

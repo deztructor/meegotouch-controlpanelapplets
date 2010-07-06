@@ -95,10 +95,16 @@ WallpaperDescriptor::setUrl (
         const QString &urlString)
 {
     QString  path;
+    QString  decoded;
 
-    m_Url.setUrl (urlString);
-    path = m_Url.encodedPath ();
-    #if 0
+    m_Url.setEncodedUrl (urlString.toAscii());
+    path = m_Url.path();
+    decoded = path.toUtf8();
+
+    #if 1
+    SYS_DEBUG ("---------------------------------------------------");
+    qDebug() << "path = " << path;
+    SYS_DEBUG ("*** mystuff      = %s", SYS_STR(decoded));
     SYS_DEBUG ("*** urlString    = %s", SYS_STR(urlString));
     SYS_DEBUG ("*** scheme       = %s", SYS_STR(m_Url.scheme()));
     SYS_DEBUG ("*** path         = %s", SYS_STR(path));
@@ -406,9 +412,19 @@ WallpaperDescriptor::suggestedOutputFilename (
         int            ver) const
 {
     QString retval;
+    QString outputExtension;
 
     if (ver < 0)
         ver = version ();
+
+    /*
+     * There are some extensions we can not support for writing.
+     */
+    outputExtension = extension();
+    if (QString::compare(outputExtension, "gif", Qt::CaseInsensitive) == 0 ||
+        QString::compare(outputExtension, "bpm", Qt::CaseInsensitive) == 0 ||
+        QString::compare(outputExtension, "pgm", Qt::CaseInsensitive) == 0)
+        outputExtension = "jpeg";
 
     switch (orientation) {
         case M::Landscape:
@@ -421,7 +437,7 @@ WallpaperDescriptor::suggestedOutputFilename (
     }
 
     retval = basename() + retval + 
-        QString::number(ver) + "." + extension();
+        QString::number(ver) + "." + outputExtension;
 
     return retval;
 }
