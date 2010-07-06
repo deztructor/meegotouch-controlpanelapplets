@@ -102,7 +102,7 @@ QmBattery::modifyBatteryState (
         BatteryState BatteryState, 
         int          percentage)
 {
-    SYS_DEBUG ("Chaging batteryState %s -> %s",
+    SYS_DEBUG ("Changing batteryState %s -> %s",
             SYS_STR(BatteryStateName(m_BatteryState)),
             SYS_STR(BatteryStateName(BatteryState)));
     SYS_DEBUG ("Changing percentage  %d%% -> %d%%", m_Percentage, percentage);
@@ -126,7 +126,7 @@ void
 QmBattery::setChargingState (
         ChargingState    newState)
 {
-    SYS_DEBUG ("Chaging batteryState %s -> %s",
+    SYS_DEBUG ("Changing chargingState %s -> %s",
             SYS_STR(ChargingStateName(m_ChargingState)),
             SYS_STR(ChargingStateName(newState)));
 

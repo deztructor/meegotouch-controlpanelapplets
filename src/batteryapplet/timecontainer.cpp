@@ -37,7 +37,9 @@ TimeContainer::setText (
     m_TextLabel->setText (text);
 }
 
-void TimeContainer::updateTimeLabel (const QString &value)
+void 
+TimeContainer::updateTimeLabel (
+        const QString &value)
 {
     if (m_TimeLabel == NULL)
         return;

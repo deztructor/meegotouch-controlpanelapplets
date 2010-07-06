@@ -1,6 +1,8 @@
 systemui-applets (0.14.11~1) harmattan; urgency=low
 
-  * [NEW VERSION]
+  [ Laszlo Pere ]
+  * Showing the remaining times as charging until the charging state is not
+    changed (but still not animating if the battery is full).
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 05 Jul 2010 11:11:11 +0200
 

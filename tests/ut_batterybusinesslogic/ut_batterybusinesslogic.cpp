@@ -448,6 +448,8 @@ Ut_BatteryBusinessLogic::testSpontaneousChargingComplete ()
     /*
      * Checking NB#172929 -  Battery applet in Settings->Device system->Battery 
      * should stop animating once battery is full
+     * We alse expect to report the remaining times as charging, since the
+     * charger is connected.
      */
     SYS_DEBUG ("**********************************************************");
     SYS_DEBUG ("*** The battery got charged.                           ***");
@@ -457,7 +459,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargingComplete ()
     
     m_SignalSink.print();
     QVERIFY (m_SignalSink.notCharging());
-    QVERIFY (m_SignalSink.hasRemainingTimes(false));
+    QVERIFY (m_SignalSink.hasRemainingTimes(true));
     QVERIFY (m_SignalSink.hasBarValue(9));
 
     SYS_DEBUG ("**********************************************************");
@@ -470,6 +472,19 @@ Ut_BatteryBusinessLogic::testSpontaneousChargingComplete ()
     QVERIFY (m_SignalSink.chargingWithAnimation(250));
     QVERIFY (m_SignalSink.hasBarValue(1));
     QVERIFY (m_SignalSink.hasRemainingTimes(true));
+    
+    SYS_DEBUG ("**********************************************************");
+    SYS_DEBUG ("*** The charging is stopped.                           ***");
+    SYS_DEBUG ("**********************************************************");
+    m_SignalSink.reset();
+    m_Logic->m_battery->modifyBatteryState (QmBattery::StateFull, 96);
+    m_Logic->m_battery->setChargingState (QmBattery::StateNotCharging);
+    m_Logic->m_battery->connectCharger (QmBattery::None);
+    
+    m_SignalSink.print();
+    QVERIFY (m_SignalSink.notCharging());
+    QVERIFY (m_SignalSink.hasBarValue(9));
+    QVERIFY (m_SignalSink.hasRemainingTimes(false));
 }
 
 

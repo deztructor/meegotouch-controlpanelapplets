@@ -36,7 +36,7 @@ class BatteryBusinessLogic : public QObject
 public:
     BatteryBusinessLogic (QObject *parent = 0);
     ~BatteryBusinessLogic ();
-
+    
     QStringList PSMThresholdValues ();
     int PSMThresholdValue ();
     bool PSMAutoValue ();
@@ -65,13 +65,19 @@ private slots:
 private:
     int batteryBarValue (int percentage);
     void recalculateChargingInfo ();
-    bool realyCharging();
 
     bool              m_initialized;
     QmBattery        *m_battery;
     QmDeviceMode     *m_devicemode;
+
+    // If the charger is connected, the battery is not full and the charging is
+    // not failed this integer shows the speed of the charging animation.
     int               m_ChargingRate;
 
+    // If the charger is connected. Might be not really charging if the battery
+    // is full.
+    bool              m_Charging;
+    
 #ifdef UNIT_TEST
     friend class Ut_BatteryBusinessLogic;
 #endif

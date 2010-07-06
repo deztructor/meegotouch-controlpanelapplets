@@ -40,7 +40,8 @@ BatteryBusinessLogic::BatteryBusinessLogic (
         QObject *parent)
     : QObject (parent),
     m_initialized (false),
-    m_ChargingRate (-1)
+    m_ChargingRate (-1),
+    m_Charging (false)
 {
     m_battery    = new QmBattery (this);
     m_devicemode = new QmDeviceMode (this);
@@ -167,13 +168,28 @@ BatteryBusinessLogic::PSMAutoValue ()
     return PSMAutoKey.value ().toBool ();
 }
 
+/*!
+ * This function will amit a signal with the remaining times for the battery as
+ * a list of strings. When the battery is not charging the return value contains
+ * numbers as strings, when the battery is on charger the return string is a UI
+ * string representing the charging state.
+ *
+ * FIXME: Maybe this class should not contain localization, it should return
+ * only the logical values?
+ */
 void
 BatteryBusinessLogic::remainingTimeValuesRequired ()
 {
     QmBattery::RemainingTimeMode mode;
     QStringList                  values;
 
-    if (realyCharging()) {
+    /*
+     * If the charger QmSystem reports charging there might be no actual
+     * charging since the battery might be full. We still show charging however,
+     * otherwise we would show that the phone has a limited time to stay on and
+     * we don't want to say that while we are on charger...
+     */
+    if (m_Charging) {
         //% "Charging"
         values << qtTrId ("qtn_ener_charging") 
                << qtTrId ("qtn_ener_charging");
@@ -274,12 +290,12 @@ BatteryBusinessLogic::batteryRemCapacityChanged (
  *
  */
 int
-BatteryBusinessLogic::batteryBarValue (int percentage)
+BatteryBusinessLogic::batteryBarValue (
+        int percentage)
 {
     int index;
 
-    if (percentage == -1)
-    {
+    if (percentage == -1) {
         percentage = m_battery->getRemainingCapacityPct ();
     }
 
@@ -330,6 +346,7 @@ BatteryBusinessLogic::recalculateChargingInfo ()
     QmBattery::BatteryState  batteryState;
     QmBattery::ChargerType   chargerType;
     bool                     charging;
+    bool                     couldBeCharging;
     int                      chargingRate;
    
     chargerType = m_battery->getChargerType ();
@@ -340,6 +357,12 @@ BatteryBusinessLogic::recalculateChargingInfo ()
      * Carefully calculating the charging rate, the animation rate of the
      * charging indicator.
      */
+    couldBeCharging =
+        chargingState == QmBattery::StateCharging &&
+        // This is actually not necessary, but we even check it in the unit
+        // test. Just to be sure.
+        chargerType != QmBattery::None;
+
     charging = 
         batteryState != QmBattery::StateFull &&
         chargerType != QmBattery::None &&
@@ -351,16 +374,20 @@ BatteryBusinessLogic::recalculateChargingInfo ()
         chargingRate = chargerType == QmBattery::Wall ?
             animation_rate_charging_wall : animation_rate_charging_usb;
 
-    SYS_DEBUG ("*** charging      = %s", SYS_BOOL(charging));
-    SYS_DEBUG ("*** chargingRate  = %d", chargingRate);
+    SYS_DEBUG ("*** charging       = %s", SYS_BOOL(charging));
+    SYS_DEBUG ("*** m_Charging     = %s", SYS_BOOL(m_Charging));
+    SYS_DEBUG ("*** chargingRate   = %d", chargingRate);
+    SYS_DEBUG ("*** m_ChargingRate = %d", m_ChargingRate);
 
-    if (chargingRate == m_ChargingRate) 
+    if (chargingRate == m_ChargingRate &&
+            couldBeCharging == m_Charging) 
         return;
 
     /*
      * If the charging rate has been changed we need to notify the ui with a
      * signal.
      */
+    m_Charging = couldBeCharging;
     SYS_DEBUG ("*** chargingRate %d -> %d", m_ChargingRate, chargingRate);
     m_ChargingRate = chargingRate;       
     SYS_DEBUG ("Emitting batteryCharging(%d)", m_ChargingRate);
@@ -379,13 +406,3 @@ BatteryBusinessLogic::recalculateChargingInfo ()
     remainingTimeValuesRequired ();
 }
 
-/*!
- * Returns true if the businesslogic decided that the battery is actually
- * charging. Please check the documentation of recalculateChargingInfo() for
- * further information.
- */
-bool
-BatteryBusinessLogic::realyCharging ()
-{
-    return m_ChargingRate != 0;
-}
