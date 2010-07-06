@@ -108,8 +108,9 @@ BatteryBusinessLogic::setPSMThresholdValue (int percentage)
     bool ret;
     ret = m_devicemode->setPSMBatteryMode (percentage);
 
-    if (! ret)
+    if (!ret) {
         SYS_WARNING (" failed to set (precentage = %d)", percentage);
+    }
 }
 
 int

@@ -71,6 +71,7 @@ private slots:
     void testSpontaneousPSMValue ();
     void testSpontaneousChargerEvent ();
     void testSpontaneousChargingComplete ();
+    void testSetPSMThreshold ();
 
 private:
     BatteryBusinessLogic    *m_Logic;

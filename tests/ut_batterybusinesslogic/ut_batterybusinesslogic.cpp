@@ -487,6 +487,15 @@ Ut_BatteryBusinessLogic::testSpontaneousChargingComplete ()
     QVERIFY (m_SignalSink.hasRemainingTimes(false));
 }
 
-
+/*!
+ * Simply test the PSMThresholdValue setting and retrieving.
+ */
+void 
+Ut_BatteryBusinessLogic::testSetPSMThreshold ()
+{
+    m_Logic->setPSMThresholdValue (10);
+    QVERIFY (m_Logic->m_devicemode->getPSMBatteryMode() == 10);
+    QVERIFY (m_Logic->PSMThresholdValue() == 10);
+}
 
 QTEST_MAIN (Ut_BatteryBusinessLogic);
