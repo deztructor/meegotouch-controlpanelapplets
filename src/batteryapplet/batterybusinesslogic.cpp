@@ -27,9 +27,9 @@
 #define WARNING
 #include "../debug.h"
 
-static const char *psm_auto_key =
+static const QString psm_auto_key =
     "/system/osso/dsm/energymanagement/enable_power_saving";
-static const char *psm_values_key =
+static const QString psm_values_key =
     "/system/osso/dsm/energymanagement/possible_psm_thresholds";
 
 static const int animation_rate_charging_usb  = 500;
@@ -103,7 +103,8 @@ BatteryBusinessLogic::requestValues ()
 }
 
 void
-BatteryBusinessLogic::setPSMThresholdValue (int percentage)
+BatteryBusinessLogic::setPSMThresholdValue (
+        int percentage)
 {
     bool ret;
     ret = m_devicemode->setPSMBatteryMode (percentage);
@@ -122,9 +123,17 @@ BatteryBusinessLogic::PSMThresholdValue ()
 QStringList
 BatteryBusinessLogic::PSMThresholdValues ()
 {
-    MGConfItem possible_values (psm_values_key);
+    MGConfItem  possible_values (psm_values_key);
+    QStringList retval;
 
-    return possible_values.value ().toStringList ();
+    retval = possible_values.value ().toStringList ();
+    if (retval.size() == 0) {
+        SYS_WARNING ("The GConf key %s is not set. Falling back to default.",
+                SYS_STR(psm_values_key));
+        retval << "10" << "20" << "30" << "40" << "50";
+    }
+
+    return retval;
 }
 
 void
@@ -142,6 +151,10 @@ BatteryBusinessLogic::setPSMValue (
         // the PSMValueChanged asap to update the UI.
         SYS_DEBUG ("Emitting PSMValueReceived(%s)", SYS_BOOL(enabled));
         emit PSMValueReceived (enabled);
+    } else {
+        SYS_WARNING ("Failed to set PSM mode to %s",
+                enabled ? 
+                "QmDeviceMode::PSMStateOn" : "QmDeviceMode::PSMStateOff");
     }
 }
 
