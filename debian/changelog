@@ -5,6 +5,8 @@ systemui-applets (0.14.11~1) harmattan; urgency=low
     changed (but still not animating if the battery is full).
   * Fixes: NB#168748 - Wallpaper applet can not set GIF image as wallpaper to 
     home
+  * Fixes: NB#175984 - The progress spinner is not shown on Theme setting 
+    main view
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 05 Jul 2010 11:11:11 +0200
 

@@ -128,10 +128,10 @@ ThemeBusinessLogic::changeTheme (
         QString themeCodeName)
 {
     SYS_DEBUG ("Activating theme '%s'", SYS_STR(themeCodeName));
+    emit themeChangeStarted (themeCodeName);
     
     MGConfItem  gconfItem (themeGConfKey);
     gconfItem.set (themeCodeName);
-    //emit themeChanged (themeCodeName);
 }
 
 void 

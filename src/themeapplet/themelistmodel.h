@@ -1,3 +1,5 @@
+/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
+/* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 #ifndef THEMELISTMODEL_H__
 #define THEMELISTMODEL_H__
 
@@ -28,13 +30,20 @@ class ThemeListModel : public QAbstractListModel
         QVariant data(const QModelIndex &index, int role=Qt::DisplayRole) const;
         void setThemeList(const QList<ThemeDescriptor *> &themeList);
         QModelIndex indexOfCodeName(const QString &codeName) const;
+        QString changingTheme () const;
+        
+    public slots:
+	    void themeChangeStarted (QString themeCodeName);
+    	void themeChanged (QString themeCodeName);
 
     private:
-	/*
-	 * FIXME: This model should hold theme descriptors instead of just
-	 * strings. This is not robust enough!
-	 */
+        /*
+         * FIXME: This model should hold theme descriptors instead of just
+         * strings. This is not robust enough!
+         */
+        QModelIndex  indexByThemeCodeName (QString themeCodeName);
         QList<QStringList> m_Rows;
+        QString            m_ChangingTheme;
 };
 
 #endif

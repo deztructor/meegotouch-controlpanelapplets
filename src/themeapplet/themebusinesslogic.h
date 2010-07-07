@@ -30,6 +30,7 @@ public slots:
     void themeChangeCompleted ();
 
 signals:
+    void themeChangeStarted (QString themeCodeName);
     void themeChanged (QString themeCodeName);
 };
 

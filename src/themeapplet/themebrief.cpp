@@ -4,6 +4,7 @@
 #include "themebrief.h"
 #include <dcpwidgettypes.h>
 
+#define DEBUG
 #include "../debug.h"
 
 ThemeBrief::ThemeBrief (
@@ -18,6 +19,7 @@ int
 ThemeBrief::widgetTypeID() const
 {
     return DcpWidgetType::Image;
+    //return DcpWidgetType::Label;
 }
 
 QString 

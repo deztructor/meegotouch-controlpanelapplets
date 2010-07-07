@@ -25,7 +25,6 @@ public:
 private slots:
     void acceptClicked ();
     void cancelClicked ();
-    void themeChanged (QString themeId);
 
 private:
     QPointer<ThemeBusinessLogic>  m_ThemeBusinessLogic;

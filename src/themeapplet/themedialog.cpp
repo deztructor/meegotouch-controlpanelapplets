@@ -5,14 +5,27 @@
 #include "themebusinesslogic.h"
 #include "themedescriptor.h"
 
-#include <MButton>
 #include <QGraphicsLinearLayout>
+#include <QPixmap>
+
+#include <MButton>
 #include <MContainer>
 #include <MImageWidget>
+#include <MLayout>
+#include <MLinearLayoutPolicy>
 
 #define DEBUG
 #include "../debug.h"
 
+/*
+ * You might wonder why this dialog is damn complicated, why do we hide the
+ * button box and create a custom one. The answer is simple: the original UI
+ * spec was different, so we needed to create and handle our own buttons and
+ * this is how that is done.
+ * 
+ * if you think you can simplify the applet by modifying ths dialog, then by all
+ * means, please do it!
+ */
 ThemeDialog::ThemeDialog (
         ThemeBusinessLogic *themeBusinessLogic,
         ThemeDescriptor    *themeDesc):
@@ -20,16 +33,62 @@ ThemeDialog::ThemeDialog (
     m_ThemeBusinessLogic (themeBusinessLogic),
     m_ThemeDesc (themeDesc)
 {  
-    QGraphicsLinearLayout *buttonLayout, *mainLayout;
-    MContainer  *hbox;
-    MImageWidget *image1;
+    MLayout               *buttonLayout;
+    MLinearLayoutPolicy   *portraitButtonLayoutPolicy;
+    MLinearLayoutPolicy   *landscapeButtonLayoutPolicy;
 
-    mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
-    buttonLayout = new QGraphicsLinearLayout;
+    MLayout               *mainLayout;
+    MLinearLayoutPolicy   *portraitLayoutPolicy;
+    MLinearLayoutPolicy   *landscapeLayoutPolicy;
+
+    MContainer            *hbox;
+    MImageWidget          *image1, *image2;
+    QString                landscapePreviewFileName;
+    QString                portraitPreviewFileName;
+    QPixmap pixmap;
+
+    portraitPreviewFileName = 
+        "/usr/share/themes/" +
+        themeDesc->codeName() + 
+        "/meegotouch/images/meegotouch-theme-preview-portrait.jpg";
+    landscapePreviewFileName = 
+        "/usr/share/themes/" +
+        themeDesc->codeName() + 
+        "/meegotouch/images/meegotouch-theme-preview-landscape.jpg";
+
+    mainLayout = new MLayout;
+    portraitLayoutPolicy =
+        new MLinearLayoutPolicy (mainLayout, Qt::Vertical);
+    landscapeLayoutPolicy =
+        new MLinearLayoutPolicy (mainLayout, Qt::Vertical);
+    landscapeLayoutPolicy->setSpacing (10);
+    portraitLayoutPolicy->setSpacing (10);
+
+    buttonLayout = new MLayout;
+    portraitButtonLayoutPolicy =
+        new MLinearLayoutPolicy (buttonLayout, Qt::Vertical);
+    landscapeButtonLayoutPolicy =
+        new MLinearLayoutPolicy (buttonLayout, Qt::Horizontal);
+    landscapeButtonLayoutPolicy->setSpacing (10);
+    portraitButtonLayoutPolicy->setSpacing (10);
 
     // An image widget to show some preview screenshot.
-    image1 = new MImageWidget (themeDesc->iconName());
-    mainLayout->addItem (image1);
+
+    image1 = new MImageWidget (this);
+    if (pixmap.load (portraitPreviewFileName))
+        image1->setPixmap (pixmap);
+    else
+        image1->setImage (themeDesc->iconName());
+
+    portraitLayoutPolicy->addItem (image1);
+
+    image2 = new MImageWidget (this);
+    if (pixmap.load (landscapePreviewFileName))
+        image2->setPixmap (pixmap);
+    else
+        image2->setImage (themeDesc->iconName());
+    
+    landscapeLayoutPolicy->addItem (image2);
 
     //% "Select"
     m_SelectButton = new MButton (qtTrId ("qtn_teme_select"));
@@ -41,13 +100,25 @@ ThemeDialog::ThemeDialog (
     connect (m_CancelButton, SIGNAL(clicked()),
             this, SLOT(cancelClicked()));
     
-    buttonLayout->addItem (m_SelectButton);
-    buttonLayout->setStretchFactor (m_SelectButton, 1);
-    buttonLayout->addItem (m_CancelButton);
-    buttonLayout->setStretchFactor (m_CancelButton, 1);
-
-    mainLayout->addItem (buttonLayout);
+    portraitButtonLayoutPolicy->addItem (m_SelectButton);
+    //buttonLayout->setStretchFactor (m_SelectButton, 1);
+    portraitButtonLayoutPolicy->addItem (m_CancelButton);
+    //buttonLayout->setStretchFactor (m_CancelButton, 1);
     
+    landscapeButtonLayoutPolicy->addItem (m_SelectButton);
+    //buttonLayout->setStretchFactor (m_SelectButton, 1);
+    landscapeButtonLayoutPolicy->addItem (m_CancelButton);
+    //buttonLayout->setStretchFactor (m_CancelButton, 1);
+    
+    buttonLayout->setLandscapePolicy (landscapeButtonLayoutPolicy);
+    buttonLayout->setPortraitPolicy (portraitButtonLayoutPolicy);
+
+    portraitLayoutPolicy->addItem (buttonLayout);
+    landscapeLayoutPolicy->addItem (buttonLayout);
+
+    mainLayout->setLandscapePolicy (landscapeLayoutPolicy);
+    mainLayout->setPortraitPolicy (portraitLayoutPolicy);
+
     hbox = new MContainer;
     hbox->setHeaderVisible (false);
     hbox->setLayout (mainLayout);
@@ -56,9 +127,6 @@ ThemeDialog::ThemeDialog (
     setButtonBoxVisible (false);
 
     setTitle (m_ThemeDesc->name());
-
-    connect (m_ThemeBusinessLogic, SIGNAL(themeChanged(QString)),
-            this, SLOT(themeChanged(QString)));
 }
 
 void
@@ -72,21 +140,16 @@ ThemeDialog::acceptClicked ()
 {
     SYS_DEBUG ("");
     m_ThemeBusinessLogic->changeTheme (m_ThemeDesc->codeName());
-    //deleteLater ();
+    accept();
+    disappear ();
 }
 
 void 
 ThemeDialog::cancelClicked ()
 {
     SYS_DEBUG ("");
-    deleteLater ();
+    accept();
+    disappear ();
 }
 
-void
-ThemeDialog::themeChanged (
-        QString themeId)
-{
-    Q_UNUSED(themeId);
-    SYS_DEBUG ("*** themeId = %s", SYS_STR(themeId));
-    deleteLater();
-}
+

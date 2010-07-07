@@ -78,26 +78,53 @@ ThemeWidget::retranslateUi ()
 void
 ThemeWidget::readLocalThemes ()
 {
-    m_ThemeListModel = new ThemeListModel(this);
+    /*
+     * Creating the model and connecting it to the businesslogic so we can show
+     * the spinner while the theme change is in progress.
+     */
+    m_ThemeListModel = new ThemeListModel (this);
+
+    if (m_ThemeBusinessLogic) {
+        connect (m_ThemeBusinessLogic, SIGNAL(themeChangeStarted(QString)),
+                m_ThemeListModel, SLOT(themeChangeStarted(QString)));
+        connect (m_ThemeBusinessLogic, SIGNAL(themeChanged(QString)),
+                m_ThemeListModel, SLOT(themeChanged(QString)));
+    } else {
+        SYS_WARNING ("ThemeBusinessLogic has been destroyed?");
+    }
+
     m_ThemeDescList = m_ThemeBusinessLogic->availableThemes ();
     m_ThemeListModel->setThemeList(m_ThemeDescList);
     m_List->setItemModel(m_ThemeListModel);
+
     QString currentTheme = m_ThemeBusinessLogic->currentThemeCodeName();
     QModelIndex currentIndex = m_ThemeListModel->indexOfCodeName(currentTheme);
     m_List->selectItem(currentIndex);
+
     connect(m_List, SIGNAL(itemClicked(QModelIndex)),
             this, SLOT(themeActivated(QModelIndex)));
 }
 
 
 void 
-ThemeWidget::themeActivated (const QModelIndex &index)
+ThemeWidget::themeActivated (
+        const QModelIndex &index)
 {
-    ThemeDialog *dialog;
+    ThemeDialog      *dialog;
+    QStringList       row = m_ThemeListModel->data(index).value<QStringList>();
+    QString           codeName = row[ThemeColumnCodeName];
+    ThemeDescriptor  *descr = 0;
+    
+    /*
+     * If the user selects the current theme we don't do anything.
+     */
+    if (codeName == m_ThemeBusinessLogic->currentThemeCodeName())
+        return;
 
-    QStringList row = m_ThemeListModel->data(index).value<QStringList>();
-    QString codeName = row[ThemeColumnCodeName];
-    ThemeDescriptor *descr = 0;
+    /*
+     * FIXME:  This is certainly too complicated here, the ThemeBusinessLogic
+     * should do stuff like this.
+     */
     foreach (ThemeDescriptor *d, m_ThemeDescList) {
         if (d->codeName() == codeName) {
             descr = d;

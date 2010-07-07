@@ -1,3 +1,5 @@
+/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
+/* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 #include "themelistmodel.h"
 #include "themedescriptor.h"
 
@@ -64,5 +66,53 @@ ThemeListModel::indexOfCodeName(const QString &codeName) const {
     return QModelIndex();
 }
 
+void 
+ThemeListModel::themeChangeStarted (
+		QString themeCodeName)
+{
+    QModelIndex index = indexByThemeCodeName(themeCodeName);
+    
+    SYS_DEBUG ("*** themeCodeName = %s", SYS_STR(themeCodeName));
+    m_ChangingTheme = themeCodeName;
 
+    if (index.isValid())
+        emit dataChanged (index, index);
+}
+
+void
+ThemeListModel::themeChanged (
+		QString themeCodeName)
+{
+    QModelIndex index = indexByThemeCodeName(themeCodeName);
+
+    SYS_DEBUG ("*** themeCodeName = %s", SYS_STR(themeCodeName));
+    m_ChangingTheme = "";
+
+    if (index.isValid())
+        emit dataChanged (index, index);
+}
+
+QString 
+ThemeListModel::changingTheme () const
+{
+    return m_ChangingTheme;
+}
+
+QModelIndex  
+ThemeListModel::indexByThemeCodeName (
+        QString themeCodeName)
+{
+    QModelIndex retval;
+    
+    for (int n = 0; n < m_Rows.size(); ++n) {
+        if (m_Rows[n][ThemeColumnCodeName] == themeCodeName)
+            retval = index (n, 0);
+    }
+
+    if (!retval.isValid()) {
+        SYS_WARNING ("Theme code name %s not found.", SYS_STR(themeCodeName));
+    }
+
+    return retval;
+}
 
