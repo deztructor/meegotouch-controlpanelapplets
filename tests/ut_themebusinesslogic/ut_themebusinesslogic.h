@@ -16,15 +16,20 @@ class UtThemeBusinessLogicPrivate : public QObject
 
 public slots:
     void themeChanged (QString themeCodeName);
+    void themeChangeStarted (QString themeCodeName);
 
 signals:
     void changeTheme (QString themeCodeName);
 
 public:
+    QString m_ThemeCodeNameUnderProcess;
     QString m_ThemeCodeName;
 };
 
-
+/*
+ * There is a new signal notifyes us about the theme change being complete. The
+ * signal sent by MTheme and should be simulated in this unit test.
+ */
 class Ut_ThemeBusinessLogic : public QObject 
 {
 Q_OBJECT

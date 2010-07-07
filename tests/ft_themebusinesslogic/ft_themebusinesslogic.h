@@ -11,18 +11,22 @@ class MApplication;
 class ThemeBusinessLogic;
 class ThemeDescriptor;
 
+
 class FtThemeBusinessLogicPrivate : public QObject 
 {
     Q_OBJECT
 
 public slots:
     void themeChanged (QString themeCodeName);
+    void themeChangeStarted (QString themeCodeName);
 
 signals:
     void changeTheme (QString themeCodeName);
 
 public:
+    QString m_ThemeCodeNameUnderProcess;
     QString m_ThemeCodeName;
+
 };
 
 class Ft_ThemeBusinessLogic : public QObject 

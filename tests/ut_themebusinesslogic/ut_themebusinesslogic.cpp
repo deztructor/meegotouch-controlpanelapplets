@@ -42,6 +42,14 @@ UtThemeBusinessLogicPrivate::themeChanged (
     m_ThemeCodeName = themeCodeName;
 }
 
+void
+UtThemeBusinessLogicPrivate::themeChangeStarted (
+        QString themeCodeName)
+{
+    m_ThemeCodeNameUnderProcess = themeCodeName;
+}
+
+
 /******************************************************************************
  * Ut_ThemeBusinessLogic implementation. 
  */
@@ -71,6 +79,11 @@ Ut_ThemeBusinessLogic::initTestCase()
     connectSuccess = connect (
             m_Api, SIGNAL(themeChanged(QString)),
             m_Priv, SLOT(themeChanged(QString)));
+    QVERIFY (connectSuccess);
+    
+    connectSuccess = connect (
+            m_Api, SIGNAL(themeChangeStarted(QString)),
+            m_Priv, SLOT(themeChangeStarted(QString)));
     QVERIFY (connectSuccess);
     
     connectSuccess = connect (
@@ -147,6 +160,7 @@ Ut_ThemeBusinessLogic::testSetTheme ()
     m_Api->changeTheme (fakeName);
     QVERIFY (GConfLastKey == "/meegotouch/theme/name");
     QVERIFY (GConfLastValue == fakeName);
+    QVERIFY (m_Priv->m_ThemeCodeNameUnderProcess == fakeName);
 }
 
 QTEST_APPLESS_MAIN(Ut_ThemeBusinessLogic)

@@ -23,8 +23,15 @@ FtThemeBusinessLogicPrivate::themeChanged (
     m_ThemeCodeName = themeCodeName;
 }
 
+void
+FtThemeBusinessLogicPrivate::themeChangeStarted (
+        QString themeCodeName)
+{
+    m_ThemeCodeNameUnderProcess = themeCodeName;
+}
+
 /******************************************************************************
- * Ut_ThemeBusinessLogic implementation. 
+ * Ft_ThemeBusinessLogic implementation. 
  */
 void 
 Ft_ThemeBusinessLogic::init()
@@ -53,7 +60,12 @@ Ft_ThemeBusinessLogic::initTestCase()
             m_Api, SIGNAL(themeChanged(QString)),
             m_Priv, SLOT(themeChanged(QString)));
     QVERIFY (connectSuccess);
-    
+
+    connectSuccess = connect (
+            m_Api, SIGNAL(themeChangeStarted(QString)),
+            m_Priv, SLOT(themeChangeStarted(QString)));
+    QVERIFY (connectSuccess);
+        
     connectSuccess = connect (
             m_Priv, SIGNAL(changeTheme(QString)),
             m_Api, SLOT(changeTheme(QString)));
@@ -124,8 +136,8 @@ Ft_ThemeBusinessLogic::testChangeTheme ()
         m_Api->changeTheme (desc->codeName());
         QTest::qWait (themeWaitMSec);
 
-        qDebug() << "Theme is          " << m_Priv->m_ThemeCodeName;
-        QVERIFY (m_Priv->m_ThemeCodeName == desc->codeName());
+        qDebug() << "Theme is          " << m_Priv->m_ThemeCodeNameUnderProcess;
+        QVERIFY (m_Priv->m_ThemeCodeNameUnderProcess == desc->codeName());
     }
 }
 

@@ -13,6 +13,7 @@
 #include <QModelIndex>
 #include <QVariant>
 
+//#define LOTDEBUG
 #define DEBUG
 #include "../../src/debug.h"
 
@@ -90,7 +91,7 @@ Ut_ThemeWidget::testThemeActivated ()
 
         QVERIFY (stringList.size() >= 2);
         name = stringList[1];
-        SYS_DEBUG ("*** name = %s", SYS_STR(name));
+        SYS_DEBUG ("*** name            = %s", SYS_STR(name));
         #ifdef LOTDEBUG
         SYS_DEBUG ("--------------------------------------------------");
         foreach (QString sval, stringList) {
@@ -102,8 +103,17 @@ Ut_ThemeWidget::testThemeActivated ()
         QVERIFY (index.column() == 0);
         QVERIFY (index.row() == n);
 
+        lastDialogTitle = "";
         m_ThemeWidget->themeActivated (index);
-        QVERIFY (lastDialogTitle == name);
+        /*
+         * If this is the current theme there should be no dialog shown, if not,
+         * a dialog should be shown with the theme name set as title.
+         */
+        SYS_DEBUG ("*** lastDialogTitle = %s", SYS_STR(lastDialogTitle));
+        if (m_ThemeBusinessLogic->currentThemeName() != name)
+            QVERIFY (lastDialogTitle == name);
+        else
+            QVERIFY (lastDialogTitle == "");
     }
 }
 
