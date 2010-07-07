@@ -9,11 +9,14 @@
 
 class QString;
 class ThemeDescriptor;
+
 class ThemeBusinessLogic : public QObject
 {
     Q_OBJECT
 
 public:
+    ThemeBusinessLogic ();
+    
     QString currentThemeCodeName () const;
     QString currentThemeName () const;
     QString currentThemeIconName () const;
@@ -24,6 +27,7 @@ public slots:
      * Sets the current theme to the theme with the given id.
      */
     void changeTheme (QString themeCodeName);
+    void themeChangeCompleted ();
 
 signals:
     void themeChanged (QString themeCodeName);

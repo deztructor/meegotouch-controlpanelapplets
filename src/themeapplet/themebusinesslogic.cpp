@@ -28,6 +28,12 @@ static const QString themeDirName ("/usr/share/themes");
 // The GConf key where meegotouch expects us to place the theme name.
 static const QString themeGConfKey ("/meegotouch/theme/name");
 
+ThemeBusinessLogic::ThemeBusinessLogic ()
+{
+    connect (MTheme::instance(), SIGNAL(themeChangeCompleted()),
+            this, SLOT(themeChangeCompleted()));
+}
+
 /*!
  * Returns the code name of the current theme. This code name can be used as a
  * string ID to the GConf database.
@@ -125,6 +131,14 @@ ThemeBusinessLogic::changeTheme (
     
     MGConfItem  gconfItem (themeGConfKey);
     gconfItem.set (themeCodeName);
-    emit themeChanged (themeCodeName);
+    //emit themeChanged (themeCodeName);
 }
 
+void 
+ThemeBusinessLogic::themeChangeCompleted ()
+{
+    QString     themeCodeName = currentThemeCodeName ();
+
+    SYS_DEBUG ("Theme changed to %s", SYS_STR(themeCodeName));
+    emit themeChanged (themeCodeName);
+}
