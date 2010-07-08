@@ -46,7 +46,7 @@ ThemeWidget::createWidgets ()
 
     m_OviItem = new MContentItem(MContentItem::IconAndSingleTextLabel);
     // This icon is currently missing, see NB#175015
-    m_OviItem->setImageID ("icon-m-common-ovi-store");
+    m_OviItem->setImageID ("icon-m-common-ovi");
     m_OviItem->setObjectName("OviItem");
 
     mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
