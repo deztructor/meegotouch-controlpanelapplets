@@ -66,8 +66,11 @@ ProfileWidget::initProfiles ()
      * mainLayout
      */
     mContainer->centralWidget()->setLayout(vibraLayout);
+
     mainLayout->addItem(mContainer);
-    this->setLayout (mainLayout);
+    mainLayout->addStretch ();
+
+    setLayout (mainLayout);
 }
 
 void 
