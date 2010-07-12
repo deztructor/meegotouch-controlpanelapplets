@@ -1,4 +1,4 @@
-systemui-applets (0.14.11~1) harmattan; urgency=low
+systemui-applets (0.14.11-1) harmattan; urgency=low
 
   [ Laszlo Pere ]
   * Showing the remaining times as charging until the charging state is not
@@ -10,7 +10,7 @@ systemui-applets (0.14.11~1) harmattan; urgency=low
   * Fixes: NB#175015 - Icon for "Get more from Ovi Store" is missing in Theme
     setting main view
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 05 Jul 2010 11:11:11 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 12 Jul 2010 14:41:04 +0200
 
 systemui-applets (0.14.10-1) harmattan; urgency=low
 
