@@ -16,6 +16,8 @@
 #define DEBUG
 #include "../debug.h"
 
+static const char *oviCommand = "webwidgetrunner /usr/share/webwidgets/applications/d34177b1c241ea44cb132005b63ee6527c9f6040-wrt-widget.desktop -widgetparameter themes";
+
 ThemeWidget::ThemeWidget (
         ThemeBusinessLogic *themeBusinessLogic, 
         QGraphicsWidget    *parent) :
@@ -48,6 +50,9 @@ ThemeWidget::createWidgets ()
     // This icon is currently missing, see NB#175015
     m_OviItem->setImageID ("icon-m-common-ovi");
     m_OviItem->setObjectName("OviItem");
+
+    connect (m_OviItem, SIGNAL(clicked()),
+            this, SLOT(oviActivated()));
 
     mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
     mainLayout->addItem (m_OviItem);
@@ -139,5 +144,12 @@ ThemeWidget::themeActivated (
 
     dialog = new ThemeDialog (m_ThemeBusinessLogic, descr);
     dialog->showDialog ();
+}
+
+void
+ThemeWidget::oviActivated ()
+{
+    SYS_DEBUG ("Executing %s", oviCommand);
+    system (oviCommand);
 }
 

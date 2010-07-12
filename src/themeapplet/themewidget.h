@@ -28,6 +28,7 @@ public:
 
 private slots:
     void themeActivated(const QModelIndex &index);
+    void oviActivated ();
 
 private:
     void createWidgets ();
