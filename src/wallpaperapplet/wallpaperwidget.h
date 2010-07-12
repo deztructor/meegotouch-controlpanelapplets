@@ -12,6 +12,7 @@ class MContainer;
 class MLinearLayoutPolicy;
 class MList;
 class WallpaperList;
+class MContentItem;
 
 class WallpaperWidget : public DcpWidget
 {
@@ -23,13 +24,18 @@ public:
             QGraphicsWidget        *parent = 0);
     ~WallpaperWidget ();
 
+    void retranslateUi ();
+
 private slots:
     void slotImageActivated (WallpaperDescriptor *desc);
     virtual void createContent ();
+    void oviActivated ();
 
 private:
     QPointer<WallpaperBusinessLogic>   m_WallpaperBusinessLogic;
     WallpaperList                     *m_ImageList;
+    MContentItem                      *m_OviItem;
+
     #ifdef UNIT_TEST
     friend class Ut_WallpaperWidget;
     #endif

@@ -9,10 +9,14 @@
 #include <MLinearLayoutPolicy>
 #include <MContainer>
 #include <QTimer>
+#include <MContentItem>
+
 #define DEBUG
 #include "../debug.h"
 
 static const int MaxColumns = 2;
+
+static const char *oviCommand = "webwidgetrunner /usr/share/webwidgets/applications/d34177b1c241ea44cb132005b63ee6527c9f6040-wrt-widget.desktop -widgetparameter graphics";
 
 WallpaperWidget::WallpaperWidget (
         WallpaperBusinessLogic *wallpaperBusinessLogic, 
@@ -43,6 +47,16 @@ WallpaperWidget::createContent ()
     SYS_DEBUG ("");
     mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
     setLayout (mainLayout);
+  
+    /*
+     * The OVI item.
+     */
+    m_OviItem = new MContentItem(MContentItem::IconAndSingleTextLabel);
+    m_OviItem->setImageID ("icon-m-common-ovi");
+    m_OviItem->setObjectName("OviItem");
+
+    connect (m_OviItem, SIGNAL(clicked()),
+            this, SLOT(oviActivated()));
 
     /*
      * The list of the available images.
@@ -56,8 +70,11 @@ WallpaperWidget::createContent ()
     /*
      * Adding all widgets into the layout.
      */
+    mainLayout->addItem (m_OviItem);
     mainLayout->addItem (m_ImageList);
     mainLayout->setStretchFactor (m_ImageList, 1);
+
+    retranslateUi ();
 }
 
 
@@ -73,4 +90,19 @@ WallpaperWidget::slotImageActivated (
     
     m_WallpaperBusinessLogic->setEditedImage (desc);
     emit changeWidget (1);
+}
+
+void
+WallpaperWidget::retranslateUi ()
+{
+    //% "Get more from Ovi Store"
+    m_OviItem->setTitle(qtTrId("qtn_wall_get_more_from_ovi"));
+}
+
+
+void 
+WallpaperWidget::oviActivated ()
+{
+    SYS_DEBUG ("Executing %s", oviCommand);
+    system (oviCommand);
 }
