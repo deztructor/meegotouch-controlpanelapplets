@@ -35,6 +35,7 @@ HEADERS += \
     $$STUB_PREFIX/filesystemstub.h \
     ../../src/debug.h \
     ut_wallpapermodel.h \
+    $$SRC_PREFIX/wallpapergconf.h \
     $$SRC_PREFIX/wallpaperbusinesslogic.h \
     $$SRC_PREFIX/wallpapercurrentdescriptor.h \
     $$SRC_PREFIX/wallpaperdescriptor.h \

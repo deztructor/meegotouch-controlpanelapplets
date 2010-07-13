@@ -5,3 +5,4 @@ usr/lib/duicontrolpanel/applets/libwallpaperapplet.so
 etc/osso-rfs-scripts/wallpaper-rfs.sh
 usr/share/wallpaper
 usr/share/backup-framework/applications/wallpaper.conf
+usr/bin/wallpapercli

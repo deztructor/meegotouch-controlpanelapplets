@@ -85,6 +85,9 @@ WallpaperWidget::createContent ()
     mainLayout->setStretchFactor (m_ImageList, 1);
 
     retranslateUi ();
+    
+    connect (m_WallpaperBusinessLogic, SIGNAL(imageEditRequested()),
+            this, SLOT(slotImageActivated()));
 }
 
 
@@ -99,6 +102,14 @@ WallpaperWidget::slotImageActivated (
     SYS_DEBUG ("*** desc = %s", SYS_STR(desc->basename()));
     
     m_WallpaperBusinessLogic->setEditedImage (desc);
+    emit changeWidget (1);
+}
+
+void 
+WallpaperWidget::slotImageActivated ()
+{
+    SYS_DEBUG ("");
+    
     emit changeWidget (1);
 }
 

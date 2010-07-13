@@ -28,6 +28,7 @@
 #include <MGConfItem>
 
 #include "main.h"
+#include "wallpapergconf.h"
 
 #define DEBUG
 #include "../debug.h"
@@ -40,31 +41,28 @@ long_options[] =
     {"start-applet",       no_argument, 0, 's'},
     {"print-gconf",        no_argument, 0, 'P'},
     {"set-gconf",          no_argument, 0, 'S'},
+    {"edit",               no_argument, 0, 'e'},
     {"portrait",           required_argument, 0, 'p'},
     {"landscape",          required_argument, 0, 'l'},
 
     {0, 0, 0, 0}
 };
 
-static const char *short_options = "hsp:l:S";
-
-static const QString PortraitKey = 
-    "/desktop/meego/background/portrait/picture_filename";
-static const QString LandscapeKey = 
-    "/desktop/meego/background/landscape/picture_filename";
-
+static const char *short_options = "hsp:l:Se";
 
 WallpaperCLI::WallpaperCLI () :
     m_ProgramName (0),
     m_OptionHelp (false),
     m_OptionVerbose (false),
     m_PrintGconf (false),
+    m_SetGconf (false),
+    m_EditImages (false),
     m_OptionStartApplet (false),
     m_DcpIf (new DuiControlPanelIf),
     m_ExitCode (EXIT_SUCCESS)
 {
-    m_LandscapeGConfItem = new MGConfItem (LandscapeKey);
-    m_PortraitGConfItem = new MGConfItem (PortraitKey);
+    m_LandscapeGConfItem = new MGConfItem (WALLPAPER_LANDSCAPE_KEY);
+    m_PortraitGConfItem = new MGConfItem (WALLPAPER_PORTRAIT_KEY);
 }
 
 WallpaperCLI::~WallpaperCLI ()
@@ -105,6 +103,10 @@ WallpaperCLI::parseCommandLineArguments (
                     m_SetGconf = true;
                     break;
 
+                case 'e':
+                    m_EditImages = true;
+                    break;
+                    
                 case 'h':
                     m_OptionHelp = true;
                     break;
@@ -122,12 +124,10 @@ WallpaperCLI::parseCommandLineArguments (
                     break;
                 
                 case 'p':
-                    SYS_DEBUG ("p = %s", argv[optind - 1]);
                     m_OptionPortraitFilename = argv[optind - 1];
                     break;
 
                 case 'l':
-                    SYS_DEBUG ("l = %s", argv[optind - 1]);
                     m_OptionLandscapeFilename = argv[optind - 1];
                     break;
 
@@ -142,11 +142,20 @@ WallpaperCLI::parseCommandLineArguments (
 bool
 WallpaperCLI::executeCommandLineArguments ()
 {
+    bool retval = true;
+
+    /*
+     * Executing --help: printing the help message and exit.
+     */
     if (m_OptionHelp) {
         printHelp ();
         goto finalize;
     } 
     
+    /*
+     * Executing --set-gconf: Simply changing the file names in the GConf
+     * database. 
+     */
     if (m_SetGconf) {
         m_LandscapeGConfItem->set (m_OptionLandscapeFilename);
         m_PortraitGConfItem->set (m_OptionPortraitFilename);
@@ -154,6 +163,9 @@ WallpaperCLI::executeCommandLineArguments ()
         goto finalize;
     }
     
+    /*
+     * Printing the values stored in the GConf database.
+     */
     if (m_PrintGconf) {
         QString landscape = m_LandscapeGConfItem->value().toString();
         QString portrait = m_PortraitGConfItem->value().toString();
@@ -169,21 +181,53 @@ WallpaperCLI::executeCommandLineArguments ()
         goto finalize;
     }
 
-    if (m_OptionStartApplet) {
-        if (!m_DcpIf->isValid()) {
-            m_ErrorString = "Service unavailable";
-            m_ExitCode = EXIT_FAILURE;
-            return false;
-        }
+    /*
+     * Executing --edit: Opening the images in the wallpaper applet for 
+     * editing.
+     */
+    if (m_EditImages) {
+        retval = performEditImages ();
+        goto finalize;
+    }
 
-        startControlPanel ();
-        pageToWallpaperApplet ();
+    /*
+     * Executing --start-applet: Start up the applet in normal mode.
+     */
+    if (m_OptionStartApplet) {
+        retval = pageToWallpaperApplet ();
+        goto finalize;
     }
 
 finalize:
     return true;
 }
 
+bool
+WallpaperCLI::performEditImages ()
+{
+    MGConfItem lEditedImage (WALLPAPER_EDITED_LANDSCAPE_KEY);
+    MGConfItem pEditedImage (WALLPAPER_EDITED_PORTRAIT_KEY);
+    MGConfItem requestCode  (WALLPAPER_APPLET_REQUEST_CODE);
+    bool retval = true;
+
+    SYS_DEBUG ("+++ Starting up the controlpanel");
+    if (!pageToWallpaperApplet()) {
+        retval = false;
+        goto finalize;
+    }
+    sleep (1);
+
+    SYS_DEBUG ("+++ Resetting GConf...");
+    requestCode.set (-1);
+
+    SYS_DEBUG ("+++ Pushing request into GConf...");
+    lEditedImage.set (m_OptionLandscapeFilename);
+    pEditedImage.set (m_OptionPortraitFilename);
+    requestCode.set (WallpaperRequestEdit);
+
+finalize:
+    return retval;
+}
 
 void
 WallpaperCLI::printHelp ()
@@ -196,6 +240,7 @@ WallpaperCLI::printHelp ()
 "-s, --start-applet         Start the wallpaper applet.\n"
 "--print-gconf              Print the settings from the GConf database.\n"
 "--set-gconf                Save the settings from the GConf database.\n"
+"--edit                     Edit the images in the wallpaper applet.\n"
 "\n"
 "-p, --portrait <filename>  Portrait image filename.\n"
 "-l, --landscape <filename> Portrait image filename.\n"
@@ -213,16 +258,30 @@ void
 WallpaperCLI::startControlPanel ()
 {
     SYS_DEBUG ("");
-    system ("duicontrolpanel.launch -software >/dev/null &");
+    system ("duicontrolpanel.launch -software &");
     sleep (1);
 }
 
-void
+bool
 WallpaperCLI::pageToWallpaperApplet ()
 {
     SYS_DEBUG ("");
     Q_ASSERT (m_DcpIf);
-    m_DcpIf->appletPage("Wallpaper");
+   
+    /*
+     * FIXME: It is not clear why do we need to to start up the controlpanel
+     * manually here...
+     */
+    startControlPanel ();
+
+    if (!m_DcpIf->isValid()) {
+        SYS_WARNING ("ERROR: Service unavailable");
+        m_ErrorString = "Service unavailable";
+        m_ExitCode = EXIT_FAILURE;
+        return false;
+    }
+        
+    return m_DcpIf->appletPage("Wallpaper");
 }
 
 int 

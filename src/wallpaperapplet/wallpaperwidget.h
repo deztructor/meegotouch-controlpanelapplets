@@ -28,6 +28,7 @@ public:
 
 private slots:
     void slotImageActivated (WallpaperDescriptor *desc);
+    void slotImageActivated ();
     virtual void createContent ();
     void galleryActivated ();
     void oviActivated ();

@@ -1,5 +1,21 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
+/***************************************************************************
+**
+** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Karoliina T. Salminen <karoliina.t.salminen@nokia.com>
+**
+** This file is part of duicontrolpanel.
+**
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation
+** and appearing in the file LICENSE.LGPL included in the packaging
+** of this file.
+**
+****************************************************************************/
 
 /*
  * In the functional tests we use the real thing, in the unit tests we use the
@@ -18,7 +34,7 @@
    typedef QFile WallpaperFile;
 #endif
 
-
+#include "wallpapergconf.h"
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperdescriptor.h"
 #include "wallpapercurrentdescriptor.h"
@@ -33,13 +49,8 @@
 #include <MGConfItem>
 
 //#define LOTDEBUG
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
-
-static const QString PortraitKey = 
-    "/desktop/meego/background/portrait/picture_filename";
-static const QString LandscapeKey = 
-    "/desktop/meego/background/landscape/picture_filename";
 
 static const QString wallpaperDir = ".wallpapers";
 static const QString destopFileName = "wallpaper.desktop";
@@ -59,8 +70,9 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
     QString                     desktopFile = dirPath() + destopFileName;
     bool                        success;
     
-    m_LandscapeGConfItem = new MGConfItem (LandscapeKey);
-    m_PortraitGConfItem = new MGConfItem (PortraitKey);
+    m_LandscapeGConfItem = new MGConfItem (WALLPAPER_LANDSCAPE_KEY);
+    m_PortraitGConfItem = new MGConfItem (WALLPAPER_PORTRAIT_KEY);
+    m_RequestGConfItem = new MGConfItem (WALLPAPER_APPLET_REQUEST_CODE);
     m_EditedImage = 0;
 
     currentDesc = WallpaperCurrentDescriptor::instance ();
@@ -92,12 +104,19 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
             currentDesc->setMimeType (defaultLandscapeMimeType);
         }
     }
+
+    success = connect (m_RequestGConfItem, SIGNAL(valueChanged()),
+            this, SLOT(requestArrived()));
+    if (!success) {
+        SYS_WARNING ("Connect failed.");
+    }
 }
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
 {
     delete m_LandscapeGConfItem;
     delete m_PortraitGConfItem;
+    delete m_RequestGConfItem;
 }
 
 /*!
@@ -504,3 +523,32 @@ WallpaperBusinessLogic::makeBackup (
     file.rename (backupFilePath);
 }
 
+void 
+WallpaperBusinessLogic::requestArrived ()
+{
+    MGConfItem lEditedImageItem (WALLPAPER_EDITED_LANDSCAPE_KEY);
+    MGConfItem pEditedImageItem (WALLPAPER_EDITED_PORTRAIT_KEY);
+    MGConfItem requestCodeItem  (WALLPAPER_APPLET_REQUEST_CODE);
+    WallpaperAppletRequestCode code;
+    QString portraitFileName;
+    QString landscapeFileName;
+
+    SYS_DEBUG ("");
+    code = (WallpaperAppletRequestCode) requestCodeItem.value().toInt();
+    if (code == WallpaperRequestNone)
+        return;
+
+    portraitFileName = pEditedImageItem.value().toString();
+    landscapeFileName = lEditedImageItem.value().toString();
+
+    SYS_DEBUG ("*** landscapeFileName = %s", SYS_STR(landscapeFileName));
+    SYS_DEBUG ("*** portraitFileName  = %s", SYS_STR(portraitFileName));
+    if (code == WallpaperRequestEdit) {
+        // FIXME: Memory leak
+        // FIXME: Only one image name
+        WallpaperDescriptor *desc = new WallpaperDescriptor (landscapeFileName);
+        setEditedImage (desc);
+        SYS_DEBUG ("Emitting imageEditRequested()");
+        emit imageEditRequested ();
+    }
+}

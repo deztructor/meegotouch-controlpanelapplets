@@ -41,6 +41,10 @@ public:
 
 signals:
     void wallpaperChanged ();
+    void imageEditRequested ();
+    
+private slots:
+    void requestArrived ();
 
 private:
     QString dirPath () const;
@@ -61,6 +65,8 @@ private:
 private:
     MGConfItem   *m_LandscapeGConfItem;
     MGConfItem   *m_PortraitGConfItem;
+    MGConfItem   *m_RequestGConfItem;
+
     QPointer<WallpaperDescriptor> m_EditedImage;
 #ifdef UNIT_TEST
     friend class Ut_WallpaperBusinessLogic;
