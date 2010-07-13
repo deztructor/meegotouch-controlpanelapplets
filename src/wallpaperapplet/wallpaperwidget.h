@@ -29,11 +29,13 @@ public:
 private slots:
     void slotImageActivated (WallpaperDescriptor *desc);
     virtual void createContent ();
+    void galleryActivated ();
     void oviActivated ();
 
 private:
     QPointer<WallpaperBusinessLogic>   m_WallpaperBusinessLogic;
     WallpaperList                     *m_ImageList;
+    MContentItem                      *m_GalleryItem;
     MContentItem                      *m_OviItem;
 
     #ifdef UNIT_TEST

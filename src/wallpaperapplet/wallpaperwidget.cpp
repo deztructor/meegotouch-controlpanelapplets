@@ -16,7 +16,7 @@
 
 static const int MaxColumns = 2;
 
-static const char *oviCommand = "webwidgetrunner /usr/share/webwidgets/applications/d34177b1c241ea44cb132005b63ee6527c9f6040-wrt-widget.desktop -widgetparameter graphics";
+static const char *oviCommand = "webwidgetrunner /usr/share/webwidgets/applications/d34177b1c241ea44cb132005b63ee6527c9f6040-wrt-widget.desktop -widgetparameter graphics &";
 
 WallpaperWidget::WallpaperWidget (
         WallpaperBusinessLogic *wallpaperBusinessLogic, 
@@ -49,6 +49,15 @@ WallpaperWidget::createContent ()
     setLayout (mainLayout);
   
     /*
+     * The gallery item.
+     */
+    m_GalleryItem = new MContentItem(MContentItem::IconAndSingleTextLabel);
+    //m_OviItem->setImageID ("icon-m-common-ovi");
+    m_GalleryItem->setObjectName("GalleryItem");
+
+    connect (m_GalleryItem, SIGNAL(clicked()),
+            this, SLOT(galleryActivated()));
+    /*
      * The OVI item.
      */
     m_OviItem = new MContentItem(MContentItem::IconAndSingleTextLabel);
@@ -70,6 +79,7 @@ WallpaperWidget::createContent ()
     /*
      * Adding all widgets into the layout.
      */
+    mainLayout->addItem (m_GalleryItem);
     mainLayout->addItem (m_OviItem);
     mainLayout->addItem (m_ImageList);
     mainLayout->setStretchFactor (m_ImageList, 1);
@@ -97,6 +107,9 @@ WallpaperWidget::retranslateUi ()
 {
     //% "Get more from Ovi Store"
     m_OviItem->setTitle(qtTrId("qtn_wall_get_more_from_ovi"));
+   
+    //% "Pick from My Gallery"
+    m_GalleryItem->setTitle(qtTrId("qtn_wall_pick_from_gallery"));
 }
 
 
@@ -105,4 +118,10 @@ WallpaperWidget::oviActivated ()
 {
     SYS_DEBUG ("Executing %s", oviCommand);
     system (oviCommand);
+}
+
+void 
+WallpaperWidget::galleryActivated ()
+{
+    SYS_DEBUG ("");
 }
