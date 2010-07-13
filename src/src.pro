@@ -7,6 +7,7 @@ SUBDIRS = batteryapplet   \
           profileplugin   \
           usbapplet       \
           wallpaperapplet \
+          wallpapercli    \
           resetapplet     \
           aboutapplet     \
           warrantyapplet  \

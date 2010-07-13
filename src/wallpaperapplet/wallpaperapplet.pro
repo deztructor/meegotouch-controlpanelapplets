@@ -2,6 +2,8 @@ include(../coverage.pri)
 
 TEMPLATE = lib
 MOC_DIR = .moc
+OBJECTS_DIR = .objects
+
 CONFIG += plugin \
           gui \
           meegotouch \
@@ -16,8 +18,6 @@ INCLUDEPATH += \
     /usr/include/QtTracker \
     /usr/include/thumbnailer 
 
-MOC_DIR = .moc
-OBJECTS_DIR = .objects
 
 HEADERS = \
     ../debug.h \
