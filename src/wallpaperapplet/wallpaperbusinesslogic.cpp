@@ -74,6 +74,7 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
     m_PortraitGConfItem = new MGConfItem (WALLPAPER_PORTRAIT_KEY);
     m_RequestGConfItem = new MGConfItem (WALLPAPER_APPLET_REQUEST_CODE);
     m_EditedImage = 0;
+    m_EditedImageOurs = false;
 
     currentDesc = WallpaperCurrentDescriptor::instance ();
     success = currentDesc->setFromDestopFile (desktopFile);
@@ -225,11 +226,21 @@ WallpaperBusinessLogic::availableWallpapers () const
  */
 void
 WallpaperBusinessLogic::setEditedImage (
-        WallpaperDescriptor  *desc)
+        WallpaperDescriptor  *desc, 
+        bool                  ours)
 {
     SYS_DEBUG ("*** desc = %s", 
             desc ? SYS_STR(desc->filename()) : "NULL");
+
+    if (m_EditedImage == desc)
+        return;
+
+    if (m_EditedImage &&
+            m_EditedImageOurs)
+        delete m_EditedImage;
+
     m_EditedImage = desc;
+    m_EditedImageOurs = ours;
 }
 
 /*!
@@ -544,11 +555,18 @@ WallpaperBusinessLogic::requestArrived ()
     SYS_DEBUG ("*** landscapeFileName = %s", SYS_STR(landscapeFileName));
     SYS_DEBUG ("*** portraitFileName  = %s", SYS_STR(portraitFileName));
     if (code == WallpaperRequestEdit) {
-        // FIXME: Memory leak
         // FIXME: Only one image name
         WallpaperDescriptor *desc = new WallpaperDescriptor (landscapeFileName);
-        setEditedImage (desc);
+        setEditedImage (desc, true);
         SYS_DEBUG ("Emitting imageEditRequested()");
         emit imageEditRequested ();
+
+        requestCodeItem.set (WallpaperRequestNone);
     }
+}
+
+void
+WallpaperBusinessLogic::checkForPendingSignals ()
+{
+    requestArrived ();
 }

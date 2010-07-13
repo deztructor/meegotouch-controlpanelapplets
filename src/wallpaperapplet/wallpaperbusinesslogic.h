@@ -31,13 +31,15 @@ public:
 
     QList<WallpaperDescriptor *> availableWallpapers () const;
 
-    void setEditedImage (WallpaperDescriptor  *desc);
+    void setEditedImage (WallpaperDescriptor *desc, bool ours = false);
     WallpaperDescriptor *editedImage ();
 
     void setBackground (
         WallpaperITrans     *landscapeITrans,
         WallpaperITrans     *portraitITrans,
         WallpaperDescriptor *desc = 0);
+
+    void checkForPendingSignals ();
 
 signals:
     void wallpaperChanged ();
@@ -68,6 +70,7 @@ private:
     MGConfItem   *m_RequestGConfItem;
 
     QPointer<WallpaperDescriptor> m_EditedImage;
+    bool                          m_EditedImageOurs;
 #ifdef UNIT_TEST
     friend class Ut_WallpaperBusinessLogic;
     friend class Ft_WallpaperBusinessLogic;

@@ -88,6 +88,7 @@ WallpaperWidget::createContent ()
     
     connect (m_WallpaperBusinessLogic, SIGNAL(imageEditRequested()),
             this, SLOT(slotImageActivated()));
+    m_WallpaperBusinessLogic->checkForPendingSignals ();
 }
 
 

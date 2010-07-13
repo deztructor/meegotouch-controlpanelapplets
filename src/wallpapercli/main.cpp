@@ -210,13 +210,6 @@ WallpaperCLI::performEditImages ()
     MGConfItem requestCode  (WALLPAPER_APPLET_REQUEST_CODE);
     bool retval = true;
 
-    SYS_DEBUG ("+++ Starting up the controlpanel");
-    if (!pageToWallpaperApplet()) {
-        retval = false;
-        goto finalize;
-    }
-    sleep (1);
-
     SYS_DEBUG ("+++ Resetting GConf...");
     requestCode.set (-1);
 
@@ -224,6 +217,12 @@ WallpaperCLI::performEditImages ()
     lEditedImage.set (m_OptionLandscapeFilename);
     pEditedImage.set (m_OptionPortraitFilename);
     requestCode.set (WallpaperRequestEdit);
+
+    SYS_DEBUG ("+++ Starting up the controlpanel");
+    if (!pageToWallpaperApplet()) {
+        retval = false;
+        goto finalize;
+    }
 
 finalize:
     return retval;
