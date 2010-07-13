@@ -7,6 +7,7 @@
 #include <QString>
 
 class DuiControlPanelIf;
+class MGConfItem;
 
 class WallpaperCLI : public QObject 
 {
@@ -30,8 +31,17 @@ private:
 private:
     char               *m_ProgramName;
     bool                m_OptionHelp;
+    bool                m_OptionVerbose;
+    bool                m_PrintGconf;
+    bool                m_SetGconf;
     bool                m_OptionStartApplet;
+    QString             m_OptionPortraitFilename;
+    QString             m_OptionLandscapeFilename;
+
     DuiControlPanelIf  *m_DcpIf;
+    MGConfItem         *m_LandscapeGConfItem;
+    MGConfItem         *m_PortraitGConfItem;
+    
     QString             m_ErrorString;
     int                 m_ExitCode;
 };

@@ -25,6 +25,7 @@
 #include <MApplication>
 #include <MApplicationWindow>
 #include <MApplicationPage>
+#include <MGConfItem>
 
 #include "main.h"
 
@@ -34,27 +35,41 @@
 static struct option
 long_options[] =
 {
-    {"help",            no_argument, 0, 'h'},
-    {"start-applet",    no_argument, 0, 's'},
+    {"help",               no_argument, 0, 'h'},
+    {"verbose",            no_argument, 0, 'V'},
+    {"start-applet",       no_argument, 0, 's'},
+    {"print-gconf",        no_argument, 0, 'P'},
+    {"set-gconf",          no_argument, 0, 'S'},
+    {"portrait",           required_argument, 0, 'p'},
+    {"landscape",          required_argument, 0, 'l'},
+
     {0, 0, 0, 0}
 };
 
-static const char *short_options = "hs";
+static const char *short_options = "hsp:l:S";
+
+static const QString PortraitKey = 
+    "/desktop/meego/background/portrait/picture_filename";
+static const QString LandscapeKey = 
+    "/desktop/meego/background/landscape/picture_filename";
 
 
 WallpaperCLI::WallpaperCLI () :
     m_ProgramName (0),
     m_OptionHelp (false),
+    m_OptionVerbose (false),
+    m_PrintGconf (false),
     m_OptionStartApplet (false),
     m_DcpIf (new DuiControlPanelIf),
     m_ExitCode (EXIT_SUCCESS)
 {
+    m_LandscapeGConfItem = new MGConfItem (LandscapeKey);
+    m_PortraitGConfItem = new MGConfItem (PortraitKey);
 }
 
 WallpaperCLI::~WallpaperCLI ()
 {
-    if (m_DcpIf)
-        delete m_DcpIf;
+    delete m_DcpIf;
 }
 
 
@@ -74,6 +89,10 @@ WallpaperCLI::parseCommandLineArguments (
         c = getopt_long (argc, argv, 
                 short_options, long_options, &option_index);
 
+        //SYS_DEBUG ("*** c            = %c", c);
+        //SYS_DEBUG ("*** option_index = %d", option_index);
+        //SYS_DEBUG ("*** optind       = %d", optind);
+
         if (c == -1)
             break;
 
@@ -81,13 +100,39 @@ WallpaperCLI::parseCommandLineArguments (
                 case 's':
                     m_OptionStartApplet = true;
                     break;
+                
+                case 'S':
+                    m_SetGconf = true;
+                    break;
+
                 case 'h':
                     m_OptionHelp = true;
                     break;
 
+                case 'V':
+                    m_OptionVerbose = true;
+                    break;
+
+                case 'P':
+                    m_PrintGconf = true;
+                    break;
+                
+                case 'L':
+                    m_SetGconf = true;
+                    break;
+                
+                case 'p':
+                    SYS_DEBUG ("p = %s", argv[optind - 1]);
+                    m_OptionPortraitFilename = argv[optind - 1];
+                    break;
+
+                case 'l':
+                    SYS_DEBUG ("l = %s", argv[optind - 1]);
+                    m_OptionLandscapeFilename = argv[optind - 1];
+                    break;
+
                 default:
-                    SYS_WARNING ("argv[%d] = %s", 
-                            option_index, argv[option_index]);
+                    SYS_WARNING ("Unhandled option: %d", c); 
             }
     }
 
@@ -99,7 +144,32 @@ WallpaperCLI::executeCommandLineArguments ()
 {
     if (m_OptionHelp) {
         printHelp ();
-    } else if (m_OptionStartApplet) {
+        goto finalize;
+    } 
+    
+    if (m_SetGconf) {
+        m_LandscapeGConfItem->set (m_OptionLandscapeFilename);
+        m_PortraitGConfItem->set (m_OptionPortraitFilename);
+        
+        goto finalize;
+    }
+    
+    if (m_PrintGconf) {
+        QString landscape = m_LandscapeGConfItem->value().toString();
+        QString portrait = m_PortraitGConfItem->value().toString();
+
+        if (m_OptionVerbose) {
+            printf ("Landscape : '%s'\n", landscape.toLatin1().constData());
+            printf ("Portrait  : '%s'\n", portrait.toLatin1().constData());
+        } else {
+            printf ("'%s'\n", landscape.toLatin1().constData());
+            printf ("'%s'\n", portrait.toLatin1().constData());
+        }
+
+        goto finalize;
+    }
+
+    if (m_OptionStartApplet) {
         if (!m_DcpIf->isValid()) {
             m_ErrorString = "Service unavailable";
             m_ExitCode = EXIT_FAILURE;
@@ -110,6 +180,7 @@ WallpaperCLI::executeCommandLineArguments ()
         pageToWallpaperApplet ();
     }
 
+finalize:
     return true;
 }
 
@@ -119,8 +190,15 @@ WallpaperCLI::printHelp ()
 {
     fprintf (stderr, 
 "Usage: %s [OPTION...]\n\n"
-"-h, --help          Print help message and exit.\n"
-"-s, --start-applet  Start the wallpaper applet."
+"-h, --help                 Print help message and exit.\n"
+"--verbose                  Verbose output.\n"
+"\n"
+"-s, --start-applet         Start the wallpaper applet.\n"
+"--print-gconf              Print the settings from the GConf database.\n"
+"--set-gconf                Save the settings from the GConf database.\n"
+"\n"
+"-p, --portrait <filename>  Portrait image filename.\n"
+"-l, --landscape <filename> Portrait image filename.\n"
 "\n\n", m_ProgramName
 );
 }
