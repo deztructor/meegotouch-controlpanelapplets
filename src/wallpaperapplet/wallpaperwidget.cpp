@@ -51,9 +51,9 @@ WallpaperWidget::createContent ()
     /*
      * The gallery item.
      */
-    m_GalleryItem = new MContentItem(MContentItem::IconAndSingleTextLabel);
-    //m_OviItem->setImageID ("icon-m-common-ovi");
-    m_GalleryItem->setObjectName("GalleryItem");
+    m_GalleryItem = new MContentItem (MContentItem::IconAndSingleTextLabel);
+    m_GalleryItem->setObjectName ("GalleryItem");
+    m_GalleryItem->setItemMode (MContentItem::Single);
 
     connect (m_GalleryItem, SIGNAL(clicked()),
             this, SLOT(galleryActivated()));
@@ -62,7 +62,8 @@ WallpaperWidget::createContent ()
      */
     m_OviItem = new MContentItem(MContentItem::IconAndSingleTextLabel);
     m_OviItem->setImageID ("icon-m-common-ovi");
-    m_OviItem->setObjectName("OviItem");
+    m_OviItem->setObjectName ("OviItem");
+    m_OviItem->setItemMode (MContentItem::Single);
 
     connect (m_OviItem, SIGNAL(clicked()),
             this, SLOT(oviActivated()));

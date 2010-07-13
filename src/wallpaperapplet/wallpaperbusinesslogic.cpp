@@ -221,6 +221,8 @@ WallpaperBusinessLogic::availableWallpapers () const
 }
 
 /*!
+ * \param ours if true the descriptor will be destroyed when not needed any more
+ *
  * While a wallpaper image is edited the WallpaperBusinessLogic holds a
  * descriptor on it. This function is used to set this wallpaper descriptor.
  */
