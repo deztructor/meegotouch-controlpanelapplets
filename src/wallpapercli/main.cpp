@@ -26,9 +26,10 @@
 #include <MApplicationWindow>
 #include <MApplicationPage>
 
+#include "main.h"
+
 #define DEBUG
 #include "../debug.h"
-
 
 static struct option
 long_options[] =
@@ -40,47 +41,31 @@ long_options[] =
 
 static const char *short_options = "hs";
 
-static char        *programName = NULL;
-DuiControlPanelIf  *m_DcpIf = NULL;
-bool                m_OptionStartApplet = false;
 
-void
-printHelpAndExit ()
+WallpaperCLI::WallpaperCLI () :
+    m_ProgramName (0),
+    m_OptionHelp (false),
+    m_OptionStartApplet (false),
+    m_DcpIf (new DuiControlPanelIf),
+    m_ExitCode (EXIT_SUCCESS)
 {
-    fprintf (stderr, 
-"Usage: %s [OPTION...]\n\n"
-"-h, --help          Print help message and exit.\n"
-"-s, --start-applet  Start the wallpaper applet."
-"\n\n", programName
-);
-    exit (EXIT_SUCCESS);
 }
 
-void
-startControlPanel ()
+WallpaperCLI::~WallpaperCLI ()
 {
-    SYS_DEBUG ("");
-    system ("duicontrolpanel.launch -software >/dev/null &");
-    sleep (1);
+    if (m_DcpIf)
+        delete m_DcpIf;
 }
 
-void
-pageToWallpaperApplet ()
-{
-    SYS_DEBUG ("");
-    Q_ASSERT (m_DcpIf);
-    m_DcpIf->appletPage("Wallpaper");
-}
 
-int 
-main (
-        int argc, 
-		char *argv[])
+bool 
+WallpaperCLI::parseCommandLineArguments (
+        int argc, char *argv[])
 {
     int c;
-    int digit_optind = 0;
+    //int digit_optind = 0;
 
-    programName = basename (argv[0]);
+    m_ProgramName = basename (argv[0]);
 
     while (1) {
         int this_option_optind = optind ? optind : 1;
@@ -97,24 +82,91 @@ main (
                     m_OptionStartApplet = true;
                     break;
                 case 'h':
-                    printHelpAndExit ();
+                    m_OptionHelp = true;
                     break;
+
+                default:
+                    SYS_WARNING ("argv[%d] = %s", 
+                            option_index, argv[option_index]);
             }
     }
 
-    m_DcpIf = new DuiControlPanelIf();
+    return true;
+}
 
-    // check the interface is valid
-    if (!m_DcpIf->isValid()) {
-        SYS_WARNING ("Err: Service unavailable");
-        exit (EXIT_FAILURE);
-    }
+bool
+WallpaperCLI::executeCommandLineArguments ()
+{
+    if (m_OptionHelp) {
+        printHelp ();
+    } else if (m_OptionStartApplet) {
+        if (!m_DcpIf->isValid()) {
+            m_ErrorString = "Service unavailable";
+            m_ExitCode = EXIT_FAILURE;
+            return false;
+        }
 
-    if (m_OptionStartApplet) {
         startControlPanel ();
         pageToWallpaperApplet ();
     }
 
-    return 0;
+    return true;
+}
+
+
+void
+WallpaperCLI::printHelp ()
+{
+    fprintf (stderr, 
+"Usage: %s [OPTION...]\n\n"
+"-h, --help          Print help message and exit.\n"
+"-s, --start-applet  Start the wallpaper applet."
+"\n\n", m_ProgramName
+);
+}
+
+void
+WallpaperCLI::printError ()
+{
+    SYS_WARNING ("Error: %s", SYS_STR(m_ErrorString));
+}
+
+void
+WallpaperCLI::startControlPanel ()
+{
+    SYS_DEBUG ("");
+    system ("duicontrolpanel.launch -software >/dev/null &");
+    sleep (1);
+}
+
+void
+WallpaperCLI::pageToWallpaperApplet ()
+{
+    SYS_DEBUG ("");
+    Q_ASSERT (m_DcpIf);
+    m_DcpIf->appletPage("Wallpaper");
+}
+
+int 
+main (
+        int   argc, 
+		char *argv[])
+{
+    WallpaperCLI cli;
+    bool         success;
+
+    success = cli.parseCommandLineArguments (argc, argv);
+    if (!success) {
+        cli.printError ();
+        goto finalize;
+    }
+
+    success = cli.executeCommandLineArguments ();
+    if (!success) {
+        cli.printError ();
+    }
+
+finalize:
+    return cli.exitCode ();
 }
 

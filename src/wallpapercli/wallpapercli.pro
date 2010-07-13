@@ -22,7 +22,7 @@ INCLUDEPATH += \
 
 HEADERS = \
     ../debug.h \
-    main.cpp
+    main.h
 
 SOURCES = \
     ../debug.cpp \
