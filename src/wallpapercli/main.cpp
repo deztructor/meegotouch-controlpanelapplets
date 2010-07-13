@@ -198,6 +198,8 @@ WallpaperCLI::executeCommandLineArguments ()
         goto finalize;
     }
 
+    printHelp ();
+
 finalize:
     return true;
 }
@@ -243,7 +245,15 @@ WallpaperCLI::printHelp ()
 "\n"
 "-p, --portrait <filename>  Portrait image filename.\n"
 "-l, --landscape <filename> Portrait image filename.\n"
-"\n\n", m_ProgramName
+"\n"
+"Examples:\n\n"
+"  Starting to edit\n"
+"    %s --portrait image1.jpg --landscape image2.jpg --edit\n\n"
+"  Set wallpaper without editing\n"
+"    %s --portrait image1.jpg --landscape image2.jpg --set-gconf\n\n"
+"  Show settings\n"
+"    %s --verbose --print-gconf\n\n"
+"", m_ProgramName, m_ProgramName, m_ProgramName, m_ProgramName
 );
 }
 
