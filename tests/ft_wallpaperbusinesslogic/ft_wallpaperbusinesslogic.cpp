@@ -128,22 +128,25 @@ Ft_WallpaperBusinessLogic::testAvailableWallpapers ()
         originalp = desc->originalImageFile (M::Portrait);
         originall = desc->originalImageFile (M::Landscape);
 
-        #if 0
-        /*
-         * These might prove usefull in the future, but obviously generate too
-         * much output.
-         */
-        SYS_DEBUG ("*********** available wallpaper #%3d ****************", n);
-        SYS_DEBUG ("*** filename   = %s", SYS_STR(filename));
-        SYS_DEBUG ("*** title      = %s", SYS_STR(title));
-        SYS_DEBUG ("*** basename   = %s", SYS_STR(basename));
-        SYS_DEBUG ("*** mimetype   = %s", SYS_STR(mimetype));
-        SYS_DEBUG ("*** extension  = %s", SYS_STR(extension));
-        SYS_DEBUG ("*** suggestedp = %s", SYS_STR(suggestedp));
-        SYS_DEBUG ("*** suggestedl = %s", SYS_STR(suggestedl));
-        SYS_DEBUG ("*** originalp  = %s", SYS_STR(originalp));
-        SYS_DEBUG ("*** originall  = %s", SYS_STR(originall));
-        #endif
+        if (filename.isEmpty() ||
+                title.isEmpty() ||
+                mimetype.isEmpty() ||
+                suggestedp.isEmpty() ||
+                suggestedl.isEmpty() ||
+                originalp.isEmpty() ||
+                originall.isEmpty()) {
+            SYS_DEBUG ("*** available wallpaper #%3d ***", n);
+            SYS_DEBUG ("*** filename   = %s", SYS_STR(filename));
+            SYS_DEBUG ("*** title      = %s", SYS_STR(title));
+            SYS_DEBUG ("*** basename   = %s", SYS_STR(basename));
+            SYS_DEBUG ("*** mimetype   = %s", SYS_STR(mimetype));
+            SYS_DEBUG ("*** extension  = %s", SYS_STR(extension));
+            SYS_DEBUG ("*** suggestedp = %s", SYS_STR(suggestedp));
+            SYS_DEBUG ("*** suggestedl = %s", SYS_STR(suggestedl));
+            SYS_DEBUG ("*** originalp  = %s", SYS_STR(originalp));
+            SYS_DEBUG ("*** originall  = %s", SYS_STR(originall));
+        }
+
         QVERIFY (!filename.isEmpty());
         QVERIFY (!title.isEmpty());
         QVERIFY (!basename.isEmpty());
