@@ -44,8 +44,8 @@ ProfileWidget::initProfiles ()
     QList<ProfileDataInterface::ProfileData> l = m_ProfileIf->getProfilesData();
     //% "Vibration"
     MContainer *mContainer = new MContainer(qtTrId("qtn_prof_vibration"));
-    QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout();
-    QGraphicsLinearLayout *vibraLayout = new QGraphicsLinearLayout(Qt::Vertical);
+    QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    QGraphicsLinearLayout *vibraLayout = new QGraphicsLinearLayout (Qt::Vertical);
     
     SYS_DEBUG ("We have %d profiles.", l.count());
 
