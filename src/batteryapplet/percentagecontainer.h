@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
-#ifndef TIMECONTAINER_H
-#define TIMECONTAINER_H
+#ifndef PERCENTAGECONTAINER_H
+#define PERCENTAGECONTAINER_H
 
 #include <MContainer>
 
@@ -14,14 +14,17 @@ class MLabel;
  * in stand-by and active mode.
  * This widget also holds an image, but does not handle its changes.
  */
-class TimeContainer : public MContainer
+class PercentageContainer : public MContainer
 {
 public:
-    TimeContainer(const QString &text, MImageWidget *image,
+    PercentageContainer(const QString &text, MImageWidget *image,
                   MWidget *parent = 0);
 
-    void updateTimeLabel (const QString &text);
+    void updateCapacity (const int value);
     void setText (const QString &text);
+
+public slots:
+    void charging(int);
 
 private:
     void setLayout();
@@ -32,4 +35,4 @@ private:
     MLabel        *m_TimeLabel;
 };
 
-#endif // STANDBYTIMECONTAINER_H
+#endif // PERCENTAGECONTAINER_H
