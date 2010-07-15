@@ -6,11 +6,12 @@
 #include "dcpwidget.h"
 
 class MButton;
+class MLabel;
 class MLayout;
 class BatteryBusinessLogic;
 class BatteryImage;
 class SliderContainer;
-class TimeContainer;
+class PercentageContainer;
 
 class BatteryWidget : public DcpWidget
 {
@@ -26,9 +27,10 @@ protected:
 
 private slots:
     void PSMButtonReleased();
-    void remainingTimeValuesReceived (const QStringList &timeValues);
+    void remainingBatteryCapacityReceived (const int value);
     void PSMValueReceived (bool PSMEnabled);
     void PSMAutoToggled (bool PSMAutoEnabled);
+    void chargindReceived(int animation_rate);
 
 private:
     void updatePSMButton ();
@@ -42,9 +44,7 @@ private:
     // true means we are believed to be in power save mode
     bool                     m_PSMButtonToggle;
     SliderContainer         *sliderContainer;
-    TimeContainer           *standByTimeContainer;
-    TimeContainer           *talkTimeContainer;
-
+    PercentageContainer     *remainingCapacityContainer;
 };
 
 #endif // BATTERYWIDGET_H

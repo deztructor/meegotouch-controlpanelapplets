@@ -5,7 +5,7 @@
 #include "batterybusinesslogic.h"
 #include "dcpbattery.h"
 #include "slidercontainer.h"
-#include "timecontainer.h"
+#include "percentagecontainer.h"
 
 #include <QGraphicsLinearLayout>
 #include <QTimer>
@@ -28,8 +28,7 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
         PSMButton (0),
         m_MainLayout (0),
         sliderContainer (0),
-        standByTimeContainer (0),
-        talkTimeContainer (0)
+        remainingCapacityContainer (0)
 {
     SYS_DEBUG ("Starting in %p", this);
     /*
@@ -66,16 +65,15 @@ void BatteryWidget::initWidget ()
     // battery image
     batteryImage = new BatteryImage;
 
-    // talkTimeContainer
-    //% "Estimated talk time:"
-    talkTimeContainer = new TimeContainer (
-            qtTrId ("qtn_ener_tt"), batteryImage);
+    // batteryRemainingCapacityPercentage
+    //% "Battery level"
+    remainingCapacityContainer = new PercentageContainer (
+            qtTrId ("qtn_ener_battery_level"), batteryImage);
 
-    // standByTimeContainer
-    //% "Estimated stand-by time:"
-    standByTimeContainer = new TimeContainer (
-            qtTrId ("qtn_ener_st"), new MImageWidget);
-                                  //"qgn_ener_standby" ^
+    connect (m_logic, SIGNAL(batteryCharging (int)),
+             remainingCapacityContainer, SLOT(batteryCharging(int)));
+
+    m_logic->remainingCapacityRequired();
 
     /*
      * PSMButton is used to immediately turn the power save mode on/off.
@@ -111,10 +109,7 @@ void BatteryWidget::initWidget ()
 
     MGridLayoutPolicy *landscapeLayoutPolicy =
         new MGridLayoutPolicy (m_MainLayout);
-    landscapeLayoutPolicy->addItem (talkTimeContainer, 0, 0);
-    landscapeLayoutPolicy->addItem (standByTimeContainer, 0, 1);
-    landscapeLayoutPolicy->setColumnStretchFactor (0, 2);
-    landscapeLayoutPolicy->setColumnStretchFactor (1, 2);
+    landscapeLayoutPolicy->addItem (remainingCapacityContainer, 0, 0, 1, 2);
     landscapeLayoutPolicy->addItem (sliderContainer, 1, 0, 1, 2);
     landscapeLayoutPolicy->addItem (PSMButton, 2, 0, 1, 2);
     landscapeLayoutPolicy->setSpacing (10);
@@ -122,10 +117,8 @@ void BatteryWidget::initWidget ()
 
     MLinearLayoutPolicy *portraitLayoutPolicy =
         new MLinearLayoutPolicy (m_MainLayout, Qt::Vertical);
-    portraitLayoutPolicy->addItem (talkTimeContainer, Qt::AlignLeft);
-    portraitLayoutPolicy->addItem (standByTimeContainer, Qt::AlignLeft);
-    portraitLayoutPolicy->setStretchFactor (talkTimeContainer, 2);
-    portraitLayoutPolicy->setStretchFactor (standByTimeContainer, 2);
+    portraitLayoutPolicy->addItem (remainingCapacityContainer, Qt::AlignLeft);
+    portraitLayoutPolicy->setStretchFactor (remainingCapacityContainer, 2);
     portraitLayoutPolicy->addItem (sliderContainer, Qt::AlignLeft);
     portraitLayoutPolicy->addItem (PSMButton, Qt::AlignCenter);
     portraitLayoutPolicy->setSpacing (10);
@@ -136,8 +129,8 @@ void BatteryWidget::initWidget ()
     mainContainer->centralWidget ()->setLayout (m_MainLayout);
 
     // connect the value receive signals
-    connect (m_logic, SIGNAL (remainingTimeValuesChanged (QStringList)),
-             this, SLOT (remainingTimeValuesReceived (QStringList)));
+    connect (m_logic, SIGNAL(remainingBatteryCapacityChanged(int)),
+             this, SLOT(remainingBatteryCapacityReceived(int)));
 
     /*
      * Connect the batteryImage slots.
@@ -221,16 +214,11 @@ BatteryWidget::updatePSMButton ()
     }
 }
 
-void BatteryWidget::remainingTimeValuesReceived(const QStringList &timeValues)
+void BatteryWidget::remainingBatteryCapacityReceived(const int pct)
 {
-    SYS_DEBUG ("timevalues = %s, %s",
-               SYS_STR (timeValues.at (0)),
-               SYS_STR (timeValues.at (1)));
-
-    talkTimeContainer->updateTimeLabel (timeValues.at (0));
-    standByTimeContainer->updateTimeLabel (timeValues.at (1));
+    SYS_DEBUG ("percentage = %d", pct);
+    remainingCapacityContainer->updateCapacity (pct);
 }
-
 
 void 
 BatteryWidget::PSMValueReceived (
@@ -263,6 +251,7 @@ BatteryWidget::PSMValueReceived (
             policy->addItem (sliderContainer, 1, 0, 1, 2);
         }
         sliderContainer->setVisible (true);
+        m_logic->remainingCapacityRequired();
     }
     else
     {
@@ -272,11 +261,28 @@ BatteryWidget::PSMValueReceived (
             m_MainLayout->landscapePolicy ()->removeItem (sliderContainer);
         if (m_MainLayout->portraitPolicy () != 0)
             m_MainLayout->portraitPolicy ()->removeItem (sliderContainer);
+        //% "Power save mode"
+        remainingCapacityContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
     }
     m_MainLayout->invalidate ();
 
     m_UILocked = false;
 }
+
+void BatteryWidget::chargindReceived(int animation_rate)
+{
+    if(animation_rate == 0)
+    {
+        m_logic->remainingCapacityRequired();
+    }
+    else
+    {
+        //% "Charging"
+        remainingCapacityContainer->setText (qtTrId ("qtn_ener_charging"));
+    }
+}
+
+
 
 void 
 BatteryWidget::retranslateUi ()
@@ -287,9 +293,6 @@ BatteryWidget::retranslateUi ()
     // This call will retranslate the label (infoText)
     sliderContainer->retranslate ();
 
-    talkTimeContainer->setText(qtTrId ("qtn_ener_tt"));
-    standByTimeContainer->setText (qtTrId ("qtn_ener_st"));
-
-    m_logic->remainingTimeValuesRequired ();
+    m_logic->remainingCapacityRequired();
 }
 

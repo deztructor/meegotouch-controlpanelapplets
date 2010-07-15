@@ -46,10 +46,12 @@ public slots:
     void setPSMValue (bool enabled);
     void setPSMAutoValue (bool toggle);
     void requestValues ();
-    void remainingTimeValuesRequired ();
+//    void remainingTimeValuesRequired ();
+    void remainingCapacityRequired ();
 
 signals:
     void remainingTimeValuesChanged (QStringList values);
+    void remainingBatteryCapacityChanged (int value);
     // animation_rate is 0 when not charging...
     void batteryCharging (int animation_rate);
     void batteryBarValueReceived (int bar_value);

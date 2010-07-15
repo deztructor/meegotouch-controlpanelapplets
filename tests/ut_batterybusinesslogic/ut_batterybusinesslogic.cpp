@@ -51,8 +51,8 @@ SignalSink::reset ()
 {
     m_PSMValue = false;
     m_PSMValueReceived = false;
-    m_RemainingTimeValues.clear();
-    m_RemainingTimeValuesReceived = false;
+    m_RemainingCapacity= -1;
+    m_RemainingCapacityReceived = false;
     m_AnimationRate = -1;
     m_AnimationRateReceived = false;
     m_BarValue = -1;
@@ -67,15 +67,11 @@ SignalSink::print ()
         SYS_DEBUG ("*** m_PSMValue                    = %s", SYS_BOOL (m_PSMValue));
     }
 
-    SYS_DEBUG ("*** m_RemainingTimeValuesReceived = %s", 
-            SYS_BOOL(m_RemainingTimeValuesReceived));
-    if (m_RemainingTimeValuesReceived) {
-        int   n = 0;
-        foreach (QString value, m_RemainingTimeValues) {
-            SYS_DEBUG ("*** m_RemainingTimeValues[%2d]     = %s", 
-                    n, SYS_STR(value));
-            n++;
-        }
+    SYS_DEBUG ("*** m_RemainingCapacityReceived = %s",
+            SYS_BOOL(m_RemainingCapacityReceived));
+    if (m_RemainingCapacityReceived) {
+            SYS_DEBUG ("*** m_RemainingCapacity     = %d", m_RemainingCapacity);
+
     }
 
     SYS_DEBUG ("*** m_AnimationRateReceived       = %s", 
@@ -114,36 +110,54 @@ SignalSink::hasBarValue (
 /*!
  * \param charging If the sink should have information sho
  */
+//bool
+//SignalSink::hasRemainingTimes (
+//        bool   charging)
+//{
+//    if (charging)
+//        return m_RemainingTimeValuesReceived &&
+//            m_RemainingTimeValues.size() == 2 &&
+//            m_RemainingTimeValues[0] == "qtn_ener_charging" &&
+//            m_RemainingTimeValues[1] == "qtn_ener_charging";
+
+//    return m_RemainingTimeValuesReceived &&
+//        m_RemainingTimeValues.size() == 2 &&
+//        m_RemainingTimeValues[0] != "qtn_ener_charging" &&
+//        m_RemainingTimeValues[1] != "qtn_ener_charging";
+//}
+
 bool
-SignalSink::hasRemainingTimes (
+SignalSink::hasRemainingCapacity (
         bool   charging)
 {
-    if (charging)
-        return m_RemainingTimeValuesReceived &&
-            m_RemainingTimeValues.size() == 2 &&
-            m_RemainingTimeValues[0] == "qtn_ener_charging" &&
-            m_RemainingTimeValues[1] == "qtn_ener_charging";
-
-    return m_RemainingTimeValuesReceived && 
-        m_RemainingTimeValues.size() == 2 && 
-        m_RemainingTimeValues[0] != "qtn_ener_charging" && 
-        m_RemainingTimeValues[1] != "qtn_ener_charging";
+    if(m_RemainingCapacity != -1)
+        return true;
+    else
+        return false;
 }
 
-void
-SignalSink::remainingTimeValuesChanged (
-        QStringList values)
-{
-    int   n = 0;
-    foreach (QString value, values) {
-        SYS_DEBUG ("*** values[%d] = %s", n, SYS_STR(value));
-        n++;
-    }
+//void
+//SignalSink::remainingTimeValuesChanged (
+//        QStringList values)
+//{
+//    int   n = 0;
+//    foreach (QString value, values) {
+//        SYS_DEBUG ("*** values[%d] = %s", n, SYS_STR(value));
+//        n++;
+//    }
 
-    m_RemainingTimeValues = values;
-    m_RemainingTimeValuesReceived = true;
-}
+//    m_RemainingTimeValues = values;
+//    m_RemainingTimeValuesReceived = true;
+//}
  
+void
+SignalSink::remainingCapacityChanged(
+        int value)
+{
+    SYS_DEBUG ("*** value = %d", value);
+    m_RemainingCapacity = value;
+}
+
 void
 SignalSink::batteryCharging (
         int animationRate)
@@ -253,8 +267,8 @@ void Ut_BatteryBusinessLogic::init ()
      * Conencting to its signals.
      */
     connectSuccess = connect (
-            m_Logic, SIGNAL (remainingTimeValuesChanged (QStringList)),
-            &m_SignalSink, SLOT (remainingTimeValuesChanged (QStringList)));
+            m_Logic, SIGNAL (remainingBatteryCapacityChanged(int)),
+            &m_SignalSink, SLOT (remainingCapacityChanged (int)));
     QVERIFY (connectSuccess);
     
     connectSuccess = connect (
@@ -394,7 +408,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargerEvent ()
     m_SignalSink.print();
     QVERIFY (m_SignalSink.chargingWithAnimation(500));
     QVERIFY (m_SignalSink.hasBarValue(5));
-    QVERIFY (m_SignalSink.hasRemainingTimes(true));
+    QVERIFY (m_SignalSink.hasRemainingCapacity(true));
     
 
     SYS_DEBUG ("**********************************************************");
@@ -405,7 +419,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargerEvent ()
 
     m_SignalSink.print();
     QVERIFY (m_SignalSink.notCharging());
-    QVERIFY (m_SignalSink.hasRemainingTimes(false));
+    QVERIFY (m_SignalSink.hasRemainingCapacity(false));
     
 
     SYS_DEBUG ("**********************************************************");
@@ -417,7 +431,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargerEvent ()
     m_SignalSink.print();
     QVERIFY (m_SignalSink.chargingWithAnimation(250));
     QVERIFY (m_SignalSink.hasBarValue(5));
-    QVERIFY (m_SignalSink.hasRemainingTimes(true));
+    QVERIFY (m_SignalSink.hasRemainingCapacity(true));
     
     
     SYS_DEBUG ("**********************************************************");
@@ -428,7 +442,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargerEvent ()
 
     m_SignalSink.print();
     QVERIFY (m_SignalSink.notCharging());
-    QVERIFY (m_SignalSink.hasRemainingTimes(false));
+    QVERIFY (m_SignalSink.hasRemainingCapacity(false));
 }
 
 /*!
@@ -459,7 +473,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargingComplete ()
     
     m_SignalSink.print();
     QVERIFY (m_SignalSink.notCharging());
-    QVERIFY (m_SignalSink.hasRemainingTimes(true));
+    QVERIFY (m_SignalSink.hasRemainingCapacity(true));
     QVERIFY (m_SignalSink.hasBarValue(9));
 
     SYS_DEBUG ("**********************************************************");
@@ -471,7 +485,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargingComplete ()
     m_SignalSink.print();
     QVERIFY (m_SignalSink.chargingWithAnimation(250));
     QVERIFY (m_SignalSink.hasBarValue(1));
-    QVERIFY (m_SignalSink.hasRemainingTimes(true));
+    QVERIFY (m_SignalSink.hasRemainingCapacity(true));
     
     SYS_DEBUG ("**********************************************************");
     SYS_DEBUG ("*** The charging is stopped.                           ***");
@@ -484,7 +498,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargingComplete ()
     m_SignalSink.print();
     QVERIFY (m_SignalSink.notCharging());
     QVERIFY (m_SignalSink.hasBarValue(9));
-    QVERIFY (m_SignalSink.hasRemainingTimes(false));
+    QVERIFY (m_SignalSink.hasRemainingCapacity(false));
 }
 
 /*!

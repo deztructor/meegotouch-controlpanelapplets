@@ -191,42 +191,54 @@ BatteryBusinessLogic::PSMAutoValue ()
  * FIXME: Maybe this class should not contain localization, it should return
  * only the logical values?
  */
-void
-BatteryBusinessLogic::remainingTimeValuesRequired ()
-{
-    QmBattery::RemainingTimeMode mode;
-    QStringList                  values;
+//void
+//BatteryBusinessLogic::remainingTimeValuesRequired ()
+//{
+//    QmBattery::RemainingTimeMode mode;
+//    QStringList                  values;
+//    int remainingBatteryCapacityPercentage;
 
-    /*
-     * If the charger QmSystem reports charging there might be no actual
-     * charging since the battery might be full. We still show charging however,
-     * otherwise we would show that the phone has a limited time to stay on and
-     * we don't want to say that while we are on charger...
-     */
-    if (m_Charging) {
-        //% "Charging"
-        values << qtTrId ("qtn_ener_charging") 
-               << qtTrId ("qtn_ener_charging");
-        goto finalize;
-    }
+//    /*
+//     * If the charger QmSystem reports charging there might be no actual
+//     * charging since the battery might be full. We still show charging however,
+//     * otherwise we would show that the phone has a limited time to stay on and
+//     * we don't want to say that while we are on charger...
+//     */
+//    if (m_Charging) {
+//        //% "Charging"
+//        values << qtTrId ("qtn_ener_charging")
+//               << qtTrId ("qtn_ener_charging");
+//        goto finalize;
+//    }
 
-    switch (m_devicemode->getPSMState ()) {
-        case QmDeviceMode::PSMStateOn:
-            mode = QmBattery::PowersaveMode;
-            break;
+//    switch (m_devicemode->getPSMState ()) {
+//        case QmDeviceMode::PSMStateOn:
+//            mode = QmBattery::PowersaveMode;
+//            break;
 
-        case QmDeviceMode::PSMStateOff:
-        default:
-             mode = QmBattery::NormalMode;
-             break;
-    }
+//        case QmDeviceMode::PSMStateOff:
+//        default:
+//             mode = QmBattery::NormalMode;
+//             break;
+//    }
     
-    values << QString ("%1").arg (m_battery->getRemainingTalkTime (mode) / 60)
-           << QString ("%1").arg (m_battery->getRemainingIdleTime (mode) / 60);
+//    values << QString ("%1").arg (m_battery->getRemainingTalkTime (mode) / 60)
+//           << QString ("%1").arg (m_battery->getRemainingIdleTime (mode) / 60);
 
-finalize:
-    SYS_DEBUG ("Emitting remainingTimeValuesChanged()");
-    emit remainingTimeValuesChanged (values);
+//    remainingBatteryCapacityPercentage =
+//            m_battery->getRemainingCapacityPct();
+
+//finalize:
+//    SYS_DEBUG ("Emitting remainingTimeValuesChanged()");
+//    emit remainingTimeValuesChanged (values);
+//    emit remainingBatteryCapacityChanged(remainingBatteryCapacityPercentage);
+//}
+
+void
+BatteryBusinessLogic::remainingCapacityRequired()
+{
+    emit remainingBatteryCapacityChanged(
+            m_battery->getRemainingCapacityPct());
 }
 
 /*!
@@ -292,7 +304,7 @@ BatteryBusinessLogic::batteryRemCapacityChanged (
     SYS_DEBUG ("Emitting batteryBarValueReceived(%d)",
             batteryBarValue (percentage));
     emit batteryBarValueReceived (batteryBarValue (percentage));
-    remainingTimeValuesRequired ();
+    emit remainingBatteryCapacityChanged(percentage);
 }
 
 /*!
@@ -415,8 +427,8 @@ BatteryBusinessLogic::recalculateChargingInfo ()
     emit batteryBarValueReceived (batteryBarValue (-1));
 
     /*
-     * And the remaining time values has to be recalculated.
+     * And the remaining battery capacity has to be recalculated.
      */
-    remainingTimeValuesRequired ();
+    remainingCapacityRequired();
 }
 

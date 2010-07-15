@@ -2,5 +2,5 @@
  * The time label is the label that shows the remaining time for the battery.
  */
 #batteryTimeLabel {
-    color: orange;
+    color: black;
 }

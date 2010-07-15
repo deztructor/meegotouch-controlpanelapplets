@@ -40,7 +40,7 @@ HEADERS += \
     $$SRC_PREFIX/batterywidget.h \
     $$SRC_PREFIX/dcpbattery.h \
     $$SRC_PREFIX/slidercontainer.h \
-    $$SRC_PREFIX/timecontainer.h
+    $$SRC_PREFIX/percentagecontainer.h
 
 SOURCES += \
     $$STUB_PREFIX/qmbattery.cpp \
@@ -53,6 +53,6 @@ SOURCES += \
     $$SRC_PREFIX/batteryimage.cpp \
     $$SRC_PREFIX/batterywidget.cpp \
     $$SRC_PREFIX/slidercontainer.cpp \
-    $$SRC_PREFIX/timecontainer.cpp
+    $$SRC_PREFIX/percentagecontainer.cpp
 
 INSTALLS += target

@@ -37,10 +37,12 @@ public:
     bool chargingWithAnimation (int animationRate);
     bool notCharging ();
     bool hasBarValue (int barValue);
-    bool hasRemainingTimes (bool charging);
+//    bool hasRemainingTimes (bool charging);
+    bool hasRemainingCapacity(bool charging);
     
 public slots:
-    void remainingTimeValuesChanged (QStringList values);
+//    void remainingTimeValuesChanged (QStringList values);
+    void remainingCapacityChanged(int value);
     void batteryCharging (int animationRate);
     void batteryBarValueReceived (int barValue);
     void PSMValueReceived (bool PSMValue);
@@ -48,8 +50,8 @@ public slots:
 public:
     bool        m_PSMValue;
     bool        m_PSMValueReceived;
-    QStringList m_RemainingTimeValues;
-    bool        m_RemainingTimeValuesReceived;
+    int         m_RemainingCapacity;
+    bool        m_RemainingCapacityReceived;
     int         m_AnimationRate;
     bool        m_AnimationRateReceived;
     int         m_BarValue;

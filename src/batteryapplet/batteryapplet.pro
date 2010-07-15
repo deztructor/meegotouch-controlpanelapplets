@@ -22,7 +22,7 @@ HEADERS =                  \
     batterywidget.h        \
     batterybrief.h         \
     batterybusinesslogic.h \
-    timecontainer.h        \
+    percentagecontainer.h  \
     slidercontainer.h      \
     dcpbattery.h           \
     batteryimage.h
@@ -33,7 +33,7 @@ SOURCES =                    \
     batterywidget.cpp        \
     batterybrief.cpp         \
     batterybusinesslogic.cpp \
-    timecontainer.cpp        \
+    percentagecontainer.cpp  \
     slidercontainer.cpp      \
     batteryimage.cpp
 
@@ -51,4 +51,6 @@ INSTALLS += target \
 
 OTHER_FILES += batteryapplet.css \
                battery.desktop
+
+
 
