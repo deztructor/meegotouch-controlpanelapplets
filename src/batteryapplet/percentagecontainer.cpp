@@ -37,7 +37,7 @@ void PercentageContainer::updateCapacity(
         const int value)
 {
     QString text;
-    //% "Battery level %L1%"
+    //% "Battery level \%L1\%"
     text = qtTrId ("qtn_ener_battery_level", value).arg (value);
     m_TextLabel->setText(text);
 }
@@ -54,9 +54,4 @@ void PercentageContainer::setLayout()
     layoutPolicy->addItem (m_TextLabel, 0, 1, 1, 1,Qt::AlignVCenter);
 }
 
-void PercentageContainer::charging(int animation_rate)
-{
-    Q_UNUSED(animation_rate);
-    //% "Charging"
-    m_TextLabel->setText(qtTrId ("qtn_ener_charging"));
-}
+

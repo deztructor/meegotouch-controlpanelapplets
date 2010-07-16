@@ -30,7 +30,7 @@ private slots:
     void remainingBatteryCapacityReceived (const int value);
     void PSMValueReceived (bool PSMEnabled);
     void PSMAutoToggled (bool PSMAutoEnabled);
-    void chargindReceived(int animation_rate);
+    void charging(int animation_rate);
 
 private:
     void updatePSMButton ();

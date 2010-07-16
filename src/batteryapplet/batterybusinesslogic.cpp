@@ -237,6 +237,7 @@ BatteryBusinessLogic::PSMAutoValue ()
 void
 BatteryBusinessLogic::remainingCapacityRequired()
 {
+//    SYS_DEBUG("BATTERY REMAINING CAPACITY: %d", m_battery->getRemainingCapacityPct());
     emit remainingBatteryCapacityChanged(
             m_battery->getRemainingCapacityPct());
 }
@@ -432,3 +433,7 @@ BatteryBusinessLogic::recalculateChargingInfo ()
     remainingCapacityRequired();
 }
 
+bool BatteryBusinessLogic::isCharging()
+{
+    return m_Charging;
+}

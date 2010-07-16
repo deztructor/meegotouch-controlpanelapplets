@@ -40,6 +40,7 @@ public:
     QStringList PSMThresholdValues ();
     int PSMThresholdValue ();
     bool PSMAutoValue ();
+    bool isCharging();
 
 public slots:
     void setPSMThresholdValue (int percentage);

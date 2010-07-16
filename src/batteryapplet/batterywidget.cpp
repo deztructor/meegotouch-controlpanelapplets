@@ -16,7 +16,7 @@
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -66,12 +66,12 @@ void BatteryWidget::initWidget ()
     batteryImage = new BatteryImage;
 
     // batteryRemainingCapacityPercentage
-    //% "Battery level"
+    //% "Battery level \%L1\%"
     remainingCapacityContainer = new PercentageContainer (
             qtTrId ("qtn_ener_battery_level"), batteryImage);
 
     connect (m_logic, SIGNAL(batteryCharging (int)),
-             remainingCapacityContainer, SLOT(batteryCharging(int)));
+             this, SLOT(charging(int)));
 
     m_logic->remainingCapacityRequired();
 
@@ -217,7 +217,31 @@ BatteryWidget::updatePSMButton ()
 void BatteryWidget::remainingBatteryCapacityReceived(const int pct)
 {
     SYS_DEBUG ("percentage = %d", pct);
-    remainingCapacityContainer->updateCapacity (pct);
+    if(!(m_logic->isCharging()))
+    {
+        if(!m_PSMButtonToggle)
+        {
+            remainingCapacityContainer->updateCapacity (pct);
+        }
+        else
+        {
+            //% "Power save mode"
+            remainingCapacityContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
+        }
+    }
+    else
+    {
+        if(!m_PSMButtonToggle)
+        {
+            //% "Charging"
+            remainingCapacityContainer->setText(qtTrId ("qtn_ener_charging"));
+        }
+        else
+        {
+            //% "Power save mode"
+            remainingCapacityContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
+        }
+    }
 }
 
 void 
@@ -269,22 +293,7 @@ BatteryWidget::PSMValueReceived (
     m_UILocked = false;
 }
 
-void BatteryWidget::chargindReceived(int animation_rate)
-{
-    if(animation_rate == 0)
-    {
-        m_logic->remainingCapacityRequired();
-    }
-    else
-    {
-        //% "Charging"
-        remainingCapacityContainer->setText (qtTrId ("qtn_ener_charging"));
-    }
-}
-
-
-
-void 
+void
 BatteryWidget::retranslateUi ()
 {
     // This call will reload the translated text on PSButton
@@ -296,3 +305,12 @@ BatteryWidget::retranslateUi ()
     m_logic->remainingCapacityRequired();
 }
 
+void BatteryWidget::charging(int animation_rate)
+{
+    SYS_DEBUG("Charging rate: %d", animation_rate);
+    if(animation_rate > 0)
+    {
+        //% "Charging"
+        remainingCapacityContainer->setText(qtTrId ("qtn_ener_charging"));
+    }
+}
