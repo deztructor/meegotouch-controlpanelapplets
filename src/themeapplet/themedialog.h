@@ -22,6 +22,9 @@ public:
             ThemeDescriptor    *themeDesc);
     void showDialog ();
 
+signals:
+    void themeChangeCancelled ();
+    
 private slots:
     void acceptClicked ();
     void cancelClicked ();

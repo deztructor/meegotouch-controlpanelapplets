@@ -102,9 +102,6 @@ ThemeWidget::retranslateUi ()
 void
 ThemeWidget::readLocalThemes ()
 {
-    QString        currentThemeCodeName; 
-    QModelIndex    currentIndex;
-
     /*
      * Creating the model and connecting it to the businesslogic so we can show
      * the spinner while the theme change is in progress.
@@ -147,6 +144,25 @@ ThemeWidget::readLocalThemes ()
     //m_List->setItemModel (m_ThemeListModel);
     //m_List->setItemModel (proxy);
 
+
+    connect(m_List, SIGNAL(itemClicked(QModelIndex)),
+            this, SLOT(themeActivated(QModelIndex)));
+
+    selectCurrentTheme ();
+}
+
+/*!
+ * This slot selects the current theme from the theme list. We needed to
+ * implement this feature as a slot, so we can select the current theme when the
+ * user pressed the cancel button in the dialog. We need to go back to the
+ * original theme then.
+ */
+void 
+ThemeWidget::selectCurrentTheme ()
+{
+    QString        currentThemeCodeName; 
+    QModelIndex    currentIndex;
+    
     /*
      * Selecting the current theme from the list.
      */
@@ -158,9 +174,6 @@ ThemeWidget::readLocalThemes ()
     m_List->selectItem (currentIndex);
     m_List->scrollTo (currentIndex, MList::EnsureVisibleHint);
     SYS_DEBUG ("End. -------------------------");
-
-    connect(m_List, SIGNAL(itemClicked(QModelIndex)),
-            this, SLOT(themeActivated(QModelIndex)));
 }
 
 void 
@@ -197,6 +210,8 @@ ThemeWidget::themeActivated (
     }
 
     dialog = new ThemeDialog (m_ThemeBusinessLogic, descr);
+    connect (dialog, SIGNAL(themeChangeCancelled()),
+            this, SLOT(selectCurrentTheme()));
     dialog->showDialog ();
 }
 

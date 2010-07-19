@@ -29,6 +29,7 @@ public:
     void retranslateUi ();
 
 private slots:
+    void selectCurrentTheme ();
     void themeActivated(const QModelIndex &index);
     void oviActivated ();
     void textChanged ();
