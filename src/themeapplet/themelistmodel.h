@@ -30,9 +30,10 @@ class ThemeListModel : public QAbstractListModel
         } ThemeColumnIndex;
         
         typedef enum {
-            DataRole    = Qt::UserRole + 1,
-            SearchRole,
+            SearchRole  = Qt::UserRole + 1,
             CodeNameRole,
+            NameRole,
+            IconNameRole,
             ChangingNameRole,
         } Roles;
 

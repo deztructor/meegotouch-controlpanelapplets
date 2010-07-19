@@ -47,8 +47,6 @@ ThemeCellCreator::updateCell (
         MWidget *cell) const
 {
     MAdvancedListItem    *contentItem;
-    QVariant              data;
-    QStringList           rowData;
     QString               title;
     QString               codeName;
     QString               iconName;
@@ -56,13 +54,10 @@ ThemeCellCreator::updateCell (
 
     contentItem = qobject_cast<MAdvancedListItem *>(cell);
     
-    data = index.data(ThemeListModel::DataRole);
     changingTheme = index.data (ThemeListModel::ChangingNameRole).toString();
-    rowData = data.value<QStringList>();
-    
-    title = rowData[ThemeListModel::ThemeColumnName];
-    codeName = rowData[ThemeListModel::ThemeColumnCodeName];
-    iconName = rowData[ThemeListModel::ThemeColumnIcon];
+    title = index.data (ThemeListModel::NameRole).toString();
+    codeName = index.data (ThemeListModel::CodeNameRole).toString();
+    iconName = index.data (ThemeListModel::IconNameRole).toString();
 
     SYS_DEBUG ("title         = %s", SYS_STR(title));
     SYS_DEBUG ("changingTheme = %s", SYS_STR(changingTheme));

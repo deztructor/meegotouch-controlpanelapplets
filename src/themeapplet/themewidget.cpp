@@ -70,8 +70,8 @@ ThemeWidget::createWidgets ()
     mainLayout->addItem (m_OviItem);
     mainLayout->addItem (m_List);
 
-    //connect (m_LiveFilterEditor, SIGNAL(textChanged()),
-    //        this, SLOT(textChanged ()));
+    connect (m_LiveFilterEditor, SIGNAL(textChanged()),
+            this, SLOT(textChanged ()));
     this->setLayout (mainLayout);
 
     retranslateUi ();

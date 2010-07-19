@@ -30,19 +30,20 @@ ThemeListModel::data (
     QStringList row = m_Rows[index.row()];
    
     switch (role) {
-        case ThemeListModel::DataRole:
-            SYS_DEBUG ("Returning list of %d items.", row.size());
-            SYS_WARNING ("ThemeListModel::DataRole is deprecated");
-            return QVariant(row);
-
         case ThemeListModel::SearchRole:
-            SYS_DEBUG ("ThemeListModel::SearchRole");
-            SYS_DEBUG ("Returning %s", SYS_STR(row[ThemeColumnName]));
+            SYS_WARNING ("ThemeListModel::SearchRole");
+            SYS_WARNING ("Returning %s", SYS_STR(row[ThemeColumnName]));
             return QVariant (row[ThemeColumnName]);
 
         case ThemeListModel::CodeNameRole:
             return QVariant(row[ThemeColumnCodeName]);
 
+        case ThemeListModel::NameRole:
+            return QVariant(row[ThemeColumnName]);
+        
+        case ThemeListModel::IconNameRole:
+            return QVariant(row[ThemeColumnIcon]);
+            
         case ThemeListModel::ChangingNameRole:
             return QVariant (m_ChangingTheme);
 
