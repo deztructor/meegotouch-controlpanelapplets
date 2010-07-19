@@ -14,6 +14,11 @@
 
 #define THUMBNAIL_BG_COLOR "Red"
 
+/*
+ * Please note that printing non UTF-8 characters might break the tests.
+ * Apparently the test engine can not tolerate the debug messages when there are
+ * weird file names around.
+ */
 //#define DEBUG
 #include "../debug.h"
 
@@ -32,11 +37,14 @@ WallpaperDescriptor::WallpaperDescriptor (
     QObject (),
     m_Cached (false)
 {
-    // FIXME: What about the other fields?!
-    m_ThumbnailPixmap = orig.m_ThumbnailPixmap;
-    m_Filename        = orig.m_Filename;
-    m_HasThumbnail    = orig.m_HasThumbnail;
     m_Url             = orig.m_Url;
+    m_Filename        = orig.m_Filename;
+    m_Title           = orig.m_Title;
+    m_MimeType        = orig.m_MimeType;
+    m_HasThumbnail    = orig.m_HasThumbnail;
+    m_Cached          = orig.m_Cached;
+    m_ThumbnailPixmap = orig.m_ThumbnailPixmap;
+    m_Pixmap          = orig.m_Pixmap;
 }
 
 WallpaperDescriptor::WallpaperDescriptor(
@@ -104,7 +112,7 @@ WallpaperDescriptor::setUrl (
     m_Url.setEncodedUrl (urlString.toAscii());
     path = m_Url.path();
 
-    #if 1
+    #if 0
     SYS_DEBUG ("---------------------------------------------------");
     SYS_DEBUG ("*** urlString    = %s", SYS_STR(urlString));
     SYS_DEBUG ("*** scheme       = %s", SYS_STR(m_Url.scheme()));
@@ -229,10 +237,41 @@ WallpaperDescriptor::setMimeType (
     m_MimeType = newMimeType;
 }
 
+static const char *
+mimetypes[][2] = 
+{
+    { "bmp",  "image/bmp"  },
+    { "gif",  "image/gif"  },
+    { "jpg",  "image/jpeg" },
+    { "jpeg", "image/jpeg" },
+    { "jpe",  "image/jpeg" },
+    { "tif",  "image/tiff" },
+    { "png",  "image/png"  },
+    { NULL,   NULL}
+};
+
 QString
 WallpaperDescriptor::mimeType () const
 {
-    return m_MimeType;
+    QString retval = m_MimeType;
+
+    /*
+     * One desparate attempt to produce a mimetype for it is very important.
+     * Well it does not really matter if the mime type is wrong, the thumbnail
+     * will not appear I guess...
+     */
+    if (retval.isEmpty() && !m_Filename.isEmpty()) {
+        QString ext = extension();
+
+        for (int n = 0; mimetypes[n][0] != NULL; ++n) {
+            if (!QString::compare(ext, mimetypes[n][0], Qt::CaseInsensitive)) {
+                retval = QString(mimetypes[n][1]);
+            }
+        }
+    }
+
+    SYS_WARNING ("Returning %s", SYS_STR(retval));
+    return retval;
 }
 
 /*!
@@ -353,6 +392,7 @@ WallpaperDescriptor::thumbnailError (
             QUrl         url)
 {
     Q_UNUSED (url);
+    Q_UNUSED (message);
     SYS_WARNING ("Failed to thumbnail %s: %s", 
             SYS_STR(title()),
             SYS_STR(message));

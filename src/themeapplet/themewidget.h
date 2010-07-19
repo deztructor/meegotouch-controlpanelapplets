@@ -13,6 +13,8 @@
 #include "themelistmodel.h"
 
 class MList;
+class MTextEdit;
+class MSortFilterProxyModel;
 
 class ThemeWidget : public DcpWidget
 {
@@ -29,6 +31,7 @@ public:
 private slots:
     void themeActivated(const QModelIndex &index);
     void oviActivated ();
+    void textChanged ();
 
 private:
     void createWidgets ();
@@ -36,7 +39,10 @@ private:
 
     QPointer<ThemeBusinessLogic>  m_ThemeBusinessLogic;
     ThemeListModel               *m_ThemeListModel;
+    MSortFilterProxyModel        *m_Proxy;
     QList<ThemeDescriptor *>      m_ThemeDescList;
+
+    MTextEdit                    *m_LiveFilterEditor;
     MList                        *m_List;
     MContentItem                 *m_OviItem;
     #ifdef UNIT_TEST

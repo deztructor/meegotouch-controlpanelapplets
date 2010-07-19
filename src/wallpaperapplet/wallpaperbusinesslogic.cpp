@@ -85,13 +85,17 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
                 m_LandscapeGConfItem->value().toString(),
                 m_PortraitGConfItem->value().toString());
         /*
-         * FIXME: Now, this is serious. We have the images set in gconf items,
-         * we managed to load them but we don't know the mimetype. Fortunatelly
-         * this can happen only in the unit test, because the gcon value is
-         * always properly set by us or not set at all. But this might be
-         * changed in the future. See NB#174943 for details.
+         * We have the images set in gconf items, we managed to load them but we
+         * don't know the mimetype. (Fortunatelly this can happen only in the
+         * unit test, because the gcon value is always properly set by us or not
+         * set at all. But this might be changed in the future. See NB#174943
+         * for details.)
+         *
+         * This issue is solved for the most used mime types as we added some
+         * mime guessing mechanism to the WallpaperDescriptor::mimeType()
+         * method.
          */
-        if (success) {
+        if (success && currentDesc->mimeType().isEmpty()) {
             currentDesc->setMimeType (defaultLandscapeMimeType);
         }
     }
@@ -557,7 +561,8 @@ WallpaperBusinessLogic::requestArrived ()
     SYS_DEBUG ("*** landscapeFileName = %s", SYS_STR(landscapeFileName));
     SYS_DEBUG ("*** portraitFileName  = %s", SYS_STR(portraitFileName));
     if (code == WallpaperRequestEdit) {
-        // FIXME: Only one image name
+        // FIXME: Only one image name because only the current wallpaper
+        // descriptor has support for two filenames. 
         WallpaperDescriptor *desc = new WallpaperDescriptor (landscapeFileName);
         setEditedImage (desc, true);
         SYS_DEBUG ("Emitting imageEditRequested()");

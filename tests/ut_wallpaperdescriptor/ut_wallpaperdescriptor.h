@@ -58,7 +58,6 @@ private slots:
     void testThumbnailingWithoutData ();
     void testThumbnailingFailure ();
     void testCache ();
-    //void testFromFileNames ();
 
 private:
     void createDescriptor ();

@@ -40,7 +40,6 @@ ThemeDescriptor::ThemeDescriptor (
         SYS_DEBUG ("m_DesktopEntry = %p");
         delete m_DesktopEntry;
         m_DesktopEntry = 0;
-        SYS_WARNING ("MDesktopEntry is invalid.");
         return;
     }
 

@@ -4,20 +4,10 @@
 #define THEMELISTMODEL_H__
 
 #include <QStringList>
+#include <QString>
 #include <QAbstractListModel>
 
 class ThemeDescriptor;
-
-/*
- * FIXME: This swhould be inside the class namespace.
- */
-enum ThemeColumnIndex {
-    ThemeColumnCodeName = 0,
-    ThemeColumnName,
-    ThemeColumnIcon,
-    ThemeColumnLast
-};
-
 
 class ThemeListModel : public QAbstractListModel
 {
@@ -31,7 +21,21 @@ class ThemeListModel : public QAbstractListModel
         void setThemeList(const QList<ThemeDescriptor *> &themeList);
         QModelIndex indexOfCodeName(const QString &codeName) const;
         QString changingTheme () const;
+
+        typedef enum {
+            ThemeColumnCodeName = 0,
+            ThemeColumnName,
+            ThemeColumnIcon,
+            ThemeColumnLast
+        } ThemeColumnIndex;
         
+        typedef enum {
+            DataRole    = Qt::UserRole + 1,
+            SearchRole,
+            CodeNameRole,
+            ChangingNameRole,
+        } Roles;
+
     public slots:
 	    void themeChangeStarted (QString themeCodeName);
     	void themeChanged (QString themeCodeName);
@@ -42,8 +46,8 @@ class ThemeListModel : public QAbstractListModel
          * strings. This is not robust enough!
          */
         QModelIndex  indexByThemeCodeName (QString themeCodeName);
-        QList<QStringList> m_Rows;
         QString            m_ChangingTheme;
+        QList<QStringList> m_Rows;
 };
 
 #endif
