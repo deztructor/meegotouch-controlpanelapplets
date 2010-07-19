@@ -58,6 +58,7 @@ ThemeWidget::createWidgets ()
      * An item to activate the OVI link.
      */
     m_OviItem = new MContentItem(MContentItem::IconAndSingleTextLabel);
+    m_OviItem->setItemMode (MContentItem::Single);
     m_OviItem->setImageID ("icon-m-common-ovi");
     m_OviItem->setObjectName("OviItem");
 

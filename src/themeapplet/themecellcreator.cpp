@@ -6,6 +6,7 @@
 #include <MSortFilterProxyModel>
 
 #include <QVariant>
+#include <MContentItem>
 #include <MAdvancedListItem>
 #include <MImageWidget>
 #include <MProgressIndicator>
@@ -77,5 +78,30 @@ ThemeCellCreator::updateCell (
     } else {
         contentItem->progressIndicator()->hide();
     }
+
+    updateContentItemMode(index, contentItem);
+}
+
+void 
+ThemeCellCreator::updateContentItemMode (
+              const QModelIndex &index, 
+              MAdvancedListItem *contentItem) const
+{
+    #if 0
+    /*
+     * FIXME: It seems that there is no way to set the visual appearance for the
+     * MAdvancedListItem items.
+     */
+    int row = index.row();
+    int rows = index.model()->rowCount();
+
+    SYS_DEBUG ("");
+    if (row == 0)
+        contentItem->setItemMode(MContentItem::SingleColumnTop);
+    else if (row < rows - 1)
+        contentItem->setItemMode(MContentItem::SingleColumnCenter);
+    else 
+        contentItem->setItemMode(MContentItem::SingleColumnBottom);
+    #endif
 }
 
