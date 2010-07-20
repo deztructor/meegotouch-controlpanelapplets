@@ -9,7 +9,7 @@
 #include <MApplication>
 #include <MDialog>
 #include <MTheme>
-
+#include <MSortFilterProxyModel>
 #include <QModelIndex>
 #include <QVariant>
 
@@ -77,27 +77,17 @@ Ut_ThemeWidget::testThemeActivated ()
 {
     QModelIndex      index;
     QVariant         data;
-    QStringList      stringList;
     QString          name;
     int              rows;
 
-    rows = m_ThemeWidget->m_ThemeListModel->rowCount (index);
+    rows = m_ThemeWidget->m_Proxy->rowCount (index);
 
     SYS_DEBUG ("*** rows    = %d", rows);
     for (int n = 0; n < rows; ++n) {
-        index = m_ThemeWidget->m_ThemeListModel->index (n, 0);
-        data = index.data();
-        stringList = data.value<QStringList>();
+        index = m_ThemeWidget->m_Proxy->index (n, 0);
 
-        QVERIFY (stringList.size() >= 2);
-        name = stringList[1];
+        name = index.data().toString();
         SYS_DEBUG ("*** name            = %s", SYS_STR(name));
-        #ifdef LOTDEBUG
-        SYS_DEBUG ("--------------------------------------------------");
-        foreach (QString sval, stringList) {
-            SYS_DEBUG ("*** sval = %s", SYS_STR(sval));
-        }
-        #endif
 
         QVERIFY (index.isValid ());
         QVERIFY (index.column() == 0);
