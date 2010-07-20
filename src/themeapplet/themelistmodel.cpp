@@ -5,7 +5,7 @@
 
 #include <QModelIndex>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 ThemeListModel::ThemeListModel(QObject *parent)
@@ -44,9 +44,6 @@ ThemeListModel::columnCount (
 {
     int retval = 2;
 
-    SYS_DEBUG ("*** parent.model()   = %p", parent.model());
-    SYS_DEBUG ("*** this             = %p", this);
-    SYS_DEBUG ("*** parent.isValid() = %s", SYS_BOOL(parent.isValid()));
     if (parent.isValid())
         retval = 0;
 
@@ -78,53 +75,41 @@ ThemeListModel::index (
 #endif
 
 /*!
- * \returns A list of strings as in ThemeColumnIndex...
+ * Please note: In this function we return a value based on the role parameter
+ * and we are not using the column number from the index. Well, it works...
  */
 QVariant
 ThemeListModel::data (
 		const QModelIndex &index, 
 		int                role) const
 {    
-    SYS_DEBUG ("*** role = %d", role);
-    SYS_DEBUG ("*** index at %d, %d", index.row(), index.column());
+    if (index.row() < 0 || index.row() >= m_Rows.size())
+        return QVariant();
+
     QStringList row = m_Rows[index.row()];
    
     switch (role) {
         case Qt::DisplayRole:
-            SYS_DEBUG ("*** role = Qt::DisplayRole");
-            SYS_WARNING ("Returning %s", SYS_STR(row[ThemeColumnName]));
             return QVariant (row[ThemeColumnName]);
 
         case ThemeListModel::SearchRole:
-            SYS_WARNING ("ThemeListModel::SearchRole");
-            SYS_DEBUG ("*** role = ThemeListModel::SearchRole");
-            SYS_WARNING ("Returning %s", SYS_STR(row[ThemeColumnName]));
             return QVariant (row[ThemeColumnName]);
 
         case ThemeListModel::CodeNameRole:
-            SYS_DEBUG ("*** role = ThemeListModel::CodeNameRole");
-            SYS_DEBUG ("Returning %s", SYS_STR(row[ThemeColumnCodeName]));
             return QVariant(row[ThemeColumnCodeName]);
 
         case ThemeListModel::NameRole:
-            SYS_DEBUG ("*** role = ThemeListModel::NameRole");
-            SYS_DEBUG ("Returning %s", SYS_STR(row[ThemeColumnName]));
             return QVariant(row[ThemeColumnName]);
         
         case ThemeListModel::IconNameRole:
-            SYS_DEBUG ("*** role = ThemeListModel::IconNameRole");
-            SYS_DEBUG ("Returning %s", SYS_STR(row[ThemeColumnIcon]));
             return QVariant(row[ThemeColumnIcon]);
             
         case ThemeListModel::ChangingNameRole:
-            SYS_DEBUG ("*** role = ThemeListModel::ChangingNameRole");
-            SYS_DEBUG ("Returning %s", SYS_STR(m_ChangingTheme));
             return QVariant (m_ChangingTheme);
 
         default:
             SYS_WARNING ("Unhandled role: %d", role);
             SYS_DEBUG ("Returning list of %d items.", row.size());
-            Q_ASSERT (false);
             return QVariant(row);
     }
 }

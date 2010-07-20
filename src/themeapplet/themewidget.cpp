@@ -16,7 +16,7 @@
 #include <MListFilter>
 #include <MSortFilterProxyModel>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 static const char *oviCommand = "webwidgetrunner /usr/share/webwidgets/applications/d34177b1c241ea44cb132005b63ee6527c9f6040-wrt-widget.desktop -widgetparameter themes &";
@@ -129,20 +129,16 @@ ThemeWidget::readLocalThemes ()
      * list will use a QSortFilterProxyModel object as model. 
      */
     m_List->filtering()->setEnabled (true);
-    //
-    m_List->filtering()->setFilterRole (Qt::DisplayRole);
+    m_List->filtering()->setFilterRole (ThemeListModel::SearchRole);
 
     m_Proxy = m_List->filtering()->proxy();
-    m_Proxy->setSortRole (Qt::DisplayRole/*ThemeListModel::SearchRole*/);
-    // FIXME: just testing...
-    //m_Proxy->setDynamicSortFilter (true);
+    m_Proxy->setSortRole (ThemeListModel::SearchRole);
     m_Proxy->setSortCaseSensitivity(Qt::CaseInsensitive);
     // FIXME: Seems that the sort() method simply will not sort when the
     // ThemeListModel::SearchRole is used.
-    m_Proxy->sort(Qt::DisplayRole/*ThemeListModel::SearchRole*/);
+    m_Proxy->sort(Qt::DisplayRole);
     m_Proxy->setFilterKeyColumn(0);
 
-    //m_List->filtering()->editor()->setVisible(true);
     m_LiveFilterEditor = m_List->filtering()->editor();
 
     connect(m_List, SIGNAL(itemClicked(QModelIndex)),
@@ -180,14 +176,13 @@ ThemeWidget::themeActivated (
     ThemeDialog      *dialog;
     QString           codeName;
     ThemeDescriptor  *descr = 0;
-   
+      
+    SYS_WARNING ("*** index at %d, %d", index.row(), index.column());
     codeName = m_Proxy->data(index, ThemeListModel::CodeNameRole).toString();
+
     /*
      * If the user selects the current theme we don't do anything.
      */
-    SYS_DEBUG ("*** codeName        = %s", SYS_STR(codeName));
-    SYS_DEBUG ("*** currentCodeName = %s", 
-            SYS_STR(m_ThemeBusinessLogic->currentThemeCodeName()));
     if (codeName == m_ThemeBusinessLogic->currentThemeCodeName())
         return;
 
@@ -220,9 +215,6 @@ ThemeWidget::oviActivated ()
     system (oviCommand);
 }
 
-// Added the regexp here for debugging purposes only.
-#include <QRegExp>
-
 void 
 ThemeWidget::textChanged ()
 {
@@ -230,39 +222,14 @@ ThemeWidget::textChanged ()
         m_List->filtering()->editor()->show();
         m_List->filtering()->editor()->setFocus();
     }
-    SYS_DEBUG ("Text: %s", SYS_STR(m_LiveFilterEditor->text()));
-    SYS_DEBUG ("-''-: %s", SYS_STR(m_List->filtering()->editor()->text()));
+
+
     m_CellCreator->highlightByText (m_LiveFilterEditor->text());
+    // FIXME: Seems that the sort() method simply will not sort when the
+    // ThemeListModel::SearchRole is used.
+    m_Proxy->sort(Qt::DisplayRole);
+    selectCurrentTheme ();
     m_ThemeListModel->refresh();
-
-#if 0
-
-    SYS_DEBUG ("enabled: %s", SYS_BOOL(m_List->filtering()->enabled()));
-    QRegExp regexp;
-
-    regexp = m_Proxy->filterRegExp ();
-    SYS_DEBUG ("*** regexp.isValid() = %s", SYS_BOOL(regexp.isValid()));
-    SYS_DEBUG ("*** regexp.isEmpty() = %s", SYS_BOOL(regexp.isEmpty()));
-    SYS_DEBUG ("*** regexp.pattern() = %s", SYS_STR(regexp.pattern()));
-
-    m_List->update();
-    
-    QModelIndex          index;
-    int                  rows = m_Proxy->rowCount (index);
-    QString              debugString;
-    bool                 accepts;
-
-    for (int n = 0; n < rows; ++n) {
-        index = m_ThemeListModel->index (n, 0);
-        debugString = index.data (ThemeListModel::NameRole).toString();
-
-        SYS_DEBUG ("Start ==================================================");
-        accepts = m_Proxy->filterAcceptsRow (n, index);
-        SYS_DEBUG ("End   ==================================================");
-        SYS_DEBUG ("name          [%d] = %s", n, SYS_STR(debugString));
-        SYS_DEBUG ("filteraccepts [%d] = %s", n, SYS_BOOL(accepts));
-    }
-#endif
 }
 
 void 

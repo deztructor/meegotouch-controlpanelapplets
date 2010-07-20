@@ -15,10 +15,10 @@
 #include "themecellcreator.h"
 #include "themelistmodel.h"
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
-#if 1
+
 MWidget *
 ThemeCellCreator::createCell(
         const QModelIndex &index, 
@@ -49,7 +49,6 @@ ThemeCellCreator::createCell(
 
     return cell;
 }
-#endif
 
 void
 ThemeCellCreator::updateCell (
@@ -62,17 +61,8 @@ ThemeCellCreator::updateCell (
     QString               iconName;
     QString               changingTheme;
 
-    /* happens to be null when shortening filter string */
-    if(!cell){ 
+    if(!cell || !index.isValid()) 
         return;
-    }
-
-    /* happens to be invalid when filtered to be empty */
-    if(!index.isValid()) {
-        return;
-    }
-
-    //QModelIndex index = _index.sibling(_index.row(), 0);
 
     contentItem = qobject_cast<MAdvancedListItem *>(cell);
     
@@ -81,11 +71,13 @@ ThemeCellCreator::updateCell (
     codeName = index.data (ThemeListModel::CodeNameRole).toString();
     iconName = index.data (ThemeListModel::IconNameRole).toString();
 
+    #if 0
     SYS_DEBUG ("************** %d ***************", index.row());
     SYS_DEBUG ("title         = %s", SYS_STR(title));
     SYS_DEBUG ("changingTheme = %s", SYS_STR(changingTheme));
     SYS_DEBUG ("codeName      = %s", SYS_STR(codeName));
     SYS_DEBUG ("iconName      = %s", SYS_STR(iconName));
+    #endif
 
     // The title
     if (m_HighlightText.isEmpty()) {
