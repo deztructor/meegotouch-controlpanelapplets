@@ -27,6 +27,10 @@ Profile::Profile ()
 {
     SYS_DEBUG ("Constructor: %p", this);
     m_ActiveProfileName = ProfileName::ringing; 
+    m_Vibration[0] = false;
+    m_Vibration[1] = false;
+    m_Vibration[2] = false;
+    m_Vibration[3] = false;
 }
 
 Profile::~Profile ()

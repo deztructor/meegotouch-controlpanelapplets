@@ -38,7 +38,7 @@ TestWidget::createWidgets ()
     MLabel                *tLabel;
     char                   title[512];
 
-    sprintf (title, "This is page %d at %p", m_NumId, this);
+    snprintf (title, 512, "This is page %d at %p", m_NumId, this);
 
     tLabel = new MLabel (title);
     
