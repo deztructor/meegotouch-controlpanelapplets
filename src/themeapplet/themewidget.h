@@ -11,6 +11,7 @@
 #include "themebusinesslogic.h"
 #include "themedescriptor.h"
 #include "themelistmodel.h"
+#include "themecellcreator.h"
 
 class MList;
 class MTextEdit;
@@ -33,7 +34,8 @@ private slots:
     void themeActivated(const QModelIndex &index);
     void oviActivated ();
     void textChanged ();
-
+    void hideEmptyTextEdit ();
+    
 private:
     void createWidgets ();
     void readLocalThemes ();
@@ -41,6 +43,7 @@ private:
     QPointer<ThemeBusinessLogic>  m_ThemeBusinessLogic;
     ThemeListModel               *m_ThemeListModel;
     MSortFilterProxyModel        *m_Proxy;
+    ThemeCellCreator             *m_CellCreator;
     QList<ThemeDescriptor *>      m_ThemeDescList;
 
     MTextEdit                    *m_LiveFilterEditor;

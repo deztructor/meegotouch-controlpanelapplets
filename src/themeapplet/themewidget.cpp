@@ -7,22 +7,19 @@
 #include "themecellcreator.h"
 #include "themedialog.h"
 
-#include <QGraphicsLinearLayout>
-#include <MSortFilterProxyModel>
-
+#include <MApplication>
+#include <MApplicationWindow>
 #include <MLayout>
+#include <MLinearLayoutPolicy>
 #include <MTextEdit>
 #include <MList>
 #include <MListFilter>
-#include <MApplication>
-#include <MApplicationWindow>
+#include <MSortFilterProxyModel>
 
 #define DEBUG
 #include "../debug.h"
 
 static const char *oviCommand = "webwidgetrunner /usr/share/webwidgets/applications/d34177b1c241ea44cb132005b63ee6527c9f6040-wrt-widget.desktop -widgetparameter themes &";
-
-#include <QTimer>
 
 ThemeWidget::ThemeWidget (
         ThemeBusinessLogic *themeBusinessLogic, 
@@ -43,16 +40,25 @@ ThemeWidget::~ThemeWidget ()
 void
 ThemeWidget::createWidgets ()
 {
-    QGraphicsLinearLayout *mainLayout;
+    MLayout *mainLayout = new MLayout(this);
+    setLayout(mainLayout);
 
-    m_List = new MList(this);
+    MLinearLayoutPolicy *mainLayoutPolicy =
+        new MLinearLayoutPolicy(mainLayout, Qt::Vertical);
+    mainLayout->setPolicy(mainLayoutPolicy);
+    mainLayoutPolicy->setObjectName("ThemeWidgetMainLayoutPolicy");
+
+    m_List = new MList();
+    m_List->setObjectName ("ThemeList");
+
+    m_CellCreator = new ThemeCellCreator;
+    m_List->setCellCreator (m_CellCreator);
     m_List->setSelectionMode (MList::SingleSelection);
 
 
-    ThemeCellCreator *cellCreator = new ThemeCellCreator();
-    m_List->setCellCreator(cellCreator);
     // This function will create the m_LiveFilterEditor widget.
     readLocalThemes ();
+    //m_List->setShowGroups(true);
 
     /*
      * An item to activate the OVI link.
@@ -65,20 +71,16 @@ ThemeWidget::createWidgets ()
     connect (m_OviItem, SIGNAL(clicked()),
             this, SLOT(oviActivated()));
 
-    mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
-    
-    mainLayout->addItem (m_LiveFilterEditor);
-    mainLayout->addItem (m_OviItem);
-    mainLayout->addItem (m_List);
+    mainLayoutPolicy->addItem (m_LiveFilterEditor);
+    mainLayoutPolicy->addItem (m_OviItem);
+    mainLayoutPolicy->addItem (m_List);
 
     connect (m_LiveFilterEditor, SIGNAL(textChanged()),
             this, SLOT(textChanged ()));
-    this->setLayout (mainLayout);
+    connect (m_List, SIGNAL(panningStarted()),
+            this, SLOT(hideEmptyTextEdit()));
 
     retranslateUi ();
-
-    mainLayout->insertItem(0, m_LiveFilterEditor);
-    m_LiveFilterEditor->setVisible(true);
 }
 
 void
@@ -107,8 +109,13 @@ ThemeWidget::readLocalThemes ()
      * Creating the model and connecting it to the businesslogic so we can show
      * the spinner while the theme change is in progress.
      */
-    m_ThemeListModel = new ThemeListModel (this);
+    m_ThemeListModel = new ThemeListModel ();
+    m_ThemeDescList = m_ThemeBusinessLogic->availableThemes ();
+    m_ThemeListModel->setThemeList(m_ThemeDescList);
+
+    m_ThemeListModel->setObjectName ("ThemeListModel");
     SYS_DEBUG ("*** m_ThemeListModel = %p", m_ThemeListModel);
+    m_List->setItemModel (m_ThemeListModel);
 
     if (m_ThemeBusinessLogic) {
         connect (m_ThemeBusinessLogic, SIGNAL(themeChangeStarted(QString)),
@@ -117,34 +124,26 @@ ThemeWidget::readLocalThemes ()
                 m_ThemeListModel, SLOT(themeChanged(QString)));
     }
 
-    m_ThemeDescList = m_ThemeBusinessLogic->availableThemes ();
-    m_ThemeListModel->setThemeList(m_ThemeDescList);
-
-#if 0
-    m_Proxy = new MSortFilterProxyModel();
-    m_Proxy->setSortRole (ThemeListModel::SearchRole);
-    m_Proxy->setFilterRole (ThemeListModel::SearchRole);
-    m_Proxy->setSourceModel (m_ThemeListModel);
-    m_List->setItemModel (m_Proxy);
-#endif
     /*
      * Enabling the live filter feature for the list. From this moment on the
      * list will use a QSortFilterProxyModel object as model. 
      */
     m_List->filtering()->setEnabled (true);
-    m_List->filtering()->setFilterRole (ThemeListModel::SearchRole);
-    m_LiveFilterEditor = m_List->filtering()->editor();
+    //
+    m_List->filtering()->setFilterRole (Qt::DisplayRole);
 
-    #if 1
     m_Proxy = m_List->filtering()->proxy();
-    m_Proxy->setFilterRole (ThemeListModel::SearchRole);
-    m_Proxy->setSourceModel (m_ThemeListModel);
-    #endif
-    
+    m_Proxy->setSortRole (Qt::DisplayRole/*ThemeListModel::SearchRole*/);
+    // FIXME: just testing...
+    //m_Proxy->setDynamicSortFilter (true);
+    m_Proxy->setSortCaseSensitivity(Qt::CaseInsensitive);
+    // FIXME: Seems that the sort() method simply will not sort when the
+    // ThemeListModel::SearchRole is used.
+    m_Proxy->sort(Qt::DisplayRole/*ThemeListModel::SearchRole*/);
+    m_Proxy->setFilterKeyColumn(0);
 
-    //m_List->setItemModel (m_ThemeListModel);
-    //m_List->setItemModel (proxy);
-
+    //m_List->filtering()->editor()->setVisible(true);
+    m_LiveFilterEditor = m_List->filtering()->editor();
 
     connect(m_List, SIGNAL(itemClicked(QModelIndex)),
             this, SLOT(themeActivated(QModelIndex)));
@@ -163,18 +162,15 @@ ThemeWidget::selectCurrentTheme ()
 {
     QString        currentThemeCodeName; 
     QModelIndex    currentIndex;
-    
+   
     /*
      * Selecting the current theme from the list.
      */
-    SYS_DEBUG ("Selecting current theme -----");
     currentThemeCodeName = m_ThemeBusinessLogic->currentThemeCodeName();
     currentIndex = m_ThemeListModel->indexOfCodeName(currentThemeCodeName);
     currentIndex = m_Proxy->mapFromSource (currentIndex);
-    SYS_DEBUG ("*** currentIndex = %d", currentIndex.row());
     m_List->selectItem (currentIndex);
     m_List->scrollTo (currentIndex, MList::EnsureVisibleHint);
-    SYS_DEBUG ("End. -------------------------");
 }
 
 void 
@@ -182,15 +178,16 @@ ThemeWidget::themeActivated (
         const QModelIndex &index)
 {
     ThemeDialog      *dialog;
-    QVariant          data;
     QString           codeName;
     ThemeDescriptor  *descr = 0;
    
-    data = m_ThemeListModel->data(index, ThemeListModel::CodeNameRole);
-    codeName = data.toString();
+    codeName = m_Proxy->data(index, ThemeListModel::CodeNameRole).toString();
     /*
      * If the user selects the current theme we don't do anything.
      */
+    SYS_DEBUG ("*** codeName        = %s", SYS_STR(codeName));
+    SYS_DEBUG ("*** currentCodeName = %s", 
+            SYS_STR(m_ThemeBusinessLogic->currentThemeCodeName()));
     if (codeName == m_ThemeBusinessLogic->currentThemeCodeName())
         return;
 
@@ -223,9 +220,55 @@ ThemeWidget::oviActivated ()
     system (oviCommand);
 }
 
+// Added the regexp here for debugging purposes only.
+#include <QRegExp>
+
 void 
 ThemeWidget::textChanged ()
 {
+    if (!m_List->filtering()->editor()->isOnDisplay()) {
+        m_List->filtering()->editor()->show();
+        m_List->filtering()->editor()->setFocus();
+    }
     SYS_DEBUG ("Text: %s", SYS_STR(m_LiveFilterEditor->text()));
-    //m_Proxy->setFilterFixedString (m_LiveFilterEditor->text());
+    SYS_DEBUG ("-''-: %s", SYS_STR(m_List->filtering()->editor()->text()));
+    m_CellCreator->highlightByText (m_LiveFilterEditor->text());
+    m_ThemeListModel->refresh();
+
+#if 0
+
+    SYS_DEBUG ("enabled: %s", SYS_BOOL(m_List->filtering()->enabled()));
+    QRegExp regexp;
+
+    regexp = m_Proxy->filterRegExp ();
+    SYS_DEBUG ("*** regexp.isValid() = %s", SYS_BOOL(regexp.isValid()));
+    SYS_DEBUG ("*** regexp.isEmpty() = %s", SYS_BOOL(regexp.isEmpty()));
+    SYS_DEBUG ("*** regexp.pattern() = %s", SYS_STR(regexp.pattern()));
+
+    m_List->update();
+    
+    QModelIndex          index;
+    int                  rows = m_Proxy->rowCount (index);
+    QString              debugString;
+    bool                 accepts;
+
+    for (int n = 0; n < rows; ++n) {
+        index = m_ThemeListModel->index (n, 0);
+        debugString = index.data (ThemeListModel::NameRole).toString();
+
+        SYS_DEBUG ("Start ==================================================");
+        accepts = m_Proxy->filterAcceptsRow (n, index);
+        SYS_DEBUG ("End   ==================================================");
+        SYS_DEBUG ("name          [%d] = %s", n, SYS_STR(debugString));
+        SYS_DEBUG ("filteraccepts [%d] = %s", n, SYS_BOOL(accepts));
+    }
+#endif
 }
+
+void 
+ThemeWidget::hideEmptyTextEdit ()
+{
+    if (m_List->filtering()->editor()->text().isEmpty())
+        m_List->filtering()->editor()->hide();
+}
+

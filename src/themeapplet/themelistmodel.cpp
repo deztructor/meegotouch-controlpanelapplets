@@ -3,20 +3,79 @@
 #include "themelistmodel.h"
 #include "themedescriptor.h"
 
+#include <QModelIndex>
+
 #define DEBUG
 #include "../debug.h"
 
 ThemeListModel::ThemeListModel(QObject *parent)
-    : QAbstractListModel(parent)
+    : QAbstractTableModel(parent)
 {
 }
 
-int
-ThemeListModel::rowCount(const QModelIndex &parent) const
+void
+ThemeListModel::refresh()
 {
-    Q_UNUSED(parent);
-    return m_Rows.size();
+    if (m_Rows.size() != 0) {
+        QModelIndex first = index (0, 0);
+        QModelIndex last  = index (m_Rows.size() - 1, 0);
+
+        SYS_DEBUG ("Emitting dataChanged()");
+        emit dataChanged (first, last);
+    }
 }
+
+int
+ThemeListModel::rowCount(
+        const QModelIndex &parent) const
+{
+    int retval = m_Rows.size();
+
+    if (parent.isValid())
+        retval = 0;
+
+    SYS_DEBUG ("Returning %d", retval);
+    return retval;
+}
+
+int 
+ThemeListModel::columnCount (
+        const QModelIndex & parent) const
+{
+    int retval = 2;
+
+    SYS_DEBUG ("*** parent.model()   = %p", parent.model());
+    SYS_DEBUG ("*** this             = %p", this);
+    SYS_DEBUG ("*** parent.isValid() = %s", SYS_BOOL(parent.isValid()));
+    if (parent.isValid())
+        retval = 0;
+
+    SYS_DEBUG ("Returning %d", retval);
+    return retval;
+}
+        
+#if 0
+        /*
+         * FIXME:
+         * This method is only for debugging purposes and will be removed soon.
+         */
+QModelIndex
+ThemeListModel::index (
+                int row, 
+                int column, 
+                const QModelIndex &parent) const
+{
+    QModelIndex retval;
+
+    retval = QAbstractTableModel::index (row, column, parent);
+
+    SYS_DEBUG ("*** row              = %d", row);
+    SYS_DEBUG ("*** column           = %d", column);
+    SYS_DEBUG ("*** parent.isValid() = %s", SYS_BOOL(parent.isValid()));
+    SYS_DEBUG ("*** retval.isValid() = %s", SYS_BOOL(retval.isValid()));
+    return retval;
+}
+#endif
 
 /*!
  * \returns A list of strings as in ThemeColumnIndex...
@@ -27,29 +86,45 @@ ThemeListModel::data (
 		int                role) const
 {    
     SYS_DEBUG ("*** role = %d", role);
+    SYS_DEBUG ("*** index at %d, %d", index.row(), index.column());
     QStringList row = m_Rows[index.row()];
    
     switch (role) {
+        case Qt::DisplayRole:
+            SYS_DEBUG ("*** role = Qt::DisplayRole");
+            SYS_WARNING ("Returning %s", SYS_STR(row[ThemeColumnName]));
+            return QVariant (row[ThemeColumnName]);
+
         case ThemeListModel::SearchRole:
             SYS_WARNING ("ThemeListModel::SearchRole");
+            SYS_DEBUG ("*** role = ThemeListModel::SearchRole");
             SYS_WARNING ("Returning %s", SYS_STR(row[ThemeColumnName]));
             return QVariant (row[ThemeColumnName]);
 
         case ThemeListModel::CodeNameRole:
+            SYS_DEBUG ("*** role = ThemeListModel::CodeNameRole");
+            SYS_DEBUG ("Returning %s", SYS_STR(row[ThemeColumnCodeName]));
             return QVariant(row[ThemeColumnCodeName]);
 
         case ThemeListModel::NameRole:
+            SYS_DEBUG ("*** role = ThemeListModel::NameRole");
+            SYS_DEBUG ("Returning %s", SYS_STR(row[ThemeColumnName]));
             return QVariant(row[ThemeColumnName]);
         
         case ThemeListModel::IconNameRole:
+            SYS_DEBUG ("*** role = ThemeListModel::IconNameRole");
+            SYS_DEBUG ("Returning %s", SYS_STR(row[ThemeColumnIcon]));
             return QVariant(row[ThemeColumnIcon]);
             
         case ThemeListModel::ChangingNameRole:
+            SYS_DEBUG ("*** role = ThemeListModel::ChangingNameRole");
+            SYS_DEBUG ("Returning %s", SYS_STR(m_ChangingTheme));
             return QVariant (m_ChangingTheme);
 
         default:
             SYS_WARNING ("Unhandled role: %d", role);
             SYS_DEBUG ("Returning list of %d items.", row.size());
+            Q_ASSERT (false);
             return QVariant(row);
     }
 }

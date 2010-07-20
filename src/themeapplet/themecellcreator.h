@@ -14,7 +14,7 @@ class ThemeCellCreator : public MAbstractCellCreator<MAdvancedListItem>
         virtual MWidget *createCell (
                 const QModelIndex &index, 
                 MWidgetRecycler   &recycler) const;
-
+        
         virtual void updateCell (
                 const QModelIndex &index, 
                 MWidget           *cell) const;
@@ -23,6 +23,10 @@ class ThemeCellCreator : public MAbstractCellCreator<MAdvancedListItem>
               const QModelIndex &index, 
               MAdvancedListItem *contentItem) const;
 
+        void highlightByText(QString text);
+
+    private:
+        QString   m_HighlightText;
 };
 
 #endif

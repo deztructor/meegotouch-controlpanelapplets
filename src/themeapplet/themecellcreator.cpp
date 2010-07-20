@@ -18,12 +18,20 @@
 #define DEBUG
 #include "../debug.h"
 
+#if 1
 MWidget *
 ThemeCellCreator::createCell(
         const QModelIndex &index, 
         MWidgetRecycler &recycler) const
 {
     MAdvancedListItem *cell;
+    
+    // Title is just for debugging purposes.
+    QString title;
+    title = index.data (ThemeListModel::NameRole).toString();
+    SYS_DEBUG ("************** %d ***************", index.row());
+    SYS_DEBUG ("index.isValid() = %s", SYS_BOOL(index.isValid()));
+    SYS_DEBUG ("title           = %s", SYS_STR(title));
     
     cell = qobject_cast <MAdvancedListItem *> (
             recycler.take(MAdvancedListItem::staticMetaObject.className()));
@@ -41,6 +49,7 @@ ThemeCellCreator::createCell(
 
     return cell;
 }
+#endif
 
 void
 ThemeCellCreator::updateCell (
@@ -53,6 +62,18 @@ ThemeCellCreator::updateCell (
     QString               iconName;
     QString               changingTheme;
 
+    /* happens to be null when shortening filter string */
+    if(!cell){ 
+        return;
+    }
+
+    /* happens to be invalid when filtered to be empty */
+    if(!index.isValid()) {
+        return;
+    }
+
+    //QModelIndex index = _index.sibling(_index.row(), 0);
+
     contentItem = qobject_cast<MAdvancedListItem *>(cell);
     
     changingTheme = index.data (ThemeListModel::ChangingNameRole).toString();
@@ -60,13 +81,25 @@ ThemeCellCreator::updateCell (
     codeName = index.data (ThemeListModel::CodeNameRole).toString();
     iconName = index.data (ThemeListModel::IconNameRole).toString();
 
+    SYS_DEBUG ("************** %d ***************", index.row());
     SYS_DEBUG ("title         = %s", SYS_STR(title));
     SYS_DEBUG ("changingTheme = %s", SYS_STR(changingTheme));
     SYS_DEBUG ("codeName      = %s", SYS_STR(codeName));
     SYS_DEBUG ("iconName      = %s", SYS_STR(iconName));
 
     // The title
-    contentItem->setTitle(title);
+    if (m_HighlightText.isEmpty()) {
+        contentItem->setTitle(title);
+    } else {
+        int matchingIndex = title.indexOf (
+                m_HighlightText, 0, Qt::CaseInsensitive);
+
+        if (matchingIndex != -1) {
+            title.insert (matchingIndex + m_HighlightText.length(), "</b>");
+            title.insert (matchingIndex, "<b>");
+        }
+        contentItem->setTitle (title);
+    }
 
     // The icon
     if (contentItem->imageWidget()->image() != iconName)
@@ -103,5 +136,13 @@ ThemeCellCreator::updateContentItemMode (
     else 
         contentItem->setItemMode(MContentItem::SingleColumnBottom);
     #endif
+}
+
+void 
+ThemeCellCreator::highlightByText (
+        QString text)
+{
+    SYS_DEBUG ("*** text = %s", SYS_STR(text));
+    m_HighlightText = text;
 }
 

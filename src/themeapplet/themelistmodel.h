@@ -5,18 +5,34 @@
 
 #include <QStringList>
 #include <QString>
-#include <QAbstractListModel>
+#include <QAbstractTableModel>
 
 class ThemeDescriptor;
+class QModelIndex;
 
-class ThemeListModel : public QAbstractListModel
+class ThemeListModel : public QAbstractTableModel
 {
     Q_OBJECT
 
     public:
         ThemeListModel(QObject *parent = 0);
 
-        int rowCount(const QModelIndex &parent = QModelIndex()) const;
+        void refresh ();
+        
+        #if 0
+        /*
+         * FIXME:
+         * This method is only for debugging purposes and will be removed soon.
+         */
+        virtual QModelIndex index (
+                int row, 
+                int column, 
+                const QModelIndex & parent = QModelIndex()) const;
+        #endif
+
+        int rowCount (const QModelIndex &parent = QModelIndex()) const;
+        int columnCount (const QModelIndex & parent) const;
+
         QVariant data(const QModelIndex &index, int role=Qt::DisplayRole) const;
         void setThemeList(const QList<ThemeDescriptor *> &themeList);
         QModelIndex indexOfCodeName(const QString &codeName) const;
