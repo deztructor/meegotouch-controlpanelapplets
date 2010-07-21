@@ -100,7 +100,7 @@ Ut_WallpaperCurrentDescriptor::testFromDesktopFileInvalid ()
 
     createDescriptor ();
 
-    success = m_Desc->setFromDestopFile (WALLPAPER_DESKTOPFILE_MISSING);
+    success = m_Desc->setFromDesktopFile (WALLPAPER_DESKTOPFILE_MISSING);
     QVERIFY (!success);
     QVERIFY (!m_Desc->valid());
     QVERIFY (!m_Desc->m_DesktopEntry);
@@ -115,7 +115,7 @@ Ut_WallpaperCurrentDescriptor::testFromDesktopFile ()
 
     createDescriptor ();
 
-    success = m_Desc->setFromDestopFile (wallpaperDesktopFileName());
+    success = m_Desc->setFromDesktopFile (wallpaperDesktopFileName());
     QVERIFY (success);
     QVERIFY (m_Desc->valid());
     QVERIFY (!m_Desc->m_DesktopEntry);

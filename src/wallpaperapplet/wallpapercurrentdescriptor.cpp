@@ -73,15 +73,24 @@ WallpaperCurrentDescriptor::version () const
     return m_Version;
 }
 
-/*
+/*!
+ * \param desktopFileName The full path of the desktop file to read
+ * \param landscapeFileName If provided the method will report failure when the
+ *   desktop file contains a different file name.
+ * \param portraitFileName If provided the method will report failure when the
+ *   desktop file contains a different file name.
+ * 
  * Reads the data stored in a desktop wile and initializes the object using the
  * data found there.
  */
 bool 
-WallpaperCurrentDescriptor::setFromDestopFile (
-        QString desktopFileName)
+WallpaperCurrentDescriptor::setFromDesktopFile (
+        const QString &desktopFileName,
+        bool           checkFilenames,
+        const QString &landscapeFileName,
+        const QString &portraitFileName)
 {
-    QString        value;
+    QString        value, value1;
     qreal          rval;
     bool           retval = false;
 
@@ -97,21 +106,28 @@ WallpaperCurrentDescriptor::setFromDestopFile (
      * orientation.
      * We should compare these with the values stored in the gconf database.
      */
-    if (!getValue(landscapeGroupKey, editedFilenameKey, value)) {
+    if (!getValue(landscapeGroupKey, editedFilenameKey, value) ||
+            !getValue(portraitGroupKey, editedFilenameKey, value1)) {
         goto finalize;
     }
+    /*
+     * If the filenames are provided we check the desktop file data against
+     * them.
+     */
+    if (checkFilenames && landscapeFileName != value)
+        goto finalize;
+
+    if (checkFilenames && portraitFileName != value1)
+        goto finalize;
+
     m_landscapeEditedFile = value;
+    m_portraitEditedFile = value1;
+
+    /*
+     * FIXME: Still no support for separate files in the parent class...
+     */
     setFilename (value);
     setUrl ("file://" + value);
-   
-    /*
-     * The portrait edited file name. 
-     * We should compare these with the values stored in the gconf database.
-     */
-    if (!getValue(portraitGroupKey, editedFilenameKey, value)) {
-        goto finalize;
-    }
-    m_portraitEditedFile = value;
 
     /*
      * MimeType. FIXME: This should not depend on the orientation?
@@ -154,18 +170,25 @@ WallpaperCurrentDescriptor::setFromFilenames  (
             QString     landscapeFile,
             QString     portraitFile)
 {
+    QFile *lFile;
+    bool retval = false;
+
     SYS_DEBUG ("*** landscapeFile = %s", SYS_STR(landscapeFile));
     SYS_DEBUG ("*** portraitFile  = %s", SYS_STR(portraitFile));
     
     if (landscapeFile.isEmpty())
-        return false;
+        goto finalize;
 
 #if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
 #  warning This should be stubbed or something
 #else
-    QFile lFile (landscapeFile);
-    if (!lFile.exists())
-        return false;
+    lFile  = new QFile(landscapeFile);
+    if (!lFile->exists()) {
+        SYS_WARNING ("File %s does not exists.", SYS_STR(landscapeFile));
+        delete lFile;
+        goto finalize;
+    }
+    delete lFile;
 #endif
 
     m_LandscapeTrans = WallpaperITrans();
@@ -180,7 +203,11 @@ WallpaperCurrentDescriptor::setFromFilenames  (
     setFilename (landscapeFile);
 
     m_Valid = true;
-    return true;
+    retval = true;
+
+finalize:
+    SYS_DEBUG ("Returning %s", SYS_BOOL(retval));
+    return retval;
 }
 
 

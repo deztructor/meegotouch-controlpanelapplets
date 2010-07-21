@@ -1,6 +1,8 @@
 systemui-applets (0.14.12~1) harmattan; urgency=low
 
-  * [NEW VERSION]
+  [ Laszlo Pere ]
+  * Fixes: NB#180999 - Wallpaper image must be changed separately to landscape
+    and portrait modes
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 14 Jul 2010 16:28:19 +0300
 

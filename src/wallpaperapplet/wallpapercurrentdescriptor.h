@@ -33,7 +33,12 @@ public:
 
     QString editedFilename (M::Orientation orientation) const;
 
-    bool setFromDestopFile (QString desktopFileName);
+    bool setFromDesktopFile (
+            const QString &desktopFileName,
+            bool           checkFilenames = false,
+            const QString &landscapeFileName = QString(""),
+            const QString &portraitFileName = QString(""));
+
     bool setFromFilenames  (
             QString     landscapeFile,
             QString     portraitFile);

@@ -12,15 +12,22 @@
 
 #include <MTheme>
 
-#define THUMBNAIL_BG_COLOR "Red"
 
 /*
  * Please note that printing non UTF-8 characters might break the tests.
  * Apparently the test engine can not tolerate the debug messages when there are
  * weird file names around.
  */
-//#define DEBUG
+#define DEBUG
+#define LOTDEBUG
+#define WARNING
 #include "../debug.h"
+
+#ifdef DEBUG
+#  define THUMBNAIL_BG_COLOR "Red"
+#else
+#  define THUMBNAIL_BG_COLOR "White"
+#endif
 
 const QString dir = "";
 
@@ -257,20 +264,23 @@ WallpaperDescriptor::mimeType () const
 
     /*
      * One desparate attempt to produce a mimetype for it is very important.
-     * Well it does not really matter if the mime type is wrong, the thumbnail
-     * will not appear I guess...
+     * This mechanism will fire up only for the images that are not coming from
+     * the Tracker, for the Tracker actually tells us the mimetype. And it does
+     * not really matter, because if the thumbnail generation fails we do the
+     * thumbnail ourselves.
      */
     if (retval.isEmpty() && !m_Filename.isEmpty()) {
         QString ext = extension();
 
         for (int n = 0; mimetypes[n][0] != NULL; ++n) {
             if (!QString::compare(ext, mimetypes[n][0], Qt::CaseInsensitive)) {
+                SYS_DEBUG ("Guessing mimetype %s", SYS_STR(retval));
                 retval = QString(mimetypes[n][1]);
             }
         }
     }
 
-    SYS_WARNING ("Returning %s", SYS_STR(retval));
+    SYS_DEBUG ("Returning %s", SYS_STR(retval));
     return retval;
 }
 
@@ -284,12 +294,12 @@ WallpaperDescriptor::initiateThumbnailer ()
 {
     #ifdef LOTDEBUG
     SYS_DEBUG ("*** m_Filename = %s", SYS_STR(m_Filename));
-    SYS_DEBUG ("*** m_MimeType = %s", SYS_STR(m_MimeType));
+    SYS_DEBUG ("*** m_MimeType = %s", SYS_STR(mimeType()));
     #endif
     /*
      * If some necessary information is missing.
      */
-    if (m_MimeType.isEmpty() || m_Filename.isEmpty()) {
+    if (mimeType().isEmpty() || m_Filename.isEmpty()) {
         return;
     }
 

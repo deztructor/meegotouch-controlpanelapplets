@@ -57,12 +57,12 @@ static const QString destopFileName = "wallpaper.desktop";
 static const QString backupExtension = ".BAK";
 
 static const QString defaultLandscapeImageFile = 
-"/usr/share/themes/base/meegotouch/duihome/images/HomeWallpaperLandscape.png";
+"/usr/share/themes/base/meegotouch/duihome/images/meegotouch-wallpaper-portrait.jpg";
 
 static const QString defaultPortraitImageFile = 
-"/usr/share/themes/base/meegotouch/duihome/images/HomeWallpaperPortrait.png";
+"/usr/share/themes/base/meegotouch/duihome/images/meegotouch-wallpaper-landscape.jpg";
 
-static const QString defaultLandscapeMimeType = "image/png";
+static const QString defaultLandscapeMimeType = "image/jpeg";
 
 WallpaperBusinessLogic::WallpaperBusinessLogic()
 {
@@ -77,7 +77,11 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
     m_EditedImageOurs = false;
 
     currentDesc = WallpaperCurrentDescriptor::instance ();
-    success = currentDesc->setFromDestopFile (desktopFile);
+    success = currentDesc->setFromDesktopFile (
+            desktopFile,
+            true,
+            m_LandscapeGConfItem->value().toString(),
+            m_PortraitGConfItem->value().toString());
     if (!success) {
         SYS_DEBUG ("Loading of %s failed. Trying image files from GConf.",
                 SYS_STR(desktopFile));
@@ -162,7 +166,7 @@ WallpaperBusinessLogic::setBackground (
      */
     WallpaperCurrentDescriptor *currentDesc;
     currentDesc = WallpaperCurrentDescriptor::instance ();
-    currentDesc->setFromDestopFile (dirPath() + destopFileName);
+    currentDesc->setFromDesktopFile (dirPath() + destopFileName);
     emit wallpaperChanged ();
 
     SYS_DEBUG ("****** End saving background ********");
