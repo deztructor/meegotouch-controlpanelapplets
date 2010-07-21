@@ -3,6 +3,8 @@ systemui-applets (0.14.12~1) harmattan; urgency=low
   [ Laszlo Pere ]
   * Fixes: NB#180999 - Wallpaper image must be changed separately to landscape
     and portrait modes
+  * Fixes: NB#174943 - The default background image paths are hardcoded into 
+    System-UI
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 14 Jul 2010 16:28:19 +0300
 

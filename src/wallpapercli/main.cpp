@@ -61,6 +61,8 @@ WallpaperCLI::WallpaperCLI () :
     m_DcpIf (new DuiControlPanelIf),
     m_ExitCode (EXIT_SUCCESS)
 {
+    SYS_DEBUG ("landscape-key: %s", WALLPAPER_LANDSCAPE_KEY);
+    SYS_DEBUG ("portrait-key : %s", WALLPAPER_PORTRAIT_KEY);
     m_LandscapeGConfItem = new MGConfItem (WALLPAPER_LANDSCAPE_KEY);
     m_PortraitGConfItem = new MGConfItem (WALLPAPER_PORTRAIT_KEY);
 }
@@ -157,6 +159,9 @@ WallpaperCLI::executeCommandLineArguments ()
      * database. 
      */
     if (m_SetGconf) {
+        SYS_DEBUG ("Setting GConf keys.");
+        SYS_DEBUG ("land: %s", SYS_STR(m_OptionLandscapeFilename));
+        SYS_DEBUG ("port: %s", SYS_STR(m_OptionPortraitFilename));
         m_LandscapeGConfItem->set (m_OptionLandscapeFilename);
         m_PortraitGConfItem->set (m_OptionPortraitFilename);
         

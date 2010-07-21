@@ -56,13 +56,6 @@ static const QString wallpaperDir = ".wallpapers";
 static const QString destopFileName = "wallpaper.desktop";
 static const QString backupExtension = ".BAK";
 
-static const QString defaultLandscapeImageFile = 
-"/usr/share/themes/base/meegotouch/duihome/images/meegotouch-wallpaper-portrait.jpg";
-
-static const QString defaultPortraitImageFile = 
-"/usr/share/themes/base/meegotouch/duihome/images/meegotouch-wallpaper-landscape.jpg";
-
-static const QString defaultLandscapeMimeType = "image/jpeg";
 
 WallpaperBusinessLogic::WallpaperBusinessLogic()
 {
@@ -88,37 +81,17 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
         success = currentDesc->setFromFilenames (
                 m_LandscapeGConfItem->value().toString(),
                 m_PortraitGConfItem->value().toString());
-        /*
-         * We have the images set in gconf items, we managed to load them but we
-         * don't know the mimetype. (Fortunatelly this can happen only in the
-         * unit test, because the gcon value is always properly set by us or not
-         * set at all. But this might be changed in the future. See NB#174943
-         * for details.)
-         *
-         * This issue is solved for the most used mime types as we added some
-         * mime guessing mechanism to the WallpaperDescriptor::mimeType()
-         * method.
-         */
-        if (success && currentDesc->mimeType().isEmpty()) {
-            currentDesc->setMimeType (defaultLandscapeMimeType);
-        }
     }
 
+    /*
+     * FIXME: Should we interpret the strings as icon IDs?
+     */
     if (!success) {
-        SYS_DEBUG ("Trying default images.");
-        success = currentDesc->setFromFilenames (
-                defaultLandscapeImageFile,
-                defaultPortraitImageFile);
-        if (success) {
-            currentDesc->setMimeType (defaultLandscapeMimeType);
-        }
+        SYS_WARNING ("Current wallpaper was not found.");
     }
 
-    success = connect (m_RequestGConfItem, SIGNAL(valueChanged()),
+    connect (m_RequestGConfItem, SIGNAL(valueChanged()),
             this, SLOT(requestArrived()));
-    if (!success) {
-        SYS_WARNING ("Connect failed.");
-    }
 }
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
