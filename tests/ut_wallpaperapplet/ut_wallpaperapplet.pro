@@ -26,7 +26,10 @@ CONFIG += \
 	meegotouch \
 	plugin \
 	duicontrolpanel \
-	silent 
+        silent \
+        link_pkgconfig
+
+PKGCONFIG += ContentManager
 
 HEADERS += \
     $$STUB_PREFIX/thumbnailerstub.h \

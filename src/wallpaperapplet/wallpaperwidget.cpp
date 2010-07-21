@@ -10,6 +10,9 @@
 #include <MContainer>
 #include <QTimer>
 #include <MContentItem>
+#include <SelectSingleContentItemPage.h>
+#include <QDebug>
+#include <QtTracker/Tracker>
 
 #define DEBUG
 #include "../debug.h"
@@ -137,4 +140,23 @@ void
 WallpaperWidget::galleryActivated ()
 {
     SYS_DEBUG ("");
+    if (m_noImageBrowser) {
+            SelectSingleContentItemPage *imageBrowser = new SelectSingleContentItemPage(QString(), QStringList() << "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Image", QString());
+            imageBrowser->setObjectName("SelectSingleContentItemPage_imageBrowser");
+            QObject::connect(imageBrowser, SIGNAL(backButtonClicked()), imageBrowser, SLOT(dismiss()));
+            QObject::connect(imageBrowser, SIGNAL(backButtonClicked()), this, SLOT(imageBrowserDismissed()));
+            QObject::connect(imageBrowser, SIGNAL(selectingContentItem(const QString &)), this, SLOT(galleryImageSelected(const QString &)));
+            imageBrowser->appear(MSceneWindow::DestroyWhenDismissed);
+            m_noImageBrowser = false;
+    }
+}
+
+void WallpaperWidget::galleryImageSelected(const QString &uri)
+{
+    m_WallpaperBusinessLogic->addImageFromGallery(uri);
+}
+
+void WallpaperWidget::imageBrowserDismissed()
+{
+    m_noImageBrowser = true;
 }
