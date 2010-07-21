@@ -49,7 +49,7 @@
 #include <MGConfItem>
 
 //#define LOTDEBUG
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 static const QString wallpaperDir = ".wallpapers";

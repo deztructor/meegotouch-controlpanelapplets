@@ -79,13 +79,13 @@
  * the saved wallpaper. the filename is calculated from the users home directory
  * name in the initFileSystem() function.
  */
-#define WALLPAPER_LANDSCAPE_EDITEDFILE "/somewhere/WallpaperLandscapeEditedFile"
-#define WALLPAPER_PORTRAIT_EDITEDFILE  "/somewhere/WallpaperLandscapeEditedFile"
+#define WALLPAPER_LANDSCAPE_EDITEDFILE "/somewhere/WallpaperLandscapeEditedFile.jpeg"
+#define WALLPAPER_PORTRAIT_EDITEDFILE "/somewhere/WallpaperLandscapeEditedFile.jpeg"
 #define WALLPAPER_MIMETYPE "image/jpeg"
 #define WALLPAPER_NAME "Wallpaper name/title"
 #define WALLPAPER_VERSION "27"
-#define WALLPAPER_LANDSCAPE_ORIGINALFILE "/usr/share/LandscapeOriginalFile"
-#define WALLPAPER_PORTRAIT_ORIGINALFILE "/usr/share/PortraitOriginalFile"
+#define WALLPAPER_LANDSCAPE_ORIGINALFILE "/usr/share/LandscapeOriginalFile.jpeg"
+#define WALLPAPER_PORTRAIT_ORIGINALFILE "/usr/share/PortraitOriginalFile.jpeg"
 
 #define WALLPAPER_LANDSCAPE_HOROFFSET_NUM 33
 #define WALLPAPER_LANDSCAPE_HOROFFSET "33"

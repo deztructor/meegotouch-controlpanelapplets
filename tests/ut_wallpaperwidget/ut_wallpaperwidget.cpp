@@ -9,7 +9,7 @@
 
 #include <MApplication>
 
-#define DEBUG
+//#define DEBUG
 #include "../../src/debug.h"
 
 /******************************************************************************

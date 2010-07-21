@@ -12,7 +12,7 @@
 #include <MApplication>
 #include <MGConfItem>
 
-#define DEBUG
+//#define DEBUG
 #include "../../src/debug.h"
 
 /******************************************************************************

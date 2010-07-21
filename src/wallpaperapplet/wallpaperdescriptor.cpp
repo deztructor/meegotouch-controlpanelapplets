@@ -280,7 +280,7 @@ WallpaperDescriptor::mimeType () const
         }
     }
 
-    SYS_DEBUG ("Returning %s", SYS_STR(retval));
+    SYS_DEBUG ("Returning %s for %s", SYS_STR(retval), SYS_STR(m_Filename));
     return retval;
 }
 
@@ -330,7 +330,7 @@ WallpaperDescriptor::initiateThumbnailer ()
     QStringList mimeList;
 
     urisList << m_Url;
-    mimeList << m_MimeType;
+    mimeList << mimeType();
 
     #ifdef USE_PAINTER
     m_Thumbnailer->request (urisList, mimeList);

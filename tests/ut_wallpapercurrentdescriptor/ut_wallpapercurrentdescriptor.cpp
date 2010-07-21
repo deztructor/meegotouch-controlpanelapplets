@@ -4,6 +4,7 @@
 #include "mdesktopentry.h"
 #include "wallpapercurrentdescriptor.h"
 #include "wallpaperitrans.h"
+#include "wallpapergconf.h"
 
 #include <QPixmap>
 #include <QUrl>
@@ -15,6 +16,29 @@
 #define DEBUG
 #include "../../src/debug.h"
 
+
+QVariant
+MGConfItem::value () const
+{
+    QString retval;
+
+    SYS_DEBUG ("*** key() = %s", SYS_STR(key()));
+
+    if (key() == WALLPAPER_LANDSCAPE_KEY) {
+        retval = WALLPAPER_LANDSCAPE_EDITEDFILE;
+        goto return_string;
+    }
+
+    if (key() == WALLPAPER_PORTRAIT_KEY) {
+        retval = WALLPAPER_PORTRAIT_EDITEDFILE;
+        goto return_string;
+    }
+
+    return QVariant();
+
+return_string:
+    return QVariant (retval);
+}
 
 /******************************************************************************
  * SignalSink implementation.

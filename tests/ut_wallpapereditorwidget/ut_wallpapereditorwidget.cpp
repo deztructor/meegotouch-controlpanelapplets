@@ -4,6 +4,7 @@
 #include "wallpaperbusinesslogic.h"
 #include "wallpapereditorwidget.h"
 #include "wallpapercurrentdescriptor.h"
+#include "wallpapergconf.h"
 
 /*
  * We are reading data from this stub, we have some definition there we can use
@@ -15,13 +16,37 @@
 #include <MApplication>
 #include <QList>
 #include <QGraphicsSceneEvent>
+#include <MGConfItem>
 
-#define DEBUG
+//#define DEBUG
 #include "../../src/debug.h"
 
 #define UNKNOWN_BORDER_X 10
 #define UNKNOWN_BORDER_Y 10
 #define TITLEBAR_HEIGHT 60
+
+QVariant
+MGConfItem::value () const
+{
+    QString retval;
+
+    SYS_DEBUG ("*** key() = %s", SYS_STR(key()));
+
+    if (key() == WALLPAPER_LANDSCAPE_KEY) {
+        retval = WALLPAPER_LANDSCAPE_EDITEDFILE;
+        goto return_string;
+    }
+
+    if (key() == WALLPAPER_PORTRAIT_KEY) {
+        retval = WALLPAPER_PORTRAIT_EDITEDFILE;
+        goto return_string;
+    }
+
+    return QVariant();
+
+return_string:
+    return QVariant (retval);
+}
 
 /******************************************************************************
  * Ut_WallpaperEditorWidget implementation. 
@@ -327,6 +352,7 @@ Ut_WallpaperEditorWidget::dropObjects ()
     if (m_BusinessLogic)
         delete m_BusinessLogic;
 
+    delete WallpaperCurrentDescriptor::instance();
     m_Widget = 0;
     m_BusinessLogic = 0;
 }

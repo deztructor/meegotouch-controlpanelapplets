@@ -6,6 +6,15 @@
  */
 
 /*
+ * Unfortunately testrunner.py sometimes drops an exception because the debug
+ * messages are not UTF-8 strings. This is most probably because I have some
+ * filenames printed in the functional tests. Could not find one though, so I
+ * disabled the messages here.
+ */
+#ifdef UNIT_TEST
+#  undef DEBUG
+#endif
+/*
  * If the debug facility is enabled we also enable all the warning messages.
  */
 #if defined(DEBUG) && !defined(WARNING)

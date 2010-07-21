@@ -25,6 +25,7 @@ using namespace Thumbnails;
 #include <QStringList>
 
 #undef DEBUG
+#define WARNING
 #include "../../src/debug.h"
 
 
@@ -110,6 +111,10 @@ Thumbnailer::request (
     
     for (int n = 0; n < uris.size(); ++n) {
         Q_ASSERT (!uris[n].toString().isEmpty());
+        if (mimeTypes[n].isEmpty()) {
+            SYS_WARNING ("MimeType for %s is empty.",
+                    SYS_STR(uris[n].toString()));
+        }
         Q_ASSERT (!mimeTypes[n].isEmpty());
         Q_ASSERT (mimeTypes[n].startsWith("image/"));
     }
