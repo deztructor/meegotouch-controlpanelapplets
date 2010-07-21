@@ -15,7 +15,7 @@
 #include "themecellcreator.h"
 #include "themelistmodel.h"
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 
@@ -71,7 +71,7 @@ ThemeCellCreator::updateCell (
     codeName = index.data (ThemeListModel::CodeNameRole).toString();
     iconName = index.data (ThemeListModel::IconNameRole).toString();
 
-    #if 0
+    #if 1
     SYS_DEBUG ("************** %d ***************", index.row());
     SYS_DEBUG ("title         = %s", SYS_STR(title));
     SYS_DEBUG ("changingTheme = %s", SYS_STR(changingTheme));
