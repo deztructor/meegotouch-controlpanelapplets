@@ -186,6 +186,14 @@ ThemeWidget::themeActivated (
     if (codeName == m_ThemeBusinessLogic->currentThemeCodeName())
         return;
 
+    #if 0
+    /*
+     * For debugging purposes it is possible to leave out the dialog and change
+     * the theme here.
+     */
+    m_ThemeBusinessLogic->changeTheme (codeName);
+    return;
+    #endif
     /*
      * FIXME:  This is certainly too complicated here, the ThemeBusinessLogic
      * should do stuff like this.
