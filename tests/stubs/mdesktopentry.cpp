@@ -71,7 +71,7 @@ initFileSystem ()
      * If we need to see what exactly we have in this simulated file system.
      */
     #ifdef DEBUG
-    int n;
+    int n = 0;
     foreach (QString debugString, fileSystemFiles) {
         SYS_DEBUG ("fileSystemFiles[%d] = %s", n, SYS_STR(debugString));
         ++n;

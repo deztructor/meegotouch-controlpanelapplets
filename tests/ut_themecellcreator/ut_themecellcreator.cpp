@@ -103,6 +103,9 @@ Ut_ThemeCellCreator::testCreateCell ()
         QVERIFY (!item->title().isEmpty());
         QVERIFY (!item->imageWidget()->image().isEmpty());
     }
+
+    delete cellCreator;
+    delete model;
 }
 
 QTEST_APPLESS_MAIN(Ut_ThemeCellCreator)

@@ -4,34 +4,55 @@
 #define THEMELISTMODEL_H__
 
 #include <QStringList>
-#include <QAbstractListModel>
+#include <QString>
+#include <QAbstractTableModel>
 
 class ThemeDescriptor;
+class QModelIndex;
 
-/*
- * FIXME: This swhould be inside the class namespace.
- */
-enum ThemeColumnIndex {
-    ThemeColumnCodeName = 0,
-    ThemeColumnName,
-    ThemeColumnIcon,
-    ThemeColumnLast
-};
-
-
-class ThemeListModel : public QAbstractListModel
+class ThemeListModel : public QAbstractTableModel
 {
     Q_OBJECT
 
     public:
         ThemeListModel(QObject *parent = 0);
 
-        int rowCount(const QModelIndex &parent = QModelIndex()) const;
+        void refresh ();
+        
+        #if 0
+        /*
+         * FIXME:
+         * This method is only for debugging purposes and will be removed soon.
+         */
+        virtual QModelIndex index (
+                int row, 
+                int column, 
+                const QModelIndex & parent = QModelIndex()) const;
+        #endif
+
+        int rowCount (const QModelIndex &parent = QModelIndex()) const;
+        int columnCount (const QModelIndex & parent) const;
+
         QVariant data(const QModelIndex &index, int role=Qt::DisplayRole) const;
         void setThemeList(const QList<ThemeDescriptor *> &themeList);
         QModelIndex indexOfCodeName(const QString &codeName) const;
         QString changingTheme () const;
+
+        typedef enum {
+            ThemeColumnCodeName = 0,
+            ThemeColumnName,
+            ThemeColumnIcon,
+            ThemeColumnLast
+        } ThemeColumnIndex;
         
+        typedef enum {
+            SearchRole  = Qt::UserRole + 1,
+            CodeNameRole,
+            NameRole,
+            IconNameRole,
+            ChangingNameRole,
+        } Roles;
+
     public slots:
 	    void themeChangeStarted (QString themeCodeName);
     	void themeChanged (QString themeCodeName);
@@ -42,8 +63,8 @@ class ThemeListModel : public QAbstractListModel
          * strings. This is not robust enough!
          */
         QModelIndex  indexByThemeCodeName (QString themeCodeName);
-        QList<QStringList> m_Rows;
         QString            m_ChangingTheme;
+        QList<QStringList> m_Rows;
 };
 
 #endif

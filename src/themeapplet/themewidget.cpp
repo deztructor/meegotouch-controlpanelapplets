@@ -7,13 +7,16 @@
 #include "themecellcreator.h"
 #include "themedialog.h"
 
-#include <QGraphicsLinearLayout>
-#include <MLayout>
-#include <MList>
 #include <MApplication>
 #include <MApplicationWindow>
+#include <MLayout>
+#include <MLinearLayoutPolicy>
+#include <MTextEdit>
+#include <MList>
+#include <MListFilter>
+#include <MSortFilterProxyModel>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 static const char *oviCommand = "webwidgetrunner /usr/share/webwidgets/applications/d34177b1c241ea44cb132005b63ee6527c9f6040-wrt-widget.desktop -widgetparameter themes &";
@@ -28,8 +31,6 @@ ThemeWidget::ThemeWidget (
     m_OviItem(0)
 {
     createWidgets ();
-    retranslateUi ();
-    readLocalThemes ();
 }
 
 ThemeWidget::~ThemeWidget ()
@@ -39,26 +40,47 @@ ThemeWidget::~ThemeWidget ()
 void
 ThemeWidget::createWidgets ()
 {
-    QGraphicsLinearLayout *mainLayout;
+    MLayout *mainLayout = new MLayout(this);
+    setLayout(mainLayout);
+
+    MLinearLayoutPolicy *mainLayoutPolicy =
+        new MLinearLayoutPolicy(mainLayout, Qt::Vertical);
+    mainLayout->setPolicy(mainLayoutPolicy);
+    mainLayoutPolicy->setObjectName("ThemeWidgetMainLayoutPolicy");
 
     m_List = new MList();
-    m_List->setSelectionMode(MList::SingleSelection);
-    ThemeCellCreator *cellCreator = new ThemeCellCreator();
-    m_List->setCellCreator(cellCreator);
+    m_List->setObjectName ("ThemeList");
 
+    m_CellCreator = new ThemeCellCreator;
+    m_List->setCellCreator (m_CellCreator);
+    m_List->setSelectionMode (MList::SingleSelection);
+
+
+    // This function will create the m_LiveFilterEditor widget.
+    readLocalThemes ();
+    //m_List->setShowGroups(true);
+
+    /*
+     * An item to activate the OVI link.
+     */
     m_OviItem = new MContentItem(MContentItem::IconAndSingleTextLabel);
-    // This icon is currently missing, see NB#175015
+    m_OviItem->setItemMode (MContentItem::Single);
     m_OviItem->setImageID ("icon-m-common-ovi");
     m_OviItem->setObjectName("OviItem");
 
     connect (m_OviItem, SIGNAL(clicked()),
             this, SLOT(oviActivated()));
 
-    mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
-    mainLayout->addItem (m_OviItem);
-    mainLayout->addItem (m_List);
+    mainLayoutPolicy->addItem (m_LiveFilterEditor);
+    mainLayoutPolicy->addItem (m_OviItem);
+    mainLayoutPolicy->addItem (m_List);
 
-    this->setLayout (mainLayout);
+    connect (m_LiveFilterEditor, SIGNAL(textChanged()),
+            this, SLOT(textChanged ()));
+    connect (m_List, SIGNAL(panningStarted()),
+            this, SLOT(hideEmptyTextEdit()));
+
+    retranslateUi ();
 }
 
 void
@@ -87,45 +109,91 @@ ThemeWidget::readLocalThemes ()
      * Creating the model and connecting it to the businesslogic so we can show
      * the spinner while the theme change is in progress.
      */
-    m_ThemeListModel = new ThemeListModel (this);
+    m_ThemeListModel = new ThemeListModel ();
+    m_ThemeDescList = m_ThemeBusinessLogic->availableThemes ();
+    m_ThemeListModel->setThemeList(m_ThemeDescList);
+
+    m_ThemeListModel->setObjectName ("ThemeListModel");
+    SYS_DEBUG ("*** m_ThemeListModel = %p", m_ThemeListModel);
+    m_List->setItemModel (m_ThemeListModel);
 
     if (m_ThemeBusinessLogic) {
         connect (m_ThemeBusinessLogic, SIGNAL(themeChangeStarted(QString)),
                 m_ThemeListModel, SLOT(themeChangeStarted(QString)));
         connect (m_ThemeBusinessLogic, SIGNAL(themeChanged(QString)),
                 m_ThemeListModel, SLOT(themeChanged(QString)));
-    } else {
-        SYS_WARNING ("ThemeBusinessLogic has been destroyed?");
     }
 
-    m_ThemeDescList = m_ThemeBusinessLogic->availableThemes ();
-    m_ThemeListModel->setThemeList(m_ThemeDescList);
-    m_List->setItemModel(m_ThemeListModel);
+    /*
+     * Enabling the live filter feature for the list. From this moment on the
+     * list will use a QSortFilterProxyModel object as model. 
+     */
+    m_List->filtering()->setEnabled (true);
+    m_List->filtering()->setFilterRole (ThemeListModel::SearchRole);
 
-    QString currentTheme = m_ThemeBusinessLogic->currentThemeCodeName();
-    QModelIndex currentIndex = m_ThemeListModel->indexOfCodeName(currentTheme);
-    m_List->selectItem(currentIndex);
+    m_Proxy = m_List->filtering()->proxy();
+    m_Proxy->setSortRole (ThemeListModel::SearchRole);
+    m_Proxy->setSortCaseSensitivity(Qt::CaseInsensitive);
+    // FIXME: Seems that the sort() method simply will not sort when the
+    // ThemeListModel::SearchRole is used.
+    m_Proxy->sort(Qt::DisplayRole);
+    m_Proxy->setFilterKeyColumn(0);
+
+    m_LiveFilterEditor = m_List->filtering()->editor();
 
     connect(m_List, SIGNAL(itemClicked(QModelIndex)),
             this, SLOT(themeActivated(QModelIndex)));
+
+    selectCurrentTheme ();
 }
 
+/*!
+ * This slot selects the current theme from the theme list. We needed to
+ * implement this feature as a slot, so we can select the current theme when the
+ * user pressed the cancel button in the dialog. We need to go back to the
+ * original theme then.
+ */
+void 
+ThemeWidget::selectCurrentTheme ()
+{
+    QString        currentThemeCodeName; 
+    QModelIndex    currentIndex;
+   
+    /*
+     * Selecting the current theme from the list.
+     */
+    currentThemeCodeName = m_ThemeBusinessLogic->currentThemeCodeName();
+    currentIndex = m_ThemeListModel->indexOfCodeName(currentThemeCodeName);
+    currentIndex = m_Proxy->mapFromSource (currentIndex);
+    m_List->selectItem (currentIndex);
+    m_List->scrollTo (currentIndex, MList::EnsureVisibleHint);
+}
 
 void 
 ThemeWidget::themeActivated (
         const QModelIndex &index)
 {
     ThemeDialog      *dialog;
-    QStringList       row = m_ThemeListModel->data(index).value<QStringList>();
-    QString           codeName = row[ThemeColumnCodeName];
+    QString           codeName;
     ThemeDescriptor  *descr = 0;
-    
+      
+    SYS_WARNING ("*** index at %d, %d", index.row(), index.column());
+    codeName = m_Proxy->data(index, ThemeListModel::CodeNameRole).toString();
+
     /*
      * If the user selects the current theme we don't do anything.
      */
     if (codeName == m_ThemeBusinessLogic->currentThemeCodeName())
         return;
 
+    #if 0
+    /*
+     * For debugging purposes it is possible to leave out the dialog and change
+     * the theme here.
+     */
+    m_ThemeBusinessLogic->changeTheme (codeName);
+    return;
+    #endif
     /*
      * FIXME:  This is certainly too complicated here, the ThemeBusinessLogic
      * should do stuff like this.
@@ -143,6 +211,8 @@ ThemeWidget::themeActivated (
     }
 
     dialog = new ThemeDialog (m_ThemeBusinessLogic, descr);
+    connect (dialog, SIGNAL(themeChangeCancelled()),
+            this, SLOT(selectCurrentTheme()));
     dialog->showDialog ();
 }
 
@@ -151,5 +221,29 @@ ThemeWidget::oviActivated ()
 {
     SYS_DEBUG ("Executing %s", oviCommand);
     system (oviCommand);
+}
+
+void 
+ThemeWidget::textChanged ()
+{
+    if (!m_List->filtering()->editor()->isOnDisplay()) {
+        m_List->filtering()->editor()->show();
+        m_List->filtering()->editor()->setFocus();
+    }
+
+
+    m_CellCreator->highlightByText (m_LiveFilterEditor->text());
+    // FIXME: Seems that the sort() method simply will not sort when the
+    // ThemeListModel::SearchRole is used.
+    m_Proxy->sort(Qt::DisplayRole);
+    selectCurrentTheme ();
+    m_ThemeListModel->refresh();
+}
+
+void 
+ThemeWidget::hideEmptyTextEdit ()
+{
+    if (m_List->filtering()->editor()->text().isEmpty())
+        m_List->filtering()->editor()->hide();
 }
 

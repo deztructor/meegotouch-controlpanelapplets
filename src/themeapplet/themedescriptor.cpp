@@ -5,7 +5,7 @@
 #include <QString>
 #include <mdesktopentry.h>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -35,12 +35,9 @@ ThemeDescriptor::ThemeDescriptor (
      * holds an index file.
      */
     m_DesktopEntry = new MDesktopEntry (indexFileName);
-    SYS_DEBUG ("m_DesktopEntry = %p");
     if (!m_DesktopEntry->isValid()) {
-        SYS_DEBUG ("m_DesktopEntry = %p");
         delete m_DesktopEntry;
         m_DesktopEntry = 0;
-        SYS_WARNING ("MDesktopEntry is invalid.");
         return;
     }
 

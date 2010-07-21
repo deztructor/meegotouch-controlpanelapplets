@@ -148,6 +148,7 @@ void
 ThemeDialog::cancelClicked ()
 {
     SYS_DEBUG ("");
+    emit themeChangeCancelled ();
     accept();
     disappear ();
 }

@@ -15,6 +15,23 @@
 #define DEBUG
 #include "../../src/debug.h"
 
+/******************************************************************************
+ * 
+ */
+static bool pixmapLoadSuccess = true;
+
+bool 	
+QPixmap::load (
+        const QString & fileName, 
+        const char * format, 
+        Qt::ImageConversionFlags flags)
+{
+    SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
+    if (pixmapLoadSuccess)
+        *this = QPixmap (100, 100);
+
+    return pixmapLoadSuccess;
+}
 
 /******************************************************************************
  * SignalSink implementation.
@@ -276,14 +293,19 @@ Ut_WallpaperDescriptor::testThumbnailingFailure ()
     QVERIFY (m_Desc->mimeType() == "image/png");
 
     /*
-     * Ok, now we emulate the case when the thumbnail creation is finished.
+     * Ok, now we emulate the case when the thumbnail creation is finished with
+     * an error. We have to make the pixmap loader stub simulate failure,
+     * otherwise the descriptor does the thumbnailing by itself.
      */
+    pixmapLoadSuccess = false;
     m_Desc->m_Thumbnailer->sendError ();
     m_Desc->m_Thumbnailer->sendFinished ();
 
     QVERIFY (!m_Desc->isThumbnailLoaded());
     QVERIFY (!m_SignalSink.m_ThumbnailLoaded);
     QVERIFY (m_Desc->m_Thumbnailer == 0);
+    
+    pixmapLoadSuccess = true;
 
     dropDescriptor ();    
 }
@@ -292,68 +314,22 @@ Ut_WallpaperDescriptor::testCache ()
 {
     createDescriptor ();
 
-    // FIXME: Actually to cache the wallpaper image we would need to stub
-    // QPixmap and with that we would achieve nothing. Maybe when we will have
-    // some meaningfull bugs to test we do the sub.
+    /*
+     * Caching...
+     */
+    pixmapLoadSuccess = true;
+    m_Desc->cache();
+    QVERIFY (m_Desc->m_Cached);
+
+    /*
+     * Uncaching...
+     */
     m_Desc->unCache();
     QVERIFY (!m_Desc->m_Cached);
 
     dropDescriptor ();
 }
 
-#if 0
-void
-Ut_WallpaperDescriptor::testFromFileNames ()
-{
-    QString file1 ("nolandscapefile.png");
-    QString file2 ("noportraitfile.png");
-    WallpaperCurrentDescriptor *curr = WallpaperCurrentDescriptor::instance();
-
-    curr->setFromFilenames (file1, file2);
-
-    /*
-     * When set from filenames all these properties should have the same value.
-     * This is the situation when the current wallpaper is set from the gconf
-     * items.
-     */
-    QString originalPortrait  = curr->originalImageFile (M::Portrait);
-    QString originalLandscape = curr->originalImageFile (M::Landscape);
-    QVERIFY (originalPortrait == file2);
-    QVERIFY (originalLandscape == file1);
-
-    QString suggestedPortrait = curr->suggestedOutputFilename (M::Portrait);
-    QString suggestedLandscape = curr->suggestedOutputFilename (M::Landscape);
-    QVERIFY (suggestedPortrait != suggestedLandscape);
-    QVERIFY (!suggestedPortrait.contains("/"));
-    QVERIFY (!suggestedLandscape.contains("/"));
-    
-    QString editedPortrait = curr->editedFilename (M::Portrait);
-    QString editedLandscape = curr->editedFilename (M::Landscape);
-    SYS_DEBUG ("*** = %s", SYS_STR(editedPortrait));
-    SYS_DEBUG ("*** = %s", SYS_STR(editedLandscape));
-    QVERIFY (editedPortrait == file2);
-    QVERIFY (editedLandscape == file1);
-
-    QString desktopString = curr->generateDesktopFile ("ThisIsThePath");
-    SYS_DEBUG ("*** = %s", SYS_STR(desktopString));
-    // FIXME: We obviously should do a much 
-
-    /*
-     * When set from image file names the image transformations should be all
-     * default.
-     */
-    WallpaperITrans trans1 = curr->iTrans (M::Portrait);
-    WallpaperITrans trans2 = curr->iTrans (M::Landscape);
-
-    QVERIFY (trans1.scale() == 1.0);
-    QVERIFY (trans1.x() == 0);
-    QVERIFY (trans1.y() == 0);
-    
-    QVERIFY (trans2.scale() == 1.0);
-    QVERIFY (trans2.x() == 0);
-    QVERIFY (trans2.y() == 0);
-}
-#endif
 
 /******************************************************************************
  * Low level test programs.

@@ -18,6 +18,7 @@
 SignalSink::SignalSink () :
     m_ChangeWidgetCame (false)
 {
+    m_WidgetID = 0;
 }
 
 void
