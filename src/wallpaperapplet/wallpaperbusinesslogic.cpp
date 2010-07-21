@@ -572,3 +572,28 @@ WallpaperBusinessLogic::checkForPendingSignals ()
 {
     requestArrived ();
 }
+
+static QString
+trackerIdToFilename(const QString &trackerId)
+{
+        QVector<QStringList> result = ::tracker()->rawSparqlQuery(QString("select ?u where { <" + trackerId + "> nie:url ?u }"));
+
+        for (int Nix = 0 ; Nix < result.size() ; Nix++)
+                for (int Nix1 = 0 ; Nix1 < result[Nix].size() ; Nix1++) {
+                        QUrl url(result[Nix][Nix1]);
+                        if (url.isValid() && url.scheme() == "file")
+                                return url.path();
+                }
+
+        return QString("");
+}
+
+void
+WallpaperBusinessLogic::addImageFromGallery(QString uri)
+{
+    WallpaperDescriptor *desc =
+            new WallpaperDescriptor (trackerIdToFilename(uri));
+    setEditedImage (desc, false);
+    SYS_DEBUG ("Emitting imageEditRequested()");
+    emit imageEditRequested ();
+}

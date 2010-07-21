@@ -40,6 +40,7 @@ public:
         WallpaperDescriptor *desc = 0);
 
     void checkForPendingSignals ();
+    void addImageFromGallery(QString);
 
 signals:
     void wallpaperChanged ();

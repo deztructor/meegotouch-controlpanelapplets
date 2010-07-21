@@ -32,13 +32,15 @@ private slots:
     virtual void createContent ();
     void galleryActivated ();
     void oviActivated ();
+    void galleryImageSelected(const QString &);
+    void imageBrowserDismissed();
 
 private:
     QPointer<WallpaperBusinessLogic>   m_WallpaperBusinessLogic;
     WallpaperList                     *m_ImageList;
     MContentItem                      *m_GalleryItem;
     MContentItem                      *m_OviItem;
-
+    bool                               m_noImageBrowser;
     #ifdef UNIT_TEST
     friend class Ut_WallpaperWidget;
     #endif

@@ -32,7 +32,11 @@ CONFIG += \
 	gui \
 	meegotouch \
 	duicontrolpanel \
-	silent 
+        silent \
+        link_pkgconfig
+
+PKGCONFIG += ContentManager
+
 
 HEADERS += \
     ../../src/debug.h \

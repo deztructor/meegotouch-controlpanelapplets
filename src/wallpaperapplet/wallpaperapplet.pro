@@ -8,7 +8,10 @@ CONFIG += plugin \
           gui \
           meegotouch \
           duicontrolpanel \
-	  silent
+          silent \
+          link_pkgconfig
+
+PKGCONFIG += ContentManager
 
 LIBS += \
     -lqttracker \
