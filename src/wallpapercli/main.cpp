@@ -272,7 +272,7 @@ void
 WallpaperCLI::startControlPanel ()
 {
     SYS_DEBUG ("");
-    system ("duicontrolpanel.launch -software &");
+    system ("duicontrolpanel.launch &");
     sleep (1);
 }
 

@@ -9,6 +9,7 @@ rm -rf $WALLPAPER_HOME
 
 if test -d $BACKUP; then
     cp -a $BACKUP $WALLPAPER_HOME || exit 2
+    [ -e $BACKUP/gconf.backup ] && gconftool-2 --load $BACKUP/gconf.backup
 fi
 
 exit 0

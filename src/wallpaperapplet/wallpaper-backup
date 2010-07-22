@@ -8,6 +8,7 @@ BACKUP=$HOME/.wallpapersbackup
 if test -d $WALLPAPER_HOME; then
     rm -rf $BACKUP
     cp -a $WALLPAPER_HOME $BACKUP || exit 2
+    gconftool-2 --dump /desktop/meego/background > $BACKUP/gconf.backup || true
 fi
 
 exit 0
