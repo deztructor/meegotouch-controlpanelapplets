@@ -87,10 +87,15 @@ ProfileDataInterface::getProfilesData ()
         ProfileDataInterface::ProfileData d;
         //get name...
         QString id = ids.at(i);
+
+        SYS_DEBUG ("profile-id : '%s'", SYS_STR (id));
         d.profileId = mapId (id);
+        if (d.profileId == ProfileIdNone)
+            continue;
+
         d.visualData.first = mapId2IconID (d.profileId);
         d.visualData.second = id2Name (id);
-       d.vibrationEnabled = m_ProfileAPI->isVibrationEnabled (id);
+        d.vibrationEnabled = m_ProfileAPI->isVibrationEnabled (id);
         data.append(d);
     }
     SYS_DEBUG ("data.count () = %d", data.count ());
