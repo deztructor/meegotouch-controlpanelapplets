@@ -149,3 +149,24 @@ ThemeBusinessLogic::themeChangeCompleted ()
     SYS_DEBUG ("Theme changed to %s", SYS_STR(themeCodeName));
     emit themeChanged (themeCodeName);
 }
+
+QString 
+ThemeBusinessLogic::themePreviewFileName (
+        const QString  &themeCodeName,
+        M::Orientation  orientation) const
+{
+    QString oString;
+
+    switch (orientation) {
+        case M::Portrait:
+            oString = "portrait";
+            break;
+
+        case M::Landscape:
+            oString = "landscape";
+    }
+
+    return themeDirName + QDir::separator() + themeCodeName + 
+        "/meegotouch/images/meegotouch-theme-preview-" + oString + ".jpg";
+}
+

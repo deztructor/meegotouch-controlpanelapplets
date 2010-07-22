@@ -6,6 +6,7 @@
 #include <QList>
 #include <QObject>
 #include <QDir>
+#include <MApplication>
 
 #include "themedescriptor.h"
 
@@ -23,6 +24,10 @@ public:
     QString currentThemeName ();
     QString currentThemeIconName ();
     QList<ThemeDescriptor *> availableThemes ();
+
+    QString themePreviewFileName (
+            const QString  &themeCodeName,
+            M::Orientation orientation) const;
 
 public slots:
     /*!

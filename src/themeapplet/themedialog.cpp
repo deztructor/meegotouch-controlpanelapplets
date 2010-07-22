@@ -47,14 +47,11 @@ ThemeDialog::ThemeDialog (
     QString                portraitPreviewFileName;
     QPixmap pixmap;
 
-    portraitPreviewFileName = 
-        "/usr/share/themes/" +
-        themeDesc->codeName() + 
-        "/meegotouch/images/meegotouch-theme-preview-portrait.jpg";
-    landscapePreviewFileName = 
-        "/usr/share/themes/" +
-        themeDesc->codeName() + 
-        "/meegotouch/images/meegotouch-theme-preview-landscape.jpg";
+    portraitPreviewFileName = themeBusinessLogic->themePreviewFileName (
+            themeDesc->codeName(), M::Portrait);
+
+    landscapePreviewFileName = themeBusinessLogic->themePreviewFileName (
+            themeDesc->codeName(), M::Landscape);
 
     mainLayout = new MLayout;
     portraitLayoutPolicy =
@@ -73,20 +70,23 @@ ThemeDialog::ThemeDialog (
     portraitButtonLayoutPolicy->setSpacing (10);
 
     // An image widget to show some preview screenshot.
-
     image1 = new MImageWidget (this);
-    if (pixmap.load (portraitPreviewFileName))
+    if (pixmap.load (portraitPreviewFileName)) {
         image1->setPixmap (pixmap);
-    else
+    } else {
+        SYS_WARNING ("Failed to load %s", SYS_STR(portraitPreviewFileName));
         image1->setImage (themeDesc->iconName());
+    }
 
     portraitLayoutPolicy->addItem (image1);
 
     image2 = new MImageWidget (this);
-    if (pixmap.load (landscapePreviewFileName))
+    if (pixmap.load (landscapePreviewFileName)) {
         image2->setPixmap (pixmap);
-    else
+    } else {
+        SYS_WARNING ("Failed to load %s", SYS_STR(landscapePreviewFileName));
         image2->setImage (themeDesc->iconName());
+    }
     
     landscapeLayoutPolicy->addItem (image2);
 
@@ -101,14 +101,10 @@ ThemeDialog::ThemeDialog (
             this, SLOT(cancelClicked()));
     
     portraitButtonLayoutPolicy->addItem (m_SelectButton);
-    //buttonLayout->setStretchFactor (m_SelectButton, 1);
     portraitButtonLayoutPolicy->addItem (m_CancelButton);
-    //buttonLayout->setStretchFactor (m_CancelButton, 1);
     
     landscapeButtonLayoutPolicy->addItem (m_SelectButton);
-    //buttonLayout->setStretchFactor (m_SelectButton, 1);
     landscapeButtonLayoutPolicy->addItem (m_CancelButton);
-    //buttonLayout->setStretchFactor (m_CancelButton, 1);
     
     buttonLayout->setLandscapePolicy (landscapeButtonLayoutPolicy);
     buttonLayout->setPortraitPolicy (portraitButtonLayoutPolicy);
@@ -119,7 +115,7 @@ ThemeDialog::ThemeDialog (
     mainLayout->setLandscapePolicy (landscapeLayoutPolicy);
     mainLayout->setPortraitPolicy (portraitLayoutPolicy);
 
-    hbox = new MContainer;
+    hbox = new MContainer (this);
     hbox->setHeaderVisible (false);
     hbox->setLayout (mainLayout);
 
