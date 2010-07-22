@@ -1,4 +1,4 @@
-systemui-applets (0.14.12~1) harmattan; urgency=low
+systemui-applets (0.14.12-1) harmattan; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#180999 - Wallpaper image must be changed separately to landscape
@@ -6,7 +6,7 @@ systemui-applets (0.14.12~1) harmattan; urgency=low
   * Fixes: NB#174943 - The default background image paths are hardcoded into 
     System-UI
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 14 Jul 2010 16:28:19 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 22 Jul 2010 15:09:23 +0200
 
 systemui-applets (0.14.11-1) harmattan; urgency=low
 
