@@ -5,7 +5,7 @@
 
 #include <QModelIndex>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 ThemeListModel::ThemeListModel(QObject *parent)

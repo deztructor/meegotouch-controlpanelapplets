@@ -150,6 +150,15 @@ ThemeBusinessLogic::themeChangeCompleted ()
     emit themeChanged (themeCodeName);
 }
 
+/*!
+ * \param themeCodeName The code name of the theme for which we need the
+ *   screenshot.
+ * \param orientation Every theme should be two screenshots.
+ * \returns The preview screenshot image file name for a given theme.
+ *
+ * Please note, that the preview can not handled through the normal MTheme
+ * support, because we need the image _before_ the theme is set to be current.
+ */
 QString 
 ThemeBusinessLogic::themePreviewFileName (
         const QString  &themeCodeName,
