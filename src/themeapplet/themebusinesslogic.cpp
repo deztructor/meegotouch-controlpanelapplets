@@ -109,7 +109,7 @@ ThemeBusinessLogic::availableThemes () const
             continue;
         
         descr = new ThemeDescriptor (
-                themeDirName + "/" + themeFile,
+                themeDirName + QDir::separator() + themeFile,
                 themeFile);
 
         if (descr->isValid() && descr->isVisible())
