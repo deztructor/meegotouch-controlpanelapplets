@@ -12,7 +12,8 @@
 #include <QDir>
 #include <QFile>
 
-#define DEBUG
+//#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 #if !defined(UNIT_TEST) || defined(FUNCTIONAL_TEST)
@@ -101,13 +102,12 @@ ThemeBusinessLogic::availableThemes () const
     QList<ThemeDescriptor *> retval;
     QDir themeDir (themeDirName);
 
-    foreach (QString themeFile, entryList (themeDir, QDir::Dirs)) {
+    SYS_WARNING ("------------------------------------------------");
+    foreach (QString themeFile, 
+            entryList(themeDir, (QDir::Dirs | QDir::NoDotAndDotDot))) {
         ThemeDescriptor *descr;
 
-        if (themeFile == "." || 
-                themeFile == "..")
-            continue;
-        
+        SYS_WARNING ("themeFile = %s", SYS_STR(themeFile));
         descr = new ThemeDescriptor (
                 themeDirName + QDir::separator() + themeFile,
                 themeFile);
@@ -117,6 +117,7 @@ ThemeBusinessLogic::availableThemes () const
         else
             delete descr;
     }
+    SYS_WARNING ("------------------------------------------------");
 
     return retval;
 }
