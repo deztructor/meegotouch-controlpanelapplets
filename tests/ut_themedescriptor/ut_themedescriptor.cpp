@@ -51,9 +51,11 @@ Ut_ThemeDescriptor::testPerfectDescriptor ()
     ThemeDescriptor *desc, *desc1;
 
     desc = new ThemeDescriptor (
+            NULL,
             DIRNAMEDesktopFilePerfect, 
             CODENAMEDesktopFilePerfect);
     desc1 = new ThemeDescriptor (
+            NULL,
             DIRNAMEDesktopFilePerfect, 
             CODENAMEDesktopFilePerfect);
 
@@ -90,6 +92,7 @@ Ut_ThemeDescriptor::testMissingFileDescriptor ()
     ThemeDescriptor *desc;
 
     desc = new ThemeDescriptor (
+            NULL,
             DIRNAMEDesktopFileMissing, 
             CODENAMEDesktopFileMissing);
 
@@ -117,6 +120,7 @@ Ut_ThemeDescriptor::testHiddenThemeDescriptor ()
     ThemeDescriptor *desc;
 
     desc = new ThemeDescriptor (
+            NULL,
             DIRNAMEDesktopFileHidden, 
             CODENAMEDesktopFileHidden);
 
@@ -145,6 +149,7 @@ Ut_ThemeDescriptor::testEmptyThemeDescriptor ()
     ThemeDescriptor *desc;
 
     desc = new ThemeDescriptor (
+            NULL,
             DIRNAMEDesktopFileEmpty, 
             CODENAMEDesktopFileEmpty);
 

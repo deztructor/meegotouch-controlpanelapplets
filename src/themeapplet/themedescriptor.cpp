@@ -18,8 +18,10 @@ static const QString iconNameKey = "X-MeeGoTouch-Metatheme/X-Icon";
 static const QString visibleKey = "X-MeeGoTouch-Metatheme/X-Visible";
 
 ThemeDescriptor::ThemeDescriptor (
+        QObject       *parent,
         const QString &directoryPath,
         const QString &codeName) :
+    QObject (parent),
     m_Valid (false),
     m_Visible (false),
     m_CodeName (codeName),

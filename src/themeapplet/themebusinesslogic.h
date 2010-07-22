@@ -7,6 +7,8 @@
 #include <QObject>
 #include <QDir>
 
+#include "themedescriptor.h"
+
 class QString;
 class ThemeDescriptor;
 
@@ -17,10 +19,10 @@ class ThemeBusinessLogic : public QObject
 public:
     ThemeBusinessLogic ();
     
-    QString currentThemeCodeName () const;
-    QString currentThemeName () const;
-    QString currentThemeIconName () const;
-    QList<ThemeDescriptor *> availableThemes () const;
+    QString currentThemeCodeName ();
+    QString currentThemeName ();
+    QString currentThemeIconName ();
+    QList<ThemeDescriptor *> availableThemes ();
 
 public slots:
     /*!

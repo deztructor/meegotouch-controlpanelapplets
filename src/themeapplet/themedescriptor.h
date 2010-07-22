@@ -18,6 +18,7 @@ class ThemeDescriptor : public QObject
 
 public:
     ThemeDescriptor (
+            QObject       *parent,
             const QString &directoryPath,
             const QString &codeName);
     ~ThemeDescriptor ();

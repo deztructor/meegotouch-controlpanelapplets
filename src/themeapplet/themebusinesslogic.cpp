@@ -12,7 +12,7 @@
 #include <QDir>
 #include <QFile>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -41,7 +41,7 @@ ThemeBusinessLogic::ThemeBusinessLogic ()
  * string ID to the GConf database.
  */
 QString
-ThemeBusinessLogic::currentThemeCodeName () const
+ThemeBusinessLogic::currentThemeCodeName ()
 {
     MTheme *theme = MTheme::instance();
 
@@ -55,7 +55,7 @@ ThemeBusinessLogic::currentThemeCodeName () const
  * string.
  */
 QString
-ThemeBusinessLogic::currentThemeName () const
+ThemeBusinessLogic::currentThemeName ()
 {
     QString codeName = currentThemeCodeName();
     QList<ThemeDescriptor *> list = availableThemes ();
@@ -76,7 +76,7 @@ ThemeBusinessLogic::currentThemeName () const
  * string.
  */
 QString
-ThemeBusinessLogic::currentThemeIconName () const
+ThemeBusinessLogic::currentThemeIconName ()
 {
     QString codeName = currentThemeCodeName();
     QList<ThemeDescriptor *> list = availableThemes ();
@@ -97,18 +97,19 @@ ThemeBusinessLogic::currentThemeIconName () const
  * Invisible themes are filtered out.
  */
 QList<ThemeDescriptor *>
-ThemeBusinessLogic::availableThemes () const
+ThemeBusinessLogic::availableThemes ()
 {
     QList<ThemeDescriptor *> retval;
     QDir themeDir (themeDirName);
 
-    SYS_WARNING ("------------------------------------------------");
+    SYS_DEBUG ("------------------------------------------------");
     foreach (QString themeFile, 
             entryList(themeDir, (QDir::Dirs | QDir::NoDotAndDotDot))) {
         ThemeDescriptor *descr;
 
-        SYS_WARNING ("themeFile = %s", SYS_STR(themeFile));
+        SYS_DEBUG ("themeFile = %s", SYS_STR(themeFile));
         descr = new ThemeDescriptor (
+                this,
                 themeDirName + QDir::separator() + themeFile,
                 themeFile);
 
@@ -117,7 +118,7 @@ ThemeBusinessLogic::availableThemes () const
         else
             delete descr;
     }
-    SYS_WARNING ("------------------------------------------------");
+    SYS_DEBUG ("------------------------------------------------");
 
     return retval;
 }
