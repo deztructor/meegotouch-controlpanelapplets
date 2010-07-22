@@ -24,7 +24,7 @@
 #include <QStringList>
 #include <MTheme>
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../../src/debug.h"
 

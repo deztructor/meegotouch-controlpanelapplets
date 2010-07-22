@@ -14,6 +14,7 @@
 #ifdef UNIT_TEST
 #  undef DEBUG
 #endif
+
 /*
  * If the debug facility is enabled we also enable all the warning messages.
  */

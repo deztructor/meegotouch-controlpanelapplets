@@ -34,6 +34,9 @@ public slots:
 signals:
     void themeChangeStarted (QString themeCodeName);
     void themeChanged (QString themeCodeName);
+
+private:
+    QList<ThemeDescriptor *>  m_AvailableThemes;
 };
 
 #endif

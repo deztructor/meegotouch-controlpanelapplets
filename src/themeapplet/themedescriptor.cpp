@@ -5,7 +5,7 @@
 #include <QString>
 #include <mdesktopentry.h>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 

@@ -57,15 +57,13 @@ ThemeBusinessLogic::currentThemeCodeName ()
 QString
 ThemeBusinessLogic::currentThemeName ()
 {
-    QString codeName = currentThemeCodeName();
-    QList<ThemeDescriptor *> list = availableThemes ();
-    QString retval;
+    QString                   codeName = currentThemeCodeName();
+    QString                   retval;
 
-    foreach (ThemeDescriptor *descr, list) {
+    availableThemes();
+    foreach (ThemeDescriptor *descr, m_AvailableThemes) {
         if (descr->codeName() == codeName)
             retval = descr->name();
-
-        delete descr;
     }
 
     return retval;
@@ -79,14 +77,12 @@ QString
 ThemeBusinessLogic::currentThemeIconName ()
 {
     QString codeName = currentThemeCodeName();
-    QList<ThemeDescriptor *> list = availableThemes ();
     QString retval;
 
-    foreach (ThemeDescriptor *descr, list) {
+    availableThemes ();
+    foreach (ThemeDescriptor *descr, m_AvailableThemes) {
         if (descr->codeName() == codeName)
             retval = descr->iconName();
-
-        delete descr;
     }
 
     return retval;
@@ -99,28 +95,36 @@ ThemeBusinessLogic::currentThemeIconName ()
 QList<ThemeDescriptor *>
 ThemeBusinessLogic::availableThemes ()
 {
-    QList<ThemeDescriptor *> retval;
     QDir themeDir (themeDirName);
 
-    SYS_DEBUG ("------------------------------------------------");
+    /*
+     * If we already got the list we are not going to read the filesystem again.
+     */
+    if (m_AvailableThemes.size() > 0) {
+        return m_AvailableThemes;
+    }
+
+    /*
+     * Here we do the actual reading.
+     */
     foreach (QString themeFile, 
             entryList(themeDir, (QDir::Dirs | QDir::NoDotAndDotDot))) {
         ThemeDescriptor *descr;
 
-        SYS_DEBUG ("themeFile = %s", SYS_STR(themeFile));
         descr = new ThemeDescriptor (
                 this,
                 themeDirName + QDir::separator() + themeFile,
                 themeFile);
 
-        if (descr->isValid() && descr->isVisible())
-            retval << descr;
-        else
+        if (descr->isValid() && descr->isVisible()) {
+            SYS_DEBUG ("themeFile = %s", SYS_STR(themeFile));
+            m_AvailableThemes << descr;
+        } else {
             delete descr;
+        }
     }
-    SYS_DEBUG ("------------------------------------------------");
 
-    return retval;
+    return m_AvailableThemes;
 }
 
 /*!
