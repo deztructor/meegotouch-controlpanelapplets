@@ -4,11 +4,16 @@ TEMPLATE = lib
 CONFIG += plugin \
           gui \
           meegotouch \
+          meegotouch_defines \
           duicontrolpanel \
-          silent
+	  silent
 
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
+
+load(meegotouch_defines)
+DEFINES += \
+    MEEGO_THEMEDIR=\\\"\"$$M_THEME_DIR\"\\\"
 
 HEADERS = \
     ../debug.h \

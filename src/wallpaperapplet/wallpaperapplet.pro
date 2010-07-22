@@ -21,7 +21,6 @@ INCLUDEPATH += \
     /usr/include/QtTracker \
     /usr/include/thumbnailer 
 
-
 HEADERS = \
     ../debug.h \
     wallpaperdescriptor.h \

@@ -26,6 +26,10 @@ DEFINES += UNIT_TEST
 TARGET = ut_themecellcreator
 target.path = /usr/lib/systemui-applets-tests
 
+load(meegotouch_defines)
+DEFINES += \
+    MEEGO_THEMEDIR=\\\"\"$$M_THEME_DIR\"\\\"
+
 HEADERS += \
     $$STUB_PREFIX/mdesktopentry.h \
     ../../src/debug.h \

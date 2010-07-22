@@ -26,6 +26,10 @@ DEFINES += \
 TARGET = ft_themebusinesslogic
 target.path = /usr/lib/systemui-applets-tests
 
+load(meegotouch_defines)
+DEFINES += \
+    MEEGO_THEMEDIR=\\\"\"$$M_THEME_DIR\"\\\"
+
 HEADERS += \
     ../../src/debug.h \
     ft_themebusinesslogic.h \

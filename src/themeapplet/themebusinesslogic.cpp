@@ -24,7 +24,8 @@
 
 
 // The directory where all the available themes are installed.
-static const QString themeDirName ("/usr/share/themes");
+static const QString themeDirName (MEEGO_THEMEDIR);
+
 // The GConf key where meegotouch expects us to place the theme name.
 static const QString themeGConfKey ("/meegotouch/theme/name");
 
