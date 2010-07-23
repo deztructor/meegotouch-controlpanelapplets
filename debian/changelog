@@ -10,8 +10,9 @@ systemui-applets (0.14.12-2) harmattan; urgency=low
 
   [ David Kedves ]
   * Wallpaper-applet backup enhancements...
+  * Fixes: NB#181605 - Profiles applet view is not proper.
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 22 Jul 2010 16:54:23 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 23 Jul 2010 11:29:40 +0200
 
 systemui-applets (0.14.11-1) harmattan; urgency=low
 
