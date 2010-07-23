@@ -1,4 +1,4 @@
-systemui-applets (0.14.12-1) harmattan; urgency=low
+systemui-applets (0.14.12-2) harmattan; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#180999 - Wallpaper image must be changed separately to landscape
