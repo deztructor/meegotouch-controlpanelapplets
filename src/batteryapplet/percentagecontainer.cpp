@@ -2,19 +2,18 @@
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 #include "percentagecontainer.h"
 
-#include <MGridLayoutPolicy>
+#include <QGraphicsLinearLayout>
 #include <MImageWidget>
 #include <MLabel>
-#include <MLayout>
 
-#define DEBUG 
+#define DEBUG
 #include "../debug.h"
 
 PercentageContainer::PercentageContainer(
-		const QString  &text, 
-		MImageWidget *image, 
-		MWidget      *parent) :
-	MContainer (parent),
+    const QString  &text,
+    MImageWidget *image,
+    MWidget      *parent) :
+    MContainer (parent),
         m_Image (image),
         m_TextLabel (0)
 {
@@ -26,9 +25,9 @@ PercentageContainer::PercentageContainer(
 }
 
 
-void 
+void
 PercentageContainer::setText (
-		const QString &text)
+        const QString &text)
 {
     m_TextLabel->setText (text);
 }
@@ -44,14 +43,15 @@ void PercentageContainer::updateCapacity(
 
 void PercentageContainer::setLayout()
 {
-    // set the layout
-    MLayout *layout = new MLayout();
-    MGridLayoutPolicy *layoutPolicy = new MGridLayoutPolicy(layout);
-    centralWidget()->setLayout(layout);
+    QGraphicsLinearLayout *layout =
+        new QGraphicsLinearLayout (Qt::Horizontal);
 
     // add the widgets
-    layoutPolicy->addItem (m_Image, 0, 0, 1, 1);
-    layoutPolicy->addItem (m_TextLabel, 0, 1, 1, 1,Qt::AlignVCenter);
-}
+    layout->addItem (m_Image);
+    layout->addItem (m_TextLabel);
+    layout->addStretch ();
 
+    // set the layout
+    centralWidget ()->setLayout (layout);
+}
 

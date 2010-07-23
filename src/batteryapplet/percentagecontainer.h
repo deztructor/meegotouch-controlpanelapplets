@@ -24,10 +24,10 @@ public:
     void setText (const QString &text);
 
 public slots:
-    void charging(int);
+    void charging (int);
 
 private:
-    void setLayout();
+    void setLayout ();
 
 private:
     MImageWidget  *m_Image;

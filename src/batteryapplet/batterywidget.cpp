@@ -12,11 +12,8 @@
 
 #include <MButton>
 #include <MContainer>
-#include <MGridLayoutPolicy>
-#include <MLayout>
-#include <MLinearLayoutPolicy>
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -105,24 +102,11 @@ void BatteryWidget::initWidget ()
              Qt::DirectConnection);
 
     // mainContainer
-    m_MainLayout = new MLayout;
+    m_MainLayout = new QGraphicsLinearLayout (Qt::Vertical);
 
-    MGridLayoutPolicy *landscapeLayoutPolicy =
-        new MGridLayoutPolicy (m_MainLayout);
-    landscapeLayoutPolicy->addItem (remainingCapacityContainer, 0, 0, 1, 2);
-    landscapeLayoutPolicy->addItem (sliderContainer, 1, 0, 1, 2);
-    landscapeLayoutPolicy->addItem (PSMButton, 2, 0, 1, 2);
-    landscapeLayoutPolicy->setSpacing (10);
-    m_MainLayout->setLandscapePolicy (landscapeLayoutPolicy);
-
-    MLinearLayoutPolicy *portraitLayoutPolicy =
-        new MLinearLayoutPolicy (m_MainLayout, Qt::Vertical);
-    portraitLayoutPolicy->addItem (remainingCapacityContainer, Qt::AlignLeft);
-    portraitLayoutPolicy->setStretchFactor (remainingCapacityContainer, 2);
-    portraitLayoutPolicy->addItem (sliderContainer, Qt::AlignLeft);
-    portraitLayoutPolicy->addItem (PSMButton, Qt::AlignCenter);
-    portraitLayoutPolicy->setSpacing (10);
-    m_MainLayout->setPortraitPolicy (portraitLayoutPolicy);
+    m_MainLayout->addItem (remainingCapacityContainer);
+    m_MainLayout->addItem (sliderContainer);
+    m_MainLayout->addItem (PSMButton);
 
     MContainer *mainContainer = new MContainer;
     mainContainer->setHeaderVisible (false);
@@ -261,19 +245,7 @@ BatteryWidget::PSMValueReceived (
 
     if (!PSMEnabled)
     {
-        if (m_MainLayout->portraitPolicy () != 0)
-        {
-            MLinearLayoutPolicy *policy =
-                static_cast<MLinearLayoutPolicy*> (m_MainLayout->portraitPolicy ());
-            // Add sliderContainer before the PSMButton
-            policy->insertItem (policy->indexOf (PSMButton), sliderContainer);
-        }
-        if (m_MainLayout->landscapePolicy () != 0)
-        {
-            MGridLayoutPolicy *policy =
-                static_cast<MGridLayoutPolicy*> (m_MainLayout->landscapePolicy ());
-            policy->addItem (sliderContainer, 1, 0, 1, 2);
-        }
+        m_MainLayout->insertItem (1, sliderContainer);
         sliderContainer->setVisible (true);
         m_logic->remainingCapacityRequired();
     }
@@ -281,10 +253,7 @@ BatteryWidget::PSMValueReceived (
     {
         sliderContainer->setVisible (false);
 
-        if (m_MainLayout->landscapePolicy () != 0)
-            m_MainLayout->landscapePolicy ()->removeItem (sliderContainer);
-        if (m_MainLayout->portraitPolicy () != 0)
-            m_MainLayout->portraitPolicy ()->removeItem (sliderContainer);
+        m_MainLayout->removeItem (sliderContainer);
         //% "Power save mode"
         remainingCapacityContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
     }
