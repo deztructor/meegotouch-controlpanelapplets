@@ -3,8 +3,6 @@ systemui-applets (0.14.12-2) harmattan; urgency=low
   [ Laszlo Pere ]
   * Fixes: NB#180999 - Wallpaper image must be changed separately to landscape
     and portrait modes
-  * Fixes: NB#174943 - The default background image paths are hardcoded into 
-    System-UI
   * Fixes: NB#179836 -  Display settings: wrong spelling for backlight time-out
     values §qtn_comm_time_second§
 
@@ -12,7 +10,7 @@ systemui-applets (0.14.12-2) harmattan; urgency=low
   * Wallpaper-applet backup enhancements...
   * Fixes: NB#181605 - Profiles applet view is not proper.
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 23 Jul 2010 11:29:40 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 23 Jul 2010 12:32:39 +0200
 
 systemui-applets (0.14.11-1) harmattan; urgency=low
 
