@@ -5,6 +5,8 @@ systemui-applets (0.14.12-1) harmattan; urgency=low
     and portrait modes
   * Fixes: NB#174943 - The default background image paths are hardcoded into 
     System-UI
+  * Fixes: NB#179836 -  Display settings: wrong spelling for backlight time-out
+    values §qtn_comm_time_second§
 
   [ David Kedves ]
   * Wallpaper-applet backup enhancements...

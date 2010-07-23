@@ -93,7 +93,7 @@ void DisplayWidget::initWidget ()
                         m_logic->selectedScreenLightsValue ());
         QString str = (value < 60) ?
                       //% "%1 seconds"
-                      qtTrId ("qtn_comm_time_second") :
+                      qtTrId ("qtn_comm_time_second", value) :
                       //% "%1 minutes"
                       qtTrId ("qtn_comm_time_minute", value / 60);
         if (value >= 60)
@@ -151,7 +151,7 @@ DisplayWidget::screenTimeoutClicked ()
         int value = m_screenlight_vals.at (i);
         QString str = (value < 60) ?
                       //% "%1 seconds"
-                      qtTrId ("qtn_comm_time_second") :
+                      qtTrId ("qtn_comm_time_second", value) :
                       //% "%1 minutes"
                       qtTrId ("qtn_comm_time_minute", value / 60);
         if (value >= 60)
@@ -191,7 +191,7 @@ DisplayWidget::retranslateUi ()
                         m_logic->selectedScreenLightsValue ());
         QString str = (value < 60) ?
                       //% "%1 seconds"
-                      qtTrId ("qtn_comm_time_second") :
+                      qtTrId ("qtn_comm_time_second", value) :
                       //% "%1 minutes"
                       qtTrId ("qtn_comm_time_minute", value / 60);
         if (value >= 60)
