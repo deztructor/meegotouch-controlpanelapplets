@@ -60,7 +60,7 @@ ThemeCellCreator::updateCell (
     QString               codeName;
     QString               iconName;
     QString               changingTheme;
-
+    bool                  isChangingTheme;
     if(!cell || !index.isValid()) 
         return;
 
@@ -70,13 +70,15 @@ ThemeCellCreator::updateCell (
     title = index.data (ThemeListModel::NameRole).toString();
     codeName = index.data (ThemeListModel::CodeNameRole).toString();
     iconName = index.data (ThemeListModel::IconNameRole).toString();
+    isChangingTheme = !codeName.isEmpty() && changingTheme == codeName;
 
     #if 1
     SYS_DEBUG ("************** %d ***************", index.row());
-    SYS_DEBUG ("title         = %s", SYS_STR(title));
-    SYS_DEBUG ("changingTheme = %s", SYS_STR(changingTheme));
-    SYS_DEBUG ("codeName      = %s", SYS_STR(codeName));
-    SYS_DEBUG ("iconName      = %s", SYS_STR(iconName));
+    SYS_DEBUG ("title           = %s", SYS_STR(title));
+    SYS_DEBUG ("changingTheme   = %s", SYS_STR(changingTheme));
+    SYS_DEBUG ("codeName        = %s", SYS_STR(codeName));
+    SYS_DEBUG ("iconName        = %s", SYS_STR(iconName));
+    SYS_DEBUG ("isChangingTheme = %s", SYS_BOOL(isChangingTheme));
     #endif
 
     // The title
@@ -98,7 +100,7 @@ ThemeCellCreator::updateCell (
         contentItem->imageWidget()->setImage (iconName);
 
     // The spinner.
-    if (!codeName.isEmpty() && changingTheme == codeName) {
+    if (isChangingTheme) {
         contentItem->progressIndicator()->show();
     } else {
         contentItem->progressIndicator()->hide();

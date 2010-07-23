@@ -5,7 +5,7 @@
 
 #include <QModelIndex>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 ThemeListModel::ThemeListModel(QObject *parent)
@@ -34,7 +34,7 @@ ThemeListModel::rowCount(
     if (parent.isValid())
         retval = 0;
 
-    SYS_DEBUG ("Returning %d", retval);
+    //SYS_DEBUG ("Returning %d", retval);
     return retval;
 }
 
@@ -47,15 +47,15 @@ ThemeListModel::columnCount (
     if (parent.isValid())
         retval = 0;
 
-    SYS_DEBUG ("Returning %d", retval);
+    //SYS_DEBUG ("Returning %d", retval);
     return retval;
 }
         
 #if 0
-        /*
-         * FIXME:
-         * This method is only for debugging purposes and will be removed soon.
-         */
+/*
+ * FIXME:
+ * This method is only for debugging purposes and will be removed soon.
+ */
 QModelIndex
 ThemeListModel::index (
                 int row, 
@@ -190,7 +190,9 @@ ThemeListModel::themeChanged (
 {
     QModelIndex index = indexByThemeCodeName(themeCodeName);
 
-    SYS_DEBUG ("*** themeCodeName = %s", SYS_STR(themeCodeName));
+    SYS_DEBUG ("***********************************************************");
+    SYS_DEBUG ("*** themeCodeName   = %s", SYS_STR(themeCodeName));
+    SYS_DEBUG ("*** index.isValid() = %s", SYS_BOOL(index.isValid()));
     m_ChangingTheme = "";
 
     if (index.isValid())
