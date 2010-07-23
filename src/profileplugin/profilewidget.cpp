@@ -88,7 +88,7 @@ void ProfileWidget::showProfileDialog()
 
 #if 1
     /*
-     * Hide the status indicator menu: We can coose to hide the menu and make a
+     * Hide the status indicator menu: We can choose to hide the menu and make a
      * system modal dialog to be visible without the menu or keep the menu in
      * the background and use a non-system-modal dialog.
      *
