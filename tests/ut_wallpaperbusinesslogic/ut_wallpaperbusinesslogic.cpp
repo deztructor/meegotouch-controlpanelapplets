@@ -310,7 +310,6 @@ Ut_WallpaperBusinessLogic::testSetBackground()
             &landscapeITrans,
             &portraitITrans,
              availableWallpapers[n]);
-    QTest::qWait (150);
     // Testing if the images are valid and we got a signal about the change.
     QVERIFY (m_SignalSink.m_WallpaperChangedCame);
 }

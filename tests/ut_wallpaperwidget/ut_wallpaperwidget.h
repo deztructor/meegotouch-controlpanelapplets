@@ -43,8 +43,6 @@ private slots:
     void cleanupTestCase ();
 
     void testImageActivated ();
-
-//    void testGalleryActivated ();
     void testGalleryImageSelected ();
     void testImageBrowserDismissed();
 
