@@ -20,16 +20,12 @@ class SignalSink : public QObject
 public:
     SignalSink ();
 
-    void reset();
-
 public slots:
     void changeWidget (int widgetId);
-    void imageEditRequested ();
 
 public:
     bool   m_ChangeWidgetCame;
     int    m_WidgetID;
-    bool   m_WallpaperImageEditRequestedCame;
 };
 
 class Ut_WallpaperWidget : public QObject 
@@ -43,10 +39,6 @@ private slots:
     void cleanupTestCase ();
 
     void testImageActivated ();
-
-    void testGalleryActivated ();
-    void testGalleryImageSelected ();
-    void testImageBrowserDismissed();
 
 private:
     MApplication              *m_App;
