@@ -39,6 +39,7 @@ private slots:
     void testAvailableWallpapers ();
     void testCurrentWallpaper ();
     void testSetWallpapert ();
+    void testSetEditedImage ();
 
 private:
     void testValidImages ();

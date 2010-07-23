@@ -29,6 +29,18 @@ SignalSink::changeWidget (
     m_WidgetID = widgetId;
 }
 
+void
+SignalSink::reset()
+{
+    m_WallpaperImageEditRequestedCame = false;
+}
+
+void
+SignalSink::imageEditRequested()
+{
+    SYS_DEBUG ("");
+    m_WallpaperImageEditRequestedCame = true;
+}
 /******************************************************************************
  * Ut_WallpaperWidget implementation. 
  */
@@ -53,11 +65,16 @@ Ut_WallpaperWidget::initTestCase()
 
     m_App = new MApplication (argc, &app_name);
     m_BusinessLogic = new WallpaperBusinessLogic;
-    
+
     m_Widget = new WallpaperWidget (m_BusinessLogic);
     connectSuccess = connect (
             m_Widget, SIGNAL(changeWidget(int)),
             &m_Sink, SLOT(changeWidget(int)));
+    QVERIFY(connectSuccess);
+
+    connectSuccess = connect(
+            m_BusinessLogic, SIGNAL(imageEditRequested()),
+            &m_Sink, SLOT(imageEditRequested()));
     QVERIFY(connectSuccess);
 
     QTest::qWait (150);
@@ -92,6 +109,26 @@ Ut_WallpaperWidget::testImageActivated ()
     QVERIFY (m_Sink.m_WidgetID == 1);
 }
 
+void
+Ut_WallpaperWidget::testGalleryActivated()
+{
+    m_Widget->galleryActivated();
+    QVERIFY (!(m_Widget->m_noImageBrowser));
+}
+
+void
+Ut_WallpaperWidget::testGalleryImageSelected()
+{
+    m_Widget->galleryImageSelected("file:///nodir/NoSuchFile.png");
+    QVERIFY(m_Sink.m_WallpaperImageEditRequestedCame);
+}
+
+void
+Ut_WallpaperWidget::testImageBrowserDismissed()
+{
+    m_Widget->imageBrowserDismissed();
+    QVERIFY (m_Widget->m_noImageBrowser);
+}
 
 QTEST_APPLESS_MAIN(Ut_WallpaperWidget)
 
