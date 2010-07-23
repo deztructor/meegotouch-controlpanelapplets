@@ -110,13 +110,6 @@ Ut_WallpaperWidget::testImageActivated ()
 }
 
 void
-Ut_WallpaperWidget::testGalleryActivated()
-{
-    m_Widget->galleryActivated();
-    QVERIFY (!(m_Widget->m_noImageBrowser));
-}
-
-void
 Ut_WallpaperWidget::testGalleryImageSelected()
 {
     m_Widget->galleryImageSelected("file:///nodir/NoSuchFile.png");

@@ -310,7 +310,7 @@ Ut_WallpaperBusinessLogic::testSetBackground()
             &landscapeITrans,
             &portraitITrans,
              availableWallpapers[n]);
-
+    QTest::qWait (150);
     // Testing if the images are valid and we got a signal about the change.
     QVERIFY (m_SignalSink.m_WallpaperChangedCame);
 }
@@ -325,32 +325,7 @@ Ut_WallpaperBusinessLogic::testCheckForPendingSignals()
     QVERIFY (m_SignalSink.m_WallpaperImageEditRequestedCame);
 }
 
-void
-Ut_WallpaperBusinessLogic::testWriteFiles()
-{
-    bool success;
 
-    WallpaperITrans landscapeITrans;
-    WallpaperITrans portraitITrans;
-    QList<WallpaperDescriptor *> availableWallpapers;
-    int n;
-
-    availableWallpapers = m_Api->availableWallpapers ();
-    for (n = 0; n < availableWallpapers.size(); ++n) {
-        if (!availableWallpapers[n]->isCurrent())
-            break;
-    }
-
-    SYS_DEBUG ("*** n = %d", n);
-    if (n == availableWallpapers.size()) {
-        SYS_WARNING ("Only one image?");
-        return;
-    }
-
-    success = m_Api->writeFiles(&landscapeITrans,
-                      &portraitITrans,
-                       availableWallpapers[n]);
-}
 
 /******************************************************************************
  * Private functions.

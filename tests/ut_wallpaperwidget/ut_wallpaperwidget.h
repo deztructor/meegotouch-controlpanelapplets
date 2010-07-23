@@ -44,7 +44,7 @@ private slots:
 
     void testImageActivated ();
 
-    void testGalleryActivated ();
+//    void testGalleryActivated ();
     void testGalleryImageSelected ();
     void testImageBrowserDismissed();
 
