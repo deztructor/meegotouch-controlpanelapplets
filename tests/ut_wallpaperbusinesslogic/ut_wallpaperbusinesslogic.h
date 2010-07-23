@@ -9,6 +9,24 @@
 class MApplication;
 class WallpaperBusinessLogic;
 
+class SignalSink : public QObject
+{
+Q_OBJECT
+
+public:
+    SignalSink ();
+
+    void reset ();
+
+public slots:
+    void wallpaperChanged ();
+    void imageEditRequested ();
+
+public:
+    bool   m_WallpaperChangedCame;
+    bool   m_WallpaperImageEditRequestedCame;
+};
+
 class Ut_WallpaperBusinessLogic : public QObject 
 {
 Q_OBJECT
@@ -26,9 +44,14 @@ private slots:
     void testITrans ();
     void testCreateDirectory ();
     void testBackupFiles ();
+    void testSetBackground ();
+    void testCheckForPendingSignals ();
+    void testWriteFiles ();
 private:
     WallpaperBusinessLogic    *m_Api;
     MApplication              *m_App;
+    SignalSink                 m_SignalSink;
 };
 
 #endif
+
