@@ -7,9 +7,9 @@ contains(BUILD_FEATURES,coverage) {
 	#
 	# Sometimes it is good to disable all but one unit tests.
 	#
-	#SUBDIRS =  ut_themecellcreator
-	#SUBDIRS =  $$system(ls -1d ut_battery*/)
-	SUBDIRS = $$system(./unit_tests.sh)
+        #SUBDIRS =  ut_wallpaperwidget
+        #SUBDIRS =  $$system(ls -1d ut_wallpaper*/)
+        SUBDIRS = $$system(./unit_tests.sh)
 } else {
 	SUBDIRS = $$system(ls -1d ut_*/ ft_*/)
 }
