@@ -2,12 +2,10 @@
 /* vim:set et sw=4 ts=4 sts=4: */
 #include "filesystemstub.h"
 #include "ut_wallpaperbusinesslogic.h"
-#include "wallpapergconf.h"
 
 #include "wallpaperbusinesslogic.h"
 #include "wallpapercurrentdescriptor.h"
 #include "wallpaperitrans.h"
-#include "wallpapergconf.h"
 
 
 #include <QPixmap>
@@ -23,34 +21,6 @@ static const QString PortraitKey =
 static const QString LandscapeKey = 
     "/desktop/meego/background/landscape/picture_filename";
 
-/******************************************************************************
- * SignalSink implementation.
- */
-SignalSink::SignalSink ()
-{
-    reset ();
-}
-
-void
-SignalSink::reset ()
-{
-    m_WallpaperChangedCame = false;
-    m_WallpaperImageEditRequestedCame = false;
-}
-
-void
-SignalSink::wallpaperChanged ()
-{
-    SYS_DEBUG ("");
-    m_WallpaperChangedCame = true;
-}
-
-void
-SignalSink::imageEditRequested()
-{
-    SYS_DEBUG ("");
-    m_WallpaperImageEditRequestedCame = true;
-}
 /******************************************************************************
  * Ut_WallpaperBusinessLogic implementation. 
  */
@@ -73,14 +43,6 @@ Ut_WallpaperBusinessLogic::initTestCase()
 {
     m_App = new MApplication (argc, &app_name);
     m_Api = new WallpaperBusinessLogic;
-
-    connect (
-            m_Api, SIGNAL (wallpaperChanged()),
-            &m_SignalSink, SLOT (wallpaperChanged()));
-
-    connect (
-            m_Api, SIGNAL (imageEditRequested()),
-            &m_SignalSink, SLOT (imageEditRequested()));
 
     QVERIFY (m_Api->m_EditedImage == 0);
 }
@@ -282,82 +244,15 @@ Ut_WallpaperBusinessLogic::testBackupFiles ()
      */
     m_Api->createBackupFiles ();
 
-    SYS_DEBUG ("*** desktopfile.exists = %s",
+    SYS_DEBUG ("*** desktopfile.exists = %s", 
             SYS_BOOL(desktopFile.exists()));
-    SYS_DEBUG ("*** backupfile.exists  = %s",
+    SYS_DEBUG ("*** backupfile.exists  = %s", 
             SYS_BOOL(desktopFileBak.exists()));
     QVERIFY (!desktopFile.exists());
     QVERIFY (desktopFileBak.exists());
 
     m_Api->deleteBackupFiles ();
     QVERIFY (!desktopFileBak.exists());
-}
-
-void
-Ut_WallpaperBusinessLogic::testSetBackground()
-{
-    WallpaperITrans landscapeITrans;
-    WallpaperITrans portraitITrans;
-    QList<WallpaperDescriptor *> availableWallpapers;
-    int n;
-
-    availableWallpapers = m_Api->availableWallpapers ();
-    for (n = 0; n < availableWallpapers.size(); ++n) {
-        if (!availableWallpapers[n]->isCurrent())
-            break;
-    }
-
-    SYS_DEBUG ("*** n = %d", n);
-    if (n == availableWallpapers.size()) {
-        SYS_WARNING ("Only one image?");
-        return;
-    }
-
-    m_SignalSink.reset ();
-    m_Api->setBackground (
-            &landscapeITrans,
-            &portraitITrans,
-             availableWallpapers[n]);
-
-    // Testing if the images are valid and we got a signal about the change.
-    QVERIFY (m_SignalSink.m_WallpaperChangedCame);
-}
-
-void
-Ut_WallpaperBusinessLogic::testCheckForPendingSignals()
-{
-    MGConfItem requestCodeItem  (WALLPAPER_APPLET_REQUEST_CODE);
-    requestCodeItem.set(WallpaperRequestEdit);
-    m_Api->checkForPendingSignals();
-
-    QVERIFY (m_SignalSink.m_WallpaperImageEditRequestedCame);
-}
-
-void
-Ut_WallpaperBusinessLogic::testWriteFiles()
-{
-    bool success;
-
-    WallpaperITrans landscapeITrans;
-    WallpaperITrans portraitITrans;
-    QList<WallpaperDescriptor *> availableWallpapers;
-    int n;
-
-    availableWallpapers = m_Api->availableWallpapers ();
-    for (n = 0; n < availableWallpapers.size(); ++n) {
-        if (!availableWallpapers[n]->isCurrent())
-            break;
-    }
-
-    SYS_DEBUG ("*** n = %d", n);
-    if (n == availableWallpapers.size()) {
-        SYS_WARNING ("Only one image?");
-        return;
-    }
-
-    success = m_Api->writeFiles(&landscapeITrans,
-                      &portraitITrans,
-                       availableWallpapers[n]);
 }
 
 /******************************************************************************

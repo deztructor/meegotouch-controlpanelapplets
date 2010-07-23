@@ -261,7 +261,7 @@ Ft_WallpaperBusinessLogic::testSetWallpapert ()
      * Testing with some arbitrary scale and offset images.
      */
     landscapeITrans.setScale (0.3);
-    portraitITrans.setScale (0.2);
+    portraitITrans.setScale (0.2);   
     landscapeITrans.setOffset (QPointF(10, 20));
     portraitITrans.setOffset (QPointF(20, 10));
 
@@ -279,7 +279,7 @@ Ft_WallpaperBusinessLogic::testSetWallpapert ()
      * Also with magnifying and negative offsets.
      */
     landscapeITrans.setScale (1.5);
-    portraitITrans.setScale (1.3);
+    portraitITrans.setScale (1.3);   
     landscapeITrans.setOffset (QPointF(-10, -200));
     portraitITrans.setOffset (QPointF(-800, -300));
 
