@@ -16,9 +16,9 @@ contains(BUILD_FEATURES,coverage) {
 	QMAKE_EXTRA_TARGETS += coverage
 	coverage.depends = src/Makefile 
 	coverage.commands = \
-		cd tests && make coverage && cd .. \
+                cd tests && make coverage && cd .. \
                 && genhtml --no-branch-coverage --legend -o coverage/ \
-		   -t \"SystemUI Applets Coverage Report\" \
-		tests/ut_*/selected.cov
+                   -t \"SystemUI Applets Coverage Report\" \
+                tests/ut_*/selected.cov
 }
 
