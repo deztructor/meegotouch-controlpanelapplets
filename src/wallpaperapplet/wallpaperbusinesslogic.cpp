@@ -49,13 +49,14 @@
 #include <MGConfItem>
 
 //#define LOTDEBUG
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 static const QString wallpaperDir = ".wallpapers";
 static const QString destopFileName = "wallpaper.desktop";
 static const QString backupExtension = ".BAK";
 
+static const QString nl = "\n";
 
 WallpaperBusinessLogic::WallpaperBusinessLogic()
 {
@@ -394,35 +395,32 @@ WallpaperBusinessLogic::writeFiles (
      */
     QTextStream out(&file);
 
-    QString outString = currentDesc->generateDesktopFile (path);
-    SYS_DEBUG ("outString = %s", SYS_STR(outString));
-
     /*
-     * Then this is deprecated.
+     * 
      */
-    out << "[Desktop Entry]\n";
-    out << "Type=WallpaperImage\n";
-    out << "Name=" << desc->title() << "\n";
-    out << "Version=" << QString::number(version) << "\n";
-    out << "\n";
+    out << "[Desktop Entry]" << nl;
+    out << "Type=WallpaperImage" << nl;
+    out << "Name=" << desc->title() << nl;
+    out << "Version=" << QString::number(version) << nl;
+    out << nl;
 
-    out << "[DCP Landscape Wallpaper]\n";
-    out << "OriginalFile=" << desc->originalImageFile(M::Landscape) << "\n";
-    out << "EditedFile=" << landscapeFilePath << "\n";
-    out << "MimeType=" << desc->mimeType() << "\n";
-    out << "HorOffset=" << landscapeITrans->x() << "\n";
-    out << "VertOffset=" << landscapeITrans->y() << "\n";
-    out << "Scale=" << landscapeITrans->scale() << "\n";
-    out << "\n";
+    out << "[DCP Landscape Wallpaper]" << nl;
+    out << "OriginalFile=" << desc->originalImageFile(M::Landscape) << nl;
+    out << "EditedFile=" << landscapeFilePath << nl;
+    out << "MimeType=" << desc->mimeType() << nl;
+    out << "HorOffset=" << landscapeITrans->x() << nl;
+    out << "VertOffset=" << landscapeITrans->y() << nl;
+    out << "Scale=" << landscapeITrans->scale() << nl;
+    out << nl;
 
-    out << "[DCP Portrait Wallpaper]\n";
-    out << "OriginalFile=" << desc->originalImageFile(M::Portrait) << "\n";
-    out << "EditedFile=" << portraitFilePath << "\n";
-    out << "MimeType=" << desc->mimeType() << "\n";
-    out << "HorOffset=" << portraitITrans->x() << "\n";
-    out << "VertOffset=" << portraitITrans->y() << "\n";
-    out << "Scale=" << portraitITrans->scale() << "\n";
-    out << "\n";
+    out << "[DCP Portrait Wallpaper]" << nl;
+    out << "OriginalFile=" << desc->originalImageFile(M::Portrait) << nl;
+    out << "EditedFile=" << portraitFilePath << nl;
+    out << "MimeType=" << desc->mimeType() << nl;
+    out << "HorOffset=" << portraitITrans->x() << nl;
+    out << "VertOffset=" << portraitITrans->y() << nl;
+    out << "Scale=" << portraitITrans->scale() << nl;
+    out << nl;
 
     makeImageFile (portraitFilePath, desc, portraitITrans);
     makeImageFile (landscapeFilePath, desc, landscapeITrans);

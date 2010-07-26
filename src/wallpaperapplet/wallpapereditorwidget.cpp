@@ -332,6 +332,7 @@ WallpaperEditorWidget::back ()
      * Turning back from fullscreen. This could be done in the destructor, but
      * that ends up with a segfault in the Qt...
      */
+    SYS_DEBUG ("");
     if (MApplication::activeApplicationWindow())
         MApplication::activeApplicationWindow()->showNormal();
 

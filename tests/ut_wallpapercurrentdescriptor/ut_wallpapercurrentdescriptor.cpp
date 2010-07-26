@@ -194,11 +194,6 @@ Ut_WallpaperCurrentDescriptor::testFromFileNames ()
     QVERIFY (editedPortrait == file2);
     QVERIFY (editedLandscape == file1);
 
-    QString desktopString = curr->generateDesktopFile ("ThisIsThePath");
-    // SYS_DEBUG ("*** = %s", SYS_STR(desktopString));
-    // FIXME: We obviously should do a much 
-    QVERIFY (!desktopString.isEmpty());
-
     /*
      * When set from image file names the image transformations should be all
      * default.

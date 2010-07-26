@@ -26,7 +26,6 @@ static const QString mimeTypeKey = "MimeType";
 static const QString horOffsetKey = "HorOffset";
 static const QString vertOffsetKey = "VertOffset";
 static const QString scaleKey = "Scale";
-static const QString nl = "\n";
 
 WallpaperCurrentDescriptor *
 WallpaperCurrentDescriptor::instance ()
@@ -238,46 +237,6 @@ finalize:
     return retval;
 }
 
-/*!
- * \param path The directory path for the image files.
- *
- * Not yet implemented.
- */
-QString
-WallpaperCurrentDescriptor::generateDesktopFile (
-        const QString  &path) const
-{
-    QString landscapeFilePath = path + suggestedOutputFilename (M::Landscape);
-    QString portraitFilePath = path + suggestedOutputFilename (M::Portrait);
-    QString out;
-
-    out  = "[" + mainGroupKey + "]" + nl;
-    out += "Type=WallpaperImage" + nl;
-    out += nameKey + "=" + title() + nl;
-    out += versionKey + "=" + QString::number(version() + 1) + nl;
-    out += nl;
-
-    out += "[" + landscapeGroupKey + "]" + nl;
-    out += originalFilenameKey + "=" + originalImageFile(M::Landscape) + nl;
-    out += editedFilenameKey + "=" + landscapeFilePath + nl;
-    out += mimeTypeKey + "=" + mimeType() + nl;
-    out += horOffsetKey + "=" + QString::number(m_LandscapeTrans.x()) + nl;
-    out += vertOffsetKey + "=" + QString::number(m_LandscapeTrans.y()) + nl;
-    out += scaleKey + "=" + QString::number(m_LandscapeTrans.scale()) + nl;
-    out += nl;
-    
-    out += "[" + portraitGroupKey + "]" + nl;
-    out += originalFilenameKey + "=" + originalImageFile(M::Portrait) + nl;
-    out += editedFilenameKey + "=" + portraitFilePath + nl;
-    out += mimeTypeKey + "=" + mimeType() + nl;
-    out += horOffsetKey + "=" + QString::number(m_PortraitTrans.x()) + nl;
-    out += vertOffsetKey + "=" + QString::number(m_PortraitTrans.y()) + nl;
-    out += scaleKey + "=" + QString::number(m_PortraitTrans.scale()) + nl;
-    out += nl;
-
-    return out;
-}
-
 /*! 
  * \returns The image transformations for the given orientation.
  */
@@ -296,6 +255,7 @@ WallpaperCurrentDescriptor::iTrans (
     SYS_WARNING ("Unknown orientation: %d", orientation);
     return m_LandscapeTrans;
 }
+
 
 QString 
 WallpaperCurrentDescriptor::originalImageFile (

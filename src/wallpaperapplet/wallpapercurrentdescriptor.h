@@ -48,10 +48,8 @@ public:
             QString     landscapeID,
             QString     portraitID);
 
-    QString generateDesktopFile (const QString &path) const;
-
     WallpaperITrans iTrans (M::Orientation orientation) const;
-    
+
 protected:
     WallpaperCurrentDescriptor ();
 
