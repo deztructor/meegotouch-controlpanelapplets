@@ -46,6 +46,7 @@ WallpaperDescriptor::WallpaperDescriptor (
 {
     m_Url             = orig.m_Url;
     m_Filename        = orig.m_Filename;
+    m_ImageID         = orig.m_ImageID;
     m_Title           = orig.m_Title;
     m_MimeType        = orig.m_MimeType;
     m_HasThumbnail    = orig.m_HasThumbnail;
@@ -79,7 +80,21 @@ WallpaperDescriptor::setFilename (
     m_HasThumbnail = false;
     m_Cached       = false;
     m_Filename     = filename;
+    m_ImageID      = "";
     m_Url          = QUrl::fromLocalFile (filename);
+
+    m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
+}
+
+void
+WallpaperDescriptor::setImageID (
+        const QString &imageID)
+{
+    m_HasThumbnail = false;
+    m_Cached       = false;
+    m_Filename     = "";
+    m_ImageID      = imageID;
+    m_Url          = QUrl();
 
     m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
 }
@@ -103,8 +118,14 @@ WallpaperDescriptor::title () const
     QString retval;
 
     retval = m_Title;
-    if (retval.isEmpty())
-        retval = basename ();
+    // If we have no title set we try the imageID, if that is also empty we use
+    // the basename of the image file.
+    if (retval.isEmpty()) {
+        if (!m_ImageID.isEmpty())
+            retval = m_ImageID;
+        else 
+            retval = basename ();
+    }
 
     SYS_DEBUG ("Returning %s", SYS_STR(retval));
     return retval;
@@ -197,6 +218,16 @@ WallpaperDescriptor::cache ()
 
     if (m_Cached)
         return;
+
+    if (!m_ImageID.isEmpty()) {
+        QPixmap *pixmap = MTheme::instance()->pixmapCopy(m_ImageID);
+
+        m_Pixmap = *pixmap;
+        delete pixmap;
+        
+        m_Cached = true;
+        return;
+    }
 
     success = m_Pixmap.load (filename());
     if (!success) {
@@ -295,7 +326,20 @@ WallpaperDescriptor::initiateThumbnailer ()
     #ifdef LOTDEBUG
     SYS_DEBUG ("*** m_Filename = %s", SYS_STR(m_Filename));
     SYS_DEBUG ("*** m_MimeType = %s", SYS_STR(mimeType()));
+    SYS_DEBUG ("*** m_ImageID  = %s", SYS_STR(m_ImageID));
     #endif
+
+    if (!m_ImageID.isEmpty()) {
+        SYS_WARNING ("-----------------");
+        QPixmap *pixmap = MTheme::instance()->pixmapCopy(
+                m_ImageID,
+                QSize (100, 100));
+        m_ThumbnailPixmap = *pixmap;
+        delete pixmap;
+        emit thumbnailLoaded (this);
+        return;
+    }
+
     /*
      * If some necessary information is missing.
      */

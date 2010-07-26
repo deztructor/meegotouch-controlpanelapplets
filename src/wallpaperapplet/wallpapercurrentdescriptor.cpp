@@ -8,7 +8,7 @@
 
 #include <mdesktopentry.h>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 WallpaperCurrentDescriptor *WallpaperCurrentDescriptor::sm_Instance = 0;
@@ -176,7 +176,10 @@ WallpaperCurrentDescriptor::setFromFilenames  (
     SYS_DEBUG ("*** landscapeFile = %s", SYS_STR(landscapeFile));
     SYS_DEBUG ("*** portraitFile  = %s", SYS_STR(portraitFile));
     
-    if (landscapeFile.isEmpty())
+    if (landscapeFile.isEmpty() ||
+            portraitFile.isEmpty() ||
+            !landscapeFile.startsWith("/") ||
+            !portraitFile.startsWith("/"))
         goto finalize;
 
 #if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
@@ -210,6 +213,29 @@ finalize:
     return retval;
 }
 
+bool 
+WallpaperCurrentDescriptor::setFromIDs  (
+            QString     landscapeID,
+            QString     portraitID)
+{
+    bool retval = false;
+    
+    if (landscapeID.isEmpty() ||
+            landscapeID.startsWith("/"))
+        goto finalize;
+
+    m_LandscapeID = landscapeID;
+    m_PortraitID = portraitID;
+
+    setImageID (landscapeID);
+    
+    m_Valid = true;
+    retval = true;
+
+finalize:
+    SYS_DEBUG ("Returning %s", SYS_BOOL(retval));
+    return retval;
+}
 
 /*!
  * \param path The directory path for the image files.

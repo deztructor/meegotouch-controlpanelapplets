@@ -70,15 +70,31 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
     m_EditedImageOurs = false;
 
     currentDesc = WallpaperCurrentDescriptor::instance ();
+    /*
+     * Trying to load the current wallpaper from the files saved by the theme
+     * applet. Will load only if the GConf contains our filenames.
+     */
     success = currentDesc->setFromDesktopFile (
             desktopFile,
             true,
             m_LandscapeGConfItem->value().toString(),
             m_PortraitGConfItem->value().toString());
+    /*
+     * If not successfull we try to load the files from the GConf database. Will
+     * be successfull if both GConf keys reference to images with full path.
+     */
     if (!success) {
         SYS_DEBUG ("Loading of %s failed. Trying image files from GConf.",
                 SYS_STR(desktopFile));
         success = currentDesc->setFromFilenames (
+                m_LandscapeGConfItem->value().toString(),
+                m_PortraitGConfItem->value().toString());
+    }
+    /*
+     *
+     */
+    if (!success) {
+        success = currentDesc->setFromIDs (
                 m_LandscapeGConfItem->value().toString(),
                 m_PortraitGConfItem->value().toString());
     }
@@ -254,6 +270,7 @@ WallpaperBusinessLogic::dirPath () const
 
     return dirPath;
 }
+
 
 /*!
  * \returns true if the directory exists or could be created

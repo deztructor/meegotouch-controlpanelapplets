@@ -43,6 +43,10 @@ public:
             QString     landscapeFile,
             QString     portraitFile);
 
+    bool setFromIDs  (
+            QString     landscapeID,
+            QString     portraitID);
+
     QString generateDesktopFile (const QString &path) const;
 
     WallpaperITrans iTrans (M::Orientation orientation) const;
@@ -72,6 +76,8 @@ private:
     MDesktopEntry         *m_DesktopEntry;
     WallpaperITrans        m_LandscapeTrans;
     WallpaperITrans        m_PortraitTrans;
+    QString                m_LandscapeID;
+    QString                m_PortraitID;
     QString                m_LandscapeOriginalFile;
     QString                m_PortraitOriginalFile;
     QString                m_landscapeEditedFile;

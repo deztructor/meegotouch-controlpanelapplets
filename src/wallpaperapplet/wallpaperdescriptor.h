@@ -52,6 +52,8 @@ public:
     ~WallpaperDescriptor ();
 
     void setFilename (const QString &filename);
+    void setImageID  (const QString &imageID);
+
     QString filename () const;
 
     void setTitle (const QString &title);
@@ -106,6 +108,7 @@ private:
     QPointer<Thumbnailer> m_Thumbnailer;
     QUrl                  m_Url;
     QString               m_Filename;
+    QString               m_ImageID;
     QString               m_Title;
     QString               m_MimeType;
     bool                  m_HasThumbnail;
