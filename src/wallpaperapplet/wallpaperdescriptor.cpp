@@ -264,6 +264,9 @@ WallpaperDescriptor::unCache ()
     m_Cached = false;
 }
 
+/*!
+ * Will cache the pixmap, then returns the loaded QPixmap.
+ */
 QPixmap
 WallpaperDescriptor::pixmap ()
 {

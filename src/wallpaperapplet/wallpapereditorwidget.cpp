@@ -137,7 +137,7 @@ WallpaperEditorWidget::createContent ()
             goto not_current_wallpaper;
         }
         
-        SYS_DEBUG ("This image has already been edited.");
+        SYS_DEBUG ("This is the current image.");
         SYS_DEBUG ("*** orig landscape       = %s", 
                 SYS_STR(cdesc->originalImageFile (M::Landscape)));
         SYS_DEBUG ("*** orig portrait        = %s", 
@@ -159,13 +159,13 @@ WallpaperEditorWidget::createContent ()
         /*
          * new stuff
          */
-        QPixmap landscapePixmap (cdesc->originalImageFile (M::Landscape));
+        QPixmap landscapePixmap = cdesc->originalPixmap (M::Landscape);
         m_bgLandscape = landscapePixmap.scaled (
                 m_LandscapeTrans.expectedSize(), 
                 Qt::KeepAspectRatioByExpanding);
 
         // FIXME: But most of the times the two images are the same!
-        QPixmap portraitPixmap (cdesc->originalImageFile (M::Landscape));
+        QPixmap portraitPixmap = cdesc->originalPixmap (M::Portrait);
         m_bgPortrait = portraitPixmap.scaled (
                 m_PortraitTrans.expectedSize(), 
                 Qt::KeepAspectRatioByExpanding);

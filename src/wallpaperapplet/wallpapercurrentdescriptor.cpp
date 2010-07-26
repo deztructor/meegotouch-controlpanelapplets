@@ -5,6 +5,7 @@
 
 #include <QPointF>
 #include <QFileInfo>
+#include <MTheme>
 
 #include <mdesktopentry.h>
 
@@ -310,6 +311,30 @@ WallpaperCurrentDescriptor::originalImageFile (
 
     SYS_WARNING ("Unknown orientation: %d", orientation);
     return m_LandscapeOriginalFile;
+}
+
+QPixmap
+WallpaperCurrentDescriptor::originalPixmap (
+        M::Orientation orientation) const
+{
+    QString fileName;
+    QString imageId;
+    QPixmap retval;
+
+    fileName = originalImageFile(orientation);
+    imageId = orientation == M::Portrait ? m_PortraitID : m_LandscapeID;
+
+    if (!imageId.isEmpty()) {
+        QPixmap *themedPixmap;
+        
+        themedPixmap = MTheme::pixmapCopy(imageId);
+        retval = *themedPixmap;
+        delete themedPixmap;
+    } else {
+        retval.load (fileName);
+    }
+
+    return retval;
 }
 
 /*!
