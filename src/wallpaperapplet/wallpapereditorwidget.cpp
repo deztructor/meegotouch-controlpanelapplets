@@ -298,6 +298,7 @@ void
 WallpaperEditorWidget::slotDoneActivated ()
 {
     WallpaperITrans   *ltrans, *ptrans;
+    MWindow           *win;
 
     SYS_DEBUG ("");
     ltrans = m_Trans.orientation() == M::Landscape ?
@@ -314,8 +315,9 @@ WallpaperEditorWidget::slotDoneActivated ()
      * Turning back from fullscreen. This could be done in the destructor, but
      * that ends up with a segfault in the Qt...
      */
-    if (MApplication::activeApplicationWindow())
-        MApplication::activeApplicationWindow()->showNormal();
+    win = MApplication::activeWindow ();
+    if (win)
+        win->showNormal();
 
     /*
      * We are done with the editing, let's page back to the view where we have
@@ -328,13 +330,17 @@ WallpaperEditorWidget::slotDoneActivated ()
 bool 
 WallpaperEditorWidget::back ()
 {
+    MWindow *win;
+
     /*
      * Turning back from fullscreen. This could be done in the destructor, but
      * that ends up with a segfault in the Qt...
      */
     SYS_DEBUG ("");
-    if (MApplication::activeApplicationWindow())
-        MApplication::activeApplicationWindow()->showNormal();
+
+    win = MApplication::activeWindow ();
+    if (win)
+        win->showNormal();
 
     return DcpWidget::back();
 }
