@@ -100,6 +100,12 @@ WallpaperDescriptor::setImageID (
 }
 
 QString
+WallpaperDescriptor::imageID () const
+{
+    return m_ImageID;
+}
+
+QString
 WallpaperDescriptor::filename () const
 {
     return m_Filename;
@@ -203,6 +209,8 @@ void
 WallpaperDescriptor::cache ()
 {
     bool success;
+
+    SYS_DEBUG ("Caching...");
     #if 0
     /*
      * This is just a drill.
@@ -220,8 +228,11 @@ WallpaperDescriptor::cache ()
         return;
 
     if (!m_ImageID.isEmpty()) {
-        QPixmap *pixmap = MTheme::instance()->pixmapCopy(m_ImageID);
-
+        QPixmap *pixmap = MTheme::instance()->pixmapCopy (m_ImageID);
+        
+        SYS_DEBUG ("Cached %dx%d image from theme.", 
+                pixmap->width(),
+                pixmap->height());
         m_Pixmap = *pixmap;
         delete pixmap;
         
@@ -311,7 +322,6 @@ WallpaperDescriptor::mimeType () const
         }
     }
 
-    SYS_DEBUG ("Returning %s for %s", SYS_STR(retval), SYS_STR(m_Filename));
     return retval;
 }
 

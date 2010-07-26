@@ -51,3 +51,15 @@ WallpaperBrief::image () const
     return "";
 }
 
+QString
+WallpaperBrief::icon () const
+{
+    WallpaperCurrentDescriptor *desc = WallpaperCurrentDescriptor::instance();
+    
+    if (desc->valid()) {
+        return desc->imageID ();
+    }
+     
+    return "";
+}
+

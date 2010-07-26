@@ -52,9 +52,10 @@ public:
     ~WallpaperDescriptor ();
 
     void setFilename (const QString &filename);
-    void setImageID  (const QString &imageID);
-
     QString filename () const;
+
+    void setImageID  (const QString &imageID);
+    QString imageID () const;
 
     void setTitle (const QString &title);
     QString title () const;
