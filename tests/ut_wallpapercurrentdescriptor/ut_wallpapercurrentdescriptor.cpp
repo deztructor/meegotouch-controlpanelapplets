@@ -165,8 +165,8 @@ Ut_WallpaperCurrentDescriptor::testFromDesktopFile ()
 void
 Ut_WallpaperCurrentDescriptor::testFromFileNames ()
 {
-    QString file1 ("nolandscapefile.png");
-    QString file2 ("noportraitfile.png");
+    QString file1 ("/nodir/nolandscapefile.png");
+    QString file2 ("/nodir/noportraitfile.png");
     WallpaperCurrentDescriptor *curr = WallpaperCurrentDescriptor::instance();
 
     curr->setFromFilenames (file1, file2);
