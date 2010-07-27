@@ -119,6 +119,7 @@ Ut_WallpaperApplet::testConstructbrief ()
     DcpBrief *brief1 = m_Applet->constructBrief(0);
     QString   valueText;
     QString   imageFilename;
+    QString   iconName;
 
     QVERIFY (brief1);
     QVERIFY (brief1->widgetTypeID() == DcpWidgetType::Image);
@@ -129,10 +130,12 @@ Ut_WallpaperApplet::testConstructbrief ()
      * this test with a GConf stub.
      */
     //QVERIFY (valueText == WALLPAPER_NAME);
-    
-    imageFilename = brief1->image();
-    QVERIFY (!imageFilename.isEmpty());
+    imageFilename = brief1->image ();
+    iconName = brief1->icon ();
+    SYS_DEBUG ("*** valueText     = %s", SYS_STR(valueText));
     SYS_DEBUG ("*** imageFilename = %s", SYS_STR(imageFilename));
+    SYS_DEBUG ("*** iconName      = %s", SYS_STR(iconName));
+    QVERIFY (!imageFilename.isEmpty() || !iconName.isEmpty());
 
     delete brief1;
 }

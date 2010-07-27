@@ -123,17 +123,24 @@ bool
 Ft_WallpaperModel::isWallpaperDescriptorValid (
         WallpaperDescriptor *desc)
 {
+    QString filename, basename, mimeType, title;
     bool valid = true;
 
     if (desc == 0) {
         SYS_WARNING ("The pointer should not be NULL.");
         return false;
     }
-    
+   
+    /*
+     * If this is a theme based wallpaper the image informations might be empty.
+     */
+    if (!desc->imageID().isEmpty())
+        goto no_file_check_necessary;
+
     /*
      * Checking the filename
      */
-    QString filename = desc->filename();
+    filename = desc->filename();
     if (filename.isEmpty())
         valid = false;
     else if (!filename.startsWith("/"))
@@ -151,7 +158,7 @@ Ft_WallpaperModel::isWallpaperDescriptorValid (
     /*
      * Checking basename
      */
-    QString basename = desc->basename();
+    basename = desc->basename();
     if (basename.isEmpty())
         valid = false;
     else if (basename.contains("/"))
@@ -165,21 +172,9 @@ Ft_WallpaperModel::isWallpaperDescriptorValid (
     }
 
     /*
-     * Checking the title.
-     */
-    QString title = desc->title();
-    if (title.isEmpty())
-        valid = false;
-    
-    if (!valid) {
-        SYS_WARNING ("Invalid title: %s", SYS_STR(title));
-        return false;
-    }
-
-    /*
      * Checking the MimeType
      */
-    QString mimeType = desc->mimeType ();
+    mimeType = desc->mimeType ();
     if (mimeType.isEmpty())
         valid = false;
     else if (!mimeType.startsWith("image/"))
@@ -189,6 +184,20 @@ Ft_WallpaperModel::isWallpaperDescriptorValid (
         SYS_WARNING ("Invalid mimeType = %s", SYS_STR(mimeType));
         return false;
     }
+
+no_file_check_necessary:
+    /*
+     * Checking the title.
+     */
+    title = desc->title();
+    if (title.isEmpty())
+        valid = false;
+    
+    if (!valid) {
+        SYS_WARNING ("Invalid title: %s", SYS_STR(title));
+        return false;
+    }
+
 
     return true;
 }

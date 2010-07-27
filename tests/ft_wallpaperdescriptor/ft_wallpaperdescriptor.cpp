@@ -107,11 +107,6 @@ Ft_WallpaperDescriptor::testCacheUncache ()
     m_Desc->setFilename (defaultLandscapeImageFile);
     m_Desc->cache ();
 
-    SYS_DEBUG ("Image file = %s", SYS_STR(defaultLandscapeImageFile));
-    SYS_DEBUG ("Image size = %dx%d", 
-            m_Desc->m_Pixmap.width(),
-            m_Desc->m_Pixmap.height());
-
     QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Cached);
     QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Pixmap.width() == 864);
     QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Pixmap.height() == 480);

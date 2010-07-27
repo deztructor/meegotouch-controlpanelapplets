@@ -117,8 +117,10 @@ Ft_WallpaperBusinessLogic::testAvailableWallpapers ()
         QString   extension, mimetype;
         QString   suggestedp, suggestedl;
         QString   originalp, originall;
+        QString   imageID;
 
         filename = desc->filename ();
+        imageID = desc->imageID ();
         title = desc->title ();
         basename = desc->basename ();
         extension = desc->extension ();
@@ -128,15 +130,21 @@ Ft_WallpaperBusinessLogic::testAvailableWallpapers ()
         originalp = desc->originalImageFile (M::Portrait);
         originall = desc->originalImageFile (M::Landscape);
 
-        if (filename.isEmpty() ||
+        if ((filename.isEmpty() && imageID.isEmpty()) ||
                 title.isEmpty() ||
-                mimetype.isEmpty() ||
+                (basename.isEmpty() && imageID.isEmpty()) ||
+                (mimetype.isEmpty() && imageID.isEmpty()) ||
                 suggestedp.isEmpty() ||
                 suggestedl.isEmpty() ||
-                originalp.isEmpty() ||
-                originall.isEmpty()) {
+                (originalp.isEmpty() && imageID.isEmpty()) ||
+                (originall.isEmpty() && imageID.isEmpty())) {
+            /*
+             * These might prove usefull in the future, but obviously generate
+             * too much output.
+             */
             SYS_DEBUG ("*** available wallpaper #%3d ***", n);
             SYS_DEBUG ("*** filename   = %s", SYS_STR(filename));
+            SYS_DEBUG ("*** imageID    = %s", SYS_STR(imageID));
             SYS_DEBUG ("*** title      = %s", SYS_STR(title));
             SYS_DEBUG ("*** basename   = %s", SYS_STR(basename));
             SYS_DEBUG ("*** mimetype   = %s", SYS_STR(mimetype));
@@ -147,16 +155,16 @@ Ft_WallpaperBusinessLogic::testAvailableWallpapers ()
             SYS_DEBUG ("*** originall  = %s", SYS_STR(originall));
         }
 
-        QVERIFY (!filename.isEmpty());
+        QVERIFY (!filename.isEmpty() || !imageID.isEmpty());
         QVERIFY (!title.isEmpty());
-        QVERIFY (!basename.isEmpty());
-        QVERIFY (!mimetype.isEmpty());
+        QVERIFY (!basename.isEmpty() || !imageID.isEmpty());
+        QVERIFY (!mimetype.isEmpty() || !imageID.isEmpty());
         QVERIFY (!suggestedp.isEmpty());
         QVERIFY (!suggestedl.isEmpty());
-        QVERIFY (!originalp.isEmpty());
-        QVERIFY (!originall.isEmpty());
+        QVERIFY (!originalp.isEmpty() || !imageID.isEmpty());
+        QVERIFY (!originall.isEmpty() || !imageID.isEmpty());
 
-        ++n;
+        ++n;        
     }
 }
 
@@ -172,10 +180,12 @@ Ft_WallpaperBusinessLogic::testCurrentWallpaper ()
     QString   extension, mimetype;
     QString   suggestedp, suggestedl;
     QString   originalp, originall;
+    QString   imageID;
 
     QVERIFY (desc != 0);
 
     filename = desc->filename ();
+    imageID = desc->imageID ();
     title = desc->title ();
     basename = desc->basename ();
     extension = desc->extension ();
@@ -185,31 +195,39 @@ Ft_WallpaperBusinessLogic::testCurrentWallpaper ()
     originalp = desc->originalImageFile (M::Portrait);
     originall = desc->originalImageFile (M::Landscape);
 
-    #if 0
-    /*
-     * These might prove usefull in the future, but obviously generate too much
-     * output.
-     */
-    SYS_DEBUG ("*********** current wallpaper ***********************");
-    SYS_DEBUG ("*** filename   = %s", SYS_STR(filename));
-    SYS_DEBUG ("*** title      = %s", SYS_STR(title));
-    SYS_DEBUG ("*** basename   = %s", SYS_STR(basename));
-    SYS_DEBUG ("*** mimetype   = %s", SYS_STR(mimetype));
-    SYS_DEBUG ("*** extension  = %s", SYS_STR(extension));
-    SYS_DEBUG ("*** suggestedp = %s", SYS_STR(suggestedp));
-    SYS_DEBUG ("*** suggestedl = %s", SYS_STR(suggestedl));
-    SYS_DEBUG ("*** originalp  = %s", SYS_STR(originalp));
-    SYS_DEBUG ("*** originall  = %s", SYS_STR(originall));
-    #endif
+    if ((filename.isEmpty() && imageID.isEmpty()) ||
+            title.isEmpty() ||
+            (basename.isEmpty() && imageID.isEmpty()) ||
+            (mimetype.isEmpty() && imageID.isEmpty()) ||
+            suggestedp.isEmpty() ||
+            suggestedl.isEmpty() ||
+            (originalp.isEmpty() && imageID.isEmpty()) ||
+            (originall.isEmpty() && imageID.isEmpty())) {
+        /*
+         * These might prove usefull in the future, but obviously generate
+         * too much output.
+         */
+        SYS_DEBUG ("*** Current wallpaper ***");
+        SYS_DEBUG ("*** filename   = %s", SYS_STR(filename));
+        SYS_DEBUG ("*** imageID    = %s", SYS_STR(imageID));
+        SYS_DEBUG ("*** title      = %s", SYS_STR(title));
+        SYS_DEBUG ("*** basename   = %s", SYS_STR(basename));
+        SYS_DEBUG ("*** mimetype   = %s", SYS_STR(mimetype));
+        SYS_DEBUG ("*** extension  = %s", SYS_STR(extension));
+        SYS_DEBUG ("*** suggestedp = %s", SYS_STR(suggestedp));
+        SYS_DEBUG ("*** suggestedl = %s", SYS_STR(suggestedl));
+        SYS_DEBUG ("*** originalp  = %s", SYS_STR(originalp));
+        SYS_DEBUG ("*** originall  = %s", SYS_STR(originall));
+    }
 
-    QVERIFY (!filename.isEmpty());
+    QVERIFY (!filename.isEmpty() || !imageID.isEmpty());
     QVERIFY (!title.isEmpty());
-    QVERIFY (!basename.isEmpty());
-    QVERIFY (!mimetype.isEmpty());
+    QVERIFY (!basename.isEmpty() || !imageID.isEmpty());
+    QVERIFY (!mimetype.isEmpty() || !imageID.isEmpty());
     QVERIFY (!suggestedp.isEmpty());
     QVERIFY (!suggestedl.isEmpty());
-    QVERIFY (!originalp.isEmpty());
-    QVERIFY (!originall.isEmpty());
+    QVERIFY (!originalp.isEmpty() || !imageID.isEmpty());
+    QVERIFY (!originall.isEmpty() || !imageID.isEmpty());
 
     QVERIFY (desc->isCurrent());
     QVERIFY (desc->valid());
@@ -328,17 +346,26 @@ Ft_WallpaperBusinessLogic::testValidImages ()
     QVERIFY (!landscapeFile.isEmpty());
     QVERIFY (!portraitFile.isEmpty());
 
-    success = pixmap.load (landscapeFile);
-    SYS_DEBUG ("*** landscape size = %dx%d", pixmap.width(), pixmap.height());
-    QVERIFY (success);
-    QVERIFY (pixmap.width() == 864);
-    QVERIFY (pixmap.height() == 480);
+    /*
+     * FIXME: Maybe we should test the theme based values also? How?
+     */
+    if (landscapeFile.startsWith("/")) {
+        success = pixmap.load (landscapeFile);
+        SYS_DEBUG ("*** landscape size = %dx%d", 
+                pixmap.width(), pixmap.height());
+        QVERIFY (success);
+        QVERIFY (pixmap.width() == 864);
+        QVERIFY (pixmap.height() == 480);
+    }
 
-    success = pixmap.load (portraitFile);
-    SYS_DEBUG ("*** portrait size = %dx%d", pixmap.width(), pixmap.height());
-    QVERIFY (success);
-    QVERIFY (pixmap.width() == 480);
-    QVERIFY (pixmap.height() == 864);
+    if (portraitFile.startsWith("/")) {
+        success = pixmap.load (portraitFile);
+        SYS_DEBUG ("*** portrait size = %dx%d", 
+                pixmap.width(), pixmap.height());
+        QVERIFY (success);
+        QVERIFY (pixmap.width() == 480);
+        QVERIFY (pixmap.height() == 864);
+    }
 
 
     delete landscapeGConfItem;

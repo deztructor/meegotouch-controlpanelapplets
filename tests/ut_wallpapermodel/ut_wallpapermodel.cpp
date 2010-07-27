@@ -194,10 +194,14 @@ Ut_WallpaperModel::testImageLoader ()
         data = index.data();
         desc = data.value<WallpaperDescriptor*>();
 
-        QVERIFY (desc->m_Thumbnailer);
-        SYS_DEBUG ("Simulating thumbnail-finished");
-        desc->m_Thumbnailer->sendThumbnail ();
-        desc->m_Thumbnailer->sendFinished ();
+        // We either have a thumbnailer or we don't need it because this is a 
+        // theme based wallpaper.
+        QVERIFY (desc->m_Thumbnailer || !desc->imageID().isEmpty());
+        if (desc->m_Thumbnailer) {
+            SYS_DEBUG ("Simulating thumbnail-finished");
+            desc->m_Thumbnailer->sendThumbnail ();
+            desc->m_Thumbnailer->sendFinished ();
+        }
     }
 
     // As all the thumbnails are ready (simulated of course) we should have no
@@ -208,7 +212,6 @@ Ut_WallpaperModel::testImageLoader ()
     // FIXME: To create a new test case, leave the thumbnailing there and call
     // this method. Well, it should be done, but it only checks one line...
     imageLoader->stopLoadingPictures();
-
 }
 
 /******************************************************************************
@@ -218,17 +221,24 @@ bool
 Ut_WallpaperModel::isWallpaperDescriptorValid (
         WallpaperDescriptor *desc)
 {
+    QString filename, basename, mimeType, title;
     bool valid = true;
 
     if (desc == 0) {
         SYS_WARNING ("The pointer should not be NULL.");
         return false;
     }
-    
+   
+    /*
+     * If this is a theme based wallpaper the image informations might be empty.
+     */
+    if (!desc->imageID().isEmpty())
+        goto no_file_check_necessary;
+
     /*
      * Checking the filename
      */
-    QString filename = desc->filename();
+    filename = desc->filename();
     if (filename.isEmpty())
         valid = false;
     else if (!filename.startsWith("/"))
@@ -246,7 +256,7 @@ Ut_WallpaperModel::isWallpaperDescriptorValid (
     /*
      * Checking basename
      */
-    QString basename = desc->basename();
+    basename = desc->basename();
     if (basename.isEmpty())
         valid = false;
     else if (basename.contains("/"))
@@ -260,21 +270,9 @@ Ut_WallpaperModel::isWallpaperDescriptorValid (
     }
 
     /*
-     * Checking the title.
-     */
-    QString title = desc->title();
-    if (title.isEmpty())
-        valid = false;
-    
-    if (!valid) {
-        SYS_WARNING ("Invalid title: %s", SYS_STR(title));
-        return false;
-    }
-
-    /*
      * Checking the MimeType
      */
-    QString mimeType = desc->mimeType ();
+    mimeType = desc->mimeType ();
     if (mimeType.isEmpty())
         valid = false;
     else if (!mimeType.startsWith("image/"))
@@ -284,6 +282,20 @@ Ut_WallpaperModel::isWallpaperDescriptorValid (
         SYS_WARNING ("Invalid mimeType = %s", SYS_STR(mimeType));
         return false;
     }
+
+no_file_check_necessary:
+    /*
+     * Checking the title.
+     */
+    title = desc->title();
+    if (title.isEmpty())
+        valid = false;
+    
+    if (!valid) {
+        SYS_WARNING ("Invalid title: %s", SYS_STR(title));
+        return false;
+    }
+
 
     return true;
 }

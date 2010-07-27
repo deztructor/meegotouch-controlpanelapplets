@@ -158,8 +158,10 @@ Ut_WallpaperBusinessLogic::testAvailableWallpapers ()
         QString   extension, mimetype;
         QString   suggestedp, suggestedl;
         QString   originalp, originall;
+        QString   imageID;
 
         filename = desc->filename ();
+        imageID = desc->imageID ();
         title = desc->title ();
         basename = desc->basename ();
         extension = desc->extension ();
@@ -169,20 +171,21 @@ Ut_WallpaperBusinessLogic::testAvailableWallpapers ()
         originalp = desc->originalImageFile (M::Portrait);
         originall = desc->originalImageFile (M::Landscape);
 
-        if (filename.isEmpty() ||
+        if ((filename.isEmpty() && imageID.isEmpty()) ||
                 title.isEmpty() ||
-                basename.isEmpty() ||
-                mimetype.isEmpty() ||
+                (basename.isEmpty() && imageID.isEmpty()) ||
+                (mimetype.isEmpty() && imageID.isEmpty()) ||
                 suggestedp.isEmpty() ||
                 suggestedl.isEmpty() ||
-                originalp.isEmpty() ||
-                originall.isEmpty()) {
+                (originalp.isEmpty() && imageID.isEmpty()) ||
+                (originall.isEmpty() && imageID.isEmpty())) {
             /*
              * These might prove usefull in the future, but obviously generate
              * too much output.
              */
             SYS_DEBUG ("*** available wallpaper #%3d ***", n);
             SYS_DEBUG ("*** filename   = %s", SYS_STR(filename));
+            SYS_DEBUG ("*** imageID    = %s", SYS_STR(imageID));
             SYS_DEBUG ("*** title      = %s", SYS_STR(title));
             SYS_DEBUG ("*** basename   = %s", SYS_STR(basename));
             SYS_DEBUG ("*** mimetype   = %s", SYS_STR(mimetype));
@@ -193,14 +196,14 @@ Ut_WallpaperBusinessLogic::testAvailableWallpapers ()
             SYS_DEBUG ("*** originall  = %s", SYS_STR(originall));
         }
 
-        QVERIFY (!filename.isEmpty());
+        QVERIFY (!filename.isEmpty() || !imageID.isEmpty());
         QVERIFY (!title.isEmpty());
-        QVERIFY (!basename.isEmpty());
-        QVERIFY (!mimetype.isEmpty());
+        QVERIFY (!basename.isEmpty() || !imageID.isEmpty());
+        QVERIFY (!mimetype.isEmpty() || !imageID.isEmpty());
         QVERIFY (!suggestedp.isEmpty());
         QVERIFY (!suggestedl.isEmpty());
-        QVERIFY (!originalp.isEmpty());
-        QVERIFY (!originall.isEmpty());
+        QVERIFY (!originalp.isEmpty() || !imageID.isEmpty());
+        QVERIFY (!originall.isEmpty() || !imageID.isEmpty());
 
         ++n;
     }
