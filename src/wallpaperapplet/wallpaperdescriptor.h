@@ -107,6 +107,8 @@ public:
     typedef enum {
         Landscape   = 0,
         Portrait,
+        OriginalLandscape,
+        OriginalPortrait,
         NVariants
     } ImageVariant;
 

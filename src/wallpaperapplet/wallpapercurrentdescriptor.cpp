@@ -120,8 +120,8 @@ WallpaperCurrentDescriptor::setFromDesktopFile (
     if (checkFilenames && portraitFileName != value1)
         goto finalize;
 
-    m_landscapeEditedFile = value;
-    m_portraitEditedFile = value1;
+    setFilename (value, WallpaperDescriptor::Landscape);
+    setFilename (value1, WallpaperDescriptor::Portrait);
 
     /*
      * FIXME: Still no support for separate files in the parent class...
@@ -149,8 +149,12 @@ WallpaperCurrentDescriptor::setFromDesktopFile (
     if (getValue(mainGroupKey, versionKey, &rval))
         m_Version = (int) rval;
 
-    getValue (landscapeGroupKey, originalFilenameKey, m_LandscapeOriginalFile);
-    getValue (portraitGroupKey, originalFilenameKey, m_PortraitOriginalFile);
+    getValue (landscapeGroupKey, originalFilenameKey, value);
+    setFilename (value, WallpaperDescriptor::OriginalLandscape);
+
+    getValue (portraitGroupKey, originalFilenameKey, value);
+    setFilename (value, WallpaperDescriptor::OriginalPortrait);
+
     getValue (landscapeGroupKey, m_LandscapeTrans);
     getValue (portraitGroupKey, m_PortraitTrans);
 
@@ -197,13 +201,10 @@ WallpaperCurrentDescriptor::setFromFilenames  (
     m_LandscapeTrans = WallpaperITrans();
     m_PortraitTrans = WallpaperITrans();
 
-    m_LandscapeOriginalFile = landscapeFile;
-    m_PortraitOriginalFile = portraitFile;
-
-    m_landscapeEditedFile = landscapeFile;
-    m_portraitEditedFile = portraitFile;
-
-    setFilename (landscapeFile);
+    setFilename (landscapeFile, WallpaperDescriptor::Landscape);
+    setFilename (portraitFile,  WallpaperDescriptor::Portrait);
+    setFilename (landscapeFile, WallpaperDescriptor::OriginalLandscape);
+    setFilename (portraitFile,  WallpaperDescriptor::OriginalPortrait);
 
     m_Valid = true;
     retval = true;
@@ -220,15 +221,25 @@ WallpaperCurrentDescriptor::setFromIDs  (
 {
     bool retval = false;
     
-    if (landscapeID.isEmpty() ||
-            landscapeID.startsWith("/"))
+    if (landscapeID.isEmpty())
         goto finalize;
 
-    m_LandscapeID = landscapeID;
-    m_PortraitID = portraitID;
+    if (landscapeID.startsWith("/")) {
+        setFilename (landscapeID, WallpaperDescriptor::Landscape);
+        setFilename (landscapeID, WallpaperDescriptor::OriginalLandscape);
+    } else {
+        setImageID (landscapeID, WallpaperDescriptor::Landscape);
+        setImageID (landscapeID, WallpaperDescriptor::OriginalLandscape);
+    }
 
-    setImageID (landscapeID);
-    
+    if (portraitID.startsWith("/")) {
+        setFilename (landscapeID, WallpaperDescriptor::Portrait);
+        setFilename (landscapeID, WallpaperDescriptor::OriginalPortrait);
+    } else {
+        setImageID (portraitID, WallpaperDescriptor::Portrait);
+        setImageID (portraitID, WallpaperDescriptor::OriginalPortrait);
+    }
+
     m_Valid = true;
     retval = true;
 
@@ -263,16 +274,20 @@ WallpaperCurrentDescriptor::originalImageFile (
 {
     switch (orientation) {
         case M::Portrait:
-            return m_PortraitOriginalFile;
+            return filename (WallpaperDescriptor::OriginalPortrait);
 
         case M::Landscape:
-            return m_LandscapeOriginalFile;
+            return filename (WallpaperDescriptor::OriginalLandscape);
     }
 
     SYS_WARNING ("Unknown orientation: %d", orientation);
-    return m_LandscapeOriginalFile;
+    return filename (WallpaperDescriptor::OriginalLandscape);
 }
 
+/*
+ * FIXME: handle the difference between the original image and the modified
+ * image in the WallpaperDescriptor?
+ */
 QPixmap
 WallpaperCurrentDescriptor::originalPixmap (
         M::Orientation orientation) const
@@ -282,7 +297,8 @@ WallpaperCurrentDescriptor::originalPixmap (
     QPixmap retval;
 
     fileName = originalImageFile(orientation);
-    imageId = orientation == M::Portrait ? m_PortraitID : m_LandscapeID;
+    imageId = imageID (orientation == M::Portrait ?
+            WallpaperDescriptor::Portrait : WallpaperDescriptor::Landscape);
 
     if (!imageId.isEmpty()) {
         QPixmap *themedPixmap;
@@ -363,10 +379,10 @@ WallpaperCurrentDescriptor::editedFilename (
 {
     switch (orientation) {
         case M::Landscape:
-            return m_landscapeEditedFile;
+            return filename (WallpaperDescriptor::Landscape);
 
         case M::Portrait:
-            return m_portraitEditedFile;
+            return filename (WallpaperDescriptor::Portrait);
     }
 
     return QString();

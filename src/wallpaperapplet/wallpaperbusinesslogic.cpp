@@ -152,7 +152,7 @@ WallpaperBusinessLogic::setBackground (
     deleteBackupFiles ();
 
     /*
-     *
+     * Re-reading the current wallpaper as it is saved into the user's home.
      */
     WallpaperCurrentDescriptor *currentDesc;
     currentDesc = WallpaperCurrentDescriptor::instance ();

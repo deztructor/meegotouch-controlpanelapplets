@@ -207,7 +207,7 @@ Image::title () const
             retval = basename ();
     }
 
-    SYS_DEBUG ("Returning %s", SYS_STR(retval));
+    //SYS_DEBUG ("Returning %s", SYS_STR(retval));
     return retval;
 }
 
@@ -232,8 +232,8 @@ Image::cache ()
 {
     bool success;
 
-    SYS_DEBUG ("Caching...");
-
+    SYS_DEBUG ("Caching %p", this);
+    
     if (m_Cached)
         return;
 
@@ -242,14 +242,28 @@ Image::cache ()
      * current theme.
      */
     if (!m_ImageID.isEmpty()) {
-        QPixmap *pixmap = MTheme::instance()->pixmapCopy (m_ImageID);
-        
-        SYS_DEBUG ("Cached %dx%d image from theme.", 
-                pixmap->width(),
-                pixmap->height());
+        QPixmap       *pixmap;
+        const QPixmap *cPixmap;
+       
+        /*
+         * First we try the cached pixmap, then we force the loading. We do
+         * this, because we had some problems with the theme damon when we used
+         * the pixmapCopy() the second time: the application was blocked.
+         */
+        cPixmap = MTheme::instance()->pixmap (m_ImageID);
+        if (cPixmap->width() > 1 && cPixmap->height()) {
+            m_Pixmap = *cPixmap;
+            m_Cached = true;
+            MTheme::instance()->releasePixmap (cPixmap);
+            return;
+        } else {
+            MTheme::instance()->releasePixmap (cPixmap);
+        }
+
+
+        pixmap = MTheme::instance()->pixmapCopy (m_ImageID);
         m_Pixmap = *pixmap;
         delete pixmap;
-        
         m_Cached = true;
         return;
     }
@@ -274,6 +288,7 @@ Image::cache ()
 void
 Image::unCache ()
 {
+    SYS_DEBUG ("Uncaching...");
     if (!m_Cached)
         return;
 
@@ -339,7 +354,10 @@ Image::thumbnail (
         }
     }
 
-    SYS_DEBUG ("Returning %s", SYS_BOOL(retval));
+    SYS_DEBUG ("Returning %s for ID:%s File:%s", 
+            SYS_BOOL(retval),
+            SYS_STR(m_ImageID),
+            SYS_STR(m_Filename));
     return retval;
 }
 
@@ -467,6 +485,7 @@ void
 WallpaperDescriptor::cache (
     ImageVariant   variant)
 {
+    SYS_DEBUG ("Caching %d...", variant);
     m_Images[variant].cache ();
 }
 
@@ -474,6 +493,7 @@ void
 WallpaperDescriptor::unCache (
         ImageVariant   variant)
 {
+    SYS_DEBUG ("Uncaching %d...", variant);
     m_Images[variant].unCache ();
 }
 
@@ -489,9 +509,10 @@ WallpaperDescriptor::pixmap (
 
 QPixmap 
 WallpaperDescriptor::scaled (
-        QSize  size,
+        QSize          size,
         ImageVariant   variant)
 {
+    cache ();
     return m_Images[variant].scaled(size);
 }
 
@@ -532,8 +553,15 @@ WallpaperDescriptor::initiateThumbnailer ()
         if (m_Images[n].hasThumbnail())
             continue;
 
-        if (m_Images[n].thumbnail())
+        if (m_Images[n].thumbnail()) {
+            /*
+             * FIXME: maybe we should emit signal for every variant?
+             */
+            if (n == WallpaperDescriptor::Landscape)
+                emit thumbnailLoaded (this);
+
             continue;
+        }
 
         if (m_Images[n].mimeType().isEmpty() ||
                 m_Images[n].filename().isEmpty())

@@ -121,6 +121,8 @@ WallpaperEditorWidget::createContent ()
     MWindow             *win = MApplication::activeWindow ();
     WallpaperDescriptor *desc;
 
+    SYS_DEBUG ("");
+
     desc = m_WallpaperBusinessLogic->editedImage();
     if (!desc) {
         SYS_WARNING ("There is no editedimage.");
@@ -157,18 +159,28 @@ WallpaperEditorWidget::createContent ()
         m_LandscapeTrans.setOrientation (M::Landscape);
         
         /*
-         * new stuff
+         * FIXME: We are using the original pixmap here, but we could make this
+         * be more generic, and use the original only when it differs from the
+         * edited, then we could move it to the WallpaperDescriptor class...
          */
+        m_bgLandscape = cdesc->scaled (
+                m_LandscapeTrans.expectedSize(),
+                WallpaperDescriptor::OriginalLandscape);
+        
+        m_bgPortrait = cdesc->scaled (
+                m_PortraitTrans.expectedSize(),
+                WallpaperDescriptor::OriginalPortrait);
+#if 0
         QPixmap landscapePixmap = cdesc->originalPixmap (M::Landscape);
         m_bgLandscape = landscapePixmap.scaled (
                 m_LandscapeTrans.expectedSize(), 
                 Qt::KeepAspectRatioByExpanding);
 
-        // FIXME: But most of the times the two images are the same!
         QPixmap portraitPixmap = cdesc->originalPixmap (M::Portrait);
         m_bgPortrait = portraitPixmap.scaled (
                 m_PortraitTrans.expectedSize(), 
                 Qt::KeepAspectRatioByExpanding);
+#endif
     
         /*
          * Need to copy back...
@@ -200,12 +212,28 @@ not_current_wallpaper:
      * If the image is very big the handling might be slow, so we scale it
      * down.
      */
+#if 0
     desc->cache();
     m_bgLandscape = desc->scaled (m_LandscapeTrans.expectedSize());
     m_bgPortrait = desc->scaled (m_PortraitTrans.expectedSize());
+#endif
+    m_bgLandscape = desc->scaled (
+            m_LandscapeTrans.expectedSize(),
+            WallpaperDescriptor::Landscape);
+   
+    m_bgPortrait = desc->scaled (
+           m_PortraitTrans.expectedSize(),
+           WallpaperDescriptor::Portrait);
 
 
 finalize:
+    SYS_DEBUG ("*** m_bgLandscape is %dx%d", 
+            m_bgLandscape.width(),
+            m_bgLandscape.height());
+    SYS_DEBUG ("*** m_bgPortrait  is %dx%d", 
+            m_bgPortrait.width(),
+            m_bgPortrait.height());
+
     this->setMinimumSize (m_Trans.expectedSize());
 
     /*

@@ -75,12 +75,6 @@ private:
     MDesktopEntry         *m_DesktopEntry;
     WallpaperITrans        m_LandscapeTrans;
     WallpaperITrans        m_PortraitTrans;
-    QString                m_LandscapeID;
-    QString                m_PortraitID;
-    QString                m_LandscapeOriginalFile;
-    QString                m_PortraitOriginalFile;
-    QString                m_landscapeEditedFile;
-    QString                m_portraitEditedFile;
     int                    m_Version;
     #ifdef UNIT_TEST
     friend class Ut_WallpaperCurrentDescriptor;
