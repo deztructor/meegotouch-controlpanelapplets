@@ -12,7 +12,6 @@
 
 #include <MTheme>
 
-
 /*
  * Please note that printing non UTF-8 characters might break the tests.
  * Apparently the test engine can not tolerate the debug messages when there are
@@ -31,262 +30,82 @@
 
 const QString dir = "";
 
-WallpaperDescriptor::WallpaperDescriptor() :
-    m_HasThumbnail (false),
-    m_Cached (false),
-    m_ThumbnailPixmap (100, 100)
-{
-    m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
-}
-
-WallpaperDescriptor::WallpaperDescriptor (
-        const WallpaperDescriptor &orig) :
-    QObject (),
-    m_Cached (false)
-{
-    m_Url             = orig.m_Url;
-    m_Filename        = orig.m_Filename;
-    m_ImageID         = orig.m_ImageID;
-    m_Title           = orig.m_Title;
-    m_MimeType        = orig.m_MimeType;
-    m_HasThumbnail    = orig.m_HasThumbnail;
-    m_Cached          = orig.m_Cached;
-    m_ThumbnailPixmap = orig.m_ThumbnailPixmap;
-    m_Pixmap          = orig.m_Pixmap;
-}
-
-WallpaperDescriptor::WallpaperDescriptor(
-        const QString &filename) :
-    m_Filename (filename),
-    m_HasThumbnail (false),
-    m_Cached (false),
-    m_ThumbnailPixmap (100, 100)
-{
-    m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
-    m_Url = QUrl::fromLocalFile (filename);
-}
-
-WallpaperDescriptor::~WallpaperDescriptor()
-{
-}
-
-void
-WallpaperDescriptor::setFilename (
-        const QString &filename)
-{
-    SYS_DEBUG ("*** filename = %s", SYS_STR(filename));
-    Q_ASSERT (!filename.isEmpty());
-
-    m_HasThumbnail = false;
-    m_Cached       = false;
-    m_Filename     = filename;
-    m_ImageID      = "";
-    m_Url          = QUrl::fromLocalFile (filename);
-
-    m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
-}
-
-void
-WallpaperDescriptor::setImageID (
-        const QString &imageID)
-{
-    m_HasThumbnail = false;
-    m_Cached       = false;
-    m_Filename     = "";
-    m_ImageID      = imageID;
-    m_Url          = QUrl();
-
-    m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
-}
-
-QString
-WallpaperDescriptor::imageID () const
-{
-    return m_ImageID;
-}
-
-QString
-WallpaperDescriptor::filename () const
-{
-    return m_Filename;
-}
-
-void
-WallpaperDescriptor::setTitle (
-        const QString &title)
-{
-    m_Title = title;
-}
-
-QString
-WallpaperDescriptor::title () const
-{
-    QString retval;
-
-    retval = m_Title;
-    // If we have no title set we try the imageID, if that is also empty we use
-    // the basename of the image file.
-    if (retval.isEmpty()) {
-        if (!m_ImageID.isEmpty())
-            retval = m_ImageID;
-        else 
-            retval = basename ();
-    }
-
-    SYS_DEBUG ("Returning %s", SYS_STR(retval));
-    return retval;
-}
-
-void
-WallpaperDescriptor::setUrl (
-        const QString &urlString)
-{
-    QString  path;
-
-    m_Url.setEncodedUrl (urlString.toAscii());
-    path = m_Url.path();
-
-    #if 0
-    SYS_DEBUG ("---------------------------------------------------");
-    SYS_DEBUG ("*** urlString    = %s", SYS_STR(urlString));
-    SYS_DEBUG ("*** scheme       = %s", SYS_STR(m_Url.scheme()));
-    SYS_DEBUG ("*** path         = %s", SYS_STR(path));
-    #endif
-    if (m_Url.scheme() != "file") {
-        SYS_WARNING ("Only local files are supported yet.");
-        return;
-    }
-
-    m_HasThumbnail = false;
-    m_Cached       = false;
-    m_Filename     = path;
-}
-
-QString
-WallpaperDescriptor::basename () const 
-{
-    QFileInfo fileInfo (m_Filename);
-
-    return fileInfo.baseName();
-}
-
-/*!
- * \returns The filename extension of the filename. 
- *
- * The filename extension is used when the applet creates a new file to save the
- * edited image. The edited file will use the same extension used in the
- * original filename.
+/******************************************************************************
+ * Image implementation.
  */
-QString
-WallpaperDescriptor::extension () const 
+Image::Image ()
 {
-    QFileInfo fileInfo (m_Filename);
-
-    return fileInfo.suffix();
+    reset ();
 }
 
-#ifdef SUPPORT_IMAGE_THUMBNAILS
-QImage 
-WallpaperDescriptor::thumbnail()
+Image::Image (
+        const Image &orig) :
+    QObject ()
 {
-    return m_Thumbnail;
-}
-#endif
-
-QPixmap
-WallpaperDescriptor::thumbnailPixmap()
-{
-    return m_ThumbnailPixmap;
-}
-
-bool 
-WallpaperDescriptor::isThumbnailLoaded ()
-{
-    return m_HasThumbnail;
+    m_Filename = orig.m_Filename;
+    m_MimeType = orig.m_MimeType;
+    m_ImageID  = orig.m_ImageID;
+    m_Title    = orig.m_Title;
+    m_Cached   = orig.m_Cached;
+    m_Url      = orig.m_Url;  
+    m_ThumbnailPixmap = orig.m_ThumbnailPixmap;
+    m_HasThumbnail = orig.m_HasThumbnail;
+    m_Pixmap   = orig.m_Pixmap;
 }
 
 void 
-WallpaperDescriptor::cache ()
+Image::reset ()
 {
-    bool success;
+    m_Filename = "";
+    m_MimeType = "";
+    m_ImageID  = "";
+    m_Title    = "";
+    m_Cached   = false;
+    m_Url      = QUrl ();
 
-    SYS_DEBUG ("Caching...");
-    #if 0
-    /*
-     * This is just a drill.
-     */
-        QDir dir ("/home/pipas/MyDocs/");
-        SYS_DEBUG ("--------------- List by Qt ----------------------");
-        foreach (QString fileName, dir.entryList (QDir::Files)) {
-            SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
-        }
-        SYS_DEBUG ("--------------- List by Shell -------------------");
-        system ("ls -lh /home/pipas/MyDocs/ | cat");
-    #endif
+    m_ThumbnailPixmap = QPixmap (100, 100);
+    m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
+    m_HasThumbnail = false;
 
-    if (m_Cached)
-        return;
+    m_Pixmap = QPixmap ();
+}
 
-    if (!m_ImageID.isEmpty()) {
-        QPixmap *pixmap = MTheme::instance()->pixmapCopy (m_ImageID);
-        
-        SYS_DEBUG ("Cached %dx%d image from theme.", 
-                pixmap->width(),
-                pixmap->height());
-        m_Pixmap = *pixmap;
-        delete pixmap;
-        
-        m_Cached = true;
-        return;
+Image &
+Image::operator= (
+        const Image &rhs)
+{
+    if (this != &rhs) {
+        m_Filename = rhs.m_Filename;
+        m_MimeType = rhs.m_MimeType;
+        m_ImageID  = rhs.m_ImageID;
+        m_Title    = rhs.m_Title;
+        m_Cached   = rhs.m_Cached;
+        m_Url      = rhs.m_Url;  
+        m_ThumbnailPixmap = rhs.m_ThumbnailPixmap;
+        m_HasThumbnail = rhs.m_HasThumbnail;
+        m_Pixmap   = rhs.m_Pixmap;
     }
 
-    success = m_Pixmap.load (filename());
-    if (!success) {
-        QFile file (filename());
-        
-        SYS_WARNING ("Loading of %s has been failed: %m", SYS_STR(filename()));
-        SYS_WARNING ("*** exists = %s", SYS_BOOL(file.exists()));
-        
-        m_Cached = false;
-        return;
-    }
-
-    m_Cached = true;
+    return *this;
 }
 
 void
-WallpaperDescriptor::unCache ()
+Image::setFilename (
+        const QString &fileName)
 {
-    if (!m_Cached)
+    if (fileName == m_Filename)
         return;
-
-    m_Pixmap = QPixmap();
-    m_Cached = false;
+    
+    reset ();
+    m_Filename     = fileName;
+    m_Url          = QUrl::fromLocalFile (fileName);
 }
-
-/*!
- * Will cache the pixmap, then returns the loaded QPixmap.
- */
-QPixmap
-WallpaperDescriptor::pixmap ()
-{
-    cache();
-    return m_Pixmap;
-}
-
-QPixmap 
-WallpaperDescriptor::scaled (
-        QSize  size)
-{
-    cache ();
-    return m_Pixmap.scaled (size, Qt::KeepAspectRatioByExpanding);
-}
-
+    
 void
-WallpaperDescriptor::setMimeType (
-        const QString &newMimeType)
+Image::setMimeType (
+        const QString &mimeType)
 {
-    m_MimeType = newMimeType;
+    m_MimeType = mimeType;
 }
 
 static const char *
@@ -303,7 +122,7 @@ mimetypes[][2] =
 };
 
 QString
-WallpaperDescriptor::mimeType () const
+Image::mimeType () const
 {
     QString retval = m_MimeType;
 
@@ -328,6 +147,369 @@ WallpaperDescriptor::mimeType () const
     return retval;
 }
 
+QString
+Image::filename () const
+{
+    return m_Filename;
+}
+
+void
+Image::setImageID (
+        const QString &imageID)
+{
+    if (m_ImageID == imageID)
+        return;
+
+    reset ();
+    m_ImageID = imageID;
+}
+
+QString
+Image::imageID () const
+{
+    return m_ImageID;
+}
+
+void
+Image::setUrl (
+        const QString &urlString)
+{
+    QUrl     newUrl;
+
+    newUrl.setEncodedUrl (urlString.toAscii());
+    if (newUrl == m_Url)
+        return;
+
+    reset ();
+    m_Filename = newUrl.path();
+    m_Url = newUrl;
+}
+
+void
+Image::setTitle (
+        const QString &title)
+{
+    m_Title = title;
+}
+
+QString 
+Image::title () const
+{
+    QString retval;
+
+    retval = m_Title;
+    // If we have no title set we try the imageID, if that is also empty we use
+    // the basename of the image file.
+    if (retval.isEmpty()) {
+        if (!m_ImageID.isEmpty())
+            retval = m_ImageID;
+        else 
+            retval = basename ();
+    }
+
+    SYS_DEBUG ("Returning %s", SYS_STR(retval));
+    return retval;
+}
+
+QString
+Image::basename () const 
+{  
+    QFileInfo fileInfo (m_Filename);
+
+    return fileInfo.baseName();
+}
+
+QString
+Image::extension () const 
+{
+    QFileInfo fileInfo (m_Filename);
+
+    return fileInfo.suffix();
+}
+
+void 
+Image::cache ()
+{
+    bool success;
+
+    SYS_DEBUG ("Caching...");
+
+    if (m_Cached)
+        return;
+
+    /*
+     * If the wallpaper is set by an image ID we load the image using the
+     * current theme.
+     */
+    if (!m_ImageID.isEmpty()) {
+        QPixmap *pixmap = MTheme::instance()->pixmapCopy (m_ImageID);
+        
+        SYS_DEBUG ("Cached %dx%d image from theme.", 
+                pixmap->width(),
+                pixmap->height());
+        m_Pixmap = *pixmap;
+        delete pixmap;
+        
+        m_Cached = true;
+        return;
+    }
+
+    /*
+     * If the image is set by a filename, we load that file.
+     */
+    success = m_Pixmap.load (filename());
+    if (!success) {
+        QFile file (filename());
+        
+        SYS_WARNING ("Loading of %s has been failed: %m", SYS_STR(filename()));
+        SYS_WARNING ("*** exists = %s", SYS_BOOL(file.exists()));
+        
+        m_Cached = false;
+        return;
+    }
+
+    m_Cached = true;
+}
+
+void
+Image::unCache ()
+{
+    if (!m_Cached)
+        return;
+
+    m_Pixmap = QPixmap();
+    m_Cached = false;
+}
+
+QPixmap
+Image::pixmap ()
+{
+    cache();
+    return m_Pixmap;
+}
+
+QPixmap 
+Image::scaled (QSize size)
+{
+    cache ();
+    return m_Pixmap.scaled (size, Qt::KeepAspectRatioByExpanding);
+}
+
+bool
+Image::setThumbnailPixmap (
+        const QPixmap &pixmap)
+{
+    m_ThumbnailPixmap = pixmap;
+    if (pixmap.height() >= 100 &&
+            pixmap.width() >= 100)
+        m_HasThumbnail = true;
+    else
+        m_HasThumbnail = false;
+
+    return m_HasThumbnail;
+}
+
+bool
+Image::thumbnail (
+        bool force)
+{
+    QPixmap *pixmap;
+    bool     retval = false;
+
+    if (!m_ImageID.isEmpty()) {
+        /*
+         * If we have an image ID instead of a filename the thumbler will not
+         * help us. In this case we shall create a thumbnail using the theme.
+         */
+        pixmap = MTheme::instance()->pixmapCopy(m_ImageID, QSize (100, 100));
+        m_ThumbnailPixmap = *pixmap;
+        m_HasThumbnail = true;
+        delete pixmap;
+        retval = true;
+    } else if (force) {
+        /*
+         * And if the force was set that means we have to make our own thumbnail
+         * most probably the thumbler failed.
+         */
+        cache ();
+        if (m_Cached) {
+            m_ThumbnailPixmap = m_Pixmap.scaled (100, 100);
+            m_HasThumbnail = true;
+            retval = true;
+        }
+    }
+
+    SYS_DEBUG ("Returning %s", SYS_BOOL(retval));
+    return retval;
+}
+
+/******************************************************************************
+ * WallpaperDescriptor implementation.
+ */
+WallpaperDescriptor::WallpaperDescriptor(
+        QObject *parent) : 
+    QObject (parent),
+    m_Images (NVariants)
+{
+}
+
+WallpaperDescriptor::WallpaperDescriptor (
+        const WallpaperDescriptor &orig) :
+    QObject (),
+    m_Images (NVariants)
+{
+    m_Images = orig.m_Images;
+}
+
+WallpaperDescriptor::WallpaperDescriptor(
+        const QString &filename) : 
+    QObject (),
+    m_Images (NVariants)
+{
+    setFilename (filename);
+}
+
+WallpaperDescriptor::~WallpaperDescriptor()
+{
+}
+
+
+void
+WallpaperDescriptor::setImageID (
+        const QString &imageID,
+        ImageVariant   variant)
+{
+    m_Images[variant].setImageID (imageID);
+}
+
+QString
+WallpaperDescriptor::imageID (
+            ImageVariant   variant) const
+{
+    return m_Images[variant].imageID();
+}
+
+void
+WallpaperDescriptor::setFilename (
+        const QString &filename,
+        ImageVariant   variant)
+{
+    SYS_DEBUG ("*** variant = %d", variant);
+    m_Images[variant].setFilename (filename);
+}
+
+QString
+WallpaperDescriptor::filename (
+        ImageVariant   variant) const
+{
+    return m_Images[variant].filename();
+}
+
+void
+WallpaperDescriptor::setTitle (
+        const QString &title,
+        ImageVariant   variant)
+{
+    m_Images[variant].setTitle (title);
+}
+
+QString
+WallpaperDescriptor::title (
+        ImageVariant   variant) const
+{
+    return m_Images[variant].title();
+}
+
+void
+WallpaperDescriptor::setUrl (
+        const QString &urlString,
+        ImageVariant   variant)
+{
+    m_Images[variant].setUrl (urlString);
+}
+
+QString
+WallpaperDescriptor::basename (
+        ImageVariant   variant) const
+{
+    return m_Images[variant].basename();
+}
+
+/*!
+ * \returns The filename extension of the filename. 
+ *
+ * The filename extension is used when the applet creates a new file to save the
+ * edited image. The edited file will use the same extension used in the
+ * original filename.
+ */
+QString
+WallpaperDescriptor::extension ( 
+        ImageVariant   variant) const
+{
+    return m_Images[variant].extension ();
+}
+
+
+QPixmap
+WallpaperDescriptor::thumbnailPixmap() const
+{
+    return m_Images[WallpaperDescriptor::Landscape].thumbnailPixmap();
+}
+
+bool 
+WallpaperDescriptor::isThumbnailLoaded (
+        ImageVariant   variant) const
+{
+    return m_Images[variant].hasThumbnail ();
+}
+
+void 
+WallpaperDescriptor::cache (
+    ImageVariant   variant)
+{
+    m_Images[variant].cache ();
+}
+
+void
+WallpaperDescriptor::unCache (
+        ImageVariant   variant)
+{
+    m_Images[variant].unCache ();
+}
+
+/*!
+ * Will cache the pixmap, then returns the loaded QPixmap.
+ */
+QPixmap
+WallpaperDescriptor::pixmap (
+        ImageVariant variant)
+{
+    return m_Images[variant].pixmap();
+}
+
+QPixmap 
+WallpaperDescriptor::scaled (
+        QSize  size,
+        ImageVariant   variant)
+{
+    return m_Images[variant].scaled(size);
+}
+
+void
+WallpaperDescriptor::setMimeType (
+        const QString &mimeType,
+        ImageVariant   variant)
+{
+    m_Images[variant].setMimeType (mimeType);
+}
+
+QString
+WallpaperDescriptor::mimeType (
+        ImageVariant   variant) const
+{
+    return m_Images[variant].mimeType ();
+}
+
 /*!
  * This function will initiate the thumbnail generation. The thumbnail will be
  * loaded into the pixmap that is returned by the thumbnailPixmap() function. I
@@ -336,45 +518,34 @@ WallpaperDescriptor::mimeType () const
 void 
 WallpaperDescriptor::initiateThumbnailer ()
 {
-    #ifdef LOTDEBUG
-    SYS_DEBUG ("*** m_Filename = %s", SYS_STR(m_Filename));
-    SYS_DEBUG ("*** m_MimeType = %s", SYS_STR(mimeType()));
-    SYS_DEBUG ("*** m_ImageID  = %s", SYS_STR(m_ImageID));
-    #endif
-
-    if (!m_ImageID.isEmpty()) {
-        SYS_WARNING ("-----------------");
-        QPixmap *pixmap = MTheme::instance()->pixmapCopy(
-                m_ImageID,
-                QSize (100, 100));
-        m_ThumbnailPixmap = *pixmap;
-        delete pixmap;
-        emit thumbnailLoaded (this);
-        return;
-    }
+    QList<QUrl>      urisList;
+    QStringList      mimeList;
 
     /*
-     * If some necessary information is missing.
-     */
-    if (mimeType().isEmpty() || m_Filename.isEmpty()) {
-        return;
-    }
-
-    /*
-     * If the thumbnailer is already initiated.
+     * If the thumbnailer is already initiated we return.
      */
     if (m_Thumbnailer != 0) {
         return;
     }
 
-    /*
-     * If we already has the thumbnail.
-     */
-    if (m_HasThumbnail) {
-        return;
+    for (int n = Landscape; n < NVariants; ++n) {
+        if (m_Images[n].hasThumbnail())
+            continue;
+
+        if (m_Images[n].thumbnail())
+            continue;
+
+        if (m_Images[n].mimeType().isEmpty() ||
+                m_Images[n].filename().isEmpty())
+            continue;
+    
+        urisList << m_Images[n].url();
+        mimeList << m_Images[n].mimeType();
     }
 
-    SYS_DEBUG ("Creating the thumbnailer and connecting to its signals.");
+    if (urisList.size() == 0)
+        return;
+
     m_Thumbnailer = new Thumbnailer;
     connect (m_Thumbnailer, SIGNAL(thumbnail(QUrl,QUrl,QPixmap,QString)),
             this, SLOT(thumbnailReady(QUrl,QUrl,QPixmap,QString)) );
@@ -382,12 +553,6 @@ WallpaperDescriptor::initiateThumbnailer ()
             this, SLOT(thumbnailError(QString,QUrl)) );
     connect (m_Thumbnailer, SIGNAL(finished(int)),
             this, SLOT(thumbnailLoadingFinished(int)));
-
-    QList<QUrl> urisList;
-    QStringList mimeList;
-
-    urisList << m_Url;
-    mimeList << mimeType();
 
     #ifdef USE_PAINTER
     m_Thumbnailer->request (urisList, mimeList);
@@ -406,46 +571,24 @@ WallpaperDescriptor::thumbnailReady (
             QPixmap      pixmap, 
             QString      flavor)
 {
-    Q_UNUSED (fileUri);
-    Q_UNUSED (thumbnailUri);
-    Q_UNUSED (flavor);
+    bool success;
+    bool needEmitSignal = false;
 
-    #ifdef LOTDEBUG
-    SYS_DEBUG ("Got thumbnail for %s",  SYS_STR(m_Filename));
-    SYS_DEBUG ("*** thumbnailUri = %s", SYS_STR(thumbnailUri.toString()));
-    #endif
+    /*
+     * FIXME: should store the thumbnail URL as well.
+     * FIXME: maybe we should emit a signal for every variant...
+     */
+    for (int n = Landscape; n < NVariants; ++n) {
+        if (m_Images[n].url() == fileUri) {
+            SYS_DEBUG ("Has thumbnail for %dth image", n);
+            success = m_Images[n].setThumbnailPixmap (pixmap);
+            if (success && n == 0)
+                needEmitSignal = true;
+        }
+    }
 
-    #ifdef USE_PAINTER
-    QPixmap thumb (thumbnailUri.toLocalFile());
-    QPainter painter (&m_ThumbnailPixmap);
-    qreal    ratio1, ratio2, ratio;
-
-    ratio1 = 100.0 / thumb.width ();
-    ratio2 = 100.0 / thumb.height ();
-    ratio = ratio1 > ratio2 ? ratio1 : ratio2;
-
-    #ifdef LOTDEBUG
-    SYS_DEBUG ("*** w      = %d", thumb.width());
-    SYS_DEBUG ("*** h      = %d", thumb.height());
-    SYS_DEBUG ("*** ratio1 = %g", ratio1);
-    SYS_DEBUG ("*** ratio2 = %g", ratio2);
-    SYS_DEBUG ("*** ratio  = %g", ratio);
-    #endif
-    painter.drawPixmap (
-                0, 0,
-                thumb.width() * ratio,
-                thumb.height() * ratio,
-                thumb);
-    #else
-    m_ThumbnailPixmap = pixmap;
-    #endif
-
-    #ifdef SUPPORT_IMAGE_THUMBNAILS
-    m_Thumbnail = pixmap.toImage();
-    #endif
-
-    m_HasThumbnail = true;
-    emit thumbnailLoaded (this);
+    if (needEmitSignal)
+        emit thumbnailLoaded (this);
 }
 
 /*!
@@ -456,36 +599,21 @@ WallpaperDescriptor::thumbnailReady (
 void
 WallpaperDescriptor::thumbnailError (
             QString      message,
-            QUrl         url)
+            QUrl         fileUri)
 {
-    Q_UNUSED (url);
-    Q_UNUSED (message);
-    SYS_WARNING ("Failed to thumbnail %s: %s", 
-            SYS_STR(title()),
-            SYS_STR(message));
-    /*
-     * The thumbnailer failed. Let's see if we can do something about it.
-     * FIXME: In the future maybe the cache should return a boolean and we
-     * could set this descriptor to invalid... 
-     */
-    cache();
-    if (!m_Cached) {
-        m_HasThumbnail = false;
-        m_ThumbnailPixmap = QPixmap (100, 100);
-        m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
-        return;
+    for (int n = Landscape; n < NVariants; ++n) {
+
+        if (m_Images[n].url() == fileUri) {
+            bool success;
+
+            SYS_WARNING ("Failed thumbnailing for %dth image: %s", 
+                    n, SYS_STR(message));
+            success = m_Images[n].thumbnail (true);
+
+            if (success && n == WallpaperDescriptor::Landscape)
+                emit thumbnailLoaded (this);
+        }
     }
-
-    m_ThumbnailPixmap = m_Pixmap.scaled (100, 100);
-    m_HasThumbnail = true;
-
-    #ifdef SUPPORT_IMAGE_THUMBNAILS
-    m_Thumbnail = pixmap.toImage();
-    #endif
-
-    unCache ();
-    
-    emit thumbnailLoaded (this);
 }
 
 /*!

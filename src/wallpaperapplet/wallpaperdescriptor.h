@@ -5,12 +5,15 @@
 #define WALLPAPERDESCRIPTOR_H
 
 #include <QObject>
+
 #include <QMetaType>
 #include <QImage>
 #include <QPixmap>
 #include <QUrl>
 #include <QPointer>
+#include <QVector>
 #include <MApplication>
+
 
 /*
  * In the functional tests we use the real thing, in the unit tests we use the
@@ -26,10 +29,6 @@ using namespace Thumbnails;
 
 class QString;
 
-// If this macro is defined the class will support the QPixmap class thumbnails.
-// I believe in the current version of the Meego Library it is not necessary,
-// but some versions will need this in order to show the image in the lists.
-#undef SUPPORT_IMAGE_THUMBNAILS
 
 // If this macro is enabled the thumbnail file will be loaded by the class
 // itself. This way we can try to eliminate the aspect ratio distortion, but
@@ -38,6 +37,63 @@ class QString;
 // to paint will not solve the problem.
 #undef USE_PAINTER
 
+
+class Q_DECL_EXPORT Image : public QObject {
+    Q_OBJECT
+
+public:
+    Image ();
+    Image(const Image&);
+    Image &operator= (const Image &rhs);
+    
+    void reset ();
+
+    void setFilename (const QString &fileName);
+    QString filename () const;
+
+    void setMimeType (const QString &mimeType);
+    QString mimeType () const;
+
+    void setImageID (const QString &imageID);
+    QString imageID () const;
+    
+    void setUrl (const QString &urlString);
+    QUrl url () const {return m_Url;};
+
+    void setTitle (const QString &title);
+    QString title () const;
+
+    QString basename () const;
+    QString extension () const;
+
+    bool hasThumbnail () const { return m_HasThumbnail; };
+    QPixmap thumbnailPixmap () const {return m_ThumbnailPixmap;};
+    bool setThumbnailPixmap (const QPixmap &pixmap); 
+    bool thumbnail (bool force = false);
+
+    void cache ();
+    void unCache ();
+    QPixmap pixmap ();
+    QPixmap scaled (QSize size);
+
+private:
+    QString   m_Filename;
+    QString   m_MimeType;
+    QString   m_ImageID;
+    QString   m_Title;
+    bool      m_Cached;
+    QUrl      m_Url;  
+    QPixmap   m_ThumbnailPixmap;
+    bool      m_HasThumbnail;
+    QPixmap   m_Pixmap;
+
+    #ifdef UNIT_TEST
+    friend class Ut_WallpaperDescriptor;
+    friend class Ft_WallpaperDescriptor;
+    friend class Ut_WallpaperModel;
+    #endif
+};
+
 /*!
  * This class is used to represent a potential wallpaper image with all its
  * attributes. The WallpaperList is using this class to visualize the wallpaper
@@ -45,20 +101,56 @@ class QString;
  */
 class Q_DECL_EXPORT WallpaperDescriptor : public QObject {
     Q_OBJECT
+
 public:
-    WallpaperDescriptor ();
+
+    typedef enum {
+        Landscape   = 0,
+        Portrait,
+        NVariants
+    } ImageVariant;
+
+    WallpaperDescriptor (
+            QObject *parent = NULL);
+    
     WallpaperDescriptor (const QString &filename);
     WallpaperDescriptor (const WallpaperDescriptor &orig);
     ~WallpaperDescriptor ();
 
-    void setFilename (const QString &filename);
-    QString filename () const;
+    void setFilename (
+            const QString &filename,
+            ImageVariant   variant = WallpaperDescriptor::Landscape);
+    QString filename (
+            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+    
+    void setMimeType (
+            const QString &mimeType,
+            ImageVariant   variant = WallpaperDescriptor::Landscape);
+    QString mimeType (
+            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
 
-    void setImageID  (const QString &imageID);
-    QString imageID () const;
 
-    void setTitle (const QString &title);
-    QString title () const;
+    void setImageID  (
+            const QString &imageID,
+            ImageVariant   variant = WallpaperDescriptor::Landscape);
+    QString imageID (
+            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+
+    void setUrl (
+            const QString &urlString,
+            ImageVariant   variant = WallpaperDescriptor::Landscape);
+
+
+    void setTitle (
+            const QString &title,
+            ImageVariant   variant = WallpaperDescriptor::Landscape);
+    QString title (
+            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+    
+    QString basename (
+            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+    QString extension (
+            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
     
     virtual bool isCurrent () const;
     virtual int version () const;
@@ -68,24 +160,21 @@ public:
     virtual QString originalImageFile (M::Orientation orientation) const;
     virtual bool valid () const;
 
-    void setUrl (const QString &urlString);
+    bool isThumbnailLoaded (
+            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
 
-    void setMimeType (const QString &newMimeType);
-    QString mimeType () const;
+    QPixmap thumbnailPixmap () const;
 
-    QString basename () const;
-    QString extension () const;
+    void cache (
+            ImageVariant   variant = WallpaperDescriptor::Landscape);
+    void unCache (
+            ImageVariant   variant = WallpaperDescriptor::Landscape);
 
-    bool isThumbnailLoaded ();
-    #ifdef SUPPORT_IMAGE_THUMBNAILS
-    QImage thumbnail ();
-    #endif
-    QPixmap thumbnailPixmap ();
-
-    void cache ();
-    void unCache ();
-    QPixmap pixmap ();
-    QPixmap scaled (QSize size);
+    QPixmap pixmap (
+            ImageVariant   variant = WallpaperDescriptor::Landscape);
+    QPixmap scaled (
+            QSize size,
+            ImageVariant   variant = WallpaperDescriptor::Landscape);
 
 public slots:
     void initiateThumbnailer ();
@@ -105,20 +194,9 @@ private slots:
 signals:
     void thumbnailLoaded (WallpaperDescriptor *desc);
     
-private:
+protected:
+    QVector<Image>        m_Images;
     QPointer<Thumbnailer> m_Thumbnailer;
-    QUrl                  m_Url;
-    QString               m_Filename;
-    QString               m_ImageID;
-    QString               m_Title;
-    QString               m_MimeType;
-    bool                  m_HasThumbnail;
-    bool                  m_Cached;
-    QPixmap               m_ThumbnailPixmap;
-    QPixmap               m_Pixmap;
-    #ifdef SUPPORT_IMAGE_THUMBNAILS
-    QImage                m_Thumbnail;
-    #endif
 
     #ifdef UNIT_TEST
     friend class Ut_WallpaperDescriptor;

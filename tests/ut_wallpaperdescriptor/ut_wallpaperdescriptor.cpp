@@ -99,11 +99,11 @@ Ut_WallpaperDescriptor::testDefaults ()
     createDescriptor ();
 
     QVERIFY (m_Desc->m_Thumbnailer == NULL);
-    QVERIFY (m_Desc->m_Filename.isEmpty());
-    QVERIFY (m_Desc->m_Title.isEmpty());
-    QVERIFY (m_Desc->m_MimeType.isEmpty());
-    QVERIFY (m_Desc->m_HasThumbnail == false);
-    QVERIFY (m_Desc->m_Cached == false);
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Filename.isEmpty());
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Title.isEmpty());
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_MimeType.isEmpty());
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_HasThumbnail == false);
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Cached == false);
     QVERIFY (m_Desc->isCurrent() == false);
     QVERIFY (m_Desc->version() == 0);
 
@@ -128,20 +128,20 @@ Ut_WallpaperDescriptor::testConstructors ()
      */
     WallpaperDescriptor desc1 ("/nodir/NoSuchFile.png");
     
-    QVERIFY (desc1.filename() == "/nodir/NoSuchFile.png");
-    QVERIFY (desc1.basename() == "NoSuchFile");
-    QVERIFY (desc1.extension() == "png");
-    QVERIFY (desc1.m_Url.toString() == "file:///nodir/NoSuchFile.png");
+    QVERIFY (desc1.m_Images[WallpaperDescriptor::Landscape].filename() == "/nodir/NoSuchFile.png");
+    QVERIFY (desc1.m_Images[WallpaperDescriptor::Landscape].basename() == "NoSuchFile");
+    QVERIFY (desc1.m_Images[WallpaperDescriptor::Landscape].extension() == "png");
+    QVERIFY (desc1.m_Images[WallpaperDescriptor::Landscape].m_Url.toString() == "file:///nodir/NoSuchFile.png");
 
     /*
      * Testing the copy constructor.
      */
     WallpaperDescriptor desc2 (desc1);
 
-    QVERIFY (desc2.filename() == "/nodir/NoSuchFile.png");
-    QVERIFY (desc2.basename() == "NoSuchFile");
-    QVERIFY (desc2.extension() == "png");
-    QVERIFY (desc2.m_Url.toString() == "file:///nodir/NoSuchFile.png");
+    QVERIFY (desc2.m_Images[WallpaperDescriptor::Landscape].filename() == "/nodir/NoSuchFile.png");
+    QVERIFY (desc2.m_Images[WallpaperDescriptor::Landscape].basename() == "NoSuchFile");
+    QVERIFY (desc2.m_Images[WallpaperDescriptor::Landscape].extension() == "png");
+    QVERIFY (desc2.m_Images[WallpaperDescriptor::Landscape].m_Url.toString() == "file:///nodir/NoSuchFile.png");
 }
 
 /*!
@@ -289,8 +289,8 @@ Ut_WallpaperDescriptor::testThumbnailingFailure ()
 
     QVERIFY (m_Desc->m_Thumbnailer != 0);
     QVERIFY (m_Desc->m_Thumbnailer->m_RequestCame);
-    QVERIFY (m_Desc->m_MimeType == "image/png");
-    QVERIFY (m_Desc->mimeType() == "image/png");
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_MimeType == "image/png");
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].mimeType() == "image/png");
 
     /*
      * Ok, now we emulate the case when the thumbnail creation is finished with
@@ -319,13 +319,13 @@ Ut_WallpaperDescriptor::testCache ()
      */
     pixmapLoadSuccess = true;
     m_Desc->cache();
-    QVERIFY (m_Desc->m_Cached);
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Cached);
 
     /*
      * Uncaching...
      */
     m_Desc->unCache();
-    QVERIFY (!m_Desc->m_Cached);
+    QVERIFY (!m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Cached);
 
     dropDescriptor ();
 }
