@@ -1,8 +1,10 @@
 systemui-applets (0.14.13~1) harmattan; urgency=low
 
   * Fixes: NB#181808 - Display settings doesn't reset.
+  * Fixes: NB#181811 - Battery settings doesn't reset on doing reset
+    settings.
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 28 Jul 2010 10:25:52 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 28 Jul 2010 10:36:12 +0200
 
 systemui-applets (0.14.12-2) harmattan; urgency=low
 
