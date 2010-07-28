@@ -9,7 +9,8 @@
 
 #include <mdesktopentry.h>
 
-#define DEBUG
+//#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 WallpaperCurrentDescriptor *WallpaperCurrentDescriptor::sm_Instance = 0;

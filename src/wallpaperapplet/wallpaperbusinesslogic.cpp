@@ -49,7 +49,8 @@
 #include <MGConfItem>
 
 //#define LOTDEBUG
-#define DEBUG
+//#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 static const QString wallpaperDir = ".wallpapers";
@@ -92,8 +93,11 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
                 m_LandscapeGConfItem->value().toString(),
                 m_PortraitGConfItem->value().toString());
     }
+
     /*
-     *
+     * Trying to interpret the values as icon IDs. Please note, that this
+     * setFromIDs() method will handle the case when one of the values is an
+     * image file and the other is an icon ID. 
      */
     if (!success) {
         success = currentDesc->setFromIDs (
@@ -102,7 +106,8 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
     }
 
     /*
-     * FIXME: Should we interpret the strings as icon IDs?
+     * Now we failed. But it does not happen, and when it happens nothing
+     * serious, we just have no wallpaper.
      */
     if (!success) {
         SYS_WARNING ("Current wallpaper was not found.");
@@ -356,8 +361,6 @@ WallpaperBusinessLogic::saveOriginal (
         QPixmap pixmap;
         QString filename;
 
-        SYS_DEBUG ("Image with ID %s need to be saved.", SYS_STR(imageID));
-
         pixmap = desc->pixmap (WallpaperDescriptor::OriginalLandscape);
         ensureHasDirectory ();
         filename = dirPath () +
@@ -365,7 +368,6 @@ WallpaperBusinessLogic::saveOriginal (
             imageID + 
             saveFileExtension;
 
-        SYS_DEBUG ("*** filename = %s", SYS_STR(filename));
         pixmap.save (filename);
         desc->setFilename (filename, WallpaperDescriptor::OriginalLandscape);
         desc->setMimeType (saveFileMimeType, WallpaperDescriptor::OriginalLandscape);
@@ -376,8 +378,6 @@ WallpaperBusinessLogic::saveOriginal (
         QPixmap pixmap;
         QString filename;
 
-        SYS_DEBUG ("Image with ID %s need to be saved.", SYS_STR(imageID));
-
         pixmap = desc->pixmap (WallpaperDescriptor::OriginalPortrait);
         ensureHasDirectory ();
         filename = dirPath () +
@@ -385,7 +385,6 @@ WallpaperBusinessLogic::saveOriginal (
             imageID + 
             saveFileExtension;
 
-        SYS_DEBUG ("*** filename = %s", SYS_STR(filename));
         pixmap.save (filename);
         desc->setFilename (filename, WallpaperDescriptor::OriginalPortrait);
         desc->setMimeType (saveFileMimeType, WallpaperDescriptor::OriginalPortrait);

@@ -31,7 +31,8 @@
 #include "mwidgetcreator.h"
 M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
-#define DEBUG
+//#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 static const int ExtraMargin = 10;
