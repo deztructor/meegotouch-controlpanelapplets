@@ -54,6 +54,8 @@ private:
     bool ensureHasDirectory ();
     void createBackupFiles ();
     void deleteBackupFiles ();
+    void saveOriginal (
+        WallpaperDescriptor *desc);
     bool writeFiles (
         WallpaperITrans     *landscapeITrans,
         WallpaperITrans     *portraitITrans,

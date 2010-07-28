@@ -49,13 +49,15 @@
 #include <MGConfItem>
 
 //#define LOTDEBUG
-#define DEBUG
+//#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 static const QString wallpaperDir = ".wallpapers";
 static const QString destopFileName = "wallpaper.desktop";
 static const QString backupExtension = ".BAK";
-
+static const QString saveFileExtension = ".png";
+static const QString saveFileMimeType = "image/png";
 static const QString nl = "\n";
 
 WallpaperBusinessLogic::WallpaperBusinessLogic()
@@ -91,8 +93,11 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
                 m_LandscapeGConfItem->value().toString(),
                 m_PortraitGConfItem->value().toString());
     }
+
     /*
-     *
+     * Trying to interpret the values as icon IDs. Please note, that this
+     * setFromIDs() method will handle the case when one of the values is an
+     * image file and the other is an icon ID. 
      */
     if (!success) {
         success = currentDesc->setFromIDs (
@@ -101,7 +106,8 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
     }
 
     /*
-     * FIXME: Should we interpret the strings as icon IDs?
+     * Now we failed. But it does not happen, and when it happens nothing
+     * serious, we just have no wallpaper.
      */
     if (!success) {
         SYS_WARNING ("Current wallpaper was not found.");
@@ -344,6 +350,47 @@ WallpaperBusinessLogic::deleteBackupFiles ()
     }
 }
 
+void
+WallpaperBusinessLogic::saveOriginal (
+        WallpaperDescriptor *desc)
+{
+    QString imageID;
+
+    imageID = desc->imageID (WallpaperDescriptor::OriginalLandscape);
+    if (!imageID.isEmpty()) {
+        QPixmap pixmap;
+        QString filename;
+
+        pixmap = desc->pixmap (WallpaperDescriptor::OriginalLandscape);
+        ensureHasDirectory ();
+        filename = dirPath () +
+            MTheme::currentTheme () + "-" +
+            imageID + 
+            saveFileExtension;
+
+        pixmap.save (filename);
+        desc->setFilename (filename, WallpaperDescriptor::OriginalLandscape);
+        desc->setMimeType (saveFileMimeType, WallpaperDescriptor::OriginalLandscape);
+    }
+
+    imageID = desc->imageID (WallpaperDescriptor::OriginalPortrait);
+    if (!imageID.isEmpty()) {
+        QPixmap pixmap;
+        QString filename;
+
+        pixmap = desc->pixmap (WallpaperDescriptor::OriginalPortrait);
+        ensureHasDirectory ();
+        filename = dirPath () +
+            MTheme::currentTheme () + "-" +
+            imageID + 
+            saveFileExtension;
+
+        pixmap.save (filename);
+        desc->setFilename (filename, WallpaperDescriptor::OriginalPortrait);
+        desc->setMimeType (saveFileMimeType, WallpaperDescriptor::OriginalPortrait);
+    }
+}
+
 /*!
  * \returns true if the files could be created and saved.
  *
@@ -369,6 +416,7 @@ WallpaperBusinessLogic::writeFiles (
     WallpaperCurrentDescriptor *currentDesc = 
         WallpaperCurrentDescriptor::instance();
 
+    saveOriginal (desc);
     // There is of course a reason why we use the version number from the
     // current descriptor: otherwise the re-editing of the original filename
     // might end up with the same version number.
@@ -407,7 +455,7 @@ WallpaperBusinessLogic::writeFiles (
     out << "[DCP Landscape Wallpaper]" << nl;
     out << "OriginalFile=" << desc->originalImageFile(M::Landscape) << nl;
     out << "EditedFile=" << landscapeFilePath << nl;
-    out << "MimeType=" << desc->mimeType() << nl;
+    out << "MimeType=" << desc->suggestedOutputMimeType (M::Landscape) << nl;
     out << "HorOffset=" << landscapeITrans->x() << nl;
     out << "VertOffset=" << landscapeITrans->y() << nl;
     out << "Scale=" << landscapeITrans->scale() << nl;
@@ -416,7 +464,7 @@ WallpaperBusinessLogic::writeFiles (
     out << "[DCP Portrait Wallpaper]" << nl;
     out << "OriginalFile=" << desc->originalImageFile(M::Portrait) << nl;
     out << "EditedFile=" << portraitFilePath << nl;
-    out << "MimeType=" << desc->mimeType() << nl;
+    out << "MimeType=" << desc->suggestedOutputMimeType (M::Portrait) << nl;
     out << "HorOffset=" << portraitITrans->x() << nl;
     out << "VertOffset=" << portraitITrans->y() << nl;
     out << "Scale=" << portraitITrans->scale() << nl;
