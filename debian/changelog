@@ -1,8 +1,8 @@
 systemui-applets (0.14.13~1) harmattan; urgency=low
 
-  * Prepare
+  * Fixes: NB#181808 - Display settings doesn't reset.
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 23 Jul 2010 13:29:36 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 28 Jul 2010 10:25:52 +0200
 
 systemui-applets (0.14.12-2) harmattan; urgency=low
 

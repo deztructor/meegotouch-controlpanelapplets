@@ -1,6 +1,5 @@
 include(../coverage.pri)
 
-
 TEMPLATE = lib
 CONFIG += plugin \
           gui \
@@ -31,6 +30,8 @@ SOURCES = \
 DESTDIR = lib
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
+rfsscript.files = display-rfs.sh
+rfsscript.path = $$system(/usr/bin/pkg-config --variable osso_rfs_scripts_dir clean-device)
 target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 css.files = display.css
 css.path = \
@@ -40,4 +41,5 @@ message("The plugin will be installed to: " $$target.path)
 
 INSTALLS += target \
             desktop \
+            rfsscript \
             css
