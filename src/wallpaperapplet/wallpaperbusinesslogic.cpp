@@ -135,7 +135,6 @@ WallpaperBusinessLogic::setBackground (
 {
     bool success;
 
-    SYS_DEBUG ("******** Saving background *********");
     if (desc == 0)
         desc = m_EditedImage;
 
@@ -164,8 +163,6 @@ WallpaperBusinessLogic::setBackground (
     currentDesc = WallpaperCurrentDescriptor::instance ();
     currentDesc->setFromDesktopFile (dirPath() + destopFileName);
     emit wallpaperChanged ();
-
-    SYS_DEBUG ("****** End saving background ********");
 }
 
 /*!
@@ -198,7 +195,6 @@ WallpaperBusinessLogic::availableWallpapers () const
 
     QVector<QStringList> result = ::tracker()->rawSparqlQuery(query);
 
-    SYS_DEBUG ("*** result.size() = %d", result.size());
     foreach (QStringList partlist, result) {
         WallpaperDescriptor *desc;
 
