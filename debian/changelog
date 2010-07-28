@@ -1,6 +1,5 @@
 systemui-applets (0.14.13~1) harmattan; urgency=low
 
-  * Prepare
   [ Laszlo Pere ]
   * Fixes: NB#182044 -  Wallpaper applet does not support background images 
     set by theme IDs.
