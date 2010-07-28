@@ -683,6 +683,8 @@ WallpaperDescriptor::version () const
 }
 
 /*
+ * \param orientation Selects which output file we are talking about.
+ * \param ver The version number or -1 to use the objects version number.
  * Returns a suggested file name that is used when a modified image file is
  * saved.
  */
@@ -693,31 +695,73 @@ WallpaperDescriptor::suggestedOutputFilename (
 {
     QString retval;
     QString outputExtension;
+    QString myBasename;
+    QString myExtension;
 
     if (ver < 0)
         ver = version ();
 
+
+    switch (orientation) {
+        case M::Landscape:
+            outputExtension = extension(WallpaperDescriptor::OriginalLandscape);
+            if (outputExtension.isEmpty())
+                outputExtension = extension(WallpaperDescriptor::Landscape);
+
+            myBasename = basename (WallpaperDescriptor::OriginalLandscape);
+            if (myBasename.isEmpty())
+                myBasename = basename (WallpaperDescriptor::Landscape);
+
+            myExtension = "-landscape.";
+            break;
+
+        case M::Portrait:
+            outputExtension = extension(WallpaperDescriptor::OriginalPortrait);
+            if (outputExtension.isEmpty())
+                outputExtension = extension(WallpaperDescriptor::Portrait);
+
+            myBasename = basename (WallpaperDescriptor::OriginalPortrait);
+            if (myBasename.isEmpty())
+                myBasename = basename (WallpaperDescriptor::Portrait);
+
+            myExtension = "-portrait.";
+            break;
+    }
+
     /*
      * There are some extensions we can not support for writing.
      */
-    outputExtension = extension();
-    if (QString::compare(outputExtension, "gif", Qt::CaseInsensitive) == 0 ||
+    if (outputExtension.isEmpty() ||
+        QString::compare(outputExtension, "gif", Qt::CaseInsensitive) == 0 ||
         QString::compare(outputExtension, "bpm", Qt::CaseInsensitive) == 0 ||
         QString::compare(outputExtension, "pgm", Qt::CaseInsensitive) == 0)
         outputExtension = "jpeg";
 
+    retval = myBasename + myExtension + 
+        QString::number(ver) + "." + outputExtension;
+
+    return retval;
+}
+
+QString 
+WallpaperDescriptor::suggestedOutputMimeType (
+            M::Orientation orientation)
+{
+    QString retval;
+
     switch (orientation) {
         case M::Landscape:
-            retval = "-landscape.";
+            retval = mimeType(WallpaperDescriptor::OriginalLandscape);
+            if (retval.isEmpty())
+                retval = mimeType (WallpaperDescriptor::Landscape);
             break;
 
         case M::Portrait:
-            retval = "-portrait.";
+            retval = mimeType (WallpaperDescriptor::OriginalPortrait);
+            if (retval.isEmpty())
+                retval = mimeType (WallpaperDescriptor::Portrait);
             break;
     }
-
-    retval = basename() + retval + 
-        QString::number(ver) + "." + outputExtension;
 
     return retval;
 }

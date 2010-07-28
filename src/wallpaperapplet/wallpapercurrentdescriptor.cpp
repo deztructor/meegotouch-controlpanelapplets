@@ -325,49 +325,6 @@ WallpaperCurrentDescriptor::valid () const
     return m_Valid;
 }
 
-/*!
- * \param orientation Selects which output file we are talking about
- * \param ver The version number or -1 to use the objects version number.
- * 
- * The current image that is already edited has a different algorythm to
- * suggest output file names for the edited images.
- */
-QString
-WallpaperCurrentDescriptor::suggestedOutputFilename (
-        M::Orientation orientation, 
-        int            ver) const
-{
-    QFileInfo fileInfo (originalImageFile(orientation));
-    QString   retval;
-    QString   outputExtension;
-
-    if (ver < 0)
-        ver = version();
-
-    /*
-     * There are some extensions we can not support for writing.
-     */
-    outputExtension = extension();
-    if (QString::compare(outputExtension, "gif", Qt::CaseInsensitive) == 0 ||
-        QString::compare(outputExtension, "bpm", Qt::CaseInsensitive) == 0 ||
-        QString::compare(outputExtension, "pgm", Qt::CaseInsensitive) == 0)
-        outputExtension = "jpeg";
-    
-    switch (orientation) {
-        case M::Landscape:
-            retval = "-landscape.";
-            break;
-
-        case M::Portrait:
-            retval = "-portrait.";
-            break;
-    }
-
-    retval = fileInfo.baseName() + retval + 
-        QString::number(ver) + "." + outputExtension;
-
-    return retval;
-}
 
 /*!
  * Returns the filenames used when the images was last time saved. These
