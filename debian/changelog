@@ -6,8 +6,9 @@ systemui-applets (0.14.13~1) harmattan; urgency=low
     settings.
 
   [ Laszlo Pere ]
-  * Fixes: NB#182044 -  Wallpaper applet does not support background images 
+  * Fixes: NB#182044 - Wallpaper applet does not support background images 
     set by theme IDs.
+  * Fixes: NB#181622 - select profile dialog is shown on lock ui.
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 28 Jul 2010 10:40:04 +0200
 
