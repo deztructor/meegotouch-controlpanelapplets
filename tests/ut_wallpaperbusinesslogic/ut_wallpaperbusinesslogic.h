@@ -45,7 +45,8 @@ private slots:
     void testCreateDirectory ();
     void testBackupFiles ();
     void testSetBackground ();
-    void testCheckForPendingSignals ();
+    //void testCheckForPendingSignals ();
+    
 private:
     WallpaperBusinessLogic    *m_Api;
     MApplication              *m_App;

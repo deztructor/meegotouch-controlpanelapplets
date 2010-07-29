@@ -63,7 +63,7 @@ Ut_WallpaperEditorWidget::cleanup()
 
 
 static int argc = 1;
-static char *app_name = (char*) "./Ut_WallpaperEditorWidget";
+static char *app_name = (char*) "./ut_wallpapereditorwidget";
 
 void 
 Ut_WallpaperEditorWidget::initTestCase()

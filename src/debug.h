@@ -11,9 +11,9 @@
  * filenames printed in the functional tests. Could not find one though, so I
  * disabled the messages here.
  */
-#ifdef UNIT_TEST
-#  undef DEBUG
-#endif
+//#ifdef UNIT_TEST
+//#  undef DEBUG
+//#endif
 
 /*
  * If the debug facility is enabled we also enable all the warning messages.

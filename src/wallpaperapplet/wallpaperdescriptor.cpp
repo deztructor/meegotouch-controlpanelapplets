@@ -525,7 +525,6 @@ void
 WallpaperDescriptor::cache (
     ImageVariant   variant)
 {
-    SYS_DEBUG ("Caching %d...", variant);
     m_Images[variant].cache ();
 }
 

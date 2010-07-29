@@ -49,7 +49,7 @@
 #include <MGConfItem>
 
 //#define LOTDEBUG
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -259,8 +259,8 @@ WallpaperBusinessLogic::startEdit ()
     WallpaperDescriptor *desc = m_EditedImage;
 
 
-    SYS_DEBUG ("thread started  = %s", SYS_BOOL(m_FutureWatcher.started()));
-    SYS_DEBUG ("thread finished = %s", SYS_BOOL(m_FutureWatcher.finished()));
+    //SYS_DEBUG ("thread started  = %s", SYS_BOOL(m_FutureWatcher.started()));
+    //SYS_DEBUG ("thread finished = %s", SYS_BOOL(m_FutureWatcher.finished()));
     m_EditedImage->setLoading (true);
     
     QFuture<void> future = QtConcurrent::run (
@@ -274,7 +274,7 @@ WallpaperBusinessLogic::startEditThreadEnded ()
 {
     SYS_DEBUG ("");
     m_EditedImage->loadAll (false);
-    SYS_DEBUG ("Fromthispoint should be ready-----------------");
+    SYS_DEBUG ("---------- From thispoint should be ready -----------------");
     m_EditedImage->setLoading (false);
     emit imageEditRequested();
 }

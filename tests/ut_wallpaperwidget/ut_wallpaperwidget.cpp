@@ -104,6 +104,10 @@ Ut_WallpaperWidget::testImageActivated ()
     WallpaperDescriptor *curr = WallpaperCurrentDescriptor::instance ();
 
     m_Widget->slotImageActivated (curr);
+    // The loading of the image is happening in a separate thread, we need to
+    // give a chance to be executed.
+    QTest::qWait (500);
+
     QVERIFY (m_Widget->m_WallpaperBusinessLogic->editedImage() == curr);
     QVERIFY (m_Sink.m_ChangeWidgetCame);
     QVERIFY (m_Sink.m_WidgetID == 1);
