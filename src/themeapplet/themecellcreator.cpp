@@ -6,7 +6,6 @@
 #include <MSortFilterProxyModel>
 
 #include <QVariant>
-#include <MContentItem>
 #include <MAdvancedListItem>
 #include <MImageWidget>
 #include <MProgressIndicator>
@@ -40,8 +39,6 @@ ThemeCellCreator::createCell(
         cell = new MAdvancedListItem (
             MAdvancedListItem::IconWithTitleProgressIndicatorAndTwoSideIcons);
         cell->setLayoutPosition(M::CenterPosition);
-        cell->progressIndicator()->setViewType (
-                MProgressIndicator::spinnerType);
         cell->progressIndicator()->setUnknownDuration (true);
     }
 
@@ -55,7 +52,7 @@ ThemeCellCreator::updateCell (
         const QModelIndex &index, 
         MWidget *cell) const
 {
-    MAdvancedListItem    *contentItem;
+    MAdvancedListItem    *listItem;
     QString               title;
     QString               codeName;
     QString               iconName;
@@ -64,7 +61,7 @@ ThemeCellCreator::updateCell (
     if(!cell || !index.isValid()) 
         return;
 
-    contentItem = qobject_cast<MAdvancedListItem *>(cell);
+    listItem = qobject_cast<MAdvancedListItem *>(cell);
     
     changingTheme = index.data (ThemeListModel::ChangingNameRole).toString();
     title = index.data (ThemeListModel::NameRole).toString();
@@ -83,7 +80,7 @@ ThemeCellCreator::updateCell (
 
     // The title
     if (m_HighlightText.isEmpty()) {
-        contentItem->setTitle(title);
+        listItem->setTitle(title);
     } else {
         int matchingIndex = title.indexOf (
                 m_HighlightText, 0, Qt::CaseInsensitive);
@@ -92,51 +89,43 @@ ThemeCellCreator::updateCell (
             title.insert (matchingIndex + m_HighlightText.length(), "</b>");
             title.insert (matchingIndex, "<b>");
         }
-        contentItem->setTitle (title);
+        listItem->setTitle (title);
     }
 
     // The icon
-    if (contentItem->imageWidget()->image() != iconName)
-        contentItem->imageWidget()->setImage (iconName);
+    if (listItem->imageWidget()->image() != iconName)
+        listItem->imageWidget()->setImage (iconName);
 
     // The spinner.
     if (isChangingTheme) {
-        contentItem->progressIndicator()->show();
+        listItem->progressIndicator()->show();
     } else {
-        contentItem->progressIndicator()->hide();
+        listItem->progressIndicator()->hide();
     }
 
-    updateContentItemMode(index, contentItem);
+    updateListItemMode(index, listItem);
 }
 
 void 
-ThemeCellCreator::updateContentItemMode (
+ThemeCellCreator::updateListItemMode (
               const QModelIndex &index, 
-              MAdvancedListItem *contentItem) const
+              MAdvancedListItem *listItem) const
 {
-    #if 0
-    /*
-     * FIXME: It seems that there is no way to set the visual appearance for the
-     * MAdvancedListItem items.
-     */
     int row = index.row();
     int rows = index.model()->rowCount();
 
-    SYS_DEBUG ("");
     if (row == 0)
-        contentItem->setItemMode(MContentItem::SingleColumnTop);
+        listItem->setLayoutPosition (M::VerticalTopPosition);
     else if (row < rows - 1)
-        contentItem->setItemMode(MContentItem::SingleColumnCenter);
+        listItem->setLayoutPosition (M::VerticalCenterPosition);
     else 
-        contentItem->setItemMode(MContentItem::SingleColumnBottom);
-    #endif
+        listItem->setLayoutPosition (M::VerticalBottomPosition);
 }
 
 void 
 ThemeCellCreator::highlightByText (
         QString text)
 {
-    SYS_DEBUG ("*** text = %s", SYS_STR(text));
     m_HighlightText = text;
 }
 

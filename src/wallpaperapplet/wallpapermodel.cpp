@@ -165,16 +165,12 @@ WallpaperContentItemCreator::updateCell (
         //contentItem->setSubtitle (rowData->filename());
     }
 
-#if 1
     /*
      * Older libdui (that we use) supports pixmap here, while newer versions has
      * the support for QImage.
      */
     SYS_DEBUG ("Setting pixmap for %s", SYS_STR(rowData->title()));
     contentItem->setPixmap (rowData->thumbnailPixmap());
-#else
-    contentItem->setImage (rowData->thumbnail());
-#endif
 
     updateContentItemMode(index, contentItem);
 }

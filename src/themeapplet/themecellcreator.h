@@ -19,9 +19,9 @@ class ThemeCellCreator : public MAbstractCellCreator<MAdvancedListItem>
                 const QModelIndex &index, 
                 MWidget           *cell) const;
 
-        virtual void updateContentItemMode (
+        virtual void updateListItemMode (
               const QModelIndex &index, 
-              MAdvancedListItem *contentItem) const;
+              MAdvancedListItem *listItem) const;
 
         void highlightByText(QString text);
 
