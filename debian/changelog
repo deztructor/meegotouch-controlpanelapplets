@@ -1,14 +1,11 @@
 systemui-applets (0.14.13~1) harmattan; urgency=low
 
-  [ David Kedves ]
-  * Fixes: NB#181808 - Display settings doesn't reset.
-
   [ Laszlo Pere ]
   * Fixes: NB#182044 - Wallpaper applet does not support background images 
     set by theme IDs.
   * Fixes: NB#181622 - select profile dialog is shown on lock ui.
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 28 Jul 2010 10:40:04 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 29 Jul 2010 09:44:38 +0200
 
 systemui-applets (0.14.12-2) harmattan; urgency=low
 
