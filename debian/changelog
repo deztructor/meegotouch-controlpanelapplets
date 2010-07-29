@@ -2,8 +2,6 @@ systemui-applets (0.14.13~1) harmattan; urgency=low
 
   [ David Kedves ]
   * Fixes: NB#181808 - Display settings doesn't reset.
-  * Fixes: NB#181811 - Battery settings doesn't reset on doing reset
-    settings.
 
   [ Laszlo Pere ]
   * Fixes: NB#182044 - Wallpaper applet does not support background images 
