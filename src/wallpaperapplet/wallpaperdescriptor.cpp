@@ -746,13 +746,20 @@ WallpaperDescriptor::version () const
  * Returns a suggested file name that is used when a modified image file is
  * saved.
  */
+
+// Quick fix: it seems that the jpeg save has some bugs. See NB#182044 and
+// NB##180067 for details.
+#define ALWAYS_PNG
+
 QString 
 WallpaperDescriptor::suggestedOutputFilename (
         M::Orientation orientation,
         int            ver) const
 {
     QString retval;
+#ifndef ALWAYS_PNG
     QString outputExtension;
+#endif
     QString myBasename;
     QString myExtension;
 
@@ -762,9 +769,11 @@ WallpaperDescriptor::suggestedOutputFilename (
 
     switch (orientation) {
         case M::Landscape:
+#ifndef ALWAYS_PNG
             outputExtension = extension(WallpaperDescriptor::OriginalLandscape);
             if (outputExtension.isEmpty())
                 outputExtension = extension(WallpaperDescriptor::Landscape);
+#endif
 
             myBasename = basename (WallpaperDescriptor::OriginalLandscape);
             if (myBasename.isEmpty())
@@ -774,9 +783,11 @@ WallpaperDescriptor::suggestedOutputFilename (
             break;
 
         case M::Portrait:
+#ifndef ALWAYS_PNG
             outputExtension = extension(WallpaperDescriptor::OriginalPortrait);
             if (outputExtension.isEmpty())
                 outputExtension = extension(WallpaperDescriptor::Portrait);
+#endif
 
             myBasename = basename (WallpaperDescriptor::OriginalPortrait);
             if (myBasename.isEmpty())
@@ -789,14 +800,21 @@ WallpaperDescriptor::suggestedOutputFilename (
     /*
      * There are some extensions we can not support for writing.
      */
+#ifndef ALWAYS_PNG
     if (outputExtension.isEmpty() ||
         QString::compare(outputExtension, "gif", Qt::CaseInsensitive) == 0 ||
         QString::compare(outputExtension, "bpm", Qt::CaseInsensitive) == 0 ||
         QString::compare(outputExtension, "pgm", Qt::CaseInsensitive) == 0)
-        outputExtension = "jpeg";
+        outputExtension = "png";
+#endif
 
     retval = myBasename + myExtension + 
-        QString::number(ver) + "." + outputExtension;
+        QString::number(ver) + "." + 
+#ifndef ALWAYS_PNG
+        outputExtension;
+#else
+        "png";
+#endif
 
     return retval;
 }
