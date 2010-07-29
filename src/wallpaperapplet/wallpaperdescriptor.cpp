@@ -17,7 +17,7 @@
  * Apparently the test engine can not tolerate the debug messages when there are
  * weird file names around.
  */
-//#define DEBUG
+#define DEBUG
 //#define LOTDEBUG
 #define WARNING
 #include "../debug.h"
@@ -33,7 +33,9 @@ const QString dir = "";
 /******************************************************************************
  * Image implementation.
  */
-Image::Image ()
+Image::Image () :
+    QObject () ,
+    m_Image (0)
 {
     reset ();
 }
@@ -51,6 +53,7 @@ Image::Image (
     m_ThumbnailPixmap = orig.m_ThumbnailPixmap;
     m_HasThumbnail = orig.m_HasThumbnail;
     m_Pixmap   = orig.m_Pixmap;
+    m_Image    = 0;
 }
 
 void 
@@ -68,6 +71,10 @@ Image::reset ()
     m_HasThumbnail = false;
 
     m_Pixmap = QPixmap ();
+    if (m_Image) {
+        delete m_Image;
+        m_Image = 0;
+    }
 }
 
 Image &
@@ -84,6 +91,7 @@ Image::operator= (
         m_ThumbnailPixmap = rhs.m_ThumbnailPixmap;
         m_HasThumbnail = rhs.m_HasThumbnail;
         m_Pixmap   = rhs.m_Pixmap;
+        m_Image    = 0;
     }
 
     return *this;
@@ -228,14 +236,40 @@ Image::extension () const
 }
 
 void 
-Image::cache ()
+Image::cache (
+        bool threadSafe)
 {
     bool success;
 
-    SYS_DEBUG ("Caching %p", this);
-    
-    if (m_Cached)
+    if (m_Cached) {
         return;
+    }
+    
+    SYS_DEBUG ("Caching %p", this);
+
+    if (threadSafe && !filename().isEmpty()) {
+        SYS_DEBUG ("Doing a thread-safe loading.");
+        if (m_Image)
+            delete m_Image;
+
+        m_Image = new QImage ();
+        if (!m_Image->load(filename())) {
+            SYS_WARNING ("Loading image from %s failed", SYS_STR(filename()));
+            delete m_Image;
+            m_Image = 0;
+        }
+        return;
+    }
+
+    if (m_Image) {
+        SYS_DEBUG ("Have a thread-save QImage, converting it.");
+        m_Pixmap = QPixmap::fromImage (*m_Image);
+
+        delete m_Image;
+        m_Image = NULL;
+        m_Cached = true;
+        return;
+    }
 
     /*
      * If the wallpaper is set by an image ID we load the image using the
@@ -271,15 +305,18 @@ Image::cache ()
     /*
      * If the image is set by a filename, we load that file.
      */
-    success = m_Pixmap.load (filename());
-    if (!success) {
-        QFile file (filename());
+    if (!filename().isEmpty()) {
+        success = m_Pixmap.load (filename());
+        if (!success) {
+            QFile file (filename());
         
-        SYS_WARNING ("Loading of %s has been failed: %m", SYS_STR(filename()));
-        SYS_WARNING ("*** exists = %s", SYS_BOOL(file.exists()));
+            SYS_WARNING ("Loading of %s has been failed: %m", 
+                    SYS_STR(filename()));
+            SYS_WARNING ("*** exists = %s", SYS_BOOL(file.exists()));
         
-        m_Cached = false;
-        return;
+            m_Cached = false;
+            return;
+        }
     }
 
     m_Cached = true;
@@ -367,14 +404,16 @@ Image::thumbnail (
 WallpaperDescriptor::WallpaperDescriptor(
         QObject *parent) : 
     QObject (parent),
-    m_Images (NVariants)
+    m_Images (NVariants),
+    m_Loading (false)
 {
 }
 
 WallpaperDescriptor::WallpaperDescriptor (
         const WallpaperDescriptor &orig) :
     QObject (),
-    m_Images (NVariants)
+    m_Images (NVariants),
+    m_Loading (false)
 {
     m_Images = orig.m_Images;
 }
@@ -382,7 +421,8 @@ WallpaperDescriptor::WallpaperDescriptor (
 WallpaperDescriptor::WallpaperDescriptor(
         const QString &filename) : 
     QObject (),
-    m_Images (NVariants)
+    m_Images (NVariants),
+    m_Loading (false)
 {
     setFilename (filename);
 }
@@ -495,6 +535,25 @@ WallpaperDescriptor::unCache (
 {
     SYS_DEBUG ("Uncaching %d...", variant);
     m_Images[variant].unCache ();
+}
+
+bool
+WallpaperDescriptor::loading () const
+{
+    SYS_DEBUG ("Returning %s", SYS_BOOL(m_Loading));
+    return m_Loading;
+}
+
+void
+WallpaperDescriptor::setLoading (
+        bool loading)
+{
+    if (loading == m_Loading)
+        return;
+
+    SYS_DEBUG ("setting m_Loading to %s", SYS_BOOL(loading));
+    m_Loading = loading;
+    emit changed (this);
 }
 
 /*!
@@ -790,3 +849,17 @@ WallpaperDescriptor::valid () const
 {
     return true;
 }
+
+/*
+ * This method is called from the non-GUI thread.
+ */
+void
+WallpaperDescriptor::loadAll (
+        bool threadSafe) 
+{
+    for (int n = 0; n < m_Images.size(); ++n) {
+        SYS_DEBUG ("*************** %d ***", n);
+        m_Images[n].cache (threadSafe);
+    }
+}
+

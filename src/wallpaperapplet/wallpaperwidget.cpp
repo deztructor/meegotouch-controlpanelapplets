@@ -14,7 +14,7 @@
 #include <QDebug>
 #include <QtTracker/Tracker>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 static const int MaxColumns = 2;
@@ -107,9 +107,14 @@ WallpaperWidget::slotImageActivated (
     SYS_DEBUG ("*** desc = %s", SYS_STR(desc->basename()));
     
     m_WallpaperBusinessLogic->setEditedImage (desc);
-    emit changeWidget (1);
+    m_WallpaperBusinessLogic->startEdit ();
+    
 }
 
+/*
+ * When this slot is activated the image has to be already loaded, so that the
+ * editor widget can be shown without delay.
+ */
 void 
 WallpaperWidget::slotImageActivated ()
 {

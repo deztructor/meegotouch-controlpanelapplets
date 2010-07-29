@@ -5,12 +5,11 @@
 #define WALLPAPERDESCRIPTOR_H
 
 #include <QObject>
-
+#include <QPointer>
 #include <QMetaType>
 #include <QImage>
 #include <QPixmap>
 #include <QUrl>
-#include <QPointer>
 #include <QVector>
 #include <MApplication>
 
@@ -71,8 +70,9 @@ public:
     bool setThumbnailPixmap (const QPixmap &pixmap); 
     bool thumbnail (bool force = false);
 
-    void cache ();
+    void cache (bool threadSafe = false);
     void unCache ();
+
     QPixmap pixmap ();
     QPixmap scaled (QSize size);
 
@@ -86,6 +86,7 @@ private:
     QPixmap   m_ThumbnailPixmap;
     bool      m_HasThumbnail;
     QPixmap   m_Pixmap;
+    QImage   *m_Image;
 
     #ifdef UNIT_TEST
     friend class Ut_WallpaperDescriptor;
@@ -175,12 +176,17 @@ public:
             ImageVariant   variant = WallpaperDescriptor::Landscape);
     void unCache (
             ImageVariant   variant = WallpaperDescriptor::Landscape);
-
+    
+    bool loading () const;
+    void setLoading (bool loading = true);
+    
     QPixmap pixmap (
             ImageVariant   variant = WallpaperDescriptor::Landscape);
     QPixmap scaled (
             QSize size,
             ImageVariant   variant = WallpaperDescriptor::Landscape);
+
+    void loadAll (bool threadSafe = true);
 
 public slots:
     void initiateThumbnailer ();
@@ -199,10 +205,12 @@ private slots:
 
 signals:
     void thumbnailLoaded (WallpaperDescriptor *desc);
+    void changed (WallpaperDescriptor *desc);
     
 protected:
     QVector<Image>        m_Images;
     QPointer<Thumbnailer> m_Thumbnailer;
+    bool                  m_Loading;
 
     #ifdef UNIT_TEST
     friend class Ut_WallpaperDescriptor;

@@ -13,6 +13,9 @@ class QStringList;
 class WallpaperITrans;
 
 #include <QPointer>
+#include <QtConcurrentRun>
+#include <QFutureWatcher>
+
 #include <wallpaperdescriptor.h>
 
 class WallpaperBusinessLogic : public QObject
@@ -32,6 +35,8 @@ public:
     QList<WallpaperDescriptor *> availableWallpapers () const;
 
     void setEditedImage (WallpaperDescriptor *desc, bool ours = false);
+    void startEdit ();
+
     WallpaperDescriptor *editedImage ();
 
     void setBackground (
@@ -48,6 +53,7 @@ signals:
     
 private slots:
     void requestArrived ();
+    void startEditThreadEnded ();
 
 private:
     QString dirPath () const;
@@ -74,6 +80,8 @@ private:
 
     QPointer<WallpaperDescriptor> m_EditedImage;
     bool                          m_EditedImageOurs;
+    QFutureWatcher <void>         m_FutureWatcher;
+
 #ifdef UNIT_TEST
     friend class Ut_WallpaperBusinessLogic;
     friend class Ft_WallpaperBusinessLogic;

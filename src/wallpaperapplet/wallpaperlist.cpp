@@ -36,14 +36,14 @@ void
 WallpaperList::setDataSourceType (
         WallpaperList::DataSourceType sourceType)
 {
-    WallpaperContentItemCreator *cellCreator;
+    WallpaperCellCreator *cellCreator;
 
     Q_ASSERT (m_DataSourceType == DataSourceUnknown);
     
     m_Model = new WallpaperModel (m_BusinessLogic);
     setItemModel (m_Model);
 
-    cellCreator = new WallpaperContentItemCreator;
+    cellCreator = new WallpaperCellCreator;
     setCellCreator (cellCreator);
 
     QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));

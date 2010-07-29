@@ -21,16 +21,9 @@
 MWidget *
 ThemeCellCreator::createCell(
         const QModelIndex &index, 
-        MWidgetRecycler &recycler) const
+        MWidgetRecycler   &recycler) const
 {
     MAdvancedListItem *cell;
-    
-    // Title is just for debugging purposes.
-    QString title;
-    title = index.data (ThemeListModel::NameRole).toString();
-    SYS_DEBUG ("************** %d ***************", index.row());
-    SYS_DEBUG ("index.isValid() = %s", SYS_BOOL(index.isValid()));
-    SYS_DEBUG ("title           = %s", SYS_STR(title));
     
     cell = qobject_cast <MAdvancedListItem *> (
             recycler.take(MAdvancedListItem::staticMetaObject.className()));
@@ -38,7 +31,6 @@ ThemeCellCreator::createCell(
     if (!cell) {
         cell = new MAdvancedListItem (
             MAdvancedListItem::IconWithTitleProgressIndicatorAndTwoSideIcons);
-        cell->setLayoutPosition(M::CenterPosition);
         cell->progressIndicator()->setUnknownDuration (true);
     }
 

@@ -6,6 +6,8 @@
 #include "wallpaperdescriptor.h"
 
 #include <QTimer>
+#include <MImageWidget>
+#include <MProgressIndicator>
 
 //#define DEBUG
 #include <../debug.h>
@@ -129,51 +131,76 @@ WallpaperImageLoader::processJobQueue ()
 /******************************************************************************
  * WallpaperContentItemCreator implementation.
  */
+MWidget *
+WallpaperCellCreator::createCell(
+        const QModelIndex &index, 
+        MWidgetRecycler   &recycler) const
+{
+    MAdvancedListItem *cell;
+    
+    cell = qobject_cast <MAdvancedListItem *> (
+            recycler.take(MAdvancedListItem::staticMetaObject.className()));
+
+    if (!cell) {
+        cell = new MAdvancedListItem (
+            MAdvancedListItem::IconWithTitleProgressIndicatorAndTwoSideIcons);
+        cell->progressIndicator()->setUnknownDuration (true);
+    }
+
+    updateCell(index, cell);
+
+    return cell;
+}
+
 void 
-WallpaperContentItemCreator::updateContentItemMode(
+WallpaperCellCreator::updateCell (
+        const QModelIndex &index, 
+        MWidget           *cell) const
+{
+    MAdvancedListItem *listItem = qobject_cast<MAdvancedListItem *>(cell);
+    QVariant data = index.data(Qt::DisplayRole);
+    WallpaperDescriptor *desc = data.value<WallpaperDescriptor *>();
+
+    if (desc->isCurrent()) {
+        //% "Current wallpaper"
+        listItem->setTitle (qtTrId("qtn_wall_current_wallpaper"));
+        //listItem->setSubtitle (desc->title());
+    } else {
+        listItem->setTitle (desc->title());
+        //listItem->setSubtitle ("");
+    }
+
+    // The spinner.
+    if (desc->loading()) {
+        listItem->progressIndicator()->show();
+    } else {
+        listItem->progressIndicator()->hide();
+    }
+
+    // The image
+    SYS_DEBUG ("Setting pixmap for %s", SYS_STR(desc->title()));
+    listItem->imageWidget()->setPixmap (desc->thumbnailPixmap());
+
+    // The style
+    updateListItemMode (index, listItem);
+}
+
+void 
+WallpaperCellCreator::updateListItemMode (
               const QModelIndex &index, 
-              MContentItem *contentItem) const
+              MAdvancedListItem *listItem) const
 {
     int row = index.row();
     int rows = index.model()->rowCount();
 
-    SYS_DEBUG ("");
     if (row == 0)
-        contentItem->setItemMode(MContentItem::SingleColumnTop);
+        listItem->setLayoutPosition (M::VerticalTopPosition);
     else if (row < rows - 1)
-        contentItem->setItemMode(MContentItem::SingleColumnCenter);
+        listItem->setLayoutPosition (M::VerticalCenterPosition);
     else 
-        contentItem->setItemMode(MContentItem::SingleColumnBottom);
+        listItem->setLayoutPosition (M::VerticalBottomPosition);
 }
 
-void 
-WallpaperContentItemCreator::updateCell (
-        const QModelIndex &index, 
-        MWidget           *cell) const
-{
-    MContentItem *contentItem = qobject_cast<MContentItem *>(cell);
-    QVariant data = index.data(Qt::DisplayRole);
-    WallpaperDescriptor *rowData = data.value<WallpaperDescriptor *>();
-
-    if (rowData->isCurrent()) {
-        //% "Current wallpaper"
-        contentItem->setTitle (qtTrId("qtn_wall_current_wallpaper"));
-        contentItem->setSubtitle (rowData->title());
-    } else {
-        contentItem->setTitle (rowData->title());
-        contentItem->setSubtitle ("");
-        //contentItem->setSubtitle (rowData->filename());
-    }
-
-    /*
-     * Older libdui (that we use) supports pixmap here, while newer versions has
-     * the support for QImage.
-     */
-    SYS_DEBUG ("Setting pixmap for %s", SYS_STR(rowData->title()));
-    contentItem->setPixmap (rowData->thumbnailPixmap());
-
-    updateContentItemMode(index, contentItem);
-}
 
 /******************************************************************************
  * WallpaperModel implementation.
@@ -191,6 +218,11 @@ WallpaperModel::WallpaperModel (
      * FIXME: Maybe we should delay this?
      */
     m_DescriptorList = logic->availableWallpapers();
+    
+    for (int n = 0; n < m_DescriptorList.size(); ++n) {
+        connect (m_DescriptorList[n], SIGNAL (changed (WallpaperDescriptor *)),
+                this, SLOT(descriptorChanged (WallpaperDescriptor *)));
+    }
 }
 
 int 
@@ -234,3 +266,19 @@ WallpaperModel::imageLoaded (
     emit dataChanged (row, row);
 }
 
+void 
+WallpaperModel::descriptorChanged (
+        WallpaperDescriptor *desc)
+{
+    SYS_DEBUG ("");
+
+    for (int n = 0; n < m_DescriptorList.size(); ++n) {
+        if (m_DescriptorList[n] == desc) {
+            QModelIndex first;
+            first = index (n, 0);
+            emit dataChanged (first, first);
+
+            break;
+        }
+    }
+}

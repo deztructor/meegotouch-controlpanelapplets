@@ -101,14 +101,14 @@ Ut_WallpaperModel::testData ()
 void 
 Ut_WallpaperModel::testCellCreator ()
 {
-    WallpaperContentItemCreator *contentCreator;
+    WallpaperCellCreator *contentCreator;
     QModelIndex                  index;
     QVariant                     data;
     WallpaperDescriptor         *desc;
-    MContentItem                 contentItem;
+    MAdvancedListItem            contentItem;
     int                          rows = m_Model->rowCount (index);
 
-    contentCreator = new WallpaperContentItemCreator;
+    contentCreator = new WallpaperCellCreator;
     
     for (int n = 0; n < rows; ++n) {
         index = m_Model->index (n, 0);
@@ -123,20 +123,21 @@ Ut_WallpaperModel::testCellCreator ()
          */
         if (desc->isCurrent()) {
             QVERIFY (contentItem.title() == "qtn_wall_current_wallpaper");
-            QVERIFY (contentItem.subtitle() == desc->title());
+            //QVERIFY (contentItem.subtitle() == desc->title());
         } else {
             QVERIFY (contentItem.title() == desc->title());
-            QVERIFY (contentItem.subtitle().isEmpty());
+            //QVERIFY (contentItem.subtitle().isEmpty());
         }
 
         if (n == 0) {
-            QVERIFY (contentItem.itemMode() == MContentItem::SingleColumnTop);
+            QVERIFY (contentItem.layoutPosition () == 
+                    M::VerticalTopPosition);
         } else if (n + 1 == rows) {
-            QVERIFY (contentItem.itemMode() == 
-                    MContentItem::SingleColumnBottom);
+            QVERIFY (contentItem.layoutPosition() == 
+                    M::VerticalBottomPosition);
         } else {
-            QVERIFY (contentItem.itemMode() ==
-                    MContentItem::SingleColumnCenter);
+            QVERIFY (contentItem.layoutPosition () == 
+                    M::VerticalCenterPosition);
         }
     }
 

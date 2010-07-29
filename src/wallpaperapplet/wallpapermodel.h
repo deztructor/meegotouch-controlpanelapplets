@@ -6,7 +6,7 @@
 #include <QList>
 #include <QAbstractTableModel>
 #include <MAbstractCellCreator>
-#include <MContentItem>
+#include <MAdvancedListItem>
 #include "wallpaperdescriptor.h"
 
 class WallpaperBusinessLogic;
@@ -30,22 +30,28 @@ class WallpaperModel: public QAbstractTableModel
 
 public slots:
     void imageLoaded (const QModelIndex &row);
-
+    void descriptorChanged (WallpaperDescriptor *desc);
+    
 private:
-    WallpaperBusinessLogic *m_BusinessLogic;
-    QList<WallpaperDescriptor *> m_DescriptorList;
+    WallpaperBusinessLogic       *m_BusinessLogic;
+    QList<WallpaperDescriptor *>  m_DescriptorList;
 };
 
-class WallpaperContentItemCreator : 
-    public MAbstractCellCreator<MContentItem>
+class WallpaperCellCreator : 
+    public MAbstractCellCreator<MAdvancedListItem>
 {
   public:
-      void updateCell (
+      virtual MWidget *createCell (
+                const QModelIndex &index, 
+                MWidgetRecycler   &recycler) const;
+
+      virtual void updateCell (
               const QModelIndex &index, 
               MWidget *cell) const;
-      void updateContentItemMode (
+      
+      void updateListItemMode (
               const QModelIndex &index, 
-              MContentItem *contentItem) const;
+              MAdvancedListItem *contentItem) const;
 };
 
 

@@ -115,6 +115,9 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
 
     connect (m_RequestGConfItem, SIGNAL(valueChanged()),
             this, SLOT(requestArrived()));
+
+    connect (&m_FutureWatcher, SIGNAL (finished()),
+            this, SLOT (startEditThreadEnded()));
 }
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
@@ -214,6 +217,11 @@ WallpaperBusinessLogic::availableWallpapers () const
         desc->setUrl (partlist[FieldUrl]);
         desc->setTitle (partlist[FieldTitle]);
         desc->setMimeType (partlist[FieldMime]);
+
+        desc->setUrl (partlist[FieldUrl], WallpaperDescriptor::Portrait);
+        desc->setTitle (partlist[FieldTitle], WallpaperDescriptor::Portrait);
+        desc->setMimeType (partlist[FieldMime], WallpaperDescriptor::Portrait);
+
         list << desc; 
     }
 
@@ -244,6 +252,33 @@ WallpaperBusinessLogic::setEditedImage (
     m_EditedImage = desc;
     m_EditedImageOurs = ours;
 }
+
+void
+WallpaperBusinessLogic::startEdit ()
+{
+    WallpaperDescriptor *desc = m_EditedImage;
+
+
+    SYS_DEBUG ("thread started  = %s", SYS_BOOL(m_FutureWatcher.started()));
+    SYS_DEBUG ("thread finished = %s", SYS_BOOL(m_FutureWatcher.finished()));
+    m_EditedImage->setLoading (true);
+    
+    QFuture<void> future = QtConcurrent::run (
+            desc, 
+            &WallpaperDescriptor::loadAll, true);
+    m_FutureWatcher.setFuture (future);
+}
+
+void 
+WallpaperBusinessLogic::startEditThreadEnded ()
+{
+    SYS_DEBUG ("");
+    m_EditedImage->loadAll (false);
+    SYS_DEBUG ("Fromthispoint should be ready-----------------");
+    m_EditedImage->setLoading (false);
+    emit imageEditRequested();
+}
+
 
 /*!
  * Returns the wallpaper that is being edited.
@@ -597,13 +632,14 @@ WallpaperBusinessLogic::requestArrived ()
     SYS_DEBUG ("*** landscapeFileName = %s", SYS_STR(landscapeFileName));
     SYS_DEBUG ("*** portraitFileName  = %s", SYS_STR(portraitFileName));
     if (code == WallpaperRequestEdit) {
-        // FIXME: Only one image name because only the current wallpaper
-        // descriptor has support for two filenames. 
-        WallpaperDescriptor *desc = new WallpaperDescriptor (landscapeFileName);
+        WallpaperDescriptor *desc;
+        
+        desc = new WallpaperDescriptor ();
+        desc->setFilename (landscapeFileName, WallpaperDescriptor::Landscape);
+        desc->setFilename (portraitFileName, WallpaperDescriptor::Portrait);
         setEditedImage (desc, true);
-        SYS_DEBUG ("Emitting imageEditRequested()");
-        emit imageEditRequested ();
 
+        startEdit ();
         requestCodeItem.set (WallpaperRequestNone);
     }
 }
