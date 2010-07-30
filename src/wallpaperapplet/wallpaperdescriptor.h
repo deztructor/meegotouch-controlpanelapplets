@@ -187,7 +187,7 @@ public:
             QSize size,
             ImageVariant   variant = WallpaperDescriptor::Landscape);
 
-    void loadAll (bool threadSafe = true);
+    void loadAll ();
 
 public slots:
     void initiateThumbnailer ();

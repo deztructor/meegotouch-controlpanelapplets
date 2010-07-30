@@ -9,6 +9,7 @@
 #include <QImage>
 #include <QPixmap>
 #include <QPainter>
+#include <QThread>
 
 #include <MTheme>
 
@@ -351,6 +352,7 @@ QPixmap
 Image::scaled (QSize size)
 {
     cache ();
+    SYS_DEBUG ("*** size = %dx%d", size.width(), size.height());
     return m_Pixmap.scaled (size, Qt::KeepAspectRatioByExpanding);
 }
 
@@ -874,13 +876,23 @@ WallpaperDescriptor::valid () const
     return true;
 }
 
-/*
- * This method is called from the non-GUI thread.
+/*!
+ * This method might be called from the non-GUI thread. In that case the method
+ * will load the image files as QImage objects, because the QImage can be
+ * handled from the secondary threads while QPixmap not.
  */
 void
-WallpaperDescriptor::loadAll (
-        bool threadSafe) 
+WallpaperDescriptor::loadAll () 
 {
+    bool threadSafe = false;
+
+    if (!qApp) {
+        SYS_WARNING ("QApplication must be created before calling this method");
+    } else {
+        threadSafe = qApp->thread() != QThread::currentThread();
+    }
+
+    SYS_DEBUG ("threadSafe = %s", SYS_BOOL(threadSafe));
     for (int n = 0; n < m_Images.size(); ++n) {
         SYS_DEBUG ("*************** %d ***", n);
         m_Images[n].cache (threadSafe);

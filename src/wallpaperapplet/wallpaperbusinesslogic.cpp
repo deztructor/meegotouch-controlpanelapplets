@@ -258,14 +258,14 @@ WallpaperBusinessLogic::startEdit ()
 {
     WallpaperDescriptor *desc = m_EditedImage;
 
-
-    //SYS_DEBUG ("thread started  = %s", SYS_BOOL(m_FutureWatcher.started()));
-    //SYS_DEBUG ("thread finished = %s", SYS_BOOL(m_FutureWatcher.finished()));
     m_EditedImage->setLoading (true);
-    
+
+    /*
+     * The loadAll() method is safe to call from outside the GUI thread.
+     */
     QFuture<void> future = QtConcurrent::run (
             desc, 
-            &WallpaperDescriptor::loadAll, true);
+            &WallpaperDescriptor::loadAll);
     m_FutureWatcher.setFuture (future);
 }
 
@@ -273,7 +273,10 @@ void
 WallpaperBusinessLogic::startEditThreadEnded ()
 {
     SYS_DEBUG ("");
-    m_EditedImage->loadAll (false);
+    /*
+     * Calling from loadall, this time from the GUI thread.
+     */
+    m_EditedImage->loadAll ();
     SYS_DEBUG ("---------- From thispoint should be ready -----------------");
     m_EditedImage->setLoading (false);
     emit imageEditRequested();
