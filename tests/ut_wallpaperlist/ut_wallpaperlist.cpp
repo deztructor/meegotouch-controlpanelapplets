@@ -33,25 +33,8 @@ SignalSink::imageActivated (
 void 
 Ut_WallpaperList::init()
 {
-}
-
-void 
-Ut_WallpaperList::cleanup()
-{
-}
-
-
-static int argc = 1;
-static char *app_name = (char*) "./Ut_WallpaperList";
-
-void 
-Ut_WallpaperList::initTestCase()
-{
     bool connectSuccess;
 
-    m_App = new MApplication (argc, &app_name);
-    m_BusinessLogic = new WallpaperBusinessLogic;
-    
     m_List = new WallpaperList (m_BusinessLogic);
     connectSuccess = connect (
             m_List, SIGNAL(imageActivated(WallpaperDescriptor *)),
@@ -64,10 +47,26 @@ Ut_WallpaperList::initTestCase()
 }
 
 void 
+Ut_WallpaperList::cleanup()
+{
+    delete m_List;
+}
+
+
+static int argc = 1;
+static char *app_name = (char*) "./Ut_WallpaperList";
+
+void 
+Ut_WallpaperList::initTestCase()
+{
+    m_App = new MApplication (argc, &app_name);
+    m_BusinessLogic = new WallpaperBusinessLogic; 
+}
+
+void 
 Ut_WallpaperList::cleanupTestCase()
 {
     delete m_BusinessLogic;
-    delete m_List;
     m_App->deleteLater ();
 }
 
@@ -76,25 +75,26 @@ Ut_WallpaperList::testItemClicked ()
 {
     QModelIndex          index;
     
+    SYS_DEBUG ("-------------------------------------------------------");
     index = m_List->m_Model->index (0, 0);
     QVERIFY (index.isValid ());
 
     m_List->slotItemClicked (index);
     QVERIFY (m_Sink.m_Desc);
 
-    m_List->showEvent (0);
-    QTest::qWait (300);
-    m_List->hideEvent (0);
-
+    //m_List->showEvent (0);
+    //QTest::qWait (300);
+    //m_List->hideEvent (0);
 }
 
 void 
 Ut_WallpaperList::testShowHide ()
 {
+    SYS_DEBUG ("-------------------------------------------------------");
     m_List->showEvent (0);
+    QTest::qWait (300);
     QVERIFY (m_List->m_ImageLoader->m_ThumbnailPendingJobs.size() > 0);
 
-    QTest::qWait (300);
     m_List->hideEvent (0);
     // Well, maybe the stopLoadingImages should be checked too?
 }

@@ -6,7 +6,7 @@
 
 #include <QTimer>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 static const int loadPicturesDelay = 200;
@@ -71,6 +71,7 @@ WallpaperList::loadPictures ()
      * We used to get panningStopped() signals when we got hidden, so we will
      * not initiate loading of the images when we are not visible.
      */
+    SYS_DEBUG ("*** isVisible() = %s", SYS_BOOL(isVisible()));
     if (m_ImageLoader == 0 || !isVisible())
         return;
 
@@ -94,6 +95,7 @@ WallpaperList::showEvent (
         QShowEvent *event)
 {
     Q_UNUSED (event);
+    SYS_DEBUG ("");
     /*
      * When we page back from the other widget we might want to load the images
      * we stopped loading when we become hidden.
