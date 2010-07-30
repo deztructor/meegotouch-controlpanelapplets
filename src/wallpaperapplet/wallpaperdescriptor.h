@@ -42,6 +42,7 @@ class Q_DECL_EXPORT Image : public QObject {
 
 public:
     Image ();
+    ~Image ();
     Image(const Image&);
     Image &operator= (const Image &rhs);
     

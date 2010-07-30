@@ -65,6 +65,13 @@ void
 Ft_AboutBusinessLogic::testCollectData ()
 {
     /*
+     * Can't make this test running inside scratchbox. 
+     */
+    #ifdef __i386__
+    return;
+    #endif
+
+    /*
      * Initiating the data collection and waiting for some time the
      * businesslogic to collect all the data.
      */
@@ -100,10 +107,8 @@ Ft_AboutBusinessLogic::testCollectData ()
     /*
      * These are not available under scratchbox.
      */
-    #ifndef __i386__
     QVERIFY (!osVersion.isEmpty());
     QVERIFY (!IMEI.isEmpty());
-    #endif
     
     /*
      * But these are!

@@ -40,6 +40,13 @@ Image::Image () :
     reset ();
 }
 
+Image::~Image ()
+{
+    if (m_Image) 
+        delete m_Image;
+}
+
+
 Image::Image (
         const Image &orig) :
     QObject ()
