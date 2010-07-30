@@ -9,6 +9,8 @@
 #  error "PhoneInfo is not stubbed, can't continue."
 #endif
 
+#include <stdint.h>
+#include <inttypes.h>
 #include <QMap>
 #include <QString>
 #include <QVariant>
