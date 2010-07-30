@@ -117,6 +117,9 @@ void
 Ut_WallpaperWidget::testGalleryImageSelected()
 {
     m_Widget->galleryImageSelected("file:///nodir/NoSuchFile.png");
+    // The loading of the image is happening in a separate thread, we need to
+    // give a chance to be executed.
+    QTest::qWait (500);
     QVERIFY(m_Sink.m_WallpaperImageEditRequestedCame);
 }
 
