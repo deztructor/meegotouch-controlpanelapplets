@@ -5,6 +5,7 @@ systemui-applets (0.14.13~1) harmattan; urgency=low
     set by theme IDs.
   * Fixes: NB#181622 - select profile dialog is shown on lock ui.
   * Fixes: NB#180067 - Wallpaper can't be set correctly.
+  * Fixes: NB#182578 - Icon temporarily displayed under selected themes
 
  -- David Kedves <dkedves@blumsoft.eu>  Thu, 29 Jul 2010 09:44:38 +0200
 
