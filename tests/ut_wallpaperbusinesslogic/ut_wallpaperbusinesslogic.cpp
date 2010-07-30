@@ -10,8 +10,6 @@
 #include "wallpapergconf.h"
 
 
-#include <QPixmap>
-
 #include <MApplication>
 #include <MGConfItem>
 
@@ -32,6 +30,17 @@ bool
 QImage::load (
         const QString  &fileName, 
         const char     *format)
+{
+    SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
+    return true;
+}
+
+#include <QPixmap>
+bool
+QPixmap::load (
+        const QString  &fileName, 
+        const char     *format, 
+        Qt::ImageConversionFlags flags)
 {
     SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
     return true;
