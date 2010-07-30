@@ -446,7 +446,7 @@ WallpaperBusinessLogic::writeFiles (
     QString       path = dirPath();
     QString       desktopPath = path + destopFileName;
     WallpaperFile file (desktopPath);
-    
+    SYS_DEBUG ("*** desktopPath = %s", SYS_STR(desktopPath));
     WallpaperCurrentDescriptor *currentDesc = 
         WallpaperCurrentDescriptor::instance();
 

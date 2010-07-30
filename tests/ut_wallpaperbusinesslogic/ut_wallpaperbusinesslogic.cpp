@@ -340,6 +340,7 @@ Ut_WallpaperBusinessLogic::testSetBackground()
     }
 
     m_SignalSink.reset ();
+    SYS_WARNING ("======================================================");
     m_Api->setBackground (
             &landscapeITrans,
             &portraitITrans,
