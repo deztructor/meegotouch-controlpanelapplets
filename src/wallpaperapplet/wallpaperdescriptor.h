@@ -76,6 +76,7 @@ public:
 
     QPixmap pixmap ();
     QPixmap scaled (QSize size);
+    void preScale (QSize size, bool threadSafe = false);
 
 private:
     QString   m_Filename;
@@ -88,6 +89,7 @@ private:
     bool      m_HasThumbnail;
     QPixmap   m_Pixmap;
     QImage   *m_Image;
+    QImage   *m_ScaledImage;
 
     #ifdef UNIT_TEST
     friend class Ut_WallpaperDescriptor;

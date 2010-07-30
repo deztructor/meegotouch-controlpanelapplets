@@ -36,7 +36,8 @@ const QString dir = "";
  */
 Image::Image () :
     QObject () ,
-    m_Image (0)
+    m_Image (0),
+    m_ScaledImage (0)
 {
     reset ();
 }
@@ -45,12 +46,16 @@ Image::~Image ()
 {
     if (m_Image) 
         delete m_Image;
+    if (m_ScaledImage)
+        delete m_ScaledImage;
 }
 
 
 Image::Image (
         const Image &orig) :
-    QObject ()
+    QObject (), 
+    m_Image (0),
+    m_ScaledImage (0)
 {
     m_Filename = orig.m_Filename;
     m_MimeType = orig.m_MimeType;
@@ -61,7 +66,6 @@ Image::Image (
     m_ThumbnailPixmap = orig.m_ThumbnailPixmap;
     m_HasThumbnail = orig.m_HasThumbnail;
     m_Pixmap   = orig.m_Pixmap;
-    m_Image    = 0;
 }
 
 void 
@@ -79,9 +83,15 @@ Image::reset ()
     m_HasThumbnail = false;
 
     m_Pixmap = QPixmap ();
+    
     if (m_Image) {
         delete m_Image;
         m_Image = 0;
+    }
+
+    if (m_ScaledImage) {
+        delete m_ScaledImage;
+        m_ScaledImage = 0;
     }
 }
 
@@ -100,6 +110,7 @@ Image::operator= (
         m_HasThumbnail = rhs.m_HasThumbnail;
         m_Pixmap   = rhs.m_Pixmap;
         m_Image    = 0;
+        m_ScaledImage = 0;
     }
 
     return *this;
@@ -349,11 +360,44 @@ Image::pixmap ()
 }
 
 QPixmap 
-Image::scaled (QSize size)
+Image::scaled (
+        QSize size)
 {
-    cache ();
     SYS_DEBUG ("*** size = %dx%d", size.width(), size.height());
+
+    /*
+     * Let's check if we have some pre-scaling available. We kept the aspect
+     * ratio, so most probably only one side is going to be equal.
+     */
+    if (m_ScaledImage &&
+            (m_ScaledImage->width() == size.width() ||
+            m_ScaledImage->height() == size.height())) {
+        SYS_DEBUG ("Pre-scale hit.");
+        return QPixmap::fromImage (*m_ScaledImage);
+    }
+
     return m_Pixmap.scaled (size, Qt::KeepAspectRatioByExpanding);
+}
+
+void
+Image::preScale (
+        QSize size, 
+        bool threadSafe)
+{
+    SYS_DEBUG ("*** size       = %dx%d", size.width(), size.height());
+    SYS_DEBUG ("*** threadSafe = %s", SYS_BOOL(threadSafe));
+
+    if (threadSafe) {
+        if (!m_Image) 
+            cache (threadSafe);
+        if (!m_Image)
+            return;
+
+        if (m_ScaledImage)
+            delete m_ScaledImage;
+
+        m_ScaledImage = new QImage (m_Image->scaled(size, Qt::KeepAspectRatioByExpanding));
+    }
 }
 
 bool
@@ -884,18 +928,43 @@ WallpaperDescriptor::valid () const
 void
 WallpaperDescriptor::loadAll () 
 {
-    bool threadSafe = false;
+    QSize landscapeSize (864, 480);
+    QSize portraitSize (480, 864);
+    bool  threadSafe = false;
 
+    /*
+     * Need to find out if we are in the GUI thread or in some secondary thread
+     * created so that we can stay responsive while the images are loaded.
+     */
     if (!qApp) {
         SYS_WARNING ("QApplication must be created before calling this method");
     } else {
         threadSafe = qApp->thread() != QThread::currentThread();
     }
 
+    /*
+     * We go through the images and load them: FIXME: how could we iptimize this
+     * and load only those images that are going to be used?
+     */
     SYS_DEBUG ("threadSafe = %s", SYS_BOOL(threadSafe));
     for (int n = 0; n < m_Images.size(); ++n) {
         SYS_DEBUG ("*************** %d ***", n);
         m_Images[n].cache (threadSafe);
     }
+
+    /*
+     * Not just the loading but the scaling is also blocking the GUI thread.
+     * Here we try to find out what size we are about to use and we do some
+     * thread safe pre-scaling.
+     */
+    m_Images[WallpaperDescriptor::Landscape].preScale (
+            landscapeSize, threadSafe);
+    m_Images[WallpaperDescriptor::Portrait].preScale (
+            portraitSize, threadSafe);
+
+    m_Images[WallpaperDescriptor::OriginalLandscape].preScale (
+            landscapeSize, threadSafe);
+    m_Images[WallpaperDescriptor::OriginalPortrait].preScale (
+            portraitSize, threadSafe);
 }
 

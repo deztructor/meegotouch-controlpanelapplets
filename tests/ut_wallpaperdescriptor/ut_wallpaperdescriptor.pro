@@ -40,5 +40,4 @@ SOURCES += \
 
 INSTALLS += target
 
-MOC_DIR=./.moc
 
