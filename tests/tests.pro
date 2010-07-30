@@ -22,6 +22,7 @@ check-xml.target = check-xml
 check-xml.CONFIG = recursive
 QMAKE_EXTRA_TARGETS += check-xml
 
+QMAKE_STRIP = echo
 QMAKE_CLEAN += **/*.log.xml **/*.log 
 
 contains(BUILD_FEATURES,coverage) {
