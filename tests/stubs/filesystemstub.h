@@ -89,6 +89,10 @@ public:
         Unbuffered = 0x0020
     };
 
+#if 0
+   qint64 writeData(const char *data, qint64 len);
+   qint64 write (const char *data, qint64 len);
+#endif
     Q_DECLARE_FLAGS(OpenMode, OpenModeFlag)
 };
 
@@ -107,6 +111,7 @@ public:
     
     bool remove();
     bool open(int flags);
+    qint64 	writeData ( const char * data, qint64 len );
     bool exists() const;
     bool rename(const QString &newName);
 

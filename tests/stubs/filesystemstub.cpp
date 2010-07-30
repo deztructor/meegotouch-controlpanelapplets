@@ -30,7 +30,23 @@
 
 static QList<QDirStub> fileSystemDirs;
 static QList<QFileStub> fileSystemFiles;
+#if 0
+qint64 
+QIODevice::writeData(
+        const char *data, qint64 len)
+{
+    SYS_WARNING (">>>>>>>>>>>>>>>");
+    return len;
+}
 
+qint64 
+QIODevice::write(
+        const char *data, qint64 len)
+{
+    SYS_WARNING (">>>>>>>>>>>>>>>");
+    return len;
+}
+#endif
 /******************************************************************************
  * QDirStub implementation.
  */
@@ -204,6 +220,7 @@ bool
 QFileStub::open (
         int flags)
 {
+    SYS_DEBUG ("*** opening %s", SYS_STR(m_Path));
     if (flags & WriteOnly &&
             !exists()) {
         fileSystemFiles.append (*this);
@@ -211,7 +228,8 @@ QFileStub::open (
 
     return true;
 }
-    
+
+
 bool
 QFileStub::exists() const
 {

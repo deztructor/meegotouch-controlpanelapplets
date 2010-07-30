@@ -44,7 +44,7 @@ private slots:
     void testITrans ();
     void testCreateDirectory ();
     void testBackupFiles ();
-    void testSetBackground ();
+    //void testSetBackground ();
     //void testCheckForPendingSignals ();
     
 private:
