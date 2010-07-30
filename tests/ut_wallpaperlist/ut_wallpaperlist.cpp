@@ -75,22 +75,16 @@ Ut_WallpaperList::testItemClicked ()
 {
     QModelIndex          index;
     
-    SYS_DEBUG ("-------------------------------------------------------");
     index = m_List->m_Model->index (0, 0);
     QVERIFY (index.isValid ());
 
     m_List->slotItemClicked (index);
     QVERIFY (m_Sink.m_Desc);
-
-    //m_List->showEvent (0);
-    //QTest::qWait (300);
-    //m_List->hideEvent (0);
 }
 
 void 
 Ut_WallpaperList::testShowHide ()
 {
-    SYS_DEBUG ("-------------------------------------------------------");
     m_List->showEvent (0);
     QTest::qWait (300);
     QVERIFY (m_List->m_ImageLoader->m_ThumbnailPendingJobs.size() > 0);
