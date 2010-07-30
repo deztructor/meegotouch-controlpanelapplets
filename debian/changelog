@@ -1,4 +1,4 @@
-systemui-applets (0.14.13~1) harmattan; urgency=low
+systemui-applets (0.14.13-1) harmattan; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#182044 - Wallpaper applet does not support background images 
@@ -8,7 +8,7 @@ systemui-applets (0.14.13~1) harmattan; urgency=low
   * Fixes: NB#182578 - Icon temporarily displayed under selected themes
   * Fixes: NB#182709 - systemui-applets is not buildable with cs2009q3 toolchain
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 29 Jul 2010 09:44:38 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 30 Jul 2010 15:21:41 +0200
 
 systemui-applets (0.14.12-2) harmattan; urgency=low
 
