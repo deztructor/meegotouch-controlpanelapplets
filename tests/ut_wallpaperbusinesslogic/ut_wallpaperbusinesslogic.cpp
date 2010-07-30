@@ -23,6 +23,9 @@ static const QString PortraitKey =
 static const QString LandscapeKey = 
     "/desktop/meego/background/landscape/picture_filename";
 
+/******************************************************************************
+ * QImage stub.
+ */
 #include <QImage>
 
 bool 	

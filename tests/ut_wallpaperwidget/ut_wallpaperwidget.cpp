@@ -12,6 +12,21 @@
 //#define DEBUG
 #include "../../src/debug.h"
 
+
+/******************************************************************************
+ * QImage stub.
+ */
+#include <QImage>
+
+bool 	
+QImage::load (
+        const QString  &fileName, 
+        const char     *format)
+{
+    SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
+    return true;
+}
+
 /******************************************************************************
  * SignalSink implementation. 
  */
