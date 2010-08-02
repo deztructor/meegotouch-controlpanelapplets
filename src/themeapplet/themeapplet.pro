@@ -20,7 +20,6 @@ HEADERS = \
     ../debug.h \
     themedescriptor.h \
     themebusinesslogic.h \
-    themebusinesslogicadaptor.h \
     themeapplet.h \
     themelistmodel.h \
     themewidget.h \
@@ -32,7 +31,6 @@ SOURCES = \
     ../debug.cpp \
     themedescriptor.cpp \
     themebusinesslogic.cpp \
-    themebusinesslogicadaptor.cpp \
     themeapplet.cpp \
     themelistmodel.cpp \
     themewidget.cpp \
@@ -49,13 +47,9 @@ target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 css.files = themeapplet.css
 css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/duicontrolpanel/style
 
-dbus_policy.files += themeapplet.conf
-dbus_policy.path = $$(DEBIAN_DESTDIR)/etc/dbus-1/system.d
-
 message("The plugin will be installed to: " $$target.path)
 message("CSS path will be: " $$css.path)
 INSTALLS += target \
             css \
 	    rfs \
-            desktop \
-	    dbus_policy
+            desktop 

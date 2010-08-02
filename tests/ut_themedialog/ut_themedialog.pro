@@ -37,7 +37,6 @@ HEADERS += \
     ../../src/debug.h \
     ut_themedialog.h \
     $$SRC_PREFIX/themebusinesslogic.h \
-    $$SRC_PREFIX/themebusinesslogicadaptor.h \
     $$SRC_PREFIX/themedescriptor.h \
     $$SRC_PREFIX/themedialog.h 
 
@@ -46,7 +45,6 @@ SOURCES += \
     ../../src/debug.cpp \
     ut_themedialog.cpp \
     $$SRC_PREFIX/themebusinesslogic.cpp \
-    $$SRC_PREFIX/themebusinesslogicadaptor.cpp \
     $$SRC_PREFIX/themedescriptor.cpp \
     $$SRC_PREFIX/themedialog.cpp 
 

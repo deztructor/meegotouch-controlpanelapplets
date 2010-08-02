@@ -9,12 +9,24 @@
 #include <QDir>
 #include <MApplication>
 
-#include "themebusinesslogicadaptor.h"
 #include "themedescriptor.h"
 
 class QString;
 class ThemeDescriptor;
 
+#define THEME_DBUS_INTERFACE "com.nokia.theme"
+#define THEME_DBUS_ADDED_SIGNAL "added"
+#define THEME_DBUS_REMOVED_SIGNAL "removed"
+
+/*
+  This class will connect to some DBus signals to detect when the theme packages
+  are installed/removed. Here are some examples how to test and use this feature
+  from the shell:
+
+  dbus-send --session --type=signal / com.nokia.theme.added string:blanco
+  dbus-send --session --type=signal / com.nokia.theme.removed string:blanco
+
+ */
 class ThemeBusinessLogic : public QObject
 {
     Q_OBJECT
@@ -40,8 +52,6 @@ public slots:
      */
     void changeTheme (QString themeCodeName);
     void themeChangeCompleted ();
-    void startupDBusAdaptor ();
-    void stopDBusAdaptor ();
     void themeAdded (QString themeName);
     void themeRemoved (QString themeName);
 
@@ -54,7 +64,6 @@ signals:
     void themeAdded (QList<ThemeDescriptor *> list);
 
 private:
-    QPointer<ThemeBusinessLogicAdaptor> m_ThemeBusinesslogicAdaptor;
     QList<ThemeDescriptor *>            m_AvailableThemes;
     QStringList                         m_DisabledThemeNames;
 };

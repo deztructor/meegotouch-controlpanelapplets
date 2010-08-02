@@ -52,13 +52,23 @@ ThemeBusinessLogic::ThemeBusinessLogic ()
 {
     connect (MTheme::instance(), SIGNAL(themeChangeCompleted()),
             this, SLOT(themeChangeCompleted()));
-    startupDBusAdaptor ();
+
+    /*
+     * Connecting to DBus.
+     */
+    QDBusConnection bus = QDBusConnection::sessionBus ();
+    
+    bus.connect("", "", 
+            THEME_DBUS_INTERFACE, THEME_DBUS_REMOVED_SIGNAL, 
+            this, SLOT(themeRemoved(QString)));
+    bus.connect("", "", 
+            THEME_DBUS_INTERFACE, THEME_DBUS_ADDED_SIGNAL, 
+            this, SLOT(themeAdded(QString)));
 }
 
 
 ThemeBusinessLogic::~ThemeBusinessLogic ()
 {
-    stopDBusAdaptor ();
 }
 
 /*!
@@ -178,50 +188,6 @@ ThemeBusinessLogic::themeChangeCompleted ()
 
     SYS_DEBUG ("Theme changed to %s", SYS_STR(themeCodeName));
     emit themeChanged (themeCodeName);
-}
-
-void
-ThemeBusinessLogic::startupDBusAdaptor ()
-{
-    SYS_DEBUG ("Registering:");
-    SYS_DEBUG ("*** service = %s", THEME_DBUS_SERVICE);
-    SYS_DEBUG ("*** path    = %s", THEME_DBUS_PATH);
-
-    if (m_ThemeBusinesslogicAdaptor)
-        return;
-
-    QDBusConnection bus = QDBusConnection::sessionBus ();
-    if (!bus.registerService (THEME_DBUS_SERVICE)) {
-        SYS_WARNING ("Failed to register dbus service");
-    }
-
-    if (!bus.registerObject (THEME_DBUS_PATH, this)) {
-        SYS_WARNING ("Failed to register dbus object");
-    }
-
-    m_ThemeBusinesslogicAdaptor = new ThemeBusinessLogicAdaptor (this, this);
-    connect (m_ThemeBusinesslogicAdaptor, SIGNAL (themeAdded(QString)),
-            this, SLOT(themeAdded(QString)));
-    connect (m_ThemeBusinesslogicAdaptor, SIGNAL (themeRemoved(QString)),
-            this, SLOT(themeRemoved(QString)));
-}
-    
-void
-ThemeBusinessLogic::stopDBusAdaptor ()
-{
-    SYS_DEBUG ("");
-
-    if (!m_ThemeBusinesslogicAdaptor)
-        return;
-
-    QDBusConnection bus = QDBusConnection::sessionBus ();
-    if (!bus.unregisterService (THEME_DBUS_SERVICE)) {
-        SYS_WARNING ("Failed to unregister dbus service");
-    }
-
-    bus.unregisterObject (THEME_DBUS_PATH);
-
-    delete m_ThemeBusinesslogicAdaptor;
 }
 
 ThemeDescriptor *

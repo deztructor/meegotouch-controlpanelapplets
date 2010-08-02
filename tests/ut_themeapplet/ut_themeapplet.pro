@@ -40,7 +40,6 @@ HEADERS += \
     $$SRC_PREFIX/themeapplet.h \
     $$SRC_PREFIX/themebrief.h \
     $$SRC_PREFIX/themebusinesslogic.h \
-    $$SRC_PREFIX/themebusinesslogicadaptor.h \
     $$SRC_PREFIX/themecellcreator.h \
     $$SRC_PREFIX/themedescriptor.h \
     $$SRC_PREFIX/themedialog.h \
@@ -54,7 +53,6 @@ SOURCES += \
     $$SRC_PREFIX/themeapplet.cpp \
     $$SRC_PREFIX/themebrief.cpp \
     $$SRC_PREFIX/themebusinesslogic.cpp \
-    $$SRC_PREFIX/themebusinesslogicadaptor.cpp \
     $$SRC_PREFIX/themecellcreator.cpp \
     $$SRC_PREFIX/themedescriptor.cpp \
     $$SRC_PREFIX/themedialog.cpp \

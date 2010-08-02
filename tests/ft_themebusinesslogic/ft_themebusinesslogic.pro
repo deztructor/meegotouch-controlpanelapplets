@@ -34,14 +34,12 @@ HEADERS += \
     ../../src/debug.h \
     ft_themebusinesslogic.h \
     $$SRC_PREFIX/themebusinesslogic.h \
-    $$SRC_PREFIX/themebusinesslogicadaptor.h \
     $$SRC_PREFIX/themedescriptor.h
 
 SOURCES += \
     ../../src/debug.cpp \
     ft_themebusinesslogic.cpp \
     $$SRC_PREFIX/themebusinesslogic.cpp \
-    $$SRC_PREFIX/themebusinesslogicadaptor.cpp \
     $$SRC_PREFIX/themedescriptor.cpp
 
 INSTALLS += target
