@@ -8,6 +8,7 @@
 #include <QDir>
 #include <MApplication>
 
+#include "themebusinesslogicadaptor.h"
 #include "themedescriptor.h"
 
 class QString;
@@ -19,6 +20,7 @@ class ThemeBusinessLogic : public QObject
 
 public:
     ThemeBusinessLogic ();
+    ~ThemeBusinessLogic ();
     
     QString currentThemeCodeName ();
     QString currentThemeName ();
@@ -35,13 +37,16 @@ public slots:
      */
     void changeTheme (QString themeCodeName);
     void themeChangeCompleted ();
+    void startupDBusAdaptor ();
+    void stopDBusAdaptor ();
 
 signals:
     void themeChangeStarted (QString themeCodeName);
     void themeChanged (QString themeCodeName);
 
 private:
-    QList<ThemeDescriptor *>  m_AvailableThemes;
+    QPointer<ThemeBusinessLogicAdaptor> m_ThemeBusinesslogicAdaptor;
+    QList<ThemeDescriptor *>            m_AvailableThemes;
 };
 
 #endif

@@ -16,7 +16,8 @@
 #include <MListFilter>
 #include <MSortFilterProxyModel>
 
-//#define DEBUG
+#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 static const char *oviCommand = "webwidgetrunner /usr/share/webwidgets/applications/d34177b1c241ea44cb132005b63ee6527c9f6040-wrt-widget.desktop -widgetparameter themes &";
@@ -31,10 +32,16 @@ ThemeWidget::ThemeWidget (
     m_OviItem(0)
 {
     createWidgets ();
+    SYS_DEBUG (">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    SYS_WARNING (">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    m_ThemeBusinessLogic->startupDBusAdaptor ();
 }
 
 ThemeWidget::~ThemeWidget ()
 {
+    SYS_DEBUG (">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    SYS_WARNING (">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    m_ThemeBusinessLogic->stopDBusAdaptor ();
 }
 
 void

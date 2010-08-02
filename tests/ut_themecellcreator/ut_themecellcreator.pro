@@ -36,6 +36,7 @@ HEADERS += \
     ut_themecellcreator.h \
     $$STUB_PREFIX/qdirstub.h \
     $$SRC_PREFIX/themebusinesslogic.h \
+    $$SRC_PREFIX/themebusinesslogicadaptor.h \
     $$SRC_PREFIX/themedescriptor.h \
     $$SRC_PREFIX/themelistmodel.h \
     $$SRC_PREFIX/themecellcreator.h 
@@ -45,6 +46,7 @@ SOURCES += \
     ../../src/debug.cpp \
     ut_themecellcreator.cpp \
     $$SRC_PREFIX/themebusinesslogic.cpp \
+    $$SRC_PREFIX/themebusinesslogicadaptor.cpp \
     $$SRC_PREFIX/themedescriptor.cpp \
     $$SRC_PREFIX/themelistmodel.cpp \
     $$SRC_PREFIX/themecellcreator.cpp 

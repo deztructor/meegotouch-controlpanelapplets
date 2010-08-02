@@ -1,12 +1,30 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
+/****************************************************************************
+**
+** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (directui@nokia.com)
+**
+** This file is part of systemui.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at directui@nokia.com.
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation
+** and appearing in the file LICENSE.LGPL included in the packaging
+** of this file.
+**
+****************************************************************************/
 
 #include "themebusinesslogic.h"
 #include "themedescriptor.h"
 
 #include <MGConfItem>
 #include <MTheme>
-
+#include <QDBusConnection>
 #include <QString>
 #include <QStringList>
 #include <QDir>
@@ -34,6 +52,12 @@ ThemeBusinessLogic::ThemeBusinessLogic ()
 {
     connect (MTheme::instance(), SIGNAL(themeChangeCompleted()),
             this, SLOT(themeChangeCompleted()));
+}
+
+
+ThemeBusinessLogic::~ThemeBusinessLogic ()
+{
+    stopDBusAdaptor ();
 }
 
 /*!
@@ -149,6 +173,47 @@ ThemeBusinessLogic::themeChangeCompleted ()
     SYS_DEBUG ("Theme changed to %s", SYS_STR(themeCodeName));
     emit themeChanged (themeCodeName);
 }
+
+void
+ThemeBusinessLogic::startupDBusAdaptor ()
+{
+    SYS_DEBUG ("Registering:");
+    SYS_DEBUG ("*** service = %s", THEME_DBUS_SERVICE);
+    SYS_DEBUG ("*** path    = %s", THEME_DBUS_PATH);
+
+    if (m_ThemeBusinesslogicAdaptor)
+        return;
+
+    QDBusConnection bus = QDBusConnection::sessionBus ();
+    if (!bus.registerService (THEME_DBUS_SERVICE)) {
+        SYS_WARNING ("Failed to register dbus service");
+    }
+
+    if (!bus.registerObject (THEME_DBUS_PATH, this)) {
+        SYS_WARNING ("Failed to register dbus object");
+    }
+
+    m_ThemeBusinesslogicAdaptor = new ThemeBusinessLogicAdaptor (this, this);
+}
+    
+void
+ThemeBusinessLogic::stopDBusAdaptor ()
+{
+    SYS_DEBUG ("");
+
+    if (!m_ThemeBusinesslogicAdaptor)
+        return;
+
+    QDBusConnection bus = QDBusConnection::sessionBus ();
+    if (!bus.unregisterService (THEME_DBUS_SERVICE)) {
+        SYS_WARNING ("Failed to unregister dbus service");
+    }
+
+    bus.unregisterObject (THEME_DBUS_PATH);
+
+    delete m_ThemeBusinesslogicAdaptor;
+}
+
 
 /*!
  * \param themeCodeName The code name of the theme for which we need the
