@@ -268,7 +268,36 @@ void
 ThemeBusinessLogic::themeAdded (
         QString themeName)
 {
+    ThemeDescriptor *descr;
+    int              index;
+
     SYS_DEBUG ("themeName = %s", SYS_STR(themeName));
+    descr = new ThemeDescriptor (
+            this, themeDirName + QDir::separator() + themeName, themeName);
+    
+    if (!descr->isValid() && !descr->isVisible()) {
+        SYS_WARNING ("Theme %s is invalid or invisible.", SYS_STR(themeName));
+        return;
+    }
+    
+    /*
+     * If this theme is on the removed theme list we drop that, it is installed
+     * again.
+     */
+    index = m_DisabledThemeNames.indexOf(themeName);
+    if (index >= 0)
+        m_DisabledThemeNames.removeAt (index);
+
+    /*
+     * If we already have this theme we will not add to the list. No matter who
+     * says what, there will be no duplications.
+     */
+    if (themeByCodename(themeName) != 0)
+        return;
+
+    emit themeAboutToBeAdded (m_AvailableThemes.size());
+    m_AvailableThemes << descr;
+    emit themeAdded (m_AvailableThemes);
 }
 
 void

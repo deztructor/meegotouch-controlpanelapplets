@@ -34,6 +34,11 @@ ThemeListModel::ThemeListModel (
                     this, SLOT(themeAboutToBeRemoved(int)));
         connect (logic, SIGNAL(themeRemoved(QList<ThemeDescriptor *>)),
                 this, SLOT(themeRemoved(QList<ThemeDescriptor *>)));
+
+        connect (logic, SIGNAL(themeAboutToBeAdded(int)),
+                    this, SLOT(themeAboutToBeAdded(int)));
+        connect (logic, SIGNAL(themeAdded(QList<ThemeDescriptor *>)),
+                this, SLOT(themeAdded(QList<ThemeDescriptor *>)));
     }
 }
 
@@ -215,6 +220,23 @@ ThemeListModel::themeRemoved (
     SYS_DEBUG ("");
     m_ThemeDescList = list;
     endRemoveRows ();
+}
+
+void
+ThemeListModel::themeAboutToBeAdded (
+        int index)
+{
+    SYS_DEBUG ("");
+    beginInsertRows (QModelIndex(), index, index);
+}
+ 
+void
+ThemeListModel::themeAdded (
+        QList<ThemeDescriptor *> list)
+{
+    SYS_DEBUG ("");
+    m_ThemeDescList = list;
+    endInsertRows ();
 }
 
 

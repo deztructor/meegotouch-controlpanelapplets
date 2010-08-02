@@ -55,6 +55,8 @@ class ThemeListModel : public QAbstractTableModel
     	void themeChanged (QString themeCodeName);
         void themeAboutToBeRemoved (int index);
         void themeRemoved (QList<ThemeDescriptor *> list);
+        void themeAboutToBeAdded (int index);
+        void themeAdded (QList<ThemeDescriptor *> list);
 
     private:
         ThemeBusinessLogic  *m_ThemeBusinessLogic;
