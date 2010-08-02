@@ -52,6 +52,7 @@ ThemeBusinessLogic::ThemeBusinessLogic ()
 {
     connect (MTheme::instance(), SIGNAL(themeChangeCompleted()),
             this, SLOT(themeChangeCompleted()));
+    startupDBusAdaptor ();
 }
 
 

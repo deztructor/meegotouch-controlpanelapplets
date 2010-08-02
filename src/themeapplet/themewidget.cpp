@@ -32,16 +32,10 @@ ThemeWidget::ThemeWidget (
     m_OviItem(0)
 {
     createWidgets ();
-    SYS_DEBUG (">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    SYS_WARNING (">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    m_ThemeBusinessLogic->startupDBusAdaptor ();
 }
 
 ThemeWidget::~ThemeWidget ()
 {
-    SYS_DEBUG (">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    SYS_WARNING (">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    m_ThemeBusinessLogic->stopDBusAdaptor ();
 }
 
 void
@@ -139,7 +133,7 @@ ThemeWidget::readLocalThemes ()
     m_Proxy = m_List->filtering()->proxy();
     m_Proxy->setSortRole (ThemeListModel::SearchRole);
     m_Proxy->setSortCaseSensitivity(Qt::CaseInsensitive);
-    // FIXME: Seems that the sort() method simply will not sort when the
+    // Seems that the sort() method simply will not sort when the
     // ThemeListModel::SearchRole is used.
     m_Proxy->sort(Qt::DisplayRole);
     m_Proxy->setFilterKeyColumn(0);
@@ -229,7 +223,7 @@ ThemeWidget::textChanged ()
 
 
     m_CellCreator->highlightByText (m_LiveFilterEditor->text());
-    // FIXME: Seems that the sort() method simply will not sort when the
+    // Seems that the sort() method simply will not sort when the
     // ThemeListModel::SearchRole is used.
     m_Proxy->sort(Qt::DisplayRole);
     selectCurrentTheme ();

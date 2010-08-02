@@ -33,6 +33,13 @@ class ThemeBusinessLogic;
 
 
 /*
+       DBus Interface for the Theme Applet: ThemeBusinessLogicAdaptor
+
+  This class implements a dbus adapter for the theme applet of the controlpanel.
+  The DBus adapter makes it possible to hide a theme from the available theme
+  list before the theme is uninstalled. Here is an example how a theme should be
+  diabled before it is removed.
+
 dbus-send \
   --print-reply \
   --session \
@@ -40,6 +47,11 @@ dbus-send \
   /com/nokia/theme_applet/request \
   com.nokia.theme_applet.request.remove_theme string:blanco
 
+  The DBus interface also implements a method to add a theme to the available
+  themes list when the theme is installed. Here is an example how the theme
+  install should be reported for the theme applet after it is installed. Please
+  note that the theme must be valid and visible in order to show up in the theme
+  list.
 
 dbus-send \
   --print-reply \
