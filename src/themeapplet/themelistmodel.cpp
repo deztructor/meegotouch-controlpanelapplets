@@ -8,17 +8,46 @@
 #define DEBUG
 #include "../debug.h"
 
-ThemeListModel::ThemeListModel(QObject *parent)
-    : QAbstractTableModel(parent)
+ThemeListModel::ThemeListModel (
+        ThemeBusinessLogic *logic,
+        QObject            *parent)
+    : QAbstractTableModel (parent),
+    m_ThemeBusinessLogic (logic)
 {
+    /*
+     * If we have a businesslogic we can read the available themes.
+     */
+    if (logic) {
+        QList<ThemeDescriptor *> list;
+        list = logic->availableThemes ();
+
+        if (list.size() > 0) {
+            beginInsertRows (QModelIndex(), 0, list.size() - 1);
+            m_ThemeDescList = list;
+            endInsertRows ();
+        }
+
+        /*
+         *
+         */
+        connect (logic, SIGNAL(themeAboutToBeRemoved(int)),
+                    this, SLOT(themeAboutToBeRemoved(int)));
+        connect (logic, SIGNAL(themeRemoved(QList<ThemeDescriptor *>)),
+                this, SLOT(themeRemoved(QList<ThemeDescriptor *>)));
+    }
 }
 
+/*
+ * We call this function when the whole model needs to be refreshed on the
+ * screen, for example when the highlight is changed because the user typed a
+ * search string.
+ */
 void
 ThemeListModel::refresh()
 {
-    if (m_Rows.size() != 0) {
+    if (m_ThemeDescList.size() != 0) {
         QModelIndex first = index (0, 0);
-        QModelIndex last  = index (m_Rows.size() - 1, 0);
+        QModelIndex last  = index (m_ThemeDescList.size() - 1, 0);
 
         SYS_DEBUG ("Emitting dataChanged()");
         emit dataChanged (first, last);
@@ -29,7 +58,7 @@ int
 ThemeListModel::rowCount(
         const QModelIndex &parent) const
 {
-    int retval = m_Rows.size();
+    int retval = m_ThemeDescList.size();
 
     if (parent.isValid())
         retval = 0;
@@ -83,71 +112,36 @@ ThemeListModel::data (
 		const QModelIndex &index, 
 		int                role) const
 {    
-    if (index.row() < 0 || index.row() >= m_Rows.size())
+    if (index.row() < 0 || index.row() >= m_ThemeDescList.size())
         return QVariant();
 
-    QStringList row = m_Rows[index.row()];
+    ThemeDescriptor *desc = m_ThemeDescList[index.row()];
    
     switch (role) {
         case Qt::DisplayRole:
-            return QVariant (row[ThemeColumnName]);
+            return QVariant (desc->name());
 
         case ThemeListModel::SearchRole:
-            return QVariant (row[ThemeColumnName]);
+            return QVariant (desc->name());
 
         case ThemeListModel::CodeNameRole:
-            return QVariant(row[ThemeColumnCodeName]);
+            return QVariant(desc->codeName());
 
         case ThemeListModel::NameRole:
-            return QVariant(row[ThemeColumnName]);
+            return QVariant(desc->name());
         
         case ThemeListModel::IconNameRole:
-            return QVariant(row[ThemeColumnIcon]);
+            return QVariant(desc->iconName());
             
         case ThemeListModel::ChangingNameRole:
             return QVariant (m_ChangingTheme);
 
         default:
             SYS_WARNING ("Unhandled role: %d", role);
-            SYS_DEBUG ("Returning list of %d items.", row.size());
-            return QVariant(row);
+            return QVariant();
     }
 }
 
-/*!
- * FIXME: This should not be forced from outside, this should be initiated from
- * inside!
- */
-void
-ThemeListModel::setThemeList (
-        const QList<ThemeDescriptor *> &themeList)
-{
-    if (m_Rows.size() != 0) {
-        beginRemoveColumns (QModelIndex(), 0, m_Rows.size() - 1);
-        m_Rows.clear();
-        endRemoveColumns ();
-    }
-
-    if (themeList.size() == 0)
-        return;
-
-    SYS_DEBUG ("Inserting elements 0--%d", themeList.size() - 1);
-    beginInsertRows (QModelIndex(), 0, themeList.size() - 1);
-
-    foreach (ThemeDescriptor *descr, themeList) {
-        QStringList row;
-        // respect ThemeColumnIndex order
-        for (int i = 0; i < ThemeColumnLast; ++i) {
-            row << QString();
-        }
-        row[ThemeColumnCodeName] =  descr->codeName();
-        row[ThemeColumnName] =  descr->name();
-        row[ThemeColumnIcon] = descr->iconName();
-        m_Rows.append(row);
-    }
-
-    endInsertRows ();
-}
  
 QModelIndex
 ThemeListModel::indexOfCodeName(
@@ -155,15 +149,11 @@ ThemeListModel::indexOfCodeName(
 {
     int i = 0;
 
-    SYS_DEBUG ("*** rows = %d", m_Rows.size());
-    foreach (QStringList row, m_Rows) {
-        SYS_DEBUG ("%s == %s is %s",
-                SYS_STR (row[ThemeColumnCodeName]),
-                SYS_STR (codeName),
-                SYS_BOOL(row[ThemeColumnCodeName] == codeName));
-        if (row[ThemeColumnCodeName] == codeName) {
-            return index(i, 0);
+    foreach (ThemeDescriptor *desc, m_ThemeDescList) {
+        if (desc->codeName() == codeName) {
+            return index (i, 0);
         }
+
         ++i;
     }
 
@@ -175,7 +165,7 @@ void
 ThemeListModel::themeChangeStarted (
 		QString themeCodeName)
 {
-    QModelIndex index = indexByThemeCodeName(themeCodeName);
+    QModelIndex index = indexOfCodeName (themeCodeName);
     
     SYS_DEBUG ("*** themeCodeName = %s", SYS_STR(themeCodeName));
     m_ChangingTheme = themeCodeName;
@@ -188,7 +178,7 @@ void
 ThemeListModel::themeChanged (
 		QString themeCodeName)
 {
-    QModelIndex index = indexByThemeCodeName(themeCodeName);
+    QModelIndex index = indexOfCodeName (themeCodeName);
 
     SYS_DEBUG ("***********************************************************");
     SYS_DEBUG ("*** themeCodeName   = %s", SYS_STR(themeCodeName));
@@ -210,21 +200,21 @@ ThemeListModel::changingTheme () const
     return m_ChangingTheme;
 }
 
-QModelIndex  
-ThemeListModel::indexByThemeCodeName (
-        QString themeCodeName)
+void
+ThemeListModel::themeAboutToBeRemoved (
+        int index)
 {
-    QModelIndex retval;
-    
-    for (int n = 0; n < m_Rows.size(); ++n) {
-        if (m_Rows[n][ThemeColumnCodeName] == themeCodeName)
-            retval = index (n, 0);
-    }
-
-    if (!retval.isValid()) {
-        SYS_WARNING ("Theme code name %s not found.", SYS_STR(themeCodeName));
-    }
-
-    return retval;
+    SYS_DEBUG ("");
+    beginRemoveRows (QModelIndex(), index, index);
 }
+ 
+void
+ThemeListModel::themeRemoved (
+        QList<ThemeDescriptor *> list)
+{
+    SYS_DEBUG ("");
+    m_ThemeDescList = list;
+    endRemoveRows ();
+}
+
 

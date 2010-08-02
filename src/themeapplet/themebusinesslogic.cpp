@@ -113,8 +113,7 @@ ThemeBusinessLogic::currentThemeIconName ()
 }
 
 /*!
- * Returns all the available themes. 
- * Invisible themes are filtered out.
+ * Returns all the available themes. Invisible themes are filtered out.
  */
 QList<ThemeDescriptor *>
 ThemeBusinessLogic::availableThemes ()
@@ -134,6 +133,12 @@ ThemeBusinessLogic::availableThemes ()
     foreach (QString themeFile, 
             entryList(themeDir, (QDir::Dirs | QDir::NoDotAndDotDot))) {
         ThemeDescriptor *descr;
+
+        /*
+         * If the theme is about to be removed we will not process it at all.
+         */
+        if (m_DisabledThemeNames.indexOf(themeFile) >= 0)
+            continue;
 
         descr = new ThemeDescriptor (
                 this,
@@ -194,6 +199,10 @@ ThemeBusinessLogic::startupDBusAdaptor ()
     }
 
     m_ThemeBusinesslogicAdaptor = new ThemeBusinessLogicAdaptor (this, this);
+    connect (m_ThemeBusinesslogicAdaptor, SIGNAL (themeAdded(QString)),
+            this, SLOT(themeAdded(QString)));
+    connect (m_ThemeBusinesslogicAdaptor, SIGNAL (themeRemoved(QString)),
+            this, SLOT(themeRemoved(QString)));
 }
     
 void
@@ -214,6 +223,17 @@ ThemeBusinessLogic::stopDBusAdaptor ()
     delete m_ThemeBusinesslogicAdaptor;
 }
 
+ThemeDescriptor *
+ThemeBusinessLogic::themeByCodename (
+        const QString &codeName)
+{
+    availableThemes ();
+    for (int n = 0; n < m_AvailableThemes.size(); ++n)
+        if (m_AvailableThemes[n]->codeName() == codeName)
+            return m_AvailableThemes[n];
+
+    return 0;
+}
 
 /*!
  * \param themeCodeName The code name of the theme for which we need the
@@ -242,5 +262,46 @@ ThemeBusinessLogic::themePreviewFileName (
 
     return themeDirName + QDir::separator() + themeCodeName + 
         "/meegotouch/images/meegotouch-theme-preview-" + oString + ".jpg";
+}
+
+void
+ThemeBusinessLogic::themeAdded (
+        QString themeName)
+{
+    SYS_DEBUG ("themeName = %s", SYS_STR(themeName));
+}
+
+void
+ThemeBusinessLogic::themeRemoved (
+        QString themeName)
+{
+    SYS_DEBUG ("themeName = %s", SYS_STR(themeName));
+
+    /*
+     * If we already notified about the theme removal we don't need to do
+     * anything.
+     */
+    if (m_DisabledThemeNames.indexOf(themeName) >= 0)
+        return;
+
+    /*
+     * We need to remember which themes are under removal.
+     */
+    m_DisabledThemeNames << themeName;
+
+    /*
+     *
+     */
+    for (int n = 0; n < m_AvailableThemes.size(); ++n) {
+        if (m_AvailableThemes[n]->codeName() == themeName) {
+            ThemeDescriptor *desc = m_AvailableThemes[n];
+            SYS_DEBUG ("Theme %d is about to be removed.", n);
+            
+            emit themeAboutToBeRemoved (n);
+            m_AvailableThemes.removeAt (n);
+            delete desc;
+            emit themeRemoved(m_AvailableThemes);
+        }
+    }
 }
 

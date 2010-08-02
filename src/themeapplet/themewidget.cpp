@@ -116,9 +116,7 @@ ThemeWidget::readLocalThemes ()
      * Creating the model and connecting it to the businesslogic so we can show
      * the spinner while the theme change is in progress.
      */
-    m_ThemeListModel = new ThemeListModel ();
-    m_ThemeDescList = m_ThemeBusinessLogic->availableThemes ();
-    m_ThemeListModel->setThemeList(m_ThemeDescList);
+    m_ThemeListModel = new ThemeListModel (m_ThemeBusinessLogic);
 
     m_ThemeListModel->setObjectName ("ThemeListModel");
     SYS_DEBUG ("*** m_ThemeListModel = %p", m_ThemeListModel);
@@ -201,17 +199,8 @@ ThemeWidget::themeActivated (
     m_ThemeBusinessLogic->changeTheme (codeName);
     return;
     #endif
-    /*
-     * FIXME:  This is certainly too complicated here, the ThemeBusinessLogic
-     * should do stuff like this.
-     */
-    foreach (ThemeDescriptor *d, m_ThemeDescList) {
-        if (d->codeName() == codeName) {
-            descr = d;
-            break;
-        }
-    }
 
+    descr = m_ThemeBusinessLogic->themeByCodename (codeName);
     if (descr == 0) {
         SYS_CRITICAL("codename not found: %s", SYS_STR(codeName));
         return;

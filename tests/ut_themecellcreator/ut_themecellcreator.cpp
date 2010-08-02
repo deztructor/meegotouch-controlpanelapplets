@@ -82,8 +82,7 @@ Ut_ThemeCellCreator::testCreateCell ()
     ThemeCellCreator  *cellCreator;
     MAdvancedListItem *item;
 
-    model = new ThemeListModel;
-    model->setThemeList (m_ThemeDescList);
+    model = new ThemeListModel (m_ThemeBusinessLogic);
     cellCreator = new ThemeCellCreator;
 
     rows = model->rowCount (index);

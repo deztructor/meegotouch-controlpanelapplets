@@ -9,7 +9,6 @@
 #include <dcpwidget.h>
 
 #include "themebusinesslogic.h"
-#include "themedescriptor.h"
 #include "themelistmodel.h"
 #include "themecellcreator.h"
 
@@ -44,7 +43,6 @@ private:
     ThemeListModel               *m_ThemeListModel;
     MSortFilterProxyModel        *m_Proxy;
     ThemeCellCreator             *m_CellCreator;
-    QList<ThemeDescriptor *>      m_ThemeDescList;
 
     MTextEdit                    *m_LiveFilterEditor;
     MList                        *m_List;

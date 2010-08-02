@@ -4,6 +4,7 @@
 #define THEMEBUSINESSLOGIC_H
 
 #include <QList>
+#include <QStringList>
 #include <QObject>
 #include <QDir>
 #include <MApplication>
@@ -27,6 +28,8 @@ public:
     QString currentThemeIconName ();
     QList<ThemeDescriptor *> availableThemes ();
 
+    ThemeDescriptor *themeByCodename (const QString &codeName);
+
     QString themePreviewFileName (
             const QString  &themeCodeName,
             M::Orientation orientation) const;
@@ -39,14 +42,21 @@ public slots:
     void themeChangeCompleted ();
     void startupDBusAdaptor ();
     void stopDBusAdaptor ();
+    void themeAdded (QString themeName);
+    void themeRemoved (QString themeName);
 
 signals:
     void themeChangeStarted (QString themeCodeName);
     void themeChanged (QString themeCodeName);
+    void themeAboutToBeRemoved (int index);
+    void themeRemoved (QList<ThemeDescriptor *> list);
+    void themeAboutToBeAdded (int index);
+    void themeAdded (QList<ThemeDescriptor *> list);
 
 private:
     QPointer<ThemeBusinessLogicAdaptor> m_ThemeBusinesslogicAdaptor;
     QList<ThemeDescriptor *>            m_AvailableThemes;
+    QStringList                         m_DisabledThemeNames;
 };
 
 #endif

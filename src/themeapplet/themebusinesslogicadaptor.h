@@ -65,6 +65,10 @@ public slots:
     void remove_theme (QString themeName);
     void add_theme (QString themeName);
 
+signals:
+    void themeAdded (QString themeName);
+    void themeRemoved (QString themeName);
+    
 private:
     ThemeBusinessLogic  *m_ThemeBusinessLogic;
 };

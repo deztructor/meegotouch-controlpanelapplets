@@ -46,6 +46,7 @@ ThemeBusinessLogicAdaptor::remove_theme (
         QString themeName)
 {
     SYS_DEBUG ("themeName = %s", SYS_STR(themeName));
+    emit themeRemoved (themeName);
 }
     
 void 
@@ -53,4 +54,5 @@ ThemeBusinessLogicAdaptor::add_theme (
         QString themeName)
 {
     SYS_DEBUG ("themeName = %s", SYS_STR(themeName));
+    emit themeAdded (themeName);
 }

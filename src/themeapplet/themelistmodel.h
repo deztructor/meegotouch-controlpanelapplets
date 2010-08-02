@@ -3,9 +3,13 @@
 #ifndef THEMELISTMODEL_H__
 #define THEMELISTMODEL_H__
 
+#include <QList>
 #include <QStringList>
 #include <QString>
 #include <QAbstractTableModel>
+
+#include "themebusinesslogic.h"
+#include "themedescriptor.h"
 
 class ThemeDescriptor;
 class QModelIndex;
@@ -15,10 +19,11 @@ class ThemeListModel : public QAbstractTableModel
     Q_OBJECT
 
     public:
-        ThemeListModel(QObject *parent = 0);
+        ThemeListModel(
+                ThemeBusinessLogic *businessLogic = 0,
+                QObject            *parent = 0);
 
         void refresh ();
-        
         #if 0
         /*
          * FIXME:
@@ -34,17 +39,9 @@ class ThemeListModel : public QAbstractTableModel
         int columnCount (const QModelIndex & parent) const;
 
         QVariant data(const QModelIndex &index, int role=Qt::DisplayRole) const;
-        void setThemeList(const QList<ThemeDescriptor *> &themeList);
         QModelIndex indexOfCodeName(const QString &codeName) const;
         QString changingTheme () const;
 
-        typedef enum {
-            ThemeColumnCodeName = 0,
-            ThemeColumnName,
-            ThemeColumnIcon,
-            ThemeColumnLast
-        } ThemeColumnIndex;
-        
         typedef enum {
             SearchRole  = Qt::UserRole + 1,
             CodeNameRole,
@@ -56,15 +53,14 @@ class ThemeListModel : public QAbstractTableModel
     public slots:
 	    void themeChangeStarted (QString themeCodeName);
     	void themeChanged (QString themeCodeName);
+        void themeAboutToBeRemoved (int index);
+        void themeRemoved (QList<ThemeDescriptor *> list);
 
     private:
-        /*
-         * FIXME: This model should hold theme descriptors instead of just
-         * strings. This is not robust enough!
-         */
-        QModelIndex  indexByThemeCodeName (QString themeCodeName);
-        QString            m_ChangingTheme;
-        QList<QStringList> m_Rows;
+        ThemeBusinessLogic  *m_ThemeBusinessLogic;
+        // FIXME: This should be in the businesslogic.
+        QString              m_ChangingTheme;
+        QList<ThemeDescriptor *>      m_ThemeDescList;
 };
 
 #endif
