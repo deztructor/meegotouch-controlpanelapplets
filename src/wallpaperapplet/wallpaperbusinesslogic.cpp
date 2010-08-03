@@ -44,7 +44,7 @@
 #include <QStringList>
 #include <QProcessEnvironment>
 #include <QPainter>
-
+#include <QDBusConnection>
 #include <MTheme>
 #include <MGConfItem>
 
@@ -68,7 +68,6 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
     
     m_LandscapeGConfItem = new MGConfItem (WALLPAPER_LANDSCAPE_KEY);
     m_PortraitGConfItem = new MGConfItem (WALLPAPER_PORTRAIT_KEY);
-    m_RequestGConfItem = new MGConfItem (WALLPAPER_APPLET_REQUEST_CODE);
     m_EditedImage = 0;
     m_EditedImageOurs = false;
 
@@ -113,18 +112,23 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
         SYS_WARNING ("Current wallpaper was not found.");
     }
 
-    connect (m_RequestGConfItem, SIGNAL(valueChanged()),
-            this, SLOT(requestArrived()));
-
     connect (&m_FutureWatcher, SIGNAL (finished()),
             this, SLOT (startEditThreadEnded()));
+
+    /*
+     * Connecting to DBus.
+     */
+    QDBusConnection bus = QDBusConnection::sessionBus ();
+    
+    bus.connect("", "", 
+            WALLPAPER_DBUS_INTERFACE, WALLPAPER_DBUS_EDIT_SIGNAL, 
+            this, SLOT(editRequestArrived(QString, QString)));
 }
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
 {
     delete m_LandscapeGConfItem;
     delete m_PortraitGConfItem;
-    delete m_RequestGConfItem;
 }
 
 /*!
@@ -277,7 +281,6 @@ WallpaperBusinessLogic::startEditThreadEnded ()
      * Calling from loadall, this time from the GUI thread.
      */
     m_EditedImage->loadAll ();
-    SYS_DEBUG ("---------- From thispoint should be ready -----------------");
     m_EditedImage->setLoading (false);
     emit imageEditRequested();
 }
@@ -615,43 +618,22 @@ WallpaperBusinessLogic::makeBackup (
 }
 
 void 
-WallpaperBusinessLogic::requestArrived ()
+WallpaperBusinessLogic::editRequestArrived (
+        QString   portraitFileName,
+        QString   landscapeFileName)
 {
-    MGConfItem lEditedImageItem (WALLPAPER_EDITED_LANDSCAPE_KEY);
-    MGConfItem pEditedImageItem (WALLPAPER_EDITED_PORTRAIT_KEY);
-    MGConfItem requestCodeItem  (WALLPAPER_APPLET_REQUEST_CODE);
-    WallpaperAppletRequestCode code;
-    QString portraitFileName;
-    QString landscapeFileName;
-
-    SYS_DEBUG ("");
-    code = (WallpaperAppletRequestCode) requestCodeItem.value().toInt();
-    if (code == WallpaperRequestNone)
-        return;
-
-    portraitFileName = pEditedImageItem.value().toString();
-    landscapeFileName = lEditedImageItem.value().toString();
-
-    SYS_DEBUG ("*** landscapeFileName = %s", SYS_STR(landscapeFileName));
+    WallpaperDescriptor *desc;
     SYS_DEBUG ("*** portraitFileName  = %s", SYS_STR(portraitFileName));
-    if (code == WallpaperRequestEdit) {
-        WallpaperDescriptor *desc;
-        
-        desc = new WallpaperDescriptor ();
-        desc->setFilename (landscapeFileName, WallpaperDescriptor::Landscape);
-        desc->setFilename (portraitFileName, WallpaperDescriptor::Portrait);
-        setEditedImage (desc, true);
+    SYS_DEBUG ("*** landscapeFileName = %s", SYS_STR(landscapeFileName));
 
-        startEdit ();
-        requestCodeItem.set (WallpaperRequestNone);
-    }
+    desc = new WallpaperDescriptor ();
+    desc->setFilename (landscapeFileName, WallpaperDescriptor::Landscape);
+    desc->setFilename (portraitFileName, WallpaperDescriptor::Portrait);
+    setEditedImage (desc, true);
+
+    startEdit ();
 }
 
-void
-WallpaperBusinessLogic::checkForPendingSignals ()
-{
-    requestArrived ();
-}
 
 static QString
 trackerIdToFilename(const QString &trackerId)

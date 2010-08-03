@@ -18,6 +18,30 @@ class WallpaperITrans;
 
 #include <wallpaperdescriptor.h>
 
+#define WALLPAPER_DBUS_INTERFACE "com.nokia.wallpaper"
+#define WALLPAPER_DBUS_EDIT_SIGNAL "edit"
+
+/*
+             Initiating the wallpaper editor screen from DBus
+
+ In order to initiate the wallpaper editor from an external application two
+ steps has to be performed.
+
+ (1) First the controlpanel has to be started and the wallpaper applet must be
+ activated through dbus. Please check the documentation of the
+ libduicontrolpanel about this step.
+
+ (2) Then the wallpaper applet can be contacted through DBus and the editor has
+ to be initiated giving two image files as parameter. The first image file is
+ the portrait, while the second is the landscape version of the wallpaper that
+ should be editoed. The two images might be the same, in this case the very same
+ image will be cropped differently for getting the portrait and the landscape
+ variants. The following interface can be used for this step:
+
+ dbus-send --session --type=signal / com.nokia.wallpaper.edit \
+    string:/usr/share/themes/base/meegotouch/images/meegotouch-wallpaper-portrait.jpg \
+    string:/usr/share/themes/base/meegotouch/images/meegotouch-wallpaper-landscape.jpg
+*/ 
 class WallpaperBusinessLogic : public QObject
 {
     Q_OBJECT
@@ -44,7 +68,6 @@ public:
         WallpaperITrans     *portraitITrans,
         WallpaperDescriptor *desc = 0);
 
-    void checkForPendingSignals ();
     void addImageFromGallery(QString);
 
 signals:
@@ -52,7 +75,10 @@ signals:
     void imageEditRequested ();
     
 private slots:
-    void requestArrived ();
+    void editRequestArrived (
+        QString   portraitFileName,
+        QString   landscapeFileName);
+
     void startEditThreadEnded ();
 
 private:
@@ -76,7 +102,6 @@ private:
 private:
     MGConfItem   *m_LandscapeGConfItem;
     MGConfItem   *m_PortraitGConfItem;
-    MGConfItem   *m_RequestGConfItem;
 
     QPointer<WallpaperDescriptor> m_EditedImage;
     bool                          m_EditedImageOurs;
