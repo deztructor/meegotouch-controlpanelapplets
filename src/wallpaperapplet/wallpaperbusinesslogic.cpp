@@ -617,6 +617,9 @@ WallpaperBusinessLogic::makeBackup (
     file.rename (backupFilePath);
 }
 
+/*
+ * This slot is activated when an image edit is requested through DBus.
+ */
 void 
 WallpaperBusinessLogic::editRequestArrived (
         QString   portraitFileName,
@@ -634,7 +637,10 @@ WallpaperBusinessLogic::editRequestArrived (
     startEdit ();
 }
 
-
+/*
+ * FIXME: Maybe this method should be implemented in the WallpaperDescriptor
+ * class?
+ */
 static QString
 trackerIdToFilename(const QString &trackerId)
 {
