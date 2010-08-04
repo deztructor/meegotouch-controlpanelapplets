@@ -267,11 +267,22 @@ void
 Ut_ThemeBusinessLogic::testSetTheme ()
 {
     QString fakeName = "FakeThemeCodeName";
-
+    
+    /*
+     * Initiating the theme change.
+     */
     m_Api->changeTheme (fakeName);
     QVERIFY (GConfLastKey == "/meegotouch/theme/name");
     QVERIFY (GConfLastValue == fakeName);
     QVERIFY (m_Priv->m_ThemeCodeNameUnderProcess == fakeName);
+
+    /*
+     * Finishing the theme name. FIXME: It would be better to test this by
+     * sending a signal, so we could test that the businesslogic connected the
+     * signal.
+     */
+    m_Api->themeChangeCompleted ();
+    QVERIFY (m_Priv->m_ThemeCodeName == m_Api->currentThemeCodeName ());
 }
 
 QTEST_APPLESS_MAIN(Ut_ThemeBusinessLogic)
