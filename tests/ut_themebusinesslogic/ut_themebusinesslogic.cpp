@@ -35,6 +35,21 @@ MGConfItem::set (
 /******************************************************************************
  * Ut_ThemeBusinessLogicPrivate implementation. 
  */
+UtThemeBusinessLogicPrivate::UtThemeBusinessLogicPrivate ()
+{
+    reset ();
+}
+
+
+void
+UtThemeBusinessLogicPrivate::reset ()
+{
+    m_ThemeAboutToBeAdded = false;
+    m_ThemeAdded          = false;
+    m_ThemeAboutToBeRemoved = false;
+    m_ThemeRemoved        = false;
+}
+
 void
 UtThemeBusinessLogicPrivate::themeChanged (
         QString themeCodeName)
@@ -49,6 +64,39 @@ UtThemeBusinessLogicPrivate::themeChangeStarted (
     m_ThemeCodeNameUnderProcess = themeCodeName;
 }
 
+void
+UtThemeBusinessLogicPrivate::themeAboutToBeRemoved (
+        int index)
+{
+    SYS_DEBUG ("");
+    m_ThemeAboutToBeRemoved = true;
+}
+ 
+void 
+UtThemeBusinessLogicPrivate::themeRemoved (
+        QList<ThemeDescriptor *> list)
+{
+    SYS_DEBUG ("");
+    Q_ASSERT (m_ThemeAboutToBeRemoved);
+    m_ThemeRemoved = true;
+}
+
+void
+UtThemeBusinessLogicPrivate::themeAboutToBeAdded (
+        int index)
+{
+    SYS_DEBUG ("");
+    m_ThemeAboutToBeAdded = true;
+}
+ 
+void
+UtThemeBusinessLogicPrivate::themeAdded (
+        QList<ThemeDescriptor *> list)
+{
+    SYS_DEBUG ("");
+    Q_ASSERT (m_ThemeAboutToBeAdded);
+    m_ThemeAdded = true;
+}
 
 /******************************************************************************
  * Ut_ThemeBusinessLogic implementation. 
@@ -91,6 +139,25 @@ Ut_ThemeBusinessLogic::initTestCase()
             m_Api, SLOT(changeTheme(QString)));
     QVERIFY (connectSuccess);
 
+    connectSuccess = connect (
+            m_Api, SIGNAL(themeAboutToBeRemoved(int)),
+            m_Priv, SLOT(themeAboutToBeRemoved(int)));
+    QVERIFY (connectSuccess);
+    
+    connectSuccess = connect (
+            m_Api, SIGNAL(themeRemoved(QList<ThemeDescriptor *>)),
+            m_Priv, SLOT(themeRemoved(QList<ThemeDescriptor *>)));
+    QVERIFY (connectSuccess);
+    
+    connectSuccess = connect (
+            m_Api, SIGNAL(themeAboutToBeAdded (int)),
+            m_Priv, SLOT(themeAboutToBeAdded (int)));
+    QVERIFY (connectSuccess);
+    
+    connectSuccess = connect (
+            m_Api, SIGNAL(themeAdded (QList<ThemeDescriptor *>)),
+            m_Priv, SLOT(themeAdded (QList<ThemeDescriptor *>)));
+    QVERIFY (connectSuccess);
 }
 
 void 
@@ -108,22 +175,66 @@ Ut_ThemeBusinessLogic::cleanupTestCase()
 void
 Ut_ThemeBusinessLogic::testAvailableThemes ()
 {
-    QList<ThemeDescriptor *> list = m_Api->availableThemes ();
-    ThemeDescriptor *desc;
+    QList<ThemeDescriptor *>  list = m_Api->availableThemes ();
+    ThemeDescriptor          *desc;
+    QString                   themeCodeName;
 
-    /*
+    SYS_DEBUG ("*** we have %d valid themes.", list.size());
+    for (int n = 0; n < list.size(); ++n) {
+        SYS_DEBUG ("*** %dth list item", n);
+        SYS_DEBUG ("*** name()     = %s", SYS_STR(list[n]->name()));
+        SYS_DEBUG ("*** codeName() = %s", SYS_STR(list[n]->codeName()));
+        SYS_DEBUG ("*** iconName() = %s", SYS_STR(list[n]->iconName()));
+    
+        desc = list[n];
+
+        QVERIFY(desc->isValid());
+        QVERIFY(desc->isVisible());
+        QVERIFY(!desc->name().isEmpty());
+        QVERIFY(!desc->codeName().isEmpty());
+        QVERIFY(!desc->iconName().isEmpty());
+    }
+
+    /**************************************************************************
+     * Checking the items as they are defined in the MDesktopEntry stub.
+     *
      * In the mdesktopentry stub implementation currently there is this much 
      * available valid and visible themes.
      */
-    SYS_DEBUG ("*** we have %d valid themes.", list.size());
     QVERIFY (list.size() == 2);
+    
     desc = list[0];
-
-    QVERIFY(desc->isValid());
-    QVERIFY(desc->isVisible());
     QVERIFY(desc->name() == NAMEDesktopFilePerfect);
     QVERIFY(desc->codeName() == CODENAMEDesktopFilePerfect);
     QVERIFY(desc->iconName() == ICONDesktopFilePerfect);
+
+    // In order to check the current name we have to stub the MTheme class?
+    desc = list[1];
+    QVERIFY(desc->name() == NAMEDesktopFileCurrent);
+    QVERIFY(desc->iconName() == ICONDesktopFileCurrent);
+    
+    /**************************************************************************
+     * Let's simulate a dbus api signal that is used to detect the theme
+     * uninstall.
+     */
+    m_Priv->reset ();
+    themeCodeName = list[1]->codeName();
+    m_Api->themeRemoved (CODENAMEDesktopFilePerfect);
+    list = m_Api->availableThemes ();
+
+    QVERIFY (m_Priv->m_ThemeRemoved);
+    QVERIFY (list.size() == 1);
+    QVERIFY (list[0]->codeName() == themeCodeName);
+
+    /**************************************************************************
+     * Let's simulate a dbus api signal that is used to detect the theme
+     * install.
+     */
+    m_Api->themeAdded (CODENAMEDesktopFilePerfect);
+    list = m_Api->availableThemes ();
+
+    QVERIFY (m_Priv->m_ThemeAdded);
+    QVERIFY (list.size() == 2);
 }
 
 

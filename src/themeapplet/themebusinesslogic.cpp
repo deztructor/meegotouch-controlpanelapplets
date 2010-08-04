@@ -246,7 +246,7 @@ ThemeBusinessLogic::themeAdded (
         SYS_WARNING ("Theme %s is invalid or invisible.", SYS_STR(themeName));
         return;
     }
-    
+
     /*
      * If this theme is on the removed theme list we drop that, it is installed
      * again.
@@ -259,8 +259,10 @@ ThemeBusinessLogic::themeAdded (
      * If we already have this theme we will not add to the list. No matter who
      * says what, there will be no duplications.
      */
-    if (themeByCodename(themeName) != 0)
+    if (themeByCodename(themeName) != 0) {
+        SYS_DEBUG ("");
         return;
+    }
 
     emit themeAboutToBeAdded (m_AvailableThemes.size());
     m_AvailableThemes << descr;
@@ -289,6 +291,8 @@ ThemeBusinessLogic::themeRemoved (
      *
      */
     for (int n = 0; n < m_AvailableThemes.size(); ++n) {
+    SYS_DEBUG ("m_AvailableThemes[n]->codeName() = %s",
+            SYS_STR(m_AvailableThemes[n]->codeName()));
         if (m_AvailableThemes[n]->codeName() == themeName) {
             ThemeDescriptor *desc = m_AvailableThemes[n];
             SYS_DEBUG ("Theme %d is about to be removed.", n);

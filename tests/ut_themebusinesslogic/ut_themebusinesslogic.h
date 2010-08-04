@@ -6,6 +6,9 @@
 
 #include <QtTest/QtTest>
 #include <QObject>
+#include <QList>
+
+#include <themedescriptor.h>
 
 class MApplication;
 class ThemeBusinessLogic;
@@ -14,9 +17,18 @@ class UtThemeBusinessLogicPrivate : public QObject
 {
     Q_OBJECT
 
+public:
+    UtThemeBusinessLogicPrivate ();
+    void reset ();
+
 public slots:
     void themeChanged (QString themeCodeName);
     void themeChangeStarted (QString themeCodeName);
+
+    void themeAboutToBeRemoved (int index);
+    void themeRemoved (QList<ThemeDescriptor *> list);
+    void themeAboutToBeAdded (int index);
+    void themeAdded (QList<ThemeDescriptor *> list);
 
 signals:
     void changeTheme (QString themeCodeName);
@@ -24,6 +36,10 @@ signals:
 public:
     QString m_ThemeCodeNameUnderProcess;
     QString m_ThemeCodeName;
+    bool    m_ThemeAboutToBeAdded;
+    bool    m_ThemeAdded;
+    bool    m_ThemeAboutToBeRemoved;
+    bool    m_ThemeRemoved;
 };
 
 /*
