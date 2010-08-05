@@ -8,6 +8,7 @@
 #include <QObject>
 
 class OfflineApplet;
+class MApplication;
 
 class Ut_OfflineApplet : public QObject 
 {
@@ -27,9 +28,11 @@ private slots:
     void testBriefInit ();
     void testBriefValueText ();
     void testBriefSetToggle ();
+    void testProcessDialogResult ();
 
 private:
     OfflineApplet             *m_Applet;
+    MApplication              *m_App;
 };
 
 #endif

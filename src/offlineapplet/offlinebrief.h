@@ -19,6 +19,7 @@ private:
 
 private slots:
     void devModeChanged(Maemo::QmDeviceMode::DeviceMode mode);
+    void processDialogResult();
 private:
     Maemo::QmDeviceMode::DeviceMode m_LastMode;
     Maemo::QmDeviceMode *m_DevMode;
