@@ -6,7 +6,7 @@
 #include <MImageWidget>
 #include <MLabel>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 PercentageContainer::PercentageContainer(
@@ -17,6 +17,7 @@ PercentageContainer::PercentageContainer(
         m_Image (image),
         m_TextLabel (0)
 {
+    SYS_DEBUG ("*** text = %s", SYS_STR(text));
     m_TextLabel = new MLabel (text);
     m_TextLabel->setObjectName ("batteryLabel");
 
@@ -38,6 +39,7 @@ void PercentageContainer::updateCapacity(
     QString text;
     //% "Battery level \%L1\%"
     text = qtTrId ("qtn_ener_battery_level", value).arg (value);
+    SYS_DEBUG ("*** text = %s", SYS_STR(text));
     m_TextLabel->setText(text);
 }
 
