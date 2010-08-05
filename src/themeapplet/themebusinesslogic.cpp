@@ -29,6 +29,7 @@
 #include <QStringList>
 #include <QDir>
 #include <QFile>
+#include <QTimer>
 
 #define DEBUG
 #define WARNING
@@ -177,8 +178,20 @@ ThemeBusinessLogic::changeTheme (
     SYS_DEBUG ("Activating theme '%s'", SYS_STR(themeCodeName));
     emit themeChangeStarted (themeCodeName);
     
+    m_ChangingTheme = themeCodeName;
+    #ifdef DELAY_THEME_CHANGE
+    QTimer::singleShot(1000, this, SLOT(performThemeChange()));
+    #else
+    performThemeChange ();
+    #endif
+}
+
+void 
+ThemeBusinessLogic::performThemeChange ()
+{
+    SYS_WARNING ("CHANGING THEME");
     MGConfItem  gconfItem (themeGConfKey);
-    gconfItem.set (themeCodeName);
+    gconfItem.set (m_ChangingTheme);
 }
 
 void 
@@ -187,7 +200,13 @@ ThemeBusinessLogic::themeChangeCompleted ()
     QString     themeCodeName = currentThemeCodeName ();
 
     SYS_DEBUG ("Theme changed to %s", SYS_STR(themeCodeName));
+    #ifdef WARNING
+    if (themeCodeName != m_ChangingTheme) {
+        SYS_WARNING ("We wanted %s", SYS_STR(m_ChangingTheme));
+    }
+    #endif
     emit themeChanged (themeCodeName);
+    m_ChangingTheme = "";
 }
 
 ThemeDescriptor *

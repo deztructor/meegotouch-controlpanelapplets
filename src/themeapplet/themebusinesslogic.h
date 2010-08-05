@@ -55,6 +55,9 @@ public slots:
     void themeAdded (QString themeName);
     void themeRemoved (QString themeName);
 
+private slots:
+    void performThemeChange ();
+
 signals:
     void themeChangeStarted (QString themeCodeName);
     void themeChanged (QString themeCodeName);
@@ -66,6 +69,7 @@ signals:
 private:
     QList<ThemeDescriptor *>            m_AvailableThemes;
     QStringList                         m_DisabledThemeNames;
+    QString                             m_ChangingTheme;
 };
 
 #endif
