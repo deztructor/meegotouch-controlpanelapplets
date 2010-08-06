@@ -4,6 +4,9 @@
 #include "ut_offlineapplet.h"
 #include <DcpWidgetTypes>
 #include <DcpWidget>
+#include <MMessageBox>
+#include <MDialog>
+#include <MApplication>
 
 #include "offlineapplet.h"
 #include "offlinebrief.h"
@@ -14,6 +17,32 @@
 #include "../../src/debug.h"
 
 static const char *signalValuesChanged = SIGNAL(valuesChanged());
+
+int   argc = 1;
+char *argv[] = {
+    (char *) "./ut_volumeoverlay",
+    NULL };
+/******************************************************************************
+ * Stub for QMessageBox
+ */
+
+MMessageBox::MMessageBox(const QString &title,
+                const QString          &text,
+                M::StandardButtons      buttons)
+{
+    QTest::qWarn("MMessageBox::MMessageBox");
+}
+
+int MDialog::result () const
+{
+    QTest::qWarn("MDialog::result");
+    return MDialog::Accepted;
+}
+
+void MDialog::appear (MSceneWindow::DeletionPolicy policy)
+{
+    QTest::qWarn("MDialog::appear");
+}
 
 /******************************************************************************
  * Ut_offlineApplet implementation. 
@@ -31,6 +60,9 @@ Ut_OfflineApplet::cleanup()
 void 
 Ut_OfflineApplet::initTestCase()
 {
+    m_App = new MApplication(argc, argv);
+    m_App->setQuitOnLastWindowClosed (false);
+
     m_Applet = new OfflineApplet;
     
     m_Applet->init ();
@@ -146,6 +178,7 @@ Ut_OfflineApplet::testBriefValueText ()
     QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
     delete brief;
 }
+
 void 
 Ut_OfflineApplet::testBriefSetToggle ()
 {
@@ -166,17 +199,42 @@ Ut_OfflineApplet::testBriefSetToggle ()
     brief->setToggle(true);
     QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
     QCOMPARE (gQmDeviceModeStub->stubCallCount("setMode"), 1);
-    QCOMPARE (gQmDeviceModeStub->stubLastParameters<Maemo::QmDeviceMode::DeviceMode> (0), Maemo::QmDeviceMode::Flight); 
+    QCOMPARE (gQmDeviceModeStub->stubLastParameters<Maemo::QmDeviceMode::DeviceMode> (0), Maemo::QmDeviceMode::Flight);
 
     m_sChecker.increaseSigCounter(signalValuesChanged);
     brief->devModeChanged(Maemo::QmDeviceMode::Flight);
     QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
     m_sChecker.check();
 
-    // This should not change the text
+    // This should not change the text nor the QmDeviceMode
     brief->setToggle(true);
     QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
-    QCOMPARE (gQmDeviceModeStub->stubCallCount("setMode"), 2);
+    QCOMPARE (gQmDeviceModeStub->stubCallCount("setMode"), 1);
+    QCOMPARE (gQmDeviceModeStub->stubLastParameters<Maemo::QmDeviceMode::DeviceMode> (0), Maemo::QmDeviceMode::Flight);
+
+    delete brief;
+}
+
+void
+Ut_OfflineApplet::testProcessDialogResult()
+{
+    OfflineBrief *brief;
+
+    gQmDeviceModeStub->stubReset ();
+    gQmDeviceModeStub->stubSetReturnValue<Maemo::QmDeviceMode::DeviceMode> (
+        "getMode", Maemo::QmDeviceMode::Flight);
+
+    brief = new OfflineBrief();
+    QVERIFY (brief);
+    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
+
+    SignalChecker m_sChecker(brief);
+    m_sChecker.addSignalChecker(signalValuesChanged);
+
+    brief->setToggle(true);
+
+    brief->processDialogResult();
+    QCOMPARE (gQmDeviceModeStub->stubCallCount("setMode"), 1);
     QCOMPARE (gQmDeviceModeStub->stubLastParameters<Maemo::QmDeviceMode::DeviceMode> (0), Maemo::QmDeviceMode::Normal);
 
     delete brief;

@@ -1,6 +1,9 @@
 #include <DcpWidgetTypes>
 #include <qmdevicemode.h>
 #include "offlinebrief.h"
+#include <MBanner>
+#include <MMessageBox>
+#include <MLabel>
 
 #undef DEBUG
 #include "../debug.h"
@@ -51,18 +54,33 @@ QString OfflineBrief::currentText() const
 void OfflineBrief::setToggle (bool toggle)
 {
     Q_UNUSED(toggle);
-    Maemo::QmDeviceMode::DeviceMode newDevMode;
 
     SYS_DEBUG("");
     if (m_LastMode == QmDeviceMode::Flight)
     {
-        newDevMode = QmDeviceMode::Normal;
+        //% "Exit offline mode?"
+        MMessageBox* dialog = new MMessageBox("", qtTrId("qtn_offl_exiting"),
+            M::YesButton | M::NoButton);
+        connect(dialog, SIGNAL(disappeared()), this, SLOT(processDialogResult()));
+        dialog->appear();
     }
     else
     {
-        newDevMode = QmDeviceMode::Flight;
+        MBanner *infoBanner = new MBanner();
+        //% "Closing all connections. Switching to offline mode."
+        infoBanner->setSubtitle(qtTrId("qtn_offl_entering"));
+        infoBanner->appear(MSceneWindow::DestroyWhenDone);
+        m_DevMode->setMode(QmDeviceMode::Flight);
     }
-    m_DevMode->setMode(newDevMode);
+}
+
+void OfflineBrief::processDialogResult()
+{
+    MMessageBox *dialog = static_cast<MMessageBox*>(sender());
+    if(dialog->result() == MDialog::Accepted)
+    {
+        m_DevMode->setMode(QmDeviceMode::Normal);
+    }
 }
 
 int OfflineBrief::widgetTypeID() const
