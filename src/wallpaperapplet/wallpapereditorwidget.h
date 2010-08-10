@@ -55,6 +55,7 @@ protected:
 
 private slots:
     void redrawImage ();
+    void queueRedrawImage ();
     void orientationChanged (M::Orientation orientation);
     void slotDoneActivated ();
     void createContent ();
@@ -80,6 +81,7 @@ private:
 
     QPointF               m_LastClick;
     QPointF               m_UserOffset;
+    QPointF               m_ImageFixpoint;
 
     WallpaperITrans       m_Trans;
     WallpaperITrans       m_LandscapeTrans;
@@ -87,6 +89,7 @@ private:
     
     qreal                 m_OriginalScaleFactor;
     bool                  m_Gesture;
+    bool                  m_HasPendingRedraw;
     #ifdef UNIT_TEST
     friend class Ut_WallpaperEditorWidget;
     #endif

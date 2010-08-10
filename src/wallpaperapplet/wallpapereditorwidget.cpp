@@ -46,7 +46,8 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_InfoHeader (0),
     m_DoneAction (0),
     m_NoTitlebar (false),
-    m_Gesture (false)
+    m_Gesture (false),
+    m_HasPendingRedraw (false)
 {
     MWindow *win = MApplication::activeWindow ();
 
@@ -478,12 +479,26 @@ WallpaperEditorWidget::imageDY () const
 }
 
 void 
+WallpaperEditorWidget::queueRedrawImage ()
+{
+    if (m_HasPendingRedraw) {
+        //SYS_DEBUG ("Dropping...");
+        return;
+    }
+
+    m_HasPendingRedraw = true;
+    QTimer::singleShot(50, this, SLOT(redrawImage ()));
+}
+
+void 
 WallpaperEditorWidget::redrawImage ()
 {
     /*
      * We need to update the current page and not just this widget because of
      * those damn extra margins coming from somewhere.
      */
+    //SYS_DEBUG ("Drawing...");
+    m_HasPendingRedraw = false;
     if (MApplication::activeApplicationWindow())
         MApplication::activeApplicationWindow()->currentPage()->update();
 }
@@ -525,7 +540,7 @@ WallpaperEditorWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
 {
     m_Trans.modScale (event->delta());
-    redrawImage ();
+    queueRedrawImage ();
 }
 
 void 
@@ -536,7 +551,7 @@ WallpaperEditorWidget::mouseMoveEvent (
         return;
 
     m_UserOffset = event->pos() - m_LastClick;
-    redrawImage ();
+    queueRedrawImage ();
 }
 
 void
@@ -560,8 +575,6 @@ WallpaperEditorWidget::mouseReleaseEvent (
     m_Trans += m_UserOffset;
     m_UserOffset = QPointF();
     toggleTitlebars (true);
-   
-    //redrawImage ();
 }
 
 /*******************************************************************************
@@ -582,30 +595,66 @@ WallpaperEditorWidget::pinchGestureEvent (
             QGestureEvent *event, 
             QPinchGesture *gesture)
 {
+    bool redrawNeeded = false;
+
     Q_UNUSED (event);
     
     if (gesture->state() == Qt::GestureStarted) {
+        qreal x, y;
+
         SYS_DEBUG ("Gesture started");
+        if (m_Gesture) {
+            SYS_WARNING ("But gesture is not finished yet!");
+            return;
+        }
+
         m_OriginalScaleFactor = m_Trans.scale();
         m_LastClick = gesture->centerPoint ();
         m_Gesture = true;
+        
+        
         if (!m_NoTitlebar) {
             m_LastClick += toggleTitlebars (true);
         }
+        
+        x = (gesture->centerPoint().x() - m_Trans.x()) / m_Trans.scale();
+        y = (gesture->centerPoint().y() - m_Trans.y()) / m_Trans.scale();
+
+        m_ImageFixpoint = QPointF (x, y);
     } else if (gesture->state() == Qt::GestureFinished) {
         SYS_DEBUG ("Gesture finished");
-        //m_Trans += m_UserOffset;
-        //m_UserOffset = QPointF();
-        //m_NoTitlebar = false;
         m_Gesture = false;
     } else {
+        qreal x, y;
         //SYS_DEBUG ("Gesture update");
         m_Trans.setScale (gesture->scaleFactor() * m_OriginalScaleFactor);
-        m_UserOffset = gesture->centerPoint() - m_LastClick;
+        //m_UserOffset = gesture->centerPoint() - m_LastClick;
+
+        x = gesture->centerPoint().x() - m_ImageFixpoint.x() * m_Trans.scale() - m_Trans.x();
+        y = gesture->centerPoint().y() - m_ImageFixpoint.y() * m_Trans.scale() - m_Trans.y();
+        m_UserOffset = QPointF (x, y);
+        redrawNeeded = true;
     }
 
     event->accept(gesture);
-    redrawImage ();
+
+    if (redrawNeeded)
+        redrawImage ();
+
+    #if 0
+    SYS_DEBUG ("-------------------------------------------------------");
+    SYS_DEBUG ("*** m_ImageFixpoint = %g, %g",
+            m_ImageFixpoint.x(),
+            m_ImageFixpoint.y());
+    SYS_DEBUG ("*** scaleFactor      = %g", gesture->scaleFactor());
+    SYS_DEBUG ("*** totalScaleFactor = %g", gesture->totalScaleFactor());
+    SYS_DEBUG ("*** startCenterPoint = %g, %g",
+            gesture->startCenterPoint().x(),
+            gesture->startCenterPoint().y());
+    SYS_DEBUG ("*** centerPoint      = %g, %g",
+            gesture->centerPoint().x(),
+            gesture->centerPoint().y());
+    #endif
 }
 
 

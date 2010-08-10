@@ -6,7 +6,7 @@
 
 #include <QTimer>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 static const int loadPicturesDelay = 200;
@@ -40,14 +40,19 @@ WallpaperList::setDataSourceType (
 
     Q_ASSERT (m_DataSourceType == DataSourceUnknown);
     
+    SYS_DEBUG ("*** a");
     m_Model = new WallpaperModel (m_BusinessLogic);
     setItemModel (m_Model);
 
+    SYS_DEBUG ("*** b");
     cellCreator = new WallpaperCellCreator;
     setCellCreator (cellCreator);
 
+    SYS_DEBUG ("*** c");
     QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
+    SYS_DEBUG ("*** d");
     m_DataSourceType = sourceType;
+    SYS_DEBUG ("*** e");
 }
 
 
