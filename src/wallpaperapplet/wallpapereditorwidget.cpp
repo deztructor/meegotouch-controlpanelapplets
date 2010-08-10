@@ -46,7 +46,8 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_InfoHeader (0),
     m_DoneAction (0),
     m_NoTitlebar (false),
-    m_Gesture (false),
+    m_PinchOngoing (false),
+    m_MotionOngoing (false),
     m_HasPendingRedraw (false)
 {
     MWindow *win = MApplication::activeWindow ();
@@ -83,7 +84,7 @@ WallpaperEditorWidget::paint (
   
     #if 0
     SYS_DEBUG ("-------------------------------------");
-    SYS_DEBUG ("*** offset   = %d, %d", imageDX(), imageDY());
+    SYS_DEBUG ("*** offset   = %d, %d", imageX(), imageY());
     SYS_DEBUG ("*** expected = %d, %d", 
             m_Trans.expectedWidth (),
             m_Trans.expectedHeight ());
@@ -101,19 +102,18 @@ WallpaperEditorWidget::paint (
 
     if (portrait) {
         painter->drawPixmap (
+                imageX(), imageY(),
+                //m_Trans * m_bgPortrait.width (), m_Trans * m_bgPortrait.height (),
                 imageDX(), imageDY(),
-                m_Trans * m_bgPortrait.width (),
-                m_Trans * m_bgPortrait.height (),
                 m_bgPortrait);
     } else if (!portrait) {
         painter->drawPixmap (
+                imageX(), imageY(),
+                //m_Trans * m_bgLandscape.width (), m_Trans * m_bgLandscape.height (),
                 imageDX(), imageDY(),
-                m_Trans * m_bgLandscape.width (),
-                m_Trans * m_bgLandscape.height (),
                 m_bgLandscape);
     }
 
-    //DcpWidget::paint (painter, option, widget);
     MWidget::paint (painter, option, widget);
 }
 
@@ -447,7 +447,7 @@ finalize:
  * Returns the X offset where the image should be painted inside the widget. 
  */
 int
-WallpaperEditorWidget::imageDX () const
+WallpaperEditorWidget::imageX () const
 {
     int retval = 0;
 
@@ -459,11 +459,29 @@ WallpaperEditorWidget::imageDX () const
     return retval;
 }
 
+int
+WallpaperEditorWidget::imageDX () const
+{
+    bool portrait = (geometry().height() > geometry().width());
+
+    return portrait ? 
+        m_Trans * m_bgPortrait.width() : m_Trans * m_bgLandscape.width();
+}
+
+int
+WallpaperEditorWidget::imageDY () const
+{
+    bool portrait = (geometry().height() > geometry().width());
+
+    return portrait ? 
+        m_Trans * m_bgPortrait.height() : m_Trans * m_bgLandscape.height();
+}
+
 /*!
  * Returns the Y offset where the image should be painted inside the widget. 
  */
 int
-WallpaperEditorWidget::imageDY () const
+WallpaperEditorWidget::imageY () const
 {
     int                 retval = 0;
 
@@ -547,8 +565,29 @@ void
 WallpaperEditorWidget::mouseMoveEvent (
         QGraphicsSceneMouseEvent *event)
 {
-    if (m_Gesture)
+    if (m_PinchOngoing)
         return;
+
+    /*
+     * If the tap happened outside the image we might still start moving the
+     * image when the motion enters the image.
+     */
+    if (!m_MotionOngoing) {
+        QPointF  position;
+
+        position = event->pos();
+        if (position.x() < imageX() ||
+            position.y() < imageY() ||
+            position.x() > imageX() + imageDX() ||
+            position.y() > imageY() + imageDY())
+            return;
+
+        m_MotionOngoing = true;
+        toggleTitlebars (false);
+        m_LastClick = event->pos();
+        m_LastClick += toggleTitlebars (false);
+        return;
+    }
 
     m_UserOffset = event->pos() - m_LastClick;
     queueRedrawImage ();
@@ -558,9 +597,30 @@ void
 WallpaperEditorWidget::mousePressEvent (
         QGraphicsSceneMouseEvent *event)
 {
-    if (m_Gesture)
+    QPointF  position;
+
+    /*
+     * If an ongoing pich gesture is processed we have nothing
+     * to do here.
+     */
+    if (m_PinchOngoing)
         return;
 
+    /*
+     * If the user tapped outside the image we reject moving the image. This way
+     * the image can not be moved outside the visible area and the user feels
+     * that the image can be grabbed but not the black background.
+     */
+    position = event->pos();
+    if (position.x() < imageX() ||
+            position.y() < imageY() ||
+            position.x() > imageX() + imageDX() ||
+            position.y() > imageY() + imageDY()) {
+        SYS_DEBUG ("Rejected...");
+        return;
+    }
+
+    m_MotionOngoing = true;
     toggleTitlebars (false);
     m_LastClick = event->pos();
     m_LastClick += toggleTitlebars (false);
@@ -571,7 +631,13 @@ WallpaperEditorWidget::mouseReleaseEvent (
         QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED (event);
-    
+
+    SYS_DEBUG ("");
+    if (!m_MotionOngoing)
+        return;
+
+    SYS_DEBUG ("Finalizing something...");
+    m_MotionOngoing = false;    
     m_Trans += m_UserOffset;
     m_UserOffset = QPointF();
     toggleTitlebars (true);
@@ -580,14 +646,77 @@ WallpaperEditorWidget::mouseReleaseEvent (
 /*******************************************************************************
  * Stuff for the two finger gestures.
  */
-bool
-WallpaperEditorWidget::event(QEvent *e)
+void 
+WallpaperEditorWidget::pinchGestureStarted (
+            QGestureEvent *event, 
+            QPinchGesture *gesture)
 {
-    if (e->type() == QEvent::TouchBegin) {
-        e->setAccepted(true);
-        return true;
+    Q_UNUSED (event);
+    
+    SYS_DEBUG ("Gesture started");
+    if (m_PinchOngoing) {
+        SYS_WARNING ("But gesture is not finished yet!");
+        return;
     }
-    return DcpWidget::event(e);
+
+    m_OriginalScaleFactor = m_Trans.scale();
+    m_LastClick = gesture->centerPoint ();
+    m_PinchOngoing = true;
+   
+   
+    if (!m_NoTitlebar) {
+        m_LastClick += toggleTitlebars (true);
+    }
+   
+    m_ImageFixpoint = QPointF (
+            (gesture->centerPoint().x() - m_Trans.x()) / m_Trans.scale(),
+            (gesture->centerPoint().y() - m_Trans.y()) / m_Trans.scale());
+
+    event->accept(gesture);
+}
+
+void 
+WallpaperEditorWidget::pinchGestureUpdate (
+            QGestureEvent *event, 
+            QPinchGesture *gesture)
+{
+    Q_UNUSED (event);
+    
+    if (!m_PinchOngoing)
+        return;
+
+    //SYS_DEBUG ("Gesture update");
+    m_Trans.setScale (gesture->scaleFactor() * m_OriginalScaleFactor);
+
+    m_UserOffset = QPointF (
+            gesture->centerPoint().x() - m_ImageFixpoint.x() * m_Trans.scale() - m_Trans.x(),
+            gesture->centerPoint().y() - m_ImageFixpoint.y() * m_Trans.scale() - m_Trans.y());
+        
+    event->accept(gesture);
+
+    /*
+     * No frame drop here: the pinch gesture is much better this way...
+     */
+    redrawImage ();
+}
+
+void 
+WallpaperEditorWidget::pinchGestureEnded (
+            QGestureEvent *event, 
+            QPinchGesture *gesture)
+{
+    Q_UNUSED (event);
+    SYS_DEBUG ("Gesture finished");
+
+    if (!m_PinchOngoing)
+        return;
+
+    m_PinchOngoing = false;
+    m_Trans += m_UserOffset;
+    m_UserOffset = QPointF();
+    toggleTitlebars (true);
+
+    event->accept(gesture);
 }
 
 void 
@@ -600,61 +729,12 @@ WallpaperEditorWidget::pinchGestureEvent (
     Q_UNUSED (event);
     
     if (gesture->state() == Qt::GestureStarted) {
-        qreal x, y;
-
-        SYS_DEBUG ("Gesture started");
-        if (m_Gesture) {
-            SYS_WARNING ("But gesture is not finished yet!");
-            return;
-        }
-
-        m_OriginalScaleFactor = m_Trans.scale();
-        m_LastClick = gesture->centerPoint ();
-        m_Gesture = true;
-        
-        
-        if (!m_NoTitlebar) {
-            m_LastClick += toggleTitlebars (true);
-        }
-        
-        x = (gesture->centerPoint().x() - m_Trans.x()) / m_Trans.scale();
-        y = (gesture->centerPoint().y() - m_Trans.y()) / m_Trans.scale();
-
-        m_ImageFixpoint = QPointF (x, y);
+        pinchGestureStarted (event, gesture);
     } else if (gesture->state() == Qt::GestureFinished) {
-        SYS_DEBUG ("Gesture finished");
-        m_Gesture = false;
+        pinchGestureEnded (event, gesture);
     } else {
-        qreal x, y;
-        //SYS_DEBUG ("Gesture update");
-        m_Trans.setScale (gesture->scaleFactor() * m_OriginalScaleFactor);
-        //m_UserOffset = gesture->centerPoint() - m_LastClick;
-
-        x = gesture->centerPoint().x() - m_ImageFixpoint.x() * m_Trans.scale() - m_Trans.x();
-        y = gesture->centerPoint().y() - m_ImageFixpoint.y() * m_Trans.scale() - m_Trans.y();
-        m_UserOffset = QPointF (x, y);
-        redrawNeeded = true;
+        pinchGestureUpdate (event, gesture);
     }
-
-    event->accept(gesture);
-
-    if (redrawNeeded)
-        redrawImage ();
-
-    #if 0
-    SYS_DEBUG ("-------------------------------------------------------");
-    SYS_DEBUG ("*** m_ImageFixpoint = %g, %g",
-            m_ImageFixpoint.x(),
-            m_ImageFixpoint.y());
-    SYS_DEBUG ("*** scaleFactor      = %g", gesture->scaleFactor());
-    SYS_DEBUG ("*** totalScaleFactor = %g", gesture->totalScaleFactor());
-    SYS_DEBUG ("*** startCenterPoint = %g, %g",
-            gesture->startCenterPoint().x(),
-            gesture->startCenterPoint().y());
-    SYS_DEBUG ("*** centerPoint      = %g, %g",
-            gesture->centerPoint().x(),
-            gesture->centerPoint().y());
-    #endif
 }
 
 

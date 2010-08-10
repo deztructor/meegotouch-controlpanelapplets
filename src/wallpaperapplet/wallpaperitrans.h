@@ -25,7 +25,7 @@ public:
     WallpaperITrans (const WallpaperITrans &orig);
 
     WallpaperITrans &operator= (const WallpaperITrans &rhs);
-    int operator* (const int i);
+    int operator* (const int i) const;
     WallpaperITrans &operator+= (const QPointF &rsh);
 
     int x () const;

@@ -17,7 +17,7 @@ class MAction;
 class QSize;
 class QPixmap;
 class QPointF;
-class QGestuteEvent;
+class QGestureEvent;
 class WallpaperInfoHeader;
 
 /*!
@@ -48,8 +48,19 @@ protected:
     virtual void mouseMoveEvent (QGraphicsSceneMouseEvent *event);
     virtual void wheelEvent (QGraphicsSceneWheelEvent *event);
 
-    bool event (QEvent *e);
     virtual void pinchGestureEvent (
+            QGestureEvent *event, 
+            QPinchGesture *gesture);
+
+    virtual void pinchGestureStarted (
+            QGestureEvent *event, 
+            QPinchGesture *gesture);
+
+    virtual void pinchGestureUpdate (
+            QGestureEvent *event, 
+            QPinchGesture *gesture);
+    
+    virtual void pinchGestureEnded (
             QGestureEvent *event, 
             QPinchGesture *gesture);
 
@@ -65,6 +76,8 @@ private:
     void createActions ();
     
     QPointF toggleTitlebars (bool show);
+    int  imageX () const;
+    int  imageY () const;
     int  imageDX () const;
     int  imageDY () const;
 
@@ -88,7 +101,8 @@ private:
     WallpaperITrans       m_PortraitTrans;
     
     qreal                 m_OriginalScaleFactor;
-    bool                  m_Gesture;
+    bool                  m_PinchOngoing;
+    bool                  m_MotionOngoing;
     bool                  m_HasPendingRedraw;
     #ifdef UNIT_TEST
     friend class Ut_WallpaperEditorWidget;

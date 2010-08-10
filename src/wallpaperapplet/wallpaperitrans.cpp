@@ -43,7 +43,7 @@ WallpaperITrans::operator= (
 
 int 
 WallpaperITrans::operator* (
-        const int i)
+        const int i) const
 {
     //SYS_DEBUG ("m_Scale = %f", m_Scale);
     return m_Scale * i;

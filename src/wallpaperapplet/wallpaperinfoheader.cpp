@@ -28,7 +28,7 @@ WallpaperInfoHeader::WallpaperInfoHeader (
     m_Label = new MLabel;
     m_Label->setObjectName ("WallpaperInfoHeaderLabel");
 
-    m_Icon = new MImageWidget ("icon-m-common-volume");
+    m_Icon = new MImageWidget ("missing-icon-from-ui-spec");
     m_Icon->setObjectName ("WallpaperInfoHeaderIcon");
 
     HBox = new QGraphicsLinearLayout (Qt::Horizontal);
