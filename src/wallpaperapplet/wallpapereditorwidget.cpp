@@ -593,9 +593,7 @@ WallpaperEditorWidget::mouseMoveEvent (
         }
 
         m_MotionOngoing = true;
-        toggleTitlebars (false);
         m_LastClick = event->pos();
-        m_LastClick += toggleTitlebars (false);
         return;
     }
 
