@@ -84,18 +84,6 @@ WallpaperEditorWidget::paint (
 {
     bool portrait = (geometry().height() > geometry().width());
   
-    #if 0
-    SYS_DEBUG ("-------------------------------------");
-    SYS_DEBUG ("*** offset   = %d, %d", imageX(), imageY());
-    SYS_DEBUG ("*** expected = %d, %d", 
-            m_Trans.expectedWidth (),
-            m_Trans.expectedHeight ());
-    SYS_DEBUG ("*** scale    = %g", m_Trans.scale());
-    SYS_DEBUG ("*** bgsize   = %dx%d", 
-            m_Trans.expectedWidth (), 
-            m_Trans.expectedHeight ());
-    #endif
-
     painter->fillRect (
             -ExtraMargin, -ExtraMargin, 
             m_Trans.expectedWidth (),
@@ -105,13 +93,11 @@ WallpaperEditorWidget::paint (
     if (portrait) {
         painter->drawPixmap (
                 imageX(), imageY(),
-                //m_Trans * m_bgPortrait.width (), m_Trans * m_bgPortrait.height (),
                 imageDX(), imageDY(),
                 m_bgPortrait);
     } else if (!portrait) {
         painter->drawPixmap (
                 imageX(), imageY(),
-                //m_Trans * m_bgLandscape.width (), m_Trans * m_bgLandscape.height (),
                 imageDX(), imageDY(),
                 m_bgLandscape);
     }
@@ -397,21 +383,21 @@ WallpaperEditorWidget::toggleTitlebars (
         bool       show)
 {
     MApplicationPage  *currentPage;
+    SYS_DEBUG ("--- start ------------------");
+    #if 1
     /*
-     * This shows 9, 69 and 9, 9 now, but the correct values are 10, 70 and 10,
-     * 10 I believe. FIXME: Sooner or later we have to deal with this. 
+     * This mapToScene() is sensitive to the screen rotation.
      */
     QPointF r;
     r = mapToScene (0, 0);
-    SYS_DEBUG ("r = %g, %g", r.x(), r.y());
-
+    SYS_WARNING ("r = %g, %g", r.x(), r.y());
+    #endif
     /*
      * If the requested state is the current state we don't need to hide/show
      * anything, we just return the correction value.
      */
     if (show == !m_NoTitlebar)
         goto finalize;
-    m_NoTitlebar = !show;
     
     /*
      * We do the showing/hiding here.
@@ -423,11 +409,13 @@ WallpaperEditorWidget::toggleTitlebars (
 
     if (currentPage) {
         if (show) {
+            SYS_DEBUG ("Showing titlebar");
             currentPage->setComponentsDisplayMode (
                     MApplicationPage::AllComponents,
                     MApplicationPageModel::Show); 
             m_InfoHeader->show ();
         } else {
+            SYS_DEBUG ("Hiding titlebar");
             currentPage->setComponentsDisplayMode (
                     MApplicationPage::AllComponents, 
                     MApplicationPageModel::Hide);
@@ -435,7 +423,10 @@ WallpaperEditorWidget::toggleTitlebars (
         }
     }
 
+    m_NoTitlebar = !show;
+
 finalize:
+    SYS_DEBUG ("--- end --------------------");
     /*
      * To return the correction value.
      */
@@ -454,12 +445,34 @@ WallpaperEditorWidget::imageX () const
     int retval = 0;
 
     retval -= ExtraMargin;
-
     retval += m_UserOffset.x();
     retval += m_Trans.x();
 
     return retval;
 }
+
+/*!
+ * Returns the Y offset where the image should be painted inside the widget. 
+ */
+int
+WallpaperEditorWidget::imageY () const
+{
+    int            retval = 0;
+    bool           portrait = (geometry().height() > geometry().width());
+    QPointF        r;
+    r = mapToScene (0, 0);
+
+    if (portrait)
+        retval -= r.x();
+    else
+        retval -= r.y(); 
+
+    retval += m_UserOffset.y();
+    retval += m_Trans.y();
+
+    return retval;
+}
+
 
 int
 WallpaperEditorWidget::imageDX () const
@@ -477,25 +490,6 @@ WallpaperEditorWidget::imageDY () const
 
     return portrait ? 
         m_Trans * m_bgPortrait.height() : m_Trans * m_bgLandscape.height();
-}
-
-/*!
- * Returns the Y offset where the image should be painted inside the widget. 
- */
-int
-WallpaperEditorWidget::imageY () const
-{
-    int                 retval = 0;
-
-    retval -= ExtraMargin;
-
-    if (!m_NoTitlebar)
-        retval -= TitleBarHeight;
-
-    retval += m_UserOffset.y();
-    retval += m_Trans.y();
-
-    return retval;
 }
 
 void 
@@ -570,6 +564,12 @@ WallpaperEditorWidget::mouseMoveEvent (
     if (m_PinchOngoing)
         return;
 
+    #if 0 
+    QPointF testPos = event->pos();
+    QPointF mapp = mapToScene (testPos);
+    SYS_DEBUG ("*** pos    = %g, %g", testPos.x(), testPos.y());
+    SYS_DEBUG ("*** mapped = %g, %g", mapp.x(), mapp.y());
+    #endif
     /*
      * If the tap happened outside the image we might still start moving the
      * image when the motion enters the image.
@@ -637,7 +637,6 @@ WallpaperEditorWidget::mousePressEvent (
     }
 
     m_MotionOngoing = true;
-    //toggleTitlebars (false);
     m_LastClick = event->pos();
     m_LastClick += toggleTitlebars (false);
 }
