@@ -31,6 +31,8 @@
 #include "mwidgetcreator.h"
 M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
+static const qreal ScaleLowerLimit = 0.15;
+
 #define DEBUG
 #define WARNING
 #include "../debug.h"
@@ -579,8 +581,16 @@ WallpaperEditorWidget::mouseMoveEvent (
         if (position.x() < imageX() ||
             position.y() < imageY() ||
             position.x() > imageX() + imageDX() ||
-            position.y() > imageY() + imageDY())
+            position.y() > imageY() + imageDY()) {
+            
+            SYS_DEBUG ("Rejected... %g, %g not in %d, %d - %d, %d",
+                position.x(), position.y(),
+                imageX(), imageY(), 
+                imageX() + imageDX(), 
+                imageY() + imageDY());
+
             return;
+        }
 
         m_MotionOngoing = true;
         toggleTitlebars (false);
@@ -599,6 +609,7 @@ WallpaperEditorWidget::mousePressEvent (
 {
     QPointF  position;
 
+    SYS_DEBUG ("Tapped");
     /*
      * If an ongoing pich gesture is processed we have nothing
      * to do here.
@@ -606,6 +617,7 @@ WallpaperEditorWidget::mousePressEvent (
     if (m_PinchOngoing)
         return;
 
+    toggleTitlebars (false);
     /*
      * If the user tapped outside the image we reject moving the image. This way
      * the image can not be moved outside the visible area and the user feels
@@ -616,12 +628,16 @@ WallpaperEditorWidget::mousePressEvent (
             position.y() < imageY() ||
             position.x() > imageX() + imageDX() ||
             position.y() > imageY() + imageDY()) {
-        SYS_DEBUG ("Rejected...");
+        SYS_DEBUG ("Rejected... %g, %g not in %d, %d - %d, %d",
+                position.x(), position.y(),
+                imageX(), imageY(), 
+                imageX() + imageDX(), 
+                imageY() + imageDY());
         return;
     }
 
     m_MotionOngoing = true;
-    toggleTitlebars (false);
+    //toggleTitlebars (false);
     m_LastClick = event->pos();
     m_LastClick += toggleTitlebars (false);
 }
@@ -633,8 +649,10 @@ WallpaperEditorWidget::mouseReleaseEvent (
     Q_UNUSED (event);
 
     SYS_DEBUG ("");
-    if (!m_MotionOngoing)
+    if (!m_MotionOngoing) {
+        toggleTitlebars (true);
         return;
+    }
 
     SYS_DEBUG ("Finalizing something...");
     m_MotionOngoing = false;    
@@ -669,7 +687,11 @@ WallpaperEditorWidget::pinchGestureStarted (
             centerPoint.y() < imageY() ||
             centerPoint.x() > imageX() + imageDX() ||
             centerPoint.y() > imageY() + imageDY()) {
-        SYS_DEBUG ("Rejected...");
+        SYS_DEBUG ("Rejected... %g, %g not in %d, %d - %d, %d",
+                centerPoint.x(), centerPoint.y(),
+                imageX(), imageY(), 
+                imageX() + imageDX(), 
+                imageY() + imageDY());
         return;
     }
 
@@ -693,13 +715,18 @@ WallpaperEditorWidget::pinchGestureUpdate (
             QGestureEvent *event, 
             QPinchGesture *gesture)
 {
+    qreal newScale;
+
     Q_UNUSED (event);
     
     if (!m_PinchOngoing)
         return;
 
     //SYS_DEBUG ("Gesture update");
-    m_Trans.setScale (gesture->scaleFactor() * m_OriginalScaleFactor);
+    newScale = gesture->scaleFactor() * m_OriginalScaleFactor;
+    if (newScale < ScaleLowerLimit)
+        newScale = ScaleLowerLimit;
+    m_Trans.setScale (newScale);
 
     m_UserOffset = QPointF (
             gesture->centerPoint().x() - m_ImageFixpoint.x() * m_Trans.scale() - m_Trans.x(),

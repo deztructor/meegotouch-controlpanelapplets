@@ -21,9 +21,31 @@ class QGestureEvent;
 class WallpaperInfoHeader;
 
 /*!
- * -output-level debug
- * -show-object-names
- * -emulate-two-finger-gestures
+ * Problem: During the one finger move the image lags behind the finger.
+ * Solution: Implemented framedropping, the movement is faster now.
+ *
+ * Problem: While resizing the image with the pinch gesture the image moves.
+ * Solution: The image is moved during the gesture so the point that was under
+ *   the midpoint remains under the midpoint even when the midpoint is moved
+ *   (moving while resizing).
+ *
+ * Problem: User can use one finger to move the image outside of the screen.
+ * Solution: The one finger moving of the image can be performed only when
+ *   started from inside the image. This way the image is always under the
+ *   finger, so it can not be moved outside the screen.
+ * 
+ * Problem: Two finger resizing can move the image outside the screen.
+ * Solution: The pinch gesture is accepted only if originated with the midpoint
+ *   inside the image. 
+ *
+ * Problem: The image can be resized so small, it is not possible to magnify it.
+ * Solution: We can not let the user resize the image without the midsection
+ *   being outside the image, so we imeplement a lower limit for the scale
+ *   factor.
+ * 
+ * Problem: Image can moved under the titlebar impossible to pick it up.
+ * Solution: (1) tap on the black area (2) move your finger onto the image to
+ *   pick it up.
  */
 class WallpaperEditorWidget : public DcpWidget
 {
