@@ -45,6 +45,7 @@
 #include <QProcessEnvironment>
 #include <QPainter>
 #include <QDBusConnection>
+#include <QDBusError>
 #include <MTheme>
 #include <MGConfItem>
 
@@ -120,9 +121,14 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
      */
     QDBusConnection bus = QDBusConnection::sessionBus ();
     
-    bus.connect("", "", 
+    success = bus.connect("", "", 
             WALLPAPER_DBUS_INTERFACE, WALLPAPER_DBUS_EDIT_SIGNAL, 
             this, SLOT(editRequestArrived(QString, QString)));
+    if (!success) {
+        QDBusError lastError = bus.lastError();
+        SYS_WARNING ("Connecting to DBus failed: %s", 
+                SYS_STR(lastError.message()));
+    }
 }
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic()

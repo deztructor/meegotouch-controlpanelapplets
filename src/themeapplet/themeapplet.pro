@@ -12,6 +12,8 @@ CONFIG += plugin \
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
 
+QT += dbus
+
 load(meegotouch_defines)
 DEFINES += \
     MEEGO_THEMEDIR=\\\"\"$$M_THEME_DIR\"\\\"

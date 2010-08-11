@@ -4,6 +4,8 @@ TEMPLATE = lib
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
 
+QT += dbus
+
 CONFIG += plugin \
           gui \
           meegotouch \
@@ -86,5 +88,5 @@ INSTALLS += \
     rfs \
     desktop \
     backupscripts \
-    backup
+    backup 
 

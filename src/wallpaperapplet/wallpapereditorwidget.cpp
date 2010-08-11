@@ -651,6 +651,8 @@ WallpaperEditorWidget::pinchGestureStarted (
             QGestureEvent *event, 
             QPinchGesture *gesture)
 {
+    QPointF   centerPoint;
+
     Q_UNUSED (event);
     
     SYS_DEBUG ("Gesture started");
@@ -659,18 +661,29 @@ WallpaperEditorWidget::pinchGestureStarted (
         return;
     }
 
+    /*
+     *
+     */
+    centerPoint = gesture->centerPoint();
+    if (centerPoint.x() < imageX() ||
+            centerPoint.y() < imageY() ||
+            centerPoint.x() > imageX() + imageDX() ||
+            centerPoint.y() > imageY() + imageDY()) {
+        SYS_DEBUG ("Rejected...");
+        return;
+    }
+
     m_OriginalScaleFactor = m_Trans.scale();
-    m_LastClick = gesture->centerPoint ();
+    m_LastClick = centerPoint;
     m_PinchOngoing = true;
-   
    
     if (!m_NoTitlebar) {
         m_LastClick += toggleTitlebars (true);
     }
    
     m_ImageFixpoint = QPointF (
-            (gesture->centerPoint().x() - m_Trans.x()) / m_Trans.scale(),
-            (gesture->centerPoint().y() - m_Trans.y()) / m_Trans.scale());
+            (centerPoint.x() - m_Trans.x()) / m_Trans.scale(),
+            (centerPoint.y() - m_Trans.y()) / m_Trans.scale());
 
     event->accept(gesture);
 }

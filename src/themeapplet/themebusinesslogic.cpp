@@ -25,6 +25,7 @@
 #include <MGConfItem>
 #include <MTheme>
 #include <QDBusConnection>
+#include <QDBusError>
 #include <QString>
 #include <QStringList>
 #include <QDir>
@@ -51,6 +52,8 @@ static const QString themeGConfKey ("/meegotouch/theme/name");
 
 ThemeBusinessLogic::ThemeBusinessLogic ()
 {
+    bool   success;
+
     connect (MTheme::instance(), SIGNAL(themeChangeCompleted()),
             this, SLOT(themeChangeCompleted()));
 
@@ -59,12 +62,25 @@ ThemeBusinessLogic::ThemeBusinessLogic ()
      */
     QDBusConnection bus = QDBusConnection::sessionBus ();
     
-    bus.connect("", "", 
+    success = bus.connect("", "", 
             THEME_DBUS_INTERFACE, THEME_DBUS_REMOVED_SIGNAL, 
             this, SLOT(themeRemoved(QString)));
-    bus.connect("", "", 
+    if (!success) {
+        QDBusError lastError = bus.lastError();
+        SYS_WARNING ("Connecting to DBus %s failed: %s", 
+                THEME_DBUS_REMOVED_SIGNAL,
+                SYS_STR(lastError.message()));
+    }
+    
+    success = bus.connect("", "", 
             THEME_DBUS_INTERFACE, THEME_DBUS_ADDED_SIGNAL, 
             this, SLOT(themeAdded(QString)));
+    if (!success) {
+        QDBusError lastError = bus.lastError();
+        SYS_WARNING ("Connecting to DBus %s failed: %s", 
+                THEME_DBUS_ADDED_SIGNAL,
+                SYS_STR(lastError.message()));
+    }
 }
 
 
