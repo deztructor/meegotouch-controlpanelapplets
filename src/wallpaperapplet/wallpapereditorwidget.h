@@ -46,6 +46,11 @@ class WallpaperInfoHeader;
  * Problem: Image can moved under the titlebar impossible to pick it up.
  * Solution: (1) tap on the black area (2) move your finger onto the image to
  *   pick it up.
+ *
+ * Problem: Portrait image editing is not as expected.
+ * Solution: We had to add a workaround code because the pinch gesture
+ *   coordinate system is not the same as in the motion events. I added this
+ *   point as a reminder to test the applet in portrait mode also.
  */
 class WallpaperEditorWidget : public DcpWidget
 {
@@ -102,7 +107,7 @@ private:
     int  imageY () const;
     int  imageDX () const;
     int  imageDY () const;
-
+    void gestureWorkaround (QPointF *point);
 
 private:
     QPointer<WallpaperBusinessLogic>  m_WallpaperBusinessLogic;

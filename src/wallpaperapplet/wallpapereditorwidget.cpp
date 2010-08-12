@@ -680,6 +680,8 @@ WallpaperEditorWidget::pinchGestureStarted (
      *
      */
     centerPoint = gesture->centerPoint();
+    gestureWorkaround (&centerPoint);
+
     if (centerPoint.x() < imageX() ||
             centerPoint.y() < imageY() ||
             centerPoint.x() > imageX() + imageDX() ||
@@ -712,7 +714,8 @@ WallpaperEditorWidget::pinchGestureUpdate (
             QGestureEvent *event, 
             QPinchGesture *gesture)
 {
-    qreal newScale;
+    QPointF  centerPoint;
+    qreal    newScale;
 
     Q_UNUSED (event);
     
@@ -720,14 +723,23 @@ WallpaperEditorWidget::pinchGestureUpdate (
         return;
 
     //SYS_DEBUG ("Gesture update");
+    /*
+     *
+     */
+    centerPoint = gesture->centerPoint();
+    gestureWorkaround (&centerPoint);
+
+    /*
+     * Updating the scale, we have a lower limit for this.
+     */
     newScale = gesture->scaleFactor() * m_OriginalScaleFactor;
     if (newScale < ScaleLowerLimit)
         newScale = ScaleLowerLimit;
     m_Trans.setScale (newScale);
 
     m_UserOffset = QPointF (
-            gesture->centerPoint().x() - m_ImageFixpoint.x() * m_Trans.scale() - m_Trans.x(),
-            gesture->centerPoint().y() - m_ImageFixpoint.y() * m_Trans.scale() - m_Trans.y());
+            centerPoint.x() - m_ImageFixpoint.x() * m_Trans.scale() - m_Trans.x(),
+            centerPoint.y() - m_ImageFixpoint.y() * m_Trans.scale() - m_Trans.y());
         
     event->accept(gesture);
 
@@ -761,8 +773,6 @@ WallpaperEditorWidget::pinchGestureEvent (
             QGestureEvent *event, 
             QPinchGesture *gesture)
 {
-    bool redrawNeeded = false;
-
     Q_UNUSED (event);
     
     if (gesture->state() == Qt::GestureStarted) {
@@ -774,4 +784,20 @@ WallpaperEditorWidget::pinchGestureEvent (
     }
 }
 
+/*
+ * The pinch gesture event coordinate system is not the same as the motion event
+ * event coordinate system in portrait mode. This hackish workaround will
+ * transform the coordinates if necessary.
+ */
+void 
+WallpaperEditorWidget::gestureWorkaround (
+        QPointF *point)
+{
+    bool portrait = (geometry().height() > geometry().width());
+
+    if (portrait) {
+        QPointF tmp (geometry().width() - point->y(), point->x());
+        *point = tmp;
+    }
+}
 
