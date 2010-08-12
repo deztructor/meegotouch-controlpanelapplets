@@ -383,8 +383,7 @@ WallpaperEditorWidget::toggleTitlebars (
         bool       show)
 {
     MApplicationPage  *currentPage;
-    SYS_DEBUG ("--- start ------------------");
-    #if 1
+    #if 0
     /*
      * This mapToScene() is sensitive to the screen rotation.
      */
@@ -404,7 +403,7 @@ WallpaperEditorWidget::toggleTitlebars (
      */
     if (MApplication::activeApplicationWindow())
         currentPage = MApplication::activeApplicationWindow()->currentPage();
-    else 
+    else  
         currentPage = 0;
 
     if (currentPage) {
@@ -426,7 +425,6 @@ WallpaperEditorWidget::toggleTitlebars (
     m_NoTitlebar = !show;
 
 finalize:
-    SYS_DEBUG ("--- end --------------------");
     /*
      * To return the correction value.
      */
@@ -460,7 +458,7 @@ WallpaperEditorWidget::imageY () const
     int            retval = 0;
     bool           portrait = (geometry().height() > geometry().width());
     QPointF        r;
-    r = mapToScene (0, 0);
+    r = mapToScene (0.0, 0.0);
 
     if (portrait)
         retval -= r.x();
@@ -470,6 +468,8 @@ WallpaperEditorWidget::imageY () const
     retval += m_UserOffset.y();
     retval += m_Trans.y();
 
+    SYS_DEBUG ("*** portrait = %s", SYS_BOOL(portrait));
+    SYS_DEBUG ("*** r        = %g, %g", r.x(), r.y());
     return retval;
 }
 

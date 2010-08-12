@@ -6,9 +6,7 @@
 #include <QObject>
 #include <MWidget>
 
-class MImageWidget;
 class MLabel;
-class QPixmap;
 
 class WallpaperInfoHeader : public MWidget
 {
@@ -27,7 +25,6 @@ public:
 
 private:
     QPixmap          *m_Background;
-    MImageWidget     *m_Icon;
     MLabel           *m_Label;
 };
 

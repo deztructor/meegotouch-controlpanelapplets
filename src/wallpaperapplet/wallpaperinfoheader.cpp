@@ -4,7 +4,6 @@
 #include "wallpaperinfoheader.h"
 
 #include <MLabel>
-#include <MImageWidget>
 
 #include <QGraphicsLinearLayout>
 #include <QPixmap>
@@ -28,11 +27,7 @@ WallpaperInfoHeader::WallpaperInfoHeader (
     m_Label = new MLabel;
     m_Label->setObjectName ("WallpaperInfoHeaderLabel");
 
-    m_Icon = new MImageWidget ("missing-icon-from-ui-spec");
-    m_Icon->setObjectName ("WallpaperInfoHeaderIcon");
-
     HBox = new QGraphicsLinearLayout (Qt::Horizontal);
-    HBox->addItem (m_Icon);
     HBox->addItem (m_Label);
 
     m_Background = MTheme::pixmapCopy ("top_fade");

@@ -18,7 +18,7 @@
  * Apparently the test engine can not tolerate the debug messages when there are
  * weird file names around.
  */
-#define DEBUG
+//#define DEBUG
 //#define LOTDEBUG
 #define WARNING
 #include "../debug.h"
