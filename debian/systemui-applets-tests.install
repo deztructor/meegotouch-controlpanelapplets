@@ -1,3 +1,4 @@
 usr/share/systemui-applets-tests/tests.xml
 usr/lib/systemui-applets-tests/ut_*
 usr/lib/systemui-applets-tests/ft_*
+/bin/cylontest.sh

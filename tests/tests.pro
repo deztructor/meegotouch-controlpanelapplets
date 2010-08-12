@@ -37,4 +37,9 @@ support_files.files += $$OUT_PWD/tests.xml
 support_files.path = /usr/share/systemui-applets-tests
 support_files.CONFIG += no_check_exist
 
-INSTALLS += support_files
+testscript.files = cylontest.sh
+testscript.path = /bin
+
+INSTALLS += \
+    support_files \
+    testscript
