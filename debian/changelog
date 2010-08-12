@@ -1,3 +1,11 @@
+systemui-applets (0.14.14-1) harmattan; urgency=low
+
+  * [ UNRELEASED ]
+  [ Laszlo Pere ]
+  * Fixes: NB#184799 - wallpaper doesn't reset on doing reset settings.
+
+ -- Laszlo Pere <lpere@blumsoft.eu>  Thu, 12 Aug 2010 07:51:30 +0200
+
 systemui-applets (0.14.13-1) harmattan; urgency=low
 
   [ Laszlo Pere ]
