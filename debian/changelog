@@ -1,8 +1,6 @@
 systemui-applets (0.14.14-1) harmattan; urgency=low
 
-  * [ UNRELEASED ]
   [ Laszlo Pere ]
-  * Fixes: NB#184799 - wallpaper doesn't reset on doing reset settings.
   * Fixes: NB#184751 - Able to move the wallpaper image outside the screen and 
     set the same as wallpaper.
   * A test script added.
