@@ -54,9 +54,6 @@ SOURCES = \
 DESTDIR = lib
 target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 
-rfs.files = wallpaper-rfs.sh
-rfs.path  = $$system(pkg-config --variable osso_rfs_scripts_dir clean-device)
-
 backup.files = wallpaper.conf
 backup.path  = /usr/share/backup-framework/applications/
 
@@ -74,7 +71,6 @@ images.files = images/*.png
 images.path  = $$css.path/images
 
 message("target path         :" $$target.path)
-message("rfs path            :" $$rfs.path)
 message("desktop path        :" $$desktop.path)
 message("css path:           :" $$css.path)
 message("images path         :" $$images.path)
@@ -85,7 +81,6 @@ INSTALLS += \
     target \
     images \
     css \
-    rfs \
     desktop \
     backupscripts \
     backup 
