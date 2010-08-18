@@ -5,15 +5,28 @@
 #include <QString>
 #include <MGConfItem>
 
+#include <QVariant>
+#include <QDBusInterface>
+#include <QDBusMessage>
+#include <devicelock/devicelock.h>
+
 #define DEBUG
 #include "../debug.h"
 
 ResetBusinessLogic::ResetBusinessLogic()
 {
+    m_devlock =
+        new QDBusInterface (QString (DEVLOCK_SERVICE),
+                            QString (DEVLOCK_PATH),
+                            QString ("com.nokia.devicelock"),
+                            QDBusConnection::systemBus ());
+    connect (m_devlock, SIGNAL (passwordPromptResult (bool)),
+             this, SLOT (passwordResult (bool)));
 }
 
 ResetBusinessLogic::~ResetBusinessLogic()
 {
+    delete m_devlock;
 }
 
 /*!
@@ -46,5 +59,45 @@ ResetBusinessLogic::performClearData ()
     if (retval != 0) {
         SYS_WARNING ("The command '%s' failed: %m", command);
     }
+}
+
+/*!
+ * Asks user for device-lock code when it is set
+ */
+void
+ResetBusinessLogic::getAccess ()
+{
+    QDBusMessage message;
+    message = m_devlock->call (QDBus::Block, 
+                               QString ("setState"),
+                               DeviceLock::DeviceLockEnums::Device,
+                               DeviceLock::DeviceLockEnums::PasswordPrompt);
+
+    QString errorString = message.errorMessage();
+    QString errorName = message.errorName ();
+    SYS_DEBUG ("*** errorMessage = %s", SYS_STR(errorString));
+    SYS_DEBUG ("*** errorName    = %s", SYS_STR(errorName));
+
+    /*
+     * For now i don't care about errors, i assume when some
+     * error happening means there is no device-lock daemon
+     * running on the device...
+     */
+    bool success = message.arguments().at(0).toBool ();
+    SYS_DEBUG ("*** reply = %s", SYS_BOOL (success));
+
+    /*
+     * No password needed [ie. device-lock is disabled]
+     */
+    if (success == false)
+        emit gotAccess ();
+}
+
+void
+ResetBusinessLogic::passwordResult (bool result)
+{
+    SYS_DEBUG ("*** result = %s", SYS_BOOL (result));
+    if (result == true)
+        emit gotAccess ();
 }
 

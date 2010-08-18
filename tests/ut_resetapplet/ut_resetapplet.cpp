@@ -134,6 +134,7 @@ Ut_ResetApplet::testConstructWidget ()
     dialogAnswerNo = true;
     dialogExecuted = false;
     widget->restoreActivated ();
+    widget->doTheWork ();
     QVERIFY (lastExecutedCommand == "");
     QVERIFY (dialogExecuted);
     
@@ -144,6 +145,7 @@ Ut_ResetApplet::testConstructWidget ()
     dialogAnswerNo = false;
     dialogExecuted = false;
     widget->restoreActivated ();
+    widget->doTheWork ();
     QVERIFY (lastExecutedCommand == "/usr/sbin/clean-device.sh --rfs");
     QVERIFY (dialogExecuted);
     
@@ -154,6 +156,7 @@ Ut_ResetApplet::testConstructWidget ()
     dialogAnswerNo = true;
     dialogExecuted = false;
     widget->clearActivated ();
+    widget->doTheWork ();
     QVERIFY (lastExecutedCommand == "");
     QVERIFY (dialogExecuted);
     
@@ -164,6 +167,7 @@ Ut_ResetApplet::testConstructWidget ()
     dialogAnswerNo = false;
     dialogExecuted = false;
     widget->clearActivated ();
+    widget->doTheWork ();
     QVERIFY (lastExecutedCommand == "/usr/sbin/clean-device.sh --cud");
     QVERIFY (dialogExecuted);
 

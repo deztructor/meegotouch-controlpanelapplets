@@ -1,13 +1,14 @@
 systemui-applets (0.14.15~1) harmattan; urgency=low
 
-  * [NEW VERSION]
+  * Fixes: NB#185694 - Device-lock query is not displayed while doing
+                       reset-settings/clear-user-data
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 16 Aug 2010 12:41:17 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 18 Aug 2010 11:57:46 +0200
 
 systemui-applets (0.14.14-1) harmattan; urgency=low
 
   [ Laszlo Pere ]
-  * Fixes: NB#184751 - Able to move the wallpaper image outside the screen and 
+  * Fixes NB#184751 - Able to move the wallpaper image outside the screen and
     set the same as wallpaper.
   * A test script added.
   * The wallpaper command line program has been removed, we use DBus now.
@@ -17,7 +18,7 @@ systemui-applets (0.14.14-1) harmattan; urgency=low
 systemui-applets (0.14.13-1) harmattan; urgency=low
 
   [ Laszlo Pere ]
-  * Fixes: NB#182044 - Wallpaper applet does not support background images 
+  * Fixes: NB#182044 - Wallpaper applet does not support background images
     set by theme IDs.
   * Fixes: NB#181622 - select profile dialog is shown on lock ui.
   * Fixes: NB#180067 - Wallpaper can't be set correctly.

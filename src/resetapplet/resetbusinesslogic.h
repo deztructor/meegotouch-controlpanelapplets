@@ -7,6 +7,7 @@
 #include <QObject>
 
 #include <QPointer>
+class QDBusInterface;
 
 /*!
  * Provides the 'restore factory settings' and 'clear user data' operations for
@@ -21,11 +22,6 @@
  * 
  * /usr/sbin/clean-device.sh --rfs
  * /usr/sbin/clean-device.sh --cud
- *
- * TODO: To implement the screen lock pin code query. Some info:
- * (1) apt-get install libdevlock1
- * (2) git clone git@dvcs.projects.maemo.org:security/duicontrolpanel-devicelockapplet
- * (3) libqmsystem Maemo::QmLocks Class Reference
  */
 class ResetBusinessLogic : public QObject
 {
@@ -35,9 +31,23 @@ public:
     ResetBusinessLogic ();
     ~ResetBusinessLogic ();
 
+    /*
+     * Asks user for device-lock code when it set
+     */
+    void getAccess ();
+
+signals:
+    void gotAccess ();
+
 public slots:
     void performRestoreSettings ();
     void performClearData ();
+
+private slots:
+    void passwordResult (bool result);
+
+private:
+    QDBusInterface  *m_devlock;
 };
 
 #endif

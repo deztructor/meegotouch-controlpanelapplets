@@ -16,9 +16,13 @@ ResetWidget::ResetWidget (
         ResetBusinessLogic     *resetBusinessLogic, 
         QGraphicsWidget        *parent) :
     DcpWidget (parent),
-    m_ResetBusinessLogic (resetBusinessLogic)
+    m_ResetBusinessLogic (resetBusinessLogic),
+    m_currentPlan (None)
 {
     createContent();
+
+    connect (resetBusinessLogic, SIGNAL (gotAccess ()),
+             this, SLOT (doTheWork ()));
 }
 
 ResetWidget::~ResetWidget ()
@@ -93,7 +97,8 @@ ResetWidget::restoreActivated ()
     switch (retval) {
         case M::YesButton:
             SYS_DEBUG ("YES");
-            m_ResetBusinessLogic->performRestoreSettings();
+            m_currentPlan = ResetSettings;
+            m_ResetBusinessLogic->getAccess ();
             break;
 
         case M::NoButton:
@@ -127,7 +132,8 @@ ResetWidget::clearActivated ()
     switch (retval) {
         case M::YesButton:
             SYS_DEBUG ("YES");
-            m_ResetBusinessLogic->performClearData();
+            m_currentPlan = ClearData;
+            m_ResetBusinessLogic->getAccess ();
             break;
 
         case M::NoButton:
@@ -135,6 +141,23 @@ ResetWidget::clearActivated ()
             /*
              * We do not have to do anything.
              */
+            break;
+    }
+}
+
+void
+ResetWidget::doTheWork ()
+{
+    switch (m_currentPlan)
+    {
+        case ResetSettings:
+            m_ResetBusinessLogic->performRestoreSettings();
+            break;
+        case ClearData:
+            m_ResetBusinessLogic->performClearData();
+            break;
+        default:
+            SYS_WARNING ("Got access, but no plan ?!");
             break;
     }
 }
