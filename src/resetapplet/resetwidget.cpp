@@ -160,5 +160,6 @@ ResetWidget::doTheWork ()
             SYS_WARNING ("Got access, but no plan ?!");
             break;
     }
+    m_currentPlan = None;
 }
 
