@@ -2,8 +2,10 @@ systemui-applets (0.14.15~1) harmattan; urgency=low
 
   * Fixes: NB#185694 - Device-lock query is not displayed while doing
                        reset-settings/clear-user-data
+  * Fixes: NB#183195 -  No banners or confirmation dialogue shown on activating
+                        and deactivating offline mode from connectivity view.
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 18 Aug 2010 11:57:46 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 19 Aug 2010 11:37:21 +0200
 
 systemui-applets (0.14.14-1) harmattan; urgency=low
 
