@@ -11,6 +11,7 @@
 
 #include <QtGui>
 #include <QDebug>
+#include <QDBusInterface>
 
 #include <MTheme>
 #include <MAction>
@@ -73,7 +74,20 @@ QVector<MAction*> BatteryApplet::viewMenuItems()
     MAction* helpAction = new MAction(qtTrId ("qtn_comm_userguide"), pageMain());
     vector.append(helpAction);
     helpAction->setLocation(MAction::ApplicationMenuLocation);
+
+    connect (helpAction, SIGNAL (triggered (bool)),
+             this, SLOT (userGuide ()));
+
     return vector;
+}
+
+void
+BatteryApplet::userGuide ()
+{
+    QDBusInterface userguide ("com.nokia.userguide", "/",
+                              "com.nokia.UserGuideIf");
+    userguide.call ("pageByPath", "fullguide-1-1-list-2.cfg");
+    SYS_DEBUG ("");
 }
 
 DcpBrief* BatteryApplet::constructBrief(int partId)

@@ -8,6 +8,8 @@ CONFIG += plugin \
           silent \
           duicontrolpanel
 
+QT += dbus
+
 contains(cov, true) {
     message("Coverage options enabled")
     QMAKE_CXXFLAGS += --coverage
