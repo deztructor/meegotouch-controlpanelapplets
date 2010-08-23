@@ -95,7 +95,7 @@ Ut_WarrantyApplet::testMenuItems ()
 {
     QVector<MAction*> items = m_Applet->viewMenuItems ();
     
-    QVERIFY (items.size() == 1);
+    QVERIFY (items.size() == 0);
 }
 
 void 

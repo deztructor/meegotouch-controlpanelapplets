@@ -7,6 +7,7 @@
 
 #include <MTheme>
 #include <MAction>
+#include <QDBusInterface>
 
 #define DEBUG
 #include "../debug.h"
@@ -88,6 +89,9 @@ WallpaperApplet::viewMenuItems()
     
     vector.append(helpAction);
 
+    connect (helpAction, SIGNAL (triggered (bool)),
+             this, SLOT (userGuide ()));
+
     return vector;
 }
 
@@ -99,3 +103,14 @@ WallpaperApplet::constructBrief (
 
     return new WallpaperBrief (m_WallpaperBusinessLogic);
 }
+
+void
+WallpaperApplet::userGuide ()
+{
+    SYS_DEBUG ("");
+
+    QDBusInterface userguide ("com.nokia.userguide", "/",
+                              "com.nokia.UserGuideIf");
+    userguide.call ("pageByPath", "fullguide-1-2-list-1.cfg");
+}
+

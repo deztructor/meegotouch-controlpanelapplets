@@ -34,6 +34,9 @@ public:
     virtual QVector<MAction *> viewMenuItems();
     virtual DcpBrief* constructBrief(int partId);
 
+private slots:
+    void userGuide ();
+
 private:
     QPointer<WallpaperWidget>        m_MainWidget;
     QPointer<WallpaperEditorWidget>  m_EditorWidget;
