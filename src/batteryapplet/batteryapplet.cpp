@@ -69,8 +69,8 @@ QString BatteryApplet::title() const
 QVector<MAction*> BatteryApplet::viewMenuItems()
 {
     QVector<MAction*> vector;
-    //% "Help"
-    MAction* helpAction = new MAction(qtTrId ("qtn_comm_help"), pageMain());
+    //% "User Guide"
+    MAction* helpAction = new MAction(qtTrId ("qtn_comm_userguide"), pageMain());
     vector.append(helpAction);
     helpAction->setLocation(MAction::ApplicationMenuLocation);
     return vector;

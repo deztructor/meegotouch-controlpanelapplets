@@ -81,8 +81,8 @@ WallpaperApplet::viewMenuItems()
 
     SYS_DEBUG ("");
     helpAction = new MAction (
-            //% "Help"
-            qtTrId ("qtn_comm_help"), 
+            //% "User guide"
+            qtTrId ("qtn_comm_userguide"), 
             pageMain (0));
     helpAction->setLocation (MAction::ApplicationMenuLocation);
     

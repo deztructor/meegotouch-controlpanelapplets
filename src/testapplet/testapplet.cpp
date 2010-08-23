@@ -131,8 +131,8 @@ QVector<MAction*>
 TestApplet::viewMenuItems()
 {
     QVector<MAction*> vector;
-    //% "Help"
-    MAction* helpAction = new MAction (qtTrId ("qtn_comm_help"), 
+    //% "User guide"
+    MAction* helpAction = new MAction (qtTrId ("qtn_comm_userguide"), 
             pageMain (0));
 
     vector.append(helpAction);
