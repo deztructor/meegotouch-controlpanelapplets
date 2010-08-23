@@ -28,6 +28,9 @@ public:
     virtual QVector<MAction *> viewMenuItems();
     virtual DcpBrief* constructBrief(int partId);
 
+private slots:
+    void userGuide ();
+
 private:
     QPointer<ResetWidget>        m_MainWidget;
     QPointer<ResetBusinessLogic> m_ResetBusinessLogic;

@@ -6,6 +6,7 @@
 
 #include <MTheme>
 #include <MAction>
+#include <QDBusInterface>
 
 #define DEBUG
 #include "../debug.h"
@@ -73,10 +74,24 @@ ResetApplet::viewMenuItems()
             qtTrId ("qtn_comm_userguide"), 
             pageMain (0));
     helpAction->setLocation (MAction::ApplicationMenuLocation);
+
+    connect (helpAction, SIGNAL (triggered (bool)),
+             this, SLOT (userGuide ()));
+
     vector.append(helpAction);
 
     return vector;
 }
+
+void
+ResetApplet::userGuide ()
+{
+    QDBusInterface userguide ("com.nokia.userguide", "/",
+                              "com.nokia.UserGuideIf");
+    userguide.call ("pageByPath", "tips.cfg");
+    SYS_DEBUG ("");
+}
+
 
 DcpBrief *
 ResetApplet::constructBrief (
