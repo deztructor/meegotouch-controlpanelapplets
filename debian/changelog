@@ -1,3 +1,9 @@
+systemui-applets (0.14.16~1) harmattan; urgency=low
+
+  * Fixes: NB#185858 - Wrong text layout in setting of Wallpaper from Gallery
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 23 Aug 2010 10:56:50 +0200
+
 systemui-applets (0.14.15-1) harmattan; urgency=low
 
   * Fixes: NB#185694 - Device-lock query is not displayed while doing

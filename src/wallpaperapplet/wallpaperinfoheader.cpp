@@ -26,6 +26,7 @@ WallpaperInfoHeader::WallpaperInfoHeader (
 
     m_Label = new MLabel;
     m_Label->setObjectName ("WallpaperInfoHeaderLabel");
+    m_Label->setWordWrap (true);
 
     HBox = new QGraphicsLinearLayout (Qt::Horizontal);
     HBox->addItem (m_Label);

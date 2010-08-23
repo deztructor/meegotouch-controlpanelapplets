@@ -56,7 +56,7 @@ WallpaperEditorWidget::WallpaperEditorWidget (
 
     if (win)
         win->showFullScreen();
-    
+
     setObjectName ("WallpaperEditorWidget");
     QTimer::singleShot (0, this, SLOT(createContent()));
     createActions ();
@@ -83,7 +83,7 @@ WallpaperEditorWidget::paint (
         QWidget                           *widget)
 {
     bool portrait = (geometry().height() > geometry().width());
-  
+
     painter->fillRect (
             -ExtraMargin, -ExtraMargin, 
             m_Trans.expectedWidth (),
@@ -128,7 +128,7 @@ WallpaperEditorWidget::createContent ()
                     "not <WallpaperCurrentDescriptor>");
             goto not_current_wallpaper;
         }
-        
+
         SYS_DEBUG ("This is the current image.");
         SYS_DEBUG ("*** orig landscape       = %s", 
                 SYS_STR(cdesc->originalImageFile (M::Landscape)));
@@ -147,7 +147,7 @@ WallpaperEditorWidget::createContent ()
         m_PortraitTrans.setOrientation (M::Portrait);
         m_LandscapeTrans.setExpectedSize (win->visibleSceneSize (M::Landscape));
         m_LandscapeTrans.setOrientation (M::Landscape);
-        
+
         /*
          * FIXME: We are using the original pixmap here, but we could make this
          * be more generic, and use the original only when it differs from the
@@ -156,7 +156,7 @@ WallpaperEditorWidget::createContent ()
         m_bgLandscape = cdesc->scaled (
                 m_LandscapeTrans.expectedSize(),
                 WallpaperDescriptor::OriginalLandscape);
-        
+
         m_bgPortrait = cdesc->scaled (
                 m_PortraitTrans.expectedSize(),
                 WallpaperDescriptor::OriginalPortrait);
@@ -171,7 +171,7 @@ WallpaperEditorWidget::createContent ()
                 m_PortraitTrans.expectedSize(), 
                 Qt::KeepAspectRatioByExpanding);
 #endif
-    
+
         /*
          * Need to copy back...
          */
@@ -210,7 +210,7 @@ not_current_wallpaper:
     m_bgLandscape = desc->scaled (
             m_LandscapeTrans.expectedSize(),
             WallpaperDescriptor::Landscape);
-   
+
     m_bgPortrait = desc->scaled (
            m_PortraitTrans.expectedSize(),
            WallpaperDescriptor::Portrait);
@@ -242,18 +242,17 @@ WallpaperEditorWidget::createWidgets ()
 {
     MLayout               *layout;
     MLinearLayoutPolicy   *policy;
-    MWidget               *spacer;
 
     SYS_DEBUG ("");
-    this->setContentsMargins (0, 0, 0, 0);
-    this->setWindowFrameMargins (0.0, 0.0, 0.0, 0.0);
+    setContentsMargins (0, 0, 0, 0);
+    setWindowFrameMargins (0.0, 0.0, 0.0, 0.0);
 
     /*
      *
      */
     layout = new MLayout;
     policy = new MLinearLayoutPolicy (layout, Qt::Vertical);
-    
+
     layout->setContentsMargins (0, 0, 0, 0);
 
     /*
@@ -262,18 +261,10 @@ WallpaperEditorWidget::createWidgets ()
     SYS_DEBUG ("Creating WallpaperInfoHeader");
     m_InfoHeader = new WallpaperInfoHeader;
     m_InfoHeader->setObjectName ("WallpaperInfoHeader");
-    m_InfoHeader->setSizePolicy (
-            QSizePolicy::Preferred,
-            QSizePolicy::Minimum);
     policy->addItem (m_InfoHeader);
-    
-    spacer = new MWidget;
-    spacer->setSizePolicy (QSizePolicy::Preferred, QSizePolicy::Expanding);
-    policy->addItem (spacer);
 
-    /*
-     *
-     */
+    policy->addStretch ();
+
     setLayout (layout);
 }
 
@@ -328,7 +319,7 @@ WallpaperEditorWidget::slotDoneActivated ()
      * Here we save the settings.
      */
     m_WallpaperBusinessLogic->setBackground (ltrans, ptrans);
-    
+
     /*
      * Turning back from fullscreen. This could be done in the destructor, but
      * that ends up with a segfault in the Qt...
@@ -397,13 +388,13 @@ WallpaperEditorWidget::toggleTitlebars (
      */
     if (show == !m_NoTitlebar)
         goto finalize;
-    
+
     /*
      * We do the showing/hiding here.
      */
     if (MApplication::activeApplicationWindow())
         currentPage = MApplication::activeApplicationWindow()->currentPage();
-    else  
+    else
         currentPage = 0;
 
     if (currentPage) {
@@ -669,7 +660,7 @@ WallpaperEditorWidget::pinchGestureStarted (
     QPointF   centerPoint;
 
     Q_UNUSED (event);
-    
+
     SYS_DEBUG ("Gesture started");
     if (m_PinchOngoing) {
         SYS_WARNING ("But gesture is not finished yet!");
@@ -697,11 +688,11 @@ WallpaperEditorWidget::pinchGestureStarted (
     m_OriginalScaleFactor = m_Trans.scale();
     m_LastClick = centerPoint;
     m_PinchOngoing = true;
-   
+
     if (!m_NoTitlebar) {
         m_LastClick += toggleTitlebars (true);
     }
-   
+
     m_ImageFixpoint = QPointF (
             (centerPoint.x() - m_Trans.x()) / m_Trans.scale(),
             (centerPoint.y() - m_Trans.y()) / m_Trans.scale());
@@ -718,7 +709,7 @@ WallpaperEditorWidget::pinchGestureUpdate (
     qreal    newScale;
 
     Q_UNUSED (event);
-    
+
     if (!m_PinchOngoing)
         return;
 
@@ -774,7 +765,7 @@ WallpaperEditorWidget::pinchGestureEvent (
             QPinchGesture *gesture)
 {
     Q_UNUSED (event);
-    
+
     if (gesture->state() == Qt::GestureStarted) {
         pinchGestureStarted (event, gesture);
     } else if (gesture->state() == Qt::GestureFinished) {
