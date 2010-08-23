@@ -156,6 +156,16 @@ BatteryWidget::PSMButtonReleased ()
     bool newPSMValue = !m_PSMButtonToggle;
     SYS_DEBUG ("Setting PSMvalue to %s", SYS_BOOL (newPSMValue));
 
+    /*
+     * To 'deactivate' the power-save move, we need to turn
+     * off the automatic power-saving...
+     */
+    if (newPSMValue == false)
+    {
+        m_logic->setPSMAutoValue (false);
+        sliderContainer->initPSMAutoButton (false);
+    }
+
     // UI will change only in PSMValueReceived slot...
     m_logic->setPSMValue (newPSMValue);
 }
