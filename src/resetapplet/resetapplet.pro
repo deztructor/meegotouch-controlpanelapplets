@@ -7,6 +7,8 @@ CONFIG += plugin \
           duicontrolpanel \
           silent
 
+QT += dbus
+
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
 
