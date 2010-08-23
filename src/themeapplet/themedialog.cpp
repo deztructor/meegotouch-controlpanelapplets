@@ -135,9 +135,10 @@ void
 ThemeDialog::acceptClicked ()
 {
     SYS_DEBUG ("");
-    m_ThemeBusinessLogic->changeTheme (m_ThemeDesc->codeName());
     accept();
     disappear ();
+
+    m_ThemeBusinessLogic->changeTheme (m_ThemeDesc->codeName());
 }
 
 void 

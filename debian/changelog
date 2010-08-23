@@ -5,6 +5,8 @@ systemui-applets (0.14.16~1) harmattan; urgency=low
                        entered to PSM automatically
   * Fixes: NB#186764 -  View Menu should not be shown on Theme setting view
   * Fixes: NB#183127 - User guide improvements...
+  * Fixes: NB#187166 -  Theme dialog doesn't close by tapping on select button
+    in theme dialog.
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 23 Aug 2010 17:37:41 +0200
 
