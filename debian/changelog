@@ -1,4 +1,4 @@
-systemui-applets (0.14.16~1) harmattan; urgency=low
+systemui-applets (0.14.16-1) harmattan; urgency=low
 
   * Fixes: NB#185858 - Wrong text layout in setting of Wallpaper from Gallery
   * Fixes: NB#177534 - cannot manually deactivate PSM if
@@ -10,7 +10,7 @@ systemui-applets (0.14.16~1) harmattan; urgency=low
   * Fixes: NB#187083 - Need of unique IDs for several objects [profile applet]
   * Fixes: NB#186822 - Device system ordering problem
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 24 Aug 2010 11:53:12 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 24 Aug 2010 12:20:00 +0200
 
 systemui-applets (0.14.15-1) harmattan; urgency=low
 
