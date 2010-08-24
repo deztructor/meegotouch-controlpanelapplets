@@ -8,8 +8,9 @@ systemui-applets (0.14.16~1) harmattan; urgency=low
   * Fixes: NB#187166 -  Theme dialog doesn't close by tapping on select button
     in theme dialog.
   * Fixes: NB#187083 - Need of unique IDs for several objects [profile applet]
+  * Fixes: NB#186822 - Device system ordering problem
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 24 Aug 2010 09:48:23 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 24 Aug 2010 11:53:12 +0200
 
 systemui-applets (0.14.15-1) harmattan; urgency=low
 

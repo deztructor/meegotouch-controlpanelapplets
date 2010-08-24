@@ -9,5 +9,5 @@ X-DUIApplet-Applet=libaboutapplet.so
 
 [DCP]
 Category=qtn_sett_main_data
-Order=1
+Order=6
 WidgetType=Label
