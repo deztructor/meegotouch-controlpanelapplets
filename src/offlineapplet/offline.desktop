@@ -11,6 +11,6 @@ X-DUIApplet-Applet=libofflineapplet.so
 
 [DCP]
 Category= Connectivity
-Order=1
+Order=0
 WidgetType= Button
 

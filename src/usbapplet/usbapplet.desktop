@@ -12,6 +12,6 @@ X-DUIApplet-Applet=libusbapplet.so
 
 [DCP]
 Category=Connectivity
-Order=3
+Order=7
 WidgetType=Label
 
