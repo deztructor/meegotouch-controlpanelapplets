@@ -56,6 +56,8 @@ ProfileWidget::initProfiles ()
             d.profileId,
             d.visualData.second,
             d.vibrationEnabled);
+        // For testability driver: set some object name...
+        cont->setObjectName (ProfileDataInterface::mapId (d.profileId));
         connect (cont, SIGNAL(toggled(bool)), 
                 this, SLOT(vibrationChanged(bool)));
         m_Containers.insert(d.profileId, cont);

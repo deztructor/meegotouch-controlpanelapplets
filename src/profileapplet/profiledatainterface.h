@@ -33,6 +33,8 @@ public:
     ProfileDataInterface ();
     virtual ~ProfileDataInterface ();
 
+    static QString mapId (int id);
+
 signals:
     void currentProfile (int id);
     void vibrationValue (int id, bool value);
@@ -52,7 +54,6 @@ private slots:
 
 private:
     static ProfileId mapId (const QString &id);
-    static QString mapId (int id);
     static QString id2Name (const QString &id);
     static QString mapId2IconID (int id);
 
