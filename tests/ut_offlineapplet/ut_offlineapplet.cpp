@@ -147,8 +147,14 @@ Ut_OfflineApplet::testCurrentText ()
     brief.m_LastMode = Maemo::QmDeviceMode::Flight;
     QCOMPARE (brief.currentText(), qtTrId("qtn_offl_deactivate"));
 
+/*
+ * Brief never should be empty!
+ *
     brief.m_LastMode = Maemo::QmDeviceMode::Error;
     QVERIFY (brief.currentText().isEmpty());
+ */
+    brief.m_LastMode = Maemo::QmDeviceMode::Error;
+    QVERIFY (brief.currentText().isEmpty() == false);
 }
 
 
