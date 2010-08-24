@@ -11,8 +11,9 @@ systemui-applets (0.14.16-1) harmattan; urgency=low
   * Fixes: NB#186822 - Device system ordering problem
   * Fixes: NB#187315 - Connectivity: activate offline mode not at the top
   * Fixes: NB#187306 - Large gap in between 1st item and title bar in theme
+  * Fixes: NB#187354 - Theme chooser doesnt find themes
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 24 Aug 2010 13:37:21 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 24 Aug 2010 14:24:09 +0200
 
 systemui-applets (0.14.15-1) harmattan; urgency=low
 
