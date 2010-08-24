@@ -9,8 +9,7 @@
 
 #include <MApplication>
 #include <MApplicationWindow>
-#include <MLayout>
-#include <MLinearLayoutPolicy>
+#include <QGraphicsLinearLayout>
 #include <MTextEdit>
 #include <MList>
 #include <MListFilter>
@@ -41,13 +40,7 @@ ThemeWidget::~ThemeWidget ()
 void
 ThemeWidget::createWidgets ()
 {
-    MLayout *mainLayout = new MLayout(this);
-    setLayout(mainLayout);
-
-    MLinearLayoutPolicy *mainLayoutPolicy =
-        new MLinearLayoutPolicy(mainLayout, Qt::Vertical);
-    mainLayout->setPolicy(mainLayoutPolicy);
-    mainLayoutPolicy->setObjectName("ThemeWidgetMainLayoutPolicy");
+    QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
 
     m_List = new MList();
     m_List->setObjectName ("ThemeList");
@@ -72,14 +65,16 @@ ThemeWidget::createWidgets ()
     connect (m_OviItem, SIGNAL(clicked()),
             this, SLOT(oviActivated()));
 
-    mainLayoutPolicy->addItem (m_LiveFilterEditor);
-    mainLayoutPolicy->addItem (m_OviItem);
-    mainLayoutPolicy->addItem (m_List);
+    m_LiveFilterEditor->setParentLayoutItem (mainLayout);
+    mainLayout->addItem (m_OviItem);
+    mainLayout->addItem (m_List);
 
     connect (m_LiveFilterEditor, SIGNAL(textChanged()),
             this, SLOT(textChanged ()));
     connect (m_List, SIGNAL(panningStarted()),
             this, SLOT(hideEmptyTextEdit()));
+
+    setLayout(mainLayout);
 
     retranslateUi ();
 }
@@ -221,6 +216,20 @@ ThemeWidget::textChanged ()
         m_List->filtering()->editor()->setFocus();
     }
 
+    QGraphicsLinearLayout *mainLayout = dynamic_cast<QGraphicsLinearLayout *>(layout ());
+    if (mainLayout)
+    {
+      if (m_LiveFilterEditor->text ().isEmpty () == true)
+      {
+          mainLayout->removeItem (m_LiveFilterEditor);
+          m_LiveFilterEditor->setPos (QPointF (0.,-200.));
+      }
+      else
+      {
+          mainLayout->insertItem (0, m_LiveFilterEditor);
+      }  
+      mainLayout->invalidate ();
+    }
 
     m_CellCreator->highlightByText (m_LiveFilterEditor->text());
     // Seems that the sort() method simply will not sort when the
@@ -228,6 +237,8 @@ ThemeWidget::textChanged ()
     m_Proxy->sort(Qt::DisplayRole);
     selectCurrentTheme ();
     m_ThemeListModel->refresh();
+
+    update ();
 }
 
 void 
