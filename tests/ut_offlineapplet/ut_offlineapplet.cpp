@@ -21,7 +21,7 @@ static const char *signalValuesChanged = SIGNAL(valuesChanged());
 
 int   argc = 1;
 char *argv[] = {
-    (char *) "./ut_volumeoverlay",
+    (char *) "./ut_offlineapplet",
     NULL };
 /******************************************************************************
  * Stub for MMessageBox
