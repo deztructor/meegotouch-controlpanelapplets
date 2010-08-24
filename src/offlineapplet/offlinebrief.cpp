@@ -34,19 +34,19 @@ QString OfflineBrief::valueText() const
     SYS_DEBUG("");
     return currentText();
 }
+
 QString OfflineBrief::currentText() const
 {
     SYS_DEBUG("");
     switch (m_LastMode)
     {
-        case QmDeviceMode::Normal:
-            //% "Activate offline mode"
-            return qtTrId("qtn_offl_activate");
         case QmDeviceMode::Flight:
             //% "Deactivate offline mode"
             return qtTrId("qtn_offl_deactivate");
+        case QmDeviceMode::Normal:
         default:
-            SYS_DEBUG("An error occured while getting the device mode");
+            //% "Activate offline mode"
+            return qtTrId("qtn_offl_activate");
     }
     return QString();
 }
@@ -66,11 +66,13 @@ void OfflineBrief::setToggle (bool toggle)
     }
     else
     {
-        MBanner *infoBanner = new MBanner();
-        //% "Closing all connections. Switching to offline mode."
-        infoBanner->setSubtitle(qtTrId("qtn_offl_entering"));
-        infoBanner->appear(MSceneWindow::DestroyWhenDone);
-        m_DevMode->setMode(QmDeviceMode::Flight);
+        if (m_DevMode->setMode(QmDeviceMode::Flight))
+        {
+            MBanner *infoBanner = new MBanner();
+            //% "Closing all connections. Switching to offline mode."
+            infoBanner->setSubtitle(qtTrId("qtn_offl_entering"));
+            infoBanner->appear(MSceneWindow::DestroyWhenDone);
+        }
     }
 }
 
