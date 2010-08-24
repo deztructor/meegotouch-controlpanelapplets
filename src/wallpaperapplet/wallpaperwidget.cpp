@@ -50,6 +50,15 @@ WallpaperWidget::createContent ()
     SYS_DEBUG ("--- Start ------------");
     mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
     setLayout (mainLayout);
+
+    MLayout *buttonsLayout = new MLayout;
+
+    MLinearLayoutPolicy *wallpaperLandscape =
+        new MLinearLayoutPolicy (buttonsLayout, Qt::Horizontal);
+
+    MLinearLayoutPolicy *wallpaperPortrait =
+        new MLinearLayoutPolicy (buttonsLayout, Qt::Vertical);
+
  SYS_DEBUG ("1"); 
     /*
      * The gallery item.
@@ -57,6 +66,9 @@ WallpaperWidget::createContent ()
     m_GalleryItem = new MContentItem (MContentItem::IconAndSingleTextLabel);
     m_GalleryItem->setObjectName ("GalleryItem");
     m_GalleryItem->setItemMode (MContentItem::Single);
+    m_GalleryItem->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+    wallpaperLandscape->addItem (m_GalleryItem);
+    wallpaperPortrait->addItem (m_GalleryItem);
 
     connect (m_GalleryItem, SIGNAL(clicked()),
             this, SLOT(galleryActivated()));
@@ -68,6 +80,9 @@ WallpaperWidget::createContent ()
     m_OviItem->setImageID ("icon-m-common-ovi");
     m_OviItem->setObjectName ("OviItem");
     m_OviItem->setItemMode (MContentItem::Single);
+    m_OviItem->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+    wallpaperLandscape->addItem (m_OviItem);
+    wallpaperPortrait->addItem (m_OviItem);
 
     connect (m_OviItem, SIGNAL(clicked()),
             this, SLOT(oviActivated()));
@@ -87,8 +102,9 @@ WallpaperWidget::createContent ()
     /*
      * Adding all widgets into the layout.
      */
-    mainLayout->addItem (m_GalleryItem);
-    mainLayout->addItem (m_OviItem);
+    buttonsLayout->setLandscapePolicy (wallpaperLandscape);
+    buttonsLayout->setPortraitPolicy (wallpaperPortrait);
+    mainLayout->addItem (buttonsLayout);
     mainLayout->addItem (m_ImageList);
     mainLayout->setStretchFactor (m_ImageList, 1);
 
