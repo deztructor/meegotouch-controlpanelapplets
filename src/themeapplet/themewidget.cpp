@@ -35,6 +35,7 @@ ThemeWidget::ThemeWidget (
 
 ThemeWidget::~ThemeWidget ()
 {
+    m_LiveFilterEditor->setParentLayoutItem (0);
 }
 
 void
