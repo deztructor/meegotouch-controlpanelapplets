@@ -1,3 +1,9 @@
+systemui-applets (0.14.17-1) harmattan; urgency=low
+
+  * Fixed a destructor crash in Theme-applets ThemeWidget class 
+
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 26 Aug 2010 10:55:38 +0200
+
 systemui-applets (0.14.16-1) harmattan; urgency=low
 
   * Fixes: NB#185858 - Wrong text layout in setting of Wallpaper from Gallery
