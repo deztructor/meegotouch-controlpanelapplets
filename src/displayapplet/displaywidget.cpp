@@ -41,6 +41,7 @@ void DisplayWidget::initWidget ()
 
     QGraphicsLinearLayout *mainLayout =
         new QGraphicsLinearLayout (Qt::Vertical);
+    mainLayout->setContentsMargins (0., 0., 0., 0.);
     mainLayout->setSpacing (0.); 
 
     m_logic = new DisplayBusinessLogic;
