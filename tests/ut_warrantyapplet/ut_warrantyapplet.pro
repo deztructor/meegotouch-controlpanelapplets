@@ -26,6 +26,7 @@ CONFIG += \
 	gui \
 	meegotouch \
 	plugin \
+	qmsystem \
 	duicontrolpanel \
 	silent 
 

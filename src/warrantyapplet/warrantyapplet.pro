@@ -4,6 +4,7 @@ TEMPLATE = lib
 CONFIG += plugin \
           gui \
           meegotouch \
+          qmsystem \
           duicontrolpanel \
           silent
 

@@ -9,6 +9,8 @@
 #include <MDialog>
 #include <MMessageBox>
 
+#include <qmsystemstate.h>
+
 #define DEBUG
 #include "../debug.h"
 
@@ -34,6 +36,8 @@ WarrantyWidget::createContent ()
     MLinearLayoutPolicy *portraitPolicy;
     MLabel              *label1;
 
+    Maemo::QmSystemState  systemState;
+
     layout = new MLayout;
 
     /*
@@ -47,7 +51,7 @@ WarrantyWidget::createContent ()
     /*
      *
      */
-    label1 = new MLabel (labelText());
+    label1 = new MLabel (labelText().arg (systemState.getPowerOnTimeInSeconds ()));
     label1->setWordWrap (true);
     
     landscapePolicy->addItem (label1);
@@ -68,6 +72,7 @@ WarrantyWidget::labelText()
     retval += "<h2>The text of the warranty</h2>";
     retval += "<p>Here is going to be shown the text of the WARRANTY ";
     retval += "once the text is going to be specified.</p>";
+    retval += "<br/><p>Power on time: %L1 seconds</p>";
 
     return retval;
 }

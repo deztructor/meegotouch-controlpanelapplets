@@ -5,6 +5,8 @@
 #include <QGraphicsLinearLayout>
 #include <MLabel>
 #include <MButton>
+#include <MLayout>
+#include <MLinearLayoutPolicy>
 #include <MButtonGroup>
 #include <MNotification>
 #include <MLocale>
@@ -51,12 +53,37 @@ UsbView::initWidget ()
     m_btn_group = new MButtonGroup ();
     m_btn_group->setExclusive (true);
 
+    MLayout *buttonsLayout = new MLayout;
+    MLinearLayoutPolicy *vlayout =
+        new MLinearLayoutPolicy (buttonsLayout, Qt::Vertical);
+    vlayout->setNotifyWidgetsOfLayoutPositionEnabled (true);
+
+#if MAKEIT_HBOX_IN_LANDSCAPE
+    /*
+     * XXX: Because of some translated strings lenghts,
+     * i cannot make it in this way:
+     */
+    MLinearLayoutPolicy *hlayout =
+        new MLinearLayoutPolicy (buttonsLayout, Qt::Horizontal);
+    hlayout->setNotifyWidgetsOfLayoutPositionEnabled (true);
+
+    buttonsLayout->setPortraitPolicy (vlayout);
+    buttonsLayout->setLandscapePolicy (hlayout);
+#else
+    buttonsLayout->setPolicy (vlayout);
+#endif
+
     for (int i = 0; i < 3; i++)
     {
         int id;
         m_buttons[i] = new MButton;
+        m_buttons[i]->setViewType(MButton::groupType);
         m_buttons[i]->setCheckable (true);
-        layout->addItem (m_buttons[i]);
+        vlayout->addItem (m_buttons[i]);
+#if MAKEIT_HBOX_IN_LANDSCAPE
+        hlayout->addItem (m_buttons[i]);
+        hlayout->setStretchFactor (m_buttons[i], 2);
+#endif
 
         switch (i)
         {
@@ -74,6 +101,8 @@ UsbView::initWidget ()
 
         m_btn_group->addButton (m_buttons[i], id);
     }
+
+    layout->addItem (buttonsLayout);
 
     int current_setting = (int) m_logic->getDefaultMode ();
 

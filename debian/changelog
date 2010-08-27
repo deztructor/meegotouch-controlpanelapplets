@@ -1,8 +1,9 @@
 systemui-applets (0.15.1~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  * PO-timer available in 'Warranty' applet
+  * Fixed theming problems in 'Usb' applet
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 27 Aug 2010 09:12:15 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 27 Aug 2010 16:06:56 +0200
 
 systemui-applets (0.14.17-1) harmattan; urgency=low
 
