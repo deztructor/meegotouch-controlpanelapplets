@@ -1,3 +1,9 @@
+systemui-applets (0.15.1~1) meegotouch; urgency=low
+
+  * [NEW VERSION]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 27 Aug 2010 09:12:15 +0200
+
 systemui-applets (0.14.17-1) harmattan; urgency=low
 
   * Fixed a destructor crash in Theme-applets ThemeWidget class 
