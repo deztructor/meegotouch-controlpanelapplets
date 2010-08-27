@@ -427,6 +427,12 @@ BatteryBusinessLogic::recalculateChargingInfo ()
     SYS_DEBUG ("Emitting batteryBarValueReceived(%d)", batteryBarValue (-1));
     emit batteryBarValueReceived (batteryBarValue (-1));
 
+    if(batteryState == QmBattery::StateFull)
+    {
+        emit batteryFull();
+        return;
+    }
+
     /*
      * And the remaining battery capacity has to be recalculated.
      */

@@ -16,10 +16,13 @@ class QStringList;
  * (1) Using the battery.
  * (2) Charging the battery.
  * (3) Power save mode.
+ * (4) Charging complete
  *
  * The state however is controlled by several attributes:
  * (1) Charging boolean
  * (2) PSM enabled boolean
+ * and a slot:
+ * (1) Charge complete slot
  *
  * And thus we have four combinations. here is a map that this class implements:
  * 
@@ -28,6 +31,8 @@ class QStringList;
  *   n           y         (3) Power save mode.
  *   y           n         (2) Charging the battery.
  *   y           y         (2) Charging the battery.
+ *
+ * if chargeComplete () slot called, than icon changes to charge complete.
  *
  * This is because indicating the charging is more important than indicating the
  * power save mode, although we could anymate the power save mode icon too.
@@ -58,6 +63,7 @@ public slots:
 
 private slots:
     void updateImage ();
+    void chargeComplete ();
 
 private:
     void  setIconSet ();
@@ -69,6 +75,7 @@ private:
     
 private:
     bool                    m_PowerSave;
+    bool                    m_ChargeComplete;
     int                     m_ChargingSpeed;
     QTimer                 *m_timer;
     int                     m_batteryLevel;

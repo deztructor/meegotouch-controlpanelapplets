@@ -240,4 +240,10 @@ BatteryImage::getPixmap (
     return pixmap;
 }
 
+void
+BatteryImage::chargeComplete ()
+{
+    SYS_DEBUG("battery full iconn");
+    setPixmap( *(getPixmap(QString ("icon-m-energy-management-remove-charger"))) );
+}
 

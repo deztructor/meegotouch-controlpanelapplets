@@ -31,6 +31,7 @@ private slots:
     void PSMValueReceived (bool PSMEnabled);
     void PSMAutoToggled (bool PSMAutoEnabled);
     void charging(int animation_rate);
+    void chargeComplete ();
 
 private:
     void updatePSMButton ();

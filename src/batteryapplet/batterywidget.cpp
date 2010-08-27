@@ -129,6 +129,10 @@ void BatteryWidget::initWidget ()
     connect (m_logic, SIGNAL (PSMValueReceived (bool)),
              this, SLOT (PSMValueReceived (bool)));
 
+    connect (m_logic, SIGNAL(batteryFull()),
+             batteryImage, SLOT(chargeComplete()));
+    connect (m_logic, SIGNAL(batteryFull()),
+             this, SLOT(chargeComplete()));
     // mainLayout
     QGraphicsLinearLayout *mainLayout =
         new QGraphicsLinearLayout (Qt::Vertical);
@@ -292,4 +296,10 @@ void BatteryWidget::charging(int animation_rate)
         //% "Charging"
         remainingCapacityContainer->setText(qtTrId ("qtn_ener_charging"));
     }
+}
+
+void BatteryWidget::chargeComplete()
+{
+    //% "Charging complete"
+    remainingCapacityContainer->setText(qtTrId ("qtn_ener_charcomp"));
 }

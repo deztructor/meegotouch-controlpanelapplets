@@ -57,6 +57,7 @@ signals:
     void batteryCharging (int animation_rate);
     void batteryBarValueReceived (int bar_value);
     void PSMValueReceived (bool enabled);
+    void batteryFull ();
 
 private slots:
     void batteryChargerEvent (Maemo::QmBattery::ChargerType type);
