@@ -2,8 +2,10 @@ systemui-applets (0.15.1~1) meegotouch; urgency=low
 
   * PO-timer available in 'Warranty' applet
   * Fixed theming problems in 'Usb' applet
+  * Fixes: NB#188540 -  Activate/Deactivate power saver button is right
+    aligned. Same is the case with activate and deactivate Offline mode.
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 27 Aug 2010 16:06:56 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 30 Aug 2010 10:44:37 +0200
 
 systemui-applets (0.14.17-1) harmattan; urgency=low
 

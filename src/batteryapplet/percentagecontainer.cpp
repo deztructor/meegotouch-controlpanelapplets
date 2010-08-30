@@ -38,7 +38,7 @@ void PercentageContainer::updateCapacity(
 {
     QString text;
     //% "Battery level \%L1\%"
-    text = qtTrId ("qtn_ener_battery_level", value).arg (value);
+    text = qtTrId ("qtn_ener_battery_level").arg (value);
     SYS_DEBUG ("*** text = %s", SYS_STR(text));
     m_TextLabel->setText(text);
 }
