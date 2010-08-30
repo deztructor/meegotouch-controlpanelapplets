@@ -1,5 +1,6 @@
 systemui-applets (0.15.1~1) meegotouch; urgency=low
 
+  [ David Kedves ]
   * PO-timer available in 'Warranty' applet
   * Fixed theming problems in 'Usb' applet
   * Fixes: NB#188534 -  Profile settings uses wrong object names
@@ -7,7 +8,12 @@ systemui-applets (0.15.1~1) meegotouch; urgency=low
     aligned. Same is the case with activate and deactivate Offline mode.
   * Fixes: NB#188206 -  Battery settings use wrong object names
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 30 Aug 2010 10:44:37 +0200
+  [ Zoltan Nyul ]
+  * Fixes: NB#184073  -  Show text Charging complete and Charging
+    complete icon in Battery settings UI when the battery has reached
+    FULL state
+
+ -- Zoltan Nyul <zoltan.nyul@blumsoft.eu>  Mon, 30 Aug 2010 12:55:51 +0200
 
 systemui-applets (0.14.17-1) harmattan; urgency=low
 
