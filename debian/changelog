@@ -9,6 +9,7 @@ systemui-applets (0.15.1~1) meegotouch; urgency=low
   [ Laszlo Pere ]
   * Fixes: NB#188534 -  Profile settings uses wrong object names
   * Fixes: NB#188206 -  Battery settings use wrong object names
+  * Fixes: NB#188213 -  Display settings uses wrong object names
 
   [ Zoltan Nyul ]
   * Fixes: NB#184073  -  Show text Charging complete and Charging

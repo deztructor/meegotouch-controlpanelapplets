@@ -9,7 +9,7 @@
 
 #include <MButton>
 #include <MContainer>
-#include <MContentItem>
+#include <MBasicListItem>
 #include <MPopupList>
 #include <QStringList>
 #include <QStringListModel>
@@ -46,9 +46,14 @@ void DisplayWidget::initWidget ()
 
     m_logic = new DisplayBusinessLogic;
 
+    /*
+     * First row: The brighness label and slider.
+     */
     // Brightness
     MWidget *brightness = new MStylableWidget;
     MLayout *brightnessLayout = new MLayout;
+
+    brightnessLayout->setContentsMargins (0., 0., 0., 0.);
 
     MLinearLayoutPolicy *brightnessLandscape =
         new MLinearLayoutPolicy (brightnessLayout, Qt::Horizontal);
@@ -58,12 +63,13 @@ void DisplayWidget::initWidget ()
 
     //% "Brightness"
     m_brightnessLabel = new MLabel (qtTrId ("qtn_disp_bright"));
-    m_brightnessLabel->setObjectName ("ContentItemTitle");
+    m_brightnessLabel->setObjectName ("CommonTitle");
     brightnessLandscape->addItem (m_brightnessLabel);
+    brightnessLandscape->setAlignment (m_brightnessLabel, Qt::AlignVCenter);
     brightnessPortrait->addItem (m_brightnessLabel);
 
     m_brightnessSlider = new MSlider;
-    m_brightnessSlider->setObjectName("BrightnessSlider");
+    m_brightnessSlider->setObjectName("CommonSlider");
     brightnessLandscape->addItem (m_brightnessSlider);
     brightnessLandscape->setAlignment (m_brightnessSlider, Qt::AlignVCenter);
     brightnessPortrait->addItem (m_brightnessSlider);
@@ -82,11 +88,15 @@ void DisplayWidget::initWidget ()
     brightness->setLayout (brightnessLayout);
     mainLayout->addItem (brightness);
 
+    /*
+     * Second row: The available backlight time out values.
+     */
     m_screenlight_vals = m_logic->screenLightsValues ();
 
     // Screen dim timeout selector
-    m_screenTimeout = new MContentItem (MContentItem::TwoTextLabels);
-    m_screenTimeout->setObjectName ("ScreenTimeout");
+    m_screenTimeout = new MBasicListItem (MBasicListItem::TitleWithSubtitle);
+    m_screenTimeout->setObjectName (/*"ScreenTimeout"*/"CommonPanel");
+    m_screenTimeout->setLayoutPosition (M::VerticalCenterPosition);
     //% "Backlight time out"
     m_screenTimeout->setTitle (qtTrId ("qtn_disp_screenoff"));
     {
@@ -106,18 +116,23 @@ void DisplayWidget::initWidget ()
 
     mainLayout->addItem (m_screenTimeout);
 
+    /*
+     * The third row: stays lit when charging label and button.
+     */
     MWidget *displayon = new MStylableWidget;
     QGraphicsLinearLayout *blankinhibitLayout =
         new QGraphicsLinearLayout (Qt::Horizontal);
 
+    blankinhibitLayout->setContentsMargins (0., 0., 0., 0.);
+
     //% "Display stays lit when charging"
     m_blankInhibitLabel = new MLabel (qtTrId ("qtn_disp_screenon"));
-    m_blankInhibitLabel->setObjectName("ContentItemTitle");
+    m_blankInhibitLabel->setObjectName("CommonSingleTitle");
     blankinhibitLayout->addItem (m_blankInhibitLabel);
 
     // Blank inhibit
     m_blankInhibitButton = new MButton;
-    m_blankInhibitButton->setObjectName("BlankInhibitButton");
+    m_blankInhibitButton->setObjectName("CommonSwitch");
     m_blankInhibitButton->setCheckable (true);
     m_blankInhibitButton->setViewType (MButton::switchType);
 

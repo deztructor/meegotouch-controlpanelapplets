@@ -9,7 +9,7 @@ class MButton;
 class MSlider;
 class MLabel;
 class MContainer;
-class MContentItem;
+class MBasicListItem;
 class DisplayBusinessLogic;
 
 class DisplayWidget : public DcpWidget
@@ -33,7 +33,7 @@ private:
     QList<int>              m_brightness_vals;
     QList<int>              m_screenlight_vals;
     MSlider                *m_brightnessSlider;
-    MContentItem           *m_screenTimeout;
+    MBasicListItem         *m_screenTimeout;
     MButton                *m_blankInhibitButton;
     MLabel                 *m_brightnessLabel;
     MLabel                 *m_screenlightLabel;
