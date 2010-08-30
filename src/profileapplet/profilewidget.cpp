@@ -48,6 +48,10 @@ ProfileWidget::initProfiles ()
     QGraphicsLinearLayout *vibraLayout = new QGraphicsLinearLayout (Qt::Vertical);
     
     SYS_DEBUG ("We have %d profiles.", l.count());
+    mainLayout->setContentsMargins (0., 0., 0., 0.);
+    
+    vibraLayout->setContentsMargins (0., 0., 0., 0.);
+    vibraLayout->setSpacing (0.);
 
     // create profile containers
     for (int i = 0; i < l.count(); ++i) {
@@ -57,7 +61,12 @@ ProfileWidget::initProfiles ()
             d.visualData.second,
             d.vibrationEnabled);
         // For testability driver: set some object name...
-        cont->setObjectName (ProfileDataInterface::mapId (d.profileId));
+        //cont->setObjectName (ProfileDataInterface::mapId (d.profileId));
+        /*
+         * Sorry, can't use unique ID-s, See NB#188534 for further details.
+         */
+        cont->setObjectName ("CommonPanel");
+
         connect (cont, SIGNAL(toggled(bool)), 
                 this, SLOT(vibrationChanged(bool)));
         m_Containers.insert(d.profileId, cont);

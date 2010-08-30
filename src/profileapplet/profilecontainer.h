@@ -4,7 +4,7 @@
 #ifndef PROFILECONTAINER_H
 #define PROFILECONTAINER_H
 
-#include <MWidget>
+#include <MStylableWidget>
 
 class MButton;
 class MLabel;
@@ -13,7 +13,7 @@ class MLabel;
  * A widget that shows and controls a profile's vibration on/off
  * property.
  */
-class ProfileContainer: public MWidget
+class ProfileContainer: public MStylableWidget
 {
     Q_OBJECT
     Q_PROPERTY(bool checked READ isChecked WRITE setChecked)

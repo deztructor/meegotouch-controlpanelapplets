@@ -16,7 +16,7 @@ ProfileContainer::ProfileContainer (
         const QString &title, 
         bool           vibra, 
         MWidget     *parent) :
-    MWidget (parent),
+    MStylableWidget (parent),
     m_ProfileId (id),
     m_Button(0),
     m_Label(0)
@@ -25,15 +25,20 @@ ProfileContainer::ProfileContainer (
     SYS_DEBUG ("Creating container for %s", SYS_STR(title)); 
 
     m_Button = new MButton();
+    m_Button->setObjectName ("CommonSwitch");
     m_Button->setCheckable (true);
     m_Button->setViewType (MButton::switchType);
     m_Button->setChecked (vibra);
     connect(m_Button, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
 
     m_Label = new MLabel(title);
+    m_Label->setObjectName ("CommonSingleTitle");
 
     layout->addItem(m_Label);
     layout->addItem(m_Button);
+
+    layout->setAlignment (m_Label, Qt::AlignVCenter);
+    layout->setAlignment (m_Button, Qt::AlignVCenter);
 
     setLayout(layout);
 }
