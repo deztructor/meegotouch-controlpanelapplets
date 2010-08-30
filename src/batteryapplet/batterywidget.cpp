@@ -107,6 +107,7 @@ void BatteryWidget::initWidget ()
     m_MainLayout->addItem (remainingCapacityContainer);
     m_MainLayout->addItem (sliderContainer);
     m_MainLayout->addItem (PSMButton);
+    m_MainLayout->setAlignment (PSMButton, Qt::AlignCenter);
 
     MContainer *mainContainer = new MContainer;
     mainContainer->setHeaderVisible (false);
