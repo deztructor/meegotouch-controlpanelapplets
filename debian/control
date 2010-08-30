@@ -16,19 +16,19 @@ Priority: optional
 Architecture: any
 Depends: ${shlibs:Depends}, meegotestrunner, duicontrolpanel-usbapplet,
          duicontrolpanel-batteryapplet, duicontrolpanel-aboutapplet,
-         duistatusindicatormenu-volumeplugin, duicontrolpanel-displayapplet,
-         duicontrolpanel-profileapplet, duistatusindicatormenu-profileplugin,
-         duicontrolpanel-themeapplet, duicontrolpanel-wallpaperapplet,
-         duicontrolpanel-resetapplet, duicontrolpanel-warrantyapplet,
-         duicontrolpanel-offlineapplet, testrunner, duihomescreen
-XB-Maemo-CI-Packages: system-ui
+         duicontrolpanel-displayapplet, duicontrolpanel-profileapplet,
+         duistatusindicatormenu-profileplugin, duicontrolpanel-themeapplet,
+         duicontrolpanel-wallpaperapplet, duicontrolpanel-resetapplet,
+         duicontrolpanel-warrantyapplet, duicontrolpanel-offlineapplet,
+         testrunner
+XB-Maemo-CI-Packages: systemui-applets-tests
 XB-Maemo-CI-Stage: fast, staging
-Description: Test package for system-ui applets
+Description: Test package for meegotouch-controlpanelapplets
 
 Package: systemui-applets-l10n-engineering-english
 Section: devel
 Architecture: all
-Description: Engineering English translations for system-ui packages.
+Description: Engineering English translations for meegotouch-controlpanelapplets packages.
 
 Package: duicontrolpanel-offlineapplet
 Section: misc
