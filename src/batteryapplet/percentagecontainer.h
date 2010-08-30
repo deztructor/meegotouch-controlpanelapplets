@@ -32,7 +32,6 @@ private:
 private:
     MImageWidget  *m_Image;
     MLabel        *m_TextLabel;
-    MLabel        *m_TimeLabel;
 };
 
 #endif // PERCENTAGECONTAINER_H

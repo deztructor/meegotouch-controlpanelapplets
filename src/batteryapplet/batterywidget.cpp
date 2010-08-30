@@ -34,6 +34,7 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
      */
     m_PSMButtonToggle = false;
 
+    setContentsMargins (0., 0., 0., 0.);
     initWidget ();
 }
 
@@ -76,7 +77,7 @@ void BatteryWidget::initWidget ()
      * PSMButton is used to immediately turn the power save mode on/off.
      */
     PSMButton = new MButton;
-    PSMButton->setObjectName ("PSMButton");
+    PSMButton->setObjectName ("CommonSingleButton");
     updatePSMButton ();
 
     connect (PSMButton, SIGNAL (released ()),
@@ -101,13 +102,34 @@ void BatteryWidget::initWidget ()
              m_logic, SLOT (setPSMThresholdValue (int)),
              Qt::DirectConnection);
 
+    MContainer            *buttonContainer;
+    QGraphicsLinearLayout *buttonLayout;
+
+    buttonContainer = new MContainer;
+    buttonContainer->setObjectName ("CommonPanel");
+    buttonContainer->setHeaderVisible (false);
+
+    buttonLayout = new QGraphicsLinearLayout (Qt::Horizontal);
+
+    buttonLayout->addStretch ();
+    buttonLayout->addItem (PSMButton);
+    buttonLayout->addStretch ();
+    buttonLayout->setAlignment (PSMButton, Qt::AlignHCenter);
+
+    buttonContainer->centralWidget()->setLayout (buttonLayout);
+
     // mainContainer
     m_MainLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    m_MainLayout->setContentsMargins (0., 0., 0., 0.);
+    m_MainLayout->setSpacing (0.);
 
     m_MainLayout->addItem (remainingCapacityContainer);
+    m_MainLayout->setStretchFactor (remainingCapacityContainer, 0);
     m_MainLayout->addItem (sliderContainer);
-    m_MainLayout->addItem (PSMButton);
-    m_MainLayout->setAlignment (PSMButton, Qt::AlignCenter);
+    m_MainLayout->setStretchFactor (sliderContainer, 0);
+
+    m_MainLayout->addItem (buttonContainer);
+    m_MainLayout->setStretchFactor (buttonContainer, 0);
 
     MContainer *mainContainer = new MContainer;
     mainContainer->setHeaderVisible (false);

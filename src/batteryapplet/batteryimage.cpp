@@ -20,7 +20,7 @@ BatteryImage::BatteryImage (QGraphicsItem *parent) :
 {
     setZoomFactor (1.0);
     setIconSet ();
-
+    setObjectName ("CommonMainIcon");
     connect (MTheme::instance (), SIGNAL (pixmapRequestsFinished ()),
              this, SLOT (updateImage ()));
 }

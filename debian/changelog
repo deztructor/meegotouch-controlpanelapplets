@@ -5,6 +5,7 @@ systemui-applets (0.15.1~1) meegotouch; urgency=low
   * Fixes: NB#188534 -  Profile settings uses wrong object names
   * Fixes: NB#188540 -  Activate/Deactivate power saver button is right
     aligned. Same is the case with activate and deactivate Offline mode.
+  * Fixes: NB#188206 -  Battery settings use wrong object names
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 30 Aug 2010 10:44:37 +0200
 

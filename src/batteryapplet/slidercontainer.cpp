@@ -20,6 +20,7 @@ SliderContainer::SliderContainer (MWidget *parent) :
 {
     SYS_DEBUG ("");
 
+    setObjectName ("CommonPanel");
     setHeaderVisible (false);
     setLayout ();
 }
@@ -59,14 +60,14 @@ void SliderContainer::setLayout()
      * "Auto activate power save" label
      */
     m_AutoPSMLabel = new MLabel;
-    m_AutoPSMLabel->setObjectName ("batteryLabel");
+    m_AutoPSMLabel->setObjectName ("CommonTitle");
     labelLayoutPolicy->addItem (m_AutoPSMLabel, Qt::AlignLeft);
 
     /*
      *
      */
     m_PsmValueLabel = new MLabel;
-    m_PsmValueLabel->setObjectName ("psmValueLabel");
+    m_PsmValueLabel->setObjectName ("CommonSubTitle");
     labelLayoutPolicy->addItem (m_PsmValueLabel, Qt::AlignLeft);
 
     /*
@@ -76,18 +77,18 @@ void SliderContainer::setLayout()
 
     // m_PSMAutoButton
     m_PSMAutoButton = new MButton;
+    m_PSMAutoButton->setObjectName ("CommonSwitch");
     connect (m_PSMAutoButton, SIGNAL (toggled (bool)),
              this, SLOT (PSMAutoButtonToggled (bool)));
     m_PSMAutoButton->setCheckable (true);
     m_PSMAutoButton->setViewType (MButton::switchType);
-    // m_PSMAutoButton->setObjectName ("PSMAutoButton");
     hpolicy->addItem (m_PSMAutoButton, Qt::AlignRight | Qt::AlignVCenter);
 
 
     m_LayoutPolicy->addItem (hlayout);
-
+    
     centralWidget ()->setLayout (layout);
-
+    
     retranslate ();
 }
 
@@ -173,6 +174,7 @@ SliderContainer::toggleSliderExistence (
             SYS_DEBUG ("Connecting %p->valueChanged", m_PSMSlider);
             SYS_DEBUG ("m_SliderValue = %d", m_SliderValue);
 
+            m_PSMSlider->setObjectName ("CommonSlider");
             m_PSMSlider->setOrientation (Qt::Horizontal);
             m_PSMSlider->setHandleLabelVisible (false);
             m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
@@ -191,6 +193,7 @@ SliderContainer::toggleSliderExistence (
                     Qt::DirectConnection);
 
             m_LayoutPolicy->addItem (m_PSMSlider);
+            m_LayoutPolicy->setAlignment (m_PSMSlider, Qt::AlignHCenter);
         }
     } else {
         if ((m_PSMSlider) && (m_LayoutPolicy->count () > 1)) {

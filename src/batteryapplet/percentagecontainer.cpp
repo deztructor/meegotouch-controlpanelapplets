@@ -5,6 +5,7 @@
 #include <QGraphicsLinearLayout>
 #include <MImageWidget>
 #include <MLabel>
+#include <MStylableWidget>
 
 //#define DEBUG
 #include "../debug.h"
@@ -18,8 +19,11 @@ PercentageContainer::PercentageContainer(
         m_TextLabel (0)
 {
     SYS_DEBUG ("*** text = %s", SYS_STR(text));
+
+    setObjectName ("CommonPanel");
+
     m_TextLabel = new MLabel (text);
-    m_TextLabel->setObjectName ("batteryLabel");
+    m_TextLabel->setObjectName ("CommonSingleTitle");
 
     setHeaderVisible (false);
     setLayout ();
@@ -45,15 +49,31 @@ void PercentageContainer::updateCapacity(
 
 void PercentageContainer::setLayout()
 {
-    QGraphicsLinearLayout *layout =
-        new QGraphicsLinearLayout (Qt::Horizontal);
+    MStylableWidget       *stretcher;
+    QGraphicsLinearLayout *mainLayout;
+    QGraphicsLinearLayout *layout;
 
+    mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    mainLayout->setContentsMargins (0., 0., 0., 0.);
+    mainLayout->setSpacing (0.);
+    
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    layout->setContentsMargins (0., 0., 0., 0.);
+    layout->setSpacing (0.);
+
+    stretcher = new MStylableWidget ();
+    stretcher->setObjectName ("CommonSpacer");
+    
     // add the widgets
     layout->addItem (m_Image);
+    layout->setAlignment (m_Image, Qt::AlignVCenter);
     layout->addItem (m_TextLabel);
-    layout->addStretch ();
+    layout->setAlignment (m_TextLabel, Qt::AlignVCenter);
+
+    mainLayout->addItem (layout);
+    mainLayout->addItem (stretcher);
 
     // set the layout
-    centralWidget ()->setLayout (layout);
+    centralWidget ()->setLayout (mainLayout);
 }
 
