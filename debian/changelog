@@ -3,9 +3,11 @@ systemui-applets (0.15.1~1) meegotouch; urgency=low
   [ David Kedves ]
   * PO-timer available in 'Warranty' applet
   * Fixed theming problems in 'Usb' applet
-  * Fixes: NB#188534 -  Profile settings uses wrong object names
   * Fixes: NB#188540 -  Activate/Deactivate power saver button is right
     aligned. Same is the case with activate and deactivate Offline mode.
+
+  [ Laszlo Pere ]
+  * Fixes: NB#188534 -  Profile settings uses wrong object names
   * Fixes: NB#188206 -  Battery settings use wrong object names
 
   [ Zoltan Nyul ]
