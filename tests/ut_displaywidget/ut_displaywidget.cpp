@@ -14,6 +14,7 @@
 #include <MGConfItem>
 #include <MSlider>
 #include <MContentItem>
+#include <MBasicListItem>
 #include <MDialog>
 #include <MPopupList>
 #include <MButton>
@@ -32,6 +33,8 @@ int
 MDialog::exec (
         MWindow *window)
 {
+    Q_UNUSED(window);
+
     MPopupList         *popuplist = qobject_cast<MPopupList *>(this);
     QAbstractItemModel *model;
     QModelIndex         index;
