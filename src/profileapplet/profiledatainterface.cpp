@@ -82,19 +82,19 @@ ProfileDataInterface::getCurrentProfileIconId ()
 
     switch (getCurrentProfile()) {
         case ProfileIdRinging:
-            iconId = QString ("icon-m-status-menu-volume");
+            iconId = QString ("icon-m-status-menu-normal");
             break;
 
         case ProfileIdSilent:
-            iconId = QString ("icon-m-status-menu-silent");
+            iconId = QString ("icon-m-status-menu-profile-silent");
             break;
 
         case ProfileIdBeep:
-            iconId = QString ("icon-m-status-menu-beep");
+            iconId = QString ("icon-m-status-menu-profile-beep");
             break;
 
         case ProfileIdLoud:
-            iconId = QString ("icon-m-status-menu-loud");
+            iconId = QString ("icon-m-status-menu-profile-loud");
     }
 
     return iconId;
