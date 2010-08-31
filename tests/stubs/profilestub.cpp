@@ -58,7 +58,11 @@ Profile::profileNames ()
 {
     QStringList retval;
 
-    retval << "general" << "silent" << "meeting" << "outdoors";
+    //retval << "general" << "silent" << "meeting" << "outdoors";
+    retval << "silent";
+    retval << "meeting";
+    retval << "general";
+    retval << "outdoors";
 
     return retval;
 }
@@ -95,3 +99,18 @@ Profile::nameToId (
     return 0;
 }
 
+int 
+Profile::volumeLevel (
+        QString name)
+{
+    if (name == ProfileName::silent)
+        return 0;
+    else if (name == ProfileName::beep)
+        return 10;
+    if (name == ProfileName::ringing)
+        return 50;
+    else if (name == ProfileName::loud)
+        return 90;
+
+    return 0;
+}

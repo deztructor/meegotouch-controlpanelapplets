@@ -25,9 +25,11 @@ public:
 
     struct ProfileData {
         ProfileId                 profileId;
-        QPair<QString, QString>   visualData;       /*< IconId, profilenam(translated) pair */
+        /* IconId, profilenam(translated) pair */
+        QPair<QString, QString>   visualData;
         bool                      vibrationEnabled;
         bool                      isActive;
+        int                       volumeLevel;
     };
 
     ProfileDataInterface ();

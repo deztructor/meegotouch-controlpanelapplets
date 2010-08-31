@@ -47,6 +47,7 @@ public slots:
     bool setActiveProfile(QString name);
     QStringList profileNames ();
     bool isVibrationEnabled (QString profileName);
+    int volumeLevel (QString name);
     bool setVibration (
             QString  profileName, 
             bool     enabled);

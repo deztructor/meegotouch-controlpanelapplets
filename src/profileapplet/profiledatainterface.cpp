@@ -22,6 +22,19 @@
 using namespace ProfileName;
 
 
+/******************************************************************************
+ * ProfileData support methods implementation.
+ */
+bool ProfileDataLessThan (
+        const ProfileDataInterface::ProfileData &p1,
+        const ProfileDataInterface::ProfileData &p2)
+{
+    return p1.volumeLevel < p2.volumeLevel;
+}
+
+/******************************************************************************
+ * ProfileDataInterface class implementation.
+ */
 ProfileDataInterface::ProfileDataInterface ()
 {
     m_ProfileAPI = new Profile ();
@@ -95,11 +108,26 @@ ProfileDataInterface::getProfilesData ()
 
         d.visualData.first = mapId2IconID (d.profileId);
         d.visualData.second = id2Name (id);
-        d.vibrationEnabled = m_ProfileAPI->isVibrationEnabled (id);
+        d.vibrationEnabled  = m_ProfileAPI->isVibrationEnabled (id);
+        d.volumeLevel       = m_ProfileAPI->volumeLevel (id);
         data.append(d);
     }
-    SYS_DEBUG ("data.count () = %d", data.count ());
 
+    /*
+     * We return the profiles in the order of the loudness. Please check
+     * NB#188710 for further details.
+     */
+    qSort (data.begin(), data.end(), ProfileDataLessThan);
+    #if 0
+    SYS_DEBUG ("data.count () = %d", data.count ());
+    for (int i = 0; i < data.size(); ++i) {
+        SYS_DEBUG ("************* profile %d ***********", i);
+        SYS_DEBUG ("*** visualData.second = %s",
+                SYS_STR(data[i].visualData.second));
+        SYS_DEBUG ("*** volumeLevel       = %d",
+                data[i].volumeLevel);
+    }
+    #endif
     return data;
 }
 
