@@ -40,19 +40,6 @@ Ut_ProfileDataInterface::cleanupTestCase()
 }
 
 /*!
- * Gets the current profile name, checks if the profile name is not an empty
- * string.
- */
-void 
-Ut_ProfileDataInterface::testGetCurrentProfileName ()
-{
-    QString prof = m_Api->getCurrentProfileName ();
-
-    qDebug() << "*** CurrentProfileName = " << prof;
-    QVERIFY(!prof.isEmpty());
-}
-
-/*!
  * Reads the profile data and prints the details with debug messages. Chacks if
  * there is at least 1 available profiles.
  */

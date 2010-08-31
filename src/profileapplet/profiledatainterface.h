@@ -42,7 +42,10 @@ signals:
     void vibrationValue (int id, bool value);
 
 public:
-    QString getCurrentProfileName ();
+    // This method has been remoed because the UI specification has been
+    // changed. Will remove it later. (Can't trust the UI spec will not be
+    // changed again...)
+    //QString getCurrentProfileName ();
     QString getCurrentProfileIconId ();
     int getCurrentProfile ();
     QList<ProfileData> getProfilesData ();

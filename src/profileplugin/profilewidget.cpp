@@ -70,9 +70,17 @@ ProfileWidget::~ProfileWidget ()
     dataIf = NULL;
 }
 
-void ProfileWidget::profileChanged()
+void 
+ProfileWidget::profileChanged()
 {
-    setText(dataIf->getCurrentProfileName());
+    /*
+     * UI spec changed, we are not using the current parofile name in the status
+     * menu any more.
+     */
+    //setText(dataIf->getCurrentProfileName());
+    //% "Profile"
+    setText (qtTrId("qtn_prof_profile"));
+
     setIconID(dataIf->getCurrentProfileIconId());
 }
 
@@ -112,6 +120,7 @@ void ProfileWidget::showProfileDialog()
     // Show the dialog
     dialog->exec();
 }
+
 void
 ProfileWidget::initProfileButtons ()
 {
@@ -119,6 +128,7 @@ ProfileWidget::initProfileButtons ()
     if (profileButtons)
         return;
     profileButtons = new ProfileButtons ();
+
     //% "Profiles"
     QMap<int, QPair<QString, QString> > map;
     QList<ProfileDataInterface::ProfileData> l = dataIf->getProfilesData ();
@@ -127,6 +137,7 @@ ProfileWidget::initProfileButtons ()
         ProfileDataInterface::ProfileData d = l.at (i);
         map.insert (d.profileId, d.visualData);
     }
+
     profileButtons->init (map, dataIf->getCurrentProfile ());
 
     connect (dataIf, SIGNAL (currentProfile (int)),

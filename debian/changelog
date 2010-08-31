@@ -13,6 +13,8 @@ systemui-applets (0.15.1~1) meegotouch; urgency=low
   * Fixes: NB#188710 -  Order of the profiles is wrong in Profile settings
   * Fixes: NB#188712 -  Order of the profiles is wrong in Profile selection
     dialog
+  * Fixes: NB#188091 -  Profile status menu plug-in uses incorrect icons and 
+    incorrect title
 
   [ Zoltan Nyul ]
   * Fixes: NB#184073  -  Show text Charging complete and Charging

@@ -20,7 +20,6 @@ private slots:
     void initTestCase ();
     void cleanupTestCase ();
 
-    void testGetCurrentProfileName ();
     void testGetProfilesData ();
     void testSetGetProfile ();
     void testSetVibration ();

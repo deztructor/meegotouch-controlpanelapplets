@@ -51,7 +51,10 @@ ProfileDataInterface::~ProfileDataInterface ()
     m_ProfileAPI = NULL;
 }
 
-
+#if 0
+    // This method has been remoed because the UI specification has been
+    // changed. Will remove it later. (Can't trust the UI spec will not be
+    // changed again...)
 QString 
 ProfileDataInterface::getCurrentProfileName ()
 {
@@ -60,13 +63,39 @@ ProfileDataInterface::getCurrentProfileName ()
 
     return id2Name (prof);
 }
+#endif
 
+/*!
+ * returns the icon ID representing the current profile.
+ *
+ * Please note that the icons used to represent profiles for the status menu are
+ * different from the icons used in the profile dialog (from the UI spec. 1.2,
+ * last minute change). This method returns the icon ID used in the status 
+ * menu.
+ */
 QString 
 ProfileDataInterface::getCurrentProfileIconId ()
 {
-    SYS_DEBUG ("");
+    QString iconId;
 
-    return mapId2IconID (getCurrentProfile());
+    switch (getCurrentProfile()) {
+        case ProfileIdRinging:
+            iconId = QString ("icon-m-status-menu-volume");
+            break;
+
+        case ProfileIdSilent:
+            iconId = QString ("icon-m-status-menu-silent");
+            break;
+
+        case ProfileIdBeep:
+            iconId = QString ("icon-m-status-menu-beep");
+            break;
+
+        case ProfileIdLoud:
+            iconId = QString ("icon-m-status-menu-loud");
+    }
+
+    return iconId;
 }
 
 void 
@@ -158,13 +187,20 @@ ProfileDataInterface::setVibration (
     }
 }
 
-QString ProfileDataInterface::mapId2IconID (int id)
+/*!
+ * returns The icon ID representing the given profile.
+ *
+ * Please note that from the UI spec. 1.2 we need to use different icons in the
+ * status area and in the profile dialog. These are the profile dialog icons.
+ */
+QString 
+ProfileDataInterface::mapId2IconID (int id)
 {
     QString iconId = "";
 
     switch (id) {
         case ProfileIdRinging:
-            iconId = QString("icon-m-common-volume");
+            iconId = QString("icon-m-profile-normal");
             break;
         case ProfileIdSilent:
             iconId = QString("icon-m-profile-silent");
