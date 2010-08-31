@@ -14,10 +14,13 @@ class ProfileDataInterface : public QObject
 
 public:
     
+    /*
+     * The order is fixed according to the UI specification.
+     */
     enum ProfileId {
-        ProfileIdRinging = 0,
-        ProfileIdSilent,
+        ProfileIdSilent   = 0,
         ProfileIdBeep,
+        ProfileIdRinging,
         ProfileIdLoud,
         // none must be last to teel how many profiles there are available
         ProfileIdNone 

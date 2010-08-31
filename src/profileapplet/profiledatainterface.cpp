@@ -29,7 +29,9 @@ bool ProfileDataLessThan (
         const ProfileDataInterface::ProfileData &p1,
         const ProfileDataInterface::ProfileData &p2)
 {
-    return p1.volumeLevel < p2.volumeLevel;
+    // Use this to sort the profiles in volume level order
+    //return p1.volumeLevel < p2.volumeLevel;
+    return p1.profileId < p2.profileId;
 }
 
 /******************************************************************************
