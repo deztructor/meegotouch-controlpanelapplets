@@ -21,7 +21,11 @@ systemui-applets (0.15.1~1) meegotouch; urgency=low
     complete icon in Battery settings UI when the battery has reached
     FULL state
 
- -- Zoltan Nyul <zoltan.nyul@blumsoft.eu>  Mon, 30 Aug 2010 12:55:51 +0200
+  [ David Kedves ]
+  * Fixes: NB#187290 - current wallpaper view has a sound icon + wrong font
+  * Fixes: NB#188718 - Battery settings view should not have a view menu
+
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 31 Aug 2010 14:28:07 +0200
 
 systemui-applets (0.14.17-1) harmattan; urgency=low
 

@@ -27,9 +27,6 @@ public:
     virtual QVector<MAction *> viewMenuItems();
     virtual DcpBrief* constructBrief(int partId = 0);
 
-private slots:
-    void userGuide ();
-
 private:
     QPointer<BatteryWidget> m_MainWidget;
     #ifdef UNIT_TEST
