@@ -4,8 +4,11 @@
 #include "aboutwidget.h"
 
 #include <QGraphicsLinearLayout>
+
 #include <MImageWidget>
 #include <MLabel>
+#include <QGraphicsLinearLayout>
+#include <MStylableWidget>
 
 #define DEBUG
 #include "../debug.h"
@@ -34,16 +37,40 @@ AboutWidget::createContent ()
 {
     QGraphicsLinearLayout   *layout;
     MImageWidget            *logo;
+    QGraphicsLinearLayout   *logoLayout;
+    MStylableWidget         *stretcher;
 
     layout = new QGraphicsLinearLayout (Qt::Vertical);
+    layout->setContentsMargins (0., 0., 0., 0.);
 
-    logo = new MImageWidget ("icon-l-about-nokia-logo");
-    logo->setZoomFactor (1.0);
+    /*
+     * A stretcher.
+     */
+    stretcher = new MStylableWidget ();
+    stretcher->setObjectName ("CommonSpacer");
+    layout->addItem (stretcher);
 
-    layout->addItem (logo);
-    // FIXME: why this is not working???
-    layout->setAlignment (logo, Qt::AlignLeft);
+    /*
+     * The first row: a logo
+     */
+    logoLayout = new QGraphicsLinearLayout (Qt::Horizontal);
+    logo = new MImageWidget ("missing-icon");
+    logoLayout->addItem (logo);
+    logoLayout->addStretch ();
+    layout->addItem (logoLayout);
+    
+    /*
+     * A stretcher.
+     */
+    stretcher = new MStylableWidget ();
+    stretcher->setObjectName ("CommonSpacer");
+    layout->addItem (stretcher);
 
+    /*
+     * A label... FIXME: This might be wrong, the layout guide seems to define
+     * a stretcher inside the text, so we might want to create two separate
+     * labels...
+     */
     m_Label1 = new MLabel (labelText ());
     m_Label1->setWordWrap (true);
 
