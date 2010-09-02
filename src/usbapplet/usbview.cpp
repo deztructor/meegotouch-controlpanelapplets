@@ -21,6 +21,7 @@ UsbView::UsbView (Maemo::QmUSBMode *logic) :
     m_logic (logic),
     m_error (0)
 {
+    setObjectName ("UsbView");
     initWidget ();
 }
 
@@ -45,8 +46,6 @@ UsbView::initWidget ()
 // Creating & adding the info-label
 
     m_info_label = new MLabel;
-    m_info_label->setObjectName ("info_label");
-
     layout->addItem (m_info_label);
 
 // Creating, filling and adding the mode-list
@@ -57,21 +56,15 @@ UsbView::initWidget ()
     MLinearLayoutPolicy *vlayout =
         new MLinearLayoutPolicy (buttonsLayout, Qt::Vertical);
     vlayout->setNotifyWidgetsOfLayoutPositionEnabled (true);
+    vlayout->setSpacing (0.);
 
-#if MAKEIT_HBOX_IN_LANDSCAPE
-    /*
-     * XXX: Because of some translated strings lenghts,
-     * i cannot make it in this way:
-     */
     MLinearLayoutPolicy *hlayout =
         new MLinearLayoutPolicy (buttonsLayout, Qt::Horizontal);
     hlayout->setNotifyWidgetsOfLayoutPositionEnabled (true);
+    hlayout->setSpacing (0.);
 
     buttonsLayout->setPortraitPolicy (vlayout);
     buttonsLayout->setLandscapePolicy (hlayout);
-#else
-    buttonsLayout->setPolicy (vlayout);
-#endif
 
     for (int i = 0; i < 3; i++)
     {
@@ -80,10 +73,8 @@ UsbView::initWidget ()
         m_buttons[i]->setViewType(MButton::groupType);
         m_buttons[i]->setCheckable (true);
         vlayout->addItem (m_buttons[i]);
-#if MAKEIT_HBOX_IN_LANDSCAPE
         hlayout->addItem (m_buttons[i]);
         hlayout->setStretchFactor (m_buttons[i], 2);
-#endif
 
         switch (i)
         {
@@ -117,6 +108,8 @@ UsbView::initWidget ()
     layout->addStretch ();
 
     setLayout (layout);
+
+    layout->invalidate ();
 
     retranslateUi ();
 }

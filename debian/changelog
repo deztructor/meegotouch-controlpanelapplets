@@ -25,8 +25,9 @@ systemui-applets (0.15.1~1) meegotouch; urgency=low
   [ David Kedves ]
   * Fixes: NB#187290 - current wallpaper view has a sound icon + wrong font
   * Fixes: NB#188718 - Battery settings view should not have a view menu
+  * Fixes: NB#188289 - USB settings button group uses wrong layout
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 02 Sep 2010 09:41:57 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 02 Sep 2010 11:00:16 +0200
 
 systemui-applets (0.14.17-1) harmattan; urgency=low
 
