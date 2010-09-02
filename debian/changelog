@@ -1,4 +1,4 @@
-systemui-applets (0.15.1~1) meegotouch; urgency=low
+systemui-applets (0.15.1-1) meegotouch; urgency=low
 
   [ David Kedves ]
   * PO-timer available in 'Warranty' applet
@@ -27,7 +27,7 @@ systemui-applets (0.15.1~1) meegotouch; urgency=low
   * Fixes: NB#188718 - Battery settings view should not have a view menu
   * Fixes: NB#188289 - USB settings button group uses wrong layout
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 02 Sep 2010 11:00:16 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 02 Sep 2010 16:11:01 +0200
 
 systemui-applets (0.14.17-1) harmattan; urgency=low
 
