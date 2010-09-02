@@ -15,6 +15,7 @@ systemui-applets (0.15.1~1) meegotouch; urgency=low
     dialog
   * Fixes: NB#188091 -  Profile status menu plug-in uses incorrect icons and 
     incorrect title
+  * Fixes: NB#188537 -  Theme applet uses MContentItem for OVI store
 
   [ Zoltan Nyul ]
   * Fixes: NB#184073  -  Show text Charging complete and Charging

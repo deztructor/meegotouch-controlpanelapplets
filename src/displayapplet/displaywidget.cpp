@@ -95,7 +95,7 @@ void DisplayWidget::initWidget ()
 
     // Screen dim timeout selector
     m_screenTimeout = new MBasicListItem (MBasicListItem::TitleWithSubtitle);
-    m_screenTimeout->setObjectName (/*"ScreenTimeout"*/"CommonPanel");
+    m_screenTimeout->setObjectName ("CommonPanel");
     m_screenTimeout->setLayoutPosition (M::VerticalCenterPosition);
     //% "Backlight time out"
     m_screenTimeout->setTitle (qtTrId ("qtn_disp_screenoff"));

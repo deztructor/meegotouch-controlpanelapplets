@@ -14,6 +14,8 @@
 #include <MList>
 #include <MListFilter>
 #include <MSortFilterProxyModel>
+#include <MBasicListItem>
+#include <MImageWidget>
 
 #define DEBUG
 #define WARNING
@@ -58,10 +60,17 @@ ThemeWidget::createWidgets ()
     /*
      * An item to activate the OVI link.
      */
-    m_OviItem = new MContentItem(MContentItem::IconAndSingleTextLabel);
-    m_OviItem->setItemMode (MContentItem::Single);
-    m_OviItem->setImageID ("icon-m-common-ovi");
+    // This does not help fixing the label position.
+    //m_OviItem = new MBasicListItem (MBasicListItem::TitleWithSubtitle);
+    m_OviItem = new MBasicListItem ();
+    // This does not help fixing the label position either.
+    //m_OviItem->setObjectName("CommonPanel");
     m_OviItem->setObjectName("OviItem");
+
+    // This does not help fixing the label position either.
+    //m_OviItem->setLayoutPosition (M::VerticalCenterPosition);
+    // Currently we use the default.
+    m_OviItem->imageWidget()->setImage ("icon-m-common-ovi");
 
     connect (m_OviItem, SIGNAL(clicked()),
             this, SLOT(oviActivated()));

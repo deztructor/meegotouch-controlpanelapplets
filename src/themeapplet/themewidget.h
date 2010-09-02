@@ -5,7 +5,6 @@
 
 #include <QPointer>
 #include <QModelIndex>
-#include <MContentItem>
 #include <dcpwidget.h>
 
 #include "themebusinesslogic.h"
@@ -15,6 +14,7 @@
 class MList;
 class MTextEdit;
 class MSortFilterProxyModel;
+class MBasicListItem;
 
 class ThemeWidget : public DcpWidget
 {
@@ -46,7 +46,7 @@ private:
 
     MTextEdit                    *m_LiveFilterEditor;
     MList                        *m_List;
-    MContentItem                 *m_OviItem;
+    MBasicListItem               *m_OviItem;
     #ifdef UNIT_TEST
     friend class Ut_ThemeWidget;
     #endif
