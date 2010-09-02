@@ -14,13 +14,12 @@ Package: systemui-applets-tests
 Section: devel
 Priority: optional
 Architecture: any
-Depends: ${shlibs:Depends}, meegotestrunner, duicontrolpanel-usbapplet,
+Depends: ${shlibs:Depends}, duicontrolpanel-usbapplet,
          duicontrolpanel-batteryapplet, duicontrolpanel-aboutapplet,
          duicontrolpanel-displayapplet, duicontrolpanel-profileapplet,
          duistatusindicatormenu-profileplugin, duicontrolpanel-themeapplet,
          duicontrolpanel-wallpaperapplet, duicontrolpanel-resetapplet,
-         duicontrolpanel-warrantyapplet, duicontrolpanel-offlineapplet,
-         testrunner
+         duicontrolpanel-warrantyapplet, duicontrolpanel-offlineapplet
 XB-Maemo-CI-Packages: systemui-applets-tests
 XB-Maemo-CI-Stage: fast, staging
 Description: Test package for meegotouch-controlpanelapplets
