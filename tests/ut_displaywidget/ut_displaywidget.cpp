@@ -67,6 +67,9 @@ MGConfItem::value () const
     if (key() == "/meegotouch/debug/show_async_requests")
         return QVariant (true);
 
+    if (key() == "/meegotouch/target/name")
+        return QVariant ("Default");
+
     if (key() != "/system/osso/dsm/display/possible_display_dim_timeouts") {
         SYS_DEBUG ("%s ???", SYS_STR(key()));
         goto return_invalid;
