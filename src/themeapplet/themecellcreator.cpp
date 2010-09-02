@@ -32,6 +32,8 @@ ThemeCellCreator::createCell(
         cell = new MAdvancedListItem (
             MAdvancedListItem::IconWithTitleProgressIndicatorAndTwoSideIcons);
         cell->progressIndicator()->setUnknownDuration (true);
+        cell->sideTopImageWidget()->hide();
+        cell->sideBottomImageWidget()->hide();
     }
 
     updateCell(index, cell);
