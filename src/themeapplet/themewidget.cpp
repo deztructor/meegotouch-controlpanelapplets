@@ -78,6 +78,8 @@ ThemeWidget::createWidgets ()
             this, SLOT(textChanged ()));
     connect (m_List, SIGNAL(panningStarted()),
             this, SLOT(hideEmptyTextEdit()));
+    connect (m_ThemeBusinessLogic, SIGNAL(refreshNeeded()),
+            this, SLOT(refreshNeeded ()));
 
     setLayout(mainLayout);
 
@@ -243,6 +245,23 @@ ThemeWidget::textChanged ()
     selectCurrentTheme ();
     m_ThemeListModel->refresh();
 
+    update ();
+}
+
+/*
+ * This slot will re-sort the model and select the current theme again. Need to
+ * be called when the theme package has been removed or installed, connected to
+ * a signal of the businesslogic.
+ */
+void
+ThemeWidget::refreshNeeded ()
+{
+    if (!m_Proxy)
+        return;
+
+    m_Proxy->sort(Qt::DisplayRole);
+    selectCurrentTheme ();
+    m_ThemeListModel->refresh();
     update ();
 }
 

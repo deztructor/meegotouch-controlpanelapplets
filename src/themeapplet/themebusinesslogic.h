@@ -65,6 +65,7 @@ signals:
     void themeRemoved (QList<ThemeDescriptor *> list);
     void themeAboutToBeAdded (int index);
     void themeAdded (QList<ThemeDescriptor *> list);
+    void refreshNeeded ();
 
 private:
     QList<ThemeDescriptor *>            m_AvailableThemes;

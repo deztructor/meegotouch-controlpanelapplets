@@ -302,6 +302,7 @@ ThemeBusinessLogic::themeAdded (
     emit themeAboutToBeAdded (m_AvailableThemes.size());
     m_AvailableThemes << descr;
     emit themeAdded (m_AvailableThemes);
+    emit refreshNeeded ();
 }
 
 void
@@ -336,6 +337,8 @@ ThemeBusinessLogic::themeRemoved (
             m_AvailableThemes.removeAt (n);
             delete desc;
             emit themeRemoved(m_AvailableThemes);
+            
+            emit refreshNeeded ();
         }
     }
 }

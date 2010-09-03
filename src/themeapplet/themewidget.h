@@ -34,7 +34,8 @@ private slots:
     void oviActivated ();
     void textChanged ();
     void hideEmptyTextEdit ();
-    
+    void refreshNeeded ();
+
 private:
     void createWidgets ();
     void readLocalThemes ();
