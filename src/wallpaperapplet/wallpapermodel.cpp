@@ -132,7 +132,7 @@ WallpaperImageLoader::processJobQueue ()
  * WallpaperContentItemCreator implementation.
  */
 MWidget *
-WallpaperCellCreator::createCell(
+WallpaperCellCreator::createCell (
         const QModelIndex &index, 
         MWidgetRecycler   &recycler) const
 {
@@ -181,7 +181,12 @@ WallpaperCellCreator::updateCell (
 
     // The image
     SYS_DEBUG ("Setting pixmap for %s", SYS_STR(desc->title()));
-    listItem->imageWidget()->setPixmap (desc->thumbnailPixmap());
+    if (desc->isThumbnailLoaded())
+        listItem->imageWidget()->setPixmap (desc->thumbnailPixmap());
+    else {
+        if (listItem->imageWidget()->image() != "icon-m-content-not-loaded")
+            listItem->imageWidget()->setImage("icon-m-content-not-loaded");
+    }
 
     // The style
     updateListItemMode (index, listItem);
