@@ -59,7 +59,6 @@ WallpaperWidget::createContent ()
     MLinearLayoutPolicy *wallpaperPortrait =
         new MLinearLayoutPolicy (buttonsLayout, Qt::Vertical);
 
- SYS_DEBUG ("1"); 
     /*
      * The gallery item.
      */
@@ -72,7 +71,7 @@ WallpaperWidget::createContent ()
 
     connect (m_GalleryItem, SIGNAL(clicked()),
             this, SLOT(galleryActivated()));
- SYS_DEBUG ("2"); 
+
     /*
      * The OVI item.
      */
@@ -87,7 +86,7 @@ WallpaperWidget::createContent ()
     connect (m_OviItem, SIGNAL(clicked()),
             this, SLOT(oviActivated()));
 
- SYS_DEBUG ("3"); 
+
     /*
      * The list of the available images.
      */
@@ -95,10 +94,10 @@ WallpaperWidget::createContent ()
     m_ImageList->setObjectName("WallpaperImageList");
     connect (m_ImageList, SIGNAL(imageActivated(WallpaperDescriptor *)),
             this, SLOT(slotImageActivated(WallpaperDescriptor *)));
- SYS_DEBUG ("3/a"); 
+
     m_ImageList->setDataSourceType (WallpaperList::DataSourceLocal);
 
- SYS_DEBUG ("4"); 
+
     /*
      * Adding all widgets into the layout.
      */
@@ -108,10 +107,8 @@ WallpaperWidget::createContent ()
     mainLayout->addItem (m_ImageList);
     mainLayout->setStretchFactor (m_ImageList, 1);
 
- SYS_DEBUG ("5"); 
     retranslateUi ();
     
- SYS_DEBUG ("6"); 
     connect (m_WallpaperBusinessLogic, SIGNAL(imageEditRequested()),
             this, SLOT(slotImageActivated()));
     SYS_DEBUG ("--- End   ------------");

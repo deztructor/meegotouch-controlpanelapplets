@@ -67,19 +67,14 @@ css.files = wallpaper.css
 css.path = \
   $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/duicontrolpanel/style
 
-images.files = images/*.png
-images.path  = $$css.path/images
-
 message("target path         :" $$target.path)
 message("desktop path        :" $$desktop.path)
 message("css path:           :" $$css.path)
-message("images path         :" $$images.path)
 message("backup conf path    :" $$backup.path)
 message("backup scripts path :" $$backups.path)
 
 INSTALLS += \
     target \
-    images \
     css \
     desktop \
     backupscripts \

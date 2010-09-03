@@ -4,11 +4,11 @@
 #define WALLPAPERINFOHEADER_H
 
 #include <QObject>
-#include <MWidget>
+#include <MStylableWidget>
 
 class MLabel;
 
-class WallpaperInfoHeader : public MWidget
+class WallpaperInfoHeader : public MStylableWidget
 {
     Q_OBJECT
 
@@ -16,15 +16,9 @@ public:
     WallpaperInfoHeader (QGraphicsWidget *parent = 0);
     ~WallpaperInfoHeader ();
 
-    virtual void paint (
-            QPainter                       *painter,
-            const QStyleOptionGraphicsItem *option,
-            QWidget                        *widget = 0);
- 
     virtual void retranslateUi ();
 
 private:
-    QPixmap          *m_Background;
     MLabel           *m_Label;
 };
 

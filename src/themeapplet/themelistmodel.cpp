@@ -85,29 +85,6 @@ ThemeListModel::columnCount (
     return retval;
 }
         
-#if 0
-/*
- * FIXME:
- * This method is only for debugging purposes and will be removed soon.
- */
-QModelIndex
-ThemeListModel::index (
-                int row, 
-                int column, 
-                const QModelIndex &parent) const
-{
-    QModelIndex retval;
-
-    retval = QAbstractTableModel::index (row, column, parent);
-
-    SYS_DEBUG ("*** row              = %d", row);
-    SYS_DEBUG ("*** column           = %d", column);
-    SYS_DEBUG ("*** parent.isValid() = %s", SYS_BOOL(parent.isValid()));
-    SYS_DEBUG ("*** retval.isValid() = %s", SYS_BOOL(retval.isValid()));
-    return retval;
-}
-#endif
-
 /*!
  * Please note: In this function we return a value based on the role parameter
  * and we are not using the column number from the index. Well, it works...

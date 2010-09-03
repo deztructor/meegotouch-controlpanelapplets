@@ -1,10 +1,7 @@
-/* 
- * This CSS file is empty, we can remove it in the future if we are not using
- * it.
- */
 #WallpaperInfoHeader {
     width:  100%;
-    background-image: "top_fade" 0 0 0 0;
+    background-color: black;
+    background-opacity: 0.8;
 }
 
 #WallpaperInfoHeaderLabel {

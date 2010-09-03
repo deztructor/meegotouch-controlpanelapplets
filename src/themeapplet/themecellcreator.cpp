@@ -46,7 +46,7 @@ ThemeCellCreator::createCell(
 void
 ThemeCellCreator::updateCell (
         const QModelIndex &index, 
-        MWidget *cell) const
+        MWidget           *cell) const
 {
     MAdvancedListItem    *listItem;
     QString               title;
@@ -54,6 +54,7 @@ ThemeCellCreator::updateCell (
     QString               iconName;
     QString               changingTheme;
     bool                  isChangingTheme;
+
     if(!cell || !index.isValid()) 
         return;
 

@@ -24,16 +24,6 @@ class ThemeListModel : public QAbstractTableModel
                 QObject            *parent = 0);
 
         void refresh ();
-        #if 0
-        /*
-         * FIXME:
-         * This method is only for debugging purposes and will be removed soon.
-         */
-        virtual QModelIndex index (
-                int row, 
-                int column, 
-                const QModelIndex & parent = QModelIndex()) const;
-        #endif
 
         int rowCount (const QModelIndex &parent = QModelIndex()) const;
         int columnCount (const QModelIndex & parent) const;
