@@ -60,16 +60,11 @@ ThemeWidget::createWidgets ()
     /*
      * An item to activate the OVI link.
      */
-    // This does not help fixing the label position.
-    //m_OviItem = new MBasicListItem (MBasicListItem::TitleWithSubtitle);
-    m_OviItem = new MBasicListItem ();
-    // This does not help fixing the label position either.
-    //m_OviItem->setObjectName("CommonPanel");
+    m_OviItem = new MBasicListItem (MBasicListItem::IconWithTitle);
     m_OviItem->setObjectName("OviItem");
 
-    // This does not help fixing the label position either.
-    //m_OviItem->setLayoutPosition (M::VerticalCenterPosition);
     // Currently we use the default.
+    //m_OviItem->setLayoutPosition (M::VerticalCenterPosition);
     m_OviItem->imageWidget()->setImage ("icon-m-common-ovi");
 
     connect (m_OviItem, SIGNAL(clicked()),
