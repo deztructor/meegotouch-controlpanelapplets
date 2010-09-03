@@ -17,6 +17,8 @@
 #define DEBUG
 #include "../debug.h"
 
+static const char *SelectionStartTag = "<font color='blue'>";
+static const char *SelectionEndTag   = "</font>";
 
 MWidget *
 ThemeCellCreator::createCell(
@@ -80,8 +82,9 @@ ThemeCellCreator::updateCell (
                 m_HighlightText, 0, Qt::CaseInsensitive);
 
         if (matchingIndex != -1) {
-            title.insert (matchingIndex + m_HighlightText.length(), "</b>");
-            title.insert (matchingIndex, "<b>");
+            title.insert (matchingIndex + m_HighlightText.length(), 
+                    SelectionEndTag);
+            title.insert (matchingIndex, SelectionStartTag);
         }
         listItem->setTitle (title);
     }
