@@ -145,12 +145,6 @@ Ut_WallpaperWidget::testGalleryImageSelected()
     }
 }
 
-void
-Ut_WallpaperWidget::testImageBrowserDismissed()
-{
-    m_Widget->imageBrowserDismissed();
-    QVERIFY (m_Widget->m_noImageBrowser);
-}
 
 QTEST_APPLESS_MAIN(Ut_WallpaperWidget)
 

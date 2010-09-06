@@ -44,7 +44,6 @@ private slots:
 
     void testImageActivated ();
     void testGalleryImageSelected ();
-    void testImageBrowserDismissed();
 
 private:
     MApplication              *m_App;

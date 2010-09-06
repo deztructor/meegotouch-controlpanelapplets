@@ -163,24 +163,33 @@ WallpaperWidget::oviActivated ()
 void 
 WallpaperWidget::galleryActivated ()
 {
-    SYS_DEBUG ("");
-    if (m_noImageBrowser) {
-            SelectSingleContentItemPage *imageBrowser = new SelectSingleContentItemPage(QString(), QStringList() << "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Image", QString());
-            imageBrowser->setObjectName("SelectSingleContentItemPage_imageBrowser");
-            QObject::connect(imageBrowser, SIGNAL(backButtonClicked()), imageBrowser, SLOT(dismiss()));
-            QObject::connect(imageBrowser, SIGNAL(backButtonClicked()), this, SLOT(imageBrowserDismissed()));
-            QObject::connect(imageBrowser, SIGNAL(selectingContentItem(const QString &)), this, SLOT(galleryImageSelected(const QString &)));
-            imageBrowser->appear(MSceneWindow::DestroyWhenDismissed);
-            m_noImageBrowser = false;
+    /*
+     * Please note that the m_ImageBrowser is a QPointer object that will reset
+     * itself to NULL when the widget is destroyed. It will also initialize
+     * itself to NULL when it is created.
+     */
+    if (!m_ImageBrowser) {
+        m_ImageBrowser = new SelectSingleContentItemPage (
+                QString(), 
+                QStringList() << "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Image", 
+                QString());
+
+        m_ImageBrowser->setObjectName (
+                "SelectSingleContentItemPage_imageBrowser");
+
+        connect (m_ImageBrowser, SIGNAL(backButtonClicked()), 
+                m_ImageBrowser, SLOT(dismiss()));
+        connect (m_ImageBrowser, SIGNAL(selectingContentItem(const QString &)),
+                this, SLOT(galleryImageSelected(const QString &)));
     }
+     
+    m_ImageBrowser->appear (MSceneWindow::DestroyWhenDismissed);
 }
 
-void WallpaperWidget::galleryImageSelected(const QString &uri)
+void 
+WallpaperWidget::galleryImageSelected (
+        const QString &uri)
 {
-    m_WallpaperBusinessLogic->addImageFromGallery(uri);
+    m_WallpaperBusinessLogic->addImageFromGallery (uri);
 }
 
-void WallpaperWidget::imageBrowserDismissed()
-{
-    m_noImageBrowser = true;
-}

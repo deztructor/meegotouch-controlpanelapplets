@@ -4,6 +4,8 @@
 #define WALLPAPERWIDGET_H
 
 #include <QPointer>
+#include <SelectSingleContentItemPage.h>
+
 #include "dcpwidget.h"
 
 #include "wallpaperbusinesslogic.h"
@@ -33,14 +35,13 @@ private slots:
     void galleryActivated ();
     void oviActivated ();
     void galleryImageSelected(const QString &);
-    void imageBrowserDismissed();
 
 private:
-    QPointer<WallpaperBusinessLogic>   m_WallpaperBusinessLogic;
-    WallpaperList                     *m_ImageList;
-    MContentItem                      *m_GalleryItem;
-    MContentItem                      *m_OviItem;
-    bool                               m_noImageBrowser;
+    QPointer<WallpaperBusinessLogic>       m_WallpaperBusinessLogic;
+    WallpaperList                         *m_ImageList;
+    MContentItem                          *m_GalleryItem;
+    MContentItem                          *m_OviItem;
+    QPointer<SelectSingleContentItemPage>  m_ImageBrowser;
     #ifdef UNIT_TEST
     friend class Ut_WallpaperWidget;
     #endif
