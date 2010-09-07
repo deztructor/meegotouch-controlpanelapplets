@@ -1,5 +1,6 @@
 include(../coverage.pri)
 include(../check.pri)
+include(../common_top.pri)
 
 MOC_DIR = .moc
 SRC_PREFIX = ../../src/warrantyapplet
@@ -26,9 +27,17 @@ CONFIG += \
 	gui \
 	meegotouch \
 	plugin \
-	qmsystem \
 	duicontrolpanel \
 	silent 
+
+
+#
+# If we will use the QmSystem library we shall stub it here. 
+#
+contains(DEFINES, HAVE_QMSYSTEM) {
+    PKGCONFIG += qmsystem
+}
+
 
 HEADERS += \
     $$STUB_PREFIX/mdesktopentry.h \

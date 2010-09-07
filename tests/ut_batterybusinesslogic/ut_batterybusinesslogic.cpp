@@ -341,6 +341,7 @@ Ut_BatteryBusinessLogic::testPSMAutoValue ()
 void 
 Ut_BatteryBusinessLogic::testPSMValue ()
 {
+    #ifdef HAVE_QMSYSTEM
     bool newValue;
     SYS_DEBUG ("");
     
@@ -357,7 +358,7 @@ Ut_BatteryBusinessLogic::testPSMValue ()
     QVERIFY (m_Logic->m_devicemode->getPSMState() == QmDeviceMode::PSMStateOff);
     QVERIFY (m_SignalSink.m_PSMValueReceived);
     QVERIFY (m_SignalSink.m_PSMValue == newValue);
-
+    #endif
 }
 
 /*!
@@ -372,6 +373,7 @@ Ut_BatteryBusinessLogic::testSpontaneousPSMValue ()
     /*
      * So we know we start from this state.
      */
+    #ifdef HAVE_QMSYSTEM
     m_Logic->m_devicemode->setPSMState (QmDeviceMode::PSMStateOff);
     
     m_SignalSink.reset();
@@ -383,6 +385,7 @@ Ut_BatteryBusinessLogic::testSpontaneousPSMValue ()
     m_Logic->m_devicemode->setPSMState (QmDeviceMode::PSMStateOff);
     QVERIFY (m_SignalSink.m_PSMValueReceived);
     QVERIFY (m_SignalSink.m_PSMValue == false);
+    #endif
 }
 
 /*!
@@ -393,6 +396,7 @@ Ut_BatteryBusinessLogic::testSpontaneousPSMValue ()
 void 
 Ut_BatteryBusinessLogic::testSpontaneousChargerEvent ()
 {
+    #ifdef HAVE_QMSYSTEM
     // Just to be sure we are in a known state.
     m_Logic->m_battery->connectCharger (QmBattery::None);
     m_Logic->m_battery->modifyBatteryState (QmBattery::StateOK, 50);
@@ -443,6 +447,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargerEvent ()
     m_SignalSink.print();
     QVERIFY (m_SignalSink.notCharging());
     QVERIFY (m_SignalSink.hasRemainingCapacity(false));
+    #endif
 }
 
 /*!
@@ -454,6 +459,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargerEvent ()
 void 
 Ut_BatteryBusinessLogic::testSpontaneousChargingComplete ()
 {
+    #ifdef HAVE_QMSYSTEM
     // Just to be sure we are in a known state. We are charging...
     m_Logic->m_battery->modifyBatteryState (QmBattery::StateOK, 50);
     m_Logic->m_battery->connectCharger (QmBattery::Wall);
@@ -499,6 +505,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargingComplete ()
     QVERIFY (m_SignalSink.notCharging());
     QVERIFY (m_SignalSink.hasBarValue(9));
     QVERIFY (m_SignalSink.hasRemainingCapacity(false));
+    #endif
 }
 
 /*!
@@ -507,9 +514,12 @@ Ut_BatteryBusinessLogic::testSpontaneousChargingComplete ()
 void 
 Ut_BatteryBusinessLogic::testSetPSMThreshold ()
 {
+    #ifdef HAVE_QMSYSTEM
     m_Logic->setPSMThresholdValue (10);
     QVERIFY (m_Logic->m_devicemode->getPSMBatteryMode() == 10);
+
     QVERIFY (m_Logic->PSMThresholdValue() == 10);
+    #endif
 }
 
 QTEST_MAIN (Ut_BatteryBusinessLogic);

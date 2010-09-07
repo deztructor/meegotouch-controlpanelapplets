@@ -30,10 +30,16 @@ target.path = /usr/lib/systemui-applets-tests
 CONFIG += \
 	gui \
 	meegotouch \
-        qmsystem \
 	plugin \
 	duicontrolpanel \
 	silent 
+
+#
+# If we will use the QmSystem library we shall stub it here. 
+#
+contains(DEFINES, HAVE_QMSYSTEM) {
+    PKGCONFIG += qmsystem
+}
 
 HEADERS += \
     ut_offlineapplet.h \
