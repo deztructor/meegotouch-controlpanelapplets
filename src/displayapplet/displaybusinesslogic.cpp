@@ -1,5 +1,25 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
+
+/****************************************************************************
+**
+** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (directui@nokia.com)
+**
+** This file is part of systemui.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at directui@nokia.com.
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation
+** and appearing in the file LICENSE.LGPL included in the packaging
+** of this file.
+**
+****************************************************************************/
+
 #include "displaybusinesslogic.h"
 #include <MGConfItem>
 
@@ -7,26 +27,53 @@
 #define WARNING
 #include "../debug.h"
 
+#ifdef HAVE_QMSYSTEM
 using namespace Maemo;
+#else
+static const QString GConfDir ("/system/osso/dsm/display");
+static const QString MaxBrightnessKey = 
+    GConfDir + "/max_display_brightness_levels";
+static const QString CurrentBrightnessKey = 
+    GConfDir + "/display_brightness";
+#endif
 
 static int TIMEGAP = 5; // time gap between blanking and dimming
 
 #define POSSIBLE_DIM_TIMEOUTS \
     "/system/osso/dsm/display/possible_display_dim_timeouts"
 
+#ifdef HAVE_QMSYSTEM
 DisplayBusinessLogic::DisplayBusinessLogic (
         QObject* parent) :
     QObject (parent),
-    m_Display (new QmDisplayState()),
-    m_possibleDimValues (0)
+    m_Display (new QmDisplayState())
 {
     m_possibleDimValues = new MGConfItem (POSSIBLE_DIM_TIMEOUTS);
 }
+#else
+DisplayBusinessLogic::DisplayBusinessLogic (
+        QObject* parent) :
+    QObject (parent)
+{
+    m_MaxDisplayBrightness = new MGConfItem (MaxBrightnessKey);
+    m_CurrentBrightness = new MGConfItem (CurrentBrightnessKey);
+    m_possibleDimValues = new MGConfItem (POSSIBLE_DIM_TIMEOUTS);
+}
+#endif
 
 DisplayBusinessLogic::~DisplayBusinessLogic ()
 {
+    #ifdef HAVE_QMSYSTEM
     delete m_Display;
     m_Display = 0;
+    #else
+    delete m_MaxDisplayBrightness;
+    m_MaxDisplayBrightness = 0;
+
+    delete m_CurrentBrightness;
+    m_CurrentBrightness = 0;
+    #endif
+
     delete m_possibleDimValues;
     m_possibleDimValues = 0;
 }
@@ -38,12 +85,25 @@ QList<int>
 DisplayBusinessLogic::brightnessValues ()
 {
     QList<int> values;
+    int        max;
 
-    int max = m_Display->getMaxDisplayBrightnessValue();
+    /*
+     * If the QmSystem is available we use it to get the maximum brightness
+     * value, if not we read this value from the GConf database.
+     */
+    #ifdef HAVE_QMSYSTEM
+    max = m_Display->getMaxDisplayBrightnessValue();
+    #else
+    max = m_MaxDisplayBrightness->value().toInt();
+    #endif
+    
+    // Well, this must be some kind of last minute check...
     max = (max > 0 ? max : 5);
 
-    // QmDisplayState::setDisplayBrightnessValue accepts values 
-    // between 1 and getMaxDisplayBrightnessValue()
+    /*
+     * What we use here is a list of accepted values from 1 to the maximum
+     * value.
+     */
     for (int i = 1; i <= max; ++i) {
         SYS_DEBUG ("*** BrightnessValues[%d] = %d", i - 1, i);
         values << i;
@@ -62,10 +122,7 @@ DisplayBusinessLogic::selectedBrightnessValueIndex ()
     QList<int> values = brightnessValues();
     int        index;
 
-    SYS_DEBUG ("*** getDisplayBrightnessValue() = %d", 
-            m_Display->getDisplayBrightnessValue());
-    
-    index = values.indexOf(m_Display->getDisplayBrightnessValue());
+    index = values.indexOf (selectedBrightnessValue());
     if (index < 0) {
         SYS_WARNING ("Value not in available values list.");
         index = values.size() / 2;
@@ -74,6 +131,20 @@ DisplayBusinessLogic::selectedBrightnessValueIndex ()
 
     SYS_DEBUG ("*** index                       = %d", index);
     return index;
+}
+
+int
+DisplayBusinessLogic::selectedBrightnessValue ()
+{
+    /*
+     * When we have the QmSystem we use that, otherwise we read the data from
+     * the GConf database.
+     */
+    #ifdef HAVE_QMSYSTEM
+    return m_Display->getDisplayBrightnessValue();
+    #else
+    return m_CurrentBrightness->value().toInt();
+    #endif
 }
 
 /*!
@@ -114,14 +185,23 @@ DisplayBusinessLogic::screenLightsValues ()
 int 
 DisplayBusinessLogic::selectedScreenLightsValue ()
 {
+    int index;
+
+    #if HAVE_QMSYSTEM
     QList<int> values = screenLightsValues ();
-    int index = values.indexOf (m_Display->getDisplayDimTimeout ());
+    index = values.indexOf (m_Display->getDisplayDimTimeout ());
 
     if (index < 0) {
         index = 1;
         setScreenLightTimeouts (index);
     }
-
+    #else
+    /*
+     * FIXME: To add the code that returns the selected screen lights value when
+     * QmSystem is not available.
+     */
+    index = 0;
+    #endif
     return index;
 }
 
@@ -131,7 +211,15 @@ DisplayBusinessLogic::blankInhibitValue ()
     /*
      * Actually the UI string is a negative.
      */
+    #if HAVE_QMSYSTEM
     return !m_Display->getBlankingWhenCharging();
+    #else
+    /*
+     * FIXME: To add the code that gets the value when QmSystem is not
+     * available.
+     */
+    return false;
+    #endif
 }
 
 /*!
@@ -143,7 +231,13 @@ DisplayBusinessLogic::setBrightnessValue (
         int value)
 {
     SYS_DEBUG ("*** value + 1 = %d", value + 1);
-    m_Display->setDisplayBrightnessValue(value + 1);
+    #if HAVE_QMSYSTEM
+    m_Display->setDisplayBrightnessValue (value + 1);
+    #else
+    /*
+     * FIXME: To add the code that is used when QmSystem is not available.
+     */
+    #endif
 }
 
 /*!
@@ -163,15 +257,24 @@ DisplayBusinessLogic::setScreenLightTimeouts (
     
     SYS_DEBUG ("*** index   = %d", index);
     SYS_DEBUG ("*** seconds = %d", seconds);
-
+    #ifdef HAVE_QMSYSTEM
     m_Display->setDisplayDimTimeout (seconds);
     /*
      * Originally it was seconds + TIMEGAP here, but as I see the blank timeout
      * is relative to the dim timeout value.
      */
     m_Display->setDisplayBlankTimeout (TIMEGAP);
+    #else
+    /*
+     * FIXME: To add the code that is used when there is no QmSystem.
+     */
+    #endif
 }
 
+/*!
+ * \param value If true the screen lights will remain on while the charger is
+ *   connected.
+ */
 void 
 DisplayBusinessLogic::setBlankInhibitValue (
         bool value)
@@ -181,6 +284,12 @@ DisplayBusinessLogic::setBlankInhibitValue (
      */
     value = !value;
     SYS_DEBUG ("*** blanking when charging = %s", value ? "true" : "false");
+    #ifdef HAVE_QMSYSTEM
     m_Display->setBlankingWhenCharging(value);
+    #else
+    /*
+     * FIXME: To add the code that is used when there is no QmSystem.
+     */
+    #endif
 }
 

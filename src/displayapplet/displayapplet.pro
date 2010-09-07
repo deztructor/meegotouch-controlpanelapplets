@@ -1,12 +1,16 @@
 include(../coverage.pri)
+include(../../localconfig.pri)
 
 TEMPLATE = lib
 CONFIG += plugin \
           gui \
           meegotouch \
           duicontrolpanel \
-          silent \
-          qmsystem
+	  silent
+
+contains(DEFINES, HAVE_QMSYSTEM) {
+    PKGCONFIG += qmsystem
+}
 
 QT += dbus gui
 

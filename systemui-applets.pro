@@ -2,6 +2,8 @@
 # System-UI applets main projectfile
 # ####################################################################
 
+system(./configure)
+
 TEMPLATE = subdirs
 SUBDIRS = \
 	src \
@@ -10,7 +12,8 @@ SUBDIRS = \
 
 QMAKE_CLEAN += \
 	configure-stamp \
-	build-stamp
+	build-stamp \
+	localconfig.pri
 
 contains(BUILD_FEATURES,coverage) {
 	QMAKE_EXTRA_TARGETS += coverage

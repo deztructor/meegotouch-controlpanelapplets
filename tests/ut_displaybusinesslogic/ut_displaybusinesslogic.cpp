@@ -1,10 +1,31 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et sw=4 ts=4 sts=4: */
+/****************************************************************************
+**
+** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (directui@nokia.com)
+**
+** This file is part of systemui.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at directui@nokia.com.
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation
+** and appearing in the file LICENSE.LGPL included in the packaging
+** of this file.
+**
+****************************************************************************/
+
 #include "ut_displaybusinesslogic.h"
 #include "displaybusinesslogic.h"
 
-#ifndef QMDISPLAYSTATE_STUB_H
-#  error "QmDisplayState should be stubbed, can nopt continue."
+#ifdef HAVE_QMSYSTEM
+#  ifndef QMDISPLAYSTATE_STUB_H
+#    error "QmDisplayState should be stubbed, can not continue."
+#  endif
 #endif
 
 #include <MApplication>
@@ -180,6 +201,7 @@ Ut_DisplayBusinessLogic::testSetBrightness ()
 void
 Ut_DisplayBusinessLogic::testSetBlankInhibitValue ()
 {
+    #ifdef HAVE_QMSYSTEM
     m_Api->setBlankInhibitValue (true);
     QVERIFY (m_Api->m_Display->getBlankingWhenCharging() == false);
 
@@ -188,6 +210,11 @@ Ut_DisplayBusinessLogic::testSetBlankInhibitValue ()
 
     m_Api->setBlankInhibitValue (true);
     QVERIFY (m_Api->m_Display->getBlankingWhenCharging() == false);
+    #else
+    /*
+     * FIXME: To implement the test when the QmSystem is not available.
+     */
+    #endif
 }
 
 /*!

@@ -1,5 +1,4 @@
 TEMPLATE = subdirs
-
 #
 # The coverage target will not build the functional tests.
 #
