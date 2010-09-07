@@ -24,11 +24,20 @@
 #include <QObject>
 #include <QStringList>
 
-#include <qmdevicemode.h>
-#include <qmbattery.h>
-
+#ifdef HAVE_QMSYSTEM
+#  include <qmdevicemode.h>
+#  include <qmbattery.h>
 using namespace Maemo;
+#endif
 
+/*!
+ * This class implements the backend connection the battery applet needs to
+ * sense the battery status, the charging state an the power save state. The
+ * class uses the QmSystem as a backend when available.
+ *
+ * Please note that currently no alternative, the class will not work without
+ * the QmSystem library.
+ */
 class BatteryBusinessLogic : public QObject
 {
     Q_OBJECT
@@ -47,7 +56,6 @@ public slots:
     void setPSMValue (bool enabled);
     void setPSMAutoValue (bool toggle);
     void requestValues ();
-//    void remainingTimeValuesRequired ();
     void remainingCapacityRequired ();
 
 signals:
@@ -59,20 +67,28 @@ signals:
     void PSMValueReceived (bool enabled);
     void batteryFull ();
 
+#ifdef HAVE_QMSYSTEM
 private slots:
+    /*
+     * These slots are implemented to connect to the signals of the QmSystem. If
+     * the QmSystem library is not available we don't use them.
+     */
     void batteryChargerEvent (Maemo::QmBattery::ChargerType type);
     void chargingStateChanged (Maemo::QmBattery::ChargingState state);
     void batteryStateChanged (Maemo::QmBattery::BatteryState batteryState);
     void batteryRemCapacityChanged (int percentage, int bars);
     void PSMStateChanged (Maemo::QmDeviceMode::PSMState state);
+#endif
 
 private:
     int batteryBarValue (int percentage);
     void recalculateChargingInfo ();
 
     bool              m_initialized;
+    #ifdef HAVE_QMSYSTEM 
     QmBattery        *m_battery;
     QmDeviceMode     *m_devicemode;
+    #endif
 
     // If the charger is connected, the battery is not full and the charging is
     // not failed this integer shows the speed of the charging animation.

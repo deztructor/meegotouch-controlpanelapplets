@@ -43,8 +43,10 @@ BatteryBusinessLogic::BatteryBusinessLogic (
     m_ChargingRate (-1),
     m_Charging (false)
 {
+    #ifdef HAVE_QMSYSTEM
     m_battery    = new QmBattery (this);
     m_devicemode = new QmDeviceMode (this);
+    #endif
 }
 
 BatteryBusinessLogic::~BatteryBusinessLogic ()
@@ -52,11 +54,10 @@ BatteryBusinessLogic::~BatteryBusinessLogic ()
 }
 
 /*
- * This function does the initialization and signal
- * connection to QmBattery and QmDeviceMode, and emits
- * all the signals with the current values...
+ * This function does the initialization and signal connection to QmBattery and
+ * QmDeviceMode, and emits all the signals with the current values...
  *
- * FIXME: This function should be called realize(9 or something...
+ * FIXME: This function should be called realize() or something...
  */
 void
 BatteryBusinessLogic::requestValues ()
@@ -66,6 +67,7 @@ BatteryBusinessLogic::requestValues ()
 
     m_initialized = true;
 
+    #ifdef HAVE_QMSYSTEM
     SYS_DEBUG ("Connecting to the signals of the QmBattery class");
     connect (
         m_battery, SIGNAL(chargerEvent(Maemo::QmBattery::ChargerType)),
@@ -100,24 +102,43 @@ BatteryBusinessLogic::requestValues ()
             SYS_BOOL(m_devicemode->getPSMState () == QmDeviceMode::PSMStateOn));
     emit PSMValueReceived (m_devicemode->getPSMState () ==
                            QmDeviceMode::PSMStateOn);
+    #else
+    /*
+     * FIXME: To create an implementation without the QmSystem
+     */
+    #endif
 }
 
 void
 BatteryBusinessLogic::setPSMThresholdValue (
         int percentage)
 {
+    #ifdef HAVE_QMSYSTEM
     bool ret;
     ret = m_devicemode->setPSMBatteryMode (percentage);
 
     if (!ret) {
         SYS_WARNING (" failed to set (precentage = %d)", percentage);
     }
+    #else
+    /*
+     * To implement the code that sets the power save threshold without the help
+     * of the QmSystem library.
+     */
+    #endif
 }
 
 int
 BatteryBusinessLogic::PSMThresholdValue ()
 {
+    #ifdef HAVE_QMSYSTEM
     return m_devicemode->getPSMBatteryMode ();
+    #else
+    /*
+     * FIXME: To implement a variant that does not use QmSystem
+     */
+    return 0;
+    #endif
 }
 
 QStringList
@@ -140,11 +161,19 @@ void
 BatteryBusinessLogic::setPSMValue (
         bool enabled)
 {
-    bool ret;
+    bool ret = false;
+
+    #ifdef HAVE_QMSYSTEM
     ret = m_devicemode->setPSMState (
         enabled ?
         QmDeviceMode::PSMStateOn :
         QmDeviceMode::PSMStateOff);
+    #else
+    /*
+     * FIXME: To implement the setting of the power save mode without the help
+     * of the QmSystem library.
+     */
+    #endif
 
     if (ret) {
         // Change succeed, we don't need to wait for QmSystem reply, we can emit
@@ -182,66 +211,21 @@ BatteryBusinessLogic::PSMAutoValue ()
     return PSMAutoKey.value ().toBool ();
 }
 
-/*!
- * This function will amit a signal with the remaining times for the battery as
- * a list of strings. When the battery is not charging the return value contains
- * numbers as strings, when the battery is on charger the return string is a UI
- * string representing the charging state.
- *
- * FIXME: Maybe this class should not contain localization, it should return
- * only the logical values?
- */
-//void
-//BatteryBusinessLogic::remainingTimeValuesRequired ()
-//{
-//    QmBattery::RemainingTimeMode mode;
-//    QStringList                  values;
-//    int remainingBatteryCapacityPercentage;
-
-//    /*
-//     * If the charger QmSystem reports charging there might be no actual
-//     * charging since the battery might be full. We still show charging however,
-//     * otherwise we would show that the phone has a limited time to stay on and
-//     * we don't want to say that while we are on charger...
-//     */
-//    if (m_Charging) {
-//        //% "Charging"
-//        values << qtTrId ("qtn_ener_charging")
-//               << qtTrId ("qtn_ener_charging");
-//        goto finalize;
-//    }
-
-//    switch (m_devicemode->getPSMState ()) {
-//        case QmDeviceMode::PSMStateOn:
-//            mode = QmBattery::PowersaveMode;
-//            break;
-
-//        case QmDeviceMode::PSMStateOff:
-//        default:
-//             mode = QmBattery::NormalMode;
-//             break;
-//    }
-    
-//    values << QString ("%1").arg (m_battery->getRemainingTalkTime (mode) / 60)
-//           << QString ("%1").arg (m_battery->getRemainingIdleTime (mode) / 60);
-
-//    remainingBatteryCapacityPercentage =
-//            m_battery->getRemainingCapacityPct();
-
-//finalize:
-//    SYS_DEBUG ("Emitting remainingTimeValuesChanged()");
-//    emit remainingTimeValuesChanged (values);
-//    emit remainingBatteryCapacityChanged(remainingBatteryCapacityPercentage);
-//}
 
 void
 BatteryBusinessLogic::remainingCapacityRequired()
 {
-//    SYS_DEBUG("BATTERY REMAINING CAPACITY: %d", m_battery->getRemainingCapacityPct());
+    #ifdef HAVE_QMSYSTEM
     emit remainingBatteryCapacityChanged(
             m_battery->getRemainingCapacityPct());
+    #else
+    /*
+     * FIXME: To create an implementation that works without the QmSystem.
+     */
+    #endif
 }
 
+#ifdef HAVE_QMSYSTEM
 /*!
  * We have three functions her that notify us about the changes in the charging
  * state. We use all of the three slots the same way, but we keep them
@@ -257,7 +241,9 @@ BatteryBusinessLogic::batteryChargerEvent (
     SYS_DEBUG ("");
     recalculateChargingInfo ();
 }
+#endif
 
+#ifdef HAVE_QMSYSTEM
 void
 BatteryBusinessLogic::chargingStateChanged (
         Maemo::QmBattery::ChargingState state)
@@ -267,7 +253,9 @@ BatteryBusinessLogic::chargingStateChanged (
     SYS_DEBUG ("");
     recalculateChargingInfo ();
 }
+#endif
 
+#ifdef HAVE_QMSYSTEM
 void 
 BatteryBusinessLogic::batteryStateChanged (
         Maemo::QmBattery::BatteryState batteryState)
@@ -277,7 +265,9 @@ BatteryBusinessLogic::batteryStateChanged (
     SYS_DEBUG ("");
     recalculateChargingInfo ();
 }
+#endif
 
+#ifdef HAVE_QMSYSTEM
 /*!
  * This slot will be called when the device power save mode is changed. The
  * method will send the PSMValueReceived() signal.
@@ -291,22 +281,23 @@ BatteryBusinessLogic::PSMStateChanged (
     SYS_DEBUG ("Emitting PSMValueReceived (%s)", SYS_BOOL(enabled));
     emit PSMValueReceived (enabled);
 }
+#endif
 
+#ifdef HAVE_QMSYSTEM
 void
 BatteryBusinessLogic::batteryRemCapacityChanged (
 		int percentage, 
 		int bars)
 {
     Q_UNUSED (bars);
-    SYS_DEBUG ("**** percentage = %d, bars = %d [max = %d]",
-               percentage, bars, m_battery->getMaxBars ());
-
+    
     // XXX: FIXME: maybe we can drop batteryBarValue and use 'bars' parameter..
     SYS_DEBUG ("Emitting batteryBarValueReceived(%d)",
             batteryBarValue (percentage));
     emit batteryBarValueReceived (batteryBarValue (percentage));
     emit remainingBatteryCapacityChanged(percentage);
 }
+#endif
 
 /*!
  * \param percentage The energy level percentage or -1 to ask the backend.
@@ -322,9 +313,18 @@ BatteryBusinessLogic::batteryBarValue (
 {
     int index;
 
+    /*
+     * If we got -1 we have to find the remaining capacity all by ourselves.
+     */
+    #ifdef HAVE_QMSYSTEM
     if (percentage == -1) {
         percentage = m_battery->getRemainingCapacityPct ();
     }
+    #else
+    /*
+     * FIXME: To create an implementation that works without the QmSystem
+     */
+    #endif
 
     // in case of overflow (eg. in sbox) when we get value that greater than 100
     // percent we use 10 percent intentionaly
@@ -369,6 +369,7 @@ BatteryBusinessLogic::batteryBarValue (
 void
 BatteryBusinessLogic::recalculateChargingInfo ()
 {
+    #ifdef HAVE_QMSYSTEM
     QmBattery::ChargingState chargingState;
     QmBattery::BatteryState  batteryState;
     QmBattery::ChargerType   chargerType;
@@ -437,6 +438,11 @@ BatteryBusinessLogic::recalculateChargingInfo ()
      * And the remaining battery capacity has to be recalculated.
      */
     remainingCapacityRequired();
+    #else
+    /*
+     * FIXME: To implement a variant that does not use QmSystem.
+     */
+    #endif
 }
 
 bool BatteryBusinessLogic::isCharging()
