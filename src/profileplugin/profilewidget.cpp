@@ -27,7 +27,6 @@
 #include <MButton>
 #include <MDialog>
 #include <MButtonGroup>
-#include <MApplication>
 #include <MContainer>
 #include <DuiControlPanelIf>
 #include <MGridLayoutPolicy>
@@ -49,18 +48,17 @@ ProfileWidget::ProfileWidget (
         profileButtons (0)
 {
     SYS_DEBUG ("");
-    MApplication  *App = MApplication::instance ();
     dataIf = new ProfileDataInterface ();
-    connect (App, SIGNAL (localeSettingsChanged ()),
-             this, SLOT (loadTranslation ()));
+
     loadTranslation ();
 
     setViewType(MButton::iconType);
     setObjectName("StatusIndicatorMenuTopRowExtensionButton");
-    connect(this, SIGNAL(clicked()), this, SLOT(showProfileDialog()));
+    connect(this, SIGNAL (clicked ()), this, SLOT (showProfileDialog ()));
     connect (dataIf, SIGNAL (currentProfile (int)),
              this, SLOT (profileChanged ()));
-    profileChanged();
+
+    profileChanged ();
 }
 
 ProfileWidget::~ProfileWidget ()
@@ -149,22 +147,10 @@ ProfileWidget::initProfileButtons ()
 void
 ProfileWidget::loadTranslation ()
 {
-    static bool running = false;
-    SYS_DEBUG ("");
-
-    if (running == true)
-        return;
-    running = true;
-
     MLocale       locale;
-
-    SYS_DEBUG ("Language changed to '%s'",
-               SYS_STR (locale.language ()));
 
     locale.installTrCatalog (profiles_translation);
     MLocale::setDefault (locale);
-
-    running = false;
 }
 
 void
