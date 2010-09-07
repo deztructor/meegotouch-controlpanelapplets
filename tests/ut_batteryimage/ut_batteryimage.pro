@@ -20,9 +20,12 @@ TARGET = ut_batteryimage
 target.path = /usr/lib/systemui-applets-tests
 
 CONFIG += \
-    qmsystem \
     meegotouch \
     silent 
+
+contains(DEFINES, HAVE_QMSYSTEM) {
+    CONFIG += qmsystem
+}
 
 HEADERS += \
     ut_batteryimage.h \

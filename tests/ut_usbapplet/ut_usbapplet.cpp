@@ -5,12 +5,14 @@
 #include "usbview.h"
 #include "usbbrief.h"
 
-#include "qmusbmode.h"
-#ifndef QMUSBMODE_STUB_H
-#  error "The QmUSBMode is not stubbed, can not continue."
+#ifdef HAVE_QMSYSTEM
+#  include "qmusbmode.h"
+#  ifndef QMUSBMODE_STUB_H
+#    error "The QmUSBMode is not stubbed, can not continue."
+#  endif
+using namespace Maemo;
 #endif
 
-using namespace Maemo;
 
 #include <dcpwidgettypes.h>
 #include <dcpbrief.h>
@@ -127,6 +129,7 @@ Ut_UsbApplet::testTitle ()
 void
 Ut_UsbApplet::testConstructWidget ()
 {
+    #ifdef HAVE_QMSYSTEM
     UsbView                 *widget;
     bool                     backAccepted;
     QList<QmUSBMode::Mode>   availableModes;
@@ -197,6 +200,7 @@ Ut_UsbApplet::testConstructWidget ()
      */
     delete widget;
     QVERIFY (!m_Applet->m_MainWidget);
+    #endif
 }
 
 void 
@@ -211,6 +215,7 @@ Ut_UsbApplet::testMenuItems ()
 void 
 Ut_UsbApplet::testConstructbrief ()
 {
+    #ifdef HAVE_QMSYSTEM
     UsbBrief *brief1 = (UsbBrief *) m_Applet->constructBrief(0);
     QList<QmUSBMode::Mode>   availableModes;
     QString   iconName;
@@ -279,6 +284,7 @@ Ut_UsbApplet::testConstructbrief ()
     brief1->retranslateUi ();
 
     delete brief1;
+    #endif
 }
 
 

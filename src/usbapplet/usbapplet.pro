@@ -10,7 +10,7 @@ CONFIG       += plugin \
                 silent
 
 contains(DEFINES, HAVE_QMSYSTEM) {
-    PKGCONFIG += qmsystem
+    CONFIG += qmsystem
 }
 
 QT += gui dbus

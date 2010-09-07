@@ -11,7 +11,11 @@
 
 #include "offlineapplet.h"
 #include "offlinebrief.h"
-#include "qmdevicemode_stub.h"
+
+#ifdef HAVE_QMSYSTEM
+#  include "qmdevicemode_stub.h"
+#endif
+
 #include "signalchecker.h"
 
 #define DEBUG
@@ -122,6 +126,7 @@ Ut_OfflineApplet::testConstructWidget ()
 void 
 Ut_OfflineApplet::testBriefConstruct ()
 {
+    #ifdef HAVE_QMSYSTEM
     DcpBrief* widget;
 
     gQmDeviceModeStub->stubReset ();
@@ -134,11 +139,13 @@ Ut_OfflineApplet::testBriefConstruct ()
     QCOMPARE (int(widget->widgetTypeID()), int(DcpWidgetType::Button));
     QVERIFY(dynamic_cast<OfflineBrief*> (widget));
     delete widget;
+    #endif
 }
 
 void 
 Ut_OfflineApplet::testCurrentText ()
 {
+    #ifdef HAVE_QMSYSTEM
     OfflineBrief brief;
 
     brief.m_LastMode = Maemo::QmDeviceMode::Normal;
@@ -155,12 +162,14 @@ Ut_OfflineApplet::testCurrentText ()
  */
     brief.m_LastMode = Maemo::QmDeviceMode::Error;
     QVERIFY (brief.currentText().isEmpty() == false);
+    #endif
 }
 
 
 void 
 Ut_OfflineApplet::testBriefInit ()
 {
+    #ifdef HAVE_QMSYSTEM
     OfflineBrief *brief;
 
     gQmDeviceModeStub->stubReset ();
@@ -179,11 +188,13 @@ Ut_OfflineApplet::testBriefInit ()
     QVERIFY (brief);
     QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
     delete brief;
+    #endif
 }
 
 void 
 Ut_OfflineApplet::testBriefValueText ()
 {    
+    #ifdef HAVE_QMSYSTEM
     OfflineBrief *brief;
 
     gQmDeviceModeStub->stubReset ();
@@ -206,11 +217,13 @@ Ut_OfflineApplet::testBriefValueText ()
     brief->devModeChanged(Maemo::QmDeviceMode::Normal);
     QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
     delete brief;
+    #endif
 }
 
 void 
 Ut_OfflineApplet::testBriefSetToggle ()
 {
+    #ifdef HAVE_QMSYSTEM
     OfflineBrief *brief;
 
     gQmDeviceModeStub->stubReset ();
@@ -246,11 +259,13 @@ Ut_OfflineApplet::testBriefSetToggle ()
     QCOMPARE (gQmDeviceModeStub->stubLastParameters<Maemo::QmDeviceMode::DeviceMode> (0), Maemo::QmDeviceMode::Flight);
 
     delete brief;
+    #endif
 }
 
 void
 Ut_OfflineApplet::testProcessDialogResult()
 {
+    #ifdef HAVE_QMSYSTEM
     OfflineBrief *brief;
 
     gQmDeviceModeStub->stubReset ();
@@ -272,6 +287,7 @@ Ut_OfflineApplet::testProcessDialogResult()
     QCOMPARE (gQmDeviceModeStub->stubLastParameters<Maemo::QmDeviceMode::DeviceMode> (0), Maemo::QmDeviceMode::Normal);
 
     delete brief;
+    #endif
 }
 
 QTEST_APPLESS_MAIN(Ut_OfflineApplet)
