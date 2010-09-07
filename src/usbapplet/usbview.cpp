@@ -15,8 +15,7 @@
 #define BUTTON_MASS_STORAGE 1
 #define BUTTON_OVI_SUITE    2
 
-using namespace Maemo;
-
+#ifdef HAVE_QMSYSTEM
 UsbView::UsbView (Maemo::QmUSBMode *logic) :
     m_logic (logic),
     m_error (0)
@@ -24,6 +23,17 @@ UsbView::UsbView (Maemo::QmUSBMode *logic) :
     setObjectName ("UsbView");
     initWidget ();
 }
+#else
+/*
+ * FIXME: to implement a variant that does not use the QmSystem library.
+ */
+UsbView::UsbView (void *logic) :
+    m_error (0)
+{
+    setObjectName ("UsbView");
+    initWidget ();
+}
+#endif
 
 UsbView::~UsbView ()
 {
@@ -38,6 +48,7 @@ UsbView::~UsbView ()
 void
 UsbView::initWidget ()
 {
+    #ifdef HAVE_QMSYSTEM
     QGraphicsLinearLayout   *layout;
 
 // Creating the main layout
@@ -112,11 +123,13 @@ UsbView::initWidget ()
     layout->invalidate ();
 
     retranslateUi ();
+    #endif
 }
 
 void
 UsbView::selectionChanged (int id)
 {
+    #ifdef HAVE_QMSYSTEM
     QmUSBMode::Mode newmode = (QmUSBMode::Mode) id;
     QmUSBMode::Mode active = m_logic->getMode ();
 
@@ -185,6 +198,7 @@ UsbView::selectionChanged (int id)
         m_logic->setMode (newmode);
 
     emit settingsChanged ();
+    #endif
 }
 
 void

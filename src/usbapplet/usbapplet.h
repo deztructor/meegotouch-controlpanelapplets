@@ -6,7 +6,11 @@
 #include <QObject>
 #include <QPointer>
 #include <DcpAppletIf>
-#include <qmusbmode.h>
+
+#ifdef HAVE_QMSYSTEM
+#  include <qmusbmode.h>
+using namespace Maemo;
+#endif
 
 #include "usbview.h"
 
@@ -29,7 +33,10 @@ public:
 private:
     QPointer<UsbView>   m_MainWidget;
     UsbBrief           *m_brief;
+    #ifdef HAVE_QMSYSTEM
     Maemo::QmUSBMode   *m_logic;
+    #endif
+
     #ifdef UNIT_TEST
     friend class Ut_UsbApplet;
     #endif

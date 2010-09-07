@@ -4,7 +4,11 @@
 #define USBVIEW_H
 
 #include <DcpWidget>
-#include <qmusbmode.h>
+
+#ifdef HAVE_QMSYSTEM
+#  include <qmusbmode.h>
+using namespace Maemo;
+#endif
 
 class MLabel;
 class MButton;
@@ -16,7 +20,11 @@ class UsbView : public DcpWidget
     Q_OBJECT
 
 public:
+    #ifdef HAVE_QMSYSTEM
     UsbView (Maemo::QmUSBMode *logic);
+    #else
+    UsbView (void *logic);
+    #endif
     ~UsbView ();
 
 signals:
@@ -30,8 +38,9 @@ protected:
 
 private:
     void initWidget (void);
-
+    #ifdef HAVE_QMSYSTEM
     Maemo::QmUSBMode    *m_logic;
+    #endif
     MButton             *m_buttons[3];
     MButtonGroup        *m_btn_group;
     MLabel              *m_info_label;

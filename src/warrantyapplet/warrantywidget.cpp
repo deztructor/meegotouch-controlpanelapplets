@@ -9,7 +9,9 @@
 #include <MDialog>
 #include <MMessageBox>
 
-#include <qmsystemstate.h>
+#ifdef HAVE_QMSYSTEM
+#  include <qmsystemstate.h>
+#endif
 
 #define DEBUG
 #include "../debug.h"
@@ -36,7 +38,6 @@ WarrantyWidget::createContent ()
     MLinearLayoutPolicy *portraitPolicy;
     MLabel              *label1;
 
-    Maemo::QmSystemState  systemState;
 
     layout = new MLayout;
 
@@ -49,9 +50,20 @@ WarrantyWidget::createContent ()
     portraitPolicy = new MLinearLayoutPolicy (layout, Qt::Vertical);
 
     /*
-     *
+     * This will be used here, so currently it is just a test be we keep it
+     * here.
      */
-    label1 = new MLabel (labelText().arg (systemState.getPowerOnTimeInSeconds ()));
+    #ifdef HAVE_QMSYSTEM
+    Maemo::QmSystemState  systemState;
+    label1 = new MLabel (labelText().arg(
+                systemState.getPowerOnTimeInSeconds ()));
+    #else
+    /*
+     * FIXME: To implement a version that does not use the QmSystem.
+     */
+    label1 = new MLabel ("QmSystem is not available");
+    #endif
+
     label1->setWordWrap (true);
     
     landscapePolicy->addItem (label1);

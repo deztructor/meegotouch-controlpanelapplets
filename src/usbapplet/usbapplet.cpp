@@ -8,14 +8,15 @@
 #include "usbview.h"
 #include "usbapplet.h"
 
-using namespace Maemo;
-
 Q_EXPORT_PLUGIN2(usbapplet, UsbApplet)
 
 void
 UsbApplet::init (void)
 {
+    #ifdef HAVE_QMSYSTEM
     m_logic = new QmUSBMode (this);
+    #endif
+
     m_brief = NULL;
 }
 
@@ -25,7 +26,14 @@ UsbApplet::constructWidget (int widgetId)
     Q_UNUSED (widgetId);
 
     if (!m_MainWidget) {
+        #ifdef HAVE_QMSYSTEM
         m_MainWidget = new UsbView (m_logic);
+        #else
+        /*
+         * FIXME: To implement a variant that does not use QmSystem.
+         */
+        m_MainWidget = new UsbView (NULL);
+        #endif
         connect (m_MainWidget,  SIGNAL (settingsChanged ()),
                 m_brief, SLOT (settingsChanged ()));
     }
@@ -53,7 +61,14 @@ UsbApplet::constructBrief (int partId)
 {
     Q_UNUSED (partId);
 
+    #ifdef HAVE_QMSYSTEM
     m_brief = new UsbBrief (m_logic);
+    #else
+    /*
+     * FIXME: To implement a variant that does not use QmSystem.
+     */
+     m_MainWidget = new UsbView (NULL);
+    #endif
 
     return m_brief;
 }

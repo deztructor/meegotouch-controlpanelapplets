@@ -7,17 +7,25 @@
 #include <QString>
 #include <dcpwidgettypes.h>
 
-using namespace Maemo;
-
 #define DEBUG
 #include "../debug.h"
 
+#ifdef HAVE_QMSYSTEM
 UsbBrief::UsbBrief (Maemo::QmUSBMode *logic) :
     m_logic (logic)
 {
     connect (m_logic, SIGNAL (modeChanged (Maemo::QmUSBMode::Mode)),
              this, SIGNAL (valuesChanged ()));
 }
+#else
+/*
+ * FIXME: To implement the version that works without the QmSystem library.
+ */
+UsbBrief::UsbBrief (void *logic) 
+{
+}
+#endif
+
 
 int
 UsbBrief::widgetTypeID() const
@@ -38,6 +46,7 @@ UsbBrief::retranslateUi ()
     emit valuesChanged ();
 }
 
+#ifdef HAVE_QMSYSTEM
 QString
 UsbBrief::valueText () const
 {
@@ -87,4 +96,13 @@ UsbBrief::valueText () const
     else
         return currentSetting;
 }
-
+#else
+/*
+ * FIXME: To implement a version that works without the QmSystem
+ */
+QString
+UsbBrief::valueText () const
+{
+    return QString ("QmSystem is not available");
+}
+#endif

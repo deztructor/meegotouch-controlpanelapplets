@@ -6,14 +6,22 @@
 
 #include <MLocale>
 #include <DcpBrief>
-#include <qmusbmode.h>
+
+#ifdef HAVE_QMSYSTEM
+#  include <qmusbmode.h>
+using namespace Maemo;
+#endif
 
 class UsbBrief: public DcpBrief
 {
     Q_OBJECT
 
 public:
+    #ifdef HAVE_QMSYSTEM
     UsbBrief (Maemo::QmUSBMode *logic);
+    #else
+    UsbBrief (void *logic);
+    #endif
     QString valueText () const;
     virtual int widgetTypeID() const;
 
@@ -24,7 +32,10 @@ public slots:
     void    settingsChanged ();
 
 private:
+    #ifdef HAVE_QMSYSTEM
     Maemo::QmUSBMode    *m_logic;
+    #endif
+    
     #ifdef UNIT_TEST
     friend class Ut_UsbApplet;
     #endif
