@@ -36,18 +36,16 @@ private slots:
      */
     void profileChanged();
 
-
-
-    /*!
-     * \brief A slot for reloading the translations on locale-change
-     */
-    void loadTranslation ();
-
 private:
     /*!
      * \brief A method for initializing the profile buttons container
      */
     void initProfileButtons ();
+
+    /*!
+     * \brief A method for loading the needed translation catalogue
+     */
+    void loadTranslation ();
 
 private:
     //! Interface for controlling the status indicator menu
