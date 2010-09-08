@@ -2,11 +2,13 @@
 #define PROFILEWIDGET_H
 
 #include <MButton>
+#include <QPointer>
 
 class MStatusIndicatorMenuInterface;
 class ProfileDataInterface;
 class ProfileButtons;
 class ProfilePlugin;
+class MDialog;
 
 /*!
  * The Profile widget makes it possible to select the currently
@@ -49,13 +51,16 @@ private:
 
 private:
     //! Interface for controlling the status indicator menu
-    ProfilePlugin *plugin;
+    ProfilePlugin                   *plugin;
 
     //! Profile data If to receive information about possible profiles
     ProfileDataInterface            *dataIf;
 
     //! Profile buttongroup container
     ProfileButtons                  *profileButtons;
+
+    //! The profile selection dialog
+    QPointer<MDialog>                profileDialog;
 
 };
 
