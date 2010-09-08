@@ -38,6 +38,15 @@ if [ $? -eq 0 ]; then
     if [ $? -eq 0 ]; then
         echo "DEFINES += HAVE_CELLULAR_QT" >> ${FILENAME}
     fi
+
+    #
+    # The aboutapplet has some libsysinfo0 dependency.
+    #
+    pkg-config --exists sysinfo
+    if [ $? -eq 0 ]; then
+        echo "DEFINES += HAVE_SYSINFO" >> ${FILENAME}
+    fi
+
 fi
     
 #
