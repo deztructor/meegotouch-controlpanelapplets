@@ -1,15 +1,10 @@
-System UI applets
-=================
+MeeGoTouch controlpanel applets:
+================================
 
 # UT/FT TESTING:
 
  dpkg-buildpackage -rfakeroot -b; fakeroot dpkg -i ../*deb;
  testrunner.py -f /usr/share/systemui-applets-tests/tests.xml -o result.xml
-
-# RELEASING:
-
- git tag VERSION
- git push --tags origin master
 
 # TESTING COVERAGE:
 

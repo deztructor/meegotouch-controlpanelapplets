@@ -25,8 +25,13 @@
 #include <net/if.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
-#include <sysinfo.h>
 
+#ifdef HAVE_SYSINFO
+#include <sysinfo.h>
+#endif
+
+#include <QFile>
+#include <QRegExp>
 #include <QByteArray>
 #include <QString>
 #include <QStringList>
@@ -96,17 +101,13 @@ QString
 AboutBusinessLogic::osVersion ()
 {
     QString retval = "-";
-    const char *key = "/device/sw-release-ver";
-    /*
-     * INFO: maybe imei number could be fetched in the same
-     * way (key for imei : /certs/npc/esn/gsm )
-     */
 
     if (!m_OsVersion.isEmpty())
         return m_OsVersion;
 
 
-    SYS_DEBUG ("init");
+#ifdef HAVE_SYSINFO
+    const char *key = "/device/sw-release-ver";
     struct system_config *sc = 0;
     if (sysinfo_init (&sc) == 0)
     {
@@ -134,6 +135,22 @@ AboutBusinessLogic::osVersion ()
         }
         sysinfo_finish (sc);
     }
+#else
+    /*
+     * Try to get the version number from the lsb-release
+     */
+    QFile lsbrel_file ("/etc/lsb-release");
+    if (lsbrel_file.open (QIODevice::ReadOnly))
+    {
+        QString contents (lsbrel_file.readAll ().constData ());
+        lsbrel_file.close ();
+
+        QRegExp version ("DISTRIB_RELEASE=(.*)$");
+        int pos = version.indexIn (contents);
+        if (pos > -1)
+            retval = version.cap (1);
+    }
+#endif
 
     return retval;
 }
@@ -148,10 +165,19 @@ AboutBusinessLogic::osName ()
         return m_OsName;
 
     /*
-     * TODO: Implement something here...
-     * [but currently there is no way to get the
-     *  software name... ]
+     * Try to get the version number from the lsb-release
      */
+    QFile lsbrel_file ("/etc/lsb-release");
+    if (lsbrel_file.open (QIODevice::ReadOnly))
+    {
+        QString contents (lsbrel_file.readAll ().constData ());
+        lsbrel_file.close ();
+
+        QRegExp distrib_name ("DISTRIB_ID=(.*)$");
+        int pos = distrib_name.indexIn (contents);
+        if (pos > -1)
+            retval = distrib_name.cap (1);
+    }
 
     m_OsName = retval;
     return retval;
@@ -314,7 +340,7 @@ AboutBusinessLogic::defaultBluetoothAdapterReceived (
 		QDBusObjectPath adapter)
 {
     QDBusInterface  *m_AdapterDBusIf;
-    
+
     SYS_DEBUG ("Defaultadapter: %s", SYS_STR (adapter.path()));
     m_AdapterDBusIf = new QDBusInterface (
             DBUS_BLUEZ_SERVICE, 
