@@ -30,6 +30,14 @@ if [ $? -eq 0 ]; then
     if [ $? -eq 0 ]; then
         echo "DEFINES += HAVE_CONTENT_MANAGER" >> ${FILENAME}
     fi
+    
+    #
+    # The aboutapplet has some CellularQt dependency.
+    #
+    pkg-config --exists CellularQt
+    if [ $? -eq 0 ]; then
+        echo "DEFINES += HAVE_CELLULAR_QT" >> ${FILENAME}
+    fi
 fi
     
 #
@@ -41,8 +49,8 @@ if [ -e /usr/include/profile-qt/profile.h ]; then
 fi 
 
 
-#echo "# All values were removed for testing purposes..." > ${FILENAME}
+echo "# All values were removed for testing purposes..." > ${FILENAME}
 
-echo Configured system-ui as follows:
-echo ================================
+echo Configured meegotouch-controlpanelapplets as follows:
+echo =====================================================
 cat ${FILENAME}

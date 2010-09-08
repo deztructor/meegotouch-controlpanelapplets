@@ -5,9 +5,12 @@ CONFIG += plugin \
           gui \
           meegotouch \
           duicontrolpanel \
-          cellular-qt \
           silent \
           link_pkgconfig
+
+contains(DEFINES, HAVE_CELLULAR_QT) {
+    CONFIG += cellular-qt 
+}
 
 PKGCONFIG += sysinfo
 

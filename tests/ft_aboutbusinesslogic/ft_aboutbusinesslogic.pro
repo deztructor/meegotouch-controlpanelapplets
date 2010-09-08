@@ -8,11 +8,14 @@ INCLUDEPATH += \
     $$SRC_PREFIX 
 
 CONFIG += \
-	gui \
-	meegotouch \
-	cellular-qt \
-    link_pkgconfig
-	#silent
+    gui \
+    meegotouch \
+    link_pkgconfig \
+    silent
+
+contains(DEFINES, HAVE_CELLULAR_QT) {
+    CONFIG += cellular-qt 
+}
 
 PKGCONFIG += sysinfo
 

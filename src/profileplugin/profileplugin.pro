@@ -1,3 +1,4 @@
+include(../common_top.pri)
 include(../coverage.pri)
 
 TEMPLATE = lib
@@ -6,19 +7,21 @@ MOC_DIR = .moc
 MGEN_OUTDIR = .gen
 OBJECTS_DIR = .obj
 
-CONFIG       += plugin \
-                gui \
-                meegotouch \
-                duicontrolpanel \
-                system-ui \
-                silent
+CONFIG += \
+    plugin \
+    gui \
+    meegotouch \
+    duicontrolpanel \
+    system-ui \
+    silent
+
+contains(DEFINES, HAVE_PROFILE_QT) {
+    LIBS += -lprofile-qt
+    INCLUDEPATH += /usr/include/profile-qt
+}
 
 QT += dbus
-
-LIBS += -lprofile-qt
-
-INCLUDEPATH  += ../profileapplet \
-                /usr/include/profile-qt
+INCLUDEPATH  += ../profileapplet
 
 HEADERS = profileplugin.h \
           profilewidget.h \

@@ -1,5 +1,25 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
+
+/****************************************************************************
+**
+** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (directui@nokia.com)
+**
+** This file is part of systemui.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at directui@nokia.com.
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation
+** and appearing in the file LICENSE.LGPL included in the packaging
+** of this file.
+**
+****************************************************************************/
+
 #ifndef ABOUTBUSINESSLOGIC_H
 #define ABOUTBUSINESSLOGIC_H
 
@@ -8,12 +28,15 @@
 #include <QMap>
 #include <QDBusError>
 #include <QDBusInterface>
-#include "phoneinfo.h"
+
+#ifdef HAVE_CELLULAR_QT
+#  include "phoneinfo.h"
+using namespace Cellular;
+#endif
 
 class QDBusObjectPath;
 class QString;
 
-using namespace Cellular;
 
 /*!
  * To test this class under scratchbox1 I had to start the bluetooth daemon:
@@ -56,7 +79,9 @@ private:
 private:
     QPointer<QDBusInterface> m_ManagerDBusIf;
     QPointer<QDBusInterface> m_AdapterDBusIf;
+    #ifdef HAVE_CELLULAR_QT
     QPointer<PhoneInfo>      m_PhoneInfo;
+    #endif
     
     bool          m_gotBluetoothAddress;
     QString       m_BluetoothAddress;
