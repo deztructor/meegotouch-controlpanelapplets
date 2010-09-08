@@ -8,13 +8,17 @@
 #include <QVariant>
 #include <QDBusInterface>
 #include <QDBusMessage>
+#ifdef HAVE_DEVICELOCK
 #include <devicelock/devicelock.h>
+#endif
 
 #define DEBUG
 #include "../debug.h"
 
-ResetBusinessLogic::ResetBusinessLogic()
+ResetBusinessLogic::ResetBusinessLogic() :
+    m_devlock (0)
 {
+#ifdef HAVE_DEVICELOCK
     m_devlock =
         new QDBusInterface (QString (DEVLOCK_SERVICE),
                             QString (DEVLOCK_PATH),
@@ -22,6 +26,7 @@ ResetBusinessLogic::ResetBusinessLogic()
                             QDBusConnection::systemBus ());
     connect (m_devlock, SIGNAL (passwordPromptResult (bool)),
              this, SLOT (passwordResult (bool)));
+#endif
 }
 
 ResetBusinessLogic::~ResetBusinessLogic()
@@ -67,6 +72,9 @@ ResetBusinessLogic::performClearData ()
 void
 ResetBusinessLogic::getAccess ()
 {
+    bool success = false;
+
+#ifdef HAVE_DEVICELOCK
     QDBusMessage message;
     message = m_devlock->call (QDBus::Block, 
                                QString ("setState"),
@@ -83,8 +91,9 @@ ResetBusinessLogic::getAccess ()
      * error happening means there is no device-lock daemon
      * running on the device...
      */
-    bool success = message.arguments().at(0).toBool ();
+    success = message.arguments().at(0).toBool ();
     SYS_DEBUG ("*** reply = %s", SYS_BOOL (success));
+#endif
 
     /*
      * No password needed [ie. device-lock is disabled]

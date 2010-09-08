@@ -57,6 +57,13 @@ if [ -e /usr/include/profile-qt/profile.h ]; then
     echo "DEFINES += HAVE_PROFILE_QT" >> ${FILENAME}
 fi 
 
+#
+# We need also the DBus interfaces names, and some meta-type registration
+# from devicelock-dev header (in reset-settings applet)
+#
+if [ -e /usr/include/devicelock/devicelock.h ]; then
+    echo "DEFINES += HAVE_DEVICELOCK" >> ${FILENAME}
+fi
 
 #echo "# All values were removed for testing purposes..." > ${FILENAME}
 
