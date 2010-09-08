@@ -49,7 +49,7 @@ if [ -e /usr/include/profile-qt/profile.h ]; then
 fi 
 
 
-echo "# All values were removed for testing purposes..." > ${FILENAME}
+#echo "# All values were removed for testing purposes..." > ${FILENAME}
 
 echo Configured meegotouch-controlpanelapplets as follows:
 echo =====================================================

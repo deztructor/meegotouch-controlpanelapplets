@@ -1,3 +1,4 @@
+include(../common_top.pri)
 include(../coverage.pri)
 include(../check.pri)
 
@@ -14,7 +15,7 @@ CONFIG += \
 	gui \
 	meegotouch \
 	debug \
-    link_pkgconfig \
+        link_pkgconfig \
 	silent
 
 PKGCONFIG += sysinfo
