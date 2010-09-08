@@ -1,3 +1,4 @@
+include(../common_top.pri)
 include(../coverage.pri)
 include(../check.pri)
 
@@ -5,16 +6,15 @@ SRC_PREFIX = ../../src/displayapplet
 STUB_PREFIX = ../stubs
 
 INCLUDEPATH = \
-        $$STUB_PREFIX \
-	$$SRC_PREFIX \
-	$$INCLUDEPATH
+    $$STUB_PREFIX \
+    $$SRC_PREFIX \
+    $$INCLUDEPATH
 
 CONFIG += \
-	gui \
-	meegotouch \
-	plugin \
-	duicontrolpanel \
-	silent 
+    gui \
+    meegotouch \
+    plugin \
+    duicontrolpanel 
 
 QT += \
     testlib \

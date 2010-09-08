@@ -200,6 +200,7 @@ DisplayBusinessLogic::selectedScreenLightsValue ()
      * FIXME: To add the code that returns the selected screen lights value when
      * QmSystem is not available.
      */
+    SYS_WARNING ("Not implemented!");
     index = 0;
     #endif
     return index;
@@ -218,6 +219,7 @@ DisplayBusinessLogic::blankInhibitValue ()
      * FIXME: To add the code that gets the value when QmSystem is not
      * available.
      */
+    SYS_WARNING ("Not implemented!");
     return false;
     #endif
 }
@@ -237,6 +239,7 @@ DisplayBusinessLogic::setBrightnessValue (
     /*
      * FIXME: To add the code that is used when QmSystem is not available.
      */
+    SYS_WARNING ("Not implemented!");
     #endif
 }
 
@@ -268,6 +271,7 @@ DisplayBusinessLogic::setScreenLightTimeouts (
     /*
      * FIXME: To add the code that is used when there is no QmSystem.
      */
+    SYS_WARNING ("Not implemented!");
     #endif
 }
 
@@ -290,6 +294,7 @@ DisplayBusinessLogic::setBlankInhibitValue (
     /*
      * FIXME: To add the code that is used when there is no QmSystem.
      */
+    SYS_WARNING ("Not implemented!");
     #endif
 }
 

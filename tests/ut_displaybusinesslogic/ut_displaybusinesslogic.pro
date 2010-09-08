@@ -6,14 +6,14 @@ SRC_PREFIX = ../../src/displayapplet
 STUB_PREFIX = ../stubs
 
 INCLUDEPATH = \
-        $$STUB_PREFIX \
-	$$SRC_PREFIX \
-	$$INCLUDEPATH
+    $$STUB_PREFIX \
+    $$SRC_PREFIX \
+    $$INCLUDEPATH
 
 CONFIG += \
-	gui \
-	meegotouch \
-	silent 
+    gui \
+    meegotouch \
+    silent 
 
 QT += \
     testlib \
