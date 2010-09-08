@@ -4,7 +4,11 @@ systemui-applets (0.15.2~1) meegotouch; urgency=low
   * Fixes: NB#190055 -  Wallpaper cannot be set continuously in wallpaper 
     setting view via selecting from Gallery.
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 03 Sep 2010 12:26:14 +0200
+  [ David Kedves ]
+  * Fixes: NB#190694 -  COREWEB: /usr/bin/sysuid
+    'MDialogBlancoViewPrivate::setCentralWidget'
+
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 08 Sep 2010 10:50:31 +0200
 
 systemui-applets (0.15.1-1) meegotouch; urgency=low
 

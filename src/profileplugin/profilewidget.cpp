@@ -52,7 +52,7 @@ ProfileWidget::ProfileWidget (
 
     loadTranslation ();
 
-    setViewType(MButton::iconType);
+    setViewType (MButton::iconType);
     setObjectName("StatusIndicatorMenuTopRowExtensionButton");
     connect(this, SIGNAL (clicked ()), this, SLOT (showProfileDialog ()));
     connect (dataIf, SIGNAL (currentProfile (int)),
@@ -64,11 +64,15 @@ ProfileWidget::ProfileWidget (
 ProfileWidget::~ProfileWidget ()
 {
     SYS_DEBUG ("");
+
+    if (! profileDialog.isNull ())
+        delete profileDialog.data ();
+
     delete dataIf;
-    dataIf = NULL;
+    dataIf = 0;
 }
 
-void 
+void
 ProfileWidget::profileChanged()
 {
     /*
@@ -77,46 +81,40 @@ ProfileWidget::profileChanged()
      */
     //setText(dataIf->getCurrentProfileName());
     //% "Profile"
-    setText (qtTrId("qtn_prof_profile"));
+    setText (qtTrId ("qtn_prof_profile"));
 
-    setIconID(dataIf->getCurrentProfileIconId());
+    setIconID(dataIf->getCurrentProfileIconId ());
 }
 
-void ProfileWidget::showProfileDialog()
+void ProfileWidget::showProfileDialog ()
 {
-    // Create a dialog for choosing the profile
-    //% "Select Profile"
-    MDialog* dialog = new MDialog(qtTrId("qtn_prof_select"), M::NoStandardButton);
-
-    initProfileButtons();
-    dialog->setCentralWidget(profileButtons);
-    profileButtons->connect(profileButtons, SIGNAL(profileSelected(int)), dialog, SLOT(accept()));
-
-#if 1
-    /*
-     * Hide the status indicator menu: We can choose to hide the menu and make a
-     * system modal dialog to be visible without the menu or keep the menu in
-     * the background and use a non-system-modal dialog.
-     *
-     * Plase check NB#177846 and NB#181841 for further details.
-     */
     MStatusIndicatorMenuInterface *menu;
 
-    menu = plugin->statusIndicatorMenuInterface();
+    menu = plugin->statusIndicatorMenuInterface ();
     if (menu) {
-        menu->hideStatusIndicatorMenu();
+        menu->hideStatusIndicatorMenu ();
     }
 
-    // Needed because the dialog will be shown on the hidden 
-    // status-menu-window 
-    dialog->setModal (false);
-    dialog->setSystem (true);
-#endif
-    // FIXME ^^ Not possible with the current meegotouch/window-manager,
-    // a dialog only shown without a parent (transient) window if it is 
-    // a system-modal one... so i had to uncomment these ^^^ [dkedves]
-    // Show the dialog
-    dialog->exec();
+    if (profileDialog.isNull ())
+    {
+        // Create a dialog for choosing the profile
+        //% "Select Profile"
+        profileDialog = new MDialog (qtTrId ("qtn_prof_select"),
+                                     M::NoStandardButton);
+        profileDialog->setButtonBoxVisible (false);
+
+        initProfileButtons ();
+        profileDialog->setCentralWidget (profileButtons);
+        connect (profileButtons, SIGNAL (profileSelected (int)),
+                 profileDialog, SLOT (accept ()));
+
+        // Needed because the dialog will be shown on the hidden
+        // status-menu-window
+        profileDialog->setModal (false);
+        profileDialog->setSystem (true);
+    }
+
+    profileDialog->exec ();
 }
 
 void

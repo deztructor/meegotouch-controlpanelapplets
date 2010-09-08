@@ -6,7 +6,6 @@
 
 #include <QPointer>
 #include "dcpwidget.h"
-#include "profilebuttons.h"
 #include "profiledatainterface.h"
 
 class MLabel;

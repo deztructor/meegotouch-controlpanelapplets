@@ -22,14 +22,14 @@ INCLUDEPATH  += ../profileapplet \
 
 HEADERS = profileplugin.h \
           profilewidget.h \
+          profilebuttons.h \
           ../profileapplet/profiledatainterface.h \
-          ../profileapplet/profilebuttons.h \
           ../debug.h
           
 SOURCES = profileplugin.cpp \
           profilewidget.cpp \
+          profilebuttons.cpp \
           ../profileapplet/profiledatainterface.cpp \
-          ../profileapplet/profilebuttons.cpp \
           ../debug.cpp
 
 desktop_entry.path = /usr/share/meegotouch/applicationextensions

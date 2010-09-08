@@ -31,7 +31,6 @@ HEADERS += \
     ut_profileapplet.h \
     $$SRC_PREFIX/dcpprofile.h \
     $$SRC_PREFIX/profileapplet.h \
-    $$SRC_PREFIX/profilebuttons.h \
     $$SRC_PREFIX/profilecontainer.h \
     $$SRC_PREFIX/profiledatainterface.h \
     $$SRC_PREFIX/profilewidget.h
@@ -41,7 +40,6 @@ SOURCES += \
     ../../src/debug.cpp \
     ut_profileapplet.cpp \
     $$SRC_PREFIX/profileapplet.cpp \
-    $$SRC_PREFIX/profilebuttons.cpp \
     $$SRC_PREFIX/profilecontainer.cpp \
     $$SRC_PREFIX/profiledatainterface.cpp \
     $$SRC_PREFIX/profilewidget.cpp
