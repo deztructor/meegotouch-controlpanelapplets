@@ -1,4 +1,4 @@
-include(../common_top.pri)
+include(../../localconfig.pri)
 include(../coverage.pri)
 
 TEMPLATE = lib
