@@ -1,6 +1,25 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
 
+/****************************************************************************
+**
+** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (directui@nokia.com)
+**
+** This file is part of systemui.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at directui@nokia.com.
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation
+** and appearing in the file LICENSE.LGPL included in the packaging
+** of this file.
+**
+****************************************************************************/
+
 #include "wallpaperwidget.h"
 #include "wallpaperlist.h"
 
@@ -10,7 +29,6 @@
 #include <MContainer>
 #include <QTimer>
 #include <MContentItem>
-#include <SelectSingleContentItemPage.h>
 #include <QDebug>
 #include <QtTracker/Tracker>
 
@@ -60,8 +78,10 @@ WallpaperWidget::createContent ()
         new MLinearLayoutPolicy (buttonsLayout, Qt::Vertical);
 
     /*
-     * The gallery item.
+     * The gallery item. We support this widget only when the ContentManager
+     * library is available.
      */
+    #ifdef HAVE_CONTENT_MANAGER
     m_GalleryItem = new MContentItem (MContentItem::IconAndSingleTextLabel);
     m_GalleryItem->setObjectName ("GalleryItem");
     m_GalleryItem->setItemMode (MContentItem::Single);
@@ -71,6 +91,7 @@ WallpaperWidget::createContent ()
 
     connect (m_GalleryItem, SIGNAL(clicked()),
             this, SLOT(galleryActivated()));
+    #endif
 
     /*
      * The OVI item.
@@ -148,8 +169,10 @@ WallpaperWidget::retranslateUi ()
     //% "Get more from Ovi Store"
     m_OviItem->setTitle(qtTrId("qtn_wall_get_more_from_ovi"));
    
+    #ifdef HAVE_CONTENT_MANAGER
     //% "Pick from My Gallery"
     m_GalleryItem->setTitle(qtTrId("qtn_wall_pick_from_gallery"));
+    #endif
 }
 
 
@@ -160,6 +183,12 @@ WallpaperWidget::oviActivated ()
     system (oviCommand);
 }
 
+#ifdef HAVE_CONTENT_MANAGER
+/*!
+ * Slot that is activated when the user clicked on the gallery item, the widget
+ * that activates the ContentManager page. We support this only when the
+ * ContentManager library is available.
+ */
 void 
 WallpaperWidget::galleryActivated ()
 {
@@ -185,11 +214,18 @@ WallpaperWidget::galleryActivated ()
      
     m_ImageBrowser->appear (MSceneWindow::DestroyWhenDismissed);
 }
+#endif
 
+
+#ifdef HAVE_CONTENT_MANAGER
+/*!
+ * Slot that activated when the user picks an image from the content manager
+ * page. We only need this slot when the ContentManager library is activated.
+ */
 void 
 WallpaperWidget::galleryImageSelected (
         const QString &uri)
 {
     m_WallpaperBusinessLogic->addImageFromGallery (uri);
 }
-
+#endif

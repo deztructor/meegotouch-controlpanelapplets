@@ -1,3 +1,4 @@
+include(../../localconfig.pri)
 include(../coverage.pri)
 
 TEMPLATE = lib
@@ -10,10 +11,13 @@ CONFIG += plugin \
           gui \
           meegotouch \
           duicontrolpanel \
-          silent \
-          link_pkgconfig
+          silent
 
-PKGCONFIG += ContentManager
+contains(DEFINES, HAVE_CONTENT_MANAGER) {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += ContentManager
+}
+
 
 LIBS += \
     -lqttracker \

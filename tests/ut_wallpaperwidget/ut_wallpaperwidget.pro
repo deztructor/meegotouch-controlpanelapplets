@@ -1,3 +1,4 @@
+include(../common_top.pri)
 include(../coverage.pri)
 include(../check.pri)
 
@@ -5,13 +6,13 @@ SRC_PREFIX = ../../src/wallpaperapplet
 STUB_PREFIX = ../stubs
 
 INCLUDEPATH = \
-        $$STUB_PREFIX \
-	$$SRC_PREFIX \
-	$$INCLUDEPATH
+    $$STUB_PREFIX \
+    $$SRC_PREFIX \
+    $$INCLUDEPATH
 
 QT += \
-    	testlib \
-	dbus 
+    testlib \
+    dbus 
 
 TEMPLATE = app
 
@@ -26,10 +27,12 @@ CONFIG += \
 	meegotouch \
 	plugin \
 	duicontrolpanel \
-        silent \
-        link_pkgconfig
+        silent 
 
-PKGCONFIG += ContentManager
+contains(DEFINES, HAVE_CONTENT_MANAGER) {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += ContentManager
+}
 
 HEADERS += \
     $$STUB_PREFIX/thumbnailerstub.h \
