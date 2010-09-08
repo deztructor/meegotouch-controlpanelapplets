@@ -145,7 +145,7 @@ AboutBusinessLogic::osVersion ()
         QString contents (lsbrel_file.readAll ().constData ());
         lsbrel_file.close ();
 
-        QRegExp version ("DISTRIB_RELEASE=(.*)$");
+        QRegExp version ("DISTRIB_RELEASE=(\\S*)");
         int pos = version.indexIn (contents);
         if (pos > -1)
             retval = version.cap (1);
@@ -173,7 +173,7 @@ AboutBusinessLogic::osName ()
         QString contents (lsbrel_file.readAll ().constData ());
         lsbrel_file.close ();
 
-        QRegExp distrib_name ("DISTRIB_ID=(.*)$");
+        QRegExp distrib_name ("DISTRIB_ID=(\\S*)");
         int pos = distrib_name.indexIn (contents);
         if (pos > -1)
             retval = distrib_name.cap (1);
