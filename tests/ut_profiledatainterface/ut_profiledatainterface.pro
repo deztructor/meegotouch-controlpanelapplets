@@ -1,10 +1,13 @@
+include(../common_top.pri)
 include(../coverage.pri)
 include(../check.pri)
 
 SRC_PREFIX = ../../src/profileapplet
 STUB_PREFIX = ../stubs
-INCLUDEPATH += $$SRC_PREFIX \
-               $$STUB_PREFIX
+
+INCLUDEPATH += \
+    $$SRC_PREFIX \
+    $$STUB_PREFIX
 
 QT += \
     testlib \
@@ -16,9 +19,9 @@ TARGET = ut_profiledatainterface
 target.path = /usr/lib/systemui-applets-tests
 
 CONFIG += \
-	gui \
-	meegotouch \
-	silent 
+    gui \
+    meegotouch \
+    silent 
 
 HEADERS += \
     $$STUB_PREFIX/profilestub.h \

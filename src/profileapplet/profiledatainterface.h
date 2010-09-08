@@ -6,7 +6,10 @@
 
 #include <QObject>
 #include <QPair>
+
+#ifdef HAVE_PROFILE_QT
 class Profile;
+#endif
 
 class ProfileDataInterface : public QObject
 {
@@ -45,10 +48,6 @@ signals:
     void vibrationValue (int id, bool value);
 
 public:
-    // This method has been remoed because the UI specification has been
-    // changed. Will remove it later. (Can't trust the UI spec will not be
-    // changed again...)
-    //QString getCurrentProfileName ();
     QString getCurrentProfileIconId ();
     int getCurrentProfile ();
     QList<ProfileData> getProfilesData ();
@@ -66,7 +65,9 @@ private:
     static QString mapId2IconID (int id);
 
 private:
+    #ifdef HAVE_PROFILE_QT
     Profile *m_ProfileAPI;
+    #endif
 };
 
 #endif

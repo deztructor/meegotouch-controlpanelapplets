@@ -1,3 +1,4 @@
+include(../common_top.pri)
 include(../coverage.pri)
 
 TEMPLATE = lib
@@ -7,8 +8,10 @@ CONFIG += plugin \
           duicontrolpanel \
           silent
 
-LIBS += -lprofile-qt
-INCLUDEPATH += /usr/include/profile-qt
+contains(DEFINES, HAVE_PROFILE_QT) {
+    LIBS += -lprofile-qt
+    INCLUDEPATH += /usr/include/profile-qt
+}
 
 QT += dbus
 MOC_DIR = .moc
