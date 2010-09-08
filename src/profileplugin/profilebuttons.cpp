@@ -33,9 +33,9 @@ ProfileButtons::~ProfileButtons()
  * parameter will hold a map with the integer profile ID and a pair of icon IDs
  * and profile names.
  */
-void 
+void
 ProfileButtons::init (
-        QMap<int, QPair<QString, QString> > data, 
+        QMap<int, QPair<QString, QString> > data,
         int currentId)
 {
     SYS_DEBUG ("");
@@ -45,26 +45,27 @@ ProfileButtons::init (
      * it creates widgets and sets layouts but it also initializes the widgets
      * with input data. Maybe it would be clearer to separate these things.
      */
-    m_Buttons = new MButtonGroup();
-    connect (m_Buttons, SIGNAL(buttonClicked(int)), 
-            this, SIGNAL(profileSelected(int)));
+    m_Buttons = new MButtonGroup;
+    connect (m_Buttons, SIGNAL (buttonClicked (int)),
+             this, SIGNAL (profileSelected (int)));
 
-    QList<int> ids = data.keys();
-    for (int i = 0; i < data.count(); ++i) {
-        int id = ids.at(i);
+    QList<int> ids = data.keys ();
+    for (int i = 0; i < data.count (); ++i) {
+        int id = ids.at (i);
         addButton (
-                data.value(id).first, 
-                data.value(id).second,
+                data.value (id).first,
+                data.value (id).second,
                 id, (currentId == id));
     }
-    createLayout();
+
+    createLayout ();
 }
 
 /*!
  * \param id The numerical ID of the profile to select.
  * \returns true if the button for the profile has been found.
  */
-bool 
+bool
 ProfileButtons::selectProfile (
         int id)
 {
@@ -79,7 +80,7 @@ ProfileButtons::selectProfile (
     for (int i = 0; i < buttonList.size(); ++i) {
         MButton *button = buttonList.at (i);
         bool       checked;
-        
+
         checked = id == m_Buttons->id (button);
         button->setChecked (checked);
         if (checked)
@@ -93,7 +94,7 @@ ProfileButtons::selectProfile (
  * \returns The translated UI string from the checked button or an empty string
  *   if there is no selected button.
  */
-QString 
+QString
 ProfileButtons::selectedProfileName ()
 {
     SYS_DEBUG ("");
@@ -133,16 +134,16 @@ ProfileButtons::retranslate (
 }
 
 /*!
- * Creates the layout for the profile buttons. 
+ * Creates the layout for the profile buttons.
  */
-void 
+void
 ProfileButtons::createLayout ()
 {
     SYS_DEBUG ("");
     QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(Qt::Vertical);
     QList<MButton*>       buttonList = m_Buttons->buttons();
 
-    // Storing the buttons in the layout. 
+    // Storing the buttons in the layout.
     for (int i = 0; i < buttonList.size(); ++i) {
         layout->addItem (buttonList[i]);
     }
@@ -161,8 +162,8 @@ ProfileButtons::createLayout ()
 void
 ProfileButtons::addButton (
         QString   iconId,
-        QString   name, 
-        int       id, 
+        QString   name,
+        int       id,
         bool      checked)
 {
     MButton *button;
@@ -170,7 +171,7 @@ ProfileButtons::addButton (
     SYS_DEBUG ("*** name    = %s", SYS_STR(name));
     SYS_DEBUG ("*** id      = %d", id);
     SYS_DEBUG ("*** checked = %s", SYS_BOOL(checked));
-    
+
     Q_ASSERT (m_Buttons);
     button = new MButton (iconId, name);
     button->setCheckable (true);

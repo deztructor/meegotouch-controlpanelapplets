@@ -21,15 +21,14 @@ HEADERS = \
     profileapplet.h \
     profilewidget.h \
     profilecontainer.h \
-    profilebuttons.h \
     profiledatainterface.h
 SOURCES = \
     ../debug.cpp \
     profileapplet.cpp \
     profilewidget.cpp \
     profilecontainer.cpp \
-    profilebuttons.cpp \
     profiledatainterface.cpp
+
 css.files = profileapplet.css
 DESTDIR = lib
 desktop.files += *.desktop

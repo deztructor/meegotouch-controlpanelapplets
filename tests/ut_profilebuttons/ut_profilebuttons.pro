@@ -2,7 +2,7 @@ include(../coverage.pri)
 include(../check.pri)
 
 MOC_DIR = .moc
-SRC_PREFIX = ../../src/profileapplet
+SRC_PREFIX = ../../src/profileplugin
 STUB_PREFIX = ../stubs
 INCLUDEPATH += $$SRC_PREFIX \
                $$STUB_PREFIX
