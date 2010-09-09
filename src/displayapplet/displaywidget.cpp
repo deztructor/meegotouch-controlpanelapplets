@@ -181,6 +181,7 @@ DisplayWidget::screenTimeoutClicked ()
     QStringList timeoutVals;
 
     popuplist->setTitle (qtTrId ("qtn_disp_screenoff"));
+    popuplist->setButtonBoxVisible (false);
 
     for (int i = 0; i < m_screenlight_vals.size (); i++)
     {
