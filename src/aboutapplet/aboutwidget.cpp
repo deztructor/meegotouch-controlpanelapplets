@@ -54,7 +54,7 @@ AboutWidget::createContent ()
      * The first row: a logo
      */
     logoLayout = new QGraphicsLinearLayout (Qt::Horizontal);
-    logo = new MImageWidget ("missing-icon");
+    logo = new MImageWidget ("icon-l-about-nokia-logo");
     logoLayout->addItem (logo);
     logoLayout->addStretch ();
     layout->addItem (logoLayout);
@@ -62,7 +62,7 @@ AboutWidget::createContent ()
     /*
      * A stretcher.
      */
-    stretcher = new MStylableWidget ();
+    stretcher = new MStylableWidget;
     stretcher->setObjectName ("CommonSpacer");
     layout->addItem (stretcher);
 
