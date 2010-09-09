@@ -8,7 +8,7 @@ systemui-applets (0.15.2~1) meegotouch; urgency=low
   * Fixes: NB#190694 -  COREWEB: /usr/bin/sysuid
     'MDialogBlancoViewPrivate::setCentralWidget'
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 08 Sep 2010 10:50:31 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 09 Sep 2010 11:13:00 +0200
 
 systemui-applets (0.15.1-1) meegotouch; urgency=low
 
