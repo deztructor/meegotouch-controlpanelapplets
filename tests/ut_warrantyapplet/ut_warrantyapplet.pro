@@ -8,8 +8,8 @@ STUB_PREFIX = ../stubs
 
 INCLUDEPATH = \
         $$STUB_PREFIX \
-	$$SRC_PREFIX \
-	$$INCLUDEPATH
+        $$SRC_PREFIX \
+        $$INCLUDEPATH
 
 QT += \
     testlib \
@@ -39,18 +39,18 @@ contains(DEFINES, HAVE_QMSYSTEM) {
 
 
 HEADERS += \
-    $$STUB_PREFIX/mdesktopentry.h \
     ../../src/debug.h \
     ut_warrantyapplet.h \
+    $$STUB_PREFIX/MLabel \
     $$SRC_PREFIX/warrantyapplet.h \
     $$SRC_PREFIX/warrantybrief.h \
     $$SRC_PREFIX/warrantybusinesslogic.h \
     $$SRC_PREFIX/warrantywidget.h
 
 SOURCES += \
-    $$STUB_PREFIX/mdesktopentry.cpp \
     ../../src/debug.cpp \
     ut_warrantyapplet.cpp \
+    $$STUB_PREFIX/mlabel_stub.cpp \
     $$SRC_PREFIX/warrantyapplet.cpp \
     $$SRC_PREFIX/warrantybrief.cpp \
     $$SRC_PREFIX/warrantybusinesslogic.cpp \

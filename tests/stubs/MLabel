@@ -1,0 +1,63 @@
+#ifndef MLABEL_STUB_H
+#define MLABEL_STUB_H
+
+#include <MWidget>
+#include <QGraphicsWidget>
+
+class QFont;
+class QColor;
+class QString;
+
+class MLabelHighlighter;
+class MLabelModel;
+
+class M_EXPORT MLabel : public QGraphicsWidget
+{
+    Q_OBJECT
+
+public:
+    
+    MLabel(QGraphicsItem *parent = 0, MLabelModel *model = 0);
+    explicit MLabel(QString const &text, QGraphicsItem *parent = 0);
+
+    virtual ~MLabel();
+
+    void setAlignment(Qt::Alignment alignment);
+
+    Qt::Alignment alignment() const;
+
+    QTextOption::WrapMode wrapMode() const;
+
+    void setWrapMode(QTextOption::WrapMode wrapMode);
+
+    void setWordWrap(bool wrap);
+
+    bool wordWrap() const;
+
+    QString text() const;
+
+    void setTextElide(bool elide);
+
+    bool textElide() const;
+
+    void setFont(const QFont &font);
+
+    QFont font() const;
+
+    void setColor(const QColor &color);
+
+    QColor color() const;
+
+    void addHighlighter(MLabelHighlighter *highlighter);
+
+    void removeHighlighter(MLabelHighlighter *highlighter);
+
+    void removeAllHighlighters();
+
+public Q_SLOTS:
+
+    void setText(const QString &text);
+};
+
+#endif
+

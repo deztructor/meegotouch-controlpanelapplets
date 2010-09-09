@@ -34,9 +34,9 @@ CONFIG += \
 PKGCONFIG += sysinfo
 
 HEADERS += \
-    $$STUB_PREFIX/mdesktopentry.h \
     $$STUB_PREFIX/phoneinfo.h \
     $$STUB_PREFIX/PhoneInfo \
+    $$STUB_PREFIX/MLabel \
     ../../src/debug.h \
     ut_aboutapplet.h \
     $$SRC_PREFIX/aboutapplet.h \
@@ -45,8 +45,8 @@ HEADERS += \
     $$SRC_PREFIX/aboutwidget.h
 
 SOURCES += \
-    $$STUB_PREFIX/mdesktopentry.cpp \
     $$STUB_PREFIX/phoneinfo.cpp \
+    $$STUB_PREFIX/mlabel_stub.cpp \
     ../../src/debug.cpp \
     ut_aboutapplet.cpp \
     $$SRC_PREFIX/aboutapplet.cpp \
