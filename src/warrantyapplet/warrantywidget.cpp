@@ -53,19 +53,19 @@ WarrantyWidget::createContent ()
      * This will be used here, so currently it is just a test be we keep it
      * here.
      */
+    label1 = new MLabel;
+    label1->setWordWrap (true);
+
     #ifdef HAVE_QMSYSTEM
     Maemo::QmSystemState  systemState;
-    label1 = new MLabel (labelText().arg(
-                systemState.getPowerOnTimeInSeconds ()));
+    label1->setText (labelText ().arg (systemState.getPowerOnTimeInSeconds ()));
     #else
     /*
      * FIXME: To implement a version that does not use the QmSystem.
      */
-    label1 = new MLabel ("QmSystem is not available");
+    label1->setText ("QmSystem is not available");
     #endif
 
-    label1->setWordWrap (true);
-    
     landscapePolicy->addItem (label1);
     portraitPolicy->addItem (label1);
 

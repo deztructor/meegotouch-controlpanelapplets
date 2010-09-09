@@ -1,4 +1,5 @@
 include(../coverage.pri)
+include(../../localconfig.pri)
 
 TEMPLATE = lib
 CONFIG += plugin \

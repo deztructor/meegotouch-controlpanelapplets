@@ -71,7 +71,7 @@ AboutWidget::createContent ()
      * a stretcher inside the text, so we might want to create two separate
      * labels...
      */
-    m_Label1 = new MLabel (labelText ());
+    m_Label1 = new MLabel;
     m_Label1->setWordWrap (true);
 
     layout->addItem (m_Label1);

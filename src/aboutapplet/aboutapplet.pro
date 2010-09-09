@@ -1,3 +1,4 @@
+include(../../localconfig.pri)
 include(../coverage.pri)
 
 TEMPLATE = lib

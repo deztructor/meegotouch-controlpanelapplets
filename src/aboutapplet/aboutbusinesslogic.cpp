@@ -148,7 +148,10 @@ AboutBusinessLogic::osVersion ()
         QRegExp version ("DISTRIB_RELEASE=(\\S*)");
         int pos = version.indexIn (contents);
         if (pos > -1)
+        {
             retval = version.cap (1);
+            m_OsVersion = retval;
+        }
     }
 #endif
 
