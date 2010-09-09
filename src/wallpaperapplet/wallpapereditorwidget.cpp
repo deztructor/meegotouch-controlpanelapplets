@@ -459,8 +459,6 @@ WallpaperEditorWidget::imageY () const
     retval += m_UserOffset.y();
     retval += m_Trans.y();
 
-    SYS_DEBUG ("*** portrait = %s", SYS_BOOL(portrait));
-    SYS_DEBUG ("*** r        = %g, %g", r.x(), r.y());
     return retval;
 }
 

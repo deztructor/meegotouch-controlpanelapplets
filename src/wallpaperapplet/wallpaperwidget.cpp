@@ -145,10 +145,7 @@ WallpaperWidget::slotImageActivated (
         WallpaperDescriptor *desc)
 {
     SYS_DEBUG ("*** desc = %s", SYS_STR(desc->basename()));
-    
-    m_WallpaperBusinessLogic->setEditedImage (desc);
-    m_WallpaperBusinessLogic->startEdit ();
-    
+    m_WallpaperBusinessLogic->startEdit (desc);
 }
 
 /*

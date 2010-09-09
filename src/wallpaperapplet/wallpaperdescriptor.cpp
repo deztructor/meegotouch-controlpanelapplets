@@ -18,8 +18,8 @@
  * Apparently the test engine can not tolerate the debug messages when there are
  * weird file names around.
  */
-//#define DEBUG
 //#define LOTDEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -384,9 +384,6 @@ Image::preScale (
         QSize size, 
         bool threadSafe)
 {
-    SYS_DEBUG ("*** size       = %dx%d", size.width(), size.height());
-    SYS_DEBUG ("*** threadSafe = %s", SYS_BOOL(threadSafe));
-
     if (threadSafe) {
         if (!m_Image) 
             cache (threadSafe);

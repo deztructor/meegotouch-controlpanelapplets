@@ -59,7 +59,7 @@ public:
     QList<WallpaperDescriptor *> availableWallpapers () const;
 
     void setEditedImage (WallpaperDescriptor *desc, bool ours = false);
-    void startEdit ();
+    void startEdit (WallpaperDescriptor *desc = NULL);
 
     WallpaperDescriptor *editedImage ();
 

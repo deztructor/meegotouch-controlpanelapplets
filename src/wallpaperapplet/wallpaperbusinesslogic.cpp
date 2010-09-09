@@ -264,11 +264,48 @@ WallpaperBusinessLogic::setEditedImage (
 }
 
 void
-WallpaperBusinessLogic::startEdit ()
+WallpaperBusinessLogic::startEdit (
+        WallpaperDescriptor *desc)
 {
-    WallpaperDescriptor *desc = m_EditedImage;
+    bool threadActive = m_FutureWatcher.isRunning();
 
-    m_EditedImage->setLoading (true);
+    /*
+     * If the user double clicked on the same image we are currently loading in
+     * the other thread.
+     */
+    if (threadActive && m_EditedImage && m_EditedImage == desc) {
+        SYS_WARNING ("The same image is already loading?");
+        return;
+    }
+
+    /*
+     * If we already have and image we are editing and the user clicks on an
+     * other image we remove the loading indicator progress bar from the old
+     * one. This is kind a cosmetic fix since we should abort the other thread.
+     */
+    if (desc && m_EditedImage && desc != m_EditedImage) {
+        SYS_WARNING ("We have an edited image already?");
+        m_EditedImage->setLoading (false);
+    }
+
+    /*
+     * FIXME: We have a thread already, but we can't stop it from here...
+     */
+    if (threadActive) {
+        SYS_WARNING ("The loader thread is active?");
+    }
+
+    /*
+     * If we got an image descriptor we start editing that, if not we start
+     * editing the editedimage set before.
+     */
+    if (desc) {
+        setEditedImage (desc);
+    } else {
+        desc = m_EditedImage;
+    }
+
+    desc->setLoading (true);
 
     /*
      * The loadAll() method is safe to call from outside the GUI thread.
