@@ -1,3 +1,9 @@
+systemui-applets (0.15.3~1) meegotouch; urgency=low
+
+  * [NEW VERSION] 
+
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 10 Sep 2010 12:57:59 +0200
+
 systemui-applets (0.15.2-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
