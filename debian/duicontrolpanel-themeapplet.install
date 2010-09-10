@@ -1,4 +1,3 @@
 usr/lib/duicontrolpanel/theme.desktop
 usr/share/themes/base/meegotouch/duicontrolpanel/style/themeapplet.css
 usr/lib/duicontrolpanel/applets/libthemeapplet.so
-etc/osso-rfs-scripts/theme-rfs.sh
