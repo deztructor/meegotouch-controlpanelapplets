@@ -1,3 +1,4 @@
+%define _unpackaged_files_terminate_build 0
 Name:           meegotouch-controlpanelapplets
 Version:        0.15.2
 Release:        1%{?dist}
