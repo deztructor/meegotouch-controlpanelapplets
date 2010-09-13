@@ -10,6 +10,8 @@
 #include <QGraphicsLinearLayout>
 #include <QTimer>
 
+#include <MLayout>
+#include <MLinearLayoutPolicy>
 #include <MButton>
 #include <MContainer>
 
@@ -118,8 +120,9 @@ void BatteryWidget::initWidget ()
 
     buttonContainer->centralWidget()->setLayout (buttonLayout);
 
+    MLayout *layout = new MLayout;
     // mainContainer
-    m_MainLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    m_MainLayout = new MLinearLayoutPolicy (layout, Qt::Vertical);
     m_MainLayout->setContentsMargins (0., 0., 0., 0.);
     m_MainLayout->setSpacing (0.);
 
@@ -133,7 +136,7 @@ void BatteryWidget::initWidget ()
 
     MContainer *mainContainer = new MContainer;
     mainContainer->setHeaderVisible (false);
-    mainContainer->centralWidget ()->setLayout (m_MainLayout);
+    mainContainer->setLayout (layout);
 
     // connect the value receive signals
     connect (m_logic, SIGNAL(remainingBatteryCapacityChanged(int)),
@@ -294,7 +297,6 @@ BatteryWidget::PSMValueReceived (
         //% "Power save mode"
         remainingCapacityContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
     }
-    m_MainLayout->invalidate ();
 
     m_UILocked = false;
 }

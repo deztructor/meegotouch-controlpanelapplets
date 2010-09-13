@@ -7,7 +7,7 @@
 
 class MButton;
 class MLabel;
-class QGraphicsLinearLayout;
+class MLinearLayoutPolicy;
 class BatteryBusinessLogic;
 class BatteryImage;
 class SliderContainer;
@@ -41,7 +41,7 @@ private:
     bool                     m_UILocked;
     BatteryImage            *batteryImage;
     MButton                 *PSMButton;
-    QGraphicsLinearLayout   *m_MainLayout;
+    MLinearLayoutPolicy     *m_MainLayout;
     // true means we are believed to be in power save mode
     bool                     m_PSMButtonToggle;
     SliderContainer         *sliderContainer;

@@ -1,8 +1,15 @@
+systemui-applets (0.15.4~1) meegotouch; urgency=low
+
+  * Fixes: NB#191264 -  Off and activate/deactivate power saver button looks
+    like overlapping in battery applet in a given scenario.
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 13 Sep 2010 11:51:38 +0200
+
 systemui-applets (0.15.3-1) meegotouch; urgency=low
 
   * Fixes: empty about-product-applet
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 10 Sep 2010 13:30:13 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 13 Sep 2010 11:50:29 +0200
 
 systemui-applets (0.15.2-1) meegotouch; urgency=low
 
