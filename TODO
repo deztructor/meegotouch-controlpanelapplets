@@ -1,0 +1,6 @@
+Mandatory for build:
+ * Update the .spec while when libthumnailer integrated into MeeGo repositories
+
+Needed for proper-work:
+ * .spec file update when clean-device available in MeeGo repos
+ * fix/test all the applets on MeeGo Handset SDK

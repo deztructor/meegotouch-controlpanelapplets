@@ -95,6 +95,8 @@ AboutBusinessLogic::initiateDataCollection()
     osVersion ();
     WiFiAddress ();
     IMEI ();
+
+    emit ready();
 }
 
 QString 

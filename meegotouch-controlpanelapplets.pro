@@ -1,6 +1,6 @@
-# ####################################################################
-# System-UI applets main projectfile
-# ####################################################################
+# ##########################################################################
+# MeeGo Touch Controlpanel applets (ex. system-ui-applets) main projectfile
+# ##########################################################################
 
 system(./configure)
 
@@ -21,7 +21,7 @@ contains(BUILD_FEATURES,coverage) {
 	coverage.commands = \
                 cd tests && make coverage && cd .. \
                 && genhtml --no-branch-coverage --legend -o coverage/ \
-                   -t \"SystemUI Applets Coverage Report\" \
+                   -t \"MeeGo Touch Controlpanel Applets Coverage Report\" \
                 tests/ut_*/selected.cov
 }
 

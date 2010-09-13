@@ -1,4 +1,10 @@
-systemui-applets (0.15.2~1) meegotouch; urgency=low
+systemui-applets (0.15.3-1) meegotouch; urgency=low
+
+  * Fixes: empty about-product-applet
+
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 10 Sep 2010 13:30:13 +0200
+
+systemui-applets (0.15.2-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#190055 -  Wallpaper cannot be set continuously in wallpaper 
@@ -9,7 +15,7 @@ systemui-applets (0.15.2~1) meegotouch; urgency=low
   * Fixes: NB#190694 -  COREWEB: /usr/bin/sysuid
     'MDialogBlancoViewPrivate::setCentralWidget'
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 09 Sep 2010 11:13:00 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 10 Sep 2010 10:21:31 +0200
 
 systemui-applets (0.15.1-1) meegotouch; urgency=low
 
