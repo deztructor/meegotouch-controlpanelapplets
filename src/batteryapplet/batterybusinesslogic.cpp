@@ -32,8 +32,15 @@ static const QString psm_auto_key =
 static const QString psm_values_key =
     "/system/osso/dsm/energymanagement/possible_psm_thresholds";
 
+#define SAVE_BATTERY
+
+#ifdef SAVE_BATTERY
 static const int animation_rate_charging_usb  = 500;
 static const int animation_rate_charging_wall = 250;
+#else
+static const int animation_rate_charging_usb  = 1000;
+static const int animation_rate_charging_wall = 1000;
+#endif
 
 
 BatteryBusinessLogic::BatteryBusinessLogic (
