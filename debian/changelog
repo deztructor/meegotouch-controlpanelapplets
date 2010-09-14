@@ -2,6 +2,8 @@ systemui-applets (0.15.4~1) meegotouch; urgency=low
 
   * Fixes: NB#191264 -  Off and activate/deactivate power saver button looks
     like overlapping in battery applet in a given scenario.
+  * Fixes: NB#188734 -  no profile icon seen in status menu when the profile is 
+    other than Normal.
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 13 Sep 2010 11:51:38 +0200
 
