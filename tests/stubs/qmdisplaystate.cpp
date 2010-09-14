@@ -1,12 +1,10 @@
-/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
-/* vim:set et sw=4 ts=4 sts=4: */
 /****************************************************************************
 **
 ** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
-** This file is part of systemui.
+** This file is part of meegotouch-controlpanelapplets.
 **
 ** If you have questions regarding the use of this file, please contact
 ** Nokia at directui@nokia.com.
@@ -18,6 +16,7 @@
 ** of this file.
 **
 ****************************************************************************/
+
 #include "qmdisplaystate.h"
 
 #define DEBUG
