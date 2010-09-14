@@ -129,7 +129,9 @@ bool
 SignalSink::hasRemainingCapacity (
         bool   charging)
 {
-    if(m_RemainingCapacity != -1)
+    Q_UNUSED (charging);
+
+    if (m_RemainingCapacity != -1)
         return true;
     else
         return false;

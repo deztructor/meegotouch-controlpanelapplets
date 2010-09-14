@@ -1,6 +1,4 @@
 include(../common_top.pri)
-include(../coverage.pri)
-include(../check.pri)
 
 SRC_PREFIX = ../../src/profileapplet
 STUB_PREFIX = ../stubs

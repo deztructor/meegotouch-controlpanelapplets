@@ -1,6 +1,4 @@
 include(../common_top.pri)
-include(../coverage.pri)
-include(../check.pri)
 
 MOC_DIR = .moc
 SRC_PREFIX = ../../src/aboutapplet

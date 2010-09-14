@@ -1,5 +1,4 @@
-include(../coverage.pri)
-include(../check.pri)
+include(../common_top.pri)
 
 MOC_DIR = .moc
 SRC_PREFIX = ../../src/batteryapplet
@@ -7,8 +6,8 @@ STUB_PREFIX = ../stubs
 
 INCLUDEPATH = \
         $$STUB_PREFIX \
-	$$SRC_PREFIX \
-	$$INCLUDEPATH
+        $$SRC_PREFIX \
+        $$INCLUDEPATH
 
 QT += \
     testlib
@@ -16,17 +15,17 @@ QT += \
 TEMPLATE = app
 
 DEFINES += \
-	UNIT_TEST 
+    UNIT_TEST 
 
 TARGET = ut_batteryapplet
 target.path = /usr/lib/systemui-applets-tests
 
 CONFIG += \
-	gui \
-	meegotouch \
-	plugin \
-	duicontrolpanel \
-	silent 
+    gui \
+    meegotouch \
+    plugin \
+    duicontrolpanel \
+    silent 
 
 HEADERS += \
     $$STUB_PREFIX/qmbattery.h \

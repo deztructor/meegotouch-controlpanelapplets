@@ -1,5 +1,4 @@
-include(../coverage.pri)
-include(../check.pri)
+include(../common_top.pri)
 
 TEMPLATE = app
 QT += testlib

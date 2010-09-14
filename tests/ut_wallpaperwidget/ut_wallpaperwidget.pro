@@ -1,6 +1,4 @@
 include(../common_top.pri)
-include(../coverage.pri)
-include(../check.pri)
 
 SRC_PREFIX = ../../src/wallpaperapplet
 STUB_PREFIX = ../stubs

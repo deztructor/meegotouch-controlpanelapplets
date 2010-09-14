@@ -726,6 +726,9 @@ WallpaperDescriptor::thumbnailReady (
     bool success;
     bool needEmitSignal = false;
 
+    Q_UNUSED (thumbnailUri);
+    Q_UNUSED (flavor);
+
     /*
      * FIXME: should store the thumbnail URL as well.
      * FIXME: maybe we should emit a signal for every variant...
