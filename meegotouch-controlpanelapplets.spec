@@ -119,7 +119,7 @@ make %{?_smp_mflags}
 %install
 rm -fR %{buildroot}
 make INSTALL_ROOT=%{buildroot} install
-install -m 644 -D -p LICENSE %{buildroot}/usr/share/doc/packages/%{name}/LICENSE.LGPL
+install -m 644 -D -p LICENSE.LGPL %{buildroot}/usr/share/doc/packages/%{name}/LICENSE.LGPL
 
 %clean
 rm -fR %{buildroot}
