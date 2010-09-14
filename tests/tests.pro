@@ -13,6 +13,12 @@ contains(BUILD_FEATURES,coverage) {
 	SUBDIRS = $$system(ls -1d ut_*/ ft_*/)
 }
 
+# nocheck option disables the test building
+contains(BUILD_FEATURES,nocheck) {
+    message("*** Disabling unit/functional test building ***")
+    SUBDIRS =
+}
+
 check.target = check
 check.CONFIG = recursive
 QMAKE_EXTRA_TARGETS += check
@@ -36,9 +42,16 @@ support_files.files += $$OUT_PWD/tests.xml
 support_files.path = /usr/share/systemui-applets-tests
 support_files.CONFIG += no_check_exist
 
+dummy_file.commands += touch $$OUT_PWD/keep_this_dir
+dummy_file.target = dummy_file
+dummy_file.files += $$OUT_PWD/keep_this_dir
+dummy_file.path = /usr/lib/systemui-applets-tests
+
 testscript.files = cylontest.sh
 testscript.path = /bin
 
 INSTALLS += \
     support_files \
+    dummy_file \
     testscript
+
