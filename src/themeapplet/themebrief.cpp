@@ -20,7 +20,7 @@
 #include "themebrief.h"
 #include <dcpwidgettypes.h>
 
-//#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 ThemeBrief::ThemeBrief (

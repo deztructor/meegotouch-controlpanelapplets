@@ -23,7 +23,7 @@
 #include <QStringList>
 #include <MTheme>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 BatteryImage::BatteryImage (QGraphicsItem *parent) :

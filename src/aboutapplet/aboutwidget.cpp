@@ -26,7 +26,7 @@
 #include <QGraphicsLinearLayout>
 #include <MStylableWidget>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 AboutWidget::AboutWidget (

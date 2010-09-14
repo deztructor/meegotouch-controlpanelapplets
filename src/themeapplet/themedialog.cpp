@@ -30,7 +30,7 @@
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 /*

@@ -29,7 +29,7 @@
 #include <QDebug>
 #include <QtTracker/Tracker>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 static const int MaxColumns = 2;

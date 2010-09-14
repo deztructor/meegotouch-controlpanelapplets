@@ -20,7 +20,7 @@
 #include "aboutbrief.h"
 #include <dcpwidgettypes.h>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 AboutBrief::AboutBrief (

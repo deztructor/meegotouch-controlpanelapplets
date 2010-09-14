@@ -22,7 +22,7 @@
 #include <QString>
 #include <mdesktopentry.h>
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 

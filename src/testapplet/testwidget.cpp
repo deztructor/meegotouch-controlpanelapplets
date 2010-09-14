@@ -27,7 +27,7 @@
 #include <MGridLayoutPolicy>
 #include <MContainer>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 static const int MaxColumns = 2;

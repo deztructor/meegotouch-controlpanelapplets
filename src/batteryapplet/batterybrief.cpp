@@ -20,7 +20,7 @@
 #include "batterybrief.h"
 #include <dcpwidgettypes.h>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 int

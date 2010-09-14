@@ -24,7 +24,7 @@
 #include <QGraphicsLinearLayout>
 #include <QPixmap>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 WallpaperInfoHeader::WallpaperInfoHeader (

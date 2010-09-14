@@ -38,7 +38,7 @@
 
 #define OS_NAME_FALLBACK "MeeGo"
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 /*

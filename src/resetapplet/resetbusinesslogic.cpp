@@ -28,7 +28,7 @@
 #include <devicelock/devicelock.h>
 #endif
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 ResetBusinessLogic::ResetBusinessLogic() :

@@ -31,7 +31,7 @@
 #include "themecellcreator.h"
 #include "themelistmodel.h"
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 static const char *SelectionStartTag = "<font color='blue'>";

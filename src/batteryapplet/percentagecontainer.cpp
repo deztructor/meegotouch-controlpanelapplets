@@ -24,7 +24,7 @@
 #include <MLabel>
 #include <MStylableWidget>
 
-//#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 PercentageContainer::PercentageContainer(

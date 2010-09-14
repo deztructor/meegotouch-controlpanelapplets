@@ -20,7 +20,7 @@
 #include "warrantybusinesslogic.h"
 
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 

@@ -24,7 +24,7 @@
 #include <MTheme>
 #include <MAction>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(warrantyapplet, WarrantyApplet)

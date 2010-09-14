@@ -22,7 +22,7 @@
 #include <QVariant>
 #include <QString>
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 

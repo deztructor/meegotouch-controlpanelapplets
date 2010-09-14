@@ -22,7 +22,7 @@
 #include "profilebuttons.h"
 #include "profileplugin.h"
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 #include <MButton>

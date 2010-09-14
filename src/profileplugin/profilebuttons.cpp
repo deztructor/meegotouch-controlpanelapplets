@@ -27,7 +27,7 @@
 #include <MGridLayoutPolicy>
 #include <QGraphicsLinearLayout>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 static const int nButtonColumns = 2;

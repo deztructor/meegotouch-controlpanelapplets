@@ -22,7 +22,7 @@
 
 #include <QModelIndex>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 ThemeListModel::ThemeListModel (

@@ -21,7 +21,7 @@
 #include "displaybusinesslogic.h"
 #include "dcpdisplay.h"
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 #include <MButton>

@@ -33,7 +33,7 @@
 #include <MBasicListItem>
 #include <MImageWidget>
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 

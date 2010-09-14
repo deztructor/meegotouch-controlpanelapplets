@@ -22,7 +22,7 @@
 
 #include <QTimer>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 static const int loadPicturesDelay = 200;

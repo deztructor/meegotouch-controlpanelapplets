@@ -20,7 +20,7 @@
 #include "warrantybrief.h"
 #include <dcpwidgettypes.h>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 WarrantyBrief::WarrantyBrief (

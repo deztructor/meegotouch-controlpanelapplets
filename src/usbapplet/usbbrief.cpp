@@ -23,7 +23,7 @@
 #include <QString>
 #include <dcpwidgettypes.h>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 #ifdef HAVE_QMSYSTEM

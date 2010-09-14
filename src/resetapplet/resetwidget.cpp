@@ -25,7 +25,7 @@
 #include <MDialog>
 #include <MMessageBox>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 ResetWidget::ResetWidget (

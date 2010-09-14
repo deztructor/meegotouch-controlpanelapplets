@@ -20,7 +20,7 @@
 #include "resetbrief.h"
 #include <dcpwidgettypes.h>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 ResetBrief::ResetBrief (
