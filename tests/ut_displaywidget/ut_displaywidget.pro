@@ -12,6 +12,7 @@ CONFIG += \
     gui \
     meegotouch \
     plugin \
+    silent \
     duicontrolpanel 
 
 QT += \

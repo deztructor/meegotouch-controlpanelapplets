@@ -217,7 +217,6 @@ void
 Ut_DisplayWidget::testBlankInhibit ()
 {
     DisplayWidget *widget;
-    int            screenLightsValue;
 
     widget = new DisplayWidget;
 
