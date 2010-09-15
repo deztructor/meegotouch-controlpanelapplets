@@ -70,7 +70,11 @@ AboutWidget::createContent ()
      * The first row: a logo
      */
     logoLayout = new QGraphicsLinearLayout (Qt::Horizontal);
-    logo = new MImageWidget ("missing-icon");
+    /*
+     * FIXME: How about other vendors? this should be seom generic logo
+     * or should come from some CSS ??
+     */
+    logo = new MImageWidget ("icon-l-about-nokia-logo");
     logoLayout->addItem (logo);
     logoLayout->addStretch ();
     layout->addItem (logoLayout);
