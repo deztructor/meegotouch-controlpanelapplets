@@ -29,7 +29,7 @@
 #include <MApplication>
 #include <MGConfItem>
 
-//#define DEBUG
+#define DEBUG
 #include "../../src/debug.h"
 
 /******************************************************************************
@@ -43,6 +43,8 @@ QPixmap::load (
         const char * format, 
         Qt::ImageConversionFlags flags)
 {
+    Q_UNUSED (format);
+    Q_UNUSED (flags);
     SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
     if (pixmapLoadSuccess)
         *this = QPixmap (100, 100);

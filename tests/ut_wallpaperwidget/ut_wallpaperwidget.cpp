@@ -41,6 +41,9 @@ QImage::load (
         const QString  &fileName, 
         const char     *format)
 {
+    Q_UNUSED (format);
+    Q_UNUSED (fileName);
+
     SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
     return true;
 }

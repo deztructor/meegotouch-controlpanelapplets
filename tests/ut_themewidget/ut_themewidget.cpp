@@ -47,6 +47,8 @@ MDialog::appear (
     SYS_DEBUG ("*** this    = %p", this);
     SYS_DEBUG ("*** title   = %s", SYS_STR(title()));
 
+    Q_UNUSED (policy);
+
     lastDialogTitle = title();
 }
 /******************************************************************************

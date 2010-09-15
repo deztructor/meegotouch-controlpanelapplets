@@ -204,6 +204,7 @@ WallpaperCurrentDescriptor::setFromFilenames  (
 
 #if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
 #  warning This should be stubbed or something
+    Q_UNUSED (lFile);
 #else
     lFile  = new QFile(landscapeFile);
     if (!lFile->exists()) {

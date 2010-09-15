@@ -18,7 +18,7 @@ entryList (
     Q_UNUSED (dir);
     Q_UNUSED (filters);
     //SYS_DEBUG ("*** %s", SYS_STR(dir.absolutePath()));
-    if (filters & QDir::NoDotAndDotDot == 0)
+    if ((filters & QDir::NoDotAndDotDot) == 0)
         retval << 
 	        // These are for testing if the filtering works in the
 	        // ThemeBusinessLogic class.

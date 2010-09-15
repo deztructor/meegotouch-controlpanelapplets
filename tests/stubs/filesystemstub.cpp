@@ -116,6 +116,7 @@ void
 QDirStub::setNameFilters (
         const QStringList &nameFilters)
 {
+    Q_UNUSED (nameFilters);
     //m_NameFilters = nameFilters;
 }
 
@@ -126,6 +127,9 @@ QDirStub::entryList (
 		Filters            filters)
 {
     QStringList retval;
+
+    Q_UNUSED (nameFilters);
+    Q_UNUSED (filters);
     /*
      * FIXME: Not implemented.
      */

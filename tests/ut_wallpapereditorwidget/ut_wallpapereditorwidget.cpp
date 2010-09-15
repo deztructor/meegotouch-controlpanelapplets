@@ -49,6 +49,8 @@ QPixmap::load (
         const char     *format, 
         Qt::ImageConversionFlags flags)
 {
+    Q_UNUSED (format);
+    Q_UNUSED (flags);
     SYS_WARNING ("Emulating load of %s", SYS_STR(fileName));
     *this = QPixmap (864, 480);
     this->fill ();
@@ -62,6 +64,8 @@ QPixmap::scaled (
         Qt::AspectRatioMode aspectRatioMode,
         Qt::TransformationMode transformMode) const
 {
+    Q_UNUSED (aspectRatioMode);
+    Q_UNUSED (transformMode);
     QPixmap retval (size);
 
     SYS_DEBUG ("Returning QPixmap of size %dx%d", 
@@ -114,6 +118,7 @@ MApplicationPage::setComponentsDisplayMode (
         Components components, 
         MApplicationPageModel::ComponentDisplayMode displayMode)
 {
+    Q_UNUSED (components);
     SYS_WARNING ("--->");
     if (displayMode == MApplicationPageModel::Show) {
         SYS_DEBUG ("Emulating visible titlebar");
