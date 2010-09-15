@@ -59,6 +59,9 @@ int
 MDialog::exec (MWindow *window)
 {
     SYS_DEBUG ("");
+
+    Q_UNUSED (window);
+
     dialogExecuted = true;
 
     if (dialogAnswerYes)

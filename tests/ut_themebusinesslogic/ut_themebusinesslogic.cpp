@@ -86,6 +86,7 @@ UtThemeBusinessLogicPrivate::themeAboutToBeRemoved (
         int index)
 {
     SYS_DEBUG ("");
+    Q_UNUSED (index);
     m_ThemeAboutToBeRemoved = true;
 }
  
@@ -94,6 +95,7 @@ UtThemeBusinessLogicPrivate::themeRemoved (
         QList<ThemeDescriptor *> list)
 {
     SYS_DEBUG ("");
+    Q_UNUSED (list);
     Q_ASSERT (m_ThemeAboutToBeRemoved);
     m_ThemeRemoved = true;
 }
@@ -103,6 +105,7 @@ UtThemeBusinessLogicPrivate::themeAboutToBeAdded (
         int index)
 {
     SYS_DEBUG ("");
+    Q_UNUSED (index);
     m_ThemeAboutToBeAdded = true;
 }
  
@@ -111,6 +114,7 @@ UtThemeBusinessLogicPrivate::themeAdded (
         QList<ThemeDescriptor *> list)
 {
     SYS_DEBUG ("");
+    Q_UNUSED (list);
     Q_ASSERT (m_ThemeAboutToBeAdded);
     m_ThemeAdded = true;
 }

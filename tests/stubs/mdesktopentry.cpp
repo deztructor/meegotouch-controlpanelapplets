@@ -221,6 +221,7 @@ MDesktopEntry::getValueForType (
             break;
         
         case DesktopFileEmpty:
+        default:
             // All strings are empty
             break;
     }
@@ -248,12 +249,13 @@ MDesktopEntry::getValueForName (
             retval = NAMEDesktopFileHidden;
             break;
         
-        case DesktopFileEmpty:
-            // All strings are empty
-            break;
-        
         case DesktopFileCurrent:
             retval = NAMEDesktopFileCurrent;
+            break;
+
+        case DesktopFileEmpty:
+        default:
+            // All strings are empty
             break;
     }
 
@@ -315,12 +317,13 @@ MDesktopEntry::getValueForVisible (
             retval = "false";
             break;
         
-        case MDesktopEntry::DesktopFileEmpty:
-            // All strings are empty
-            break;
-        
         case MDesktopEntry::DesktopFileCurrent:
             retval = "true";
+            break;
+
+        case MDesktopEntry::DesktopFileEmpty:
+        default:
+            // All strings are empty
             break;
     }
 
@@ -336,6 +339,8 @@ MDesktopEntry::getValueForWallp (
     QString     retval;
     QStringList keysAndValues;
     int         index;
+
+    Q_UNUSED (id);
 
     keysAndValues <<
         "DCP Landscape Wallpaper/EditedFile" << WALLPAPER_LANDSCAPE_EDITEDFILE <<
