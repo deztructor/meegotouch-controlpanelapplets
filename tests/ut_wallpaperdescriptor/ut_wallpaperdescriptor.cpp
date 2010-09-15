@@ -168,12 +168,21 @@ Ut_WallpaperDescriptor::testConstructors ()
 void
 Ut_WallpaperDescriptor::testFilenames ()
 {
-    WallpaperDescriptor desc ("/nodir/NoSuchFile.png");
+    const QString myFilename ("/nodir/NoSuchFile.png");
+
+    WallpaperDescriptor desc (myFilename);
     QString original  = desc.originalImageFile(M::Landscape);
     QString portrait  = desc.suggestedOutputFilename(M::Portrait);
     QString landscape = desc.suggestedOutputFilename(M::Landscape);
 
-    QVERIFY (original == "/nodir/NoSuchFile.png");
+    if (original != myFilename) {
+        SYS_WARNING ("originalImageFile(M::Landscape) should return '%s' "
+                "but it returns '%s'",
+                SYS_STR(myFilename),
+                SYS_STR(original));
+    }
+
+    QVERIFY (original == myFilename);
     QVERIFY (!portrait.isEmpty());
     QVERIFY (!landscape.isEmpty());
     QVERIFY (!portrait.contains("/"));
@@ -330,13 +339,18 @@ void
 Ut_WallpaperDescriptor::testCache ()
 {
     createDescriptor ();
+    m_Desc->setUrl ("file:///simulatedexistingfile.png");
 
     /*
-     * Caching...
+     * Caching with an existing image file from the main thread...
      */
     pixmapLoadSuccess = true;
     m_Desc->cache();
     QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Cached);
+
+    /*
+     * We have added some other combinations...
+     */
 
     /*
      * Uncaching...

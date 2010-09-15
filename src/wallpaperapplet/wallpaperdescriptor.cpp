@@ -270,18 +270,29 @@ Image::extension () const
     return fileInfo.suffix();
 }
 
+/*!
+ * \param threadSafe Not in main thread, only thread safe operations are
+ *   allowed.
+ */
 void 
 Image::cache (
         bool threadSafe)
 {
     bool success;
 
+    SYS_DEBUG ("Caching %p", this);
+    SYS_DEBUG ("*** threadSafe = %s", SYS_BOOL(threadSafe));
+    SYS_DEBUG ("*** m_Cached   = %s", SYS_BOOL(m_Cached));
+    SYS_DEBUG ("*** filename() = %s", SYS_STR(filename()));
+    SYS_DEBUG ("*** m_ImageID  = %s", SYS_STR(m_ImageID));
+
     if (m_Cached) {
         return;
     }
     
-    SYS_DEBUG ("Caching %p", this);
-
+    /*
+     * Secondary thread file loading.
+     */
     if (threadSafe && !filename().isEmpty()) {
         SYS_DEBUG ("Doing a thread-safe loading.");
         if (m_Image)
@@ -296,6 +307,9 @@ Image::cache (
         return;
     }
 
+    /*
+     * Loading from a previously loaded QImage.
+     */
     if (m_Image) {
         SYS_DEBUG ("Have a thread-save QImage, converting it.");
         m_Pixmap = QPixmap::fromImage (*m_Image);
@@ -307,10 +321,9 @@ Image::cache (
     }
 
     /*
-     * If the wallpaper is set by an image ID we load the image using the
-     * current theme.
+     * Main thread theme image loading.
      */
-    if (!m_ImageID.isEmpty()) {
+    if (!threadSafe && !m_ImageID.isEmpty()) {
         QPixmap       *pixmap;
         const QPixmap *cPixmap;
        
@@ -338,9 +351,9 @@ Image::cache (
     }
 
     /*
-     * If the image is set by a filename, we load that file.
+     * Main thread file loading.
      */
-    if (!filename().isEmpty()) {
+    if (!threadSafe && !filename().isEmpty()) {
         success = m_Pixmap.load (filename());
         if (!success) {
             QFile file (filename());
@@ -348,13 +361,11 @@ Image::cache (
             SYS_WARNING ("Loading of %s has been failed: %m", 
                     SYS_STR(filename()));
             SYS_WARNING ("*** exists = %s", SYS_BOOL(file.exists()));
-        
-            m_Cached = false;
             return;
         }
+    
+        m_Cached = true;
     }
-
-    m_Cached = true;
 }
 
 void
@@ -636,6 +647,7 @@ WallpaperDescriptor::scaled (
         QSize          size,
         ImageVariant   variant)
 {
+    SYS_DEBUG ("");
     cache ();
     return m_Images[variant].scaled(size);
 }
@@ -921,9 +933,26 @@ QString
 WallpaperDescriptor::originalImageFile (
         M::Orientation orientation) const
 {
-    Q_UNUSED (orientation);
+    QString retval;
 
-    return filename ();
+    switch (orientation) {
+        case M::Portrait:
+            retval = filename (WallpaperDescriptor::OriginalPortrait);
+            if (retval.isEmpty())
+                retval = filename (WallpaperDescriptor::Portrait);
+
+            return retval;
+
+        case M::Landscape:
+            retval = filename (WallpaperDescriptor::OriginalLandscape);
+            if (retval.isEmpty())
+                retval = filename (WallpaperDescriptor::Landscape);
+
+            return retval;
+    }
+
+    SYS_WARNING ("Unknown orientation: %d", orientation);
+    return filename (WallpaperDescriptor::OriginalLandscape);
 }
 
 /*
@@ -959,10 +988,10 @@ WallpaperDescriptor::loadAll ()
     }
 
     /*
-     * We go through the images and load them: FIXME: how could we iptimize this
+     * We go through the images and load them: FIXME: how could we optimize this
      * and load only those images that are going to be used?
      */
-    SYS_DEBUG ("threadSafe = %s", SYS_BOOL(threadSafe));
+    SYS_DEBUG ("secondary thread = %s", SYS_BOOL(threadSafe));
     for (int n = 0; n < m_Images.size(); ++n) {
         SYS_DEBUG ("*************** %d ***", n);
         m_Images[n].cache (threadSafe);

@@ -50,7 +50,7 @@
 #include <MGConfItem>
 
 //#define LOTDEBUG
-#undef DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -187,7 +187,8 @@ WallpaperBusinessLogic::setBackground (
 QList<WallpaperDescriptor *>
 WallpaperBusinessLogic::availableWallpapers () const
 {
-    QList<WallpaperDescriptor *> list;
+    QList<WallpaperDescriptor *>   list;
+    WallpaperDescriptor           *desc;
     const QString query = 
 "SELECT ?uri ?title ?mime ?height ?width WHERE { "
 " ?item nie:url ?uri." 
@@ -204,10 +205,31 @@ WallpaperBusinessLogic::availableWallpapers () const
 "}"
 ;
 
+    /*
+     * The first is always the current image.
+     */
     list << WallpaperCurrentDescriptor::instance ();
 
-    QVector<QStringList> result = ::tracker()->rawSparqlQuery(query);
+    /*
+     * Adding a theme default. 
+     * FIXME: This code is experimental. 
+     */
+    desc = new WallpaperDescriptor;
+    desc->setImageID ("meegotouch-wallpaper-landscape", 
+            WallpaperDescriptor::Landscape);
+    desc->setImageID ("meegotouch-wallpaper-portrait",
+            WallpaperDescriptor::Portrait);
+    desc->setImageID ("meegotouch-wallpaper-landscape", 
+            WallpaperDescriptor::OriginalLandscape);
+    desc->setImageID ("meegotouch-wallpaper-portrait",
+            WallpaperDescriptor::OriginalPortrait);
 
+    list << desc;
+
+
+
+#if 1
+    QVector<QStringList> result = ::tracker()->rawSparqlQuery(query);
     foreach (QStringList partlist, result) {
         WallpaperDescriptor *desc;
 
@@ -234,7 +256,7 @@ WallpaperBusinessLogic::availableWallpapers () const
 
         list << desc; 
     }
-
+#endif
     return list;
 }
 
@@ -435,8 +457,10 @@ WallpaperBusinessLogic::saveOriginal (
         WallpaperDescriptor *desc)
 {
     QString imageID;
-
+    
+    SYS_WARNING ("------------------------------------------");
     imageID = desc->imageID (WallpaperDescriptor::OriginalLandscape);
+    SYS_DEBUG ("*** imageID = %s", SYS_STR(imageID));
     if (!imageID.isEmpty()) {
         QPixmap pixmap;
         QString filename;
@@ -449,11 +473,13 @@ WallpaperBusinessLogic::saveOriginal (
             saveFileExtension;
 
         pixmap.save (filename);
+        SYS_DEBUG ("*** filename = %s", SYS_STR(filename));
         desc->setFilename (filename, WallpaperDescriptor::OriginalLandscape);
         desc->setMimeType (saveFileMimeType, WallpaperDescriptor::OriginalLandscape);
     }
 
     imageID = desc->imageID (WallpaperDescriptor::OriginalPortrait);
+    SYS_DEBUG ("*** imageID = %s", SYS_STR(imageID));
     if (!imageID.isEmpty()) {
         QPixmap pixmap;
         QString filename;
@@ -466,6 +492,7 @@ WallpaperBusinessLogic::saveOriginal (
             saveFileExtension;
 
         pixmap.save (filename);
+        SYS_DEBUG ("*** filename = %s", SYS_STR(filename));
         desc->setFilename (filename, WallpaperDescriptor::OriginalPortrait);
         desc->setMimeType (saveFileMimeType, WallpaperDescriptor::OriginalPortrait);
     }
@@ -486,6 +513,7 @@ WallpaperBusinessLogic::writeFiles (
     Q_ASSERT (landscapeITrans);
     Q_ASSERT (portraitITrans);
     Q_ASSERT (desc);
+
     /*
      * These are pretty constants.
      */
@@ -497,6 +525,7 @@ WallpaperBusinessLogic::writeFiles (
         WallpaperCurrentDescriptor::instance();
 
     saveOriginal (desc);
+
     // There is of course a reason why we use the version number from the
     // current descriptor: otherwise the re-editing of the original filename
     // might end up with the same version number.

@@ -25,7 +25,6 @@
 
 #include <mdesktopentry.h>
 
-//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -237,7 +236,9 @@ WallpaperCurrentDescriptor::setFromIDs  (
             QString     portraitID)
 {
     bool retval = false;
-    
+   
+    SYS_DEBUG ("*** landscapeID = %s", SYS_STR(landscapeID));
+    SYS_DEBUG ("*** portraitID  = %s", SYS_STR(portraitID));
     if (landscapeID.isEmpty())
         goto finalize;
 
@@ -282,23 +283,6 @@ WallpaperCurrentDescriptor::iTrans (
 
     SYS_WARNING ("Unknown orientation: %d", orientation);
     return m_LandscapeTrans;
-}
-
-
-QString 
-WallpaperCurrentDescriptor::originalImageFile (
-        M::Orientation orientation) const
-{
-    switch (orientation) {
-        case M::Portrait:
-            return filename (WallpaperDescriptor::OriginalPortrait);
-
-        case M::Landscape:
-            return filename (WallpaperDescriptor::OriginalLandscape);
-    }
-
-    SYS_WARNING ("Unknown orientation: %d", orientation);
-    return filename (WallpaperDescriptor::OriginalLandscape);
 }
 
 /*

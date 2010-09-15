@@ -25,7 +25,6 @@ public:
 
     virtual bool isCurrent () const;
     virtual int version () const;
-    virtual QString originalImageFile (M::Orientation orientation) const;
     virtual QPixmap originalPixmap (M::Orientation orientation) const;
     virtual bool valid () const;
 
