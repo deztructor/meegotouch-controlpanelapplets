@@ -5,7 +5,7 @@ systemui-applets (0.15.4~1) meegotouch; urgency=low
   * Fixes: NB#188734 -  no profile icon seen in status menu when the profile is 
     other than Normal.
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 13 Sep 2010 11:51:38 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 15 Sep 2010 16:31:52 +0200
 
 systemui-applets (0.15.3-1) meegotouch; urgency=low
 
@@ -18,7 +18,7 @@ systemui-applets (0.15.2-1) meegotouch; urgency=low
   [ Laszlo Pere ]
   * Fixes: NB#190055 -  Wallpaper cannot be set continuously in wallpaper 
     setting view via selecting from Gallery.
-  * Fixes: NB184762 - Not able to load a large sized image in wallpaper applet.
+  * Fixes: NB#184762 - Not able to load a large sized image in wallpaper applet.
 
   [ David Kedves ]
   * Fixes: NB#190694 -  COREWEB: /usr/bin/sysuid

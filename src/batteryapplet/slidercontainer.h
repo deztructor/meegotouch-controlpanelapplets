@@ -42,7 +42,7 @@ private:
     MLinearLayoutPolicy   *m_LayoutPolicy;
     bool                   m_SliderExists;
     
-    void    setLayout();
+    void    setLayout ();
     void    toggleSliderExistence (bool toggle);
     void    updateSliderValueLabel ();
 };
