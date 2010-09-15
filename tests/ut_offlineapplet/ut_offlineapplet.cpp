@@ -37,7 +37,7 @@
 #define DEBUG
 #include "../../src/debug.h"
 
-static const char *signalValuesChanged = SIGNAL(valuesChanged());
+static const char *signalValuesChanged = SIGNAL (valuesChanged ());
 
 int   argc = 1;
 char *argv[] = {
@@ -48,20 +48,29 @@ char *argv[] = {
  */
 static QString mmessageBoxText;
 static int mmessageBoxApereance;
-MMessageBox::MMessageBox(const QString &title,
-                const QString          &text,
-                M::StandardButtons      buttons)
+
+MMessageBox::MMessageBox (
+    const QString          &title,
+    const QString          &text,
+    M::StandardButtons      buttons)
 {
+    Q_UNUSED (title);
+    Q_UNUSED (buttons);
+
     mmessageBoxText = text;
 }
 
-int MDialog::result () const
+int
+MDialog::result () const
 {
     return MDialog::Accepted;
 }
 
-void MDialog::appear (MSceneWindow::DeletionPolicy policy)
+void
+MDialog::appear (MSceneWindow::DeletionPolicy policy)
 {
+    Q_UNUSED (policy);
+
     mmessageBoxApereance = true;
 }
 
@@ -80,13 +89,15 @@ MBanner::setSubtitle (const QString &text)
 void
 MSceneWindow::appear (MSceneWindow::DeletionPolicy policy)
 {
+    Q_UNUSED (policy);
+
     mbannerAppereance = true;
 }
 
 /******************************************************************************
- * Ut_offlineApplet implementation. 
+ * Ut_offlineApplet implementation.
  */
-void 
+void
 Ut_OfflineApplet::init()
 {
     mmessageBoxText = "";
@@ -95,51 +106,51 @@ Ut_OfflineApplet::init()
     mbannerAppereance = false;
 }
 
-void 
+void
 Ut_OfflineApplet::cleanup()
 {
 }
 
-void 
+void
 Ut_OfflineApplet::initTestCase()
 {
     m_App = new MApplication(argc, argv);
     m_App->setQuitOnLastWindowClosed (false);
 
     m_Applet = new OfflineApplet;
-    
+
     m_Applet->init ();
 
 }
 
-void 
+void
 Ut_OfflineApplet::cleanupTestCase()
 {
     m_Applet->deleteLater ();
 }
 
-void 
+void
 Ut_OfflineApplet::testTitle ()
 {
     QString title = m_Applet->title();
     QVERIFY (title.isEmpty());
 }
 
-void 
+void
 Ut_OfflineApplet::testMenu ()
 {
     QVector<MAction *> menu = m_Applet->viewMenuItems();
     QVERIFY (menu.isEmpty());
 }
-    
-void 
+
+void
 Ut_OfflineApplet::testConstructWidget ()
 {
     DcpWidget* widget = m_Applet->constructWidget(1);
     QVERIFY (!widget);
 }
 
-void 
+void
 Ut_OfflineApplet::testBriefConstruct ()
 {
     #ifdef HAVE_QMSYSTEM
@@ -158,7 +169,7 @@ Ut_OfflineApplet::testBriefConstruct ()
     #endif
 }
 
-void 
+void
 Ut_OfflineApplet::testCurrentText ()
 {
     #ifdef HAVE_QMSYSTEM
@@ -182,7 +193,7 @@ Ut_OfflineApplet::testCurrentText ()
 }
 
 
-void 
+void
 Ut_OfflineApplet::testBriefInit ()
 {
     #ifdef HAVE_QMSYSTEM
@@ -207,9 +218,9 @@ Ut_OfflineApplet::testBriefInit ()
     #endif
 }
 
-void 
+void
 Ut_OfflineApplet::testBriefValueText ()
-{    
+{
     #ifdef HAVE_QMSYSTEM
     OfflineBrief *brief;
 
@@ -236,7 +247,7 @@ Ut_OfflineApplet::testBriefValueText ()
     #endif
 }
 
-void 
+void
 Ut_OfflineApplet::testBriefSetToggle ()
 {
     #ifdef HAVE_QMSYSTEM
