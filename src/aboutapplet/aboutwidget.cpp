@@ -70,12 +70,15 @@ AboutWidget::createContent ()
      * The first row: a logo
      */
     logoLayout = new QGraphicsLinearLayout (Qt::Horizontal);
+    logoLayout->setContentsMargins (0., 0., 0., 0.);
+
     /*
-     * FIXME: How about other vendors? this should be seom generic logo
+     * FIXME: How about other vendors? this should be some generic logo
      * or should come from some CSS ??
      */
-    logo = new MImageWidget ("icon-l-about-nokia-logo");
-    logoLayout->addItem (logo);
+    logo = new MImageWidget;
+    logo->setImage ("icon-l-about-nokia-logo");
+    logo->setAspectRatioMode (Qt::KeepAspectRatio);
     logoLayout->addStretch ();
     layout->addItem (logoLayout);
     
