@@ -198,7 +198,7 @@ Ut_WallpaperModel::testImageLoader ()
      * Then we give chance for the main loop to run so the loader will initiate
      * the thumbnailing, all the jobs are moved to the pending job queue.
      */
-    QTest::qWait (500);
+    QTest::qWait (800);
     QCOMPARE (imageLoader->m_ThumbnailLoadingJobs.size(), 0);
     QVERIFY (imageLoader->m_ThumbnailPendingJobs.size() > 0);
 
