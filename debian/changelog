@@ -1,4 +1,4 @@
-systemui-applets (0.15.4~1) meegotouch; urgency=low
+systemui-applets (0.15.4-1) meegotouch; urgency=low
 
   * Fixes: NB#191264 -  Off and activate/deactivate power saver button looks
     like overlapping in battery applet in a given scenario.
@@ -7,7 +7,7 @@ systemui-applets (0.15.4~1) meegotouch; urgency=low
   * Fixes: NB#192443 -  settings application closes after tap on wallpaper
     button from Look & Feel page
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 15 Sep 2010 16:31:52 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 16 Sep 2010 14:17:27 +0200
 
 systemui-applets (0.15.3-1) meegotouch; urgency=low
 
