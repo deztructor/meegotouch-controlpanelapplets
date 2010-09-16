@@ -4,6 +4,8 @@ systemui-applets (0.15.4~1) meegotouch; urgency=low
     like overlapping in battery applet in a given scenario.
   * Fixes: NB#188734 -  no profile icon seen in status menu when the profile is 
     other than Normal.
+  * Fixes: NB#192443 -  settings application closes after tap on wallpaper
+    button from Look & Feel page
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 15 Sep 2010 16:31:52 +0200
 

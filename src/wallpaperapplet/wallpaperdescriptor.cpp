@@ -768,8 +768,9 @@ WallpaperDescriptor::thumbnailError (
             QString      message,
             QUrl         fileUri)
 {
-    for (int n = Landscape; n < NVariants; ++n) {
+    SYS_WARNING ("*** fileUri = %s", SYS_STR(fileUri.toString()));
 
+    for (int n = Landscape; n < NVariants; ++n) {
         if (m_Images[n].url() == fileUri) {
             bool success;
 
@@ -792,7 +793,8 @@ WallpaperDescriptor::thumbnailLoadingFinished (
             int          left)
 {
     Q_UNUSED (left);
-    delete m_Thumbnailer;
+    if (!m_Thumbnailer.isNull() && left == 0)
+        delete m_Thumbnailer;
 }
 
 /*!
