@@ -76,7 +76,7 @@ Ut_WallpaperModel::testRowsColumns ()
     SYS_DEBUG ("*** columns = %d", columns);
     SYS_DEBUG ("*** rows    = %d", rows);
 
-    QVERIFY (columns == 1);
+    QCOMPARE (columns, 1);
     QVERIFY (rows > 0);
 }
 
@@ -103,8 +103,8 @@ Ut_WallpaperModel::testData ()
         #endif
         
         QVERIFY (index.isValid ());
-        QVERIFY (index.column() == 0);
-        QVERIFY (index.row() == n);
+        QCOMPARE (index.column(), 0);
+        QCOMPARE (index.row(), n);
         QVERIFY (index.model() == m_Model);
         QVERIFY (isWallpaperDescriptorValid(desc));
     }
@@ -192,14 +192,14 @@ Ut_WallpaperModel::testImageLoader ()
      */
     imageLoader->loadPictures (firstRow, lastRow);
     QVERIFY (imageLoader->m_ThumbnailLoadingJobs.size() > 0);
-    QVERIFY (imageLoader->m_ThumbnailPendingJobs.size() == 0);
+    QCOMPARE (imageLoader->m_ThumbnailPendingJobs.size(), 0);
 
     /*
      * Then we give chance for the main loop to run so the loader will initiate
      * the thumbnailing, all the jobs are moved to the pending job queue.
      */
     QTest::qWait (500);
-    QVERIFY (imageLoader->m_ThumbnailLoadingJobs.size() == 0);
+    QCOMPARE (imageLoader->m_ThumbnailLoadingJobs.size(), 0);
     QVERIFY (imageLoader->m_ThumbnailPendingJobs.size() > 0);
 
     /*
@@ -224,8 +224,8 @@ Ut_WallpaperModel::testImageLoader ()
 
     // As all the thumbnails are ready (simulated of course) we should have no
     // jobs pending here.
-    QVERIFY (imageLoader->m_ThumbnailLoadingJobs.size() == 0);
-    QVERIFY (imageLoader->m_ThumbnailPendingJobs.size() == 0);
+    QCOMPARE (imageLoader->m_ThumbnailLoadingJobs.size(), 0);
+    QCOMPARE (imageLoader->m_ThumbnailPendingJobs.size(), 0);
 
     // FIXME: To create a new test case, leave the thumbnailing there and call
     // this method. Well, it should be done, but it only checks one line...

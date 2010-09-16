@@ -23,7 +23,7 @@ using namespace Thumbnails;
 #include <QString>
 #include <QStringList>
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../../src/debug.h"
 
