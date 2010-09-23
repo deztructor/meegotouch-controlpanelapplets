@@ -36,6 +36,9 @@ WALLPAPER_PATH = ../wallpaperapplet
 
 # TODO: FIXME: updatethis
 PUBLIC_HEADERS = \
+    $$WALLPAPER_PATH/wallpaperbusinesslogic.h \
+    $$WALLPAPER_PATH/wallpaperdescriptor.h \
+    $$WALLPAPER_PATH/wallpapercurrentdescriptor.h \
     meegocontrol.h
 
 HEADERS = \
