@@ -71,11 +71,15 @@ headers.files = \
     *.h
 headers.path += $$(DEBIAN_DESTDIR)/usr/include/libmeegocontrol
 
+
+qtfeature.path = $$[QT_INSTALL_DATA]/mkspecs/features
+qtfeature.files = meegocontrol.prf
+
 # css.files = wallpaper.css
 # css.path =  ??
 
 INSTALLS += \
+    qtfeature \
     headers \
     target
-
 

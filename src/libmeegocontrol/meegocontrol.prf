@@ -1,0 +1,8 @@
+QMAKE_LFLAGS_RPATH = -Wl
+
+# extending include path
+INCLUDEPATH += /usr/include/libmeegocontrol
+DEPENDPATH += /usr/include/libmeegocontrol
+
+LIBS += -lmeegocontrol
+
