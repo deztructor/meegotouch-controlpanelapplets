@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #ifndef PROFILEWIDGET_H
 #define PROFILEWIDGET_H
 

@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #ifndef PROFILEDATAINTERFACE_H
 #define PROFILEDATAINTERFACE_H
 
