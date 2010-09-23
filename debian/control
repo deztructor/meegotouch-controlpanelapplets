@@ -35,6 +35,18 @@ Priority: optional
 Architecture: all
 Description: Documentation for libmeegocontrol
 
+Package: libmeegocontrol0
+Architecture: any
+Section: libs
+Depends: ${shlibs:Depends}
+Description: libmeegocontrol to use some controlpanel applet as a library
+
+Package: libmeegocontrol-dev
+Architecture: any
+Section: libdevel
+Depends: libmeegocontrol0 (= ${binary:Version})
+Description: libmeegocontrol development files
+
 Package: duicontrolpanel-offlineapplet
 Section: misc
 Architecture: any

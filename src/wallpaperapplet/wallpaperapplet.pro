@@ -18,7 +18,6 @@ contains(DEFINES, HAVE_CONTENT_MANAGER) {
     PKGCONFIG += ContentManager
 }
 
-
 LIBS += \
     -lqttracker \
     -lthumbnailer

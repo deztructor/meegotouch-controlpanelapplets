@@ -7,6 +7,7 @@ SUBDIRS = batteryapplet   \
           profileplugin   \
           usbapplet       \
           wallpaperapplet \
+          libmeegocontrol \
           resetapplet     \
           aboutapplet     \
           warrantyapplet  \
