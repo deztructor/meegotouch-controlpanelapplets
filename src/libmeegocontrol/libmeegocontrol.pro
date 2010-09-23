@@ -35,8 +35,12 @@ INCLUDEPATH += \
 WALLPAPER_PATH = ../wallpaperapplet
 
 # TODO: FIXME: updatethis
+PUBLIC_HEADERS = \
+    meegocontrol.h
+
 HEADERS = \
     ../debug.h \
+    $$PUBLIC_HEADERS \
     $$WALLPAPER_PATH/wallpaperdescriptor.h \
     $$WALLPAPER_PATH/wallpapercurrentdescriptor.h \
     $$WALLPAPER_PATH/wallpapermodel.h \
@@ -66,11 +70,8 @@ SOURCES = \
 DESTDIR = lib
 target.path += /usr/lib
 
-# TODO: FIXME
-headers.files = \
-    *.h
+headers.files = $$PUBLIC_HEADERS
 headers.path += $$(DEBIAN_DESTDIR)/usr/include/libmeegocontrol
-
 
 qtfeature.path = $$[QT_INSTALL_DATA]/mkspecs/features
 qtfeature.files = meegocontrol.prf
