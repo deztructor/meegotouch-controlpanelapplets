@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.8.0),
                libprofile-qt-dev (>= 0.13), system-ui-dev (>= 0.16),
                libqttracker-dev, libthumbnailer-dev, libcellular-qt-dev,
                clean-device-dev, libsysinfo-dev, libcontentmanager-dev,
-               devicelock-dev
+               devicelock-dev, doxygen
 Standards-Version: 3.8.0
 
 Package: systemui-applets-tests
@@ -28,6 +28,12 @@ Package: systemui-applets-l10n-engineering-english
 Section: devel
 Architecture: all
 Description: Engineering English translations for meegotouch-controlpanelapplets packages.
+
+Package: libmeegocontrol-doc
+Section: devel
+Priority: optional
+Architecture: all
+Description: Documentation for libmeegocontrol
 
 Package: duicontrolpanel-offlineapplet
 Section: misc
