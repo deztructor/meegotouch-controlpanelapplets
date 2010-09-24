@@ -39,36 +39,27 @@ PUBLIC_HEADERS = \
     $$WALLPAPER_PATH/wallpaperbusinesslogic.h \
     $$WALLPAPER_PATH/wallpaperdescriptor.h \
     $$WALLPAPER_PATH/wallpapercurrentdescriptor.h \
+    $$WALLPAPER_PATH/wallpaperitrans.h \
+    WallpaperBusinessLogic \
+    WallpaperDescriptor \
+    WallpaperCurrentDescriptor \
+    WallpaperITrans \
     meegocontrol.h
 
 HEADERS = \
     ../debug.h \
     $$PUBLIC_HEADERS \
+    $$WALLPAPER_PATH/wallpaperitrans.h \
     $$WALLPAPER_PATH/wallpaperdescriptor.h \
     $$WALLPAPER_PATH/wallpapercurrentdescriptor.h \
-    $$WALLPAPER_PATH/wallpapermodel.h \
-    $$WALLPAPER_PATH/wallpaperlist.h \
-    $$WALLPAPER_PATH/wallpaperbusinesslogic.h \
-    $$WALLPAPER_PATH/wallpaperapplet.h \
-    $$WALLPAPER_PATH/wallpaperwidget.h \
-    $$WALLPAPER_PATH/wallpaperinfoheader.h \
-    $$WALLPAPER_PATH/wallpapereditorwidget.h \
-    $$WALLPAPER_PATH/wallpaperitrans.h \
-    $$WALLPAPER_PATH/wallpaperbrief.h
+    $$WALLPAPER_PATH/wallpaperbusinesslogic.h 
 
 SOURCES = \
     ../debug.cpp \
+    $$WALLPAPER_PATH/wallpaperitrans.cpp \
     $$WALLPAPER_PATH/wallpaperdescriptor.cpp \
     $$WALLPAPER_PATH/wallpapercurrentdescriptor.cpp \
-    $$WALLPAPER_PATH/wallpaperlist.cpp \
-    $$WALLPAPER_PATH/wallpapermodel.cpp \
-    $$WALLPAPER_PATH/wallpaperbusinesslogic.cpp \
-    $$WALLPAPER_PATH/wallpaperapplet.cpp \
-    $$WALLPAPER_PATH/wallpaperwidget.cpp \
-    $$WALLPAPER_PATH/wallpaperinfoheader.cpp \
-    $$WALLPAPER_PATH/wallpapereditorwidget.cpp \
-    $$WALLPAPER_PATH/wallpaperitrans.cpp \
-    $$WALLPAPER_PATH/wallpaperbrief.cpp
+    $$WALLPAPER_PATH/wallpaperbusinesslogic.cpp 
 
 DESTDIR = lib
 target.path += /usr/lib

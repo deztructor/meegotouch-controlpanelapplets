@@ -458,9 +458,7 @@ WallpaperBusinessLogic::saveOriginal (
 {
     QString imageID;
     
-    SYS_WARNING ("------------------------------------------");
     imageID = desc->imageID (WallpaperDescriptor::OriginalLandscape);
-    SYS_DEBUG ("*** imageID = %s", SYS_STR(imageID));
     if (!imageID.isEmpty()) {
         QPixmap pixmap;
         QString filename;
@@ -473,13 +471,11 @@ WallpaperBusinessLogic::saveOriginal (
             saveFileExtension;
 
         pixmap.save (filename);
-        SYS_DEBUG ("*** filename = %s", SYS_STR(filename));
         desc->setFilename (filename, WallpaperDescriptor::OriginalLandscape);
         desc->setMimeType (saveFileMimeType, WallpaperDescriptor::OriginalLandscape);
     }
 
     imageID = desc->imageID (WallpaperDescriptor::OriginalPortrait);
-    SYS_DEBUG ("*** imageID = %s", SYS_STR(imageID));
     if (!imageID.isEmpty()) {
         QPixmap pixmap;
         QString filename;
@@ -492,7 +488,6 @@ WallpaperBusinessLogic::saveOriginal (
             saveFileExtension;
 
         pixmap.save (filename);
-        SYS_DEBUG ("*** filename = %s", SYS_STR(filename));
         desc->setFilename (filename, WallpaperDescriptor::OriginalPortrait);
         desc->setMimeType (saveFileMimeType, WallpaperDescriptor::OriginalPortrait);
     }
@@ -501,8 +496,6 @@ WallpaperBusinessLogic::saveOriginal (
 /*!
  * \returns true if the files could be created and saved.
  *
- * FIXME: This method should and will be moved to the WallpaperCurrentDescriptor
- * class.
  */
 bool
 WallpaperBusinessLogic::writeFiles (
@@ -513,6 +506,22 @@ WallpaperBusinessLogic::writeFiles (
     Q_ASSERT (landscapeITrans);
     Q_ASSERT (portraitITrans);
     Q_ASSERT (desc);
+
+    /*
+     * Some last minute checking. The expected sizes are very important when we
+     * save the images, and some people are using us as libraries.
+     *
+     * FIXME: We should not use these wired in values here.
+     */
+    if (landscapeITrans->expectedWidth() <= 0 ||
+            landscapeITrans->expectedHeight() <= 0) {
+        landscapeITrans->setExpectedSize (QSize(864, 480));
+    }
+    
+    if (portraitITrans->expectedWidth() <= 0 ||
+            portraitITrans->expectedHeight() <= 0) {
+        portraitITrans->setExpectedSize (QSize(480, 864));
+    }
 
     /*
      * These are pretty constants.

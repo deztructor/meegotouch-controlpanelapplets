@@ -19,8 +19,9 @@
 #ifndef MEEGOCONTROL_H
 #define MEEGOCONTORL_H
 
-/*
- * TODO
- */
+#include <WallpaperBusinessLogic>
+#include <WallpaperDescriptor>
+#include <WallpaperCurrentDescriptor>
+#include <WallpaperITrans>
 
 #endif
