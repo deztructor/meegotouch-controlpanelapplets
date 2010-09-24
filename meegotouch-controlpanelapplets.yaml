@@ -26,8 +26,9 @@ PkgBR:
     - libqttracker-devel
     - meegotouch-systemui-devel
     - libthumbnailer-devel
+    - doxygen
 PkgConfigBR:
-    - meegotouch
+    - meegotouch >= 0.20.37
     - QtCore >= 4.7.0
     - QtGui >= 4.7.0
 Configure: none
