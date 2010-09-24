@@ -138,7 +138,16 @@ WallpaperBusinessLogic::~WallpaperBusinessLogic()
 }
 
 /*!
- * A high level method to set the current wallpaper.
+ * \param landscapeITrans Image transformations for the landscape orientation.
+ * \param portraitITrans Image transformations for the portrait orientation.
+ * \param desc The image descriptor that holds the image(s).
+ *
+ * A high level method to set the current wallpaper. This method will load the
+ * image file(s), apply the image transformations to create the portrait and
+ * landscape variants then will save the modified images and set them as
+ * wallpaper image(s). This method will also save some metadata that makes it
+ * possible to re-edit the images using the image transformations as default
+ * values for the image editor widget.
  */
 void
 WallpaperBusinessLogic::setBackground (

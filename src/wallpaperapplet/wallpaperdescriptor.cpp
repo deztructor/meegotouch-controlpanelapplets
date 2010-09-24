@@ -524,6 +524,12 @@ WallpaperDescriptor::imageID (
     return m_Images[variant].imageID();
 }
 
+/*!
+ * \param filename The full path filename for the image file
+ * \param variant The purpose of the image file
+ *
+ * Sets the image file name for the given purpose in the descriptor.
+ */
 void
 WallpaperDescriptor::setFilename (
         const QString &filename,
