@@ -8,19 +8,20 @@
 
 Name:       meegotouch-controlpanelapplets
 Summary:    Various MeeGo Touch Controlpanel Applets
-Version:    0.15.2
+Version:    0.15.4
 Release:    1
 Group:      System/GUI/Other
 License:    LGPL v2.1
 URL:        http://meego.gitorious.org/meegotouch/meegotouch-controlpanelapplets
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  meegotouch-controlpanelapplets.yaml
-BuildRequires:  pkgconfig(meegotouch) >= 0.20.37
+BuildRequires:  pkgconfig(meegotouch)
 BuildRequires:  pkgconfig(QtCore) >= 4.7.0
+BuildRequires:  pkgconfig(QtGui) >= 4.7.0
 BuildRequires:  meegotouch-controlpanel-devel
 BuildRequires:  libqttracker-devel
-BuildRequires:  qt-devel
 BuildRequires:  meegotouch-systemui-devel
+BuildRequires:  libthumbnailer-devel
 
 
 %description
