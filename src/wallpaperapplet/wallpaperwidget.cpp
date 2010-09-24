@@ -202,7 +202,7 @@ WallpaperWidget::galleryActivated ()
 
         connect (m_ImageBrowser, SIGNAL(backButtonClicked()), 
                 m_ImageBrowser, SLOT(dismiss()));
-        connect (m_ImageBrowser, SIGNAL(selectingContentItem(const QString &)),
+        connect (m_ImageBrowser, SIGNAL(contentItemSelected(const QString &)),
                 this, SLOT(galleryImageSelected(const QString &)));
     }
      

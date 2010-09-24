@@ -2,6 +2,7 @@ systemui-applets (0.16.1~1) meegotouch; urgency=low
 
   * Introducing libmeegocontrol
   * libMeegoControl documentation added
+  * Fixes: NB#194506 - Impossible to select a wallpaper image using the contentpicker.
 
  -- David Kedves <dkedves@blumsoft.eu>  Thu, 23 Sep 2010 11:19:31 +0200
 
