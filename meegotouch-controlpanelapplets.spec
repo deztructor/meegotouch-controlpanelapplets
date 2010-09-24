@@ -15,7 +15,7 @@ License:    LGPL v2.1
 URL:        http://meego.gitorious.org/meegotouch/meegotouch-controlpanelapplets
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  meegotouch-controlpanelapplets.yaml
-BuildRequires:  pkgconfig(meegotouch)
+BuildRequires:  pkgconfig(meegotouch) >= 0.20.40
 BuildRequires:  pkgconfig(QtCore) >= 4.7.0
 BuildRequires:  pkgconfig(QtGui) >= 4.7.0
 BuildRequires:  meegotouch-controlpanel-devel
