@@ -30,7 +30,7 @@
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 
-#undef DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 /*
@@ -114,6 +114,8 @@ ThemeDialog::ThemeDialog (
     //% "Cancel"
     m_CancelButton = new MButton (qtTrId ("qtn_comm_cancel"));
     connect (m_CancelButton, SIGNAL(clicked()),
+            this, SLOT(cancelClicked()));
+    connect (this, SIGNAL(rejected()),
             this, SLOT(cancelClicked()));
     
     portraitButtonLayoutPolicy->addItem (m_SelectButton);
