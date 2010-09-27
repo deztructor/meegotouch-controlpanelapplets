@@ -179,9 +179,14 @@ ThemeWidget::selectCurrentTheme ()
     /*
      * Selecting the current theme from the list.
      */
+    SYS_DEBUG ("************************************");
     currentThemeCodeName = m_ThemeBusinessLogic->currentThemeCodeName();
+    SYS_DEBUG ("*** currentThemeCodeName = %s", SYS_STR(currentThemeCodeName)),
     currentIndex = m_ThemeListModel->indexOfCodeName(currentThemeCodeName);
+    SYS_DEBUG ("*** row()                = %d", currentIndex.row()),
+
     currentIndex = m_Proxy->mapFromSource (currentIndex);
+    SYS_DEBUG ("*** row()                = %d", currentIndex.row()),
     m_List->selectItem (currentIndex);
     m_List->scrollTo (currentIndex, MList::EnsureVisibleHint);
 }

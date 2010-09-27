@@ -213,7 +213,8 @@ ThemeBusinessLogic::themeChangeCompleted ()
 {
     QString     themeCodeName = currentThemeCodeName ();
 
-    SYS_DEBUG ("Theme changed to %s", SYS_STR(themeCodeName));
+    SYS_DEBUG ("Theme changed to: %s", SYS_STR(themeCodeName));
+    SYS_DEBUG ("We wanted       : %s", SYS_STR(m_ChangingTheme));
     #ifdef WARNING
     if (themeCodeName != m_ChangingTheme) {
         SYS_WARNING ("We wanted %s", SYS_STR(m_ChangingTheme));
@@ -221,6 +222,7 @@ ThemeBusinessLogic::themeChangeCompleted ()
     #endif
     emit themeChanged (themeCodeName);
     m_ChangingTheme = "";
+    emit refreshNeeded ();
 }
 
 ThemeDescriptor *
