@@ -96,7 +96,8 @@ private slots:
         QString   landscapeFileName);
 
     void startEditThreadEnded ();
-
+    void valueChanged ();
+    
 private:
     QString dirPath () const;
     bool ensureHasDirectory ();

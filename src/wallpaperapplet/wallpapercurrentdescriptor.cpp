@@ -26,6 +26,7 @@
 #include <mdesktopentry.h>
 
 #define WARNING
+//#define DEBUG
 #include "../debug.h"
 
 WallpaperCurrentDescriptor *WallpaperCurrentDescriptor::sm_Instance = 0;

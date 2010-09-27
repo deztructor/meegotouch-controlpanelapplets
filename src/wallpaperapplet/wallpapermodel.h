@@ -47,6 +47,7 @@ class WallpaperModel: public QAbstractTableModel
 public slots:
     void imageLoaded (const QModelIndex &row);
     void descriptorChanged (WallpaperDescriptor *desc);
+    void wallpaperChanged ();
     
 private:
     WallpaperBusinessLogic       *m_BusinessLogic;

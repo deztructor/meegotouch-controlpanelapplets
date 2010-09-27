@@ -25,7 +25,7 @@
 #include <MImageWidget>
 #include <MProgressIndicator>
 
-#define DEBUG
+//#define DEBUG
 #include <../debug.h>
 
 /*
@@ -246,6 +246,9 @@ WallpaperModel::WallpaperModel (
         connect (m_DescriptorList[n], SIGNAL (changed (WallpaperDescriptor *)),
                 this, SLOT(descriptorChanged (WallpaperDescriptor *)));
     }
+
+    connect (logic, SIGNAL(wallpaperChanged()),
+            this, SLOT(wallpaperChanged()));
 }
 
 int 
@@ -293,7 +296,7 @@ void
 WallpaperModel::descriptorChanged (
         WallpaperDescriptor *desc)
 {
-    SYS_DEBUG ("");
+    SYS_WARNING ("");
 
     for (int n = 0; n < m_DescriptorList.size(); ++n) {
         if (m_DescriptorList[n] == desc) {
@@ -304,4 +307,14 @@ WallpaperModel::descriptorChanged (
             break;
         }
     }
+}
+
+void 
+WallpaperModel::wallpaperChanged ()
+{
+    SYS_DEBUG ("");
+
+    QModelIndex first = index (0, 0);
+    if (first.isValid())
+        emit dataChanged (first, first);
 }

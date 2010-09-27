@@ -117,6 +117,14 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
             this, SLOT (startEditThreadEnded()));
 
     /*
+     * Connecting to the DBus database.
+     */
+    connect (m_LandscapeGConfItem, SIGNAL(valueChanged()),
+            this, SLOT(valueChanged()));
+    connect (m_PortraitGConfItem, SIGNAL(valueChanged()),
+            this, SLOT(valueChanged()));
+    
+    /*
      * Connecting to DBus.
      */
     QDBusConnection bus = QDBusConnection::sessionBus ();
@@ -754,4 +762,48 @@ WallpaperBusinessLogic::addImageFromGallery(QString uri)
     setEditedImage (desc, false);
     SYS_DEBUG ("Emitting imageEditRequested()");
     emit imageEditRequested ();
+}
+
+void
+WallpaperBusinessLogic::valueChanged ()
+{
+    WallpaperCurrentDescriptor *currentDesc;
+    QString                     desktopFile = dirPath() + destopFileName;
+    bool                        success;
+
+    currentDesc = WallpaperCurrentDescriptor::instance ();
+    
+    /*
+     * Trying to load the current wallpaper from the files saved by the theme
+     * applet. Will load only if the GConf contains our filenames.
+     */
+    success = currentDesc->setFromDesktopFile (
+            desktopFile,
+            true,
+            m_LandscapeGConfItem->value().toString(),
+            m_PortraitGConfItem->value().toString());
+    /*
+     * If not successfull we try to load the files from the GConf database. Will
+     * be successfull if both GConf keys reference to images with full path.
+     */
+    if (!success) {
+        SYS_DEBUG ("Loading of %s failed. Trying image files from GConf.",
+                SYS_STR(desktopFile));
+        success = currentDesc->setFromFilenames (
+                m_LandscapeGConfItem->value().toString(),
+                m_PortraitGConfItem->value().toString());
+    }
+
+    /*
+     * Trying to interpret the values as icon IDs. Please note, that this
+     * setFromIDs() method will handle the case when one of the values is an
+     * image file and the other is an icon ID. 
+     */
+    if (!success) {
+        success = currentDesc->setFromIDs (
+                m_LandscapeGConfItem->value().toString(),
+                m_PortraitGConfItem->value().toString());
+    }
+
+    emit wallpaperChanged ();
 }

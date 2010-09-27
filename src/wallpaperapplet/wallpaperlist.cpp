@@ -16,7 +16,7 @@
 ** of this file.
 **
 ****************************************************************************/
-
+#include "wallpaperbusinesslogic.h"
 #include "wallpaperlist.h"
 #include "wallpapermodel.h"
 
@@ -45,6 +45,8 @@ WallpaperList::WallpaperList (
     connect (this, SIGNAL(panningStarted()), 
             m_ImageLoader, SLOT(stopLoadingPictures()));
     connect (this, SIGNAL(panningStopped()), 
+            this, SLOT(loadPictures()));
+    connect (m_BusinessLogic, SIGNAL(wallpaperChanged()), 
             this, SLOT(loadPictures()));
 }
 
