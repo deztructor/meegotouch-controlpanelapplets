@@ -62,21 +62,12 @@ Depends: ${shlibs:Depends}, duicontrolpanel,
 Description: USB applet for the control panel application
 
 Package: duicontrolpanel-batteryapplet
+Provides: duistatusindicatormenu-batteryplugin
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libduicontrolpanel,
          systemui-applets-l10n-engineering-english
 Description: Battery settings applet.
-
-Package: duistatusindicatormenu-batteryplugin
-Section: misc
-Architecture: any
-Description: A deprecated package
-
-Package: duistatusindicatormenu-volumeplugin
-Section: misc
-Architecture: any
-Description: Dummy package: volumecontrol ui has been moved to system-ui
 
 Package: duicontrolpanel-displayapplet
 Section: misc
@@ -88,6 +79,7 @@ Description: Display settings applet.
 Package: duicontrolpanel-profileapplet
 Section: misc
 Architecture: any
+Provides: duicontrolpanel-ledapplet
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
          systemui-applets-l10n-engineering-english
 Description: Profiles settings applet.
@@ -139,12 +131,8 @@ Description: Testapplet to manual test duicontrolpanel.
 Package: duistatusindicatormenu-profileplugin
 Section: misc
 Architecture: any
+Provides: duistatusindicatormenu-volumeplugin
 Depends: ${shlibs:Depends}, ${misc:Depends},
          systemui-applets-l10n-engineering-english
 Description: Profile status indicator menu plugin.
-
-Package: duicontrolpanel-ledapplet
-Section: misc
-Architecture: any
-Description: LED settings applet. Deprecated and will be removed soon.
 
