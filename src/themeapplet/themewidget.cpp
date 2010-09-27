@@ -33,7 +33,7 @@
 #include <MBasicListItem>
 #include <MImageWidget>
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -190,11 +190,16 @@ void
 ThemeWidget::themeActivated (
         const QModelIndex &index)
 {
-    ThemeDialog      *dialog;
     QString           codeName;
     ThemeDescriptor  *descr = 0;
       
-    SYS_WARNING ("*** index at %d, %d", index.row(), index.column());
+    SYS_DEBUG ("*** index at %d, %d", index.row(), index.column());
+
+    if (m_ThemeDialog) {
+        SYS_DEBUG ("We alreadyhave a dialog, returning.");
+        return;
+    }
+
     codeName = m_Proxy->data(index, ThemeListModel::CodeNameRole).toString();
 
     /*
@@ -218,10 +223,10 @@ ThemeWidget::themeActivated (
         return;
     }
 
-    dialog = new ThemeDialog (m_ThemeBusinessLogic, descr);
-    connect (dialog, SIGNAL(themeChangeCancelled()),
+    m_ThemeDialog = new ThemeDialog (m_ThemeBusinessLogic, descr);
+    connect (m_ThemeDialog, SIGNAL(themeChangeCancelled()),
             this, SLOT(selectCurrentTheme()));
-    dialog->showDialog ();
+    m_ThemeDialog->showDialog ();
 }
 
 void

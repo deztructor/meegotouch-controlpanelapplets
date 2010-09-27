@@ -22,6 +22,7 @@
 #include <QPointer>
 #include <QModelIndex>
 #include <dcpwidget.h>
+#include <themedialog.h>
 
 #include "themebusinesslogic.h"
 #include "themelistmodel.h"
@@ -64,6 +65,7 @@ private:
     MTextEdit                    *m_LiveFilterEditor;
     MList                        *m_List;
     MBasicListItem               *m_OviItem;
+    QPointer<ThemeDialog>         m_ThemeDialog;
     #ifdef UNIT_TEST
     friend class Ut_ThemeWidget;
     #endif
