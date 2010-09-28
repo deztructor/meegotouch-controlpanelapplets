@@ -20,7 +20,6 @@ Description: |
         - About product
         - Warranty applet
         - Profiles switcher
-
 PkgBR:
     - meegotouch-controlpanel-devel
     - libqttracker-devel
@@ -33,9 +32,8 @@ PkgConfigBR:
     - QtGui >= 4.7.0
 Configure: none
 Builder: make
-Files:
-    - "%dir /usr/share/doc/packages/%{name}"
-    - "%doc /usr/share/doc/packages/%{name}/*"
+NoFiles: True
+
 SubPackages:
     - Name: meegotouchcp-applets-l10n-eng-en
       AsWholeName: True
