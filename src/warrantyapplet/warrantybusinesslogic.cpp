@@ -19,6 +19,12 @@
 
 #include "warrantybusinesslogic.h"
 
+#ifdef HAVE_QMSYSTEM
+#  include <qmsystemstate.h>
+#endif
+
+// TODO: TBD
+#define WARRANTY_DAYS 365
 
 #undef DEBUG
 #include "../debug.h"
@@ -30,5 +36,27 @@ WarrantyBusinessLogic::WarrantyBusinessLogic()
 
 WarrantyBusinessLogic::~WarrantyBusinessLogic()
 {
+}
+
+int
+WarrantyBusinessLogic::getExpirationDays ()
+{
+    int retVal = -1;
+
+#ifdef HAVE_QMSYSTEM
+    Maemo::QmSystemState  systemState;
+    int elapsedDays = systemState.getPowerOnTimeInSeconds () / (60 * 60 * 24);
+
+    retVal = WARRANTY_DAYS - elapsedDays;
+
+    if (retVal < 0)
+        retVal = 0;
+#else
+    /*
+     * FIXME: To implement a version that does not use the QmSystem.
+     */
+#endif
+
+    return retVal;
 }
 

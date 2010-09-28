@@ -19,15 +19,9 @@
 
 #include "warrantywidget.h"
 
+#include <MLabel>
 #include <MLayout>
 #include <MLinearLayoutPolicy>
-#include <MLabel>
-#include <MDialog>
-#include <MMessageBox>
-
-#ifdef HAVE_QMSYSTEM
-#  include <qmsystemstate.h>
-#endif
 
 #undef DEBUG
 #include "../debug.h"
@@ -38,7 +32,7 @@ WarrantyWidget::WarrantyWidget (
     DcpWidget (parent),
     m_WarrantyBusinessLogic (warrantyBusinessLogic)
 {
-    createContent();
+    createContent ();
 }
 
 WarrantyWidget::~WarrantyWidget ()
@@ -50,58 +44,50 @@ void
 WarrantyWidget::createContent ()
 {
     MLayout             *layout;
-    MLinearLayoutPolicy *landscapePolicy;
-    MLinearLayoutPolicy *portraitPolicy;
-    MLabel              *label1;
-
+    MLinearLayoutPolicy *policy;
 
     layout = new MLayout;
+    policy = new MLinearLayoutPolicy (layout, Qt::Vertical);
 
-    /*
-     * I only added two policies, so that later we can use a separate layout for
-     * portrait/landscape orientation. FIXME: We might want to remove one of
-     * these when the UI spec. is finalized.
-     */
-    landscapePolicy = new MLinearLayoutPolicy (layout, Qt::Vertical);
-    portraitPolicy = new MLinearLayoutPolicy (layout, Qt::Vertical);
+    m_labelExpiration = new MLabel;
+    policy->addItem (m_labelExpiration);
 
-    /*
-     * This will be used here, so currently it is just a test be we keep it
-     * here.
-     */
-    label1 = new MLabel;
-    label1->setWordWrap (true);
+    m_labelTerms = new MLabel;
+    m_labelTerms->setWordWrap (true);
+    policy->addItem (m_labelTerms);
 
-    #ifdef HAVE_QMSYSTEM
-    Maemo::QmSystemState  systemState;
-    label1->setText (labelText ().arg (systemState.getPowerOnTimeInSeconds ()));
-    #else
-    /*
-     * FIXME: To implement a version that does not use the QmSystem.
-     */
-    label1->setText ("QmSystem is not available");
-    #endif
+    policy->addStretch ();
 
-    landscapePolicy->addItem (label1);
-    portraitPolicy->addItem (label1);
+    retranslateUi ();
 
-    layout->setLandscapePolicy (landscapePolicy);
-    layout->setPortraitPolicy (portraitPolicy);
-
+    layout->setPolicy (policy);
     setLayout (layout);
 }
 
-
-QString 
-WarrantyWidget::labelText()
+void
+WarrantyWidget::retranslateUi ()
 {
-    QString retval;
+    int expirationDays = m_WarrantyBusinessLogic->getExpirationDays ();
 
-    retval += "<h2>The text of the warranty</h2>";
-    retval += "<p>Here is going to be shown the text of the WARRANTY ";
-    retval += "once the text is going to be specified.</p>";
-    retval += "<br/><p>Power on time: %L1 seconds</p>";
+    if (expirationDays > 0)
+    {
+      //% "Product warranty will expire in <b>%L1</b> day."
+      m_labelExpiration->setText (qtTrId ("qtn_warr_expiration").arg (expirationDays));
+    }
+    else if (expirationDays == 0)
+    {
+      /* FIXME: No official logical id for this. */
+      //% "Product warranty is expired."
+      m_labelExpiration->setText (qtTrId ("qtn_warr_expired"));
+    }
+    else
+    {
+      /* FIXME: No official logical id for this. */
+      //% "Product warranty expiration N/A."
+      m_labelExpiration->setText (qtTrId ("qtn_warr_na"));
+    }
 
-    return retval;
+    //% "(insert terms of warranty here)"
+    m_labelTerms->setText (qtTrId ("qtn_warr_terms"));
 }
 

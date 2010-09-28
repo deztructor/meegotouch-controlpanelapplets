@@ -24,6 +24,8 @@
 
 #include "warrantybusinesslogic.h"
 
+class MLabel;
+
 class WarrantyWidget : public DcpWidget
 {
     Q_OBJECT
@@ -35,10 +37,15 @@ public:
     ~WarrantyWidget ();
 
     void createContent ();
-    QString labelText();
+
+protected:
+    void retranslateUi ();
 
 private:
     QPointer<WarrantyBusinessLogic>    m_WarrantyBusinessLogic;
+    MLabel                            *m_labelExpiration;
+    MLabel                            *m_labelTerms;
 };
 
 #endif
+

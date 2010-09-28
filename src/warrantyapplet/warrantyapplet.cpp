@@ -74,7 +74,7 @@ QString
 WarrantyApplet::title() const
 {
     //% "Warranty"
-    return qtTrId ("qtn_warranty"); // not official
+    return qtTrId ("qtn_warr_title");
 }
 
 QVector<MAction*>
@@ -92,3 +92,4 @@ WarrantyApplet::constructBrief (
     Q_UNUSED (partId);
     return new WarrantyBrief (m_WarrantyBusinessLogic);
 }
+

@@ -3,8 +3,8 @@ Type=DUIApplet
 Name=Warranty
 Icon=
 Exec=
-X-logical-id=qtn_rset_warranty
-X-translation-catalog=systemui-applets
+X-logical-id=qtn_warr_title
+X-translation-catalog=systemui-applets,warranty
 
 [DUI]
 X-DUIApplet-Applet=libwarrantyapplet.so

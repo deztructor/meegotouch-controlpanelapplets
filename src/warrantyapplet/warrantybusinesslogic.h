@@ -31,6 +31,8 @@ class WarrantyBusinessLogic : public QObject
 public:
     WarrantyBusinessLogic ();
     ~WarrantyBusinessLogic ();
+
+    int getExpirationDays ();
 };
 
 #endif
