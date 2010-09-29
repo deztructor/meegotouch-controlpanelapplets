@@ -63,6 +63,8 @@ SubPackages:
       Summary: MeegoTouch Controlpanel profiles settings
       Group: System/GUI/Other
       Description: MeegoTouch Controlpanel profiles settings
+      Requires:
+          - meegotouchcp-applets-l10n-eng-en
       Files:
           - "%dir /usr/lib/duicontrolpanel"
           - "%dir /usr/lib/duicontrolpanel/applets"
@@ -77,6 +79,7 @@ SubPackages:
       Group: System/GUI/Other
       Description: MeegoTouch Controlpanel wallpaper editor & setter
       Requires:
+          - meegotouchcp-applets-l10n-eng-en
           - tumbler
       Files:
           - "%dir /usr/lib/duicontrolpanel"
@@ -91,6 +94,8 @@ SubPackages:
       Summary: MeegoTouch Controlpanel about product applet
       Group: System/GUI/Other
       Description: MeegoTouch Controlpanel about product applet
+      Requires:
+          - meegotouchcp-applets-l10n-eng-en
       Files:
           - "%dir /usr/lib/duicontrolpanel"
           - "%dir /usr/lib/duicontrolpanel/applets"
@@ -102,6 +107,8 @@ SubPackages:
       Summary: MeegoTouch Controlpanel USB settings
       Group: System/GUI/Other
       Description: MeegoTouch Controlpanel USB settings
+      Requires:
+          - meegotouchcp-applets-l10n-eng-en
       Files:
           - "%dir /usr/lib/duicontrolpanel"
           - "%dir /usr/lib/duicontrolpanel/applets"
@@ -113,6 +120,8 @@ SubPackages:
       Summary: MeegoTouch Controlpanel reset-settings & clear-user data
       Group: System/GUI/Other
       Description: MeegoTouch Controlpanel reset-settings & clear-user data
+      Requires:
+          - meegotouchcp-applets-l10n-eng-en
       Files:
           - "%dir /usr/lib/duicontrolpanel"
           - "%dir /usr/lib/duicontrolpanel/applets"
@@ -124,6 +133,8 @@ SubPackages:
       Summary: MeegoTouch Controlpanel battery info/settings
       Group: System/GUI/Other
       Description: MeegoTouch Controlpanel battery info/settings
+      Requires:
+          - meegotouchcp-applets-l10n-eng-en
       Files:
           - "%dir /usr/lib/duicontrolpanel"
           - "%dir /usr/lib/duicontrolpanel/applets"
@@ -138,6 +149,7 @@ SubPackages:
       Group: System/GUI/Other
       Description: MeegoTouch profile-switcher statusindicatormenu plugin
       Requires:
+          - meegotouchcp-applets-l10n-eng-en
           - meegotouch-systemui
       Files:
           - "%dir /usr/lib/meegotouch/applicationextensions"
@@ -149,6 +161,8 @@ SubPackages:
       Summary: MeegoTouch Controlpanel warranty applet
       Group: System/GUI/Other
       Description: MeegoTouch Controlpanel warranty applet
+      Requires:
+          - meegotouchcp-applets-l10n-eng-en
       Files:
           - "%dir /usr/lib/duicontrolpanel"
           - "%dir /usr/lib/duicontrolpanel/applets"
@@ -160,6 +174,8 @@ SubPackages:
       Summary: MeegoTouch Controlpanel theme switcher
       Group: System/GUI/Other
       Description: MeegoTouch Controlpanel theme switcher
+      Requires:
+          - meegotouchcp-applets-l10n-eng-en
       Files:
           - "%dir /usr/lib/duicontrolpanel"
           - "%dir /usr/lib/duicontrolpanel/applets"
@@ -173,6 +189,8 @@ SubPackages:
       Summary: MeegoTouch Controlpanel Offline switcher
       Group: System/GUI/Other
       Description: MeegoTouch Controlpanel Offline switcher
+      Requires:
+          - meegotouchcp-applets-l10n-eng-en
       Files:
           - "%dir /usr/lib/duicontrolpanel"
           - "%dir /usr/lib/duicontrolpanel/applets"
@@ -184,6 +202,8 @@ SubPackages:
       Summary: MeegoTouch Controlpanel display settings
       Group: System/GUI/Other
       Description: MeegoTouch Controlpanel display settings
+      Requires:
+          - meegotouchcp-applets-l10n-eng-en
       Files:
           - "%dir /usr/lib/duicontrolpanel"
           - "%dir /usr/lib/duicontrolpanel/applets"

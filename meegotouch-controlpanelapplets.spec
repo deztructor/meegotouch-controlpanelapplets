@@ -64,6 +64,7 @@ MeeGo Touch Controlpanel applets engineering English messages for various applet
 %package -n meegotouchcp-profiles
 Summary:    MeegoTouch Controlpanel profiles settings
 Group:      System/GUI/Other
+Requires:   meegotouchcp-applets-l10n-eng-en
 
 %description -n meegotouchcp-profiles
 MeegoTouch Controlpanel profiles settings
@@ -71,6 +72,7 @@ MeegoTouch Controlpanel profiles settings
 %package -n meegotouchcp-wallpaper
 Summary:    MeegoTouch Controlpanel wallpaper editor & setter
 Group:      System/GUI/Other
+Requires:   meegotouchcp-applets-l10n-eng-en
 Requires:   tumbler
 
 %description -n meegotouchcp-wallpaper
@@ -79,6 +81,7 @@ MeegoTouch Controlpanel wallpaper editor & setter
 %package -n meegotouchcp-about
 Summary:    MeegoTouch Controlpanel about product applet
 Group:      System/GUI/Other
+Requires:   meegotouchcp-applets-l10n-eng-en
 
 %description -n meegotouchcp-about
 MeegoTouch Controlpanel about product applet
@@ -86,6 +89,7 @@ MeegoTouch Controlpanel about product applet
 %package -n meegotouchcp-usb
 Summary:    MeegoTouch Controlpanel USB settings
 Group:      System/GUI/Other
+Requires:   meegotouchcp-applets-l10n-eng-en
 
 %description -n meegotouchcp-usb
 MeegoTouch Controlpanel USB settings
@@ -93,6 +97,7 @@ MeegoTouch Controlpanel USB settings
 %package -n meegotouchcp-reset
 Summary:    MeegoTouch Controlpanel reset-settings & clear-user data
 Group:      System/GUI/Other
+Requires:   meegotouchcp-applets-l10n-eng-en
 
 %description -n meegotouchcp-reset
 MeegoTouch Controlpanel reset-settings & clear-user data
@@ -100,6 +105,7 @@ MeegoTouch Controlpanel reset-settings & clear-user data
 %package -n meegotouchcp-battery
 Summary:    MeegoTouch Controlpanel battery info/settings
 Group:      System/GUI/Other
+Requires:   meegotouchcp-applets-l10n-eng-en
 
 %description -n meegotouchcp-battery
 MeegoTouch Controlpanel battery info/settings
@@ -107,6 +113,7 @@ MeegoTouch Controlpanel battery info/settings
 %package -n meego-handset-statusindicators-profiles
 Summary:    MeegoTouch profile-switcher statusindicatormenu plugin
 Group:      System/GUI/Other
+Requires:   meegotouchcp-applets-l10n-eng-en
 Requires:   meegotouch-systemui
 
 %description -n meego-handset-statusindicators-profiles
@@ -115,6 +122,7 @@ MeegoTouch profile-switcher statusindicatormenu plugin
 %package -n meegotouchcp-warranty
 Summary:    MeegoTouch Controlpanel warranty applet
 Group:      System/GUI/Other
+Requires:   meegotouchcp-applets-l10n-eng-en
 
 %description -n meegotouchcp-warranty
 MeegoTouch Controlpanel warranty applet
@@ -122,6 +130,7 @@ MeegoTouch Controlpanel warranty applet
 %package -n meegotouchcp-theme
 Summary:    MeegoTouch Controlpanel theme switcher
 Group:      System/GUI/Other
+Requires:   meegotouchcp-applets-l10n-eng-en
 
 %description -n meegotouchcp-theme
 MeegoTouch Controlpanel theme switcher
@@ -129,6 +138,7 @@ MeegoTouch Controlpanel theme switcher
 %package -n meegotouchcp-offline
 Summary:    MeegoTouch Controlpanel Offline switcher
 Group:      System/GUI/Other
+Requires:   meegotouchcp-applets-l10n-eng-en
 
 %description -n meegotouchcp-offline
 MeegoTouch Controlpanel Offline switcher
@@ -136,6 +146,7 @@ MeegoTouch Controlpanel Offline switcher
 %package -n meegotouchcp-display
 Summary:    MeegoTouch Controlpanel display settings
 Group:      System/GUI/Other
+Requires:   meegotouchcp-applets-l10n-eng-en
 
 %description -n meegotouchcp-display
 MeegoTouch Controlpanel display settings
