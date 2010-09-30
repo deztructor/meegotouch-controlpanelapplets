@@ -2,12 +2,19 @@ systemui-applets (0.16.1~1) meegotouch; urgency=low
 
   * Introducing libmeegocontrol
   * libMeegoControl documentation added
-  * Fixes: NB#194506 - Impossible to select a wallpaper image using the contentpicker.
-  * Fixes: NB#194787 -  On tapping on theme applet repeatedly multiple dialogs are coming up.
-  * Fixes: NB#194853 -  list does not change back to the current theme, If you cancel the theme dialog box by clicking outside
-  * Fixes: NB#194409 -  After setting the wall paper form gallery or the wallpaper mainview, current wallpaper thumbnail doesn't get set to the currently set image.
+  * Fixes: NB#194506 - Impossible to select a wallpaper
+    image using the contentpicker.
+  * Fixes: NB#194787 - On tapping on theme applet repeatedly
+    multiple dialogs are coming up.
+  * Fixes: NB#194853 - list does not change back to the current theme,
+    if you cancel the theme dialog box by clicking outside
+  * Fixes: NB#194409 - After setting the wall paper form gallery or the
+    wallpaper mainview, current wallpaper thumbnail doesn't get set
+    to the currently set image.
+  * Fixes:NB#187326 -  Reset settings buttons too close to each other in
+    portrait
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 28 Sep 2010 11:43:02 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 30 Sep 2010 15:05:55 +0200
 
 systemui-applets (0.15.4-1) meegotouch; urgency=low
 

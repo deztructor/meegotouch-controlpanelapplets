@@ -56,15 +56,21 @@ ResetWidget::createContent ()
     MButton             *clearButton;
 
     layout = new MLayout;
+    layout->setContentsMargins (0., 0., 0., 0.);
 
     landscapePolicy = new MLinearLayoutPolicy (layout, Qt::Horizontal);
+    landscapePolicy->setContentsMargins (0., 0., 0., 0.);
+
     portraitPolicy = new MLinearLayoutPolicy (layout, Qt::Vertical);
+    portraitPolicy->setContentsMargins (0., 0., 0., 0.);
 
     /*
      *
      */
     //% "Restore original settings"
     restoreButton = new MButton (qtTrId("qtn_rset_restore"));
+    restoreButton->setStyleName ("CommonTopButton");
+    restoreButton->setObjectName ("CommonTopButton");
     connect (restoreButton, SIGNAL(clicked()), 
             this, SLOT(restoreActivated()));
 
@@ -73,16 +79,20 @@ ResetWidget::createContent ()
      */
     //% "Clear device"
     clearButton = new MButton (qtTrId("qtn_rset_clear"));
+    clearButton->setStyleName ("CommonBottomButton");
+    clearButton->setObjectName ("CommonTopButton");
     connect (clearButton, SIGNAL(clicked()), 
             this, SLOT(clearActivated()));
-    
+
     landscapePolicy->addItem (restoreButton);
+    landscapePolicy->setAlignment (restoreButton, Qt::AlignCenter);
     landscapePolicy->addItem (clearButton);
-    landscapePolicy->setStretchFactor (restoreButton, 2);
-    landscapePolicy->setStretchFactor (clearButton, 2);
+    landscapePolicy->setAlignment (clearButton, Qt::AlignCenter);
 
     portraitPolicy->addItem (restoreButton);
+    portraitPolicy->setAlignment (restoreButton, Qt::AlignCenter);
     portraitPolicy->addItem (clearButton);
+    portraitPolicy->setAlignment (clearButton, Qt::AlignCenter);
 
     layout->setLandscapePolicy (landscapePolicy);
     layout->setPortraitPolicy (portraitPolicy);
