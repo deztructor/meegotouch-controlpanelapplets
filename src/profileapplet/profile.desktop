@@ -1,10 +1,14 @@
 [Desktop Entry]
-Type=DUIApplet
+Type=ControlPanelApplet
 Name=Profile
 X-logical-id=qtn_prof_profile
 X-translation-catalog=profiles
 Icon=
 Exec=
+X-Maemo-Service=com.nokia.DuiControlPanel
+X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
+X-Maemo-Object-Path=/
+X-Maemo-Fixed-Args=Profile
 
 [DUI]
 X-DUIApplet-Applet=libprofileapplet.so

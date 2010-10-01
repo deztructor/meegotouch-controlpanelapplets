@@ -1,10 +1,14 @@
 [Desktop Entry]
-Type=DUIApplet
+Type=ControlPanelApplet
 Name=OfflineButton
 Icon=
 Exec=
 X-logical-id=qtn_sett_main_display
 X-translation-catalog=offline
+X-Maemo-Service=com.nokia.DuiControlPanel
+X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
+X-Maemo-Object-Path=/
+X-Maemo-Fixed-Args=OfflineButton
 
 [DUI]
 X-DUIApplet-Applet=libofflineapplet.so

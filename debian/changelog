@@ -13,8 +13,10 @@ systemui-applets (0.16.1~1) meegotouch; urgency=low
     to the currently set image.
   * Fixes:NB#187326 -  Reset settings buttons too close to each other in
     portrait
+  * Updated desktop files to make ContectAction able to launch
+    the settings applets via duicontrolpanels servicefw.
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 30 Sep 2010 15:05:55 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 01 Oct 2010 16:49:31 +0200
 
 systemui-applets (0.15.4-1) meegotouch; urgency=low
 

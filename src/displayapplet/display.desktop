@@ -1,10 +1,14 @@
 [Desktop Entry]
-Type=DUIApplet
+Type=ControlPanelApplet
 Name=Display
 Icon=
 Exec=
 X-logical-id=qtn_disp_display
 X-translation-catalog=display
+X-Maemo-Service=com.nokia.DuiControlPanel
+X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
+X-Maemo-Object-Path=/
+X-Maemo-Fixed-Args=Display
 
 [DUI]
 X-DUIApplet-Applet=libdisplayapplet.so

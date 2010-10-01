@@ -1,10 +1,14 @@
 [Desktop Entry]
-Type=DUIApplet
+Type=ControlPanelApplet
 Name=Wallpaper
 X-logical-id=qtn_wall_wallpaper
 X-translation-catalog=wallpaper
 Icon=
 Exec=
+X-Maemo-Service=com.nokia.DuiControlPanel
+X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
+X-Maemo-Object-Path=/
+X-Maemo-Fixed-Args=Wallpaper
 
 [DUI]
 X-DUIApplet-Applet=libwallpaperapplet.so
