@@ -22,11 +22,14 @@
 #include <MList>
 #include <QModelIndex>
 
+#define USE_GRID_LAYOUT
+
 class QGraphicsItem;
 class WallpaperDescriptor;
 class WallpaperBusinessLogic;
 class WallpaperImageLoader;
 class WallpaperModel;
+class MOrientationChangeEvent;
 
 /*!
  * A list widget that shows a list of the available wallpapers.
@@ -48,6 +51,9 @@ public:
     void setDataSourceType (WallpaperList::DataSourceType sourceType);
 
 protected:
+    #ifdef USE_GRID_LAYOUT
+    virtual void orientationChangeEvent (MOrientationChangeEvent *event);
+    #endif
     void hideEvent (QHideEvent *event);
     void showEvent (QShowEvent *event);
 

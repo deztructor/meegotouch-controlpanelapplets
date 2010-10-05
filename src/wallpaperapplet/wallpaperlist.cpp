@@ -27,6 +27,14 @@
 
 static const int loadPicturesDelay = 200;
 
+#ifdef USE_GRID_LAYOUT
+static int columnsLandscape = 5;
+static int columnsPortrait = 3;
+#include <MOrientationChangeEvent>
+#include <MApplication>
+#include <MApplicationWindow>
+#endif
+
 WallpaperList::WallpaperList (
         WallpaperBusinessLogic *logic,
         QGraphicsItem          *parent) :
@@ -36,6 +44,11 @@ WallpaperList::WallpaperList (
     m_Model (0),
     m_DataSourceType (WallpaperList::DataSourceUnknown)
 {
+    #ifdef USE_GRID_LAYOUT
+    MApplicationWindow *window;
+    int                 columns;
+    #endif
+
     connect (this, SIGNAL(itemClicked(const QModelIndex &)),
             this, SLOT(slotItemClicked(const QModelIndex &)));
     /*
@@ -48,6 +61,17 @@ WallpaperList::WallpaperList (
             this, SLOT(loadPictures()));
     connect (m_BusinessLogic, SIGNAL(wallpaperChanged()), 
             this, SLOT(loadPictures()));
+
+    #ifdef USE_GRID_LAYOUT
+    columns = columnsLandscape;
+    window = MApplication::activeApplicationWindow();
+    if (window) {
+        columns = window->orientation() == M::Landscape ?
+            columnsLandscape : columnsPortrait;
+    }
+
+    setColumns (columns);
+    #endif
 }
 
 void
@@ -94,6 +118,19 @@ WallpaperList::loadPictures ()
 
     m_ImageLoader->loadPictures (firstVisibleItem(), lastVisibleItem());
 }
+
+#ifdef USE_GRID_LAYOUT
+void 
+WallpaperList::orientationChangeEvent (
+        MOrientationChangeEvent *event)
+{
+    int columns;
+
+    columns = event->orientation() == M::Landscape ?
+            columnsLandscape : columnsPortrait;
+    setColumns (columns);
+}
+#endif
 
 void
 WallpaperList::hideEvent (
