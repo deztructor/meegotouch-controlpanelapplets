@@ -34,6 +34,7 @@ HEADERS += \
     $$STUB_PREFIX/filesystemstub.h \
     ../../src/debug.h \
     ut_wallpapermodel.h \
+    $$SRC_PREFIX/gridimagewidget.h \
     $$SRC_PREFIX/wallpapergconf.h \
     $$SRC_PREFIX/wallpaperbusinesslogic.h \
     $$SRC_PREFIX/wallpapercurrentdescriptor.h \
@@ -48,6 +49,7 @@ SOURCES += \
     $$STUB_PREFIX/filesystemstub.cpp \
     ../../src/debug.cpp \
     ut_wallpapermodel.cpp \
+    $$SRC_PREFIX/gridimagewidget.cpp \
     $$SRC_PREFIX/wallpaperbusinesslogic.cpp \
     $$SRC_PREFIX/wallpapercurrentdescriptor.cpp \
     $$SRC_PREFIX/wallpaperdescriptor.cpp \

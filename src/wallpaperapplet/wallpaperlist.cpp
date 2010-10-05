@@ -22,7 +22,8 @@
 
 #include <QTimer>
 
-#undef DEBUG
+#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 static const int loadPicturesDelay = 200;
@@ -85,7 +86,9 @@ WallpaperList::setDataSourceType (
     m_Model = new WallpaperModel (m_BusinessLogic);
     setItemModel (m_Model);
 
+    SYS_WARNING ("-------------------------------------------------------");
     cellCreator = new WallpaperCellCreator;
+    SYS_WARNING ("Adding cell creator");
     setCellCreator (cellCreator);
 
     QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));

@@ -40,6 +40,7 @@ PKGCONFIG += ContentManager
 HEADERS += \
     ../../src/debug.h \
     ft_wallpaperbusinesslogic.h \
+    $$SRC_PREFIX/gridimagewidget.h \
     $$SRC_PREFIX/wallpaperapplet.h \
     $$SRC_PREFIX/wallpaperbrief.h \
     $$SRC_PREFIX/wallpapergconf.h \
@@ -56,6 +57,7 @@ HEADERS += \
 SOURCES += \
     ../../src/debug.cpp \
     ft_wallpaperbusinesslogic.cpp \
+    $$SRC_PREFIX/gridimagewidget.cpp \
     $$SRC_PREFIX/wallpaperapplet.cpp \
     $$SRC_PREFIX/wallpaperbrief.cpp \
     $$SRC_PREFIX/wallpaperbusinesslogic.cpp \

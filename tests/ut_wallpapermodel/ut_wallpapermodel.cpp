@@ -110,6 +110,15 @@ Ut_WallpaperModel::testData ()
     }
 }
 
+#ifdef USE_IMAGE_WIDGET
+void 
+Ut_WallpaperModel::testCellCreator ()
+{
+    /*
+     * FIXME: To write the test case for the image widget case.
+     */
+}
+#else
 /*!
  * This function tests the content item creator, goes through the simulated
  * (stubbed) test data and checks if the content item creator sets an
@@ -160,7 +169,7 @@ Ut_WallpaperModel::testCellCreator ()
 
     delete contentCreator;
 }
-
+#endif
 /*
  * This function will check the thumbnailer that creates and updates the
  * tuhmbnails for the list widget. During the test we use a simulated

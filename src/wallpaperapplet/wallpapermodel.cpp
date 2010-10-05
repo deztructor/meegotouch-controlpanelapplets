@@ -21,11 +21,15 @@
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperdescriptor.h"
 
+#ifdef USE_IMAGE_WIDGET
+#  include "gridimagewidget.h"
+#endif
+
 #include <QTimer>
 #include <MImageWidget>
 #include <MProgressIndicator>
 
-//#define DEBUG
+#define DEBUG
 #include <../debug.h>
 
 /*
@@ -147,6 +151,80 @@ WallpaperImageLoader::processJobQueue ()
 /******************************************************************************
  * WallpaperContentItemCreator implementation.
  */
+#ifdef USE_IMAGE_WIDGET
+MWidget *
+WallpaperCellCreator::createCell (
+        const QModelIndex &index, 
+        MWidgetRecycler   &recycler) const
+{
+    GridImageWidget *cell;
+
+#if 0
+    cell = MListCellCreatorHelper<GridImageWidget>::createCell(recycler, "", "");
+#else 
+    cell = qobject_cast <GridImageWidget *> (
+            recycler.take(GridImageWidget::staticMetaObject.className()));
+
+    if (!cell) {
+        cell = new GridImageWidget ();
+    }
+#endif
+    SYS_DEBUG ("Showing cell %p", cell);
+    cell->show();
+    updateCell(index, cell);
+
+    return cell;
+}
+
+void 
+WallpaperCellCreator::updateCell (
+        const QModelIndex &index, 
+        MWidget           *cell) const
+{
+    GridImageWidget *imageWidget = qobject_cast<GridImageWidget *>(cell);
+    QVariant data = index.data(Qt::DisplayRole);
+    WallpaperDescriptor *desc = data.value<WallpaperDescriptor *>();
+   
+    SYS_DEBUG ("Updating cell %p", imageWidget);
+
+    if (desc->isThumbnailLoaded()) {
+        imageWidget->setPixmap (desc->thumbnailPixmap());
+    } else {
+        if (imageWidget->image() != "icon-m-content-not-loaded")
+            imageWidget->setImage("icon-m-content-not-loaded");
+    }
+
+#if 0
+    if (desc->isCurrent()) {
+        //% "Current wallpaper"
+        listItem->setTitle (qtTrId("qtn_wall_current_wallpaper"));
+        //listItem->setSubtitle (desc->title());
+    } else {
+        listItem->setTitle (desc->title());
+        //listItem->setSubtitle ("");
+    }
+
+    // The spinner.
+    if (desc->loading()) {
+        listItem->progressIndicator()->show();
+    } else {
+        listItem->progressIndicator()->hide();
+    }
+
+    // The image
+    SYS_DEBUG ("Setting pixmap for %s", SYS_STR(desc->title()));
+    if (desc->isThumbnailLoaded())
+        listItem->imageWidget()->setPixmap (desc->thumbnailPixmap());
+    else {
+        if (listItem->imageWidget()->image() != "icon-m-content-not-loaded")
+            listItem->imageWidget()->setImage("icon-m-content-not-loaded");
+    }
+
+    // The style
+    updateListItemMode (index, listItem);
+#endif
+}
+#else
 MWidget *
 WallpaperCellCreator::createCell (
         const QModelIndex &index, 
@@ -223,7 +301,7 @@ WallpaperCellCreator::updateListItemMode (
     else 
         listItem->setLayoutPosition (M::VerticalBottomPosition);
 }
-
+#endif
 
 /******************************************************************************
  * WallpaperModel implementation.

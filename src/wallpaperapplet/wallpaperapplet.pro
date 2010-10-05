@@ -28,6 +28,7 @@ INCLUDEPATH += \
 
 HEADERS = \
     ../debug.h \
+    gridimagewidget.h \
     wallpaperdescriptor.h \
     wallpapercurrentdescriptor.h \
     wallpapermodel.h \
@@ -42,6 +43,7 @@ HEADERS = \
 
 SOURCES = \
     ../debug.cpp \
+    gridimagewidget.cpp \
     wallpaperdescriptor.cpp \
     wallpapercurrentdescriptor.cpp \
     wallpaperlist.cpp \

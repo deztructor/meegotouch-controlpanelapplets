@@ -50,7 +50,7 @@
 #include <MGConfItem>
 
 //#define LOTDEBUG
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -274,6 +274,8 @@ WallpaperBusinessLogic::availableWallpapers () const
         list << desc; 
     }
 #endif
+
+    SYS_DEBUG ("We have %d wallpapers.", list.size());
     return list;
 }
 
