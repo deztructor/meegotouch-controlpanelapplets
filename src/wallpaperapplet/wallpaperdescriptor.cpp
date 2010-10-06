@@ -429,8 +429,8 @@ Image::setThumbnailPixmap (
         const QPixmap &pixmap)
 {
     m_ThumbnailPixmap = pixmap;
-    if (pixmap.height() >= 100 &&
-            pixmap.width() >= 100)
+    if (pixmap.height() >= 10 &&
+            pixmap.width() >= 10)
         m_HasThumbnail = true;
     else
         m_HasThumbnail = false;
@@ -699,8 +699,10 @@ WallpaperDescriptor::initiateThumbnailer ()
             /*
              * FIXME: maybe we should emit signal for every variant?
              */
-            if (n == WallpaperDescriptor::Landscape)
+            if (n == WallpaperDescriptor::Landscape) {
+                SYS_DEBUG ("emit thumbnailLoaded()");
                 emit thumbnailLoaded (this);
+            }
 
             continue;
         }
@@ -760,8 +762,10 @@ WallpaperDescriptor::thumbnailReady (
         }
     }
 
-    if (needEmitSignal)
+    if (needEmitSignal) {
+        SYS_DEBUG ("emit thumbnailLoaded()");
         emit thumbnailLoaded (this);
+    }
 }
 
 /*!

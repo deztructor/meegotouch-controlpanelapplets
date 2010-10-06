@@ -43,11 +43,13 @@ WallpaperList::WallpaperList (
     m_BusinessLogic (logic),
     m_ImageLoader (new WallpaperImageLoader),
     m_Model (0),
+    m_CellCreator (new WallpaperCellCreator),
     m_DataSourceType (WallpaperList::DataSourceUnknown)
 {
     #ifdef USE_GRID_LAYOUT
     MApplicationWindow *window;
     int                 columns;
+    int                 initialWidth;
     #endif
 
     connect (this, SIGNAL(itemClicked(const QModelIndex &)),
@@ -64,11 +66,16 @@ WallpaperList::WallpaperList (
             this, SLOT(loadPictures()));
 
     #ifdef USE_GRID_LAYOUT
+
     columns = columnsLandscape;
     window = MApplication::activeApplicationWindow();
     if (window) {
+        SYS_DEBUG ("--------------->");
         columns = window->orientation() == M::Landscape ?
             columnsLandscape : columnsPortrait;
+        initialWidth = window->visibleSceneSize().width() / columns;
+        SYS_DEBUG ("initialWidth = %d", initialWidth);
+        m_CellCreator->setCellSize (QSizeF(initialWidth, initialWidth));
     }
 
     setColumns (columns);
@@ -79,17 +86,12 @@ void
 WallpaperList::setDataSourceType (
         WallpaperList::DataSourceType sourceType)
 {
-    WallpaperCellCreator *cellCreator;
-
     Q_ASSERT (m_DataSourceType == DataSourceUnknown);
     
     m_Model = new WallpaperModel (m_BusinessLogic);
     setItemModel (m_Model);
 
-    SYS_WARNING ("-------------------------------------------------------");
-    cellCreator = new WallpaperCellCreator;
-    SYS_WARNING ("Adding cell creator");
-    setCellCreator (cellCreator);
+    setCellCreator (m_CellCreator);
 
     QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
     m_DataSourceType = sourceType;
@@ -127,10 +129,23 @@ void
 WallpaperList::orientationChangeEvent (
         MOrientationChangeEvent *event)
 {
-    int columns;
+    int   columns;
+    qreal width;
 
     columns = event->orientation() == M::Landscape ?
-            columnsLandscape : columnsPortrait;
+        columnsLandscape : columnsPortrait;
+    //width = geometry().width() / columns;
+    width = event->orientation() == M::Landscape ?
+        864  / columns : 480 / columns;
+
+    #if 0
+    SYS_DEBUG ("*** geometry().width()  = %g", geometry().width());
+    SYS_DEBUG ("*** geometry().height() = %g", geometry().height());
+    SYS_DEBUG ("*** columns             = %d", columns);
+    SYS_DEBUG ("*** width               = %g", width);
+    #endif
+
+    m_CellCreator->setCellSize (QSizeF(width, width));
     setColumns (columns);
 }
 #endif

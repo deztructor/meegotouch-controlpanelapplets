@@ -6,7 +6,6 @@
 class GridImageWidget : public MImageWidget
 {
     Q_OBJECT
-    M_CONTROLLER(MImageWidget)
 
     public:
         GridImageWidget(QGraphicsItem *parent = 0);

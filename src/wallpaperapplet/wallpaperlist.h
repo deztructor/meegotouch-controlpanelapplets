@@ -30,6 +30,7 @@ class WallpaperBusinessLogic;
 class WallpaperImageLoader;
 class WallpaperModel;
 class MOrientationChangeEvent;
+class WallpaperCellCreator;
 
 /*!
  * A list widget that shows a list of the available wallpapers.
@@ -68,6 +69,7 @@ private:
     WallpaperBusinessLogic *m_BusinessLogic;
     WallpaperImageLoader   *m_ImageLoader;
     WallpaperModel         *m_Model;
+    WallpaperCellCreator   *m_CellCreator;
     DataSourceType          m_DataSourceType;
     #ifdef UNIT_TEST
     friend class Ut_WallpaperList;

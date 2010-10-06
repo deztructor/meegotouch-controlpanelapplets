@@ -110,6 +110,7 @@ WallpaperImageLoader::thumbnailLoaded (
      * diefferent order, it is possible, that the generation of some thumbnails
      * is slower than the others.
      */
+    SYS_DEBUG ("");
     for (int n = 0; n < m_ThumbnailPendingJobs.size(); ++n) {
         if (m_ThumbnailPendingJobs[n].desc == desc) {
             WallpaperModel *model = (WallpaperModel*) 
@@ -135,7 +136,7 @@ WallpaperImageLoader::processJobQueue ()
     if (m_ThumbnailLoadingJobs.isEmpty())
         return;
 
-    SYS_DEBUG ("Initiating Thumbnailer");
+    //SYS_DEBUG ("Initiating Thumbnailer");
     Job job = m_ThumbnailLoadingJobs.takeFirst();
     m_ThumbnailPendingJobs.append (job);
     connect (job.desc, SIGNAL(thumbnailLoaded(WallpaperDescriptor*)),
@@ -159,21 +160,31 @@ WallpaperCellCreator::createCell (
 {
     GridImageWidget *cell;
 
-#if 0
-    cell = MListCellCreatorHelper<GridImageWidget>::createCell(recycler, "", "");
-#else 
     cell = qobject_cast <GridImageWidget *> (
             recycler.take(GridImageWidget::staticMetaObject.className()));
 
     if (!cell) {
         cell = new GridImageWidget ();
     }
-#endif
-    SYS_DEBUG ("Showing cell %p", cell);
-    cell->show();
+
     updateCell(index, cell);
 
     return cell;
+}
+
+void 
+WallpaperCellCreator::setCellSize (
+        const QSizeF &size)
+{
+    SYS_WARNING ("setting %gx%g", size.width(), size.height());
+    m_CellSize = size;
+}
+
+QSizeF 
+WallpaperCellCreator::cellSize() const
+{
+    SYS_DEBUG ("");
+    return m_CellSize;
 }
 
 void 
@@ -185,15 +196,25 @@ WallpaperCellCreator::updateCell (
     QVariant data = index.data(Qt::DisplayRole);
     WallpaperDescriptor *desc = data.value<WallpaperDescriptor *>();
    
-    SYS_DEBUG ("Updating cell %p", imageWidget);
+    //SYS_DEBUG ("Updating cell %p", imageWidget);
+    if (!imageWidget)
+        return;
 
+#if 1
     if (desc->isThumbnailLoaded()) {
-        imageWidget->setPixmap (desc->thumbnailPixmap());
+        SYS_DEBUG ("--> thumbnail %gx%g", 
+                cellSize().width(), cellSize().height());
+        imageWidget->setPixmap (desc->thumbnailPixmap().scaled(
+                    cellSize().width(),
+                    cellSize().height()));
+        //imageWidget->setPixmap (desc->thumbnailPixmap().scaled(250,300));
+        //imageWidget->setPixmap (desc->pixmap());
     } else {
+        SYS_DEBUG ("--> icon-m-content-not-loaded");
         if (imageWidget->image() != "icon-m-content-not-loaded")
             imageWidget->setImage("icon-m-content-not-loaded");
     }
-
+#endif
 #if 0
     if (desc->isCurrent()) {
         //% "Current wallpaper"

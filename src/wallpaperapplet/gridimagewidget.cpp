@@ -6,6 +6,7 @@ GridImageWidget::GridImageWidget (
         QGraphicsItem *parent)
     : MImageWidget(parent)
 {
+    setObjectName ("GridImageWidget");
 }
 
 

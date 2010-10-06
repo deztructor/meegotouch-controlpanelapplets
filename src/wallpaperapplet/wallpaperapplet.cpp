@@ -26,7 +26,7 @@
 #include <MAction>
 #include <QDBusInterface>
 
-#undef DEBUG
+#define DEBUG
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(wallpaperapplet, WallpaperApplet)
