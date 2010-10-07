@@ -15,6 +15,7 @@ systemui-applets (0.16.1~1) meegotouch; urgency=low
     portrait
   * Updated desktop files to make ContectAction able to launch
     the settings applets via duicontrolpanels servicefw.
+  * Using the new grid layout in the wallpaper applet.
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 01 Oct 2010 16:49:31 +0200
 

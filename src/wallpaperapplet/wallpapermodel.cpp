@@ -29,7 +29,7 @@
 #include <MImageWidget>
 #include <MProgressIndicator>
 
-#define DEBUG
+//#define DEBUG
 #include <../debug.h>
 
 /*
@@ -183,7 +183,7 @@ WallpaperCellCreator::setCellSize (
 QSizeF 
 WallpaperCellCreator::cellSize() const
 {
-    SYS_DEBUG ("");
+    //SYS_DEBUG ("Returning %gx%g", m_CellSize.width(), m_CellSize.height());
     return m_CellSize;
 }
 

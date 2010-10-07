@@ -64,6 +64,7 @@ WallpaperWidget::createContent ()
 
     SYS_DEBUG ("--- Start ------------");
     mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    mainLayout->setContentsMargins (0, 0, 0, 0);
     setLayout (mainLayout);
 
     MLayout *buttonsLayout = new MLayout;

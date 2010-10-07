@@ -22,7 +22,7 @@
 
 #include <QTimer>
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -46,12 +46,6 @@ WallpaperList::WallpaperList (
     m_CellCreator (new WallpaperCellCreator),
     m_DataSourceType (WallpaperList::DataSourceUnknown)
 {
-    #ifdef USE_GRID_LAYOUT
-    MApplicationWindow *window;
-    int                 columns;
-    int                 initialWidth;
-    #endif
-
     connect (this, SIGNAL(itemClicked(const QModelIndex &)),
             this, SLOT(slotItemClicked(const QModelIndex &)));
     /*
@@ -66,19 +60,36 @@ WallpaperList::WallpaperList (
             this, SLOT(loadPictures()));
 
     #ifdef USE_GRID_LAYOUT
+    MApplicationWindow *window;
+    int                 columns;
+    qreal               width, height;
 
-    columns = columnsLandscape;
+
+    // The return value for geometry() is not right.
+    //width = geometry().width() / columns;
     window = MApplication::activeApplicationWindow();
     if (window) {
-        SYS_DEBUG ("--------------->");
+        qreal  aspectRatio;
+
         columns = window->orientation() == M::Landscape ?
             columnsLandscape : columnsPortrait;
-        initialWidth = window->visibleSceneSize().width() / columns;
-        SYS_DEBUG ("initialWidth = %d", initialWidth);
-        m_CellCreator->setCellSize (QSizeF(initialWidth, initialWidth));
-    }
+        aspectRatio = 
+            (qreal) window->visibleSceneSize().height() / 
+            (qreal) window->visibleSceneSize().width();
+        width = window->visibleSceneSize().width() / columns;
+        height = aspectRatio * width;
+    
+        m_CellCreator->setCellSize (QSizeF(width, height));
+        setColumns (columns);
+    } 
 
-    setColumns (columns);
+    #if 0
+    SYS_DEBUG ("*** geometry().width()  = %g", geometry().width());
+    SYS_DEBUG ("*** geometry().height() = %g", geometry().height());
+    SYS_DEBUG ("*** columns             = %d", columns);
+    SYS_DEBUG ("*** width               = %g", width);
+    #endif
+
     #endif
 }
 
@@ -129,14 +140,36 @@ void
 WallpaperList::orientationChangeEvent (
         MOrientationChangeEvent *event)
 {
-    int   columns;
-    qreal width;
+    MApplicationWindow *window;
+    int                 columns;
+    qreal               width, height;
 
     columns = event->orientation() == M::Landscape ?
         columnsLandscape : columnsPortrait;
+
+    // The return value for geometry() is not right.
     //width = geometry().width() / columns;
-    width = event->orientation() == M::Landscape ?
-        864  / columns : 480 / columns;
+    window = MApplication::activeApplicationWindow();
+    if (window) {
+        qreal  aspectRatio;
+        if (window->orientation() == M::Landscape)
+            aspectRatio = 
+                (qreal) window->visibleSceneSize().height() / 
+                (qreal) window->visibleSceneSize().width();
+        else
+            aspectRatio = 
+                (qreal) window->visibleSceneSize().width() /
+                (qreal) window->visibleSceneSize().height();
+
+        width = window->visibleSceneSize().width() / columns;
+        height = aspectRatio * width;
+    } else {
+        // FIXME: These are the vired in values.
+        width = event->orientation() == M::Landscape ?
+            864  / columns : 480 / columns;
+        height = event->orientation() == M::Landscape ?
+            480  / columns : 864 / columns;
+    }
 
     #if 0
     SYS_DEBUG ("*** geometry().width()  = %g", geometry().width());
@@ -145,7 +178,7 @@ WallpaperList::orientationChangeEvent (
     SYS_DEBUG ("*** width               = %g", width);
     #endif
 
-    m_CellCreator->setCellSize (QSizeF(width, width));
+    m_CellCreator->setCellSize (QSizeF(width, height));
     setColumns (columns);
 }
 #endif
