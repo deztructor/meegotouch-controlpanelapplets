@@ -28,6 +28,8 @@
 #undef DEBUG
 #include "../debug.h"
 
+#include <QDebug>
+
 SliderContainer::SliderContainer (MWidget *parent) :
         MContainer (parent),
         m_PSMAutoButton (0),
@@ -172,6 +174,7 @@ SliderContainer::sliderValueChanged (
     m_SliderValue = value;
 
     updateSliderValueLabel ();
+
     emit PSMThresholdValueChanged (m_SliderValues.at (value).toInt ());
 }
 
@@ -193,7 +196,7 @@ SliderContainer::toggleSliderExistence (
 
             m_PSMSlider->setObjectName ("CommonSlider");
             m_PSMSlider->setOrientation (Qt::Horizontal);
-            m_PSMSlider->setHandleLabelVisible (false);
+            m_PSMSlider->setHandleLabelVisible (true);
             m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
 
             /*
@@ -208,6 +211,9 @@ SliderContainer::toggleSliderExistence (
             connect (m_PSMSlider, SIGNAL (valueChanged (int)),
                     this, SLOT (sliderValueChanged (int)),
                     Qt::DirectConnection);
+//            connect (m_PSMSlider, SIGNAL (valueChanged (int)),
+//                    this, SLOT (updateSliderHandleLabel(int)),
+//                    Qt::DirectConnection);
 
             m_LayoutPolicy->addItem (m_PSMSlider);
             m_LayoutPolicy->setAlignment (m_PSMSlider, Qt::AlignHCenter);
@@ -262,8 +268,11 @@ SliderContainer::updateSliderValueLabel ()
     if (m_SliderExists &&
             m_SliderValue >= 0 &&
             m_SliderValue < m_SliderValues.size()) {
+
         m_PsmValueLabel->setText (QString ("%1%").arg (
                     m_SliderValues[m_SliderValue]));
+        m_PSMSlider->setHandleLabel(QString ("%1%").arg (
+                m_SliderValues[m_SliderValue]));
     }
 }
 

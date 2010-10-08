@@ -31,6 +31,7 @@
 #include <MLinearLayoutPolicy>
 #include <MButton>
 #include <MContainer>
+#include <MLabel>
 
 #undef DEBUG
 #define WARNING
@@ -137,6 +138,23 @@ void BatteryWidget::initWidget ()
 
     buttonContainer->centralWidget()->setLayout (buttonLayout);
 
+    MContainer            *activationLevelLabelContainer;
+    QGraphicsLinearLayout *activationLevelLabelLayout;
+    MLabel                *activationLevelLabel;
+
+    activationLevelLabel = new MLabel("Activation battery level");
+
+    activationLevelLabelContainer = new MContainer;
+    activationLevelLabelContainer->setObjectName("CommonPanel");
+    activationLevelLabelContainer->setHeaderVisible (false);
+
+//    activationLevelLabelLayout->addStretch ();
+    activationLevelLabelLayout->addItem (activationLevelLabel);
+//    activationLevelLabelLayout->addStretch ();
+//    activationLevelLabelLayout->setAlignment (activationLevelLabel, Qt::AlignHCenter);
+
+    activationLevelLabelContainer->centralWidget()->setLayout (activationLevelLabelLayout);
+
     MLayout *layout = new MLayout;
     // mainContainer
     m_MainLayout = new MLinearLayoutPolicy (layout, Qt::Vertical);
@@ -150,6 +168,9 @@ void BatteryWidget::initWidget ()
 
     m_MainLayout->addItem (buttonContainer);
     m_MainLayout->setStretchFactor (buttonContainer, 0);
+
+    m_MainLayout->addItem (activationLevelLabelContainer);
+    m_MainLayout->setStretchFactor (activationLevelLabelContainer, 0);
 
     MContainer *mainContainer = new MContainer;
     mainContainer->setHeaderVisible (false);
