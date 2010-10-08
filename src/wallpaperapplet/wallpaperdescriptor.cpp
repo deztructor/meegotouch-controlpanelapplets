@@ -719,6 +719,12 @@ WallpaperDescriptor::initiateThumbnailer ()
         return;
 
     m_Thumbnailer = new Thumbnailer;
+    #ifdef DEBUG
+    QStringList list = Thumbnailer::getFlavors();
+    foreach (QString flavor, list) {
+        SYS_DEBUG ("*** flavor = %s", SYS_STR(flavor));
+    }
+    #endif
     connect (m_Thumbnailer, SIGNAL(thumbnail(QUrl,QUrl,QPixmap,QString)),
             this, SLOT(thumbnailReady(QUrl,QUrl,QPixmap,QString)) );
     connect (m_Thumbnailer, SIGNAL(error(QString,QUrl)),
