@@ -95,7 +95,7 @@ OfflineBrief::setToggle (
         bool toggle)
 {
     Q_UNUSED(toggle);
-    
+
     #ifdef HAVE_QMSYSTEM
     SYS_DEBUG("");
     if (m_LastMode == QmDeviceMode::Flight)

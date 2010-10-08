@@ -17,4 +17,4 @@ X-DUIApplet-Applet=libofflineapplet.so
 Category= Connectivity
 Order=0
 WidgetType= Button
-
+HelpId=IDUG_MEEGO_CONN_CLOSE.html
