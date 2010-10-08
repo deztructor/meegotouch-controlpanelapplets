@@ -200,7 +200,7 @@ WallpaperCellCreator::updateCell (
     if (!imageWidget)
         return;
 
-#if 1
+
     if (desc->isThumbnailLoaded()) {
         SYS_DEBUG ("--> thumbnail %gx%g", 
                 cellSize().width(), cellSize().height());
@@ -214,36 +214,23 @@ WallpaperCellCreator::updateCell (
         if (imageWidget->image() != "icon-m-content-not-loaded")
             imageWidget->setImage("icon-m-content-not-loaded");
     }
-#endif
-#if 0
-    if (desc->isCurrent()) {
-        //% "Current wallpaper"
-        listItem->setTitle (qtTrId("qtn_wall_current_wallpaper"));
-        //listItem->setSubtitle (desc->title());
-    } else {
-        listItem->setTitle (desc->title());
-        //listItem->setSubtitle ("");
-    }
 
     // The spinner.
     if (desc->loading()) {
-        listItem->progressIndicator()->show();
+        imageWidget->progressIndicator(true)->show();
     } else {
-        listItem->progressIndicator()->hide();
-    }
+        MProgressIndicator *indicator;
 
-    // The image
-    SYS_DEBUG ("Setting pixmap for %s", SYS_STR(desc->title()));
-    if (desc->isThumbnailLoaded())
-        listItem->imageWidget()->setPixmap (desc->thumbnailPixmap());
-    else {
-        if (listItem->imageWidget()->image() != "icon-m-content-not-loaded")
-            listItem->imageWidget()->setImage("icon-m-content-not-loaded");
+        indicator = imageWidget->progressIndicator(false);
+        if (indicator)
+            indicator->hide();
     }
-
-    // The style
-    updateListItemMode (index, listItem);
-#endif
+    
+    // A checkmark indicating that this is the current wallpaper.
+    if (desc->isCurrent()) {
+        // FIXME: This icon is not yet specified, this is a substitute.
+        imageWidget->setTopRightImage ("icon-m-common-checkbox-checked");
+    }
 }
 #else
 MWidget *

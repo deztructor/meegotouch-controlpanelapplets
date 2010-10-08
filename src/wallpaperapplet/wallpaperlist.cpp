@@ -79,7 +79,7 @@ WallpaperList::WallpaperList (
         width = window->visibleSceneSize().width() / columns;
         height = aspectRatio * width;
     
-        m_CellCreator->setCellSize (QSizeF(width, height));
+        m_CellCreator->setCellSize (QSizeF(width, width/*height*/));
         setColumns (columns);
     } 
 
@@ -178,7 +178,7 @@ WallpaperList::orientationChangeEvent (
     SYS_DEBUG ("*** width               = %g", width);
     #endif
 
-    m_CellCreator->setCellSize (QSizeF(width, height));
+    m_CellCreator->setCellSize (QSizeF(width, width/*height*/));
     setColumns (columns);
 }
 #endif
