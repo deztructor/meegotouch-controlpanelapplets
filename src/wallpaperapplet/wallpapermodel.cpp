@@ -29,7 +29,7 @@
 #include <MImageWidget>
 #include <MProgressIndicator>
 
-#define DEBUG
+//#define DEBUG
 #include <../debug.h>
 
 /*
@@ -191,7 +191,7 @@ WallpaperCellCreator::setCellSize (
 QSizeF 
 WallpaperCellCreator::cellSize() const
 {
-    //SYS_DEBUG ("Returning %gx%g", m_CellSize.width(), m_CellSize.height());
+    SYS_DEBUG ("Returning %gx%g", m_CellSize.width(), m_CellSize.height());
     return m_CellSize;
 }
 
@@ -222,8 +222,12 @@ WallpaperCellCreator::updateCell (
         imageWidget->setPixmap (desc->thumbnailPixmap());
         #endif
     } else {
-        if (imageWidget->image() != imagePlaceHolderIconId)
-            imageWidget->setImage(imagePlaceHolderIconId);
+        if (imageWidget->image() != imagePlaceHolderIconId) {
+            /*
+             * Need to set the size also, otherwise the iamge gets pixelated.
+             */
+            imageWidget->setImage (imagePlaceHolderIconId, cellSize()); 
+        }
     }
 
     // The spinner.

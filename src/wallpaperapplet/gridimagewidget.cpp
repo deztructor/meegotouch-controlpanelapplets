@@ -237,6 +237,20 @@ GridImageWidget::setImage(
     m_ImageWidget->setImage (id);
 }
 
+void
+GridImageWidget::setImage(
+        const QString  &id,
+        const QSizeF   &size)
+{
+    if (!m_ImageWidget)
+        createLayout ();
+
+    m_ImageWidget->setImage (id, QSize(
+                (int) size.width(), 
+                (int) size.height()));
+}
+
+
 void 
 GridImageWidget::setTopRightImage (
         const QString &id)

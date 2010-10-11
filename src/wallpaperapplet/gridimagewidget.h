@@ -59,6 +59,7 @@ class GridImageWidget : public MListItem
     public Q_SLOTS:
         void setPixmap(const QPixmap &pixmap);
         void setImage(const QString &id);
+        void setImage(const QString &id, const QSizeF &size);
         void setTopRightImage (const QString &id);
 
         MProgressIndicator *progressIndicator(bool create);
