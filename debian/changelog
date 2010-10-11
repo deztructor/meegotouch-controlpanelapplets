@@ -17,7 +17,7 @@ systemui-applets (0.16.1~1) meegotouch; urgency=low
     the settings applets via duicontrolpanels servicefw.
   * Using the new grid layout in the wallpaper applet.
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 01 Oct 2010 16:49:31 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 11 Oct 2010 09:24:05 +0200
 
 systemui-applets (0.15.4-1) meegotouch; urgency=low
 
