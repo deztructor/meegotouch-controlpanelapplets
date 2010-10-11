@@ -35,7 +35,7 @@
  * weird file names around.
  */
 //#define LOTDEBUG
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -45,7 +45,10 @@
 #  define THUMBNAIL_BG_COLOR "White"
 #endif
 
-const QString dir = "";
+static const QString dir = "";
+static const QString flavor = "grid";
+static const int defaultThumbnailWidth = 172;
+static const int defaultThumbnailHeight = 172;
 
 /******************************************************************************
  * Image implementation.
@@ -94,7 +97,7 @@ Image::reset ()
     m_Cached   = false;
     m_Url      = QUrl ();
 
-    m_ThumbnailPixmap = QPixmap (100, 100);
+    m_ThumbnailPixmap = QPixmap (defaultThumbnailWidth, defaultThumbnailHeight);
     m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
     m_HasThumbnail = false;
 
@@ -450,7 +453,8 @@ Image::thumbnail (
          * If we have an image ID instead of a filename the thumbler will not
          * help us. In this case we shall create a thumbnail using the theme.
          */
-        pixmap = MTheme::instance()->pixmapCopy(m_ImageID, QSize (100, 100));
+        pixmap = MTheme::instance()->pixmapCopy(m_ImageID, 
+                QSize (defaultThumbnailWidth, defaultThumbnailHeight));
         m_ThumbnailPixmap = *pixmap;
         m_HasThumbnail = true;
         delete pixmap;
@@ -462,7 +466,8 @@ Image::thumbnail (
          */
         cache ();
         if (m_Cached) {
-            m_ThumbnailPixmap = m_Pixmap.scaled (100, 100);
+            m_ThumbnailPixmap = m_Pixmap.scaled (
+                    defaultThumbnailWidth, defaultThumbnailHeight);
             m_HasThumbnail = true;
             retval = true;
         }
@@ -733,9 +738,9 @@ WallpaperDescriptor::initiateThumbnailer ()
             this, SLOT(thumbnailLoadingFinished(int)));
 
     #ifdef USE_PAINTER
-    m_Thumbnailer->request (urisList, mimeList);
+    m_Thumbnailer->request (urisList, mimeList, false, flavor);
     #else
-    m_Thumbnailer->request (urisList, mimeList, true);
+    m_Thumbnailer->request (urisList, mimeList, true, flavor);
     #endif
 }
 
@@ -755,6 +760,7 @@ WallpaperDescriptor::thumbnailReady (
     Q_UNUSED (thumbnailUri);
     Q_UNUSED (flavor);
 
+    SYS_DEBUG ("*** thumbnail size = %dx%d", pixmap.width(), pixmap.height());
     /*
      * FIXME: should store the thumbnail URL as well.
      * FIXME: maybe we should emit a signal for every variant...

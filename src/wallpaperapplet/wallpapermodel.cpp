@@ -29,7 +29,7 @@
 #include <MImageWidget>
 #include <MProgressIndicator>
 
-//#define DEBUG
+#define DEBUG
 #include <../debug.h>
 
 /*
@@ -58,8 +58,12 @@ WallpaperImageLoader::loadPictures (
     int    from = firstVisibleRow.row();
     int    to = lastVisibleRow.row();
 
-    SYS_DEBUG ("Between %d - %d", from, to);
-    for (int n = from; n <= to; ++n) {
+    SYS_DEBUG ("Between %d, %d - %d, %d", 
+            firstVisibleRow.column(),
+            firstVisibleRow.row(), 
+            lastVisibleRow.column(),
+            lastVisibleRow.row());
+    for (int n = from; n < to; ++n) {
         QModelIndex index(firstVisibleRow.sibling (n, 0));
         if(!index.isValid())
             continue;

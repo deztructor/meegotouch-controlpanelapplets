@@ -22,7 +22,7 @@
 
 #include <QTimer>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
