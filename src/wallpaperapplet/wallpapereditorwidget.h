@@ -114,9 +114,9 @@ private slots:
     void slotDoneActivated ();
     void createContent ();
     void createWidgets ();
+    void createActions ();
 
 private:
-    void createActions ();
     
     QPointF toggleTitlebars (bool show);
     int  imageX () const;

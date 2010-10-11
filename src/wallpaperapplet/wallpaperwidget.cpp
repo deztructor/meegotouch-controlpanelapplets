@@ -54,10 +54,8 @@ WallpaperWidget::WallpaperWidget (
     //createContent ();
     QTimer::singleShot(100, this, SLOT(createContent()));
 
-    bool success;
-    success = connect (this, SIGNAL(layoutChanged()),
+    connect (this, SIGNAL(layoutChanged()),
             this, SLOT(haveParent ()));
-    SYS_DEBUG ("*** success = %s", SYS_BOOL(success));
 }
 
 WallpaperWidget::~WallpaperWidget ()
