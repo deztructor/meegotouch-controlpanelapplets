@@ -143,15 +143,17 @@ void BatteryWidget::initWidget ()
     MLabel                *activationLevelLabel;
 
     activationLevelLabel = new MLabel("Activation battery level");
+    activationLevelLabelLayout = new QGraphicsLinearLayout (Qt::Horizontal);
+
 
     activationLevelLabelContainer = new MContainer;
     activationLevelLabelContainer->setObjectName("CommonPanel");
     activationLevelLabelContainer->setHeaderVisible (false);
 
-//    activationLevelLabelLayout->addStretch ();
+    activationLevelLabelLayout->addStretch ();
     activationLevelLabelLayout->addItem (activationLevelLabel);
-//    activationLevelLabelLayout->addStretch ();
-//    activationLevelLabelLayout->setAlignment (activationLevelLabel, Qt::AlignHCenter);
+    activationLevelLabelLayout->addStretch ();
+    activationLevelLabelLayout->setAlignment (activationLevelLabel, Qt::AlignHCenter);
 
     activationLevelLabelContainer->centralWidget()->setLayout (activationLevelLabelLayout);
 
@@ -161,6 +163,9 @@ void BatteryWidget::initWidget ()
     m_MainLayout->setContentsMargins (0., 0., 0., 0.);
     m_MainLayout->setSpacing (0.);
 
+    m_MainLayout->addItem (activationLevelLabelContainer);
+    m_MainLayout->setStretchFactor (activationLevelLabelContainer, 0);
+
     m_MainLayout->addItem (remainingCapacityContainer);
     m_MainLayout->setStretchFactor (remainingCapacityContainer, 0);
     m_MainLayout->addItem (sliderContainer);
@@ -169,8 +174,7 @@ void BatteryWidget::initWidget ()
     m_MainLayout->addItem (buttonContainer);
     m_MainLayout->setStretchFactor (buttonContainer, 0);
 
-    m_MainLayout->addItem (activationLevelLabelContainer);
-    m_MainLayout->setStretchFactor (activationLevelLabelContainer, 0);
+
 
     MContainer *mainContainer = new MContainer;
     mainContainer->setHeaderVisible (false);
