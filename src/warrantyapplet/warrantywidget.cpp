@@ -76,15 +76,13 @@ WarrantyWidget::retranslateUi ()
     }
     else if (expirationDays == 0)
     {
-      /* FIXME: No official logical id for this. */
       //% "Product warranty is expired."
       m_labelExpiration->setText (qtTrId ("qtn_warr_expired"));
     }
     else
     {
-      /* FIXME: No official logical id for this. */
-      //% "Product warranty expiration N/A."
-      m_labelExpiration->setText (qtTrId ("qtn_warr_na"));
+      //% "Warranty timer error."
+      m_labelExpiration->setText (qtTrId ("qtn_warr_error_timer"));
     }
 
     //% "(insert terms of warranty here)"
