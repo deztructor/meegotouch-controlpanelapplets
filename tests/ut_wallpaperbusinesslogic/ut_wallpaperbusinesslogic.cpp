@@ -110,7 +110,7 @@ Ut_WallpaperBusinessLogic::cleanup()
 
 
 static int argc = 1;
-static char* app_name = (char*) "./Ut_WallpaperBusinessLogic";
+static char* app_name = (char*) "./ut_wallpaperbusinesslogic";
 
 void 
 Ut_WallpaperBusinessLogic::initTestCase()
@@ -132,8 +132,9 @@ Ut_WallpaperBusinessLogic::initTestCase()
 void 
 Ut_WallpaperBusinessLogic::cleanupTestCase()
 {
-    delete m_App;
     delete m_Api;
+
+    m_App->deleteLater ();
 }
 
 /*!
