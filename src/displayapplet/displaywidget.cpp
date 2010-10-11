@@ -24,6 +24,10 @@
 #undef DEBUG
 #include "../debug.h"
 
+// Define this if you want handle-label for brightness-slider
+// XXX: for now it looks very ugly... it is visible over the dialogs :-S
+#undef WANT_HANDLE_LABEL
+
 #include <MButton>
 #include <MContainer>
 #include <MBasicListItem>
@@ -68,38 +72,33 @@ void DisplayWidget::initWidget ()
      */
     // Brightness
     MWidget *brightness = new MStylableWidget;
-    MLayout *brightnessLayout = new MLayout;
-
+    QGraphicsLinearLayout *brightnessLayout =
+        new QGraphicsLinearLayout (Qt::Vertical);
     brightnessLayout->setContentsMargins (0., 0., 0., 0.);
-
-    MLinearLayoutPolicy *brightnessLandscape =
-        new MLinearLayoutPolicy (brightnessLayout, Qt::Horizontal);
-
-    MLinearLayoutPolicy *brightnessPortrait =
-        new MLinearLayoutPolicy (brightnessLayout, Qt::Vertical);
 
     //% "Brightness"
     m_brightnessLabel = new MLabel (qtTrId ("qtn_disp_bright"));
     m_brightnessLabel->setObjectName ("CommonTitle");
-    brightnessLandscape->addItem (m_brightnessLabel);
-    brightnessLandscape->setAlignment (m_brightnessLabel, Qt::AlignVCenter);
-    brightnessPortrait->addItem (m_brightnessLabel);
 
     m_brightnessSlider = new MSlider;
     m_brightnessSlider->setObjectName("CommonSlider");
-    brightnessLandscape->addItem (m_brightnessSlider);
-    brightnessLandscape->setAlignment (m_brightnessSlider, Qt::AlignVCenter);
-    brightnessPortrait->addItem (m_brightnessSlider);
+#ifdef WANT_HANDLE_LABEL
+    m_brightnessSlider->setHandleLabelVisible (true);
+#endif
+    m_brightnessSlider->setSizePolicy (QSizePolicy::Ignored, QSizePolicy::Preferred);
+
+    brightnessLayout->addItem (m_brightnessLabel);
+    brightnessLayout->setAlignment (m_brightnessLabel, Qt::AlignVCenter);
+
+    brightnessLayout->addItem (m_brightnessSlider);
+    brightnessLayout->setAlignment (m_brightnessSlider, Qt::AlignVCenter);
 
     m_brightness_vals = m_logic->brightnessValues ();
     m_brightnessSlider->setRange (0, m_brightness_vals.size () - 1);
     m_brightnessSlider->setValue (m_logic->selectedBrightnessValueIndex ());
 
     connect (m_brightnessSlider, SIGNAL (valueChanged (int)),
-             m_logic, SLOT (setBrightnessValue (int)));
-
-    brightnessLayout->setLandscapePolicy (brightnessLandscape);
-    brightnessLayout->setPortraitPolicy (brightnessPortrait);
+             SLOT (sliderUpdated (int)));
 
     brightness->setObjectName ("CommonPanel");
     brightness->setLayout (brightnessLayout);
@@ -168,6 +167,15 @@ void DisplayWidget::initWidget ()
     mainLayout->addStretch ();
 
     setLayout (mainLayout);
+}
+
+void
+DisplayWidget::sliderUpdated (int val)
+{
+    m_logic->setBrightnessValue (val);
+#ifdef WANT_HANDLE_LABEL
+    m_brightnessSlider->setHandleLabel (QString ("%1").arg (val));
+#endif
 }
 
 void
