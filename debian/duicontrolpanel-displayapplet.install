@@ -1,3 +1,4 @@
 usr/lib/duicontrolpanel/display.desktop
 usr/lib/duicontrolpanel/applets/libdisplayapplet.so
 usr/share/themes/base/meegotouch/duicontrolpanel/style/display.css
+etc/osso-rfs-scripts/display-rfs.sh

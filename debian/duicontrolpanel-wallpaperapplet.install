@@ -3,3 +3,4 @@ usr/share/themes/base/meegotouch/duicontrolpanel/style/wallpaper.css
 usr/lib/duicontrolpanel/applets/libwallpaperapplet.so
 usr/share/wallpaper
 usr/share/backup-framework/applications/wallpaper.conf
+etc/osso-rfs-scripts/wallpaper-rfs.sh

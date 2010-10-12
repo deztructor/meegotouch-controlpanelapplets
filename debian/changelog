@@ -16,8 +16,11 @@ meegotouch-controlpanelapplets (0.16.1-1) meegotouch; urgency=low
   * Updated desktop files to make ContectAction able to launch
     the settings applets via duicontrolpanels servicefw.
   * Using the new grid layout in the wallpaper applet.
+  * Fixes: NB#184799 - wallpaper doesn't reset on doing reset settings.
+  * Re-added missing restore-original-settings scripts...
+    (for battery, theme, display, wallpaper and usb applets)
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 12 Oct 2010 12:18:47 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 12 Oct 2010 13:52:10 +0200
 
 systemui-applets (0.15.4-1) meegotouch; urgency=low
 

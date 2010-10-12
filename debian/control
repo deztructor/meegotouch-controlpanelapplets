@@ -6,7 +6,8 @@ Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.8.0),
                libmeegotouch-dev (>= 0.20.37), libqmsystem-dev (>= 0.1.64),
                libprofile-qt-dev (>= 0.13), system-ui-dev (>= 0.16),
                libqttracker-dev, libthumbnailer-dev, libcellular-qt-dev,
-               libsysinfo-dev, libcontentmanager-dev, devicelock-dev, doxygen
+               libsysinfo-dev, libcontentmanager-dev, devicelock-dev,
+               doxygen, clean-device-dev (>= 0.0.3)
 Standards-Version: 3.8.0
 
 Package: systemui-applets-tests

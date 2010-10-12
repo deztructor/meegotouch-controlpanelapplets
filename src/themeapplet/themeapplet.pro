@@ -4,11 +4,11 @@ include(../../localconfig.pri)
 TEMPLATE = lib
 CONFIG += plugin \
           gui \
-	  dbus \
+          dbus \
           meegotouch \
           meegotouch_defines \
           duicontrolpanel \
-	  silent
+          silent
 
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
@@ -42,15 +42,21 @@ SOURCES = \
     themedialog.cpp
 
 DESTDIR = lib
+target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
+
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
-target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
+
 css.files = themeapplet.css
 css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/duicontrolpanel/style
+
+rfs.files = theme-rfs.sh
+rfs.path += $$(DEBIAN_DESTDIR)/$$RFS_DIR
 
 message("The plugin will be installed to: " $$target.path)
 message("CSS path will be: " $$css.path)
 INSTALLS += target \
             css \
+            rfs \
             desktop 
 

@@ -43,20 +43,24 @@ SOURCES =                    \
     slidercontainer.cpp      \
     batteryimage.cpp
 
-css.files = batteryapplet.css
 DESTDIR = lib
+target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
+
+css.files = batteryapplet.css
+css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/duicontrolpanel/style
+
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
-target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
-css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/duicontrolpanel/style
+
+rfs.files = battery-rfs.sh
+rfs.path += $$(DEBIAN_DESTDIR)/$$RFS_DIR
+
 message("The plugin will be installed to: " $$target.path)
 message("CSS path will be: " $$css.path)
+message("Restore script path: " $$rfs.path)
+
 INSTALLS += target \
             css \
+            rfs \
             desktop
-
-OTHER_FILES += batteryapplet.css \
-               battery.desktop
-
-
 

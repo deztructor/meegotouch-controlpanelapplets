@@ -1,2 +1,3 @@
 usr/lib/duicontrolpanel/applets/libusbapplet.so
 usr/lib/duicontrolpanel/usbapplet.desktop
+etc/osso-rfs-scripts/usb-rfs.sh

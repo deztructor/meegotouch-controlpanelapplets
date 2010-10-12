@@ -31,11 +31,16 @@ SOURCES += \
     usbview.cpp
 
 DESTDIR = lib
+target.path +=  $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
+
 desktop.files += usbapplet.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
-target.path +=  $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
+
+rfs.files = usb-rfs.sh
+rfs.path += $$(DEBIAN_DESTDIR)/$$RFS_DIR
 
 message("The plugin will be installed to: " $$target.path)
 INSTALLS += target \
+            rfs \
             desktop
 
