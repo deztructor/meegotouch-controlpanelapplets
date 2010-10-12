@@ -20,6 +20,7 @@
 #include "wallpaperwidget.h"
 #include "wallpaperlist.h"
 
+#include <MApplicationPage>
 #include <QGraphicsLinearLayout>
 #include <MLayout>
 #include <MLinearLayoutPolicy>
