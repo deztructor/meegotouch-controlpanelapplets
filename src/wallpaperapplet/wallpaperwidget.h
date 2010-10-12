@@ -44,13 +44,12 @@ public:
             QGraphicsWidget        *parent = 0);
     ~WallpaperWidget ();
 
-    void retranslateUi ();
-
 private slots:
     void slotImageActivated (WallpaperDescriptor *desc);
     void slotImageActivated ();
     virtual void createContent ();
     void oviActivated ();
+    void haveParent ();
     
     #ifdef HAVE_CONTENT_MANAGER
     void galleryActivated ();
@@ -61,7 +60,6 @@ private:
     QPointer<WallpaperBusinessLogic>       m_WallpaperBusinessLogic;
     WallpaperList                         *m_ImageList;
     #ifdef HAVE_CONTENT_MANAGER
-    MContentItem                          *m_GalleryItem;
     QPointer<SelectSingleContentItemPage>  m_ImageBrowser;
     #endif
 

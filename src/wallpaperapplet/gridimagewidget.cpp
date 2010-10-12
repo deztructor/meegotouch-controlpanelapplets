@@ -15,7 +15,7 @@ GridImageLayout::GridImageLayout (
     QGraphicsLayout (parent),
     m_Image (0),
     m_ProgressBar (0),
-    m_CheckMark (0)
+    m_TopRightImageWidget (0)
 {
 }
  
@@ -38,7 +38,7 @@ GridImageLayout::count() const
         retval++;
     if (m_ProgressBar)
         retval++;
-    if (m_CheckMark)
+    if (m_TopRightImageWidget)
         retval++;
 
     //SYS_DEBUG ("Returning %d", retval);
@@ -56,7 +56,7 @@ GridImageLayout::itemAt (int idx) const
     else if (idx == 1)
         retval = m_ProgressBar;
     else if (idx == 2)
-        retval = m_CheckMark;
+        retval = m_TopRightImageWidget;
 
     //SYS_DEBUG ("Returning %p at %d", retval, idx);
     return retval;
@@ -84,22 +84,17 @@ GridImageLayout::addItem (
         QGraphicsLayoutItem *layoutItem,
         GridImageLayoutRole  role)
 {
-    SYS_DEBUG ("");
-
     switch (role) {
         case Image:
-            SYS_DEBUG ("Adding image to %p", this);
             m_Image = layoutItem;
             break;
 
         case ProgressIndicator:
-            SYS_DEBUG ("Adding progr to %p", this);
             m_ProgressBar = layoutItem;
             break;
 
         case CheckMark:
-            SYS_DEBUG ("Adding check to %p", this);
-            m_CheckMark = layoutItem;
+            m_TopRightImageWidget = layoutItem;
     }
 
     addChildLayoutItem (layoutItem);
@@ -112,8 +107,10 @@ GridImageLayout::setGeometry(
 {
     qreal left, top, right, bottom;
 
+    #if 0
     SYS_DEBUG ("---------------------------------------");
     SYS_DEBUG ("*** at %g, %g (%gx%g)", r.x(), r.y(), r.width(), r.height());
+    #endif
 
     QGraphicsLayout::setGeometry(r);
 
@@ -121,6 +118,17 @@ GridImageLayout::setGeometry(
 
     if (m_Image)
         m_Image->setGeometry (r);
+
+    if (m_TopRightImageWidget) {
+        QSizeF iconSize = m_TopRightImageWidget->preferredSize ();
+        QRectF iconGeometry (
+                r.width() - iconSize.width() - left,
+                top,
+                iconSize.width(),
+                iconSize.height());
+        
+        m_TopRightImageWidget->setGeometry (iconGeometry);
+    }
 
     if (m_ProgressBar) {
         QSizeF progressSize;
@@ -184,6 +192,7 @@ GridImageLayout::sizeHint (
 GridImageWidget::GridImageWidget () :
     m_Layout (0),
     m_ImageWidget (0),
+    m_TopRightImageWidget (0),
     m_ProgressIndicator (0)
 {
     createLayout ();
@@ -197,6 +206,16 @@ GridImageWidget::image() const
 
     return m_ImageWidget->image();
 }
+
+QString 
+GridImageWidget::topRightImage() const
+{
+    if (!m_TopRightImageWidget)
+        return QString("");
+
+    return m_TopRightImageWidget->image();
+}
+
 
 void 
 GridImageWidget::setPixmap(
@@ -218,11 +237,50 @@ GridImageWidget::setImage(
     m_ImageWidget->setImage (id);
 }
 
+void
+GridImageWidget::setImage(
+        const QString  &id,
+        const QSizeF   &size)
+{
+    if (!m_ImageWidget)
+        createLayout ();
+
+    m_ImageWidget->setImage (id, QSize(
+                (int) size.width(), 
+                (int) size.height()));
+}
+
+
 void 
 GridImageWidget::setTopRightImage (
         const QString &id)
 {
-    SYS_DEBUG ("*** id = %s", SYS_STR(id));
+    /*
+     * If the ID is not empty and we have no stamp widget we create one.
+     */
+    if (!m_TopRightImageWidget && !id.isEmpty()) {
+        m_TopRightImageWidget = new MImageWidget (this);
+        m_TopRightImageWidget->setObjectName ("CommonIcon");
+        m_Layout->addItem (
+                m_TopRightImageWidget, 
+                GridImageLayout::CheckMark);
+    }
+
+    /*
+     * Set the image and show it if the ID is valid.
+     */
+    if (!id.isEmpty()) {
+        m_TopRightImageWidget->setImage (id);
+        m_TopRightImageWidget->show();
+    }
+    
+    /*
+     * The stamp can be disabled by the empty ID.
+     */
+    if (id.isEmpty() && m_TopRightImageWidget) {
+        m_TopRightImageWidget->setImage (id);
+        m_TopRightImageWidget->hide ();
+    }
 }
 
 MProgressIndicator *
@@ -254,11 +312,7 @@ GridImageWidget::createLayout()
     }
 
     m_Layout = new GridImageLayout(this);
-
-    if (progressType == MProgressIndicator::spinnerType)
-        m_Layout->setContentsMargins(0.0, 0.0, 0.0, 0.0);
-    else
-        m_Layout->setContentsMargins(10.0, 10.0, 10.0, 10.0);
+    m_Layout->setContentsMargins(10.0, 10.0, 10.0, 10.0);
 
     m_ImageWidget = new MImageWidget (this);
 

@@ -86,6 +86,9 @@ WallpaperEditorWidget::WallpaperEditorWidget (
                     "Only in tests though...");
         m_Orientation = M::Landscape;
     }
+
+    connect (this, SIGNAL(layoutChanged()),
+            this, SLOT(createActions()));
 }
 
 WallpaperEditorWidget::~WallpaperEditorWidget ()
@@ -295,21 +298,34 @@ WallpaperEditorWidget::createWidgets ()
 void
 WallpaperEditorWidget::createActions ()
 {
-    MApplicationWindow *window = 
-        MApplication::instance()->activeApplicationWindow();
+    QGraphicsWidget  *parent;
+    MApplicationPage *page = 0;
+    MAction          *action;
+    
+    /*
+     * We need to find the MApplicationPage among our parents.
+     */
+    parent = parentWidget();
+    while (parent) {
+        page = qobject_cast <MApplicationPage *>(parent);
+        if (page)
+            break;
+        parent = parent->parentWidget();
+    }
 
-    // FIXME: What to do then?
-    if (!window)
+    if (!page)
         return;
 
+    /*
+     * Creating the 'done' action.
+     */
     m_DoneAction = new MAction (
             "icon-m-framework-done",
             //% "Done"
             qtTrId("qtn_comm_command_done"),
             this);
     m_DoneAction->setLocation(MAction::ToolBarLocation);
-    window->addAction(m_DoneAction);
-    m_DoneAction->setVisible(true);
+    page->addAction(m_DoneAction);
 
     connect(m_DoneAction, SIGNAL(triggered()), 
             this, SLOT(slotDoneActivated()));

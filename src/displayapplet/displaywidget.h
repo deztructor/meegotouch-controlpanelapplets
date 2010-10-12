@@ -42,6 +42,7 @@ protected:
 
 private slots:
     void screenTimeoutClicked ();
+    void sliderUpdated (int val);
 
 private:
     void retranslateUi ();

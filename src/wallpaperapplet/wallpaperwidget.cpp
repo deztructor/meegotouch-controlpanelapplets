@@ -26,10 +26,12 @@
 #include <MContainer>
 #include <QTimer>
 #include <MContentItem>
+#include <MAction>
 #include <QDebug>
 #include <QtTracker/Tracker>
 
-#undef DEBUG
+#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 static const int MaxColumns = 2;
@@ -51,6 +53,9 @@ WallpaperWidget::WallpaperWidget (
      */
     //createContent ();
     QTimer::singleShot(100, this, SLOT(createContent()));
+
+    connect (this, SIGNAL(layoutChanged()),
+            this, SLOT(haveParent ()));
 }
 
 WallpaperWidget::~WallpaperWidget ()
@@ -62,49 +67,9 @@ WallpaperWidget::createContent ()
 {
     QGraphicsLinearLayout *mainLayout;
 
-    SYS_DEBUG ("--- Start ------------");
     mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
     mainLayout->setContentsMargins (0, 0, 0, 0);
     setLayout (mainLayout);
-
-    MLayout *buttonsLayout = new MLayout;
-
-    MLinearLayoutPolicy *wallpaperLandscape =
-        new MLinearLayoutPolicy (buttonsLayout, Qt::Horizontal);
-
-    MLinearLayoutPolicy *wallpaperPortrait =
-        new MLinearLayoutPolicy (buttonsLayout, Qt::Vertical);
-
-    /*
-     * The gallery item. We support this widget only when the ContentManager
-     * library is available.
-     */
-    #ifdef HAVE_CONTENT_MANAGER
-    m_GalleryItem = new MContentItem (MContentItem::IconAndSingleTextLabel);
-    m_GalleryItem->setObjectName ("GalleryItem");
-    m_GalleryItem->setItemMode (MContentItem::Single);
-    m_GalleryItem->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
-    wallpaperLandscape->addItem (m_GalleryItem);
-    wallpaperPortrait->addItem (m_GalleryItem);
-
-    connect (m_GalleryItem, SIGNAL(clicked()),
-            this, SLOT(galleryActivated()));
-    #endif
-
-    /*
-     * The OVI item.
-     */
-    m_OviItem = new MContentItem(MContentItem::IconAndSingleTextLabel);
-    m_OviItem->setImageID ("icon-m-common-ovi");
-    m_OviItem->setObjectName ("OviItem");
-    m_OviItem->setItemMode (MContentItem::Single);
-    m_OviItem->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
-    wallpaperLandscape->addItem (m_OviItem);
-    wallpaperPortrait->addItem (m_OviItem);
-
-    connect (m_OviItem, SIGNAL(clicked()),
-            this, SLOT(oviActivated()));
-
 
     /*
      * The list of the available images.
@@ -120,17 +85,11 @@ WallpaperWidget::createContent ()
     /*
      * Adding all widgets into the layout.
      */
-    buttonsLayout->setLandscapePolicy (wallpaperLandscape);
-    buttonsLayout->setPortraitPolicy (wallpaperPortrait);
-    mainLayout->addItem (buttonsLayout);
     mainLayout->addItem (m_ImageList);
     mainLayout->setStretchFactor (m_ImageList, 1);
 
-    retranslateUi ();
-    
     connect (m_WallpaperBusinessLogic, SIGNAL(imageEditRequested()),
             this, SLOT(slotImageActivated()));
-    SYS_DEBUG ("--- End   ------------");
 }
 
 
@@ -158,24 +117,52 @@ WallpaperWidget::slotImageActivated ()
     emit changeWidget (1);
 }
 
-void
-WallpaperWidget::retranslateUi ()
-{
-    //% "Get more from Ovi Store"
-    m_OviItem->setTitle(qtTrId("qtn_wall_get_more_from_ovi"));
-   
-    #ifdef HAVE_CONTENT_MANAGER
-    //% "Pick from My Gallery"
-    m_GalleryItem->setTitle(qtTrId("qtn_wall_pick_from_gallery"));
-    #endif
-}
-
 
 void 
 WallpaperWidget::oviActivated ()
 {
     SYS_DEBUG ("Executing %s", oviCommand);
     system (oviCommand);
+}
+
+void
+WallpaperWidget::haveParent ()
+{
+    QGraphicsWidget  *parent;
+    MApplicationPage *page = 0;
+    MAction          *action;
+    
+    /*
+     * We need to find the MApplicationPage among our parents.
+     */
+    parent = parentWidget();
+    while (parent) {
+        page = qobject_cast <MApplicationPage *>(parent);
+        if (page)
+            break;
+        parent = parent->parentWidget();
+    }
+
+    if (!page)
+        return;
+
+    /*
+     * Adding the gallery action.
+     */
+    #ifdef HAVE_CONTENT_MANAGER
+    action = new MAction("icon-m-content-gallery", "", this);
+    action->setLocation(MAction::ToolBarLocation);
+    page->addAction(action);
+    connect(action, SIGNAL(triggered()), this, SLOT(galleryActivated()));
+    #endif
+
+    /*
+     * Adding the ovi action.
+     */
+    action = new MAction("icon-m-common-ovi", "", this);
+    action->setLocation(MAction::ToolBarLocation);
+    page->addAction(action);
+    connect(action, SIGNAL(triggered()), this, SLOT(oviActivated()));
 }
 
 #ifdef HAVE_CONTENT_MANAGER

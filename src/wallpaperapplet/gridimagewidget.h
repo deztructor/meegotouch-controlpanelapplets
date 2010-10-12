@@ -43,7 +43,7 @@ class GridImageLayout : public QGraphicsLayout
         QList<QGraphicsLayoutItem*> list;
         QGraphicsLayoutItem   *m_Image;
         QGraphicsLayoutItem   *m_ProgressBar;
-        QGraphicsLayoutItem   *m_CheckMark;
+        QGraphicsLayoutItem   *m_TopRightImageWidget;
 };
 
 class GridImageWidget : public MListItem
@@ -54,10 +54,12 @@ class GridImageWidget : public MListItem
         GridImageWidget();
         
         QString image() const;
+        QString topRightImage() const;
 
     public Q_SLOTS:
         void setPixmap(const QPixmap &pixmap);
         void setImage(const QString &id);
+        void setImage(const QString &id, const QSizeF &size);
         void setTopRightImage (const QString &id);
 
         MProgressIndicator *progressIndicator(bool create);
@@ -72,6 +74,7 @@ class GridImageWidget : public MListItem
    private:
         GridImageLayout     *m_Layout;
         MImageWidget        *m_ImageWidget;
+        MImageWidget        *m_TopRightImageWidget;
         MProgressIndicator  *m_ProgressIndicator;
 #if 1
     protected:

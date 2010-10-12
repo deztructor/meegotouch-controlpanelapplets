@@ -38,6 +38,10 @@
  */
 static const int loadPictureDelay = 100;
 
+// FIXME: This icon is not yet specified, this is a substitute.
+static const QString checkIconId = "icon-m-common-checkbox-checked";
+static const QString imagePlaceHolderIconId = "icon-m-content-not-loaded";
+
 /******************************************************************************
  * WallpaperImageLoader implementation.
  */
@@ -54,8 +58,12 @@ WallpaperImageLoader::loadPictures (
     int    from = firstVisibleRow.row();
     int    to = lastVisibleRow.row();
 
-    SYS_DEBUG ("Between %d - %d", from, to);
-    for (int n = from; n <= to; ++n) {
+    SYS_DEBUG ("Between %d, %d - %d, %d", 
+            firstVisibleRow.column(),
+            firstVisibleRow.row(), 
+            lastVisibleRow.column(),
+            lastVisibleRow.row());
+    for (int n = from; n < to; ++n) {
         QModelIndex index(firstVisibleRow.sibling (n, 0));
         if(!index.isValid())
             continue;
@@ -183,7 +191,7 @@ WallpaperCellCreator::setCellSize (
 QSizeF 
 WallpaperCellCreator::cellSize() const
 {
-    //SYS_DEBUG ("Returning %gx%g", m_CellSize.width(), m_CellSize.height());
+    SYS_DEBUG ("Returning %gx%g", m_CellSize.width(), m_CellSize.height());
     return m_CellSize;
 }
 
@@ -202,17 +210,24 @@ WallpaperCellCreator::updateCell (
 
 
     if (desc->isThumbnailLoaded()) {
-        SYS_DEBUG ("--> thumbnail %gx%g", 
-                cellSize().width(), cellSize().height());
+        /*
+         * We can experiment with different image sizes.
+         */
+        #if 1
         imageWidget->setPixmap (desc->thumbnailPixmap().scaled(
                     cellSize().width(),
                     cellSize().height()));
-        //imageWidget->setPixmap (desc->thumbnailPixmap().scaled(250,300));
+        #else
         //imageWidget->setPixmap (desc->pixmap());
+        imageWidget->setPixmap (desc->thumbnailPixmap());
+        #endif
     } else {
-        SYS_DEBUG ("--> icon-m-content-not-loaded");
-        if (imageWidget->image() != "icon-m-content-not-loaded")
-            imageWidget->setImage("icon-m-content-not-loaded");
+        if (imageWidget->image() != imagePlaceHolderIconId) {
+            /*
+             * Need to set the size also, otherwise the iamge gets pixelated.
+             */
+            imageWidget->setImage (imagePlaceHolderIconId, cellSize()); 
+        }
     }
 
     // The spinner.
@@ -228,8 +243,10 @@ WallpaperCellCreator::updateCell (
     
     // A checkmark indicating that this is the current wallpaper.
     if (desc->isCurrent()) {
-        // FIXME: This icon is not yet specified, this is a substitute.
-        imageWidget->setTopRightImage ("icon-m-common-checkbox-checked");
+        if (imageWidget->topRightImage() != checkIconId)
+            imageWidget->setTopRightImage (checkIconId);
+    } else {
+        imageWidget->setTopRightImage ("");
     }
 }
 #else

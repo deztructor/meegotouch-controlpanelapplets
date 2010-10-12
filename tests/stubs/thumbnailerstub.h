@@ -41,7 +41,9 @@ public:
     void sendFinished ();
     void sendThumbnail ();
     void sendError ();
-    
+
+    static QStringList getFlavors () {return QStringList(); };
+
     bool request (
             QList<QUrl> &uris, 
             QStringList &mimeTypes, 
