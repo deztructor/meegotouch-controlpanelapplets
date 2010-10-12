@@ -3,12 +3,13 @@
 # We do not care about parameters yet
 
 WALLPAPER_HOME=$HOME/.wallpapers
-BACKUP=$HOME/.wallpapersbackup
+BACKUP_TAR=$HOME/.wallpapersbackup.tar.gz
+BACKUP_FILE=$HOME/.wallpapersbackup.gconf
 
 if test -d $WALLPAPER_HOME; then
-    rm -rf $BACKUP
-    cp -a $WALLPAPER_HOME $BACKUP || exit 2
-    gconftool-2 --dump /desktop/meego/background > $BACKUP/gconf.backup || true
+    rm -f $BACKUP_TAR $BACKUP_FILE
+    tar -czpf $BACKUP_TAR $WALLPAPER_HOME || exit 2
+    gconftool-2 --dump /desktop/meego/background > $BACKUP_FILE || true
 fi
 
 exit 0
