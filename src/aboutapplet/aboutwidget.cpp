@@ -109,7 +109,6 @@ AboutWidget::labelText()
 {
     QString retval;
 
-    retval += "<h3>Name of the product</h3>";
     retval += "<h3>" + m_AboutBusinessLogic->osName () + "</h3>";
     //% "Version"
     retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_version"));
