@@ -64,6 +64,13 @@ ThemeWidget::createWidgets ()
     m_List = new MList();
     m_List->setObjectName ("ThemeList");
 
+    if (connect (m_ThemeBusinessLogic, SIGNAL (themeChanged (QString)),
+                 SLOT (enableList ())))
+    {
+        connect (m_ThemeBusinessLogic, SIGNAL (themeChangeStarted (QString)),
+                 SLOT (disableList ()));
+    }
+
     m_CellCreator = new ThemeCellCreator;
     m_List->setCellCreator (m_CellCreator);
     m_List->setSelectionMode (MList::SingleSelection);
@@ -100,6 +107,24 @@ ThemeWidget::createWidgets ()
     setLayout(mainLayout);
 
     retranslateUi ();
+}
+
+void
+ThemeWidget::disableList ()
+{
+    SYS_DEBUG ("");
+    /*
+     * disable the signals, in this way during theme
+     * change user cannot do anything, until theme changed
+     */
+    m_List->blockSignals (true);
+}
+
+void
+ThemeWidget::enableList ()
+{
+    SYS_DEBUG ("");
+    m_List->blockSignals (false);
 }
 
 void

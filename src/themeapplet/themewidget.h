@@ -52,6 +52,8 @@ private slots:
     void textChanged ();
     void hideEmptyTextEdit ();
     void refreshNeeded ();
+    void enableList ();
+    void disableList ();
 
 private:
     void createWidgets ();

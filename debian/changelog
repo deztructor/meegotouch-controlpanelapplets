@@ -1,8 +1,10 @@
 meegotouch-controlpanelapplets (0.17.1~1) meegotouch; urgency=low
 
   * [UNRELEASED]
+  * Fixes: NB#198310 - Able to select one more theme before one theme change
+    is complete.
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 14 Oct 2010 13:25:46 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 14 Oct 2010 16:12:31 +0200
 
 meegotouch-controlpanelapplets (0.16.1-1) meegotouch; urgency=low
 
