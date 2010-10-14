@@ -9,7 +9,7 @@ CONFIG += \
     silent
 
 TARGET = ft_statusmenuplugins
-target.path = /usr/lib/systemui-applets-tests
+target.path = /usr/lib/$$TEST_PKG_NAME
 
 SOURCES += \
     pluginloader.cpp \

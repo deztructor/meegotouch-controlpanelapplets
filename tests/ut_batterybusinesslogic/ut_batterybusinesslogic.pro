@@ -16,7 +16,7 @@ TEMPLATE = app
 DEFINES += UNIT_TEST 
 
 TARGET = ut_batterybusinesslogic
-target.path = /usr/lib/systemui-applets-tests
+target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
     meegotouch \

@@ -1,3 +1,9 @@
+meegotouch-controlpanelapplets (0.17.1~1) meegotouch; urgency=low
+
+  * [UNRELEASED]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 14 Oct 2010 13:25:46 +0200
+
 meegotouch-controlpanelapplets (0.16.1-1) meegotouch; urgency=low
 
   * Introducing libmeegocontrol

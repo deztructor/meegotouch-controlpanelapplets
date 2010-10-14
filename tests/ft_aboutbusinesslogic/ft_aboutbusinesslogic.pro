@@ -30,7 +30,7 @@ DEFINES += \
     FUNCTIONAL_TEST	
 
 TARGET = ft_aboutbusinesslogic
-target.path = /usr/lib/systemui-applets-tests
+target.path = /usr/lib/$$TEST_PKG_NAME
 
 HEADERS += \
     ../../src/debug.h \

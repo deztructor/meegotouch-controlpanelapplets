@@ -15,7 +15,7 @@ DEFINES += \
 	UNIT_TEST 
 
 TARGET = ut_profilebuttons
-target.path = /usr/lib/systemui-applets-tests
+target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
 	gui \

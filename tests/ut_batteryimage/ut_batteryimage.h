@@ -4,7 +4,7 @@
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
-** This file is part of systemui-applets.
+** This file is part of meegotouch-controlpanelapplets.
 **
 ** If you have questions regarding the use of this file, please contact
 ** Nokia at directui@nokia.com.

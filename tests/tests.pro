@@ -1,4 +1,6 @@
 TEMPLATE = subdirs
+
+include(common_top.pri)
 #
 # The coverage target will not build the functional tests.
 #
@@ -39,13 +41,13 @@ contains(BUILD_FEATURES,coverage) {
 support_files.commands += $$PWD/gen-tests-xml.sh > $$OUT_PWD/tests.xml
 support_files.target = support_files
 support_files.files += $$OUT_PWD/tests.xml
-support_files.path = /usr/share/systemui-applets-tests
+support_files.path = /usr/share/$$TEST_PKG_NAME
 support_files.CONFIG += no_check_exist
 
 dummy_file.commands += touch $$OUT_PWD/keep_this_dir
 dummy_file.target = dummy_file
 dummy_file.files += $$OUT_PWD/keep_this_dir
-dummy_file.path = /usr/lib/systemui-applets-tests
+dummy_file.path = /usr/lib/$$TEST_PKG_NAME
 
 testscript.files = cylontest.sh
 testscript.path = /bin

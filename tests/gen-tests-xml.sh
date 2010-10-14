@@ -7,7 +7,7 @@ DOMAIN="Application framework"
 FEATURE="DuiControlPanel SystemUIApplets"
 TYPE="Functional"
 LEVEL="Component"
-BINARY_DIR="/usr/lib/systemui-applets-tests"
+BINARY_DIR="/usr/lib/meegotouch-controlpanelapplets-tests"
 
 #
 # The code. These lines should not contain configuration values.
@@ -124,7 +124,7 @@ TESTSUITE_TEMPLATE="<?xml version='1.0' encoding='ISO-8859-1'?>
       o If the 'timeout' file exists in the test directory the timeout value
 	will be loaded from that file.
     -->
-  <suite name='system-ui-tests' domain='$DOMAIN' type='$TYPE' level='$LEVEL'>
+  <suite name='meegotouch-controlpanelapplets' domain='$DOMAIN' type='$TYPE' level='$LEVEL'>
     <set name='unit_tests' description='Unit Tests' feature='$FEATURE'>$UT_TESTCASES
       <environments>
         <scratchbox>false</scratchbox>

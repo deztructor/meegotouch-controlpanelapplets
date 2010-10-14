@@ -23,7 +23,7 @@ DEFINES += \
     FUNCTIONAL_TEST
 
 TARGET = ft_themebusinesslogic
-target.path = /usr/lib/systemui-applets-tests
+target.path = /usr/lib/$$TEST_PKG_NAME
 
 load(meegotouch_defines)
 DEFINES += \
