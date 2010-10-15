@@ -7,7 +7,8 @@ DOMAIN="Application framework"
 FEATURE="DuiControlPanel SystemUIApplets"
 TYPE="Functional"
 LEVEL="Component"
-BINARY_DIR="/usr/lib/meegotouch-controlpanelapplets-tests"
+#BINARY_DIR="/usr/lib/meegotouch-controlpanelapplets-tests"
+BINARY_DIR="/usr/lib/systemui-applets-tests"
 
 #
 # The code. These lines should not contain configuration values.
