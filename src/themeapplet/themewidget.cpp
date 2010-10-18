@@ -125,6 +125,10 @@ ThemeWidget::enableList ()
 {
     SYS_DEBUG ("");
     m_List->blockSignals (false);
+    /*
+     * and select the correct one, if user tried to select some other...
+     */
+    selectCurrentTheme ();
 }
 
 void
