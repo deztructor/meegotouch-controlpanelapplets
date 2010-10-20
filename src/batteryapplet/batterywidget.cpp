@@ -1,4 +1,4 @@
-/****************************************************************************
+/****************************************************************************+
 **
 ** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
@@ -32,6 +32,9 @@
 #include <MButton>
 #include <MContainer>
 #include <MLabel>
+#include <MSlider>
+#include <HelpButton>
+#include <MBasicLayoutAnimation>
 
 #undef DEBUG
 #define WARNING
@@ -112,12 +115,9 @@ void BatteryWidget::initWidget ()
      * SliderContainer signals and slots,
      * and initialization
      */
-    sliderContainer->initPSMAutoButton (m_logic->PSMAutoValue ());
     sliderContainer->initSlider (m_logic->PSMThresholdValues ());
     sliderContainer->updateSlider (m_logic->PSMThresholdValue ());
 
-    connect (sliderContainer, SIGNAL (PSMAutoToggled (bool)),
-             this, SLOT (PSMAutoToggled (bool)));
     connect (sliderContainer, SIGNAL (PSMThresholdValueChanged (int)),
              m_logic, SLOT (setPSMThresholdValue (int)),
              Qt::DirectConnection);
@@ -138,43 +138,57 @@ void BatteryWidget::initWidget ()
 
     buttonContainer->centralWidget()->setLayout (buttonLayout);
 
-    MContainer            *activationLevelLabelContainer;
-    QGraphicsLinearLayout *activationLevelLabelLayout;
+    MLayout               *activationLevelLabelLayout;
     MLabel                *activationLevelLabel;
 
-    activationLevelLabel = new MLabel("Activation battery level");
-    activationLevelLabelLayout = new QGraphicsLinearLayout (Qt::Horizontal);
+    //% "Auto activate power save"
+    activationLevelLabel = new MLabel(qtTrId ("qtn_ener_autops"));
+    activationLevelLabelLayout = new MLayout;
+    MLinearLayoutPolicy *hpolicy = new MLinearLayoutPolicy (activationLevelLabelLayout, Qt::Horizontal);
 
+    HelpButton* helpButton = new HelpButton ("IDUG_MEEGO_BATTERY.html");
+    helpButton->setViewType(MButton::iconType);
+    helpButton->setIconID ("icon-m-content-description");
+
+    m_PSMAutoButton = new MButton;
+    m_PSMAutoButton->setObjectName ("CommonSwitch");
+    connect (m_PSMAutoButton, SIGNAL (toggled (bool)),
+             this, SLOT (PSMAutoToggled (bool)));
+    m_PSMAutoButton->setCheckable (true);
+    m_PSMAutoButton->setViewType (MButton::switchType);
+    m_PSMAutoButton->setChecked (m_logic->PSMAutoValue ());
 
     activationLevelLabelContainer = new MContainer;
     activationLevelLabelContainer->setObjectName("CommonPanel");
     activationLevelLabelContainer->setHeaderVisible (false);
 
-    activationLevelLabelLayout->addStretch ();
-    activationLevelLabelLayout->addItem (activationLevelLabel);
-    activationLevelLabelLayout->addStretch ();
-    activationLevelLabelLayout->setAlignment (activationLevelLabel, Qt::AlignHCenter);
+    hpolicy->addItem (activationLevelLabel, Qt::AlignLeft | Qt::AlignVCenter);
+    hpolicy->addItem(helpButton);
+    hpolicy->addItem (m_PSMAutoButton, Qt::AlignRight | Qt::AlignVCenter);
 
     activationLevelLabelContainer->centralWidget()->setLayout (activationLevelLabelLayout);
 
     MLayout *layout = new MLayout;
-    // mainContainer
+    // mainContainer_
     m_MainLayout = new MLinearLayoutPolicy (layout, Qt::Vertical);
     m_MainLayout->setContentsMargins (0., 0., 0., 0.);
     m_MainLayout->setSpacing (0.);
+    MBasicLayoutAnimation *anim = new MBasicLayoutAnimation(layout);
+
+    m_MainLayout->addItem (remainingCapacityContainer);
+    m_MainLayout->setStretchFactor (remainingCapacityContainer, 0);
 
     m_MainLayout->addItem (activationLevelLabelContainer);
     m_MainLayout->setStretchFactor (activationLevelLabelContainer, 0);
 
-    m_MainLayout->addItem (remainingCapacityContainer);
-    m_MainLayout->setStretchFactor (remainingCapacityContainer, 0);
-    m_MainLayout->addItem (sliderContainer);
-    m_MainLayout->setStretchFactor (sliderContainer, 0);
+    if(m_PSMAutoButton->isChecked ())
+    {
+        m_MainLayout->addItem (sliderContainer);
+        m_MainLayout->setStretchFactor (sliderContainer, 0);
+    }
 
     m_MainLayout->addItem (buttonContainer);
     m_MainLayout->setStretchFactor (buttonContainer, 0);
-
-
 
     MContainer *mainContainer = new MContainer;
     mainContainer->setHeaderVisible (false);
@@ -264,6 +278,16 @@ BatteryWidget::PSMAutoToggled (
              * the proper value
              */
             sliderContainer->updateSlider (m_logic->PSMThresholdValue ());
+            if(m_MainLayout)
+                if(m_MainLayout->indexOf(sliderContainer) == -1)
+                {
+                    m_MainLayout->insertItem (/*m_MainLayout->indexOf(activationLevelLabelContainer)+1*/2, sliderContainer);
+                    m_MainLayout->setStretchFactor (sliderContainer, 0);
+                }
+        }
+        else
+        {
+            m_MainLayout->removeAt(m_MainLayout->indexOf(sliderContainer));
         }
     }
 }
@@ -280,7 +304,7 @@ BatteryWidget::updatePSMButton ()
     }
 }
 
-void BatteryWidget::remainingBatteryCapacityReceived(const int pct)
+void BatteryWidget::remainingBatteryCapacityReceived(const   int pct)
 {
     SYS_DEBUG ("percentage = %d", pct);
     if(!(m_logic->isCharging()))
@@ -324,21 +348,23 @@ BatteryWidget::PSMValueReceived (
 
     updatePSMButton ();
     m_UILocked = true;
-
-    if (!PSMEnabled)
-    {
-        m_MainLayout->insertItem (1, sliderContainer);
-        sliderContainer->setVisible (true);
-        m_logic->remainingCapacityRequired();
-    }
-    else
-    {
-        sliderContainer->setVisible (false);
-
-        m_MainLayout->removeItem (sliderContainer);
-        //% "Power save mode"
-        remainingCapacityContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
-    }
+    if(m_MainLayout)
+        if (!PSMEnabled)
+        {
+            if(m_MainLayout->indexOf(activationLevelLabelContainer) == -1)
+            {
+                m_PSMAutoButton->setChecked(false);
+                m_MainLayout->insertItem (/*m_MainLayout->indexOf(activationLevelLabelContainer)+1*/1, activationLevelLabelContainer);
+                m_MainLayout->setStretchFactor (activationLevelLabelContainer, 0);
+            }
+        }
+        else
+        {
+            m_MainLayout->removeAt(m_MainLayout->indexOf(sliderContainer));
+            m_MainLayout->removeAt(m_MainLayout->indexOf(activationLevelLabelContainer));
+            //% "Power save mode"
+            remainingCapacityContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
+        }
 
     m_UILocked = false;
 }

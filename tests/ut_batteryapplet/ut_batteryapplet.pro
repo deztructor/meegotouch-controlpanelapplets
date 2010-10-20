@@ -9,6 +9,11 @@ INCLUDEPATH = \
         $$SRC_PREFIX \
         $$INCLUDEPATH
 
+# FIXME: this has to be removed if the functionality has merged into meegotouch
+INCLUDEPATH += /usr/include/userguide
+DEPENDPATH += /usr/include/userguide
+LIBS += -luserguide
+
 QT += \
     testlib
 

@@ -25,6 +25,9 @@
 #include <MLayout>
 #include <MSlider>
 
+#include "percentagecontainer.h"
+
+
 #undef DEBUG
 #include "../debug.h"
 
@@ -54,8 +57,8 @@ void
 SliderContainer::retranslate ()
 {
     SYS_DEBUG ("");
-    //% "Auto activate power save"
-    m_AutoPSMLabel->setText (qtTrId ("qtn_ener_autops"));
+
+    m_AutoPSMLabel->setText ("Activation battery level");
     updateSliderValueLabel ();
 }
 
@@ -71,6 +74,7 @@ void SliderContainer::setLayout()
 
     MLayout *layout = new MLayout;
     m_LayoutPolicy = new MLinearLayoutPolicy (layout, Qt::Vertical);
+
 
     MLayout *hlayout = new MLayout;
     MLinearLayoutPolicy *hpolicy = new MLinearLayoutPolicy (hlayout, Qt::Horizontal);
@@ -94,20 +98,39 @@ void SliderContainer::setLayout()
      */
     hpolicy->addItem (labelLayout);
 
-    // m_PSMAutoButton
-    m_PSMAutoButton = new MButton;
-    m_PSMAutoButton->setObjectName ("CommonSwitch");
-    connect (m_PSMAutoButton, SIGNAL (toggled (bool)),
-             this, SLOT (PSMAutoButtonToggled (bool)));
-    m_PSMAutoButton->setCheckable (true);
-    m_PSMAutoButton->setViewType (MButton::switchType);
-    hpolicy->addItem (m_PSMAutoButton, Qt::AlignRight | Qt::AlignVCenter);
-
-
     m_LayoutPolicy->addItem (hlayout);
     
+    /*
+     * PSM Slider
+     */
+    m_PSMSlider = new MSlider;
+    SYS_DEBUG ("Connecting %p->valueChanged", m_PSMSlider);
+    SYS_DEBUG ("m_SliderValue = %d", m_SliderValue);
+
+    m_PSMSlider->setObjectName ("PSMSlider");
+    m_PSMSlider->setOrientation (Qt::Horizontal);
+    m_PSMSlider->setHandleLabelVisible (true);
+    m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
+    m_LayoutPolicy->addItem(m_PSMSlider);
+
+    /*
+     * Set the slider value if available...
+     */
+    if (m_SliderValue >= 0)
+        m_PSMSlider->setValue (m_SliderValue);
+
+    /*
+     * .. and after connect the slidervalue changed signal
+     */
+    connect (m_PSMSlider, SIGNAL (valueChanged (int)),
+            this, SLOT (sliderValueChanged (int)),
+            Qt::DirectConnection);
+    connect (m_PSMSlider, SIGNAL (valueChanged (int)),
+            this, SLOT (updateSliderHandleLabel(int)),
+            Qt::DirectConnection);
+
     centralWidget ()->setLayout (layout);
-    
+
     retranslate ();
 }
 
@@ -140,10 +163,6 @@ SliderContainer::updateSlider (int value)
     // Store the actual value for later
     // (eg for the case when slider isn't ready yet...)
     m_SliderValue = m_SliderValues.indexOf (QString ("%1").arg (value));
-
-    // Slider not yet created:
-    if (m_PSMSlider == 0)
-        return;
 
     if (m_SliderValue >= 0)
         m_PSMSlider->setValue (m_SliderValue);
@@ -178,57 +197,6 @@ SliderContainer::sliderValueChanged (
     emit PSMThresholdValueChanged (m_SliderValues.at (value).toInt ());
 }
 
-void
-SliderContainer::toggleSliderExistence (
-        bool toggle)
-{
-    SYS_DEBUG ("");
-
-    if (toggle == m_SliderExists)
-        return;
-    m_SliderExists = toggle;
-
-    if (toggle) {
-        if ((m_LayoutPolicy->count () < 2) && (m_PSMSlider == 0)) {
-            m_PSMSlider = new MSlider;
-            SYS_DEBUG ("Connecting %p->valueChanged", m_PSMSlider);
-            SYS_DEBUG ("m_SliderValue = %d", m_SliderValue);
-
-            m_PSMSlider->setObjectName ("CommonSlider");
-            m_PSMSlider->setOrientation (Qt::Horizontal);
-            m_PSMSlider->setHandleLabelVisible (true);
-            m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
-
-            /*
-             * Set the slider value if available...
-             */
-            if (m_SliderValue >= 0)
-                m_PSMSlider->setValue (m_SliderValue);
-
-            /*
-             * .. and after connect the slidervalue changed signal
-             */
-            connect (m_PSMSlider, SIGNAL (valueChanged (int)),
-                    this, SLOT (sliderValueChanged (int)),
-                    Qt::DirectConnection);
-//            connect (m_PSMSlider, SIGNAL (valueChanged (int)),
-//                    this, SLOT (updateSliderHandleLabel(int)),
-//                    Qt::DirectConnection);
-
-            m_LayoutPolicy->addItem (m_PSMSlider);
-            m_LayoutPolicy->setAlignment (m_PSMSlider, Qt::AlignHCenter);
-        }
-    } else {
-        if ((m_PSMSlider) && (m_LayoutPolicy->count () > 1)) {
-            m_LayoutPolicy->removeItem (m_PSMSlider);
-            m_PSMSlider->deleteLater();
-            m_PSMSlider = 0;
-        }
-    }
-
-    updateSliderValueLabel ();
-}
-
 /*!
  * This function is called when the dackend decides if the automatic power save
  * mode is enabled or disabled, so we can toggle the switch widget. Everything
@@ -240,17 +208,8 @@ SliderContainer::initPSMAutoButton (
 {
     SYS_DEBUG ("toggle = %s", SYS_BOOL (toggle));
 
-    m_PSMAutoButton->setChecked (toggle);
-
-    toggleSliderExistence (toggle);
-}
-
-void SliderContainer::PSMAutoButtonToggled (bool toggle)
-{
-    SYS_DEBUG ("toggle = %s", SYS_BOOL (toggle));
-
-    toggleSliderExistence (toggle);
-    emit PSMAutoToggled (toggle);
+    if (m_SliderValue >= 0)
+        m_PSMSlider->setValue (m_SliderValue);
 }
 
 /*!
@@ -260,14 +219,8 @@ void SliderContainer::PSMAutoButtonToggled (bool toggle)
 void
 SliderContainer::updateSliderValueLabel ()
 {
-    if (!m_SliderExists) {
-        //% "Off"
-        m_PsmValueLabel->setText (qtTrId ("qtn_comm_settings_off"));
-    }
-
-    if (m_SliderExists &&
-            m_SliderValue >= 0 &&
-            m_SliderValue < m_SliderValues.size()) {
+    if ( m_SliderValue >= 0 &&
+         m_SliderValue < m_SliderValues.size()) {
 
         m_PsmValueLabel->setText (QString ("%1%").arg (
                     m_SliderValues[m_SliderValue]));

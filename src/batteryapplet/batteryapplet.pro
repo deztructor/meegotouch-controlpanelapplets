@@ -8,6 +8,11 @@ CONFIG += plugin \
           silent \
           duicontrolpanel
 
+# FIXME: this has to be removed if the functionality has merged into meegotouch
+INCLUDEPATH += /usr/include/userguide
+DEPENDPATH += /usr/include/userguide
+LIBS += -luserguide
+
 contains(DEFINES, HAVE_QMSYSTEM) {
     CONFIG += qmsystem
 }
