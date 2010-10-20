@@ -87,7 +87,7 @@ OfflineBrief::currentText() const
     }
     #endif
 
-    return QString();
+    return QString("No QmSystem");
 }
 
 void 

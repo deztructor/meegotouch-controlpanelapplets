@@ -39,9 +39,10 @@ public slots:
     void initSlider (const QStringList &values);
     void updateSlider (const int value);
     void initPSMAutoButton (bool toggle);
+//    void PSMAutoButtonToggled (bool toggle);
+
 
 private slots:
-    void PSMAutoButtonToggled (bool toggle);
     void sliderValueChanged (int value);
 
 signals:
@@ -59,7 +60,7 @@ private:
     bool                   m_SliderExists;
     
     void    setLayout ();
-    void    toggleSliderExistence (bool toggle);
+//    void    toggleSliderExistence (bool toggle);
     void    updateSliderValueLabel ();
 };
 

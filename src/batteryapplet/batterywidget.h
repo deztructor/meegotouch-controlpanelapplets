@@ -23,7 +23,9 @@
 
 class MButton;
 class MLabel;
+class MLayout;
 class MLinearLayoutPolicy;
+class MContainer;
 class BatteryBusinessLogic;
 class BatteryImage;
 class SliderContainer;
@@ -52,7 +54,8 @@ private slots:
 private:
     void updatePSMButton ();
     void retranslateUi ();
-
+    MButton                 *m_PSMAutoButton;
+    MContainer              *activationLevelLabelContainer;
     BatteryBusinessLogic    *m_logic;
     bool                     m_UILocked;
     BatteryImage            *batteryImage;

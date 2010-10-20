@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.8.0),
                libprofile-qt-dev (>= 0.13), system-ui-dev (>= 0.16),
                libqttracker-dev, libthumbnailer-dev, libcellular-qt-dev,
                libsysinfo-dev, libcontentmanager-dev, devicelock-dev,
-               doxygen, clean-device-dev (>= 0.0.3)
+               doxygen, clean-device-dev (>= 0.0.3), libuserguide-dev
 Standards-Version: 3.8.0
 
 Package: systemui-applets-tests
@@ -66,7 +66,7 @@ Provides: duistatusindicatormenu-batteryplugin
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libduicontrolpanel,
-         systemui-applets-l10n-engineering-english
+         systemui-applets-l10n-engineering-english, libuserguide
 Description: Battery settings applet.
 
 Package: duicontrolpanel-displayapplet
