@@ -19,4 +19,4 @@ X-DUIApplet-ImagePortrait=Widget_portrait_weather.png
 Category=qtn_sett_main_data
 Order=1
 WidgetType=Label
-
+HelpId=IDUG_MEEGO_BATTERY.html
