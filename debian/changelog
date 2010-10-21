@@ -1,3 +1,10 @@
+meegotouch-controlpanelapplets (0.17.1-2) lucid; urgency=low
+
+  * Battery applet updated to the new ui spec
+  * Context Sensitive help button added to the battery applet
+
+ -- Zoltan Nyul <znyul@blumsoft.eu>  Thu, 21 Oct 2010 11:03:20 +0200
+
 meegotouch-controlpanelapplets (0.17.1-1) meegotouch; urgency=low
 
   * Fixes: NB#198310 - Able to select one more theme before one theme change
