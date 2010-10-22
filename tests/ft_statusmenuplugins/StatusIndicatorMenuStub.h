@@ -21,7 +21,7 @@
 
 #include <QObject>
 #include <MWidget>
-#include <mstatusindicatormenuplugininterface.h>
+#include <MStatusIndicatorMenuExtensionInterface>
 
 class StatusIndicatorMenuStub : public MWidget, public MStatusIndicatorMenuInterface
 {
