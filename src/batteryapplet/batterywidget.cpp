@@ -173,7 +173,6 @@ void BatteryWidget::initWidget ()
     m_MainLayout = new MLinearLayoutPolicy (layout, Qt::Vertical);
     m_MainLayout->setContentsMargins (0., 0., 0., 0.);
     m_MainLayout->setSpacing (0.);
-    MBasicLayoutAnimation *anim = new MBasicLayoutAnimation(layout);
 
     m_MainLayout->addItem (remainingCapacityContainer);
     m_MainLayout->setStretchFactor (remainingCapacityContainer, 0);
