@@ -37,7 +37,6 @@ Q_EXPORT_PLUGIN2(displayapplet, DisplayApplet)
 void 
 DisplayApplet::init()
 {
-    MTheme::loadCSS (QString (CSSDIR) + "display.css");
 }
 
 DcpWidget* DisplayApplet::constructWidget(int widgetId)
@@ -48,6 +47,8 @@ DcpWidget* DisplayApplet::constructWidget(int widgetId)
 
 DcpWidget* DisplayApplet::pageMain()
 {
+    MTheme::loadCSS (QString (CSSDIR) + "display.css");
+
     if (m_MainWidget == NULL)
         m_MainWidget = new DisplayWidget();
     return m_MainWidget;
