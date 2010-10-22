@@ -349,6 +349,7 @@ BatteryWidget::PSMValueReceived (
     updatePSMButton ();
     m_UILocked = true;
     if(m_MainLayout)
+    {
         if (!PSMEnabled)
         {
             if(m_MainLayout->indexOf(activationLevelLabelContainer) == -1)
@@ -357,6 +358,7 @@ BatteryWidget::PSMValueReceived (
                 m_MainLayout->insertItem (/*m_MainLayout->indexOf(activationLevelLabelContainer)+1*/1, activationLevelLabelContainer);
                 m_MainLayout->setStretchFactor (activationLevelLabelContainer, 0);
             }
+            m_logic->remainingCapacityRequired();
         }
         else
         {
@@ -365,6 +367,7 @@ BatteryWidget::PSMValueReceived (
             //% "Power save mode"
             remainingCapacityContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
         }
+    }
 
     m_UILocked = false;
 }
