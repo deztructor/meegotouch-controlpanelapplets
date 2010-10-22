@@ -33,8 +33,11 @@
 #include <MContainer>
 #include <MLabel>
 #include <MSlider>
-#include <HelpButton>
 #include <MBasicLayoutAnimation>
+
+#ifdef HAVE_USERGUIDE
+#include <HelpButton>
+#endif
 
 #undef DEBUG
 #define WARNING
@@ -146,9 +149,11 @@ void BatteryWidget::initWidget ()
     activationLevelLabelLayout = new MLayout;
     MLinearLayoutPolicy *hpolicy = new MLinearLayoutPolicy (activationLevelLabelLayout, Qt::Horizontal);
 
+#ifdef HAVE_USERGUIDE
     HelpButton* helpButton = new HelpButton ("IDUG_MEEGO_BATTERY.html");
     helpButton->setViewType(MButton::iconType);
     helpButton->setIconID ("icon-m-content-description");
+#endif
 
     m_PSMAutoButton = new MButton;
     m_PSMAutoButton->setObjectName ("CommonSwitch");
@@ -163,7 +168,9 @@ void BatteryWidget::initWidget ()
     activationLevelLabelContainer->setHeaderVisible (false);
 
     hpolicy->addItem (activationLevelLabel, Qt::AlignLeft | Qt::AlignVCenter);
+#ifdef HAVE_USERGUIDE
     hpolicy->addItem(helpButton);
+#endif
     hpolicy->addItem (m_PSMAutoButton, Qt::AlignRight | Qt::AlignVCenter);
 
     activationLevelLabelContainer->centralWidget()->setLayout (activationLevelLabelLayout);

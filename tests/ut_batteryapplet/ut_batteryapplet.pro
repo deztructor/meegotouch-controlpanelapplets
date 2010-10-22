@@ -9,11 +9,6 @@ INCLUDEPATH = \
         $$SRC_PREFIX \
         $$INCLUDEPATH
 
-# FIXME: this has to be removed if the functionality has merged into meegotouch
-INCLUDEPATH += /usr/include/userguide
-DEPENDPATH += /usr/include/userguide
-LIBS += -luserguide
-
 QT += \
     testlib
 
@@ -31,6 +26,11 @@ CONFIG += \
     plugin \
     duicontrolpanel \
     silent 
+
+contains(DEFINES, HAVE_USERGUIDE) {
+    # FIXME: this has to be removed if the functionality has merged into meegotouch
+    CONFIG += userguide
+}
 
 HEADERS += \
     $$STUB_PREFIX/qmbattery.h \

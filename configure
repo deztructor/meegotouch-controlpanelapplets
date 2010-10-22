@@ -73,6 +73,14 @@ if [ -e /usr/include/devicelock/devicelock.h ]; then
     echo "DEFINES += HAVE_DEVICELOCK" >> ${FILENAME}
 fi
 
+#
+# Optionally we need to check for UserGuide application
+# XXX: This 'HelpButton' widget will be moved to MTF, so then remove this!!!
+#
+if [ -e /usr/include/userguide/HelpButton ]; then
+    echo "DEFINES += HAVE_USERGUIDE" >> ${FILENAME}
+fi
+
 #echo "# All values were removed for testing purposes..." > ${FILENAME}
 
 echo Configured meegotouch-controlpanelapplets as follows:
