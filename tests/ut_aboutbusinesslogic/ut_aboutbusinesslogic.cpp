@@ -28,6 +28,7 @@
 #include <QVariant>
 #include <QByteArray>
 
+#include <QSystemInfo>
 #include <QSystemDeviceInfo>
 
 #include <MApplication>
@@ -39,6 +40,7 @@
  * Stubbing the QSystemDeviceInfo::imei ()
  */
 QString systemdeviceinfo_imei_retval;
+QString systeminfo_firmware_retval;
 
 QTM_BEGIN_NAMESPACE
 
@@ -48,42 +50,13 @@ QSystemDeviceInfo::imei()
     return systemdeviceinfo_imei_retval;
 }
 
+QString
+QSystemInfo::version(QSystemInfo::Version type, const QString &parameter)
+{
+    return systeminfo_firmware_retval;
+}
+
 QTM_END_NAMESPACE
-
-/******************************************************************************
- * Stubbing the sysinfo
- */
-extern "C" {
-
-int
-sysinfo_init (struct system_config **sc_out)
-{
-    Q_UNUSED (sc_out);
-    return 0;
-}
-
-void
-sysinfo_finish (struct system_config *sc)
-{
-    Q_UNUSED (sc);
-}
-
-char *sysinfo_get_value_retval = 0;
-
-int
-sysinfo_get_value (struct system_config *sc, const char *key,
-                   uint8_t **val_out, unsigned long *len_out)
-{
-    Q_UNUSED (sc);
-
-    SYS_DEBUG ("key = %s", key);
-    *val_out = (uint8_t *) qstrdup (sysinfo_get_value_retval);
-    *len_out = (unsigned long) qstrlen (sysinfo_get_value_retval);
-
-    return 0;
-}
-
-};
 
 /******************************************************************************
  * Stubbing the dbus interface.
@@ -172,7 +145,7 @@ Ut_AboutBusinessLogic::testOsVersion ()
 
     m_Api = new AboutBusinessLogic;
 
-    sysinfo_get_value_retval = (char *) "HARDWARE_PROGRAM_VERSION13";
+    systeminfo_firmware_retval = "HARDWARE_PROGRAM_VERSION13";
     name = m_Api->osVersion();
 
     QCOMPARE (name, QString ("VERSION13"));

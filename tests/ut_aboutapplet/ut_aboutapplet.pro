@@ -30,7 +30,6 @@ CONFIG += \
     link_pkgconfig \
     silent 
 
-PKGCONFIG += sysinfo
 MOBILITY += systeminfo
 
 HEADERS += \

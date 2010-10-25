@@ -10,8 +10,6 @@ CONFIG += plugin \
           silent \
           link_pkgconfig
 
-PKGCONFIG += sysinfo
-
 QT += dbus
 MOBILITY += systeminfo
 

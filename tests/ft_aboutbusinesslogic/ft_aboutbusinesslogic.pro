@@ -13,8 +13,6 @@ CONFIG += \
     link_pkgconfig \
     silent
 
-PKGCONFIG += sysinfo
-
 QT += \
     testlib \
     dbus \

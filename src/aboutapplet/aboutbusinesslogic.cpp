@@ -16,19 +16,15 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "aboutbusinesslogic.h"
 
 #include <net/if.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
+#include <QSystemInfo>
 #include <QSystemDeviceInfo>
 
 QTM_USE_NAMESPACE
-
-#ifdef HAVE_SYSINFO
-#include <sysinfo.h>
-#endif
 
 #include <QFile>
 #include <QRegExp>
@@ -94,37 +90,27 @@ AboutBusinessLogic::osVersion ()
         return m_OsVersion;
 
 
-#ifdef HAVE_SYSINFO
-    const char *key = "/device/sw-release-ver";
-    struct system_config *sc = 0;
-    if (sysinfo_init (&sc) == 0)
-    {
-        uint8_t *data = 0;
-        unsigned long size = 0;
-        if ((sysinfo_get_value (sc, key, &data, &size) == 0) && (data != 0))
-        {
-            char *fw_version = new char[size+2];
-            qstrncpy (fw_version, (const char *) data, size + 1);
-            delete data;
+    QSystemInfo systemInfo;
 
-            retval = QString (fw_version);
-            delete[] fw_version;
-            /*
-             * The fw-version format is something like that:
-             * SupportedHWID_PROGRAM_ReleaseVersion_suffixes
-             *
-             * Try to get only the version number:
-             */
-            int index = retval.indexOf ('_', retval.indexOf ('_') + 1) + 1;
-            if (index > 0)
-                retval = retval.mid (index);
-
-            m_OsVersion = retval;
-        }
-        sysinfo_finish (sc);
-    }
-#else
+    retval = systemInfo.version (QSystemInfo::Firmware);
     /*
+     * The fw-version format is something like that:
+     * SupportedHWID_PROGRAM_ReleaseVersion_suffixes
+     *
+     * Try to get only the version number:
+     */
+    int index = retval.indexOf ('_', retval.indexOf ('_') + 1) + 1;
+    if (index > 0)
+        retval = retval.mid (index);
+
+    if (retval.isNull () == false)
+    {
+      m_OsVersion = retval;
+      return m_OsVersion;
+    }
+
+    /*
+     * This is a fallback method... (works fine on Ubuntu)
      * Try to get the version number from the lsb-release
      */
     QFile lsbrel_file ("/etc/lsb-release");
@@ -141,9 +127,8 @@ AboutBusinessLogic::osVersion ()
             m_OsVersion = retval;
         }
     }
-#endif
 
-    return retval;
+    return m_OsVersion;
 }
 
 QString
