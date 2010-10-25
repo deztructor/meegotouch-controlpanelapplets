@@ -29,13 +29,13 @@
 #undef TEST_NEW_TITLE_METHODS
 
 void
-Ft_AppletLoader::init ()
+Ft_AppletLoader::initTestCase ()
 {
     // Instantiate the classes what we want to test
 }
 
 void
-Ft_AppletLoader::cleanup ()
+Ft_AppletLoader::cleanupTestCase ()
 {
     // Drop the (tested) objects
 }
@@ -48,14 +48,14 @@ static char *argv[] =
     };
 
 void
-Ft_AppletLoader::initTestCase ()
+Ft_AppletLoader::init ()
 {
     m_app = new MApplication (argc, argv);
     m_window = new MApplicationWindow;
 }
 
 void
-Ft_AppletLoader::cleanupTestCase ()
+Ft_AppletLoader::cleanup ()
 {
     delete m_app;
 }
@@ -124,8 +124,11 @@ Ft_AppletLoader::DoAppletTest (const char *soname, bool hasBrief)
     QVERIFY (! widget->title ().isEmpty ());
 #endif
 
-    delete widget;
-    delete brief;
+    QTest::qWait (1000);
+
+//    loader.unload ();
+//    delete widget;
+//    delete brief;
 }
 
 void
