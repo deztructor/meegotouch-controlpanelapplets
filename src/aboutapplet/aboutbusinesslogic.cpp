@@ -22,6 +22,9 @@
 #include <net/if.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
+#include <QSystemDeviceInfo>
+
+QTM_USE_NAMESPACE
 
 #ifdef HAVE_SYSINFO
 #include <sysinfo.h>
@@ -43,7 +46,7 @@
 #include "../debug.h"
 
 /*
- * Values used for getting bluetooth address by dbus 
+ * Values used for getting bluetooth address by dbus
  */
 #define DBUS_BLUEZ_SERVICE "org.bluez"
 #define DBUS_BLUEZ_OBJECT_PATH "/"
@@ -52,20 +55,11 @@
 #define DBUS_BLUEZ_GET_DEFAULT_ADAPTER_METHOD "DefaultAdapter"
 #define DBUS_BLUEZ_GET_PROPERTIES_METHOD "GetProperties"
 
-#ifdef HAVE_CELLULAR_QT
-AboutBusinessLogic::AboutBusinessLogic() :
-    m_PhoneInfo (NULL),
-    m_gotBluetoothAddress (false),
-    m_gotImei (false)
-{
-}
-#else
 AboutBusinessLogic::AboutBusinessLogic() :
     m_gotBluetoothAddress (false),
     m_gotImei (false)
 {
 }
-#endif
 
 AboutBusinessLogic::~AboutBusinessLogic()
 {
@@ -73,11 +67,6 @@ AboutBusinessLogic::~AboutBusinessLogic()
         delete m_ManagerDBusIf;
     if (m_AdapterDBusIf)
         delete m_AdapterDBusIf;
-
-    #ifdef HAVE_CELLULAR_QT
-    if (m_PhoneInfo)
-        delete m_PhoneInfo;
-    #endif
 }
 
 /*!
@@ -87,7 +76,6 @@ void
 AboutBusinessLogic::initiateDataCollection()
 {
     initiateBluetoothQueries ();
-    initiatePhoneQueries ();
 
     osName ();
     osVersion ();
@@ -97,7 +85,7 @@ AboutBusinessLogic::initiateDataCollection()
     emit ready();
 }
 
-QString 
+QString
 AboutBusinessLogic::osVersion ()
 {
     QString retval = "-";
@@ -121,7 +109,7 @@ AboutBusinessLogic::osVersion ()
 
             retval = QString (fw_version);
             delete[] fw_version;
-            /* 
+            /*
              * The fw-version format is something like that:
              * SupportedHWID_PROGRAM_ReleaseVersion_suffixes
              *
@@ -186,11 +174,11 @@ AboutBusinessLogic::osName ()
     return retval;
 }
 
-/*! 
+/*!
  * Returns the MAC address for the interface with the given name, or returns an
  * empty string if the interface was not found.
  */
-QString 
+QString
 AboutBusinessLogic::WiFiAddress (
         const char *iface)
 {
@@ -199,7 +187,7 @@ AboutBusinessLogic::WiFiAddress (
 	unsigned char cMacAddr[8];
     char          line[32];
 
-	for (dd = 0; dd < 8; dd++) 
+	for (dd = 0; dd < 8; dd++)
         cMacAddr[dd] = 0;
 
 	dd = socket (PF_INET, SOCK_STREAM, 0);
@@ -212,8 +200,8 @@ AboutBusinessLogic::WiFiAddress (
 	if (ioctl (dd, SIOCGIFHWADDR, &sIfReq) != 0)
 		return QString();
 
-	memmove ((void *) &cMacAddr[0], 
-            (void *) &sIfReq.ifr_ifru.ifru_hwaddr.sa_data[0], 
+	memmove ((void *) &cMacAddr[0],
+            (void *) &sIfReq.ifr_ifru.ifru_hwaddr.sa_data[0],
             6);
 
 	close (dd);
@@ -229,7 +217,7 @@ AboutBusinessLogic::WiFiAddress (
  * Returns the MAC address for the first interface it founds. This method
  * contains a static list of interface names that the method will try to find.
  */
-QString 
+QString
 AboutBusinessLogic::WiFiAddress ()
 {
     QString        retval;
@@ -242,8 +230,8 @@ AboutBusinessLogic::WiFiAddress ()
 
     for (int n = 0; interfaceNames[n] != NULL; ++n) {
         retval = WiFiAddress (interfaceNames[n]);
-        SYS_DEBUG ("*** %s%s%s address is %s", 
-                TERM_YELLOW, interfaceNames[n], TERM_NORMAL, 
+        SYS_DEBUG ("*** %s%s%s address is %s",
+                TERM_YELLOW, interfaceNames[n], TERM_NORMAL,
                 SYS_STR(retval));
         if (!retval.isEmpty())
             break;
@@ -256,7 +244,7 @@ AboutBusinessLogic::WiFiAddress ()
 /*!
  * Returns the address of the default bluetooth adapter.
  */
-QString 
+QString
 AboutBusinessLogic::BluetoothAddress ()
 {
     SYS_DEBUG ("*** m_gotBluetoothAddress = %s", SYS_BOOL(m_gotBluetoothAddress));
@@ -267,31 +255,19 @@ AboutBusinessLogic::BluetoothAddress ()
 /*!
  * Returns the IMEI address as a string.
  */
-QString 
+QString
 AboutBusinessLogic::IMEI ()
 {
     SYS_DEBUG ("*** m_gotImei             = %s", SYS_BOOL(m_gotImei));
     SYS_DEBUG ("*** m_Imei                = %s", SYS_STR(m_Imei));
-    if (m_gotImei) 
+    if (m_gotImei)
         return m_Imei;
 
-    #ifdef HAVE_CELLULAR_QT
-    if (!m_PhoneInfo)
-        initiatePhoneQueries ();
+    // Get IMEI from QtMobility SystemDeviceInfo obj.
+    QSystemDeviceInfo deviceInfo;
 
-    m_Imei = m_PhoneInfo->imeiNumber ();
     m_gotImei = true;
-    delete m_PhoneInfo;
-    m_PhoneInfo = NULL;
-    #else
-    /*
-     * FIXME: To implement a variant that gets the IMEI number without usinf the
-     * CellularQt package.
-     */
-    SYS_WARNING ("Not implemented!");
-    m_gotImei = true;
-    m_Imei = "Not implemented.";
-    #endif
+    m_Imei = deviceInfo.imei ();
 
     return m_Imei;
 }
@@ -308,29 +284,16 @@ AboutBusinessLogic::initiateBluetoothQueries ()
         return;
 
     m_ManagerDBusIf = new QDBusInterface (
-            DBUS_BLUEZ_SERVICE, 
-            DBUS_BLUEZ_OBJECT_PATH, 
-            DBUS_BLUEZ_MANAGER_INTERFACE, 
+            DBUS_BLUEZ_SERVICE,
+            DBUS_BLUEZ_OBJECT_PATH,
+            DBUS_BLUEZ_MANAGER_INTERFACE,
             QDBusConnection::systemBus ());
 
     m_ManagerDBusIf->callWithCallback (
-            QString (DBUS_BLUEZ_GET_DEFAULT_ADAPTER_METHOD), 
+            QString (DBUS_BLUEZ_GET_DEFAULT_ADAPTER_METHOD),
             QList<QVariant> (), this,
             SLOT (defaultBluetoothAdapterReceived(QDBusObjectPath)),
             SLOT (DBusMessagingFailure (QDBusError)));
-}
-
-/*!
- * Initiate all the necessary queries through the dbus to get the IMAI address
- * of the phone.
- */
-void
-AboutBusinessLogic::initiatePhoneQueries ()
-{
-    #ifdef HAVE_CELLULAR_QT
-    m_PhoneInfo = new PhoneInfo;
-    SYS_DEBUG ("*** created %p", (void *)m_PhoneInfo);
-    #endif
 }
 
 /*!
@@ -346,13 +309,13 @@ AboutBusinessLogic::defaultBluetoothAdapterReceived (
 
     SYS_DEBUG ("Defaultadapter: %s", SYS_STR (adapter.path()));
     m_AdapterDBusIf = new QDBusInterface (
-            DBUS_BLUEZ_SERVICE, 
+            DBUS_BLUEZ_SERVICE,
             adapter.path(),
             DBUS_BLUEZ_ADAPTER_INTERFACE,
             QDBusConnection::systemBus());
 
     m_AdapterDBusIf->callWithCallback (
-            QString (DBUS_BLUEZ_GET_PROPERTIES_METHOD), 
+            QString (DBUS_BLUEZ_GET_PROPERTIES_METHOD),
             QList<QVariant>(), this,
             SLOT (defaultBluetoothAdapterAddressReceived(QMap<QString, QVariant>)),
             SLOT (DBusMessagingFailure (QDBusError)));
@@ -383,7 +346,7 @@ AboutBusinessLogic::defaultBluetoothAdapterAddressReceived (
 
 /*!
  * This slot is called when an error is occured during the dbus communication.
- * The error message is printed as a warning message. 
+ * The error message is printed as a warning message.
  */
 void
 AboutBusinessLogic::DBusMessagingFailure (

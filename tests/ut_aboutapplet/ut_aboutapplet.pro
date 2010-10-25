@@ -24,16 +24,16 @@ target.path = /usr/lib/$$TEST_PKG_NAME
 CONFIG += \
     gui \
     meegotouch \
+    mobility \
     plugin \
     duicontrolpanel \
     link_pkgconfig \
     silent 
 
 PKGCONFIG += sysinfo
+MOBILITY += systeminfo
 
 HEADERS += \
-    $$STUB_PREFIX/phoneinfo.h \
-    $$STUB_PREFIX/PhoneInfo \
     $$STUB_PREFIX/MLabel \
     ../../src/debug.h \
     ut_aboutapplet.h \
@@ -43,7 +43,6 @@ HEADERS += \
     $$SRC_PREFIX/aboutwidget.h
 
 SOURCES += \
-    $$STUB_PREFIX/phoneinfo.cpp \
     $$STUB_PREFIX/mlabel_stub.cpp \
     ../../src/debug.cpp \
     ut_aboutapplet.cpp \

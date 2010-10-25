@@ -8,13 +8,10 @@ INCLUDEPATH += \
 
 CONFIG += \
     gui \
+    mobility \
     meegotouch \
     link_pkgconfig \
     silent
-
-contains(DEFINES, HAVE_CELLULAR_QT) {
-    CONFIG += cellular-qt 
-}
 
 PKGCONFIG += sysinfo
 
@@ -22,6 +19,9 @@ QT += \
     testlib \
     dbus \
     gui
+
+MOBILITY += \
+    systeminfo
 
 TEMPLATE = app
 

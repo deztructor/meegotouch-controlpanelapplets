@@ -26,14 +26,8 @@
 #include <QDBusError>
 #include <QDBusInterface>
 
-#ifdef HAVE_CELLULAR_QT
-#  include "phoneinfo.h"
-using namespace Cellular;
-#endif
-
 class QDBusObjectPath;
 class QString;
-
 
 /*!
  * To test this class under scratchbox1 I had to start the bluetooth daemon:
@@ -71,15 +65,11 @@ public slots:
 
 private:
     void initiateBluetoothQueries ();
-    void initiatePhoneQueries ();
 
 private:
     QPointer<QDBusInterface> m_ManagerDBusIf;
     QPointer<QDBusInterface> m_AdapterDBusIf;
-    #ifdef HAVE_CELLULAR_QT
-    QPointer<PhoneInfo>      m_PhoneInfo;
-    #endif
-    
+
     bool          m_gotBluetoothAddress;
     QString       m_BluetoothAddress;
 

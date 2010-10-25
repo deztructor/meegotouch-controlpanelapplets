@@ -26,6 +26,11 @@
 #include <dcpwidgettypes.h>
 #include <dcpbrief.h>
 
+#include <QSystemInfo>
+#include <QSystemDeviceInfo>
+
+QTM_USE_NAMESPACE
+
 #include <mdesktopentry.h>
 #include <MApplication>
 #include <MAction>
@@ -36,14 +41,14 @@
 
 
 /******************************************************************************
- * Ut_AboutApplet implementation. 
+ * Ut_AboutApplet implementation.
  */
-void 
+void
 Ut_AboutApplet::init()
 {
 }
 
-void 
+void
 Ut_AboutApplet::cleanup()
 {
 }
@@ -52,11 +57,11 @@ Ut_AboutApplet::cleanup()
 static int argc = 1;
 static char *app_name = (char*) "./Ut_AboutApplet";
 
-void 
+void
 Ut_AboutApplet::initTestCase()
 {
     m_App = new MApplication (argc, &app_name);
-    
+
     /*
      * We create an AboutApplet here. The applet will create a businesslogic,
      * for which we check that the data collection is not started.
@@ -65,10 +70,7 @@ Ut_AboutApplet::initTestCase()
     QVERIFY (m_Applet->m_AboutBusinessLogic);
     QVERIFY (!m_Applet->m_AboutBusinessLogic->m_ManagerDBusIf);
     QVERIFY (!m_Applet->m_AboutBusinessLogic->m_AdapterDBusIf);
-    #ifdef HAVE_CELLULAR_QT
-    QVERIFY (!m_Applet->m_AboutBusinessLogic->m_PhoneInfo);
-    #endif
-    
+
     /*
      * We are not testing the AboutBusinesslogic here, so the following lines
      * act as a kind of mocking, the aboutbusinesslogic will not initiate
@@ -85,21 +87,39 @@ Ut_AboutApplet::initTestCase()
 
     QVERIFY (!m_Applet->m_MainWidget);
     m_Applet->init ();
-    
+
     /*
      * Testing if the widget is not created yet.
      */
     QVERIFY (!m_Applet->m_MainWidget);
+
+    /*
+     * TODO: FIXME: remove this, but output can be helpful
+     * for development & testing purposes
+     */
+    QSystemDeviceInfo deviceInfo;
+    SYS_DEBUG ("\n****** QSystemDeviceInfo *****\n"
+               "***** imei: %s\n***** manufacturer: %s\n"
+               "***** model: %s\n***** productName: %s\n",
+               SYS_STR(deviceInfo.imei ()), SYS_STR(deviceInfo.manufacturer ()),
+               SYS_STR(deviceInfo.model ()), SYS_STR(deviceInfo.productName ()));
+
+    QSystemInfo systemInfo;
+    SYS_DEBUG ("\n****** QSystemInfo versions *****\n"
+               "***** Os: %s\n***** QtCore: %s\n***** Firmware: %s\n",
+               SYS_STR(systemInfo.version (QSystemInfo::Os)),
+               SYS_STR(systemInfo.version (QSystemInfo::QtCore)),
+               SYS_STR(systemInfo.version (QSystemInfo::Firmware)));
 }
 
-void 
+void
 Ut_AboutApplet::cleanupTestCase()
 {
     delete m_Applet;
     m_App->deleteLater ();
 }
 
-void 
+void
 Ut_AboutApplet::testTitle ()
 {
     QString title = m_Applet->title();
@@ -139,15 +159,15 @@ Ut_AboutApplet::testConstructWidget ()
     QVERIFY (!m_Applet->m_MainWidget);
 }
 
-void 
+void
 Ut_AboutApplet::testMenuItems ()
 {
     QVector<MAction*> items = m_Applet->viewMenuItems ();
-    
+
     QVERIFY (items.size() == 0);
 }
 
-void 
+void
 Ut_AboutApplet::testConstructbrief ()
 {
     AboutBrief *brief1 = (AboutBrief *) m_Applet->constructBrief(0);

@@ -40,14 +40,6 @@ if [ $? -eq 0 ]; then
     fi
 
     #
-    # The aboutapplet has some CellularQt dependency.
-    #
-    pkg-config --exists CellularQt
-    if [ $? -eq 0 ]; then
-        echo "DEFINES += HAVE_CELLULAR_QT" >> ${FILENAME}
-    fi
-
-    #
     # The aboutapplet has some libsysinfo0 dependency.
     #
     pkg-config --exists sysinfo

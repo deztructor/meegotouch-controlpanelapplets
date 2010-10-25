@@ -6,8 +6,9 @@ meegotouch-controlpanelapplets (0.17.2~1) meegotouch; urgency=low
 
   [ David Kedves ]
   * Make userguide dependency as optional (as it closed-source)
+  * Use QtMobility to fetch IMEI (and not some closed source lib)
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 25 Oct 2010 09:34:35 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 25 Oct 2010 13:11:22 +0200
 
 meegotouch-controlpanelapplets (0.17.1-1) meegotouch; urgency=low
 

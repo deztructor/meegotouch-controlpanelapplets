@@ -21,11 +21,6 @@
 #include "mdesktopentry.h"
 #include "aboutbusinesslogic.h"
 
-#include "phoneinfo.h"
-#ifndef PHONEINFO_STUBBED_H
-#  error "PhoneInfo is not stubbed, can't continue."
-#endif
-
 #include <stdint.h>
 #include <inttypes.h>
 #include <QMap>
@@ -33,51 +28,28 @@
 #include <QVariant>
 #include <QByteArray>
 
+#include <QSystemDeviceInfo>
+
 #include <MApplication>
 
 #define DEBUG
 #include "../../src/debug.h"
 
-#if 0
 /******************************************************************************
- * Stubbing QFile.
+ * Stubbing the QSystemDeviceInfo::imei ()
  */
-#include <QFile>
+QString systemdeviceinfo_imei_retval;
 
-bool fileOpenSuccess = true;
+QTM_BEGIN_NAMESPACE
 
-bool
-QFile::open (
-        OpenMode mode)
+QString
+QSystemDeviceInfo::imei()
 {
-    SYS_DEBUG ("*** filename = %s", SYS_STR(fileName()));
-    if (fileName() == "/tmp/osso-product-info")
-        return fileOpenSuccess;
-
-    return false;
+    return systemdeviceinfo_imei_retval;
 }
 
-static const char *fileContent = NULL;
+QTM_END_NAMESPACE
 
-qint64
-QIODevice::readLine (
-        char     *data, 
-        qint64    maxSize)
-{
-    qint64 retval = -1;
-
-    if (fileContent != NULL) {
-        strcpy (data, fileContent);
-        //SYS_DEBUG ("*** data = %s", data);
-        fileContent = NULL;
-        retval = strlen (data);
-    }
-
-    //SYS_DEBUG ("*** maxSize = %lld", maxSize);
-    //SYS_DEBUG ("*** retval  = %lld", retval);
-    return retval;
-}
-#endif
 /******************************************************************************
  * Stubbing the sysinfo
  */
@@ -173,16 +145,10 @@ Ut_AboutBusinessLogic::cleanupTestCase()
 void 
 Ut_AboutBusinessLogic::testImei()
 {
-    QString imei;
+    systemdeviceinfo_imei_retval = "AA-BBBBBB-CCCCCC-D";
 
     m_Api = new AboutBusinessLogic;
-    imei = m_Api->IMEI();
-    QVERIFY (imei == FAKE_IMEI_NUMBER);
-    SYS_DEBUG ("*** IMEI = %s", SYS_STR(imei));
-    // Repeating
-    imei = m_Api->IMEI();
-    QVERIFY (imei == FAKE_IMEI_NUMBER);
-    SYS_DEBUG ("*** IMEI = %s", SYS_STR(imei));
+    QCOMPARE (m_Api->IMEI (), systemdeviceinfo_imei_retval);
 
     delete m_Api;
 }
@@ -193,41 +159,6 @@ Ut_AboutBusinessLogic::testOsName ()
     QString name;
 
     m_Api = new AboutBusinessLogic;
-
-#if 0
-    /*
-     * Simulating unsuccessfull file open.
-     */
-    fileOpenSuccess = false;
-    name = m_Api->osName();
-    SYS_DEBUG ("*** osName (nofile) = %s", SYS_STR(name));
-    QVERIFY (name == "qtn_prod_sw_version");
-    delete m_Api;
-
-    /*
-     * Simulating empty file.
-     */
-    m_Api = new AboutBusinessLogic;
-    fileOpenSuccess = true;
-    name = m_Api->osName();
-    SYS_DEBUG ("*** osName (emptyfile) = %s", SYS_STR(name));
-    QVERIFY (name == "qtn_prod_sw_version");
-    delete m_Api;
-
-    /*
-     * Testing with simulating a the perfect input file.
-     */
-    m_Api = new AboutBusinessLogic;
-    fileOpenSuccess = true;
-    fileContent = "OSSO_PRODUCT_RELEASE_NAME='fakeOsName'\n";
-    name = m_Api->osName();
-    SYS_DEBUG ("*** osName (rightfile) = %s", SYS_STR(name));
-    QVERIFY (name == "fakeOsName");
-    // Repeating with the cached version.
-    name = m_Api->osName();
-    SYS_DEBUG ("*** osName (rightfile) = %s", SYS_STR(name));
-    QVERIFY (name == "fakeOsName");
-#endif
 
     name = m_Api->osName();
     QCOMPARE (name, QString ("qtn_prod_sw_version"));
@@ -240,42 +171,6 @@ Ut_AboutBusinessLogic::testOsVersion ()
     QString name;
 
     m_Api = new AboutBusinessLogic;
-
-#if 0
-    /*
-     * Simulating unsuccessfull file open.
-     */
-    fileOpenSuccess = false;
-    name = m_Api->osVersion();
-    SYS_DEBUG ("*** osVersion (nofile) = %s", SYS_STR(name));
-    //QVERIFY (name == "qtn_prod_sw_version");
-    delete m_Api;
-
-    /*
-     * Simulating empty file.
-     */
-    m_Api = new AboutBusinessLogic;
-    fileOpenSuccess = true;
-    name = m_Api->osVersion();
-    SYS_DEBUG ("*** osVersion (emptyfile) = %s", SYS_STR(name));
-    //QVERIFY (name == "qtn_prod_sw_version");
-    delete m_Api;
-
-    /*
-     * Testing with simulating a the perfect input file.
-     */
-    m_Api = new AboutBusinessLogic;
-    fileOpenSuccess = true;
-    fileContent = "OSSO_PRODUCT_RELEASE_VERSION='fakeOsVersion'\n";
-    name = m_Api->osVersion();
-    SYS_DEBUG ("*** osName (rightfile) = %s", SYS_STR(name));
-    QVERIFY (name == "fakeOsVersion");
-
-    // Repeating with the cached version.
-    name = m_Api->osVersion();
-    SYS_DEBUG ("*** osName (rightfile) = %s", SYS_STR(name));
-    QVERIFY (name == "fakeOsVersion");
-#endif
 
     sysinfo_get_value_retval = (char *) "HARDWARE_PROGRAM_VERSION13";
     name = m_Api->osVersion();
@@ -334,7 +229,6 @@ Ut_AboutBusinessLogic::testBluetooth ()
      * producing answers to queries we just destroy the object.
      */
     m_Api = new AboutBusinessLogic; 
-    m_Api->initiatePhoneQueries ();
     m_Api->initiateBluetoothQueries ();
     delete m_Api;
 }

@@ -5,17 +5,15 @@ TEMPLATE = lib
 CONFIG += plugin \
           gui \
           meegotouch \
+          mobility \
           duicontrolpanel \
           silent \
           link_pkgconfig
 
-contains(DEFINES, HAVE_CELLULAR_QT) {
-    CONFIG += cellular-qt 
-}
-
 PKGCONFIG += sysinfo
 
 QT += dbus
+MOBILITY += systeminfo
 
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
