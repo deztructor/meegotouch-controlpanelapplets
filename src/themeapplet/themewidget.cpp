@@ -59,26 +59,36 @@ ThemeWidget::~ThemeWidget ()
 void
 ThemeWidget::createWidgets ()
 {
-    QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    QGraphicsLinearLayout *mainLayout;
+    
+    /*
+     * Creating and setting up the main layout
+     */
+    mainLayout = new QGraphicsLinearLayout(Qt::Vertical);
+    mainLayout->setContentsMargins (0., 0., 0., 0.);
+    mainLayout->setSpacing (0.);
 
+    /*
+     * Creating the list with the available themes.
+     */
     m_List = new MList();
     m_List->setObjectName ("ThemeList");
 
+    // We only connect the themeChangeStarted if we have a chance to sense the
+    // end of the theme change too. just to be sure.
     if (connect (m_ThemeBusinessLogic, SIGNAL (themeChanged (QString)),
-                 SLOT (enableList ())))
-    {
+                 SLOT (enableList ()))) {
         connect (m_ThemeBusinessLogic, SIGNAL (themeChangeStarted (QString)),
                  SLOT (disableList ()));
     }
-
+    
+    // Cellcreator
     m_CellCreator = new ThemeCellCreator;
     m_List->setCellCreator (m_CellCreator);
     m_List->setSelectionMode (MList::SingleSelection);
 
-
     // This function will create the m_LiveFilterEditor widget.
     readLocalThemes ();
-    //m_List->setShowGroups(true);
 
     /*
      * An item to activate the OVI link.
@@ -90,13 +100,18 @@ ThemeWidget::createWidgets ()
     //m_OviItem->setLayoutPosition (M::VerticalCenterPosition);
     m_OviItem->imageWidget()->setImage ("icon-m-common-ovi");
 
-    connect (m_OviItem, SIGNAL(clicked()),
-            this, SLOT(oviActivated()));
-
+    /*
+     * Adding everything to the layout.
+     */
     m_LiveFilterEditor->setParentLayoutItem (mainLayout);
     mainLayout->addItem (m_OviItem);
     mainLayout->addItem (m_List);
 
+    /*
+     * Connecting to the signals.
+     */
+    connect (m_OviItem, SIGNAL(clicked()),
+            this, SLOT(oviActivated()));
     connect (m_LiveFilterEditor, SIGNAL(textChanged()),
             this, SLOT(textChanged ()));
     connect (m_List, SIGNAL(panningStarted()),
@@ -105,7 +120,6 @@ ThemeWidget::createWidgets ()
             this, SLOT(refreshNeeded ()));
 
     setLayout(mainLayout);
-
     retranslateUi ();
 }
 
