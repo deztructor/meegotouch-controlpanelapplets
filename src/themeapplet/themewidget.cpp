@@ -138,11 +138,11 @@ void
 ThemeWidget::enableList ()
 {
     SYS_DEBUG ("");
-    m_List->blockSignals (false);
+    selectCurrentTheme ();
     /*
      * and select the correct one, if user tried to select some other...
      */
-    selectCurrentTheme ();
+    m_List->blockSignals (false);
 }
 
 void
