@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.17.2~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.17.2-1) meegotouch; urgency=low
 
   [ Zoltan Nyul ]
   * Battery applet updated to the new ui spec
