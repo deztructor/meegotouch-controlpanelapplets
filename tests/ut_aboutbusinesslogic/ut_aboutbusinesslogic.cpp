@@ -31,12 +31,30 @@
 
 #include <QSystemInfo>
 #include <QSystemDeviceInfo>
+#include <QSystemNetworkInfo>
 #include <QNetworkInterface>
 
 #include <MApplication>
 
 #define DEBUG
 #include "../../src/debug.h"
+
+/******************************************************************************
+ * Stubbing the QNetworkInfo
+ */
+QString qnetworkinterface_hwaddr;
+
+QString
+QNetworkInterface::hardwareAddress () const
+{
+    return qnetworkinterface_hwaddr;
+}
+
+bool
+QNetworkInterface::isValid () const
+{
+    return ! qnetworkinterface_hwaddr.isNull ();
+}
 
 /******************************************************************************
  * Stubbing the QSystemDeviceInfo::imei () and QSystemInfo::version ()
@@ -56,6 +74,24 @@ QString
 QSystemInfo::version(QSystemInfo::Version type, const QString &parameter)
 {
     return systeminfo_firmware_retval;
+}
+
+QSystemNetworkInfo::QSystemNetworkInfo (QObject *parent)
+{
+    Q_UNUSED (parent);
+}
+
+QSystemNetworkInfo::~QSystemNetworkInfo ()
+{
+}
+
+QNetworkInterface qnetif_for_testing;
+
+QNetworkInterface
+QSystemNetworkInfo::interfaceForMode (QSystemNetworkInfo::NetworkMode mode)
+{
+    Q_UNUSED (mode);
+    return qnetif_for_testing;
 }
 
 QTM_END_NAMESPACE
@@ -82,23 +118,6 @@ QDBusAbstractInterface::callWithCallback (
 
     lastCalledMethod = method;
     return true;
-}
-
-/******************************************************************************
- * Stubbing the QNetworkInfo
- */
-QString qnetworkinterface_hwaddr;
-
-QString
-QNetworkInterface::hardwareAddress () const
-{
-    return qnetworkinterface_hwaddr;
-}
-
-bool
-QNetworkInterface::isValid () const
-{
-    return ! qnetworkinterface_hwaddr.isNull ();
 }
 
 /******************************************************************************
