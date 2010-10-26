@@ -92,7 +92,7 @@ void
 Ut_ThemeDialog::initTestCase()
 {
     m_App = new MApplication (argc, &app_name);
-    m_ThemeBusinessLogic = new ThemeBusinessLogic;
+    m_ThemeBusinessLogic = ThemeBusinessLogic::instance();
 }
 
 void 

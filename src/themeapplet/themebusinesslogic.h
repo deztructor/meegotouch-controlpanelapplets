@@ -48,7 +48,7 @@ class ThemeBusinessLogic : public QObject
     Q_OBJECT
 
 public:
-    ThemeBusinessLogic ();
+    static ThemeBusinessLogic *instance ();
     ~ThemeBusinessLogic ();
     
     QString currentThemeCodeName ();
@@ -62,17 +62,20 @@ public:
             const QString  &themeCodeName,
             M::Orientation orientation) const;
 
+protected:
+    ThemeBusinessLogic ();
+
 public slots:
     /*!
      * Sets the current theme to the theme with the given id.
      */
     void changeTheme (QString themeCodeName);
-    void themeChangeCompleted ();
     void themeAdded (QString themeName);
     void themeRemoved (QString themeName);
 
 private slots:
     void performThemeChange ();
+    void themeChangeCompleted ();
 
 signals:
     void themeChangeStarted (QString themeCodeName);
@@ -84,9 +87,14 @@ signals:
     void refreshNeeded ();
 
 private:
-    QList<ThemeDescriptor *>            m_AvailableThemes;
-    QStringList                         m_DisabledThemeNames;
-    QString                             m_ChangingTheme;
+    static ThemeBusinessLogic   *sm_Instance;
+
+    QList<ThemeDescriptor *>     m_AvailableThemes;
+    QStringList                  m_DisabledThemeNames;
+    QString                      m_ChangingTheme;
+#ifdef UNIT_TEST
+    friend class Ut_ThemeBusinessLogic;
+#endif
 };
 
 #endif

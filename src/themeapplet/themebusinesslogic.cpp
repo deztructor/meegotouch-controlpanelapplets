@@ -30,7 +30,7 @@
 #include <QFile>
 #include <QTimer>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -41,12 +41,23 @@
 #  include "qdirstub.h"
 #endif
 
+ThemeBusinessLogic *ThemeBusinessLogic::sm_Instance = 0;
 
 // The directory where all the available themes are installed.
 static const QString themeDirName (MEEGO_THEMEDIR);
 
 // The GConf key where meegotouch expects us to place the theme name.
 static const QString themeGConfKey ("/meegotouch/theme/name");
+
+ThemeBusinessLogic *
+ThemeBusinessLogic::instance ()
+{
+    if (!ThemeBusinessLogic::sm_Instance)
+        ThemeBusinessLogic::sm_Instance = 
+            new ThemeBusinessLogic;
+
+    return ThemeBusinessLogic::sm_Instance;
+}
 
 ThemeBusinessLogic::ThemeBusinessLogic ()
 {
@@ -81,9 +92,9 @@ ThemeBusinessLogic::ThemeBusinessLogic ()
     }
 }
 
-
 ThemeBusinessLogic::~ThemeBusinessLogic ()
 {
+    sm_Instance = 0;
 }
 
 /*!
@@ -193,6 +204,7 @@ ThemeBusinessLogic::changeTheme (
     emit themeChangeStarted (themeCodeName);
     
     m_ChangingTheme = themeCodeName;
+    SYS_DEBUG ("*** m_ChangingTheme = %s", SYS_STR(m_ChangingTheme));
     #ifdef DELAY_THEME_CHANGE
     QTimer::singleShot(1000, this, SLOT(performThemeChange()));
     #else
@@ -203,9 +215,11 @@ ThemeBusinessLogic::changeTheme (
 void 
 ThemeBusinessLogic::performThemeChange ()
 {
-    SYS_WARNING ("CHANGING THEME");
+    SYS_DEBUG ("CHANGING THEME");
+    SYS_DEBUG ("*** m_ChangingTheme = %s", SYS_STR(m_ChangingTheme));
     MGConfItem  gconfItem (themeGConfKey);
     gconfItem.set (m_ChangingTheme);
+    SYS_DEBUG ("*** m_ChangingTheme = %s", SYS_STR(m_ChangingTheme));
 }
 
 void 
@@ -213,11 +227,14 @@ ThemeBusinessLogic::themeChangeCompleted ()
 {
     QString     themeCodeName = currentThemeCodeName ();
 
-    SYS_DEBUG ("Theme changed to: %s", SYS_STR(themeCodeName));
-    SYS_DEBUG ("We wanted       : %s", SYS_STR(m_ChangingTheme));
+    SYS_DEBUG ("This            : %p", this);
+    SYS_DEBUG ("Theme changed to: '%s'", SYS_STR(themeCodeName));
+    SYS_DEBUG ("We wanted       : '%s'", SYS_STR(m_ChangingTheme));
     #ifdef WARNING
     if (themeCodeName != m_ChangingTheme) {
-        SYS_WARNING ("We wanted %s", SYS_STR(m_ChangingTheme));
+        SYS_WARNING ("We wanted '%s' instead of '%s'", 
+                SYS_STR(m_ChangingTheme),
+                SYS_STR(themeCodeName));
     }
     #endif
     emit themeChanged (themeCodeName);

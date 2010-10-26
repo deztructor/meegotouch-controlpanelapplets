@@ -100,7 +100,7 @@ Ut_ThemeListModel::initTestCase()
 
     m_Priv = new UtThemeListModelPrivate;
     m_App = new MApplication (argc, &app_name);
-    m_Logic = new ThemeBusinessLogic;
+    m_Logic = ThemeBusinessLogic::instance();
     m_Api = new ThemeListModel (m_Logic);
 
     connectSuccess = connect (

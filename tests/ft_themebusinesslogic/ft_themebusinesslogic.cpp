@@ -71,7 +71,7 @@ Ft_ThemeBusinessLogic::initTestCase()
 
     m_Priv = new FtThemeBusinessLogicPrivate;
     m_App = new MApplication (argc, &app_name);
-    m_Api = new ThemeBusinessLogic;
+    m_Api = ThemeBusinessLogic::instance();
 
     connectSuccess = connect (
             m_Api, SIGNAL(themeChanged(QString)),

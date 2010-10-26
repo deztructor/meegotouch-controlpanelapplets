@@ -24,19 +24,33 @@
 #include <MTheme>
 #include <MAction>
 
+#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(themeapplet, ThemeApplet)
 
 const QString cssDir = "/usr/share/themes/base/meegotouch/duicontrolpanel/style/";
 
+#ifdef DEBUG
+static int nApplets = 0;
+#endif
+
 ThemeApplet::ThemeApplet() :
-    m_ThemeBusinessLogic (new ThemeBusinessLogic)
+    m_ThemeBusinessLogic (ThemeBusinessLogic::instance())
 {
+#ifdef DEBUG
+    ++nApplets;
+    SYS_WARNING ("*** nApplets = %d", nApplets);
+    Q_ASSERT (nApplets == 1);
+#endif
 }
 
 ThemeApplet::~ThemeApplet() 
 {
+    --nApplets;
+    SYS_WARNING ("*** nApplets = %d", nApplets);
+    delete m_ThemeBusinessLogic;
 }
 
 void 

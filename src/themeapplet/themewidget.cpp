@@ -33,7 +33,7 @@
 #include <MBasicListItem>
 #include <MImageWidget>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -224,7 +224,8 @@ ThemeWidget::selectCurrentTheme ()
      */
     currentThemeCodeName = m_ThemeBusinessLogic->currentThemeCodeName();
     currentIndex = m_ThemeListModel->indexOfCodeName(currentThemeCodeName);
-
+    SYS_DEBUG ("*** currentThemeCodeName = %s", SYS_STR(currentThemeCodeName));
+    SYS_DEBUG ("*** currentIndex         = %d", currentIndex.row());
     currentIndex = m_Proxy->mapFromSource (currentIndex);
     m_List->selectItem (currentIndex);
     m_List->scrollTo (currentIndex, MList::EnsureVisibleHint);
