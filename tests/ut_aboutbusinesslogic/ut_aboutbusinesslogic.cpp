@@ -24,12 +24,14 @@
 #include <stdint.h>
 #include <inttypes.h>
 #include <QMap>
+#include <QDebug>
 #include <QString>
 #include <QVariant>
 #include <QByteArray>
 
 #include <QSystemInfo>
 #include <QSystemDeviceInfo>
+#include <QNetworkInterface>
 
 #include <MApplication>
 
@@ -37,7 +39,7 @@
 #include "../../src/debug.h"
 
 /******************************************************************************
- * Stubbing the QSystemDeviceInfo::imei ()
+ * Stubbing the QSystemDeviceInfo::imei () and QSystemInfo::version ()
  */
 QString systemdeviceinfo_imei_retval;
 QString systeminfo_firmware_retval;
@@ -83,36 +85,54 @@ QDBusAbstractInterface::callWithCallback (
 }
 
 /******************************************************************************
+ * Stubbing the QNetworkInfo
+ */
+QString qnetworkinterface_hwaddr;
+
+QString
+QNetworkInterface::hardwareAddress () const
+{
+    return qnetworkinterface_hwaddr;
+}
+
+bool
+QNetworkInterface::isValid () const
+{
+    return ! qnetworkinterface_hwaddr.isNull ();
+}
+
+/******************************************************************************
  * Ut_AboutBusinessLogic implementation. 
  */
 void 
 Ut_AboutBusinessLogic::init()
 {
+    m_Api = new AboutBusinessLogic;
 }
 
 void 
 Ut_AboutBusinessLogic::cleanup()
 {
+    delete m_Api;
+    m_Api = 0;
 }
 
 
 static int argc = 1;
-static char *app_name = (char*) "./Ut_AboutBusinessLogic";
+static char *app_name = (char*) "./ut_aboutbusinesslogic";
 
 void 
 Ut_AboutBusinessLogic::initTestCase()
 {
     m_App = new MApplication (argc, &app_name);
-    m_Api = 0;
+
+    qDebug () << QNetworkInterface::allInterfaces ();
 }
 
 void 
 Ut_AboutBusinessLogic::cleanupTestCase()
 {
-    if (m_Api)
-        delete m_Api;
-    
-    delete m_App;
+    m_App->deleteLater ();
 }
 
 void 
@@ -120,10 +140,7 @@ Ut_AboutBusinessLogic::testImei()
 {
     systemdeviceinfo_imei_retval = "AA-BBBBBB-CCCCCC-D";
 
-    m_Api = new AboutBusinessLogic;
     QCOMPARE (m_Api->IMEI (), systemdeviceinfo_imei_retval);
-
-    delete m_Api;
 }
 
 void 
@@ -131,11 +148,8 @@ Ut_AboutBusinessLogic::testOsName ()
 {
     QString name;
 
-    m_Api = new AboutBusinessLogic;
-
     name = m_Api->osName();
     QCOMPARE (name, QString ("qtn_prod_sw_version"));
-    delete m_Api;
 }
 
 void 
@@ -143,33 +157,24 @@ Ut_AboutBusinessLogic::testOsVersion ()
 {
     QString name;
 
-    m_Api = new AboutBusinessLogic;
-
     systeminfo_firmware_retval = "HARDWARE_PROGRAM_VERSION13";
     name = m_Api->osVersion();
 
     QCOMPARE (name, QString ("VERSION13"));
-
-    delete m_Api;
 }
 
-
-void 
+void
 Ut_AboutBusinessLogic::testBluetooth ()
 {
     QMap <QString, QVariant> properties;
     QString                  address;
 
     properties["Address"] = QVariant(QString("fake-bluetooth-address"));
-    m_Api = new AboutBusinessLogic; 
-    
+
     /*
      * Let's initiate the Bluetooth query that will call the
      * QDBusAbstractInterface::callWithCallback() that is stubbed.
-     * FIXME: Once we stub the socket, the ioctl and the close() we can call
-     * initiateDataCollection() to achieve a better coverage.
      */
-    //m_Api->initiateDataCollection();
     m_Api->initiateBluetoothQueries ();
     QVERIFY (lastCalledMethod == "DefaultAdapter");
 
@@ -196,15 +201,25 @@ Ut_AboutBusinessLogic::testBluetooth ()
     m_Api->DBusMessagingFailure (QDBusError());
 
     delete m_Api;
-
     /*
      * Let's see what happens if we initate the data collection and instead of
      * producing answers to queries we just destroy the object.
      */
-    m_Api = new AboutBusinessLogic; 
+    m_Api = new AboutBusinessLogic;
     m_Api->initiateBluetoothQueries ();
-    delete m_Api;
+    //XXX: delete m_Api; (done in cleanup ())
+}
+
+void
+Ut_AboutBusinessLogic::testHwAddresses ()
+{
+    qnetworkinterface_hwaddr = "test-address-xxx";
+
+    QCOMPARE (m_Api->WiFiAddress (), qnetworkinterface_hwaddr);
+
+    qnetworkinterface_hwaddr = "test-address-yyy";
+
+    QCOMPARE (m_Api->BluetoothAddress (), qnetworkinterface_hwaddr);
 }
 
 QTEST_APPLESS_MAIN(Ut_AboutBusinessLogic)
-

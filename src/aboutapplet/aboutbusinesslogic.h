@@ -30,12 +30,7 @@ class QDBusObjectPath;
 class QString;
 
 /*!
- * To test this class under scratchbox1 I had to start the bluetooth daemon:
- * # source /tmp/session_bus_address.user
- * # bluetoothd -n	
- *
- * This class has some code that is commented out. Please leave these there,
- * when i got information about the IMEI number I will finalize the code.
+ * This class allows to get some information about system
  */
 class AboutBusinessLogic : public QObject
 {
@@ -45,21 +40,18 @@ public:
     AboutBusinessLogic ();
     ~AboutBusinessLogic ();
 
-    void initiateDataCollection();
-
     QString osName ();
     QString osVersion ();
-    QString WiFiAddress (const char *iface);
     QString WiFiAddress ();
     QString BluetoothAddress ();
     QString IMEI ();
 
 signals:
-    void ready();
-    
+    void refreshNeeded ();
+
 public slots:
     void defaultBluetoothAdapterAddressReceived (
-            QMap<QString, QVariant> properties);
+        QMap<QString, QVariant> properties);
     void defaultBluetoothAdapterReceived (QDBusObjectPath adapter);
     void DBusMessagingFailure (QDBusError error);
 
@@ -70,12 +62,8 @@ private:
     QPointer<QDBusInterface> m_ManagerDBusIf;
     QPointer<QDBusInterface> m_AdapterDBusIf;
 
-    bool          m_gotBluetoothAddress;
     QString       m_BluetoothAddress;
-
-    bool          m_gotImei;
     QString       m_Imei;
-
     QString       m_WifiAddress;
     QString       m_OsName;
     QString       m_OsVersion;

@@ -18,17 +18,15 @@
 ****************************************************************************/
 #include "aboutbusinesslogic.h"
 
-#include <net/if.h>
-#include <sys/ioctl.h>
-#include <sys/socket.h>
+#include <QFile>
 #include <QSystemInfo>
+#include <QNetworkInterface>
 #include <QSystemDeviceInfo>
+#include <QSystemNetworkInfo>
 
 QTM_USE_NAMESPACE
 
-#include <QFile>
 #include <QRegExp>
-#include <QByteArray>
 #include <QString>
 #include <QStringList>
 #include <QtDBus>
@@ -51,9 +49,7 @@ QTM_USE_NAMESPACE
 #define DBUS_BLUEZ_GET_DEFAULT_ADAPTER_METHOD "DefaultAdapter"
 #define DBUS_BLUEZ_GET_PROPERTIES_METHOD "GetProperties"
 
-AboutBusinessLogic::AboutBusinessLogic() :
-    m_gotBluetoothAddress (false),
-    m_gotImei (false)
+AboutBusinessLogic::AboutBusinessLogic()
 {
 }
 
@@ -65,22 +61,6 @@ AboutBusinessLogic::~AboutBusinessLogic()
         delete m_AdapterDBusIf;
 }
 
-/*!
- * Starts collecting data.
- */
-void
-AboutBusinessLogic::initiateDataCollection()
-{
-    initiateBluetoothQueries ();
-
-    osName ();
-    osVersion ();
-    WiFiAddress ();
-    IMEI ();
-
-    emit ready();
-}
-
 QString
 AboutBusinessLogic::osVersion ()
 {
@@ -88,7 +68,6 @@ AboutBusinessLogic::osVersion ()
 
     if (!m_OsVersion.isEmpty())
         return m_OsVersion;
-
 
     QSystemInfo systemInfo;
 
@@ -160,70 +139,25 @@ AboutBusinessLogic::osName ()
 }
 
 /*!
- * Returns the MAC address for the interface with the given name, or returns an
- * empty string if the interface was not found.
- */
-QString
-AboutBusinessLogic::WiFiAddress (
-        const char *iface)
-{
-    int           dd;
-	struct ifreq  sIfReq;
-	unsigned char cMacAddr[8];
-    char          line[32];
-
-	for (dd = 0; dd < 8; dd++)
-        cMacAddr[dd] = 0;
-
-	dd = socket (PF_INET, SOCK_STREAM, 0);
-	
-	if (dd < 0)
-		return QString();
-
-	snprintf (sIfReq.ifr_name, IFNAMSIZ, "%s", iface);
-
-	if (ioctl (dd, SIOCGIFHWADDR, &sIfReq) != 0)
-		return QString();
-
-	memmove ((void *) &cMacAddr[0],
-            (void *) &sIfReq.ifr_ifru.ifru_hwaddr.sa_data[0],
-            6);
-
-	close (dd);
-
-	snprintf (line, 18, "%02X:%02X:%02X:%02X:%02X:%02X",
-              cMacAddr[0], cMacAddr[1], cMacAddr[2],
-              cMacAddr[3], cMacAddr[4], cMacAddr[5]);
-
-    return line;
-}
-
-/*!
  * Returns the MAC address for the first interface it founds. This method
  * contains a static list of interface names that the method will try to find.
  */
 QString
 AboutBusinessLogic::WiFiAddress ()
 {
-    QString        retval;
-    const char    *interfaceNames[] = {
-        "wlan0", "wimax0", NULL
-    };
-
     if (!m_WifiAddress.isEmpty())
         return m_WifiAddress;
 
-    for (int n = 0; interfaceNames[n] != NULL; ++n) {
-        retval = WiFiAddress (interfaceNames[n]);
-        SYS_DEBUG ("*** %s%s%s address is %s",
-                TERM_YELLOW, interfaceNames[n], TERM_NORMAL,
-                SYS_STR(retval));
-        if (!retval.isEmpty())
-            break;
-    }
+    QSystemNetworkInfo netInfo;
 
-    m_WifiAddress = retval;
-    return retval;
+    m_WifiAddress = netInfo.interfaceForMode (
+            QSystemNetworkInfo::WlanMode).hardwareAddress ();
+
+    if (m_WifiAddress.isNull ())
+        m_WifiAddress = netInfo.interfaceForMode (
+            QSystemNetworkInfo::WimaxMode).hardwareAddress ();
+
+    return m_WifiAddress;
 }
 
 /*!
@@ -232,8 +166,22 @@ AboutBusinessLogic::WiFiAddress ()
 QString
 AboutBusinessLogic::BluetoothAddress ()
 {
-    SYS_DEBUG ("*** m_gotBluetoothAddress = %s", SYS_BOOL(m_gotBluetoothAddress));
-    SYS_DEBUG ("*** m_BluetoothAddress    = %s", SYS_STR(m_BluetoothAddress));
+    if (m_BluetoothAddress.isNull () == false)
+        return m_BluetoothAddress;
+
+    QSystemNetworkInfo netInfo;
+    QNetworkInterface bluetooth
+        = netInfo.interfaceForMode (QSystemNetworkInfo::BluetoothMode);
+
+    /*
+     * Currently the bluetooth hardware address only available from
+     * QNetworkInterface when the interface is loaded & up
+     */
+    if (bluetooth.isValid ())
+        m_BluetoothAddress = bluetooth.hardwareAddress ();
+    else
+        initiateBluetoothQueries ();
+
     return m_BluetoothAddress;
 }
 
@@ -243,15 +191,12 @@ AboutBusinessLogic::BluetoothAddress ()
 QString
 AboutBusinessLogic::IMEI ()
 {
-    SYS_DEBUG ("*** m_gotImei             = %s", SYS_BOOL(m_gotImei));
-    SYS_DEBUG ("*** m_Imei                = %s", SYS_STR(m_Imei));
-    if (m_gotImei)
+    if (m_Imei.isNull () == false)
         return m_Imei;
 
     // Get IMEI from QtMobility SystemDeviceInfo obj.
     QSystemDeviceInfo deviceInfo;
 
-    m_gotImei = true;
     m_Imei = deviceInfo.imei ();
 
     return m_Imei;
@@ -288,7 +233,7 @@ AboutBusinessLogic::initiateBluetoothQueries ()
  */
 void
 AboutBusinessLogic::defaultBluetoothAdapterReceived (
-		QDBusObjectPath adapter)
+        QDBusObjectPath adapter)
 {
     QDBusInterface  *m_AdapterDBusIf;
 
@@ -318,7 +263,6 @@ AboutBusinessLogic::defaultBluetoothAdapterAddressReceived (
 {
     SYS_DEBUG("");
     m_BluetoothAddress = properties["Address"].toString();
-    m_gotBluetoothAddress = true;
     SYS_DEBUG ("address = %s", SYS_STR(m_BluetoothAddress));
     delete m_AdapterDBusIf;
 
@@ -326,7 +270,7 @@ AboutBusinessLogic::defaultBluetoothAdapterAddressReceived (
      * Currently only the bluetoot address is handled asynchronously, so if we
      * have it we have them all.
      */
-    emit ready();
+    emit refreshNeeded ();
 }
 
 /*!
@@ -335,9 +279,8 @@ AboutBusinessLogic::defaultBluetoothAdapterAddressReceived (
  */
 void
 AboutBusinessLogic::DBusMessagingFailure (
-		QDBusError error)
+        QDBusError error)
 {
     SYS_WARNING ("%s: %s", SYS_STR (error.name()), SYS_STR (error.message()));
 }
-
 

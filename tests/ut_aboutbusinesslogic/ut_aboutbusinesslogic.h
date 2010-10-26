@@ -41,6 +41,8 @@ private slots:
     void testOsName ();
     void testOsVersion ();
     void testBluetooth ();
+    void testHwAddresses ();
+
 private:
     MApplication                  *m_App;
     QPointer <AboutBusinessLogic>  m_Api;

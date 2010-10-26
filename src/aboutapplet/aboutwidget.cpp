@@ -23,6 +23,7 @@
 
 #include <MImageWidget>
 #include <MLabel>
+#include <MSeparator>
 #include <QGraphicsLinearLayout>
 #include <MStylableWidget>
 
@@ -33,14 +34,13 @@ AboutWidget::AboutWidget (
         AboutBusinessLogic     *aboutBusinessLogic,
         QGraphicsWidget        *parent) :
     DcpWidget (parent),
-    m_AboutBusinessLogic (aboutBusinessLogic),
-    m_Label1 (0)
+    m_AboutBusinessLogic (aboutBusinessLogic)
 {
-    connect (aboutBusinessLogic, SIGNAL (ready ()),
-             this, SLOT (dataReady ()));
-
     createContent ();
-    aboutBusinessLogic->initiateDataCollection ();
+
+    connect (m_AboutBusinessLogic, SIGNAL (refreshNeeded ()), SLOT (refresh ()));
+
+    retranslateUi ();
 }
 
 AboutWidget::~AboutWidget ()
@@ -52,19 +52,21 @@ void
 AboutWidget::createContent ()
 {
     QGraphicsLinearLayout   *layout;
-    MImageWidget            *logo;
-    QGraphicsLinearLayout   *logoLayout;
     MStylableWidget         *stretcher;
 
     layout = new QGraphicsLinearLayout (Qt::Vertical);
     layout->setContentsMargins (0., 0., 0., 0.);
 
+#if 0
     /*
      * A stretcher.
      */
     stretcher = new MStylableWidget ();
     stretcher->setObjectName ("CommonSpacer");
     layout->addItem (stretcher);
+
+    MImageWidget            *logo;
+    QGraphicsLinearLayout   *logoLayout;
 
     /*
      * The first row: a logo
@@ -78,10 +80,10 @@ AboutWidget::createContent ()
      */
     logo = new MImageWidget;
     logo->setImage ("icon-l-about-nokia-logo");
-    logo->setAspectRatioMode (Qt::KeepAspectRatio);
     logoLayout->addStretch ();
     layout->addItem (logoLayout);
-    
+#endif
+
     /*
      * A stretcher.
      */
@@ -89,40 +91,69 @@ AboutWidget::createContent ()
     stretcher->setObjectName ("CommonSpacer");
     layout->addItem (stretcher);
 
-    /*
-     * A label... FIXME: This might be wrong, the layout guide seems to define
-     * a stretcher inside the text, so we might want to create two separate
-     * labels...
-     */
-    m_Label1 = new MLabel;
-    m_Label1->setWordWrap (true);
+    m_InfoLabel = new MLabel;
+    m_InfoLabel->setWordWrap (true);
 
-    layout->addItem (m_Label1);
+    m_LicenseLabel = new MLabel;
+    // this text is not translated!
+    m_LicenseLabel->setText (licenseText ());
+
+    layout->addItem (m_InfoLabel);
+    layout->addItem (new MSeparator (this));
+    layout->addItem (m_LicenseLabel);
+
     layout->addStretch ();
 
     setLayout (layout);
 }
 
 
-QString 
+QString
 AboutWidget::labelText()
 {
     QString retval;
+    QString tmp;
 
     retval += "<h3>" + m_AboutBusinessLogic->osName () + "</h3>";
     //% "Version"
     retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_version"));
     retval += m_AboutBusinessLogic->osVersion();
-    //% "WLAN MAC address"
-    retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_wlan_mac_address"));
-    retval += m_AboutBusinessLogic->WiFiAddress ();
-    //% "Bluetooth address"
-    retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_bt_address"));
-    retval += m_AboutBusinessLogic->BluetoothAddress ();
-    //% "IMEI"
-    retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_imei"));
-    retval += m_AboutBusinessLogic->IMEI ();
-    retval += "<hr />";
+
+    tmp = m_AboutBusinessLogic->WiFiAddress ();
+    if (tmp.isEmpty () == false)
+    {
+        //% "WLAN MAC address"
+        retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_wlan_mac_address"));
+        retval += tmp;
+    }
+
+    tmp = m_AboutBusinessLogic->BluetoothAddress ();
+    if (tmp.isEmpty () == false)
+    {
+        //% "Bluetooth address"
+        retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_bt_address"));
+        retval += tmp;
+    }
+
+    tmp = m_AboutBusinessLogic->IMEI ();
+    if (tmp.isEmpty () == false)
+    {
+        //% "IMEI"
+        retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_imei"));
+        retval += tmp;
+    }
+//    retval += "<hr />";
+
+    return retval;
+}
+
+QString
+AboutWidget::licenseText()
+{
+    QString retval;
+
+    // TODO: make this customizable [eg.: for meego.com]
+
     retval += "<p>This product includes certain free/open source software</p>";
     retval += "<p>The exact terms of the licenses, disclaimers, "
               "aknowledgements and notices are provided in the "
@@ -155,14 +186,14 @@ AboutWidget::labelText()
 }
 
 void
-AboutWidget::retranslateUi ()
+AboutWidget::refresh ()
 {
-    m_Label1->setText (labelText ());
+    m_InfoLabel->setText (labelText ());
 }
 
-void 
-AboutWidget::dataReady ()
+void
+AboutWidget::retranslateUi ()
 {
-    m_Label1->setText (labelText ());
+    refresh ();
 }
 
