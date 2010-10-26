@@ -92,9 +92,9 @@ AboutWidget::createContent ()
     layout->addItem (stretcher);
 
     m_InfoLabel = new MLabel;
-    m_InfoLabel->setWordWrap (true);
 
     m_LicenseLabel = new MLabel;
+    m_LicenseLabel->setWordWrap (true);
     // this text is not translated!
     m_LicenseLabel->setText (licenseText ());
 
