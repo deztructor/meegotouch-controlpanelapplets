@@ -107,13 +107,16 @@ UsbView::initWidget ()
         switch (i)
         {
             case BUTTON_MASS_STORAGE:
+                m_buttons[i]->setObjectName("MassStorage");
                 id = (int) QmUSBMode::MassStorage;
                 break;
             case BUTTON_OVI_SUITE:
+                m_buttons[i]->setObjectName("OviSuite");
                 id = (int) QmUSBMode::OviSuite;
                 break;
             case BUTTON_ALWAYS_ASK:
             default:
+                m_buttons[i]->setObjectName("AlwaysAsk");
                 id = (int) QmUSBMode::Ask;
                 break;
         }
