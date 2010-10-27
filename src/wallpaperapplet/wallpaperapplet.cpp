@@ -94,9 +94,9 @@ WallpaperApplet::title() const
 QVector<MAction*>
 WallpaperApplet::viewMenuItems()
 {
-    MAction            *helpAction;
+    //MAction            *helpAction;
     QVector<MAction*>   vector;
-
+#if 0
     SYS_DEBUG ("");
     helpAction = new MAction (
             //% "User guide"
@@ -108,7 +108,7 @@ WallpaperApplet::viewMenuItems()
 
     connect (helpAction, SIGNAL (triggered (bool)),
              this, SLOT (userGuide ()));
-
+#endif
     return vector;
 }
 
@@ -121,6 +121,7 @@ WallpaperApplet::constructBrief (
     return new WallpaperBrief (m_WallpaperBusinessLogic);
 }
 
+#if 0
 void
 WallpaperApplet::userGuide ()
 {
@@ -130,4 +131,4 @@ WallpaperApplet::userGuide ()
                               "com.nokia.UserGuideIf");
     userguide.call ("pageByPath", "fullguide-1-2-list-1.cfg");
 }
-
+#endif

@@ -50,8 +50,12 @@ public:
     virtual QVector<MAction *> viewMenuItems();
     virtual DcpBrief* constructBrief(int partId);
 
-private slots:
-    void userGuide ();
+    /*
+     * Now everyone tells we should not show the help menu item... I can
+     * certainly remove it...
+     */
+//private slots:
+//    void userGuide ();
 
 private:
     QPointer<WallpaperWidget>        m_MainWidget;
