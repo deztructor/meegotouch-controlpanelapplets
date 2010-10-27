@@ -44,12 +44,14 @@ public:
             QGraphicsWidget        *parent = 0);
     ~WallpaperWidget ();
 
+protected:
+    virtual void polishEvent ();
+
 private slots:
     void slotImageActivated (WallpaperDescriptor *desc);
     void slotImageActivated ();
     virtual void createContent ();
     void oviActivated ();
-    void haveParent ();
     
     #ifdef HAVE_CONTENT_MANAGER
     void galleryActivated ();

@@ -54,9 +54,6 @@ WallpaperWidget::WallpaperWidget (
      */
     //createContent ();
     QTimer::singleShot(100, this, SLOT(createContent()));
-
-    connect (this, SIGNAL(layoutChanged()),
-            this, SLOT(haveParent ()));
 }
 
 WallpaperWidget::~WallpaperWidget ()
@@ -127,7 +124,7 @@ WallpaperWidget::oviActivated ()
 }
 
 void
-WallpaperWidget::haveParent ()
+WallpaperWidget::polishEvent ()
 {
     QGraphicsWidget  *parent;
     MApplicationPage *page = 0;
@@ -146,6 +143,13 @@ WallpaperWidget::haveParent ()
 
     if (!page)
         return;
+
+    /**************************************************************************
+     * Hiding the home button. 
+     */
+    page->setComponentsDisplayMode (
+            MApplicationPage::HomeButton,
+            MApplicationPageModel::Hide);
 
     /*
      * Adding the gallery action.
