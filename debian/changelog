@@ -1,4 +1,14 @@
-meegotouch-controlpanelapplets (0.17.2~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.17.3~1) meegotouch; urgency=low
+
+  [ David Kedves ]
+  * Use QtMobility to fetch IMEI (and not some closed source lib)
+  * Use QNetworkInterface to get hardware addresses...
+  * Fixes: NB#200236 - meegotouch-controlpanelapplets 0.17.1 can not be
+    recompiled
+
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 26 Oct 2010 14:16:44 +0200
+
+meegotouch-controlpanelapplets (0.17.2-1) meegotouch; urgency=low
 
   [ Zoltan Nyul ]
   * Battery applet updated to the new ui spec
@@ -6,7 +16,6 @@ meegotouch-controlpanelapplets (0.17.2~1) meegotouch; urgency=low
 
   [ David Kedves ]
   * Make userguide dependency as optional (as it closed-source)
-  * Use QtMobility to fetch IMEI (and not some closed source lib)
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 25 Oct 2010 13:11:22 +0200
 

@@ -32,22 +32,24 @@ class AboutWidget : public DcpWidget
 
 public:
     AboutWidget (
-            AboutBusinessLogic     *aboutBusinessLogic, 
+            AboutBusinessLogic     *aboutBusinessLogic,
             QGraphicsWidget        *parent = 0);
     ~AboutWidget ();
 
     void createContent ();
-    QString labelText();
+    QString labelText ();
+    QString licenseText ();
 
-public slots:
-    void dataReady ();
+private slots:
+    void refresh ();
 
 protected:
     virtual void retranslateUi ();
 
 private:
     QPointer<AboutBusinessLogic>    m_AboutBusinessLogic;
-    MLabel                         *m_Label1;
+    MLabel                         *m_InfoLabel;
+    MLabel                         *m_LicenseLabel;
     #ifdef UNIT_TEST
     friend class Ut_AboutApplet;
     #endif

@@ -68,17 +68,13 @@ Ut_AboutApplet::initTestCase()
      */
     m_Applet = new AboutApplet;
     QVERIFY (m_Applet->m_AboutBusinessLogic);
-    QVERIFY (!m_Applet->m_AboutBusinessLogic->m_ManagerDBusIf);
-    QVERIFY (!m_Applet->m_AboutBusinessLogic->m_AdapterDBusIf);
 
     /*
      * We are not testing the AboutBusinesslogic here, so the following lines
      * act as a kind of mocking, the aboutbusinesslogic will not initiate
      * outside communication if it has the data already.
      */
-    m_Applet->m_AboutBusinessLogic->m_gotBluetoothAddress = true;
     m_Applet->m_AboutBusinessLogic->m_BluetoothAddress = "fakeBluetooth";
-    m_Applet->m_AboutBusinessLogic->m_gotImei = true;
     m_Applet->m_AboutBusinessLogic->m_Imei = "FakeImei";
     m_Applet->m_AboutBusinessLogic->m_WifiAddress = "FakeWifi";
     m_Applet->m_AboutBusinessLogic->m_OsName = "FakeOsName";
@@ -144,7 +140,6 @@ Ut_AboutApplet::testConstructWidget ()
      * FIXME: These are not much checking, more like coverage making calls.
      */
     widget->retranslateUi ();
-    widget->dataReady ();
 
     /*
      * Testing if the widget accepts the back. Our applets always accept back.
