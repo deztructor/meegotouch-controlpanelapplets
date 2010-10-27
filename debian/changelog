@@ -5,8 +5,9 @@ meegotouch-controlpanelapplets (0.17.3~1) meegotouch; urgency=low
   * Use QNetworkInterface to get hardware addresses...
   * Fixes: NB#200236 - meegotouch-controlpanelapplets 0.17.1 can not be
     recompiled
+  * Update the desktop files according to the new categories in controlpanel
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 26 Oct 2010 14:16:44 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 27 Oct 2010 11:25:17 +0200
 
 meegotouch-controlpanelapplets (0.17.2-1) meegotouch; urgency=low
 

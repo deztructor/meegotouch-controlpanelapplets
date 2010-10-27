@@ -12,6 +12,6 @@ X-Maemo-Fixed-Args="About product"
 X-DUIApplet-Applet=libaboutapplet.so
 
 [DCP]
-Category=qtn_sett_main_data
-Order=6
+Category=qtn_sett_main_about
+Order=2
 WidgetType=Label

@@ -15,7 +15,7 @@ Exec=
 X-DUIApplet-Applet=libusbapplet.so
 
 [DCP]
-Category=Connectivity
-Order=7
+Category=qtn_sett_main_accessories
+Order=1
 WidgetType=Label
 
