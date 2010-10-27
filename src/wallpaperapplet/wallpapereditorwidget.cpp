@@ -76,7 +76,6 @@ WallpaperEditorWidget::WallpaperEditorWidget (
 
     setObjectName ("WallpaperEditorWidget");
     QTimer::singleShot (0, this, SLOT(createContent()));
-    createActions ();
 
     if (win) {
         m_Orientation = win->orientation();
@@ -87,9 +86,6 @@ WallpaperEditorWidget::WallpaperEditorWidget (
                     "Only in tests though...");
         m_Orientation = M::Landscape;
     }
-
-    connect (this, SIGNAL(layoutChanged()),
-            this, SLOT(createActions()));
 }
 
 WallpaperEditorWidget::~WallpaperEditorWidget ()
@@ -289,15 +285,11 @@ WallpaperEditorWidget::createWidgets ()
 }
 
 /*
- * In this function we create the actions (currently only the 'done' action that
- * is shown in the toolbar. Unfortunatelly the 'done' action can not be added to
- * a widget (it is not shown in the toolbar if added to a widget I guess because
- * the widget is not added to the window yet), and it also can not be added to
- * the current page (the new page for this widget is not created yet), so we
- * have to get the application window and add the action to that. 
+ * This virtual method is executed when we already have an MApplicationPage as
+ * parent. We initialize the page here.
  */
 void
-WallpaperEditorWidget::createActions ()
+WallpaperEditorWidget::polishEvent ()
 {
     QGraphicsWidget  *parent;
     MApplicationPage *page = 0;
@@ -336,8 +328,8 @@ WallpaperEditorWidget::createActions ()
      * Creating the 'done' button and adding it to the page.
      */
     m_DoneButton = new MButton (
-            //% "Done"
-            qtTrId("qtn_comm_command_done"),
+            //% "Save"
+            qtTrId("qtn_comm_save"),
             this);
     m_DoneButton->setViewType("toolbar");
     widgetAction = new MWidgetAction (this);
@@ -664,8 +656,8 @@ void
 WallpaperEditorWidget::retranslateUi()
 {
     if (m_DoneButton)
-        //% "Done"
-        m_DoneButton->setText (qtTrId("qtn_comm_command_done"));
+        //% "Save"
+        m_DoneButton->setText (qtTrId("qtn_comm_save"));
 
     if (m_CancelButton)
         //% "Cancel"

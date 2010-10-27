@@ -86,6 +86,7 @@ public:
             QWidget                         *widget = 0);
 
 protected:
+    virtual void polishEvent ();
     virtual void retranslateUi();
     virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
     virtual void mouseReleaseEvent (QGraphicsSceneMouseEvent *event);
@@ -116,7 +117,6 @@ private slots:
     void slotCancelActivated ();
     void createContent ();
     void createWidgets ();
-    void createActions ();
 
 private:
     QPointF toggleTitlebars (bool show);
