@@ -35,7 +35,6 @@ int
 ThemeBrief::widgetTypeID() const
 {
     return DcpWidgetType::Image;
-    //return DcpWidgetType::Label;
 }
 
 QString 

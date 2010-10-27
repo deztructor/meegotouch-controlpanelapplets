@@ -14,7 +14,7 @@ X-Maemo-Fixed-Args=OfflineButton
 X-DUIApplet-Applet=libofflineapplet.so
 
 [DCP]
-Category= Connectivity
+Category=qtn_sett_main_connections
 Order=0
 WidgetType= Button
 HelpId=IDUG_MEEGO_CONN_CLOSE.html

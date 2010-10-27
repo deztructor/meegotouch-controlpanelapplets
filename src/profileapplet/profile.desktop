@@ -16,5 +16,5 @@ X-DUIApplet-ImageLandscape=Widget_landscape_NOT_DEFINED.png
 X-DUIApplet-ImagePortrait=Widget_portrait_NOT_DEFINED.png
 
 [DCP]
-Category= qtn_sett_main_look
+Category=qtn_sett_main_personalize
 Order=4
