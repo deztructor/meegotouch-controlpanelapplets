@@ -29,7 +29,7 @@ class MContainer;
 class MLinearLayoutPolicy;
 class QGraphicsSceneMouseEvent;
 class QGraphicsSceneWheelEvent;
-class MAction;
+class MButton;
 class QSize;
 class QPixmap;
 class QPointF;
@@ -86,6 +86,7 @@ public:
             QWidget                         *widget = 0);
 
 protected:
+    virtual void retranslateUi();
     virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
     virtual void mouseReleaseEvent (QGraphicsSceneMouseEvent *event);
     virtual void mouseMoveEvent (QGraphicsSceneMouseEvent *event);
@@ -112,12 +113,12 @@ private slots:
     void queueRedrawImage ();
     void orientationChanged (M::Orientation orientation);
     void slotDoneActivated ();
+    void slotCancelActivated ();
     void createContent ();
     void createWidgets ();
     void createActions ();
 
 private:
-    
     QPointF toggleTitlebars (bool show);
     int  imageX () const;
     int  imageY () const;
@@ -131,7 +132,8 @@ private:
     WallpaperInfoHeader  *m_InfoHeader;
     QPixmap               m_bgLandscape;
     QPixmap               m_bgPortrait;
-    MAction              *m_DoneAction;
+    MButton              *m_DoneButton;
+    MButton              *m_CancelButton;
     bool                  m_NoTitlebar;
     M::Orientation        m_Orientation;
 

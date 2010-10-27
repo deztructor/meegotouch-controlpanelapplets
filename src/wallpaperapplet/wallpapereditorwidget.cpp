@@ -38,8 +38,8 @@
 
 #include <MLayout>
 #include <MLinearLayoutPolicy>
-
-#include <MAction>
+#include <MButton>
+#include <MWidgetAction>
 #include <MApplicationWindow>
 #include <MApplication>
 #include <MApplicationPage>
@@ -62,7 +62,8 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     DcpWidget (parent),
     m_WallpaperBusinessLogic (wallpaperBusinessLogic),
     m_InfoHeader (0),
-    m_DoneAction (0),
+    m_DoneButton (0),
+    m_CancelButton (0),
     m_NoTitlebar (false),
     m_PinchOngoing (false),
     m_MotionOngoing (false),
@@ -300,7 +301,13 @@ WallpaperEditorWidget::createActions ()
 {
     QGraphicsWidget  *parent;
     MApplicationPage *page = 0;
-    MAction          *action;
+    MWidgetAction    *widgetAction;
+
+    /*
+     * Just a protection about double adding the actions.
+     */
+    if (m_DoneButton)
+        return;
     
     /*
      * We need to find the MApplicationPage among our parents.
@@ -315,20 +322,45 @@ WallpaperEditorWidget::createActions ()
 
     if (!page)
         return;
-
-    /*
-     * Creating the 'done' action.
+    /**************************************************************************
+     * Hiding the home button and the escape button from the page. 
      */
-    m_DoneAction = new MAction (
-            "icon-m-framework-done",
+    page->setComponentsDisplayMode (
+            MApplicationPage::EscapeButton,
+            MApplicationPageModel::Hide);
+    page->setComponentsDisplayMode (
+            MApplicationPage::HomeButton,
+            MApplicationPageModel::Hide);
+
+    /**************************************************************************
+     * Creating the 'done' button and adding it to the page.
+     */
+    m_DoneButton = new MButton (
             //% "Done"
             qtTrId("qtn_comm_command_done"),
             this);
-    m_DoneAction->setLocation(MAction::ToolBarLocation);
-    page->addAction(m_DoneAction);
-
-    connect(m_DoneAction, SIGNAL(triggered()), 
+    m_DoneButton->setViewType("toolbar");
+    widgetAction = new MWidgetAction (this);
+    widgetAction->setLocation(MAction::ToolBarLocation);
+    widgetAction->setWidget (m_DoneButton);
+    page->addAction(widgetAction);
+    connect(m_DoneButton, SIGNAL(clicked()), 
             this, SLOT(slotDoneActivated()));
+    
+    /**************************************************************************
+     * Creating the 'cancel' button and adding it to the page.
+     */
+    m_CancelButton = new MButton (
+            //% "Cancel"
+            qtTrId("qtn_comm_cancel"),
+            this);
+    m_CancelButton->setViewType("toolbar");
+    widgetAction = new MWidgetAction (this);
+    widgetAction->setLocation(MAction::ToolBarLocation);
+    widgetAction->setWidget (m_CancelButton);
+    page->addAction(widgetAction);
+    connect(m_CancelButton, SIGNAL(clicked()), 
+            this, SLOT(slotCancelActivated()));
 }
 
 /*
@@ -366,6 +398,12 @@ WallpaperEditorWidget::slotDoneActivated ()
      */
     SYS_DEBUG ("Calling changeWidget()");
     changeWidget (0);
+}
+
+void
+WallpaperEditorWidget::slotCancelActivated ()
+{
+    emit closePage();
 }
 
 bool 
@@ -433,13 +471,13 @@ WallpaperEditorWidget::toggleTitlebars (
         if (show) {
             SYS_DEBUG ("Showing titlebar");
             currentPage->setComponentsDisplayMode (
-                    MApplicationPage::AllComponents,
+                    MApplicationPage::NavigationBar,
                     MApplicationPageModel::Show); 
             m_InfoHeader->show ();
         } else {
             SYS_DEBUG ("Hiding titlebar");
             currentPage->setComponentsDisplayMode (
-                    MApplicationPage::AllComponents, 
+                    MApplicationPage::NavigationBar, 
                     MApplicationPageModel::Hide);
             m_InfoHeader->hide ();
         }
@@ -620,6 +658,18 @@ WallpaperEditorWidget::mouseMoveEvent (
 
     m_UserOffset = event->pos() - m_LastClick;
     queueRedrawImage ();
+}
+
+void
+WallpaperEditorWidget::retranslateUi()
+{
+    if (m_DoneButton)
+        //% "Done"
+        m_DoneButton->setText (qtTrId("qtn_comm_command_done"));
+
+    if (m_CancelButton)
+        //% "Cancel"
+        m_CancelButton->setText (qtTrId("qtn_comm_cancel"));
 }
 
 void
