@@ -37,7 +37,8 @@ PercentageContainer::PercentageContainer(
 {
     SYS_DEBUG ("*** text = %s", SYS_STR(text));
 
-    setObjectName ("CommonPanel");
+    setStyleName ("CommonPanel");
+    setObjectName ("PercentageContainer");
 
     m_TextLabel = new MLabel (text);
     m_TextLabel->setObjectName ("CommonSingleTitle");
@@ -73,7 +74,7 @@ void PercentageContainer::setLayout()
     mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
     mainLayout->setContentsMargins (0., 0., 0., 0.);
     mainLayout->setSpacing (0.);
-    
+
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
     layout->setContentsMargins (0., 0., 0., 0.);
     layout->setSpacing (0.);
