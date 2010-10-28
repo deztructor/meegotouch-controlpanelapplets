@@ -6,6 +6,8 @@ meegotouch-controlpanelapplets (0.17.3~1) meegotouch; urgency=low
   * Fixes: NB#200236 - meegotouch-controlpanelapplets 0.17.1 can not be
     recompiled
   * Update the desktop files according to the new categories in controlpanel
+  * Fixes: NB#199672 - Able to see highlight on other theme item for sometime 
+    until theme is updated completely.
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 27 Oct 2010 11:25:17 +0200
 

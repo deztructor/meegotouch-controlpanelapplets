@@ -32,8 +32,9 @@
 #include <MSortFilterProxyModel>
 #include <MBasicListItem>
 #include <MImageWidget>
+#include <QTimer>
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -123,26 +124,25 @@ ThemeWidget::createWidgets ()
     retranslateUi ();
 }
 
+/*!
+ * A slot to disable the list of themes. We use this method to disable the user
+ * interaction with the list while the theme is being changed.
+ */
 void
 ThemeWidget::disableList ()
 {
-    SYS_DEBUG ("");
-    /*
-     * disable the signals, in this way during theme
-     * change user cannot do anything, until theme changed
-     */
-    m_List->blockSignals (true);
+    m_List->setEnabled(false);
 }
 
+/*!
+ * A slot to enable the theme list that was disabled by the disableList()
+ * method.
+ */
 void
 ThemeWidget::enableList ()
 {
-    SYS_DEBUG ("");
+    m_List->setEnabled(true);
     selectCurrentTheme ();
-    /*
-     * and select the correct one, if user tried to select some other...
-     */
-    m_List->blockSignals (false);
 }
 
 void
@@ -204,6 +204,7 @@ ThemeWidget::readLocalThemes ()
     connect(m_List, SIGNAL(itemClicked(QModelIndex)),
             this, SLOT(themeActivated(QModelIndex)));
 
+    SYS_DEBUG ("*** calling selectCurrentTheme()");
     selectCurrentTheme ();
 }
 
@@ -218,17 +219,32 @@ ThemeWidget::selectCurrentTheme ()
 {
     QString        currentThemeCodeName; 
     QModelIndex    currentIndex;
-   
+    
     /*
-     * Selecting the current theme from the list.
+     * Selecting the current theme from the list. The index must be mapped to
+     * the proxy model, since we are reading from our model but the list shows a
+     * proxy that is sorted.
      */
     currentThemeCodeName = m_ThemeBusinessLogic->currentThemeCodeName();
     currentIndex = m_ThemeListModel->indexOfCodeName(currentThemeCodeName);
-    SYS_DEBUG ("*** currentThemeCodeName = %s", SYS_STR(currentThemeCodeName));
-    SYS_DEBUG ("*** currentIndex         = %d", currentIndex.row());
     currentIndex = m_Proxy->mapFromSource (currentIndex);
-    m_List->selectItem (currentIndex);
-    m_List->scrollTo (currentIndex, MList::EnsureVisibleHint);
+
+    /*
+     * Unfortunately we need to clear the selection and re-select the current
+     * item, othherwise the enabling/disabling of the list causes strange
+     * bugs... sometimes the item is selected, but the selection is not shown.
+     */
+    #if 0
+    if (m_List->selectionModel()->isSelected(currentIndex)) {
+        SYS_DEBUG ("Index already selected");
+        return;
+    }
+    #endif
+    m_List->selectionModel()->clear();
+    m_List->selectionModel()->select (
+            currentIndex, 
+            QItemSelectionModel::ClearAndSelect);
+    m_List->scrollTo (currentIndex, MList::PositionAtCenterHint);
 }
 
 void 
@@ -241,7 +257,7 @@ ThemeWidget::themeActivated (
     SYS_DEBUG ("*** index at %d, %d", index.row(), index.column());
 
     if (m_ThemeDialog) {
-        SYS_DEBUG ("We alreadyhave a dialog, returning.");
+        SYS_DEBUG ("We already have a dialog, returning.");
         return;
     }
 
@@ -294,6 +310,10 @@ ThemeWidget::textChanged ()
     {
       if (m_LiveFilterEditor->text ().isEmpty () == true)
       {
+          /*
+           * We already have a better solution for this in the soundsettings
+           * applet...
+           */
           mainLayout->removeItem (m_LiveFilterEditor);
           m_LiveFilterEditor->setPos (QPointF (0.,-200.));
       }
@@ -308,6 +328,13 @@ ThemeWidget::textChanged ()
     // Seems that the sort() method simply will not sort when the
     // ThemeListModel::SearchRole is used.
     m_Proxy->sort(Qt::DisplayRole);
+    
+    /*
+     * As the search string changes the current theme might appear in the list
+     * (if the current theme was filtered before). In this case we need to
+     * select this item in the list, because the selection is lost when the
+     * selected item is filtered out.
+     */
     selectCurrentTheme ();
     m_ThemeListModel->refresh();
 
