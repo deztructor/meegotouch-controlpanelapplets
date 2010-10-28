@@ -156,7 +156,8 @@ void BatteryWidget::initWidget ()
 #endif
 
     m_PSMAutoButton = new MButton;
-    m_PSMAutoButton->setObjectName ("CommonSwitch");
+    m_PSMAutoButton->setStyleName ("CommonSwitch");
+    m_PSMAutoButton->setObjectName ("AutoActivatePowerSaveButton");
     connect (m_PSMAutoButton, SIGNAL (toggled (bool)),
              this, SLOT (PSMAutoToggled (bool)));
     m_PSMAutoButton->setCheckable (true);

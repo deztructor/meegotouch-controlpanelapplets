@@ -41,8 +41,8 @@ SliderContainer::SliderContainer (MWidget *parent) :
         m_SliderExists (false)
 {
     SYS_DEBUG ("");
-
-    setObjectName ("CommonPanel");
+    setStyleName("CommonPanel");
+    setObjectName ("SliderContainer");
     setHeaderVisible (false);
     setLayout ();
 }
@@ -58,7 +58,8 @@ SliderContainer::retranslate ()
 {
     SYS_DEBUG ("");
 
-    m_AutoPSMLabel->setText ("Activation battery level");
+    //% "Activation battery level"
+    m_AutoPSMLabel->setText (qtTrId("qtn_ener_activation"));
     updateSliderValueLabel ();
 }
 
