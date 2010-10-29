@@ -114,7 +114,7 @@ WallpaperList::setDataSourceType (
      * items. The filtering is not used in this applet.
      */
     filtering()->setEnabled (true);
-    filtering()->proxy->sort(Qt::DisplayRole);
+    filtering()->proxy()->sort(Qt::DisplayRole);
 }
 
 

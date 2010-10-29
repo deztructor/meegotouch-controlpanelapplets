@@ -24,7 +24,7 @@
 
 #include <MApplication>
 
-//#define DEBUG
+#define DEBUG
 #include "../../src/debug.h"
 
 
@@ -93,7 +93,7 @@ Ut_WallpaperModel::testData ()
 
     for (int n = 0; n < rows; ++n) {
         index = m_Model->index (n, 0);
-        data = index.data();
+        data = index.data(WallpaperModel::WallpaperDescriptorRole);
         desc = data.value<WallpaperDescriptor*>();
 
         #if 1
@@ -138,7 +138,7 @@ Ut_WallpaperModel::testCellCreator ()
     
     for (int n = 0; n < rows; ++n) {
         index = m_Model->index (n, 0);
-        data = index.data();
+        data = index.data(WallpaperModel::WallpaperDescriptorRole);
         desc = data.value<WallpaperDescriptor*>();
 
         contentCreator->updateCell (index, &contentItem);
@@ -216,7 +216,7 @@ Ut_WallpaperModel::testImageLoader ()
      */
     for (int n = 0; n < rows; ++n) {
         index = m_Model->index (n, 0);
-        data = index.data();
+        data = index.data(WallpaperModel::WallpaperDescriptorRole);
         desc = data.value<WallpaperDescriptor*>();
 
         // We either have a thumbnailer or we don't need it because this is a 

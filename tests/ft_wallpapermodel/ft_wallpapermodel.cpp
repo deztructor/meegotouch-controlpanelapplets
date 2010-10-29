@@ -119,7 +119,7 @@ Ft_WallpaperModel::testData ()
 
     for (int n = 0; n < rows; ++n) {
         index = m_Model->index (n, 0);
-        data = index.data();
+        data = index.data(WallpaperModel::WallpaperDescriptorRole);
         desc = data.value<WallpaperDescriptor*>();
 
         #if 0
