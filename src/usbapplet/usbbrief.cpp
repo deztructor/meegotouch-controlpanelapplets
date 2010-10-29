@@ -21,16 +21,28 @@
 
 #include <QVariant>
 #include <QString>
+#include <MGConfItem>
 #include <dcpwidgettypes.h>
 
-#undef DEBUG
+#define DEBUG
 #include "../debug.h"
+
+const QString usbModeGConfKey = "/Meego/System/UsbMode";
 
 #ifdef HAVE_QMSYSTEM
 UsbBrief::UsbBrief (Maemo::QmUSBMode *logic) :
     m_logic (logic)
 {
+    SYS_DEBUG ("instance: %p", this);
     connect (m_logic, SIGNAL (modeChanged (Maemo::QmUSBMode::Mode)),
+             this, SIGNAL (valuesChanged ()));
+
+    /*
+     * due to controlpanel changes, we need to
+     * listen also for gconf key changes as well...
+     */
+    m_gconfitem = new MGConfItem (usbModeGConfKey, this);
+    connect (m_gconfitem, SIGNAL (valueChanged ()),
              this, SIGNAL (valuesChanged ()));
 }
 #else
@@ -39,6 +51,9 @@ UsbBrief::UsbBrief (Maemo::QmUSBMode *logic) :
  */
 UsbBrief::UsbBrief (void *logic) 
 {
+    m_gconfitem = new MGConfItem (usbModeGConfKey, this);
+    connect (m_gconfitem, SIGNAL (valueChanged ()),
+             this, SIGNAL (valuesChanged ()));
 }
 #endif
 
@@ -52,6 +67,7 @@ UsbBrief::widgetTypeID() const
 void
 UsbBrief::settingsChanged ()
 {
+    SYS_DEBUG ("");
     emit valuesChanged ();
 }
 

@@ -25,6 +25,9 @@
 #include "usbview.h"
 #include "usbapplet.h"
 
+#define DEBUG
+#include "../debug.h"
+
 Q_EXPORT_PLUGIN2(usbapplet, UsbApplet)
 
 void
@@ -86,6 +89,8 @@ UsbApplet::constructBrief (int partId)
      */
      m_MainWidget = new UsbView (NULL);
     #endif
+
+    SYS_DEBUG ("applet instance : %p (brief instance : %p)");
 
     return m_brief;
 }

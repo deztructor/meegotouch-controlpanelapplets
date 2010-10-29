@@ -22,6 +22,8 @@
 #include <MLocale>
 #include <DcpBrief>
 
+class MGConfItem;
+
 #ifdef HAVE_QMSYSTEM
 #  include <qmusbmode.h>
 using namespace Maemo;
@@ -47,6 +49,7 @@ public slots:
     void    settingsChanged ();
 
 private:
+    MGConfItem          *m_gconfitem;
     #ifdef HAVE_QMSYSTEM
     Maemo::QmUSBMode    *m_logic;
     #endif

@@ -28,6 +28,9 @@
 #include <MNotification>
 #include <MLocale>
 
+#define DEBUG
+#include "../debug.h"
+
 #define BUTTON_ALWAYS_ASK   0
 #define BUTTON_MASS_STORAGE 1
 #define BUTTON_OVI_SUITE    2
@@ -217,6 +220,7 @@ UsbView::selectionChanged (int id)
     if (m_logic->getMode () == QmUSBMode::ChargingOnly)
         m_logic->setMode (newmode);
 
+    SYS_DEBUG ("emit settingsChanged ()");
     emit settingsChanged ();
     #endif
 }
