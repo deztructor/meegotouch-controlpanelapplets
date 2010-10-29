@@ -201,7 +201,6 @@ Ut_WallpaperModel::testImageLoader ()
      */
     imageLoader->loadPictures (firstRow, lastRow);
     QVERIFY (imageLoader->m_ThumbnailLoadingJobs.size() > 0);
-    QCOMPARE (imageLoader->m_ThumbnailPendingJobs.size(), 0);
 
     /*
      * Then we give chance for the main loop to run so the loader will initiate
@@ -209,7 +208,6 @@ Ut_WallpaperModel::testImageLoader ()
      */
     QTest::qWait (800);
     QCOMPARE (imageLoader->m_ThumbnailLoadingJobs.size(), 0);
-    QVERIFY (imageLoader->m_ThumbnailPendingJobs.size() > 0);
 
     /*
      * Now we go through the wallpaper descriptors and check if the thumbnailing
@@ -234,7 +232,6 @@ Ut_WallpaperModel::testImageLoader ()
     // As all the thumbnails are ready (simulated of course) we should have no
     // jobs pending here.
     QCOMPARE (imageLoader->m_ThumbnailLoadingJobs.size(), 0);
-    QCOMPARE (imageLoader->m_ThumbnailPendingJobs.size(), 0);
 
     // FIXME: To create a new test case, leave the thumbnailing there and call
     // this method. Well, it should be done, but it only checks one line...

@@ -41,6 +41,10 @@ class WallpaperModel: public QAbstractTableModel
     Q_OBJECT
 
     public:
+        typedef enum {
+            WallpaperDescriptorRole = Qt::UserRole,
+        } WallpaperModelRole;
+
         WallpaperModel (
                 WallpaperBusinessLogic *logic,
                 QObject                *parent = 0);
@@ -53,7 +57,6 @@ class WallpaperModel: public QAbstractTableModel
     virtual int columnCount (const QModelIndex&) const;
 
 public slots:
-    void imageLoaded (const QModelIndex &row);
     void descriptorChanged (WallpaperDescriptor *desc);
     void wallpaperChanged ();
     
@@ -115,13 +118,11 @@ public slots:
             const QModelIndex& firstVisibleRow, 
             const QModelIndex& lastVisibleRow);
 
-    void thumbnailLoaded (WallpaperDescriptor *desc);
     void processJobQueue ();
     void stopLoadingPictures ();
 
 private:
     QList<Job>  m_ThumbnailLoadingJobs;
-    QList<Job>  m_ThumbnailPendingJobs;
     #ifdef UNIT_TEST
     friend class Ut_WallpaperModel;
     friend class Ut_WallpaperList;

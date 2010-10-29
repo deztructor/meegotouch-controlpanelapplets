@@ -104,11 +104,9 @@ Ut_WallpaperList::testShowHide ()
 {
     m_List->showEvent (0);
     QTest::qWait (300);
-    SYS_DEBUG ("********************************************************");
-    SYS_DEBUG ("*** m_ThumbnailPendingJobs.size()  = %d",
-            m_List->m_ImageLoader->m_ThumbnailPendingJobs.size());
-    SYS_DEBUG ("********************************************************");
-    //QVERIFY (m_List->m_ImageLoader->m_ThumbnailPendingJobs.size() > 0);
+    
+    // FIXME: We should find a way to test the loading of the thumbnails here.
+    // Some code was removed trom the tested unit, so this method became empty.
 
     m_List->hideEvent (0);
     // Well, maybe the stopLoadingImages should be checked too?

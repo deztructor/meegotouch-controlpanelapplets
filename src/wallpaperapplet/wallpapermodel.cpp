@@ -29,7 +29,7 @@
 #include <MImageWidget>
 #include <MProgressIndicator>
 
-//#define DEBUG
+#define DEBUG
 #include <../debug.h>
 
 /*
@@ -63,12 +63,14 @@ WallpaperImageLoader::loadPictures (
             firstVisibleRow.row(), 
             lastVisibleRow.column(),
             lastVisibleRow.row());
-    for (int n = from; n < to; ++n) {
-        QModelIndex index(firstVisibleRow.sibling (n, 0));
+
+    for (int n = from; n <= to; ++n) {
+        //QModelIndex index(firstVisibleRow.sibling (n, 0));
+        QModelIndex index = firstVisibleRow.model()->index(n, 0);
         if(!index.isValid())
             continue;
 
-        QVariant data = index.data(Qt::DisplayRole);
+        QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
         WallpaperDescriptor *desc = data.value<WallpaperDescriptor*>();
         
         /*
@@ -103,37 +105,6 @@ WallpaperImageLoader::stopLoadingPictures()
 }
 
 /*!
- * This slot is called when the loading of a specific thumbnail has been
- * finished. The thumbnailer is a separate process that caches the created
- * thumbnails, so the thumbnailing can happen fast (when the thumbnail is
- * already created and saved) or slow (when the thumbnail has to be created).
- */
-void
-WallpaperImageLoader::thumbnailLoaded (
-        WallpaperDescriptor *desc)
-{
-    /*
-     * The pending jobs are in order, the first initated is at the very first
-     * position of the list. The thumbler answers however might come in a
-     * diefferent order, it is possible, that the generation of some thumbnails
-     * is slower than the others.
-     */
-    SYS_DEBUG ("");
-    for (int n = 0; n < m_ThumbnailPendingJobs.size(); ++n) {
-        if (m_ThumbnailPendingJobs[n].desc == desc) {
-            WallpaperModel *model = (WallpaperModel*) 
-                m_ThumbnailPendingJobs[n].row.model();
-
-            model->imageLoaded (m_ThumbnailPendingJobs[n].row);
-            m_ThumbnailPendingJobs.removeAt (n);
-
-            disconnect (desc, 0, this, 0);
-            break;
-        }
-    }
-}
-
-/*!
  * Processes one thumbnailing job and then calls itself to process the next 
  * one. While processing the job this method will only initate the thumbnailing,
  * it will not wait until the actual thumbnail is ready.
@@ -146,10 +117,6 @@ WallpaperImageLoader::processJobQueue ()
 
     //SYS_DEBUG ("Initiating Thumbnailer");
     Job job = m_ThumbnailLoadingJobs.takeFirst();
-    m_ThumbnailPendingJobs.append (job);
-    connect (job.desc, SIGNAL(thumbnailLoaded(WallpaperDescriptor*)),
-            this, SLOT(thumbnailLoaded (WallpaperDescriptor*)));
-
     job.desc->initiateThumbnailer ();
 
     // Continue loading and letting UI thread do something
@@ -184,14 +151,14 @@ void
 WallpaperCellCreator::setCellSize (
         const QSizeF &size)
 {
-    SYS_WARNING ("setting %gx%g", size.width(), size.height());
+    //SYS_WARNING ("setting %gx%g", size.width(), size.height());
     m_CellSize = size;
 }
 
 QSizeF 
 WallpaperCellCreator::cellSize() const
 {
-    SYS_DEBUG ("Returning %gx%g", m_CellSize.width(), m_CellSize.height());
+    //SYS_DEBUG ("Returning %gx%g", m_CellSize.width(), m_CellSize.height());
     return m_CellSize;
 }
 
@@ -201,11 +168,18 @@ WallpaperCellCreator::updateCell (
         MWidget           *cell) const
 {
     GridImageWidget *imageWidget = qobject_cast<GridImageWidget *>(cell);
-    QVariant data = index.data(Qt::DisplayRole);
+    QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
     WallpaperDescriptor *desc = data.value<WallpaperDescriptor *>();
-   
-    //SYS_DEBUG ("Updating cell %p", imageWidget);
-    if (!imageWidget)
+  
+    #if 0
+    SYS_DEBUG ("model: %p row: %d title: %s",
+            index.model(), index.row(), 
+            SYS_STR(desc->title()));
+    SYS_DEBUG ("*** imageWidget = %p", imageWidget);
+    SYS_DEBUG ("*** desc        = %p", desc);
+    SYS_DEBUG ("*** row()       = %d", index.row());
+    #endif
+    if (!imageWidget || !desc)
         return;
 
 
@@ -279,7 +253,7 @@ WallpaperCellCreator::updateCell (
         MWidget           *cell) const
 {
     MAdvancedListItem *listItem = qobject_cast<MAdvancedListItem *>(cell);
-    QVariant data = index.data(Qt::DisplayRole);
+    QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
     WallpaperDescriptor *desc = data.value<WallpaperDescriptor *>();
 
     if (desc->isCurrent()) {
@@ -363,10 +337,16 @@ WallpaperModel::rowCount(
     return m_DescriptorList.size();
 }
 
+/*!
+ * Returns the data from a given row in the specified format. The supported
+ * roles are:
+ *   Qt::DisplayRole: The title of the wallpaper is returned.
+ *   otherwise: the WallpaperDescriptor object pointer is returned.
+ */
 QVariant
 WallpaperModel::data (
         const QModelIndex &index, 
-        int role) const
+        int                role) const
 {
     QVariant             var;
 
@@ -376,8 +356,31 @@ WallpaperModel::data (
     Q_ASSERT (index.row() >= 0);
     Q_ASSERT (index.row() < m_DescriptorList.size());
 
-    var.setValue (m_DescriptorList[index.row()]);
-    
+    switch (role) {
+        case Qt::DisplayRole:
+            #if 0
+            SYS_DEBUG ("Qt::DisplayRole");
+            SYS_DEBUG ("*** returning %d -> %s",
+                    index.row(),
+                    SYS_STR(m_DescriptorList[index.row()]->title()));
+            #endif
+            var.setValue (m_DescriptorList[index.row()]->title());
+            break;
+
+        case WallpaperModel::WallpaperDescriptorRole:
+            #if 0
+            SYS_DEBUG ("WallpaperModel::WallpaperDescriptorRole");
+            SYS_DEBUG ("*** returning %d -> %s",
+                    index.row(),
+                    SYS_STR(m_DescriptorList[index.row()]->title()));
+            #endif
+            var.setValue (m_DescriptorList[index.row()]);
+            break;
+
+        default:
+            var.setValue (QString("Unsupported role"));
+    }
+
     return var;
 }
 
@@ -388,19 +391,14 @@ WallpaperModel::columnCount (
     return 1;
 }
 
-void
-WallpaperModel::imageLoaded (
-        const QModelIndex &row)
-{
-    emit dataChanged (row, row);
-}
 
+/*!
+ * This slot is called when the wallpaper descriptor has been changed. 
+ */
 void 
 WallpaperModel::descriptorChanged (
         WallpaperDescriptor *desc)
 {
-    SYS_WARNING ("");
-
     for (int n = 0; n < m_DescriptorList.size(); ++n) {
         if (m_DescriptorList[n] == desc) {
             QModelIndex first;
@@ -412,12 +410,16 @@ WallpaperModel::descriptorChanged (
     }
 }
 
+/*
+ * This slot is activated when the wallpaper has been changed. We emit a
+ * dataChanged() signal here, so the UI can sense that and refresh itself.
+ */
 void 
 WallpaperModel::wallpaperChanged ()
 {
-    SYS_DEBUG ("");
-
+    /*
+     * The current wallpaper is always the first, we need to refresh that.
+     */
     QModelIndex first = index (0, 0);
-    if (first.isValid())
-        emit dataChanged (first, first);
+    emit dataChanged (first, first);
 }

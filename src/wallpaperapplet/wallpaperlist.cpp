@@ -22,7 +22,7 @@
 
 #include <QTimer>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -35,6 +35,9 @@ static int columnsPortrait = 3;
 #include <MApplication>
 #include <MApplicationWindow>
 #endif
+
+#include <MSortFilterProxyModel>
+#include <MListFilter>
 
 WallpaperList::WallpaperList (
         WallpaperBusinessLogic *logic,
@@ -101,11 +104,17 @@ WallpaperList::setDataSourceType (
     
     m_Model = new WallpaperModel (m_BusinessLogic);
     setItemModel (m_Model);
-
     setCellCreator (m_CellCreator);
 
     QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
     m_DataSourceType = sourceType;
+
+    /*
+     * Enabling the filtering will create a proxy model that is used to sort the
+     * items. The filtering is not used in this applet.
+     */
+    filtering()->setEnabled (true);
+    filtering()->proxy->sort(Qt::DisplayRole);
 }
 
 
@@ -113,7 +122,7 @@ void
 WallpaperList::slotItemClicked (
         const QModelIndex &index)
 {
-    QVariant data = index.data(Qt::DisplayRole);
+    QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
     WallpaperDescriptor *rowData = data.value<WallpaperDescriptor *>();
 
     SYS_DEBUG ("*** filename = %s", SYS_STR(rowData->filename()));
@@ -124,15 +133,35 @@ void
 WallpaperList::loadPictures ()
 {
     SYS_DEBUG ("");
-
+    filtering()->proxy()->sort(Qt::DisplayRole);
     /*
      * We used to get panningStopped() signals when we got hidden, so we will
      * not initiate loading of the images when we are not visible.
      */
-    if (m_ImageLoader == 0 || !isVisible())
+    if (m_ImageLoader == 0 || !isVisible() || !m_Model)
         return;
+#if 0
+    /*
+     * The lastVisibleItem() has some bugs, it does not report the last column +
+     * 1 elements to be visible. This is a workaround to refresh those items
+     * too.
+     *
+     * FIXME: It seems that this code is not needed any more, it will be fixed
+     * soon.
+     */
+    QModelIndex lastIndex;
+    int         idx;
 
+    lastIndex = lastVisibleItem();
+    idx = lastIndex.row() + 5;
+    idx = idx >= m_Model->rowCount() ? m_Model->rowCount()  - 1: idx;
+    lastIndex = m_Model->index (idx, 0);
+    SYS_WARNING ("*** idx        = %d", idx);
+    SYS_WARNING ("*** rowCount() = %d", m_Model->rowCount());
+    m_ImageLoader->loadPictures (firstVisibleItem(), lastIndex);
+#else
     m_ImageLoader->loadPictures (firstVisibleItem(), lastVisibleItem());
+#endif
 }
 
 #ifdef USE_GRID_LAYOUT

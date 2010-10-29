@@ -707,6 +707,7 @@ WallpaperDescriptor::initiateThumbnailer ()
             if (n == WallpaperDescriptor::Landscape) {
                 SYS_DEBUG ("emit thumbnailLoaded()");
                 emit thumbnailLoaded (this);
+                emit changed (this);
             }
 
             continue;
@@ -777,6 +778,7 @@ WallpaperDescriptor::thumbnailReady (
     if (needEmitSignal) {
         SYS_DEBUG ("emit thumbnailLoaded()");
         emit thumbnailLoaded (this);
+        emit changed (this);
     }
 }
 
@@ -800,8 +802,10 @@ WallpaperDescriptor::thumbnailError (
                     n, SYS_STR(message));
             success = m_Images[n].thumbnail (true);
 
-            if (success && n == WallpaperDescriptor::Landscape)
+            if (success && n == WallpaperDescriptor::Landscape) {
                 emit thumbnailLoaded (this);
+                emit changed (this);
+            }
         }
     }
 }
