@@ -31,7 +31,7 @@
 #include <QDebug>
 #include <QtTracker/Tracker>
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 

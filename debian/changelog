@@ -5,6 +5,10 @@ meegotouch-controlpanelapplets (0.17.4~1) meegotouch; urgency=low
     until theme is updated completely.
   * Fixes: NB#201102 - Sometimes value text on USB item doesn't get updated to
     the selected usb mode.
+  * Fixes: NB#197172 - Grid type view checkmark icon is not consistent with the
+    application design.
+  * Fixes: NB#201029 - Sorting of images in Wallpaper applet is different after
+    warm flash
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 29 Oct 2010 15:37:36 +0200
 

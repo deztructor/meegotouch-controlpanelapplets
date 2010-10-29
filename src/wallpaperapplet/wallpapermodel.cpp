@@ -29,7 +29,7 @@
 #include <MImageWidget>
 #include <MProgressIndicator>
 
-#define DEBUG
+//#define DEBUG
 #include <../debug.h>
 
 /*
