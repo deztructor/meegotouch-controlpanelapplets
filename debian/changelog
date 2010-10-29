@@ -3,8 +3,10 @@ meegotouch-controlpanelapplets (0.17.4~1) meegotouch; urgency=low
   * Update the desktop files according to the new categories in controlpanel
   * Fixes: NB#199672 - Able to see highlight on other theme item for sometime 
     until theme is updated completely.
+  * Fixes: NB#201102 - Sometimes value text on USB item doesn't get updated to
+    the selected usb mode.
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 29 Oct 2010 10:14:10 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 29 Oct 2010 15:37:36 +0200
 
 meegotouch-controlpanelapplets (0.17.3-1) meegotouch; urgency=low
 
