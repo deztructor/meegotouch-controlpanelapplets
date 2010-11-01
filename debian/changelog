@@ -11,8 +11,9 @@ meegotouch-controlpanelapplets (0.17.4~1) meegotouch; urgency=low
     warm flash
   * Fixes: NB#201437 - wallpaper; §qtn_wall_wallpaper§ contains wrong menu, 
     'user guide'
+  * Apply qmsystem Maemo -> MeeGo namespace change
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 29 Oct 2010 15:37:36 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 01 Nov 2010 08:53:56 +0100
 
 meegotouch-controlpanelapplets (0.17.3-1) meegotouch; urgency=low
 

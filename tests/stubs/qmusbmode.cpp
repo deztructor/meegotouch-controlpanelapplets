@@ -22,7 +22,7 @@
 #define DEBUG
 #include "../../src/debug.h"
 
-using namespace Maemo;
+using namespace MeeGo;
 
 QmUSBMode::QmUSBMode (
 		QObject *parent) :

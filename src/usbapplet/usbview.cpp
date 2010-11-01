@@ -36,7 +36,7 @@
 #define BUTTON_OVI_SUITE    2
 
 #ifdef HAVE_QMSYSTEM
-UsbView::UsbView (Maemo::QmUSBMode *logic) :
+UsbView::UsbView (MeeGo::QmUSBMode *logic) :
     m_logic (logic),
     m_error (0)
 {

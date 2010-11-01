@@ -32,7 +32,7 @@ CONFIG += \
 # If we will use the QmSystem library we shall stub it here. 
 #
 contains(DEFINES, HAVE_QMSYSTEM) {
-    CONFIG += qmsystem
+    CONFIG += qmsystem2
 }
 
 

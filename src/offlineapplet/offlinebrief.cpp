@@ -31,8 +31,8 @@
 OfflineBrief::OfflineBrief():
     m_DevMode(new QmDeviceMode())
 {
-    connect(m_DevMode, SIGNAL(deviceModeChanged(Maemo::QmDeviceMode::DeviceMode)),
-            this, SLOT(devModeChanged(Maemo::QmDeviceMode::DeviceMode)));
+    connect(m_DevMode, SIGNAL(deviceModeChanged(MeeGo::QmDeviceMode::DeviceMode)),
+            this, SLOT(devModeChanged(MeeGo::QmDeviceMode::DeviceMode)));
     m_LastMode = m_DevMode->getMode();
 }
 #else
@@ -55,7 +55,7 @@ OfflineBrief::~OfflineBrief()
 #ifdef HAVE_QMSYSTEM
 void 
 OfflineBrief::devModeChanged (
-        Maemo::QmDeviceMode::DeviceMode mode)
+        MeeGo::QmDeviceMode::DeviceMode mode)
 {
     SYS_DEBUG("newmode %d", mode);
     m_LastMode = mode;

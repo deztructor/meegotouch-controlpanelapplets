@@ -76,14 +76,14 @@ BatteryBusinessLogic::requestValues ()
     #ifdef HAVE_QMSYSTEM
     SYS_DEBUG ("Connecting to the signals of the QmBattery class");
     connect (
-        m_battery, SIGNAL(chargerEvent(Maemo::QmBattery::ChargerType)),
-        this, SLOT(batteryChargerEvent(Maemo::QmBattery::ChargerType)));
+        m_battery, SIGNAL(chargerEvent(MeeGo::QmBattery::ChargerType)),
+        this, SLOT(batteryChargerEvent(MeeGo::QmBattery::ChargerType)));
     connect (
-        m_battery, SIGNAL(chargingStateChanged(Maemo::QmBattery::ChargingState)),
-        this, SLOT(chargingStateChanged(Maemo::QmBattery::ChargingState)));
+        m_battery, SIGNAL(chargingStateChanged(MeeGo::QmBattery::ChargingState)),
+        this, SLOT(chargingStateChanged(MeeGo::QmBattery::ChargingState)));
     connect (
-        m_battery, SIGNAL(batteryStateChanged(Maemo::QmBattery::BatteryState)),
-        this, SLOT (batteryStateChanged(Maemo::QmBattery::BatteryState)));
+        m_battery, SIGNAL(batteryStateChanged(MeeGo::QmBattery::BatteryState)),
+        this, SLOT (batteryStateChanged(MeeGo::QmBattery::BatteryState)));
 
     // This will emit the batteryCharging signal,
     // and the remainingTimeValuesChanged signal
@@ -101,8 +101,8 @@ BatteryBusinessLogic::requestValues ()
     // batteryBarValueReceived also emitted by chargingStateChanged ^^^
     // FIXME: Why?
     connect (m_devicemode,
-             SIGNAL (devicePSMStateChanged (Maemo::QmDeviceMode::PSMState)),
-             this, SLOT (PSMStateChanged (Maemo::QmDeviceMode::PSMState)));
+             SIGNAL (devicePSMStateChanged (MeeGo::QmDeviceMode::PSMState)),
+             this, SLOT (PSMStateChanged (MeeGo::QmDeviceMode::PSMState)));
 
     SYS_DEBUG ("Emitting PSMValueReceived(%s)",
             SYS_BOOL(m_devicemode->getPSMState () == QmDeviceMode::PSMStateOn));
@@ -240,7 +240,7 @@ BatteryBusinessLogic::remainingCapacityRequired()
  */
 void
 BatteryBusinessLogic::batteryChargerEvent (
-        Maemo::QmBattery::ChargerType type)
+        MeeGo::QmBattery::ChargerType type)
 {
     Q_UNUSED (type);
 
@@ -252,7 +252,7 @@ BatteryBusinessLogic::batteryChargerEvent (
 #ifdef HAVE_QMSYSTEM
 void
 BatteryBusinessLogic::chargingStateChanged (
-        Maemo::QmBattery::ChargingState state)
+        MeeGo::QmBattery::ChargingState state)
 {
     Q_UNUSED (state);
     
@@ -264,7 +264,7 @@ BatteryBusinessLogic::chargingStateChanged (
 #ifdef HAVE_QMSYSTEM
 void 
 BatteryBusinessLogic::batteryStateChanged (
-        Maemo::QmBattery::BatteryState batteryState)
+        MeeGo::QmBattery::BatteryState batteryState)
 {
     Q_UNUSED (batteryState);
     
@@ -280,7 +280,7 @@ BatteryBusinessLogic::batteryStateChanged (
  */
 void
 BatteryBusinessLogic::PSMStateChanged (
-        Maemo::QmDeviceMode::PSMState state)
+        MeeGo::QmDeviceMode::PSMState state)
 {
     bool enabled = state == QmDeviceMode::PSMStateOn;
     

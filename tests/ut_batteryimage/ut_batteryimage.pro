@@ -5,9 +5,9 @@ SRC_PREFIX = ../../src/batteryapplet
 STUB_PREFIX = ../stubs
 
 INCLUDEPATH = \
-        $$STUB_PREFIX \
-	$$SRC_PREFIX \
-	$$INCLUDEPATH
+    $$STUB_PREFIX \
+    $$SRC_PREFIX \
+    $$INCLUDEPATH
 
 QT += testlib
 
@@ -23,7 +23,7 @@ CONFIG += \
     silent 
 
 contains(DEFINES, HAVE_QMSYSTEM) {
-    CONFIG += qmsystem
+    CONFIG += qmsystem2
 }
 
 HEADERS += \

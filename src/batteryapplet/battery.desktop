@@ -5,10 +5,10 @@ Icon=
 Exec=
 X-logical-id=qtn_ener_battery
 X-translation-catalog=systemui-applets,energy
-X-Maemo-Service=com.nokia.DuiControlPanel
-X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
-X-Maemo-Object-Path=/
-X-Maemo-Fixed-Args=Battery
+X-MeeGo-Service=com.nokia.DuiControlPanel
+X-MeeGo-Method=com.nokia.DuiControlPanelIf.appletPage
+X-MeeGo-Object-Path=/
+X-MeeGo-Fixed-Args=Battery
 
 [DUI]
 X-DUIApplet-Applet=libbatteryapplet.so

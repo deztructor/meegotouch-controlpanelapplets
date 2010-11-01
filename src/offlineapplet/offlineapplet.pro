@@ -9,7 +9,7 @@ CONFIG += plugin \
           silent
 
 contains(DEFINES, HAVE_QMSYSTEM) {
-    CONFIG += qmsystem
+    CONFIG += qmsystem2
 }
 
 MOC_DIR = .moc

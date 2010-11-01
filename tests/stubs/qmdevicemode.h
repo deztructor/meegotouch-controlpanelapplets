@@ -29,7 +29,7 @@
 
 #include <QObject>
 
-namespace Maemo
+namespace MeeGo
 {
     class QmDeviceMode : public QObject {
         Q_OBJECT
@@ -52,7 +52,7 @@ namespace Maemo
             bool setPSMBatteryMode (int percentages);
             
         signals:
-            void devicePSMStateChanged(Maemo::QmDeviceMode::PSMState state);
+            void devicePSMStateChanged(MeeGo::QmDeviceMode::PSMState state);
             
         public: // helper functions that are not in the original
             QString PSMStateName (PSMState state) const;

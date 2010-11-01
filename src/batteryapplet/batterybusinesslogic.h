@@ -25,7 +25,7 @@
 #ifdef HAVE_QMSYSTEM
 #  include <qmdevicemode.h>
 #  include <qmbattery.h>
-using namespace Maemo;
+using namespace MeeGo;
 #endif
 
 /*!
@@ -71,11 +71,11 @@ private slots:
      * These slots are implemented to connect to the signals of the QmSystem. If
      * the QmSystem library is not available we don't use them.
      */
-    void batteryChargerEvent (Maemo::QmBattery::ChargerType type);
-    void chargingStateChanged (Maemo::QmBattery::ChargingState state);
-    void batteryStateChanged (Maemo::QmBattery::BatteryState batteryState);
+    void batteryChargerEvent (MeeGo::QmBattery::ChargerType type);
+    void chargingStateChanged (MeeGo::QmBattery::ChargingState state);
+    void batteryStateChanged (MeeGo::QmBattery::BatteryState batteryState);
     void batteryRemCapacityChanged (int percentage, int bars);
-    void PSMStateChanged (Maemo::QmDeviceMode::PSMState state);
+    void PSMStateChanged (MeeGo::QmDeviceMode::PSMState state);
 #endif
 
 private:

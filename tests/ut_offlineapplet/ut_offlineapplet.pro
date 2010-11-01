@@ -9,11 +9,11 @@ TOOLS_PREFIX = ../tools
 # FIXME: I need a better solution for this...
 #
 INCLUDEPATH = \
-	/usr/include/qmsystem/ \
-	$$INCLUDEPATH \
-        $$STUB_PREFIX \
-	$$SRC_PREFIX \
-        $$TOOLS_PREFIX
+    /usr/include/qmsystem2/ \
+    $$INCLUDEPATH \
+    $$STUB_PREFIX \
+    $$SRC_PREFIX \
+    $$TOOLS_PREFIX
 
 QT += \
     testlib
@@ -21,23 +21,23 @@ QT += \
 TEMPLATE = app
 
 DEFINES += \
-	UNIT_TEST 
+    UNIT_TEST 
 
 TARGET = ut_offlineapplet
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
-	gui \
-	meegotouch \
-	plugin \
-	duicontrolpanel \
-	silent 
+    gui \
+    meegotouch \
+    plugin \
+    duicontrolpanel \
+    silent 
 
 #
 # If we will use the QmSystem library we shall stub it here. 
 #
 contains(DEFINES, HAVE_QMSYSTEM) {
-    CONFIG += qmsystem
+    CONFIG += qmsystem2
 }
 
 HEADERS += \

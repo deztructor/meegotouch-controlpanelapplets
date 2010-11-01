@@ -25,7 +25,7 @@
 
 #include <QObject>
 
-namespace Maemo
+namespace MeeGo
 {
     class QmUSBMode : public QObject
     {

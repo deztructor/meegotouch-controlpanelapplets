@@ -23,7 +23,7 @@
 
 #ifdef HAVE_QMSYSTEM
 #  include <qmusbmode.h>
-using namespace Maemo;
+using namespace MeeGo;
 #endif
 
 class MLabel;
@@ -37,7 +37,7 @@ class UsbView : public DcpWidget
 
 public:
     #ifdef HAVE_QMSYSTEM
-    UsbView (Maemo::QmUSBMode *logic);
+    UsbView (MeeGo::QmUSBMode *logic);
     #else
     UsbView (void *logic);
     #endif
@@ -55,7 +55,7 @@ protected:
 private:
     void initWidget (void);
     #ifdef HAVE_QMSYSTEM
-    Maemo::QmUSBMode    *m_logic;
+    MeeGo::QmUSBMode    *m_logic;
     #endif
     MButton             *m_buttons[3];
     MButtonGroup        *m_btn_group;

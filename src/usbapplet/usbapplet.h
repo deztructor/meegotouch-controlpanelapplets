@@ -25,7 +25,7 @@
 
 #ifdef HAVE_QMSYSTEM
 #  include <qmusbmode.h>
-using namespace Maemo;
+using namespace MeeGo;
 #endif
 
 #include "usbview.h"
@@ -50,7 +50,7 @@ private:
     QPointer<UsbView>   m_MainWidget;
     UsbBrief           *m_brief;
     #ifdef HAVE_QMSYSTEM
-    Maemo::QmUSBMode   *m_logic;
+    MeeGo::QmUSBMode   *m_logic;
     #endif
 
     #ifdef UNIT_TEST

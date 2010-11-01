@@ -24,7 +24,7 @@
 
 #ifdef HAVE_QMSYSTEM
 #  include <qmdevicemode.h>
-using namespace Maemo;
+using namespace MeeGo;
 #endif
 
 class OfflineBrief: public DcpBrief{
@@ -42,14 +42,14 @@ private:
 
 private slots:
     #ifdef HAVE_QMSYSTEM
-    void devModeChanged(Maemo::QmDeviceMode::DeviceMode mode);
+    void devModeChanged(MeeGo::QmDeviceMode::DeviceMode mode);
     #endif
     void processDialogResult();
 
 private:
     #ifdef HAVE_QMSYSTEM
-    Maemo::QmDeviceMode::DeviceMode  m_LastMode;
-    Maemo::QmDeviceMode             *m_DevMode;
+    MeeGo::QmDeviceMode::DeviceMode  m_LastMode;
+    MeeGo::QmDeviceMode             *m_DevMode;
     #endif
 
 #ifdef UNIT_TEST

@@ -26,7 +26,7 @@ class MGConfItem;
 
 #ifdef HAVE_QMSYSTEM
 #  include <qmusbmode.h>
-using namespace Maemo;
+using namespace MeeGo;
 #endif
 
 class UsbBrief: public DcpBrief
@@ -35,7 +35,7 @@ class UsbBrief: public DcpBrief
 
 public:
     #ifdef HAVE_QMSYSTEM
-    UsbBrief (Maemo::QmUSBMode *logic);
+    UsbBrief (MeeGo::QmUSBMode *logic);
     #else
     UsbBrief (void *logic);
     #endif
@@ -51,7 +51,7 @@ public slots:
 private:
     MGConfItem          *m_gconfitem;
     #ifdef HAVE_QMSYSTEM
-    Maemo::QmUSBMode    *m_logic;
+    MeeGo::QmUSBMode    *m_logic;
     #endif
     
     #ifdef UNIT_TEST

@@ -25,7 +25,7 @@
 #include "../debug.h"
 
 #ifdef HAVE_QMSYSTEM
-using namespace Maemo;
+using namespace MeeGo;
 #else
 static const QString GConfDir ("/system/osso/dsm/display");
 static const QString MaxBrightnessKey = 

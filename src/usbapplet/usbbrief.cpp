@@ -30,11 +30,11 @@
 const QString usbModeGConfKey = "/Meego/System/UsbMode";
 
 #ifdef HAVE_QMSYSTEM
-UsbBrief::UsbBrief (Maemo::QmUSBMode *logic) :
+UsbBrief::UsbBrief (MeeGo::QmUSBMode *logic) :
     m_logic (logic)
 {
     SYS_DEBUG ("instance: %p", this);
-    connect (m_logic, SIGNAL (modeChanged (Maemo::QmUSBMode::Mode)),
+    connect (m_logic, SIGNAL (modeChanged (MeeGo::QmUSBMode::Mode)),
              this, SIGNAL (valuesChanged ()));
 
     /*

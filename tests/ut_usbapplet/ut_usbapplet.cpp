@@ -27,7 +27,7 @@
 #  ifndef QMUSBMODE_STUB_H
 #    error "The QmUSBMode is not stubbed, can not continue."
 #  endif
-using namespace Maemo;
+using namespace MeeGo;
 #endif
 
 

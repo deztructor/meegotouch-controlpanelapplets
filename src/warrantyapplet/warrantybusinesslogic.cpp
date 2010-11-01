@@ -44,7 +44,7 @@ WarrantyBusinessLogic::getExpirationDays ()
     int retVal = -1;
 
 #ifdef HAVE_QMSYSTEM
-    Maemo::QmSystemState  systemState;
+    MeeGo::QmSystemState  systemState;
     int elapsedDays = systemState.getPowerOnTimeInSeconds () / (60 * 60 * 24);
 
     retVal = WARRANTY_DAYS - elapsedDays;

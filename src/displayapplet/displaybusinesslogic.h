@@ -22,7 +22,7 @@
 
 #ifdef HAVE_QMSYSTEM
 #  include <qmdisplaystate.h>
-using namespace Maemo;
+using namespace MeeGo;
 #endif
 
 #include <QObject>

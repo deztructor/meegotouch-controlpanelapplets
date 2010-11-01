@@ -29,7 +29,7 @@
 
 #include <QObject>
 
-namespace Maemo
+namespace MeeGo
 {
     class QmBattery : public QObject {
         Q_OBJECT
@@ -82,9 +82,9 @@ namespace Maemo
         int getMaxBars() const;
 
     signals:
-        void batteryStateChanged (Maemo::QmBattery::BatteryState batteryState);
-        void chargerEvent (Maemo::QmBattery::ChargerType chargerType);
-        void chargingStateChanged (Maemo::QmBattery::ChargingState chargingState);
+        void batteryStateChanged (MeeGo::QmBattery::BatteryState batteryState);
+        void chargerEvent (MeeGo::QmBattery::ChargerType chargerType);
+        void chargingStateChanged (MeeGo::QmBattery::ChargingState chargingState);
         void batteryRemainingCapacityChanged (int percentage, int bars);
 
     public: // Low level helper functions that are not in the original.

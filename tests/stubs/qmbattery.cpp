@@ -23,7 +23,7 @@
 #define WARNING
 #include "../../src/debug.h"
 
-using namespace Maemo;
+using namespace MeeGo;
 
 QmBattery::QmBattery (
         QObject *parent) :

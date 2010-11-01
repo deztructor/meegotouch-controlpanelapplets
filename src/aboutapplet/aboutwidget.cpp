@@ -164,7 +164,7 @@ AboutWidget::licenseText()
               "<a href=\"http://somethink.here\">[insert the URL]</a>. "
               "Alternatively, Nokia offers to provide such source code to you "
               "on a CD-ROM upon written request to Nokia at:</p>";
-    retval += "<p>Maemo Source Code Requests<br>";
+    retval += "<p>MeeGo Source Code Requests<br>";
     retval += "Nokia Corporation<br>";
     retval += "P.O.Box 407<br>";
     retval += "FI-00045 Nokia Group<br>";

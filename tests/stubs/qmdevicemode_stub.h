@@ -32,41 +32,41 @@
 class QmDeviceModeStub : public StubBase
 {
 public:
-    virtual Maemo::QmDeviceMode::PSMState getPSMState (); 
-    virtual bool setMode (Maemo::QmDeviceMode::DeviceMode mode);
-    virtual Maemo::QmDeviceMode::DeviceMode getMode (); 
-    virtual void setPSMState (Maemo::QmDeviceMode::PSMState state);
+    virtual MeeGo::QmDeviceMode::PSMState getPSMState (); 
+    virtual bool setMode (MeeGo::QmDeviceMode::DeviceMode mode);
+    virtual MeeGo::QmDeviceMode::DeviceMode getMode (); 
+    virtual void setPSMState (MeeGo::QmDeviceMode::PSMState state);
     virtual int getPSMBatteryMode ();
     virtual void setPSMBatteryMode (int percentages);
 };
 
 bool
-QmDeviceModeStub::setMode (Maemo::QmDeviceMode::DeviceMode mode)
+QmDeviceModeStub::setMode (MeeGo::QmDeviceMode::DeviceMode mode)
 {
     QList<ParameterBase*> params;
-    params.append (new Parameter<Maemo::QmDeviceMode::DeviceMode> (mode));
+    params.append (new Parameter<MeeGo::QmDeviceMode::DeviceMode> (mode));
     stubMethodEntered ("setMode", params);
     return true;
 }
-Maemo::QmDeviceMode::DeviceMode
+MeeGo::QmDeviceMode::DeviceMode
 QmDeviceModeStub::getMode ()
 {
     stubMethodEntered ("getMode");
-    return stubReturnValue<Maemo::QmDeviceMode::DeviceMode> ("getMode");
+    return stubReturnValue<MeeGo::QmDeviceMode::DeviceMode> ("getMode");
 }
 
-Maemo::QmDeviceMode::PSMState
+MeeGo::QmDeviceMode::PSMState
 QmDeviceModeStub::getPSMState ()
 {
     stubMethodEntered ("getPSMState");
-    return stubReturnValue<Maemo::QmDeviceMode::PSMState> ("getPSMState");
+    return stubReturnValue<MeeGo::QmDeviceMode::PSMState> ("getPSMState");
 }
 
 void
-QmDeviceModeStub::setPSMState (Maemo::QmDeviceMode::PSMState state)
+QmDeviceModeStub::setPSMState (MeeGo::QmDeviceMode::PSMState state)
 {
     QList<ParameterBase*> params;
-    params.append (new Parameter<Maemo::QmDeviceMode::PSMState> (state));
+    params.append (new Parameter<MeeGo::QmDeviceMode::PSMState> (state));
     stubMethodEntered ("setPSMState", params);
 }
 
@@ -94,7 +94,7 @@ QmDeviceModeStub *gQmDeviceModeStub = &gDefaultQmDeviceModeStub;
 /*
  * Create a proxy which calls the stub
  */
-namespace Maemo
+namespace MeeGo
 {
 
 QmDeviceMode::QmDeviceMode (QObject *parent)
@@ -117,7 +117,7 @@ QmDeviceMode::getPSMState () const
 }
 
 bool
-QmDeviceMode::setPSMState (Maemo::QmDeviceMode::PSMState state)
+QmDeviceMode::setPSMState (MeeGo::QmDeviceMode::PSMState state)
 {
     gQmDeviceModeStub->setPSMState (state);
     return true;
@@ -143,6 +143,6 @@ QmDeviceMode::DeviceMode QmDeviceMode::getMode() const{
 bool QmDeviceMode::setMode(QmDeviceMode::DeviceMode mode){
     return gQmDeviceModeStub->setMode (mode);
 }
-} /* namespace Maemo */
+} /* namespace MeeGo */
 
 #endif

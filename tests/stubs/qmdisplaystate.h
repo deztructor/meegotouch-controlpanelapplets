@@ -27,7 +27,7 @@
 
 #include <QObject>
 
-namespace Maemo {
+namespace MeeGo {
 
 
 class QmDisplayState : public QObject 
