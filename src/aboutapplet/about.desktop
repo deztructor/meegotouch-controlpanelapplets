@@ -3,10 +3,10 @@ Type=ControlPanelApplet
 Name=About product
 X-logical-id=qtn_prod_about_product
 X-translation-catalog=about-product
-X-MeeGo-Service=com.nokia.DuiControlPanel
-X-MeeGo-Method=com.nokia.DuiControlPanelIf.appletPage
-X-MeeGo-Object-Path=/
-X-MeeGo-Fixed-Args="About product"
+X-Maemo-Service=com.nokia.DuiControlPanel
+X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
+X-Maemo-Object-Path=/
+X-Maemo-Fixed-Args=About product
 
 [DUI]
 X-DUIApplet-Applet=libaboutapplet.so

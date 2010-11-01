@@ -5,10 +5,10 @@ X-logical-id=qtn_test_test
 X-translation-catalog=systemui-applets
 Icon=
 Exec=
-X-MeeGo-Service=com.nokia.DuiControlPanel
-X-MeeGo-Method=com.nokia.DuiControlPanelIf.appletPage
-X-MeeGo-Object-Path=/
-X-MeeGo-Fixed-Args="Test applet"
+X-Maemo-Service=com.nokia.DuiControlPanel
+X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
+X-Maemo-Object-Path=/
+X-Maemo-Fixed-Args=Test applet
 
 [DUI]
 X-DUIApplet-Applet=libtestapplet.so
