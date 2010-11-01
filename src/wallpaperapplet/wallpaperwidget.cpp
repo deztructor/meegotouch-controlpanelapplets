@@ -23,7 +23,6 @@
 #include <MApplicationPage>
 #include <QGraphicsLinearLayout>
 #include <MLayout>
-#include <MLinearLayoutPolicy>
 #include <MContainer>
 #include <QTimer>
 #include <MContentItem>
