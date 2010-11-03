@@ -16,27 +16,18 @@
 ** of this file.
 **
 ****************************************************************************/
-#ifndef UT_PROFILEBUTTONS_H
-#define UT_PROFILEBUTTONS_H
+#ifndef UT_PROFILE_DIALOG_H
+#define UT_PROFILE_DIALOG_H
 
 #include <QtTest/QtTest>
 #include <QObject>
 
-class ProfileButtons;
+#include "profiledatainterface.h"
+#include "profiledialog.h"
+
 class MApplication;
 
-class SignalSink : public QObject
-{
-Q_OBJECT
-public slots:
-    void profileSelected (int id);
-
-signals:
-    bool selectProfile (int id);
-    friend class Ut_ProfileButtons;
-};
-
-class Ut_ProfileButtons : public QObject 
+class Ut_ProfileDialog : public QObject
 {
 Q_OBJECT
 
@@ -46,14 +37,13 @@ private slots:
     void initTestCase ();
     void cleanupTestCase ();
 
-    void testInit ();
-    
+    void testExec ();
+    void testSelect ();
+
 private:
-    MApplication              *m_App;
-    ProfileButtons            *m_Buttons;
-    SignalSink                 m_SignalSink;
+    MApplication            *app;
+    ProfileDataInterface    *dataIf;
+    ProfileDialog           *profileDialog;
 };
 
 #endif
-
-

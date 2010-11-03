@@ -22,6 +22,7 @@
 #include <QGraphicsLinearLayout>
 #include <MButton>
 #include <MLabel>
+#include <MImageWidget>
 #include <QDebug>
 
 #undef DEBUG
@@ -32,16 +33,20 @@ ProfileContainer::ProfileContainer (
         const QString &title, 
         bool           vibra, 
         MWidget     *parent) :
-    MStylableWidget (parent),
+    MListItem (parent),
     m_ProfileId (id),
+    m_Icon(0),
     m_Button(0),
     m_Label(0)
 {
     QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(Qt::Horizontal, this);
     SYS_DEBUG ("Creating container for %s", SYS_STR(title)); 
 
-    m_Button = new MButton();
-    m_Button->setObjectName ("CommonSwitch");
+    m_Icon = new MImageWidget;
+    m_Icon->setStyleName ("CommonThumbnail");
+
+    m_Button = new MButton;
+    m_Button->setStyleName ("CommonRightSwitch");
     m_Button->setCheckable (true);
     m_Button->setViewType (MButton::switchType);
     m_Button->setChecked (vibra);
@@ -50,13 +55,16 @@ ProfileContainer::ProfileContainer (
     m_Label = new MLabel(title);
     m_Label->setObjectName ("CommonSingleTitle");
 
+    layout->addItem(m_Icon);
     layout->addItem(m_Label);
     layout->addItem(m_Button);
 
+    layout->setAlignment (m_Icon, Qt::AlignVCenter);
     layout->setAlignment (m_Label, Qt::AlignVCenter);
     layout->setAlignment (m_Button, Qt::AlignVCenter);
 
     setLayout(layout);
+    setStyleName ("CommonPanel");
 }
 
 ProfileContainer::~ProfileContainer()
@@ -64,6 +72,7 @@ ProfileContainer::~ProfileContainer()
     SYS_DEBUG ("");
     delete m_Button;
     delete m_Label;
+    delete m_Icon;
 }
 
 int 
@@ -91,3 +100,9 @@ QString ProfileContainer::text () const
 {
     return m_Label->text();
 }
+
+void ProfileContainer::setIconId(const QString &iconId)
+{
+    m_Icon->setImage(iconId);
+}
+

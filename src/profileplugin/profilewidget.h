@@ -24,9 +24,7 @@
 
 class MStatusIndicatorMenuInterface;
 class ProfileDataInterface;
-class ProfileButtons;
 class ProfilePlugin;
-class MDialog;
 
 /*!
  * The Profile widget makes it possible to select the currently
@@ -57,29 +55,11 @@ private slots:
     void profileChanged();
 
 private:
-    /*!
-     * \brief A method for initializing the profile buttons container
-     */
-    void initProfileButtons ();
-
-    /*!
-     * \brief A method for loading the needed translation catalogue
-     */
-    void loadTranslation ();
-
-private:
     //! Interface for controlling the status indicator menu
     ProfilePlugin                   *plugin;
 
     //! Profile data If to receive information about possible profiles
     ProfileDataInterface            *dataIf;
-
-    //! Profile buttongroup container
-    ProfileButtons                  *profileButtons;
-
-    //! The profile selection dialog
-    QPointer<MDialog>                profileDialog;
-
 };
 
 #endif // PROFILEWIDGET_H

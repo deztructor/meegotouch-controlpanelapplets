@@ -20,16 +20,17 @@
 #ifndef PROFILECONTAINER_H
 #define PROFILECONTAINER_H
 
-#include <MStylableWidget>
+#include <MListItem>
 
 class MButton;
 class MLabel;
+class MImageWidget;
 
 /*!
  * A widget that shows and controls a profile's vibration on/off
  * property.
  */
-class ProfileContainer: public MStylableWidget
+class ProfileContainer: public MListItem
 {
     Q_OBJECT
     Q_PROPERTY(bool checked READ isChecked WRITE setChecked)
@@ -47,12 +48,14 @@ public:
     void setChecked(bool buttonChecked);
     void setText(const QString &text);
     QString text() const;
+    void setIconId(const QString &iconId);
 
 signals:
     void toggled(bool checked);
 
 private:
-    const int      m_ProfileId;
+    const int       m_ProfileId;
+    MImageWidget   *m_Icon;
     MButton        *m_Button;
     MLabel         *m_Label;
 };

@@ -84,19 +84,14 @@ ProfileDataInterface::~ProfileDataInterface ()
 
 
 /*!
- * returns the icon ID representing the current profile.
- *
- * Please note that the icons used to represent profiles for the status menu are
- * different from the icons used in the profile dialog (from the UI spec. 1.2,
- * last minute change). This method returns the icon ID used in the status 
- * menu.
+ * returns the status-menu icon ID representing the current profile.
  */
-QString 
-ProfileDataInterface::getCurrentProfileIconId ()
+QString
+ProfileDataInterface::mapId2StatusIconId (int id)
 {
     QString iconId;
 
-    switch (getCurrentProfile()) {
+    switch (id) {
         case ProfileIdRinging:
             iconId = QString ("icon-m-status-menu-normal");
             break;
@@ -162,8 +157,7 @@ ProfileDataInterface::getProfilesData ()
         if (d.profileId == ProfileIdNone)
             continue;
 
-        d.visualData.first = mapId2IconID (d.profileId);
-        d.visualData.second = id2Name (id);
+        d.profileName       = id2Name (id);
         d.vibrationEnabled  = m_ProfileAPI->isVibrationEnabled (id);
         d.volumeLevel       = m_ProfileAPI->volumeLevel (id);
         data.append(d);
@@ -239,12 +233,9 @@ ProfileDataInterface::setVibration (
 
 /*!
  * returns The icon ID representing the given profile.
- *
- * Please note that from the UI spec. 1.2 we need to use different icons in the
- * status area and in the profile dialog. These are the profile dialog icons.
  */
 QString 
-ProfileDataInterface::mapId2IconID (int id)
+ProfileDataInterface::mapId2IconId (int id)
 {
     QString iconId = "";
 
