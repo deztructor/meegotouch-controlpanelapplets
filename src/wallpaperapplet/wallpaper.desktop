@@ -5,10 +5,10 @@ X-logical-id=qtn_wall_wallpaper
 X-translation-catalog=wallpaper
 Icon=
 Exec=
-X-MeeGo-Service=com.nokia.DuiControlPanel
-X-MeeGo-Method=com.nokia.DuiControlPanelIf.appletPage
-X-MeeGo-Object-Path=/
-X-MeeGo-Fixed-Args=Wallpaper
+X-Maemo-Service=com.nokia.DuiControlPanel
+X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
+X-Maemo-Object-Path=/
+X-Maemo-Fixed-Args=Wallpaper
 
 [DUI]
 X-DUIApplet-Applet=libwallpaperapplet.so

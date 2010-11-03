@@ -5,10 +5,10 @@ Icon=
 Exec=
 X-logical-id=qtn_warr_title
 X-translation-catalog=systemui-applets,warranty
-X-MeeGo-Service=com.nokia.DuiControlPanel
-X-MeeGo-Method=com.nokia.DuiControlPanelIf.appletPage
-X-MeeGo-Object-Path=/
-X-MeeGo-Fixed-Args=Warranty
+X-Maemo-Service=com.nokia.DuiControlPanel
+X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
+X-Maemo-Object-Path=/
+X-Maemo-Fixed-Args=Warranty
 
 [DUI]
 X-DUIApplet-Applet=libwarrantyapplet.so

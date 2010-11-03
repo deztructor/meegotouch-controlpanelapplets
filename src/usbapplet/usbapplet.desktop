@@ -3,10 +3,10 @@ Type=ControlPanelApplet
 Name=USB
 X-logical-id=qtn_usb_title
 X-translation-catalog=usb
-X-MeeGo-Service=com.nokia.DuiControlPanel
-X-MeeGo-Method=com.nokia.DuiControlPanelIf.appletPage
-X-MeeGo-Object-Path=/
-X-MeeGo-Fixed-Args=USB
+X-Maemo-Service=com.nokia.DuiControlPanel
+X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
+X-Maemo-Object-Path=/
+X-Maemo-Fixed-Args=USB
 
 Icon=
 Exec=

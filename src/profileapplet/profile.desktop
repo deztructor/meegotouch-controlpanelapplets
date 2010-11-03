@@ -5,10 +5,10 @@ X-logical-id=qtn_prof_profile
 X-translation-catalog=profiles
 Icon=
 Exec=
-X-MeeGo-Service=com.nokia.DuiControlPanel
-X-MeeGo-Method=com.nokia.DuiControlPanelIf.appletPage
-X-MeeGo-Object-Path=/
-X-MeeGo-Fixed-Args=Profile
+X-Maemo-Service=com.nokia.DuiControlPanel
+X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
+X-Maemo-Object-Path=/
+X-Maemo-Fixed-Args=Profile
 
 [DUI]
 X-DUIApplet-Applet=libprofileapplet.so
