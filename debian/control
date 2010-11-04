@@ -44,7 +44,7 @@ Description: libmeegocontrol to use some controlpanel applet as a library
 Package: libmeegocontrol-dev
 Architecture: any
 Section: libdevel
-Depends: libmeegocontrol0 (= ${binary:Version})
+Depends: libmeegocontrol0 (= ${binary:Version}), libthumbnailer-dev
 Description: libmeegocontrol development files
 
 Package: duicontrolpanel-offlineapplet
