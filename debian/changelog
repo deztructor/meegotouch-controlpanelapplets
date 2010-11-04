@@ -16,7 +16,7 @@ meegotouch-controlpanelapplets (0.17.4~1) meegotouch; urgency=low
     status menu
   * Fixes: NB#202356 - libmeegocontrol-dev lacks dependency on libthumbnailer-dev
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 03 Nov 2010 13:53:31 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 04 Nov 2010 12:00:36 +0200
 
 meegotouch-controlpanelapplets (0.17.3-1) meegotouch; urgency=low
 
