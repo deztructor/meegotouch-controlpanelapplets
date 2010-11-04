@@ -16,44 +16,38 @@
 ** of this file.
 **
 ****************************************************************************/
-#ifndef PROFILEWIDGET_H
-#define PROFILEWIDGET_H
+#ifndef PROFILEDIALOG_H
+#define PROFILEDIALOG_H
 
-#include <QPointer>
-#include "dcpwidget.h"
-#include "profiledatainterface.h"
+#include <QObject>
+#include <QHash>
+#include <MDialog>
 
-class MLabel;
-class MContainer;
-class ProfileContainer;
+class MListItem;
+class ProfileDataInterface;
 
-class ProfileWidget : public DcpWidget
+class ProfileDialog : public MDialog
 {
     Q_OBJECT
 
 public:
-    ProfileWidget (
-            ProfileDataInterface *api,
-            QGraphicsWidget *parent = 0);
-    virtual ~ProfileWidget();
+    ProfileDialog(ProfileDataInterface *dataIf);
+    virtual ~ProfileDialog();
 
-    void retranslateUi ();
-
-protected:
-    void initWidget();
+signals:
+    void profileChanged(int newId);
 
 private slots:
-   void initProfiles();
-   void setVibration (int profileId, bool enabled);
-   void vibrationChanged (bool enabled);
-   void selectionChanged ();
-   void profileChanged (int id);
+    void openProfileSettings ();
+    void currentProfileChanged (int newId);
+    void clickedOnProfile ();
 
 private:
-    MContainer* createContainer();
+    void createContents ();
+    ProfileDataInterface            *dataIf;
+    QHash<int, MListItem*>           profileList;
 
-private:
-    QPointer<ProfileDataInterface>   m_ProfileIf;
-    QHash<int, ProfileContainer*>    m_Containers;
+friend class Ut_ProfileDialog;
 };
+
 #endif

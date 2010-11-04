@@ -20,26 +20,34 @@ contains(DEFINES, HAVE_PROFILE_QT) {
     INCLUDEPATH += /usr/include/profile-qt
 }
 
+CXXFLAGS += -DM_LIBRARY_NAME=libstatusindicatormenu-profile
+
 QT += dbus
 INCLUDEPATH  += ../profileapplet
 
 HEADERS = profileplugin.h \
           profilewidget.h \
-          profilebuttons.h \
+          profiledialog.h \
           ../profileapplet/profiledatainterface.h \
           ../debug.h
           
 SOURCES = profileplugin.cpp \
           profilewidget.cpp \
-          profilebuttons.cpp \
+          profiledialog.cpp \
           ../profileapplet/profiledatainterface.cpp \
           ../debug.cpp
 
 desktop_entry.path = /usr/share/meegotouch/applicationextensions
 desktop_entry.files = statusindicatormenu-profile.desktop
 
+css.path = /usr/share/themes/base/meegotouch/libstatusindicatormenu-profile/style
+css.files = libstatusindicatormenu-profile.css
+
 TARGET        = $$qtLibraryTarget(statusindicatormenu-profile)
 DESTDIR       = lib
 target.path += /usr/lib/meegotouch/applicationextensions
-INSTALLS +=  target \
-        desktop_entry
+
+INSTALLS += target \
+            desktop_entry \
+            css
+

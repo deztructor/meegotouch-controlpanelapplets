@@ -1,0 +1,7 @@
+
+#ProfileChooserDialog {
+    /* force the close button visibility */
+    has-close-button: true;
+    has-title-bar: true;
+}
+

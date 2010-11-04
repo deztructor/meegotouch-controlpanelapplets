@@ -20,7 +20,6 @@
 #define PROFILEDATAINTERFACE_H
 
 #include <QObject>
-#include <QPair>
 
 #ifdef HAVE_PROFILE_QT
 class Profile;
@@ -46,8 +45,7 @@ public:
 
     struct ProfileData {
         ProfileId                 profileId;
-        /* IconId, profilenam(translated) pair */
-        QPair<QString, QString>   visualData;
+        QString                   profileName;
         bool                      vibrationEnabled;
         bool                      isActive;
         int                       volumeLevel;
@@ -63,6 +61,8 @@ signals:
     void vibrationValue (int id, bool value);
 
 public:
+    QString mapId2StatusIconId (int id);
+    QString mapId2IconId (int id);
     QString getCurrentProfileIconId ();
     int getCurrentProfile ();
     QList<ProfileData> getProfilesData ();
@@ -77,7 +77,6 @@ private slots:
 private:
     static ProfileId mapId (const QString &id);
     static QString id2Name (const QString &id);
-    static QString mapId2IconID (int id);
 
 private:
     #ifdef HAVE_PROFILE_QT
