@@ -4,7 +4,7 @@
 # export DH_VERBOSE=1
 
 DEBDIR = ..
-CFLAGS = -Wall -g
+CXXFLAGS = -Wall
 
 comma :=,
 empty :=
@@ -12,9 +12,9 @@ space := $(empty) $(empty)
 
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-	CFLAGS += -O0
+	CXXFLAGS += -O0
 else
-	CFLAGS += -O2
+	CXXFLAGS += -O2
 endif
 
 QMAKE_PARAMS = $(empty)
@@ -39,7 +39,7 @@ ifneq (,$(filter parallel=%,$(TMP_BUILD_OPTS)))
     PARALLEL_MAKEFLAGS += -j$(NUMJOBS)
 endif
 
-QMAKE_OPTIONS = COV_OPTION=off $(QMAKE_PARAMS)
+QMAKE_OPTIONS = COV_OPTION=off $(QMAKE_PARAMS) QMAKE_CXXFLAGS="$(CXXFLAGS)"
 
 configure: configure-stamp
 configure-stamp:
