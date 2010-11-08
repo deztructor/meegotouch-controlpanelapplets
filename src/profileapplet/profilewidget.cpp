@@ -23,6 +23,7 @@
 
 #include <QGraphicsLinearLayout>
 #include <MContainer>
+#include <MLabel>
 #include <QDebug>
 
 #undef DEBUG
@@ -43,11 +44,11 @@ ProfileWidget::~ProfileWidget ()
 }
 
 
-void 
+void
 ProfileWidget::initWidget ()
 {
     // catch profile If actions
-    connect (m_ProfileIf, SIGNAL(vibrationValue(int, bool)), 
+    connect (m_ProfileIf, SIGNAL(vibrationValue(int, bool)),
              SLOT(setVibration(int, bool)));
 
     // get init values
@@ -59,19 +60,49 @@ ProfileWidget::initWidget ()
              SLOT (profileChanged (int)));
 }
 
-void 
+void
 ProfileWidget::initProfiles ()
 {
     QList<ProfileDataInterface::ProfileData> l = m_ProfileIf->getProfilesData();
-    //% "Vibration"
-    MContainer *mContainer = new MContainer(qtTrId("qtn_prof_vibration"));
+
     QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
     QGraphicsLinearLayout *vibraLayout = new QGraphicsLinearLayout (Qt::Vertical);
-    
+
     SYS_DEBUG ("We have %d profiles.", l.count());
     mainLayout->setContentsMargins (0., 0., 0., 0.);
+    mainLayout->setSpacing (0.);
     vibraLayout->setContentsMargins (0., 0., 0., 0.);
-    vibraLayout->setSpacing(0.);
+    vibraLayout->setSpacing (0.);
+
+    MContainer *headerContainer = new MContainer;
+    headerContainer->setHeaderVisible (false);
+    headerContainer->setStyleName ("CommonXLargeGroupHeaderPanelInverted");
+
+    QGraphicsLinearLayout *headerLayout =
+        new QGraphicsLinearLayout (Qt::Horizontal);
+    headerLayout->setContentsMargins (0., 0., 0., 0.);
+
+    MLabel *titleLabel = new MLabel;
+    //% "Profile"
+    titleLabel->setText (qtTrId ("qtn_prof_profile"));
+    titleLabel->setStyleName ("CommonXLargeGroupHeaderInverted");
+    titleLabel->setProperty ("styleName", "CommonXLargeGroupHeaderInverted");
+    headerLayout->addItem (titleLabel);
+
+    MLabel *vibraLabel = new MLabel;
+    //% "Vibration"
+    vibraLabel->setText (qtTrId ("qtn_prof_vibration"));
+    vibraLabel->setProperty ("styleName", "VibraLabel");
+    headerLayout->addItem (vibraLabel);
+    headerLayout->setAlignment (vibraLabel, Qt::AlignRight | Qt::AlignBottom);
+
+    headerContainer->centralWidget ()->setLayout (headerLayout);
+
+    mainLayout->addItem (headerContainer);
+
+    MContainer *listContainer = new MContainer;
+    listContainer->setHeaderVisible (false);
+    listContainer->setStyleName ("CommonPanelInverted");
 
     // create profile containers
     for (int i = 0; i < l.count(); ++i) {
@@ -93,19 +124,18 @@ ProfileWidget::initProfiles ()
 
         cont->setSelected (d.profileId == m_ProfileIf->getCurrentProfile ());
     }
+    listContainer->centralWidget ()->setLayout (vibraLayout);
 
     /*
      * mainLayout
      */
-    mContainer->centralWidget()->setLayout(vibraLayout);
-
-    mainLayout->addItem(mContainer);
+    mainLayout->addItem (listContainer);
     mainLayout->addStretch ();
 
     setLayout (mainLayout);
 }
 
-void 
+void
 ProfileWidget::vibrationChanged (
         bool enabled)
 {

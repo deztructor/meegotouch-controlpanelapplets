@@ -40,31 +40,34 @@ ProfileContainer::ProfileContainer (
     m_Label(0)
 {
     QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(Qt::Horizontal, this);
+    layout->setContentsMargins (0., 0., 0., 0.);
     SYS_DEBUG ("Creating container for %s", SYS_STR(title)); 
 
     m_Icon = new MImageWidget;
-    m_Icon->setStyleName ("CommonThumbnail");
+    m_Icon->setStyleName ("CommonMainIcon");
 
     m_Button = new MButton;
-    m_Button->setStyleName ("CommonRightSwitch");
     m_Button->setCheckable (true);
     m_Button->setViewType (MButton::switchType);
+    m_Button->setStyleName ("CommonRightSwitchInverted");
     m_Button->setChecked (vibra);
     connect(m_Button, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
 
     m_Label = new MLabel(title);
-    m_Label->setObjectName ("CommonSingleTitle");
+    m_Label->setProperty ("styleName", "CommonSingleTitleInverted");
 
     layout->addItem(m_Icon);
     layout->addItem(m_Label);
     layout->addItem(m_Button);
 
-    layout->setAlignment (m_Icon, Qt::AlignVCenter);
-    layout->setAlignment (m_Label, Qt::AlignVCenter);
-    layout->setAlignment (m_Button, Qt::AlignVCenter);
+    layout->setAlignment (m_Icon, Qt::AlignVCenter | Qt::AlignLeft);
+    layout->setAlignment (m_Label, Qt::AlignVCenter | Qt::AlignLeft);
+    layout->setAlignment (m_Button, Qt::AlignVCenter | Qt::AlignRight);
 
     setLayout(layout);
-    setStyleName ("CommonPanel");
+
+    setContentsMargins (0., 0., 0., 0.);
+    setStyleName ("CommonPanelInverted");
 }
 
 ProfileContainer::~ProfileContainer()

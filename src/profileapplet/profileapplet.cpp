@@ -26,13 +26,14 @@
 
 #include <QtGui>
 #include <QDebug>
-
-#include <MTheme>
 #include <MAction>
 
-Q_EXPORT_PLUGIN2(profileapplet, ProfileApplet)
+#ifndef UNIT_TEST
+#include <MLibrary>
+M_LIBRARY
+#endif
 
-const QString cssDir = "/usr/share/themes/base/meegotouch/duicontrolpanel/style/";
+Q_EXPORT_PLUGIN2(profileapplet, ProfileApplet)
 
 ProfileApplet::ProfileApplet() :
     m_Api (new ProfileDataInterface)
@@ -48,7 +49,6 @@ ProfileApplet::~ProfileApplet()
 void 
 ProfileApplet::init()
 {
-    MTheme::loadCSS(cssDir + "profileapplet.css");
 }
 
 DcpWidget *
@@ -86,3 +86,4 @@ ProfileApplet::constructBrief (
     Q_UNUSED (partId);
     return 0;
 }
+

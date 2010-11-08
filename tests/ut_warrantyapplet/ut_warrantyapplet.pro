@@ -39,7 +39,6 @@ contains(DEFINES, HAVE_QMSYSTEM) {
 HEADERS += \
     ../../src/debug.h \
     ut_warrantyapplet.h \
-    $$STUB_PREFIX/MLabel \
     $$SRC_PREFIX/warrantyapplet.h \
     $$SRC_PREFIX/warrantybrief.h \
     $$SRC_PREFIX/warrantybusinesslogic.h \
@@ -48,7 +47,6 @@ HEADERS += \
 SOURCES += \
     ../../src/debug.cpp \
     ut_warrantyapplet.cpp \
-    $$STUB_PREFIX/mlabel_stub.cpp \
     $$SRC_PREFIX/warrantyapplet.cpp \
     $$SRC_PREFIX/warrantybrief.cpp \
     $$SRC_PREFIX/warrantybusinesslogic.cpp \
