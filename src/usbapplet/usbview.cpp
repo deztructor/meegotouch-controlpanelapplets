@@ -277,7 +277,7 @@ UsbView::addTitleLabel (
     QGraphicsLinearLayout   *containerLayout;
 
     label = new MLabel;
-    label->setProperty ("styleName", labelStyleName);
+    label->setStyleName (labelStyleName);
 
     container = new MContainer;
     container->setStyleName (panelStyleName);

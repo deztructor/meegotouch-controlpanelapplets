@@ -81,6 +81,7 @@ ProfileDialog::createContents ()
         item->setLayout (itemLayout);
 
         MImageWidget *icon = new MImageWidget (item);
+        //icon->setStyleName ("CustomCommonMainIcon");
         icon->setStyleName ("CommonTitleIcon");
         icon->setImage (dataIf->mapId2IconId (i.profileId));
         icon->setZoomFactor (1.0);
