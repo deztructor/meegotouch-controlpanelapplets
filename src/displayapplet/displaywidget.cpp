@@ -67,21 +67,26 @@ void DisplayWidget::initWidget ()
 
     m_logic = new DisplayBusinessLogic;
 
-    /*
-     * First row: The brighness label and slider.
-     */
     // Brightness
     MWidget *brightness = new MStylableWidget;
     QGraphicsLinearLayout *brightnessLayout =
         new QGraphicsLinearLayout (Qt::Vertical);
     brightnessLayout->setContentsMargins (0., 0., 0., 0.);
 
+    /*
+     * The brightness label as title. 
+     */
     //% "Brightness"
     m_brightnessLabel = new MLabel (qtTrId ("qtn_disp_bright"));
-    m_brightnessLabel->setObjectName ("CommonTitle");
-
+    m_brightnessLabel->setObjectName ("CommonTitleLabelInverted");
+    //m_brightnessLabel->setStyleName ("CommonTitleLabelInverted");
+    
+    /*
+     * The slider
+     */
     m_brightnessSlider = new MSlider;
-    m_brightnessSlider->setObjectName("CommonSlider");
+    m_brightnessSlider->setStyleName ("CommonSliderInverted");
+
 #ifdef WANT_HANDLE_LABEL
     m_brightnessSlider->setHandleLabelVisible (true);
 #endif
@@ -100,7 +105,7 @@ void DisplayWidget::initWidget ()
     connect (m_brightnessSlider, SIGNAL (valueChanged (int)),
              SLOT (sliderUpdated (int)));
 
-    brightness->setObjectName ("CommonPanel");
+    brightness->setObjectName ("CommonPanelInverted");
     brightness->setLayout (brightnessLayout);
     mainLayout->addItem (brightness);
 
@@ -111,7 +116,7 @@ void DisplayWidget::initWidget ()
 
     // Screen dim timeout selector
     m_screenTimeout = new MBasicListItem (MBasicListItem::TitleWithSubtitle);
-    m_screenTimeout->setObjectName ("CommonPanel");
+    m_screenTimeout->setStyleName ("CommonPanelInverted");
     m_screenTimeout->setLayoutPosition (M::VerticalCenterPosition);
     //% "Backlight time out"
     m_screenTimeout->setTitle (qtTrId ("qtn_disp_screenoff"));
@@ -135,7 +140,7 @@ void DisplayWidget::initWidget ()
     /*
      * The third row: stays lit when charging label and button.
      */
-    MWidget *displayon = new MStylableWidget;
+    MContainer *displayon = new MContainer;
     QGraphicsLinearLayout *blankinhibitLayout =
         new QGraphicsLinearLayout (Qt::Horizontal);
 
@@ -143,12 +148,12 @@ void DisplayWidget::initWidget ()
 
     //% "Display stays lit when charging"
     m_blankInhibitLabel = new MLabel (qtTrId ("qtn_disp_screenon"));
-    m_blankInhibitLabel->setObjectName("CommonSingleTitle");
+    m_blankInhibitLabel->setObjectName("CommonSingleTitleInverted");
     blankinhibitLayout->addItem (m_blankInhibitLabel);
 
     // Blank inhibit
     m_blankInhibitButton = new MButton;
-    m_blankInhibitButton->setObjectName("CommonSwitch");
+    m_blankInhibitButton->setStyleName ("CommonSwitchInverted");
     m_blankInhibitButton->setCheckable (true);
     m_blankInhibitButton->setViewType (MButton::switchType);
 
@@ -160,7 +165,7 @@ void DisplayWidget::initWidget ()
 
     m_blankInhibitButton->setChecked (m_logic->blankInhibitValue ());
 
-    displayon->setObjectName ("CommonPanel");
+    displayon->setStyleName ("CommonPanelInverted");
     displayon->setLayout (blankinhibitLayout);
     mainLayout->addItem (displayon);
 
