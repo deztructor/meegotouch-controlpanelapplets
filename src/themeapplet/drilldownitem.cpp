@@ -56,9 +56,9 @@ DrillDownItem::createLayout()
     
     // FIXME: According to the layout guide we should use CommonDrilldownIcon,
     // but that does not look good. It makes the icon pixelated.
-    drillIconWidget->setProperty ("styleName", "CommonMainIcon");
-    titleLabel->setProperty ("styleName", "CommonTitleInverted");
-    subTitleLabel->setProperty ("styleName", "CommonSubTitleInverted");
+    drillIconWidget->setStyleName ("CommonMainIcon");
+    titleLabel->setStyleName ("CommonTitleInverted");
+    subTitleLabel->setStyleName ("CommonSubTitleInverted");
 
     switch (itemStyle()) {
         case TitleWithSubtitle:

@@ -78,8 +78,7 @@ void DisplayWidget::initWidget ()
      */
     //% "Brightness"
     m_brightnessLabel = new MLabel (qtTrId ("qtn_disp_bright"));
-    m_brightnessLabel->setObjectName ("CommonTitleLabelInverted");
-    //m_brightnessLabel->setStyleName ("CommonTitleLabelInverted");
+    m_brightnessLabel->setStyleName ("CommonTitleLabelInverted");
     
     /*
      * The slider
@@ -148,7 +147,7 @@ void DisplayWidget::initWidget ()
 
     //% "Display stays lit when charging"
     m_blankInhibitLabel = new MLabel (qtTrId ("qtn_disp_screenon"));
-    m_blankInhibitLabel->setObjectName("CommonSingleTitleInverted");
+    m_blankInhibitLabel->setStyleName("CommonSingleTitleInverted");
     blankinhibitLayout->addItem (m_blankInhibitLabel);
 
     // Blank inhibit
