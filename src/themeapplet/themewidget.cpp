@@ -22,6 +22,7 @@
 #include "themelistmodel.h"
 #include "themecellcreator.h"
 #include "themedialog.h"
+#include "drilldownitem.h"
 
 #include <MApplication>
 #include <MApplicationWindow>
@@ -68,12 +69,13 @@ ThemeWidget::createWidgets ()
     mainLayout = new QGraphicsLinearLayout(Qt::Vertical);
     mainLayout->setContentsMargins (0., 0., 0., 0.);
     mainLayout->setSpacing (0.);
-
+    
     /*
      * Creating the list with the available themes.
      */
     m_List = new MList();
     m_List->setObjectName ("ThemeList");
+
 
     // We only connect the themeChangeStarted if we have a chance to sense the
     // end of the theme change too. just to be sure.
@@ -94,7 +96,7 @@ ThemeWidget::createWidgets ()
     /*
      * An item to activate the OVI link.
      */
-    m_OviItem = new MBasicListItem (MBasicListItem::IconWithTitle);
+    m_OviItem = new DrillDownItem (MBasicListItem::IconWithTitle);
     m_OviItem->setObjectName("OviItem");
 
     // Currently we use the default.

@@ -21,6 +21,7 @@ DEFINES += \
 
 HEADERS = \
     ../debug.h \
+    drilldownitem.h \
     themedescriptor.h \
     themebusinesslogic.h \
     themeapplet.h \
@@ -32,6 +33,7 @@ HEADERS = \
 
 SOURCES = \
     ../debug.cpp \
+    drilldownitem.cpp \
     themedescriptor.cpp \
     themebusinesslogic.cpp \
     themeapplet.cpp \

@@ -36,6 +36,7 @@ HEADERS += \
     $$STUB_PREFIX/mdesktopentry.h \
     ../../src/debug.h \
     ut_themeapplet.h \
+    $$SRC_PREFIX/drilldownitem.h \
     $$SRC_PREFIX/themeapplet.h \
     $$SRC_PREFIX/themebrief.h \
     $$SRC_PREFIX/themebusinesslogic.h \
@@ -49,6 +50,7 @@ SOURCES += \
     $$STUB_PREFIX/mdesktopentry.cpp \
     ../../src/debug.cpp \
     ut_themeapplet.cpp \
+    $$SRC_PREFIX/drilldownitem.cpp \
     $$SRC_PREFIX/themeapplet.cpp \
     $$SRC_PREFIX/themebrief.cpp \
     $$SRC_PREFIX/themebusinesslogic.cpp \
