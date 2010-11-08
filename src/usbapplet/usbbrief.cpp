@@ -24,7 +24,7 @@
 #include <MGConfItem>
 #include <dcpwidgettypes.h>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 const QString usbModeGConfKey = "/Meego/System/UsbMode";
