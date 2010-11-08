@@ -1,0 +1,10 @@
+
+#VibraLabel {
+    font: $FONT_FAMILY;
+    font-style: light;
+    font-size: 22;
+    margin-top: $MARGIN_DOUBLE;
+    margin-right: $INDENT_DEFAULT;
+    color: #C8C8C8;
+}
+

@@ -33,7 +33,6 @@ CONFIG += \
 MOBILITY += systeminfo
 
 HEADERS += \
-    $$STUB_PREFIX/MLabel \
     ../../src/debug.h \
     ut_aboutapplet.h \
     $$SRC_PREFIX/aboutapplet.h \
@@ -42,7 +41,6 @@ HEADERS += \
     $$SRC_PREFIX/aboutwidget.h
 
 SOURCES += \
-    $$STUB_PREFIX/mlabel_stub.cpp \
     ../../src/debug.cpp \
     ut_aboutapplet.cpp \
     $$SRC_PREFIX/aboutapplet.cpp \
