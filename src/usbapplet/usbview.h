@@ -30,6 +30,7 @@ class MLabel;
 class MButton;
 class MButtonGroup;
 class MNotification;
+class MLinearLayoutPolicy;
 
 class UsbView : public DcpWidget
 {
@@ -54,6 +55,11 @@ protected:
 
 private:
     void initWidget (void);
+    MLabel *addTitleLabel (MLinearLayoutPolicy    *targetPolicy,
+                           const char             *panelStyleName,
+                           const char             *labelStyleName);
+
+private:
     #ifdef HAVE_QMSYSTEM
     MeeGo::QmUSBMode    *m_logic;
     #endif

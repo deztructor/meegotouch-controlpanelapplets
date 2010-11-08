@@ -26,9 +26,10 @@
 #include <MLinearLayoutPolicy>
 #include <MButtonGroup>
 #include <MNotification>
+#include <MContainer>
 #include <MLocale>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 #define BUTTON_ALWAYS_ASK   0
@@ -68,34 +69,53 @@ UsbView::~UsbView ()
 void
 UsbView::initWidget ()
 {
-    #ifdef HAVE_QMSYSTEM
-    QGraphicsLinearLayout   *layout;
+    MLayout                 *mainLayout;
+    MLinearLayoutPolicy     *mainPolicy;
+
+    MLayout                 *buttonsLayout;
+    MLinearLayoutPolicy     *portraitButtonsPolicy;
+    MLinearLayoutPolicy     *landscapeButtonsPolicy;
+
+    setObjectName ("CommonPanelInverted");
 
 // Creating the main layout
-    layout = new QGraphicsLinearLayout (Qt::Vertical);
+    mainLayout = new MLayout;
+    mainPolicy = new MLinearLayoutPolicy (mainLayout, Qt::Vertical);
 
-// Creating & adding the info-label
+    mainLayout->setContentsMargins (0. , 0. , 0. , 0.);
+    mainPolicy->setSpacing (0. );
 
-    m_info_label = new MLabel;
-    layout->addItem (m_info_label);
+// Create the title-bar
+    MLabel *title =
+        addTitleLabel (mainPolicy,
+                       "CommonXLargeGroupHeaderPanelInverted",
+                       "CommonXLargeGroupHeaderInverted");
+    //% "USB"
+    title->setText (qtTrId ("qtn_usb_title"));
+
+// Info label
+    m_info_label = addTitleLabel (mainPolicy,
+                                  "CommonSmallPanelInverted",
+                                  "CommonSmallGroupHeaderInverted");
 
 // Creating, filling and adding the mode-list
-    m_btn_group = new MButtonGroup ();
+    m_btn_group = new MButtonGroup;
     m_btn_group->setExclusive (true);
 
-    MLayout *buttonsLayout = new MLayout;
-    MLinearLayoutPolicy *vlayout =
-        new MLinearLayoutPolicy (buttonsLayout, Qt::Vertical);
-    vlayout->setNotifyWidgetsOfLayoutPositionEnabled (true);
-    vlayout->setSpacing (0.);
+    buttonsLayout = new MLayout;
+    buttonsLayout->setContentsMargins (0, 0, 0, 0);
 
-    MLinearLayoutPolicy *hlayout =
-        new MLinearLayoutPolicy (buttonsLayout, Qt::Horizontal);
-    hlayout->setNotifyWidgetsOfLayoutPositionEnabled (true);
-    hlayout->setSpacing (0.);
+    portraitButtonsPolicy = new MLinearLayoutPolicy (buttonsLayout, Qt::Vertical);
+    portraitButtonsPolicy->setNotifyWidgetsOfLayoutPositionEnabled (true);
+    portraitButtonsPolicy->setSpacing (0.);
 
-    buttonsLayout->setPortraitPolicy (vlayout);
-    buttonsLayout->setLandscapePolicy (hlayout);
+    buttonsLayout->setPortraitPolicy (portraitButtonsPolicy);
+
+    landscapeButtonsPolicy = new MLinearLayoutPolicy (buttonsLayout, Qt::Horizontal);
+    landscapeButtonsPolicy->setNotifyWidgetsOfLayoutPositionEnabled (true);
+    landscapeButtonsPolicy->setSpacing (0.);
+
+    buttonsLayout->setLandscapePolicy (landscapeButtonsPolicy);
 
     for (int i = 0; i < 3; i++)
     {
@@ -103,32 +123,41 @@ UsbView::initWidget ()
         m_buttons[i] = new MButton;
         m_buttons[i]->setViewType(MButton::groupType);
         m_buttons[i]->setCheckable (true);
-        vlayout->addItem (m_buttons[i]);
-        hlayout->addItem (m_buttons[i]);
-        hlayout->setStretchFactor (m_buttons[i], 2);
+        portraitButtonsPolicy->addItem (m_buttons[i]);
+        landscapeButtonsPolicy->addItem (m_buttons[i]);
 
         switch (i)
         {
-            case BUTTON_MASS_STORAGE:
-                m_buttons[i]->setObjectName("MassStorage");
-                id = (int) QmUSBMode::MassStorage;
-                break;
-            case BUTTON_OVI_SUITE:
-                m_buttons[i]->setObjectName("OviSuite");
-                id = (int) QmUSBMode::OviSuite;
-                break;
-            case BUTTON_ALWAYS_ASK:
-            default:
-                m_buttons[i]->setObjectName("AlwaysAsk");
-                id = (int) QmUSBMode::Ask;
-                break;
+        case BUTTON_ALWAYS_ASK:
+            m_buttons[i]->setObjectName("AlwaysAsk");
+            m_buttons[i]->setStyleName("CommonLeftSplitButtonInverted");
+            id = (int) QmUSBMode::Ask;
+            break;
+        case BUTTON_MASS_STORAGE:
+            m_buttons[i]->setObjectName("MassStorage");
+            m_buttons[i]->setStyleName("CommonHorizontalCenterSplitButtonInverted");
+            id = (int) QmUSBMode::MassStorage;
+            break;
+        case BUTTON_OVI_SUITE:
+            m_buttons[i]->setObjectName("OviSuite");
+            m_buttons[i]->setStyleName("CommonRightSplitButtonInverted");
+            id = (int) QmUSBMode::OviSuite;
+            break;
+        default:
+            break;
         }
 
         m_btn_group->addButton (m_buttons[i], id);
     }
 
-    layout->addItem (buttonsLayout);
+    MContainer *buttonsWidget = new MContainer;
+    buttonsWidget->setHeaderVisible (false);
+    buttonsWidget->setStyleName ("CommonPanelInverted");
 
+    buttonsWidget->centralWidget ()->setLayout (buttonsLayout);
+    mainPolicy->addItem (buttonsWidget);
+
+    // init the button-group value & connect to its signal
     int current_setting = (int) m_logic->getDefaultMode ();
 
     if (m_btn_group->button (current_setting) == 0)
@@ -139,14 +168,12 @@ UsbView::initWidget ()
     connect (m_btn_group, SIGNAL (buttonClicked (int)),
              this, SLOT (selectionChanged (int)));
 
-    layout->addStretch ();
+    //finally add a stretch & set the layout
+    mainPolicy->addStretch ();
 
-    setLayout (layout);
-
-    layout->invalidate ();
+    setLayout (mainLayout);
 
     retranslateUi ();
-    #endif
 }
 
 void
@@ -237,5 +264,33 @@ UsbView::retranslateUi ()
     m_buttons[BUTTON_MASS_STORAGE]->setText (qtTrId ("qtn_usb_mass_storage"));
     //% "Ovi Suite mode"
     m_buttons[BUTTON_OVI_SUITE]->setText (qtTrId ("qtn_usb_ovi_suite"));
+}
+
+MLabel *
+UsbView::addTitleLabel (
+    MLinearLayoutPolicy     *targetPolicy,
+    const char              *panelStyleName,
+    const char              *labelStyleName)
+{
+    MLabel                  *label;
+    MContainer              *container;
+    QGraphicsLinearLayout   *containerLayout;
+
+    label = new MLabel;
+    label->setProperty ("styleName", labelStyleName);
+
+    container = new MContainer;
+    container->setStyleName (panelStyleName);
+    container->setContentsMargins (0., 0., 0., 0.);
+    container->setHeaderVisible (false);
+
+    containerLayout = new QGraphicsLinearLayout (Qt::Horizontal);
+    containerLayout->setContentsMargins (0., 0., 0., 0.);
+    containerLayout->addItem (label);
+
+    container->centralWidget ()->setLayout (containerLayout);
+
+    targetPolicy->addItem (container);
+    return label;
 }
 
