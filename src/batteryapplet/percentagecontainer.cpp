@@ -37,11 +37,11 @@ PercentageContainer::PercentageContainer(
 {
     SYS_DEBUG ("*** text = %s", SYS_STR(text));
 
-    setStyleName ("CommonPanel");
+    setStyleName ("CommonPanelInverted");
     setObjectName ("PercentageContainer");
 
     m_TextLabel = new MLabel (text);
-    m_TextLabel->setObjectName ("CommonSingleTitle");
+    m_TextLabel->setStyleName ("CommonSingleTitleInverted");
 
     setHeaderVisible (false);
     setLayout ();
@@ -65,9 +65,12 @@ void PercentageContainer::updateCapacity(
     m_TextLabel->setText(text);
 }
 
-void PercentageContainer::setLayout()
+/*
+ * This method will create all the internal widgets. 
+ */
+void 
+PercentageContainer::setLayout()
 {
-    MStylableWidget       *stretcher;
     QGraphicsLinearLayout *mainLayout;
     QGraphicsLinearLayout *layout;
 
@@ -79,9 +82,6 @@ void PercentageContainer::setLayout()
     layout->setContentsMargins (0., 0., 0., 0.);
     layout->setSpacing (0.);
 
-    stretcher = new MStylableWidget ();
-    stretcher->setObjectName ("CommonSpacer");
-    
     // add the widgets
     layout->addItem (m_Image);
     layout->setAlignment (m_Image, Qt::AlignVCenter);
@@ -89,7 +89,6 @@ void PercentageContainer::setLayout()
     layout->setAlignment (m_TextLabel, Qt::AlignVCenter);
 
     mainLayout->addItem (layout);
-    mainLayout->addItem (stretcher);
 
     // set the layout
     centralWidget ()->setLayout (mainLayout);

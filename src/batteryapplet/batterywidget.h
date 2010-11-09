@@ -52,19 +52,26 @@ private slots:
     void chargeComplete ();
 
 private:
+    void addRemainingCapacityWidget ();
+    void addAutoActivationWidget ();
+    void addSliderContainer ();
+    void addPowerSaveButton ();
+    
     void updatePSMButton ();
     void retranslateUi ();
-    MButton                 *m_PSMAutoButton;
-    MContainer              *activationLevelLabelContainer;
+
+private: 
     BatteryBusinessLogic    *m_logic;
-    bool                     m_UILocked;
-    BatteryImage            *batteryImage;
-    MButton                 *PSMButton;
     MLinearLayoutPolicy     *m_MainLayout;
+    PercentageContainer     *m_RemainingContainer;
+    MContainer              *m_ActivationContainer;
+    SliderContainer         *m_SliderContainer;
+    MButton                 *m_PSMAutoButton;
+    MButton                 *PSMButton;
+    BatteryImage            *m_BatteryImage;
+    bool                     m_UILocked;
     // true means we are believed to be in power save mode
     bool                     m_PSMButtonToggle;
-    SliderContainer         *sliderContainer;
-    PercentageContainer     *remainingCapacityContainer;
 };
 
 #endif // BATTERYWIDGET_H

@@ -39,19 +39,26 @@
 #include <HelpButton>
 #endif
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
+static const int SliderContainerPosition = 2;
+
+/******************************************************************************
+ * BatteryWidget implementation.
+ */
 BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
         DcpWidget (parent),
         m_logic (0),
-        m_UILocked (false),
-        batteryImage (0),
-        PSMButton (0),
         m_MainLayout (0),
-        sliderContainer (0),
-        remainingCapacityContainer (0)
+        m_RemainingContainer (0),
+        m_ActivationContainer (0),
+        m_SliderContainer (0),
+        m_PSMAutoButton (0),
+        PSMButton (0),
+        m_BatteryImage (0),
+        m_UILocked (false)
 {
     SYS_DEBUG ("Starting in %p", this);
     /*
@@ -59,8 +66,10 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
      * not active.
      */
     m_PSMButtonToggle = false;
-
     setContentsMargins (0., 0., 0., 0.);
+
+    // instantiate the batterybusinesslogic
+    m_logic = new BatteryBusinessLogic;
     initWidget ();
 }
 
@@ -80,161 +89,205 @@ bool BatteryWidget::back ()
     return true; // back is handled by main window by default
 }
 
-void BatteryWidget::initWidget ()
+void 
+BatteryWidget::initWidget ()
 {
-    SYS_DEBUG ("Start");
-    // instantiate the batterybusinesslogic
-    m_logic = new BatteryBusinessLogic;
+    MLayout     *layout;
+   
+    /*
+     * Creating a layout that holds the rows of the internal widgets.
+     */
+    layout = new MLayout (this);
+    m_MainLayout = new MLinearLayoutPolicy (layout, Qt::Vertical);
+    m_MainLayout->setContentsMargins (0., 0., 0., 0.);
+    m_MainLayout->setSpacing (0.);
+    setLayout (layout);
 
-    // battery image
-    batteryImage = new BatteryImage;
+    /*
+     * Adding the rows of widgets.
+     */
+    addRemainingCapacityWidget ();
+    addAutoActivationWidget ();
+    addSliderContainer ();
+    addPowerSaveButton ();
 
-    // batteryRemainingCapacityPercentage
+    /*
+     * Initializing the wigets and connecting the signals.
+     */
+    // SliderContainer signals and slots, and initialization
+    m_SliderContainer->initSlider (m_logic->PSMThresholdValues ());
+    m_SliderContainer->updateSlider (m_logic->PSMThresholdValue ());
+    connect (m_SliderContainer, SIGNAL (PSMThresholdValueChanged (int)),
+             m_logic, SLOT (setPSMThresholdValue (int)),
+             Qt::DirectConnection);
+    
+    // connect the value receive signals
+    connect (m_logic, SIGNAL(remainingBatteryCapacityChanged(int)),
+             this, SLOT(remainingBatteryCapacityReceived(int)));
+
+    // Connect the batteryImage slots.
+    connect (m_logic, SIGNAL (batteryCharging (int)),
+             m_BatteryImage, SLOT (startCharging (int)));
+    connect (m_logic, SIGNAL (batteryBarValueReceived (int)),
+             m_BatteryImage, SLOT (updateBatteryLevel (int)));
+    connect (m_logic, SIGNAL (PSMValueReceived (bool)),
+             m_BatteryImage, SLOT (setPSMValue (bool)));
+
+    // Connecting the signals of the businesslogic.
+    connect (m_logic, SIGNAL (PSMValueReceived (bool)),
+             this, SLOT (PSMValueReceived (bool)));
+    connect (m_logic, SIGNAL(batteryFull()),
+             m_BatteryImage, SLOT(chargeComplete()));
+    connect (m_logic, SIGNAL(batteryFull()),
+             this, SLOT(chargeComplete()));
+    
+    // Initialize the values from the business logic
+    m_logic->requestValues ();
+}
+
+void 
+BatteryWidget::addRemainingCapacityWidget ()
+{
+    Q_ASSERT (m_MainLayout);
+    
+    m_BatteryImage = new BatteryImage (this);
+    m_BatteryImage->setStyleName ("commonIconInverted");
+
     //% "Battery level \%L1\%"
-    remainingCapacityContainer = new PercentageContainer (
-            qtTrId ("qtn_ener_battery_level"), batteryImage);
+    m_RemainingContainer = new PercentageContainer (
+            qtTrId ("qtn_ener_battery_level"), m_BatteryImage);
 
+    m_MainLayout->addItem (m_RemainingContainer);
+    m_MainLayout->setStretchFactor (m_RemainingContainer, 0);
+    
     connect (m_logic, SIGNAL(batteryCharging (int)),
              this, SLOT(charging(int)));
-
     m_logic->remainingCapacityRequired();
+
+}
+
+void 
+BatteryWidget::addAutoActivationWidget ()
+{
+    QGraphicsLinearLayout *layout;
+    
+    MLabel                *activationLevelLabel;
+
+    Q_ASSERT (m_MainLayout);
+    Q_ASSERT (m_logic);
+
+    /*
+     * Creating the container and the layout.
+     */
+    m_ActivationContainer = new MContainer (this);
+    m_ActivationContainer->setStyleName ("CommonPanelInverted");
+    m_ActivationContainer->setHeaderVisible (false);
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    
+    m_ActivationContainer->centralWidget()->setLayout (layout);
+
+    /*
+     * A label for the PSM auto activation.
+     */
+    //% "Auto activate power save"
+    activationLevelLabel = new MLabel(qtTrId ("qtn_ener_autops"));
+    activationLevelLabel->setStyleName ("CommonSingleTitleInverted");
+    
+    /*
+     * A help button for the PSM auto activation.
+     */
+    #ifdef HAVE_USERGUIDE
+    HelpButton* helpButton = new HelpButton ("IDUG_MEEGO_BATTERY.html");
+    helpButton->setViewType(MButton::iconType);
+    helpButton->setIconID ("icon-m-content-description");
+    #endif
+    
+    /*
+     * A switch that turns the auto PSM mode on and off
+     */
+    m_PSMAutoButton = new MButton;
+    m_PSMAutoButton->setStyleName ("CommonSwitchInverted");
+    m_PSMAutoButton->setObjectName ("AutoActivatePowerSaveButton");
+    m_PSMAutoButton->setCheckable (true);
+    m_PSMAutoButton->setViewType (MButton::switchType);
+    //m_PSMAutoButton->setChecked (m_logic->PSMAutoValue());
+    
+    connect (m_PSMAutoButton, SIGNAL (toggled (bool)),
+             this, SLOT (PSMAutoToggled (bool)));
+   
+    /*
+     * Adding the widgets to the layout.
+     */
+    layout->addItem (activationLevelLabel);
+    layout->setAlignment(activationLevelLabel, Qt::AlignLeft|Qt::AlignVCenter);
+    #ifdef HAVE_USERGUIDE
+    layout->addItem(helpButton);
+    #endif
+    layout->addItem (m_PSMAutoButton);
+    layout->setAlignment(m_PSMAutoButton, Qt::AlignRight | Qt::AlignVCenter);
+
+    /*
+     * Adding the new row to the main layout.
+     */
+    m_MainLayout->addItem (m_ActivationContainer);
+    m_MainLayout->setStretchFactor (m_ActivationContainer, 0);
+}
+
+void 
+BatteryWidget::addSliderContainer ()
+{
+    Q_ASSERT (m_MainLayout);
+
+    m_SliderContainer = new SliderContainer;
+
+    /*
+     *
+     */
+    if(m_PSMAutoButton->isChecked ()) {
+        m_MainLayout->addItem (m_SliderContainer);
+        m_MainLayout->setStretchFactor (m_SliderContainer, 0);
+    }
+}
+
+void 
+BatteryWidget::addPowerSaveButton ()
+{
+    MContainer            *container;
+    QGraphicsLinearLayout *layout;
+
+    /*
+     * Creating a lcontainer and a layout.
+     */
+    container = new MContainer (this);
+    container->setStyleName ("CommonPanelInverted");
+    container->setHeaderVisible (false);
+
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    container->centralWidget()->setLayout (layout);
 
     /*
      * PSMButton is used to immediately turn the power save mode on/off.
      */
     PSMButton = new MButton;
-    PSMButton->setObjectName ("CommonSingleButton");
+    PSMButton->setStyleName ("CommonSingleButtonInverted");
     updatePSMButton ();
-
+    // FIXME: why here?
     connect (PSMButton, SIGNAL (released ()),
              this, SLOT (PSMButtonReleased ()));
 
     /*
-     * sliderContainer
+     * Adding the button to our layout.
      */
-    sliderContainer = new SliderContainer;
+    layout->addStretch ();
+    layout->addItem (PSMButton);
+    layout->addStretch ();
+    layout->setAlignment (PSMButton, Qt::AlignHCenter);
 
     /*
-     * SliderContainer signals and slots,
-     * and initialization
+     * Adding the whole row to the main container.
      */
-    sliderContainer->initSlider (m_logic->PSMThresholdValues ());
-    sliderContainer->updateSlider (m_logic->PSMThresholdValue ());
-
-    connect (sliderContainer, SIGNAL (PSMThresholdValueChanged (int)),
-             m_logic, SLOT (setPSMThresholdValue (int)),
-             Qt::DirectConnection);
-
-    MContainer            *buttonContainer;
-    QGraphicsLinearLayout *buttonLayout;
-
-    buttonContainer = new MContainer;
-    buttonContainer->setObjectName ("CommonPanel");
-    buttonContainer->setHeaderVisible (false);
-
-    buttonLayout = new QGraphicsLinearLayout (Qt::Horizontal);
-
-    buttonLayout->addStretch ();
-    buttonLayout->addItem (PSMButton);
-    buttonLayout->addStretch ();
-    buttonLayout->setAlignment (PSMButton, Qt::AlignHCenter);
-
-    buttonContainer->centralWidget()->setLayout (buttonLayout);
-
-    MLayout               *activationLevelLabelLayout;
-    MLabel                *activationLevelLabel;
-
-    //% "Auto activate power save"
-    activationLevelLabel = new MLabel(qtTrId ("qtn_ener_autops"));
-    activationLevelLabelLayout = new MLayout;
-    MLinearLayoutPolicy *hpolicy = new MLinearLayoutPolicy (activationLevelLabelLayout, Qt::Horizontal);
-
-#ifdef HAVE_USERGUIDE
-    HelpButton* helpButton = new HelpButton ("IDUG_MEEGO_BATTERY.html");
-    helpButton->setViewType(MButton::iconType);
-    helpButton->setIconID ("icon-m-content-description");
-#endif
-
-    m_PSMAutoButton = new MButton;
-    m_PSMAutoButton->setStyleName ("CommonSwitch");
-    m_PSMAutoButton->setObjectName ("AutoActivatePowerSaveButton");
-    connect (m_PSMAutoButton, SIGNAL (toggled (bool)),
-             this, SLOT (PSMAutoToggled (bool)));
-    m_PSMAutoButton->setCheckable (true);
-    m_PSMAutoButton->setViewType (MButton::switchType);
-    m_PSMAutoButton->setChecked (m_logic->PSMAutoValue ());
-
-    activationLevelLabelContainer = new MContainer;
-    activationLevelLabelContainer->setObjectName("CommonPanel");
-    activationLevelLabelContainer->setHeaderVisible (false);
-
-    hpolicy->addItem (activationLevelLabel, Qt::AlignLeft | Qt::AlignVCenter);
-#ifdef HAVE_USERGUIDE
-    hpolicy->addItem(helpButton);
-#endif
-    hpolicy->addItem (m_PSMAutoButton, Qt::AlignRight | Qt::AlignVCenter);
-
-    activationLevelLabelContainer->centralWidget()->setLayout (activationLevelLabelLayout);
-
-    MLayout *layout = new MLayout;
-    // mainContainer_
-    m_MainLayout = new MLinearLayoutPolicy (layout, Qt::Vertical);
-    m_MainLayout->setContentsMargins (0., 0., 0., 0.);
-    m_MainLayout->setSpacing (0.);
-
-    m_MainLayout->addItem (remainingCapacityContainer);
-    m_MainLayout->setStretchFactor (remainingCapacityContainer, 0);
-
-    m_MainLayout->addItem (activationLevelLabelContainer);
-    m_MainLayout->setStretchFactor (activationLevelLabelContainer, 0);
-
-    if(m_PSMAutoButton->isChecked ())
-    {
-        m_MainLayout->addItem (sliderContainer);
-        m_MainLayout->setStretchFactor (sliderContainer, 0);
-    }
-
-    m_MainLayout->addItem (buttonContainer);
-    m_MainLayout->setStretchFactor (buttonContainer, 0);
-
-    MContainer *mainContainer = new MContainer;
-    mainContainer->setHeaderVisible (false);
-    mainContainer->setLayout (layout);
-
-    // connect the value receive signals
-    connect (m_logic, SIGNAL(remainingBatteryCapacityChanged(int)),
-             this, SLOT(remainingBatteryCapacityReceived(int)));
-
-    /*
-     * Connect the batteryImage slots.
-     */
-    connect (m_logic, SIGNAL (batteryCharging (int)),
-             batteryImage, SLOT (startCharging (int)));
-    connect (m_logic, SIGNAL (batteryBarValueReceived (int)),
-             batteryImage, SLOT (updateBatteryLevel (int)));
-    connect (m_logic, SIGNAL (PSMValueReceived (bool)),
-             batteryImage, SLOT (setPSMValue (bool)));
-
-    connect (m_logic, SIGNAL (PSMValueReceived (bool)),
-             this, SLOT (PSMValueReceived (bool)));
-
-    connect (m_logic, SIGNAL(batteryFull()),
-             batteryImage, SLOT(chargeComplete()));
-    connect (m_logic, SIGNAL(batteryFull()),
-             this, SLOT(chargeComplete()));
-    // mainLayout
-    QGraphicsLinearLayout *mainLayout =
-        new QGraphicsLinearLayout (Qt::Vertical);
-
-    mainLayout->setContentsMargins (0, 0, 0, 0);
-    mainLayout->addItem (mainContainer);
-    mainLayout->addStretch ();
-    setLayout (mainLayout);
-
-    // Initialize the values from the business logic
-    m_logic->requestValues ();
-
-    SYS_DEBUG ("End");
+    m_MainLayout->addItem (container);
+    m_MainLayout->setStretchFactor (container, 0);
 }
 
 /*!
@@ -256,7 +309,7 @@ BatteryWidget::PSMButtonReleased ()
     if (newPSMValue == false)
     {
         m_logic->setPSMAutoValue (false);
-        sliderContainer->initPSMAutoButton (false);
+        m_SliderContainer->initPSMAutoButton (false);
     }
 
     // UI will change only in PSMValueReceived slot...
@@ -284,17 +337,18 @@ BatteryWidget::PSMAutoToggled (
              * so when we're enabling it, we've to re-query
              * the proper value
              */
-            sliderContainer->updateSlider (m_logic->PSMThresholdValue ());
+            m_SliderContainer->updateSlider (m_logic->PSMThresholdValue ());
             if(m_MainLayout)
-                if(m_MainLayout->indexOf(sliderContainer) == -1)
+                if(m_MainLayout->indexOf(m_SliderContainer) == -1)
                 {
-                    m_MainLayout->insertItem (/*m_MainLayout->indexOf(activationLevelLabelContainer)+1*/2, sliderContainer);
-                    m_MainLayout->setStretchFactor (sliderContainer, 0);
+                    m_MainLayout->insertItem (
+                            SliderContainerPosition, m_SliderContainer);
+                    m_MainLayout->setStretchFactor (m_SliderContainer, 0);
                 }
         }
         else
         {
-            m_MainLayout->removeAt(m_MainLayout->indexOf(sliderContainer));
+            m_MainLayout->removeAt(m_MainLayout->indexOf(m_SliderContainer));
         }
     }
 }
@@ -314,29 +368,27 @@ BatteryWidget::updatePSMButton ()
 void BatteryWidget::remainingBatteryCapacityReceived(const   int pct)
 {
     SYS_DEBUG ("percentage = %d", pct);
-    if(!(m_logic->isCharging()))
-    {
-        if(!m_PSMButtonToggle)
-        {
-            remainingCapacityContainer->updateCapacity (pct);
-        }
-        else
-        {
+
+    /*
+     * A little extra check just to be sure the widget is fully created.
+     */
+    if (!m_RemainingContainer)
+        return;
+
+    if (!(m_logic->isCharging())) {
+        if (!m_PSMButtonToggle) {
+            m_RemainingContainer->updateCapacity (pct);
+        } else {
             //% "Power save mode"
-            remainingCapacityContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
+            m_RemainingContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
         }
-    }
-    else
-    {
-        if(!m_PSMButtonToggle)
-        {
+    } else {
+        if (!m_PSMButtonToggle) {
             //% "Charging"
-            remainingCapacityContainer->setText(qtTrId ("qtn_ener_charging"));
-        }
-        else
-        {
+            m_RemainingContainer->setText(qtTrId ("qtn_ener_charging"));
+        } else {
             //% "Power save mode"
-            remainingCapacityContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
+            m_RemainingContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
         }
     }
 }
@@ -351,28 +403,24 @@ BatteryWidget::PSMValueReceived (
         SYS_DEBUG ("toggle already set");
         return;
     }
-    m_PSMButtonToggle = PSMEnabled;
 
+    m_PSMButtonToggle = PSMEnabled;
     updatePSMButton ();
     m_UILocked = true;
-    if(m_MainLayout)
-    {
-        if (!PSMEnabled)
-        {
-            if(m_MainLayout->indexOf(activationLevelLabelContainer) == -1)
-            {
+
+    if (m_MainLayout && m_ActivationContainer) {
+        if (!PSMEnabled) {
+            if (m_MainLayout->indexOf(m_ActivationContainer) == -1) {
                 m_PSMAutoButton->setChecked(false);
-                m_MainLayout->insertItem (/*m_MainLayout->indexOf(activationLevelLabelContainer)+1*/1, activationLevelLabelContainer);
-                m_MainLayout->setStretchFactor (activationLevelLabelContainer, 0);
+                m_MainLayout->insertItem (1, m_ActivationContainer);
+                m_MainLayout->setStretchFactor (m_ActivationContainer, 0);
             }
             m_logic->remainingCapacityRequired();
-        }
-        else
-        {
-            m_MainLayout->removeAt(m_MainLayout->indexOf(sliderContainer));
-            m_MainLayout->removeAt(m_MainLayout->indexOf(activationLevelLabelContainer));
+        } else {
+            m_MainLayout->removeAt(m_MainLayout->indexOf(m_SliderContainer));
+            m_MainLayout->removeAt(m_MainLayout->indexOf(m_ActivationContainer));
             //% "Power save mode"
-            remainingCapacityContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
+            m_RemainingContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
         }
     }
 
@@ -386,7 +434,7 @@ BatteryWidget::retranslateUi ()
     updatePSMButton ();
 
     // This call will retranslate the label (infoText)
-    sliderContainer->retranslate ();
+    m_SliderContainer->retranslate ();
 
     m_logic->remainingCapacityRequired();
 }
@@ -394,15 +442,14 @@ BatteryWidget::retranslateUi ()
 void BatteryWidget::charging(int animation_rate)
 {
     SYS_DEBUG("Charging rate: %d", animation_rate);
-    if(animation_rate > 0)
-    {
+    if(animation_rate > 0) {
         //% "Charging"
-        remainingCapacityContainer->setText(qtTrId ("qtn_ener_charging"));
+        m_RemainingContainer->setText(qtTrId ("qtn_ener_charging"));
     }
 }
 
 void BatteryWidget::chargeComplete()
 {
     //% "Charging complete"
-    remainingCapacityContainer->setText(qtTrId ("qtn_ener_charcomp"));
+    m_RemainingContainer->setText(qtTrId ("qtn_ener_charcomp"));
 }

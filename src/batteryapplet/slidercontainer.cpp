@@ -41,7 +41,8 @@ SliderContainer::SliderContainer (MWidget *parent) :
         m_SliderExists (false)
 {
     SYS_DEBUG ("");
-    setStyleName("CommonPanel");
+
+    setStyleName("CommonPanelInverted");
     setObjectName ("SliderContainer");
     setHeaderVisible (false);
     setLayout ();
@@ -84,14 +85,14 @@ void SliderContainer::setLayout()
      * "Auto activate power save" label
      */
     m_AutoPSMLabel = new MLabel;
-    m_AutoPSMLabel->setObjectName ("CommonTitle");
+    m_AutoPSMLabel->setStyleName ("CommonTitleInverted");
     labelLayoutPolicy->addItem (m_AutoPSMLabel, Qt::AlignLeft);
 
     /*
      *
      */
     m_PsmValueLabel = new MLabel;
-    m_PsmValueLabel->setObjectName ("CommonSubTitle");
+    m_PsmValueLabel->setStyleName ("CommonSubTitleInverted");
     labelLayoutPolicy->addItem (m_PsmValueLabel, Qt::AlignLeft);
 
     /*
@@ -109,6 +110,7 @@ void SliderContainer::setLayout()
     SYS_DEBUG ("m_SliderValue = %d", m_SliderValue);
 
     m_PSMSlider->setObjectName ("PSMSlider");
+    m_PSMSlider->setStyleName ("commonSliderInverted");
     m_PSMSlider->setOrientation (Qt::Horizontal);
     m_PSMSlider->setHandleLabelVisible (true);
     m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
