@@ -35,11 +35,6 @@ target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 
-css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libprofileapplet/style
-css.files = libprofileapplet.css
-
 message("The plugin will be installed to: " $$target.path)
-message("CSS path will be: " $$css.path)
 INSTALLS += target \
-            css \
             desktop

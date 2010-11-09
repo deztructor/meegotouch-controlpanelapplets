@@ -22,6 +22,7 @@
 #include <QGraphicsLinearLayout>
 #include <MButton>
 #include <MLabel>
+#include <MSeparator>
 #include <MImageWidget>
 #include <QDebug>
 
@@ -50,11 +51,12 @@ ProfileContainer::ProfileContainer (
     m_Button->setCheckable (true);
     m_Button->setViewType (MButton::switchType);
     m_Button->setStyleName ("CommonRightSwitchInverted");
+//    m_Button->setStyleName ("CommonRightSwitch");
     m_Button->setChecked (vibra);
     connect(m_Button, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
 
     m_Label = new MLabel(title);
-    m_Label->setProperty ("styleName", "CommonSingleTitleInverted");
+    m_Label->setStyleName ("CommonSingleTitleInverted");
 
     layout->addItem(m_Icon);
     layout->addItem(m_Label);
@@ -62,7 +64,7 @@ ProfileContainer::ProfileContainer (
 
     layout->setAlignment (m_Icon, Qt::AlignVCenter | Qt::AlignLeft);
     layout->setAlignment (m_Label, Qt::AlignVCenter | Qt::AlignLeft);
-    layout->setAlignment (m_Button, Qt::AlignVCenter | Qt::AlignRight);
+    layout->setAlignment (m_Button, Qt::AlignVCenter | Qt::AlignLeft);
 
     setLayout(layout);
 
