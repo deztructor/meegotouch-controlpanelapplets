@@ -186,7 +186,7 @@ BatteryWidget::addRemainingCapacityWidget ()
     Q_ASSERT (m_MainLayout);
     
     m_BatteryImage = new BatteryImage (this);
-    m_BatteryImage->setStyleName ("commonIconInverted");
+    m_BatteryImage->setStyleName ("CommonMainIconInverted");
 
     //% "Battery level \%L1\%"
     m_RemainingContainer = new PercentageContainer (
@@ -273,7 +273,9 @@ BatteryWidget::addSliderContainer ()
 {
     Q_ASSERT (m_MainLayout);
 
-    m_SliderContainer = new SliderContainer;
+    m_SliderContainer = new SliderContainer (this);
+    m_SliderContainer->setLayout ();
+    m_SliderContainer->hide ();
 
     /*
      *
@@ -365,24 +367,22 @@ BatteryWidget::PSMAutoToggled (
     } else {
         m_logic->setPSMAutoValue (PSMAutoEnabled);
 
-        if (PSMAutoEnabled)
-        {
+        if (PSMAutoEnabled) {
             /*
              * QmSystem returns 0 when PSMAuto is disabled,
              * so when we're enabling it, we've to re-query
              * the proper value
              */
             m_SliderContainer->updateSlider (m_logic->PSMThresholdValue ());
-            if(m_MainLayout)
-                if(m_MainLayout->indexOf(m_SliderContainer) == -1)
-                {
-                    m_MainLayout->insertItem (
-                            SliderContainerPosition, m_SliderContainer);
+            if (m_MainLayout)
+                if (m_MainLayout->indexOf(m_SliderContainer) == -1) {
+                    m_MainLayout->insertItem (SliderContainerPosition, 
+                            m_SliderContainer);
                     m_MainLayout->setStretchFactor (m_SliderContainer, 0);
+                    m_SliderContainer->show ();
                 }
-        }
-        else
-        {
+        } else {
+            m_SliderContainer->hide ();
             m_MainLayout->removeAt(m_MainLayout->indexOf(m_SliderContainer));
         }
     }

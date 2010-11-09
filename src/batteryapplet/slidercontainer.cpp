@@ -19,6 +19,7 @@
 
 #include "slidercontainer.h"
 
+#include <QGraphicsLinearLayout>
 #include <MButton>
 #include <MLinearLayoutPolicy>
 #include <MLabel>
@@ -42,8 +43,10 @@ SliderContainer::SliderContainer (MWidget *parent) :
 {
     SYS_DEBUG ("");
 
-    setStyleName("CommonPanelInverted");
-    setObjectName ("SliderContainer");
+    //setStyleName("CommonPanelInverted");
+    //setObjectName ("SliderContainer");
+    setContentsMargins (0., 0., 0., 0.);
+
     setHeaderVisible (false);
     setLayout ();
 }
@@ -66,55 +69,81 @@ SliderContainer::retranslate ()
 
 void SliderContainer::setLayout()
 {
-    MLayout              *labelLayout;
-    MLinearLayoutPolicy  *labelLayoutPolicy;
+    QGraphicsLinearLayout *mainLayout;
+
+    MContainer            *labelContainer;
+    QGraphicsLinearLayout *labelLayout;
+
+    MContainer            *sliderContainer;
+    QGraphicsLinearLayout *sliderLayout;
+    
 
     SYS_DEBUG ("");
+    
+    /*
+     * Our own layout. 
+     */
+    mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    mainLayout->setContentsMargins (0., 0., 0., 0.);
+    mainLayout->setSpacing (0.);
 
-    labelLayout = new MLayout;
-    labelLayoutPolicy = new MLinearLayoutPolicy (labelLayout, Qt::Vertical);
+    centralWidget()->setLayout (mainLayout);
 
-    MLayout *layout = new MLayout;
-    m_LayoutPolicy = new MLinearLayoutPolicy (layout, Qt::Vertical);
+    /*
+     * A container for the two labels.
+     */
+    labelContainer = new MContainer (this);
+    labelContainer->setStyleName ("CommonPanelInverted");
+    labelContainer->setHeaderVisible (false);
 
+    labelLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    labelContainer->centralWidget()->setLayout (labelLayout);
 
-    MLayout *hlayout = new MLayout;
-    MLinearLayoutPolicy *hpolicy = new MLinearLayoutPolicy (hlayout, Qt::Horizontal);
-
+    mainLayout->addItem (labelContainer);
+    
     /*
      * "Auto activate power save" label
      */
     m_AutoPSMLabel = new MLabel;
     m_AutoPSMLabel->setStyleName ("CommonTitleInverted");
-    labelLayoutPolicy->addItem (m_AutoPSMLabel, Qt::AlignLeft);
+    labelLayout->addItem (m_AutoPSMLabel);
+    labelLayout->setAlignment (m_AutoPSMLabel, Qt::AlignLeft);
 
     /*
-     *
+     * A subtitle that shows the current value of the slider.
      */
     m_PsmValueLabel = new MLabel;
     m_PsmValueLabel->setStyleName ("CommonSubTitleInverted");
-    labelLayoutPolicy->addItem (m_PsmValueLabel, Qt::AlignLeft);
+    labelLayout->addItem (m_PsmValueLabel);
+    labelLayout->setAlignment (m_PsmValueLabel, Qt::AlignLeft);
 
-    /*
-     * Adding the labels to the upper horizontal part.
-     */
-    hpolicy->addItem (labelLayout);
-
-    m_LayoutPolicy->addItem (hlayout);
+    labelLayout->addItem (m_AutoPSMLabel);
+    labelLayout->addItem (m_PsmValueLabel);
     
     /*
-     * PSM Slider
+     * A container to hold the slider.
+     */
+    sliderContainer = new MContainer (this);
+    sliderContainer->setStyleName ("CommonPanelInverted");
+    sliderContainer->setHeaderVisible (false);
+
+    sliderLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    sliderContainer->centralWidget()->setLayout (sliderLayout);
+
+    mainLayout->addItem (sliderContainer);
+    
+    /*
+     * Power save mode auto activation slider
      */
     m_PSMSlider = new MSlider;
-    SYS_DEBUG ("Connecting %p->valueChanged", m_PSMSlider);
-    SYS_DEBUG ("m_SliderValue = %d", m_SliderValue);
-
     m_PSMSlider->setObjectName ("PSMSlider");
-    m_PSMSlider->setStyleName ("commonSliderInverted");
+    m_PSMSlider->setStyleName ("CommonSliderInverted");
     m_PSMSlider->setOrientation (Qt::Horizontal);
     m_PSMSlider->setHandleLabelVisible (true);
     m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
-    m_LayoutPolicy->addItem(m_PSMSlider);
+
+    sliderLayout->addItem (m_PSMSlider);
+    sliderLayout->setAlignment (m_PSMSlider, Qt::AlignHCenter);
 
     /*
      * Set the slider value if available...
@@ -131,9 +160,7 @@ void SliderContainer::setLayout()
     connect (m_PSMSlider, SIGNAL (valueChanged (int)),
             this, SLOT (updateSliderHandleLabel(int)),
             Qt::DirectConnection);
-
-    centralWidget ()->setLayout (layout);
-
+    
     retranslate ();
 }
 

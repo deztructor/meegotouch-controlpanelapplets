@@ -33,6 +33,7 @@ class SliderContainer : public MContainer
 public:
     SliderContainer (MWidget *parent = 0);
     ~SliderContainer ();
+    void    setLayout ();
     void retranslate ();
 
 public slots:
@@ -59,7 +60,6 @@ private:
     MLinearLayoutPolicy   *m_LayoutPolicy;
     bool                   m_SliderExists;
     
-    void    setLayout ();
 //    void    toggleSliderExistence (bool toggle);
     void    updateSliderValueLabel ();
 };
