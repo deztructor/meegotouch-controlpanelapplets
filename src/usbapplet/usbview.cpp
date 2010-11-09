@@ -69,6 +69,7 @@ UsbView::~UsbView ()
 void
 UsbView::initWidget ()
 {
+#ifdef HAVE_QMSYSTEM
     MLayout                 *mainLayout;
     MLinearLayoutPolicy     *mainPolicy;
 
@@ -174,6 +175,7 @@ UsbView::initWidget ()
     setLayout (mainLayout);
 
     retranslateUi ();
+#endif
 }
 
 void
