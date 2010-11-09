@@ -43,7 +43,8 @@
 #define WARNING
 #include "../debug.h"
 
-static const int SliderContainerPosition = 2;
+static const int ActivationContainerPosition = 2;
+static const int SliderContainerPosition = 3;
 
 /******************************************************************************
  * BatteryWidget implementation.
@@ -58,6 +59,7 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
         m_PSMAutoButton (0),
         PSMButton (0),
         m_BatteryImage (0),
+        m_TitleLabel (0),
         m_UILocked (false)
 {
     SYS_DEBUG ("Starting in %p", this);
@@ -106,6 +108,7 @@ BatteryWidget::initWidget ()
     /*
      * Adding the rows of widgets.
      */
+    addHeaderContainer ();
     addRemainingCapacityWidget ();
     addAutoActivationWidget ();
     addSliderContainer ();
@@ -143,6 +146,38 @@ BatteryWidget::initWidget ()
     
     // Initialize the values from the business logic
     m_logic->requestValues ();
+}
+
+void 
+BatteryWidget::addHeaderContainer ()
+{
+    MContainer            *container;
+    QGraphicsLinearLayout *layout;
+
+    /*
+     * Creating a lcontainer and a layout.
+     */
+    container = new MContainer (this);
+    container->setStyleName ("CommonXLargeGroupHeaderPanelInverted");
+    container->setHeaderVisible (false);
+
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    container->centralWidget()->setLayout (layout);
+
+    /*
+     * The label that we use as title.
+     */
+    //% "Battery"
+    m_TitleLabel = new MLabel (qtTrId("qtn_ener_battery"));
+    m_TitleLabel->setStyleName ("CommonXLargeGroupHeaderInverted");
+    layout->addItem (m_TitleLabel);
+    layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
+    /*
+     * Adding the whole row to the main container.
+     */
+    m_MainLayout->addItem (container);
+    m_MainLayout->setStretchFactor (container, 0);
+
 }
 
 void 
@@ -412,7 +447,8 @@ BatteryWidget::PSMValueReceived (
         if (!PSMEnabled) {
             if (m_MainLayout->indexOf(m_ActivationContainer) == -1) {
                 m_PSMAutoButton->setChecked(false);
-                m_MainLayout->insertItem (1, m_ActivationContainer);
+                m_MainLayout->insertItem (
+                        ActivationContainerPosition, m_ActivationContainer);
                 m_MainLayout->setStretchFactor (m_ActivationContainer, 0);
             }
             m_logic->remainingCapacityRequired();
@@ -430,12 +466,17 @@ BatteryWidget::PSMValueReceived (
 void
 BatteryWidget::retranslateUi ()
 {
+    if (m_TitleLabel)
+        //% "Battery"
+        m_TitleLabel->setText (qtTrId("qtn_ener_battery"));
+
     // This call will reload the translated text on PSButton
     updatePSMButton ();
 
     // This call will retranslate the label (infoText)
     m_SliderContainer->retranslate ();
 
+    // FIXME: Why do we need this?
     m_logic->remainingCapacityRequired();
 }
 

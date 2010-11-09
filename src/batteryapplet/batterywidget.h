@@ -52,6 +52,7 @@ private slots:
     void chargeComplete ();
 
 private:
+    void addHeaderContainer ();
     void addRemainingCapacityWidget ();
     void addAutoActivationWidget ();
     void addSliderContainer ();
@@ -69,6 +70,7 @@ private:
     MButton                 *m_PSMAutoButton;
     MButton                 *PSMButton;
     BatteryImage            *m_BatteryImage;
+    MLabel                  *m_TitleLabel;
     bool                     m_UILocked;
     // true means we are believed to be in power save mode
     bool                     m_PSMButtonToggle;
