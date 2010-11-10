@@ -262,6 +262,7 @@ BatteryWidget::addAutoActivationWidget ()
     //% "Auto activate power save"
     activationLevelLabel = new MLabel(qtTrId ("qtn_ener_autops"));
     activationLevelLabel->setStyleName ("CommonSingleTitleInverted");
+    activationLevelLabel->setObjectName ("activationLevel");
     
     /*
      * A help button for the PSM auto activation.
@@ -375,6 +376,7 @@ BatteryWidget::addPowerSaveButton ()
      */
     PSMButton = new MButton;
     PSMButton->setStyleName ("CommonSingleButtonInverted");
+    PSMButton->setObjectName ("PSMButton");
     updatePSMButton ();
     // FIXME: why here?
     connect (PSMButton, SIGNAL (released ()),

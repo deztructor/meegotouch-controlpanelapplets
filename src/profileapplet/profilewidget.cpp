@@ -76,8 +76,7 @@ ProfileWidget::initProfiles ()
 
     MContainer *headerContainer = new MContainer;
     headerContainer->setHeaderVisible (false);
-    // headerContainer->setStyleName ("CommonLargeHeaderPanelInverted");
-    headerContainer->setStyleName ("CommonXLargeGroupHeaderPanelInverted");
+    headerContainer->setStyleName ("CommonLargeHeaderPanelInverted");
 
     QGraphicsLinearLayout *headerLayout =
         new QGraphicsLinearLayout (Qt::Horizontal);
@@ -86,8 +85,7 @@ ProfileWidget::initProfiles ()
     MLabel *titleLabel = new MLabel;
     //% "Profile"
     titleLabel->setText (qtTrId ("qtn_prof_profile"));
-    // titleLabel->setStyleName ("CommonLargeHeaderInverted");
-    titleLabel->setStyleName ("CommonXLargeGroupHeaderInverted");
+    titleLabel->setStyleName ("CommonLargeHeaderInverted");
     headerLayout->addItem (titleLabel);
 
     headerLayout->addStretch ();
