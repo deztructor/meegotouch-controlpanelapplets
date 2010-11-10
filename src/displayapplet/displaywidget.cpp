@@ -173,6 +173,7 @@ DisplayWidget::addSliderContainer ()
      */
     m_brightnessSlider = new MSlider;
     m_brightnessSlider->setStyleName ("CommonSliderInverted");
+    m_brightnessSlider->setObjectName ("BrightnessSlider");
     m_brightness_vals = m_logic->brightnessValues ();
     m_brightnessSlider->setRange (0, m_brightness_vals.size () - 1);
     m_brightnessSlider->setValue (m_logic->selectedBrightnessValueIndex ());
@@ -267,6 +268,7 @@ DisplayWidget::addBlankInhibitContainer ()
     // Blank inhibit
     m_blankInhibitButton = new MButton;
     m_blankInhibitButton->setStyleName ("CommonSwitchInverted");
+    m_blankInhibitButton->setObjectName ("BlankInhibitButton");
     m_blankInhibitButton->setCheckable (true);
     m_blankInhibitButton->setViewType (MButton::switchType);
 
