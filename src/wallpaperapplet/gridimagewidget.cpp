@@ -292,7 +292,8 @@ GridImageWidget::progressIndicator (
 
     if (!m_ProgressIndicator && create) {
         m_ProgressIndicator = new MProgressIndicator (this, progressType);
-        m_ProgressIndicator->setObjectName ("CommonProgressBar");
+        m_ProgressIndicator->setObjectName ("WallpaperLoadingSpinner");
+        m_ProgressIndicator->setStyleName ("CommonProgressBarInverted");
         m_ProgressIndicator->setUnknownDuration (true);
         m_Layout->addItem (
                 m_ProgressIndicator, 
