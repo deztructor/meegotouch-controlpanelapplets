@@ -28,6 +28,7 @@ class MLabel;
 class MContainer;
 class MBasicListItem;
 class DisplayBusinessLogic;
+class MLinearLayoutPolicy;
 
 class DisplayWidget : public DcpWidget
 {
@@ -45,15 +46,25 @@ private slots:
     void sliderUpdated (int val);
 
 private:
+    void addHeaderContainer ();
+    void addSecHeaderContainer ();
+    void addSliderContainer ();
+    void addScreenTimeoutContainer ();
+    void addBlankInhibitContainer ();
     void retranslateUi ();
 
+private:
     DisplayBusinessLogic   *m_logic;
     QList<int>              m_brightness_vals;
     QList<int>              m_screenlight_vals;
+
+    MLinearLayoutPolicy     *m_MainLayout;
+    MLabel                  *m_TitleLabel;
+    MLabel                  *m_SubTitleLabel;
+
     MSlider                *m_brightnessSlider;
     MBasicListItem         *m_screenTimeout;
     MButton                *m_blankInhibitButton;
-    MLabel                 *m_brightnessLabel;
     MLabel                 *m_screenlightLabel;
     MLabel                 *m_blankInhibitLabel;
     #ifdef UNIT_TEST

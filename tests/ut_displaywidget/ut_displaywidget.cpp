@@ -239,8 +239,9 @@ Ut_DisplayWidget::testTranslation ()
     widget->retranslateUi ();
 
     // FIXME: Should stub the qtTrId() method.
+    QVERIFY (widget->m_TitleLabel->text() == "qtn_disp_display");
+    QVERIFY (widget->m_SubTitleLabel->text() == "qtn_disp_bright");
     QVERIFY (widget->m_screenTimeout->title() == "qtn_disp_screenoff");
-    QVERIFY (widget->m_brightnessLabel->text() == "qtn_disp_bright");
     QVERIFY (widget->m_blankInhibitLabel->text() == "qtn_disp_screenon");
 }
 

@@ -26,7 +26,7 @@
 
 // Define this if you want handle-label for brightness-slider
 // XXX: for now it looks very ugly... it is visible over the dialogs :-S
-#undef WANT_HANDLE_LABEL
+#define WANT_HANDLE_LABEL
 
 #include <MButton>
 #include <MContainer>
@@ -44,80 +44,179 @@
 
 DisplayWidget::DisplayWidget (QGraphicsWidget *parent) :
         DcpWidget (parent),
-        m_logic (NULL)
+        m_logic (0),
+        m_MainLayout (0),
+        m_TitleLabel (0),
+        m_SubTitleLabel (0),
+        m_brightnessSlider (0),
+        m_screenTimeout (0),
+        m_blankInhibitButton (0),
+        m_screenlightLabel (0),
+        m_blankInhibitLabel (0)
 {
     setReferer (DcpDisplay::None);
     setContentsMargins (0, 0, 0, 0);
+    m_logic = new DisplayBusinessLogic;
+
     initWidget ();
 }
 
 DisplayWidget::~DisplayWidget ()
 {
-
 }
 
 void DisplayWidget::initWidget ()
 {
-    SYS_DEBUG ("");
+    MLayout     *layout;
+   
+    /*
+     * Creating a layout that holds the rows of the internal widgets.
+     */
+    layout = new MLayout (this);
+    m_MainLayout = new MLinearLayoutPolicy (layout, Qt::Vertical);
+    m_MainLayout->setContentsMargins (0., 0., 0., 0.);
+    m_MainLayout->setSpacing (0.);
+    setLayout (layout);
 
-    QGraphicsLinearLayout *mainLayout =
-        new QGraphicsLinearLayout (Qt::Vertical);
-    mainLayout->setContentsMargins (0., 0., 0., 0.);
-    mainLayout->setSpacing (0.); 
+    // Row 1: The title label
+    addHeaderContainer ();
+    addSecHeaderContainer ();
+    addSliderContainer ();
+    addScreenTimeoutContainer ();
+    addBlankInhibitContainer ();
+}
 
-    m_logic = new DisplayBusinessLogic;
+void 
+DisplayWidget::addHeaderContainer ()
+{
+    MContainer            *container;
+    QGraphicsLinearLayout *layout;
 
-    // Brightness
-    MWidget *brightness = new MStylableWidget;
-    QGraphicsLinearLayout *brightnessLayout =
-        new QGraphicsLinearLayout (Qt::Vertical);
-    brightnessLayout->setContentsMargins (0., 0., 0., 0.);
+    Q_ASSERT (m_MainLayout);
+    /*
+     * Creating a lcontainer and a layout.
+     */
+    container = new MContainer (this);
+    container->setStyleName ("CommonXLargeGroupHeaderPanelInverted");
+    container->setHeaderVisible (false);
+
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    container->centralWidget()->setLayout (layout);
 
     /*
-     * The brightness label as title. 
+     * The label that we use as title.
+     */
+    //% "Display"
+    m_TitleLabel = new MLabel (qtTrId("qtn_disp_display"));
+    m_TitleLabel->setStyleName ("CommonXLargeGroupHeaderInverted");
+    layout->addItem (m_TitleLabel);
+    layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
+    /*
+     * Adding the whole row to the main container.
+     */
+    m_MainLayout->addItem (container);
+    m_MainLayout->setStretchFactor (container, 0);
+}
+
+
+void 
+DisplayWidget::addSecHeaderContainer ()
+{
+    MContainer            *container;
+    QGraphicsLinearLayout *layout;
+
+    Q_ASSERT (m_MainLayout);
+    /*
+     * Creating a lcontainer and a layout.
+     */
+    container = new MContainer (this);
+    container->setStyleName ("CommonSmallGroupHeaderPanelInverted");
+    container->setHeaderVisible (false);
+
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    container->centralWidget()->setLayout (layout);
+
+    /*
+     * The label that we use as title.
      */
     //% "Brightness"
-    m_brightnessLabel = new MLabel (qtTrId ("qtn_disp_bright"));
-    m_brightnessLabel->setStyleName ("CommonTitleLabelInverted");
-    
+    m_SubTitleLabel = new MLabel (qtTrId("qtn_disp_bright"));
+    m_SubTitleLabel->setStyleName ("CommonSmallGroupHeaderInverted");
+    layout->addItem (m_SubTitleLabel);
+    layout->setAlignment (m_SubTitleLabel, Qt::AlignLeft);
     /*
-     * The slider
+     * Adding the whole row to the main container.
+     */
+    m_MainLayout->addItem (container);
+    m_MainLayout->setStretchFactor (container, 0);
+}
+
+void 
+DisplayWidget::addSliderContainer ()
+{
+    MContainer            *container;
+    QGraphicsLinearLayout *layout;
+
+    Q_ASSERT (m_MainLayout);
+    /*
+     * Creating a lcontainer and a layout.
+     */
+    container = new MContainer (this);
+    container->setStyleName ("CommonLargePanelInverted");
+    container->setHeaderVisible (false);
+
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    container->centralWidget()->setLayout (layout);
+
+    /*
+     * The slider to set the brighness of the display.
      */
     m_brightnessSlider = new MSlider;
     m_brightnessSlider->setStyleName ("CommonSliderInverted");
-
-#ifdef WANT_HANDLE_LABEL
-    m_brightnessSlider->setHandleLabelVisible (true);
-#endif
-    m_brightnessSlider->setSizePolicy (QSizePolicy::Ignored, QSizePolicy::Preferred);
-
-    brightnessLayout->addItem (m_brightnessLabel);
-    brightnessLayout->setAlignment (m_brightnessLabel, Qt::AlignVCenter);
-
-    brightnessLayout->addItem (m_brightnessSlider);
-    brightnessLayout->setAlignment (m_brightnessSlider, Qt::AlignVCenter);
-
     m_brightness_vals = m_logic->brightnessValues ();
     m_brightnessSlider->setRange (0, m_brightness_vals.size () - 1);
     m_brightnessSlider->setValue (m_logic->selectedBrightnessValueIndex ());
-
-    connect (m_brightnessSlider, SIGNAL (valueChanged (int)),
+        connect (m_brightnessSlider, SIGNAL (valueChanged (int)),
              SLOT (sliderUpdated (int)));
+        
+#ifdef WANT_HANDLE_LABEL
+    m_brightnessSlider->setHandleLabelVisible (true);
+#endif
+    /*
+    // FIXME: is this necessary?
+    m_brightnessSlider->setSizePolicy (
+            QSizePolicy::Ignored, 
+            QSizePolicy::Preferred);
+    */
+    
+    layout->addItem (m_brightnessSlider);
+    layout->setAlignment (m_brightnessSlider, Qt::AlignHCenter);
+    /*
+     * Adding the whole row to the main container.
+     */
+    m_MainLayout->addItem (container);
+    m_MainLayout->setStretchFactor (container, 0);
+}
 
-    brightness->setObjectName ("CommonPanelInverted");
-    brightness->setLayout (brightnessLayout);
-    mainLayout->addItem (brightness);
+void 
+DisplayWidget::addScreenTimeoutContainer ()
+{
+    Q_ASSERT (m_MainLayout);
 
     /*
-     * Second row: The available backlight time out values.
+     * 
      */
     m_screenlight_vals = m_logic->screenLightsValues ();
 
     // Screen dim timeout selector
     m_screenTimeout = new MBasicListItem (MBasicListItem::TitleWithSubtitle);
     m_screenTimeout->setStyleName ("CommonPanelInverted");
+    // FIXME: These are unfortunately protected, so I can't modify them!
+    // MLabel * 	titleLabelWidget ()
+    // MLabel * 	subtitleLabelWidget ()
     m_screenTimeout->setLayoutPosition (M::VerticalCenterPosition);
     //% "Backlight time out"
+    // FIXME: This should go into a separate method.
     m_screenTimeout->setTitle (qtTrId ("qtn_disp_screenoff"));
     {
         int value = m_screenlight_vals.at (
@@ -133,22 +232,37 @@ void DisplayWidget::initWidget ()
     }
     connect (m_screenTimeout, SIGNAL (clicked ()),
              this, SLOT (screenTimeoutClicked ()));
+    
+    /*
+     * Adding the whole row to the main container.
+     */
+    m_MainLayout->addItem (m_screenTimeout);
+    m_MainLayout->setStretchFactor (m_screenTimeout, 0);
+}
 
-    mainLayout->addItem (m_screenTimeout);
+void 
+DisplayWidget::addBlankInhibitContainer ()
+{
+    MContainer            *container;
+    QGraphicsLinearLayout *layout;
+
+    Q_ASSERT (m_MainLayout);
+    /*
+     * Creating a lcontainer and a layout.
+     */
+    container = new MContainer (this);
+    container->setStyleName ("CommonPanelInverted");
+    container->setHeaderVisible (false);
+
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    container->centralWidget()->setLayout (layout);
 
     /*
-     * The third row: stays lit when charging label and button.
+     * 
      */
-    MContainer *displayon = new MContainer;
-    QGraphicsLinearLayout *blankinhibitLayout =
-        new QGraphicsLinearLayout (Qt::Horizontal);
-
-    blankinhibitLayout->setContentsMargins (0., 0., 0., 0.);
-
     //% "Display stays lit when charging"
     m_blankInhibitLabel = new MLabel (qtTrId ("qtn_disp_screenon"));
     m_blankInhibitLabel->setStyleName("CommonSingleTitleInverted");
-    blankinhibitLayout->addItem (m_blankInhibitLabel);
 
     // Blank inhibit
     m_blankInhibitButton = new MButton;
@@ -156,21 +270,23 @@ void DisplayWidget::initWidget ()
     m_blankInhibitButton->setCheckable (true);
     m_blankInhibitButton->setViewType (MButton::switchType);
 
-    blankinhibitLayout->addItem (m_blankInhibitButton);
-    blankinhibitLayout->setAlignment (m_blankInhibitButton, Qt::AlignVCenter);
-
     connect (m_blankInhibitButton, SIGNAL (toggled (bool)),
              m_logic, SLOT (setBlankInhibitValue (bool)));
 
     m_blankInhibitButton->setChecked (m_logic->blankInhibitValue ());
 
-    displayon->setStyleName ("CommonPanelInverted");
-    displayon->setLayout (blankinhibitLayout);
-    mainLayout->addItem (displayon);
+    /*
+     *
+     */
+    layout->addItem (m_blankInhibitLabel);
+    layout->addItem (m_blankInhibitButton);
+    layout->setAlignment (m_blankInhibitButton, Qt::AlignVCenter);
 
-    mainLayout->addStretch ();
-
-    setLayout (mainLayout);
+    /*
+     * Adding the whole row to the main container.
+     */
+    m_MainLayout->addItem (container);
+    m_MainLayout->setStretchFactor (container, 0);
 }
 
 void
@@ -192,6 +308,7 @@ DisplayWidget::screenTimeoutClicked ()
     popuplist->setTitle (qtTrId ("qtn_disp_screenoff"));
     popuplist->setButtonBoxVisible (false);
 
+    // FIXME: This should go into a separate method.
     for (int i = 0; i < m_screenlight_vals.size (); i++)
     {
         int value = m_screenlight_vals.at (i);
@@ -232,6 +349,7 @@ DisplayWidget::screenTimeoutClicked ()
 void
 DisplayWidget::retranslateUi ()
 {
+    // FIXME: This should go into a separate method.
     {
         int value = m_screenlight_vals.at (
                         m_logic->selectedScreenLightsValue ());
@@ -245,8 +363,9 @@ DisplayWidget::retranslateUi ()
         m_screenTimeout->setSubtitle (str.arg (value));
     }
 
+    m_TitleLabel->setText (qtTrId("qtn_disp_display"));
+    m_SubTitleLabel->setText (qtTrId("qtn_disp_bright"));
     m_screenTimeout->setTitle (qtTrId ("qtn_disp_screenoff"));
-    m_brightnessLabel->setText (qtTrId ("qtn_disp_bright"));
     m_blankInhibitLabel->setText (qtTrId ("qtn_disp_screenon"));
 }
 
