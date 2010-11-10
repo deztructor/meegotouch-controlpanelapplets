@@ -42,6 +42,7 @@ ProfileDialog::ProfileDialog(ProfileDataInterface *dataIf) :
     dataIf (dataIf)
 {
     setSystem (true);
+    setModal (false);
     setObjectName ("ProfileChooserDialog");
 
     //% "Select profile"
@@ -161,8 +162,8 @@ ProfileDialog::openProfileSettings ()
     QDBusInterface dcpIf ("com.nokia.DuiControlPanel",
                           "/", "com.nokia.DuiControlPanelIf");
 
-    // lets close the dialog
-    accept ();
+    // XXX: Dont! "lets close the dialog"
+    // accept ();
 
     // and finally call the "Profile" applet open method on dcpIf
     dcpIf.call (QDBus::Block, "appletPage", "Profile");
