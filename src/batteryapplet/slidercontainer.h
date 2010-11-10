@@ -19,6 +19,7 @@
 #ifndef SLIDERCONTAINER_H
 #define SLIDERCONTAINER_H
 
+#include <QObject>
 #include <MContainer>
 
 class MButton;
@@ -26,7 +27,15 @@ class MLabel;
 class MSlider;
 class MLinearLayoutPolicy; 
 
-class SliderContainer : public MContainer
+/*!
+ * The original layout guide specified these widgets to be put in a single
+ * container, so the original SliderContainer was inherited from MContainer. The
+ * layout guide was modified, these widgets should go into two separate
+ * containers now. So this class has been modified and the two separate
+ * container can be accessed through sliderContainer() and labelContainer()
+ * methods.
+ */
+class SliderContainer : public QObject
 {
     Q_OBJECT
 
@@ -35,13 +44,14 @@ public:
     ~SliderContainer ();
     void    setLayout ();
     void retranslate ();
+    
+    MContainer *sliderContainer () const { return m_SliderContainer; };
+    MContainer *labelContainer () const { return m_LabelContainer; };
 
 public slots:
     void initSlider (const QStringList &values);
     void updateSlider (const int value);
     void initPSMAutoButton (bool toggle);
-//    void PSMAutoButtonToggled (bool toggle);
-
 
 private slots:
     void sliderValueChanged (int value);
@@ -51,6 +61,11 @@ signals:
     void PSMThresholdValueChanged (int);
 
 private:
+    void updateSliderValueLabel ();
+
+private:
+    MContainer            *m_LabelContainer;
+    MContainer            *m_SliderContainer;
     MButton               *m_PSMAutoButton;
     MSlider               *m_PSMSlider;
     MLabel                *m_AutoPSMLabel;
@@ -59,9 +74,6 @@ private:
     int                    m_SliderValue;
     MLinearLayoutPolicy   *m_LayoutPolicy;
     bool                   m_SliderExists;
-    
-//    void    toggleSliderExistence (bool toggle);
-    void    updateSliderValueLabel ();
 };
 
 #endif // SLIDERCONTAINER_H

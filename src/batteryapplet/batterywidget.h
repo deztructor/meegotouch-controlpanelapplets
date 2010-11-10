@@ -57,7 +57,8 @@ private:
     void addAutoActivationWidget ();
     void addSliderContainer ();
     void addPowerSaveButton ();
-    
+   
+    void showSlider (bool show);
     void updatePSMButton ();
     void retranslateUi ();
 

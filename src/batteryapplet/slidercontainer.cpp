@@ -35,19 +35,15 @@
 #include <QDebug>
 
 SliderContainer::SliderContainer (MWidget *parent) :
-        MContainer (parent),
+        QObject (parent),
+        m_LabelContainer (0),
+        m_SliderContainer (0),
         m_PSMAutoButton (0),
         m_PSMSlider (0),
         m_SliderValue (-1),
         m_SliderExists (false)
 {
     SYS_DEBUG ("");
-
-    //setStyleName("CommonPanelInverted");
-    //setObjectName ("SliderContainer");
-    setContentsMargins (0., 0., 0., 0.);
-
-    setHeaderVisible (false);
     setLayout ();
 }
 
@@ -67,40 +63,25 @@ SliderContainer::retranslate ()
     updateSliderValueLabel ();
 }
 
-void SliderContainer::setLayout()
+void 
+SliderContainer::setLayout()
 {
-    QGraphicsLinearLayout *mainLayout;
-
-    MContainer            *labelContainer;
     QGraphicsLinearLayout *labelLayout;
-
-    MContainer            *sliderContainer;
     QGraphicsLinearLayout *sliderLayout;
     
 
     SYS_DEBUG ("");
-    
-    /*
-     * Our own layout. 
-     */
-    mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
-    mainLayout->setContentsMargins (0., 0., 0., 0.);
-    mainLayout->setSpacing (0.);
-
-    centralWidget()->setLayout (mainLayout);
 
     /*
      * A container for the two labels.
      */
-    labelContainer = new MContainer (this);
-    labelContainer->setStyleName ("CommonPanelInverted");
-    labelContainer->setHeaderVisible (false);
+    m_LabelContainer = new MContainer;
+    m_LabelContainer->setStyleName ("CommonPanelInverted");
+    m_LabelContainer->setHeaderVisible (false);
 
     labelLayout = new QGraphicsLinearLayout (Qt::Vertical);
-    labelContainer->centralWidget()->setLayout (labelLayout);
+    m_LabelContainer->centralWidget()->setLayout (labelLayout);
 
-    mainLayout->addItem (labelContainer);
-    
     /*
      * "Auto activate power save" label
      */
@@ -123,15 +104,13 @@ void SliderContainer::setLayout()
     /*
      * A container to hold the slider.
      */
-    sliderContainer = new MContainer (this);
-    sliderContainer->setStyleName ("CommonPanelInverted");
-    sliderContainer->setHeaderVisible (false);
+    m_SliderContainer = new MContainer;
+    m_SliderContainer->setStyleName ("CommonPanelInverted");
+    m_SliderContainer->setHeaderVisible (false);
 
     sliderLayout = new QGraphicsLinearLayout (Qt::Vertical);
-    sliderContainer->centralWidget()->setLayout (sliderLayout);
+    m_SliderContainer->centralWidget()->setLayout (sliderLayout);
 
-    mainLayout->addItem (sliderContainer);
-    
     /*
      * Power save mode auto activation slider
      */

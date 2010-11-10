@@ -44,7 +44,8 @@
 #include "../debug.h"
 
 static const int ActivationContainerPosition = 2;
-static const int SliderContainerPosition = 3;
+static const int LabelContainerPosition = 3;
+static const int SliderContainerPosition = 4;
 
 /******************************************************************************
  * BatteryWidget implementation.
@@ -274,15 +275,52 @@ BatteryWidget::addSliderContainer ()
     Q_ASSERT (m_MainLayout);
 
     m_SliderContainer = new SliderContainer (this);
-    m_SliderContainer->setLayout ();
-    m_SliderContainer->hide ();
+    showSlider (m_PSMAutoButton->isChecked ());
+}
 
-    /*
-     *
-     */
-    if(m_PSMAutoButton->isChecked ()) {
-        m_MainLayout->addItem (m_SliderContainer);
-        m_MainLayout->setStretchFactor (m_SliderContainer, 0);
+void 
+BatteryWidget::showSlider (
+        bool   show)
+{
+    MContainer *container;
+
+    if (!m_SliderContainer || !m_MainLayout)
+        return;
+
+    if (show) {
+        container = m_SliderContainer->labelContainer();
+        SYS_DEBUG ("*** container = %p", container);
+
+        if (m_MainLayout->indexOf(container) == -1) {
+            m_MainLayout->insertItem (LabelContainerPosition, container);
+            m_MainLayout->setStretchFactor (container, 0);
+            container->show ();
+        }
+        
+        container = m_SliderContainer->sliderContainer();
+        SYS_DEBUG ("*** container = %p", container);
+
+        if (m_MainLayout->indexOf(container) == -1) {
+            m_MainLayout->insertItem (SliderContainerPosition, container);
+            m_MainLayout->setStretchFactor (container, 0);
+            container->show ();
+        }
+    } else {
+        container = m_SliderContainer->labelContainer();
+        SYS_DEBUG ("*** container = %p", container);
+
+        if (m_MainLayout->indexOf(container) != -1) {
+            container->hide ();
+            m_MainLayout->removeAt(m_MainLayout->indexOf(container));
+        }
+        
+        container = m_SliderContainer->sliderContainer();
+        SYS_DEBUG ("*** container = %p", container);
+
+        if (m_MainLayout->indexOf(container) != -1) {
+            container->hide ();
+            m_MainLayout->removeAt(m_MainLayout->indexOf(container));
+        }
     }
 }
 
@@ -374,16 +412,9 @@ BatteryWidget::PSMAutoToggled (
              * the proper value
              */
             m_SliderContainer->updateSlider (m_logic->PSMThresholdValue ());
-            if (m_MainLayout)
-                if (m_MainLayout->indexOf(m_SliderContainer) == -1) {
-                    m_MainLayout->insertItem (SliderContainerPosition, 
-                            m_SliderContainer);
-                    m_MainLayout->setStretchFactor (m_SliderContainer, 0);
-                    m_SliderContainer->show ();
-                }
+            showSlider (true);
         } else {
-            m_SliderContainer->hide ();
-            m_MainLayout->removeAt(m_MainLayout->indexOf(m_SliderContainer));
+            showSlider (false);
         }
     }
 }
@@ -453,7 +484,7 @@ BatteryWidget::PSMValueReceived (
             }
             m_logic->remainingCapacityRequired();
         } else {
-            m_MainLayout->removeAt(m_MainLayout->indexOf(m_SliderContainer));
+            showSlider (false);
             m_MainLayout->removeAt(m_MainLayout->indexOf(m_ActivationContainer));
             //% "Power save mode"
             m_RemainingContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
