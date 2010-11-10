@@ -42,7 +42,6 @@ class SliderContainer : public QObject
 public:
     SliderContainer (MWidget *parent = 0);
     ~SliderContainer ();
-    void    setLayout ();
     void retranslate ();
     
     MContainer *sliderContainer () const { return m_SliderContainer; };
@@ -62,6 +61,7 @@ signals:
 
 private:
     void updateSliderValueLabel ();
+    void createWidgets ();
 
 private:
     MContainer            *m_LabelContainer;

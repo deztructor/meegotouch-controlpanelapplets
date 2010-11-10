@@ -27,6 +27,7 @@
 #include <QGraphicsLinearLayout>
 #include <QTimer>
 
+#include <MStylableWidget>
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 #include <MButton>
@@ -39,13 +40,19 @@
 #include <HelpButton>
 #endif
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
+#ifdef USE_SPACERS
+static const int ActivationContainerPosition = 5;
+static const int LabelContainerPosition = 7;
+static const int SliderContainerPosition = 8;
+#else
 static const int ActivationContainerPosition = 2;
 static const int LabelContainerPosition = 3;
 static const int SliderContainerPosition = 4;
+#endif
 
 /******************************************************************************
  * BatteryWidget implementation.
@@ -109,11 +116,37 @@ BatteryWidget::initWidget ()
     /*
      * Adding the rows of widgets.
      */
+    #ifdef USE_SPACERS
+    // Row 1: The title label
     addHeaderContainer ();
+    // Row 2: A spacer
+    addSpacer ("CommonSmallSpacerInverted");
+    // Row 3: Remaining capacity widget
     addRemainingCapacityWidget ();
+    // Row 4: A spacer
+    addSpacer ("CommonItemDivider");
+    // Row 5: PSM Auto activation switch
     addAutoActivationWidget ();
+    // Row 6: A spacer
+    addSpacer ("CommonItemDivider");
+    // Row 7-8: PSM Auto activation text and slider
     addSliderContainer ();
+    // Row 9: A spacer
+    addSpacer ("CommonItemDivider");
+    // Row 10: PSM forced activation button.
     addPowerSaveButton ();
+    #else
+    // Row 1: The title label
+    addHeaderContainer ();
+    // Row 2: Remaining capacity widget
+    addRemainingCapacityWidget ();
+    // Row 3: PSM Auto activation switch
+    addAutoActivationWidget ();
+    // Row 4-5: PSM Auto activation text and slider
+    addSliderContainer ();
+    // Row 6: PSM forced activation button.
+    addPowerSaveButton ();
+    #endif
 
     /*
      * Initializing the wigets and connecting the signals.
@@ -155,6 +188,7 @@ BatteryWidget::addHeaderContainer ()
     MContainer            *container;
     QGraphicsLinearLayout *layout;
 
+    Q_ASSERT (m_MainLayout);
     /*
      * Creating a lcontainer and a layout.
      */
@@ -178,7 +212,6 @@ BatteryWidget::addHeaderContainer ()
      */
     m_MainLayout->addItem (container);
     m_MainLayout->setStretchFactor (container, 0);
-
 }
 
 void 
@@ -219,6 +252,7 @@ BatteryWidget::addAutoActivationWidget ()
     m_ActivationContainer->setStyleName ("CommonPanelInverted");
     m_ActivationContainer->setHeaderVisible (false);
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    //layout->setSpacing (0.);
     
     m_ActivationContainer->centralWidget()->setLayout (layout);
 
@@ -289,7 +323,6 @@ BatteryWidget::showSlider (
 
     if (show) {
         container = m_SliderContainer->labelContainer();
-        SYS_DEBUG ("*** container = %p", container);
 
         if (m_MainLayout->indexOf(container) == -1) {
             m_MainLayout->insertItem (LabelContainerPosition, container);
@@ -298,7 +331,6 @@ BatteryWidget::showSlider (
         }
         
         container = m_SliderContainer->sliderContainer();
-        SYS_DEBUG ("*** container = %p", container);
 
         if (m_MainLayout->indexOf(container) == -1) {
             m_MainLayout->insertItem (SliderContainerPosition, container);
@@ -307,7 +339,6 @@ BatteryWidget::showSlider (
         }
     } else {
         container = m_SliderContainer->labelContainer();
-        SYS_DEBUG ("*** container = %p", container);
 
         if (m_MainLayout->indexOf(container) != -1) {
             container->hide ();
@@ -315,7 +346,6 @@ BatteryWidget::showSlider (
         }
         
         container = m_SliderContainer->sliderContainer();
-        SYS_DEBUG ("*** container = %p", container);
 
         if (m_MainLayout->indexOf(container) != -1) {
             container->hide ();
@@ -363,6 +393,21 @@ BatteryWidget::addPowerSaveButton ()
      */
     m_MainLayout->addItem (container);
     m_MainLayout->setStretchFactor (container, 0);
+}
+
+void
+BatteryWidget::addSpacer (
+        const QString &styleName)
+{
+    MStylableWidget   *spacer;
+
+    Q_ASSERT (m_MainLayout);
+
+    spacer = new MStylableWidget;
+    spacer->setStyleName (styleName);
+    m_MainLayout->addItem (spacer);
+    m_MainLayout->setStretchFactor (spacer, 0);
+
 }
 
 /*!

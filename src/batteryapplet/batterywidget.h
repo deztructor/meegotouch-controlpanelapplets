@@ -57,7 +57,8 @@ private:
     void addAutoActivationWidget ();
     void addSliderContainer ();
     void addPowerSaveButton ();
-   
+    void addSpacer (const QString &styleName); 
+
     void showSlider (bool show);
     void updatePSMButton ();
     void retranslateUi ();
@@ -67,6 +68,7 @@ private:
     MLinearLayoutPolicy     *m_MainLayout;
     PercentageContainer     *m_RemainingContainer;
     MContainer              *m_ActivationContainer;
+    // SliderContainer is not a container any more!
     SliderContainer         *m_SliderContainer;
     MButton                 *m_PSMAutoButton;
     MButton                 *PSMButton;

@@ -29,7 +29,8 @@
 #include "percentagecontainer.h"
 
 
-#undef DEBUG
+//#define DEBUG
+//#define WARNING
 #include "../debug.h"
 
 #include <QDebug>
@@ -44,7 +45,7 @@ SliderContainer::SliderContainer (MWidget *parent) :
         m_SliderExists (false)
 {
     SYS_DEBUG ("");
-    setLayout ();
+    createWidgets ();
 }
 
 SliderContainer::~SliderContainer ()
@@ -64,7 +65,7 @@ SliderContainer::retranslate ()
 }
 
 void 
-SliderContainer::setLayout()
+SliderContainer::createWidgets ()
 {
     QGraphicsLinearLayout *labelLayout;
     QGraphicsLinearLayout *sliderLayout;
@@ -173,16 +174,17 @@ SliderContainer::updateSlider (int value)
     // (eg for the case when slider isn't ready yet...)
     m_SliderValue = m_SliderValues.indexOf (QString ("%1").arg (value));
 
-    if (m_SliderValue >= 0)
+    if (m_SliderValue >= 0) {
         m_PSMSlider->setValue (m_SliderValue);
-#ifdef DEBUG
-    else
-    {
+    } else {
         SYS_WARNING ("ERROR: got an invalid PSM value: %d", value);
         foreach (QString str, m_SliderValues)
             SYS_DEBUG ("Available slider value: %s", SYS_STR (str));
+        /*
+         * This should not happen, but we show some label anyway.
+         */
+        m_SliderValue = 0;
     }
-#endif
 
     updateSliderValueLabel ();
 }
@@ -228,13 +230,19 @@ SliderContainer::initPSMAutoButton (
 void
 SliderContainer::updateSliderValueLabel ()
 {
-    if ( m_SliderValue >= 0 &&
-         m_SliderValue < m_SliderValues.size()) {
+    int index = m_SliderValue;
 
+    /*
+     * We want to show something, but this should never happen.
+     */
+    if (index < 0 || index >= m_SliderValues.size())
+        index = 0;
+
+    if (index >= 0 && index < m_SliderValues.size()) {
         m_PsmValueLabel->setText (QString ("%1%").arg (
-                    m_SliderValues[m_SliderValue]));
+                    m_SliderValues[index]));
         m_PSMSlider->setHandleLabel(QString ("%1%").arg (
-                m_SliderValues[m_SliderValue]));
+                m_SliderValues[index]));
     }
 }
 
