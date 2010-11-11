@@ -175,7 +175,8 @@ AboutWidget::addInfoLabelContainer ()
      * The logo 
      */
     m_InfoLabel = new MLabel;
-    m_InfoLabel->setStyleName ("CommonSubTitleInverted");
+    m_InfoLabel->setObjectName ("AboutAppletInfoLabel");
+    //m_InfoLabel->setStyleName ("CommonSubTitleInverted");
    
     layout->addItem (m_InfoLabel);
 
@@ -210,7 +211,8 @@ AboutWidget::addLicenseLabelContainer ()
     m_LicenseLabel->setWordWrap (true);
     // this text is not translated!
     m_LicenseLabel->setText (licenseText ());
-    m_LicenseLabel->setStyleName ("CommonSubTitleInverted"); 
+    //m_LicenseLabel->setStyleName ("CommonSubTitleInverted"); 
+    m_LicenseLabel->setObjectName ("AboutAppletLicenseLabel");
 
     layout->addItem (m_LicenseLabel);
 

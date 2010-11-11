@@ -1,6 +1,25 @@
 #AboutAppletLogoImage {
-    margin-top:     $MARGIN_XLARGE;
-    margin-bottom:  $MARGIN_XLARGE;
-    margin-left:    $MARGIN_XLARGE;
-    margin-right:   $MARGIN_XLARGE;
+    margin-top:      $MARGIN_XLARGE;
+    margin-bottom:   $MARGIN_XLARGE;
+    margin-left:     $MARGIN_XLARGE;
+    margin-right:    $MARGIN_XLARGE;
+}
+
+#AboutAppletInfoLabel {
+    color:           $COLOR_INVERTED_FOREGROUND;
+    font:            $FONT_DEFAULT;
+    margin-top:      $INDENT_DEFAULT;
+    margin-bottom:   $INDENT_DEFAULT;
+    margin-left:     $INDENT_DEFAULT;
+    margin-right:    $INDENT_DEFAULT;
+}
+
+#AboutAppletLicenseLabel {
+    color:           $COLOR_INVERTED_FOREGROUND;
+    font:            $FONT_SMALL;
+    margin-top:      $MARGIN_XLARGE;
+    margin-bottom:   $MARGIN_XLARGE;
+    margin-left:     $MARGIN_XLARGE;
+    margin-right:    $MARGIN_XLARGE;
+    highlight-color: $COLOR_LINK_ACTIVE;
 }
