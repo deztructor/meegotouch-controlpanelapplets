@@ -29,6 +29,8 @@
 
 Q_EXPORT_PLUGIN2(aboutapplet, AboutApplet)
 
+const QString cssDir = "/usr/share/themes/base/meegotouch/duicontrolpanel/style/";
+
 AboutApplet::AboutApplet() :
     m_AboutBusinessLogic (new AboutBusinessLogic)
 {
@@ -41,6 +43,7 @@ AboutApplet::~AboutApplet()
 void 
 AboutApplet::init()
 {
+    MTheme::loadCSS(cssDir + "aboutapplet.css");
 }
 
 DcpWidget *

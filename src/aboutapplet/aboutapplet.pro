@@ -16,25 +16,30 @@ MOBILITY += systeminfo
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
 
-HEADERS = \
-    ../debug.h \
-    aboutbusinesslogic.h \
-    aboutapplet.h \
-    aboutwidget.h \
+HEADERS =                   \
+    ../debug.h              \
+    aboutbusinesslogic.h    \
+    aboutapplet.h           \
+    aboutwidget.h           \
     aboutbrief.h 
 
-SOURCES = \
-    ../debug.cpp \
-    aboutbusinesslogic.cpp \
-    aboutapplet.cpp \
-    aboutwidget.cpp \
+SOURCES =                   \
+    ../debug.cpp            \
+    aboutbusinesslogic.cpp  \
+    aboutapplet.cpp         \
+    aboutwidget.cpp         \
     aboutbrief.cpp 
 
 DESTDIR = lib
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
+
+css.files = aboutapplet.css
+css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/duicontrolpanel/style
+
 target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 
 message("The plugin will be installed to: " $$target.path)
-INSTALLS += target \
-            desktop
+INSTALLS += target  \
+            desktop \
+            css

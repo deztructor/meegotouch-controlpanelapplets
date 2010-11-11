@@ -141,6 +141,7 @@ AboutWidget::addLogoContainer ()
      */
     logo = new MImageWidget;
     logo->setImage ("icon-l-about-nokia-logo");
+    logo->setObjectName ("AboutAppletLogoImage");
    
     layout->addItem (logo);
     layout->setAlignment (logo, Qt::AlignLeft);

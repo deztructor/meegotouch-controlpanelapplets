@@ -1,2 +1,3 @@
 usr/lib/duicontrolpanel/about.desktop
+usr/share/themes/base/meegotouch/duicontrolpanel/style/aboutapplet.css
 usr/lib/duicontrolpanel/applets/libaboutapplet.so
