@@ -25,6 +25,7 @@
 #include "aboutbusinesslogic.h"
 
 class MLabel;
+class MLinearLayoutPolicy;
 
 class AboutWidget : public DcpWidget
 {
@@ -47,7 +48,16 @@ protected:
     virtual void retranslateUi ();
 
 private:
+    void addHeaderContainer ();
+    void addLogoContainer ();
+    void addInfoLabelContainer ();
+    void addLicenseLabelContainer ();
+    void addStretcher (const QString &styleName);
+
+private:
     QPointer<AboutBusinessLogic>    m_AboutBusinessLogic;
+    MLinearLayoutPolicy            *m_MainLayout;
+    MLabel                         *m_TitleLabel;
     MLabel                         *m_InfoLabel;
     MLabel                         *m_LicenseLabel;
     #ifdef UNIT_TEST

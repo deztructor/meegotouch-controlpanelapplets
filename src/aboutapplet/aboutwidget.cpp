@@ -26,6 +26,9 @@
 #include <MSeparator>
 #include <QGraphicsLinearLayout>
 #include <MStylableWidget>
+#include <MLinearLayoutPolicy>
+#include <MContainer>
+#include <MLayout>
 
 #undef DEBUG
 #include "../debug.h"
@@ -34,11 +37,16 @@ AboutWidget::AboutWidget (
         AboutBusinessLogic     *aboutBusinessLogic,
         QGraphicsWidget        *parent) :
     DcpWidget (parent),
-    m_AboutBusinessLogic (aboutBusinessLogic)
+    m_AboutBusinessLogic (aboutBusinessLogic),
+    m_MainLayout (0),
+    m_TitleLabel (0),
+    m_InfoLabel (0),
+    m_LicenseLabel (0)
 {
     createContent ();
 
-    connect (m_AboutBusinessLogic, SIGNAL (refreshNeeded ()), SLOT (refresh ()));
+    connect (m_AboutBusinessLogic, SIGNAL (refreshNeeded ()), 
+            SLOT (refresh ()));
 
     retranslateUi ();
 }
@@ -51,62 +59,180 @@ AboutWidget::~AboutWidget ()
 void
 AboutWidget::createContent ()
 {
-    QGraphicsLinearLayout   *layout;
-    MStylableWidget         *stretcher;
-
-    layout = new QGraphicsLinearLayout (Qt::Vertical);
-    layout->setContentsMargins (0., 0., 0., 0.);
-
-#if 0
+    MLayout     *layout;
+   
     /*
-     * A stretcher.
+     * Creating a layout that holds the rows of the internal widgets.
      */
-    stretcher = new MStylableWidget ();
-    stretcher->setObjectName ("CommonSpacer");
-    layout->addItem (stretcher);
+    layout = new MLayout (this);
+    m_MainLayout = new MLinearLayoutPolicy (layout, Qt::Vertical);
+    m_MainLayout->setContentsMargins (0., 0., 0., 0.);
+    m_MainLayout->setSpacing (0.);
+    setLayout (layout);
 
-    MImageWidget            *logo;
-    QGraphicsLinearLayout   *logoLayout;
+    // Row 1: the title
+    addHeaderContainer ();
+    addStretcher ("CommonSmallSpacerInverted");
+    // Row 3: the logo
+    addLogoContainer ();
+    addStretcher ("CommonSpacerInverted");
+    // Row 5: the info label
+    addInfoLabelContainer ();
+    addStretcher ("CommonGroupDividerInverted");
+    // Row 7: the license label
+    addLicenseLabelContainer ();
+    addStretcher ("CommonSmallSpacerInverted");
+    
+    //m_MainLayout->addStretch ();
+}
 
+void 
+AboutWidget::addHeaderContainer ()
+{
+    MContainer            *container;
+    QGraphicsLinearLayout *layout;
+
+    Q_ASSERT (m_MainLayout);
     /*
-     * The first row: a logo
+     * Creating a lcontainer and a layout.
      */
-    logoLayout = new QGraphicsLinearLayout (Qt::Horizontal);
-    logoLayout->setContentsMargins (0., 0., 0., 0.);
+    container = new MContainer (this);
+    container->setStyleName ("CommonXLargeGroupHeaderPanelInverted");
+    container->setHeaderVisible (false);
+
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    container->centralWidget()->setLayout (layout);
 
     /*
-     * FIXME: How about other vendors? this should be some generic logo
-     * or should come from some CSS ??
+     * The label that we use as title.
+     */
+    //% "About product"
+    m_TitleLabel = new MLabel (qtTrId("qtn_prod_about_product"));
+    m_TitleLabel->setStyleName ("CommonXLargeGroupHeaderInverted");
+    layout->addItem (m_TitleLabel);
+    layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
+    /*
+     * Adding the whole row to the main container.
+     */
+    m_MainLayout->addItem (container);
+    m_MainLayout->setStretchFactor (container, 0);
+}
+
+void 
+AboutWidget::addLogoContainer ()
+{
+    MContainer            *container;
+    QGraphicsLinearLayout *layout;
+    MImageWidget *logo;
+
+    Q_ASSERT (m_MainLayout);
+    /*
+     * Creating a lcontainer and a layout.
+     */
+    container = new MContainer (this);
+    container->setStyleName ("CommonPanelInverted");
+    container->setHeaderVisible (false);
+
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    container->centralWidget()->setLayout (layout);
+
+    /*
+     * The logo 
      */
     logo = new MImageWidget;
     logo->setImage ("icon-l-about-nokia-logo");
-    logoLayout->addStretch ();
-    layout->addItem (logoLayout);
-#endif
+   
+    layout->addItem (logo);
+    layout->setAlignment (logo, Qt::AlignLeft);
+    layout->addStretch ();
 
     /*
-     * A stretcher.
+     * Adding the whole row to the main container.
      */
-    stretcher = new MStylableWidget ();
-    stretcher->setObjectName ("CommonSpacer");
-    layout->addItem (stretcher);
+    m_MainLayout->addItem (container);
+    m_MainLayout->setStretchFactor (container, 0);
+}
 
+void 
+AboutWidget::addInfoLabelContainer ()
+{
+    MContainer            *container;
+    QGraphicsLinearLayout *layout;
+
+    Q_ASSERT (m_MainLayout);
+    /*
+     * Creating a lcontainer and a layout.
+     */
+    container = new MContainer (this);
+    container->setStyleName ("CommonLargePanelInverted");
+    container->setHeaderVisible (false);
+
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    container->centralWidget()->setLayout (layout);
+
+    /*
+     * The logo 
+     */
     m_InfoLabel = new MLabel;
+    m_InfoLabel->setStyleName ("CommonSubTitleInverted");
+   
+    layout->addItem (m_InfoLabel);
 
+    /*
+     * Adding the whole row to the main container.
+     */
+    m_MainLayout->addItem (container);
+    m_MainLayout->setStretchFactor (container, 0);
+}
+
+void 
+AboutWidget::addLicenseLabelContainer ()
+{
+    MContainer            *container;
+    QGraphicsLinearLayout *layout;
+
+    Q_ASSERT (m_MainLayout);
+    /*
+     * Creating a lcontainer and a layout.
+     */
+    container = new MContainer (this);
+    container->setStyleName ("CommonLargePanelInverted");
+    container->setHeaderVisible (false);
+
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    container->centralWidget()->setLayout (layout);
+
+    /*
+     * The label
+     */
     m_LicenseLabel = new MLabel;
     m_LicenseLabel->setWordWrap (true);
     // this text is not translated!
     m_LicenseLabel->setText (licenseText ());
+    m_LicenseLabel->setStyleName ("CommonSubTitleInverted"); 
 
-    layout->addItem (m_InfoLabel);
-    layout->addItem (new MSeparator (this));
     layout->addItem (m_LicenseLabel);
 
-    layout->addStretch ();
-
-    setLayout (layout);
+    /*
+     * Adding the whole row to the main container.
+     */
+    m_MainLayout->addItem (container);
+    m_MainLayout->setStretchFactor (container, 0);
 }
 
+
+void 
+AboutWidget::addStretcher (
+        const QString &styleName)
+{
+    MStylableWidget *stretcher;
+
+    Q_ASSERT (m_MainLayout);
+
+    stretcher = new MStylableWidget ();
+    stretcher->setStyleName (styleName);
+    m_MainLayout->addItem (stretcher);
+}
 
 QString
 AboutWidget::labelText()
@@ -194,6 +320,9 @@ AboutWidget::refresh ()
 void
 AboutWidget::retranslateUi ()
 {
+    //% "About product"
+    if (m_TitleLabel)
+        m_TitleLabel->setText (qtTrId("qtn_prod_about_product"));
     refresh ();
 }
 
