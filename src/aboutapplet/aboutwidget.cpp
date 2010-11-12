@@ -25,7 +25,7 @@
 #include <MLabel>
 #include <MSeparator>
 #include <QGraphicsLinearLayout>
-#include <MStylableWidget>
+#include <MSeparator>
 #include <MLinearLayoutPolicy>
 #include <MContainer>
 #include <MLayout>
@@ -228,11 +228,11 @@ void
 AboutWidget::addStretcher (
         const QString &styleName)
 {
-    MStylableWidget *stretcher;
+    MSeparator *stretcher;
 
     Q_ASSERT (m_MainLayout);
 
-    stretcher = new MStylableWidget ();
+    stretcher = new MSeparator ();
     stretcher->setStyleName (styleName);
     m_MainLayout->addItem (stretcher);
 }
