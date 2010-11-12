@@ -24,6 +24,7 @@
 
 #include "warrantybusinesslogic.h"
 
+class MLinearLayoutPolicy;
 class MLabel;
 
 class WarrantyWidget : public DcpWidget
@@ -42,7 +43,15 @@ protected:
     void retranslateUi ();
 
 private:
+    void addHeaderContainer (MLinearLayoutPolicy *mainLayout);
+    void addLabelContainer (
+            MLinearLayoutPolicy *mainLayout,
+            MLabel              *label1,
+            MLabel              *label2);
+
+private:
     QPointer<WarrantyBusinessLogic>    m_WarrantyBusinessLogic;
+    MLabel                            *m_TitleLabel;
     MLabel                            *m_labelExpiration;
     MLabel                            *m_labelTerms;
 };

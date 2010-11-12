@@ -29,6 +29,9 @@
 
 Q_EXPORT_PLUGIN2(warrantyapplet, WarrantyApplet)
 
+const QString cssDir = 
+    "/usr/share/themes/base/meegotouch/duicontrolpanel/style/";
+
 WarrantyApplet::WarrantyApplet() :
     m_WarrantyBusinessLogic (new WarrantyBusinessLogic)
 {
@@ -41,6 +44,7 @@ WarrantyApplet::~WarrantyApplet()
 void 
 WarrantyApplet::init()
 {
+    MTheme::loadCSS(cssDir + "warrantyapplet.css");
 }
 
 DcpWidget *
