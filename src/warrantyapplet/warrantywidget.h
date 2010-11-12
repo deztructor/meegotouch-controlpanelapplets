@@ -48,6 +48,9 @@ private:
             MLinearLayoutPolicy *mainLayout,
             MLabel              *label1,
             MLabel              *label2);
+    void addStretcher (
+            MLinearLayoutPolicy *mainLayout,
+            const QString       &styleName);
 
 private:
     QPointer<WarrantyBusinessLogic>    m_WarrantyBusinessLogic;

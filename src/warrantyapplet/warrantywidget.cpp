@@ -24,6 +24,7 @@
 #include <MLinearLayoutPolicy>
 #include <QGraphicsLinearLayout>
 #include <MContainer>
+#include <MSeparator>
 
 #undef DEBUG
 #include "../debug.h"
@@ -55,6 +56,7 @@ WarrantyWidget::createContent ()
 
     // Row 1: The title label.
     addHeaderContainer (policy);
+    addStretcher (policy, "CommonSmallSpacerInverted");
 
     // The label that shows the expiration date
     m_labelExpiration = new MLabel;
@@ -76,6 +78,20 @@ WarrantyWidget::createContent ()
 
     layout->setPolicy (policy);
     setLayout (layout);
+}
+
+void 
+WarrantyWidget::addStretcher (
+        MLinearLayoutPolicy *mainLayout,
+        const QString       &styleName)
+{
+    MSeparator *stretcher;
+
+    Q_ASSERT (mainLayout);
+
+    stretcher = new MSeparator ();
+    stretcher->setStyleName (styleName);
+    mainLayout->addItem (stretcher);
 }
 
 void 
