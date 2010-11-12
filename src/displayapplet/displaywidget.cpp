@@ -41,6 +41,7 @@
 #include <MStylableWidget>
 #include <MLinearLayoutPolicy>
 #include <QGraphicsLinearLayout>
+#include <MSeparator>
 
 DisplayWidget::DisplayWidget (QGraphicsWidget *parent) :
         DcpWidget (parent),
@@ -80,10 +81,13 @@ void DisplayWidget::initWidget ()
 
     // Row 1: The title label
     addHeaderContainer ();
+    addStretcher ("CommonSmallSpacerInverted");
     addSecHeaderContainer ();
     addSliderContainer ();
+    addStretcher ("CommonItemDivider");
     addScreenTimeoutContainer ();
     addBlankInhibitContainer ();
+    addStretcher ("CommonSmallSpacerInverted");
 }
 
 void 
@@ -177,21 +181,23 @@ DisplayWidget::addSliderContainer ()
     m_brightness_vals = m_logic->brightnessValues ();
     m_brightnessSlider->setRange (0, m_brightness_vals.size () - 1);
     m_brightnessSlider->setValue (m_logic->selectedBrightnessValueIndex ());
-        connect (m_brightnessSlider, SIGNAL (valueChanged (int)),
+        
+    connect (m_brightnessSlider, SIGNAL (valueChanged (int)),
              SLOT (sliderUpdated (int)));
         
 #ifdef WANT_HANDLE_LABEL
     m_brightnessSlider->setHandleLabelVisible (true);
 #endif
-    /*
-    // FIXME: is this necessary?
-    m_brightnessSlider->setSizePolicy (
-            QSizePolicy::Ignored, 
-            QSizePolicy::Preferred);
-    */
     
+    /*
+     * Adding the slider to the panel. Please note that the theme might set the
+     * size of the slider, so we need stretchers to move the short slider to the
+     * center and make the panel as wide as possible.
+     */
+    layout->addStretch ();
     layout->addItem (m_brightnessSlider);
-    layout->setAlignment (m_brightnessSlider, Qt::AlignHCenter);
+    layout->addStretch ();
+    //layout->setAlignment (m_brightnessSlider, Qt::AlignHCenter);
     /*
      * Adding the whole row to the main container.
      */
@@ -289,6 +295,19 @@ DisplayWidget::addBlankInhibitContainer ()
      */
     m_MainLayout->addItem (container);
     m_MainLayout->setStretchFactor (container, 0);
+}
+
+void 
+DisplayWidget::addStretcher (
+        const QString &styleName)
+{
+    MSeparator *stretcher;
+
+    Q_ASSERT (m_MainLayout);
+
+    stretcher = new MSeparator ();
+    stretcher->setStyleName (styleName);
+    m_MainLayout->addItem (stretcher);
 }
 
 void

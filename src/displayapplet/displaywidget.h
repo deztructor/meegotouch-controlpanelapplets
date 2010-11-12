@@ -51,6 +51,7 @@ private:
     void addSliderContainer ();
     void addScreenTimeoutContainer ();
     void addBlankInhibitContainer ();
+    void addStretcher (const QString &styleName);
     void retranslateUi ();
 
 private:
