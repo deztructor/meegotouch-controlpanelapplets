@@ -19,6 +19,7 @@
 
 #include "resetwidget.h"
 
+#include <MContainer>
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 #include <MButton>
@@ -50,54 +51,96 @@ void
 ResetWidget::createContent ()
 {
     MLayout             *layout;
-    MLinearLayoutPolicy *landscapePolicy;
-    MLinearLayoutPolicy *portraitPolicy;
+    MLinearLayoutPolicy *policy;
     MButton             *restoreButton;
     MButton             *clearButton;
-
+    /*
+     *
+     */
     layout = new MLayout;
-    layout->setContentsMargins (0., 0., 0., 0.);
-
-    landscapePolicy = new MLinearLayoutPolicy (layout, Qt::Horizontal);
-    landscapePolicy->setContentsMargins (0., 0., 0., 0.);
-
-    portraitPolicy = new MLinearLayoutPolicy (layout, Qt::Vertical);
-    portraitPolicy->setContentsMargins (0., 0., 0., 0.);
+    policy = new MLinearLayoutPolicy (layout, Qt::Vertical);
+    policy->setContentsMargins (0., 0., 0., 0.);
+    policy->setSpacing (0.);
 
     /*
      *
      */
     //% "Restore original settings"
     restoreButton = new MButton (qtTrId("qtn_rset_restore"));
-    restoreButton->setStyleName ("CommonTopButton");
-    restoreButton->setObjectName ("CommonTopButton");
+    restoreButton->setStyleName ("CommonTopButtonInverted");
+    restoreButton->setObjectName ("ResetAppletRFSButton");
     connect (restoreButton, SIGNAL(clicked()), 
             this, SLOT(restoreActivated()));
 
     /*
-     *
+     * The second button.
      */
     //% "Clear device"
     clearButton = new MButton (qtTrId("qtn_rset_clear"));
-    clearButton->setStyleName ("CommonBottomButton");
-    clearButton->setObjectName ("CommonTopButton");
+    clearButton->setStyleName ("CommonBottomButtonInverted");
+    clearButton->setObjectName ("ResetAppletCUDButton");
     connect (clearButton, SIGNAL(clicked()), 
             this, SLOT(clearActivated()));
 
-    landscapePolicy->addItem (restoreButton);
-    landscapePolicy->setAlignment (restoreButton, Qt::AlignCenter);
-    landscapePolicy->addItem (clearButton);
-    landscapePolicy->setAlignment (clearButton, Qt::AlignCenter);
+    addButtonContainer (policy, restoreButton, clearButton);
 
-    portraitPolicy->addItem (restoreButton);
-    portraitPolicy->setAlignment (restoreButton, Qt::AlignCenter);
-    portraitPolicy->addItem (clearButton);
-    portraitPolicy->setAlignment (clearButton, Qt::AlignCenter);
+    /*
+     *
+     */
+    layout->setPolicy (policy);
+    setLayout (layout);
+}
+
+void
+ResetWidget::addButtonContainer (
+            MLinearLayoutPolicy *mainLayout,
+            MButton             *button1,
+            MButton             *button2)
+{
+    MContainer          *container;
+    MLayout             *layout;
+    MLinearLayoutPolicy *landscapePolicy;
+    MLinearLayoutPolicy *portraitPolicy;
+    
+    /*
+     * Creating a lcontainer and a layout.
+     */
+    container = new MContainer (this);
+    container->setStyleName ("CommonLargePanelInverted");
+    container->setHeaderVisible (false);
+
+    layout = new MLayout;
+    layout->setContentsMargins (0., 0., 0., 0.);
+    
+    landscapePolicy = new MLinearLayoutPolicy (layout, Qt::Horizontal);
+    landscapePolicy->setContentsMargins (0., 0., 0., 0.);
+
+    portraitPolicy = new MLinearLayoutPolicy (layout, Qt::Vertical);
+    portraitPolicy->setContentsMargins (0., 0., 0., 0.);
 
     layout->setLandscapePolicy (landscapePolicy);
     layout->setPortraitPolicy (portraitPolicy);
 
-    setLayout (layout);
+    container->centralWidget()->setLayout (layout);
+
+    /*
+     * Adding the buttons to the layouts
+     */
+    landscapePolicy->addStretch ();
+    landscapePolicy->addItem (button1);
+    landscapePolicy->addItem (button2);
+    landscapePolicy->addStretch ();
+
+    portraitPolicy->addItem (button1);
+    portraitPolicy->setAlignment (button1, Qt::AlignHCenter);
+    portraitPolicy->addItem (button2);
+    portraitPolicy->setAlignment (button2, Qt::AlignHCenter);
+
+    /*
+     *
+     */
+    mainLayout->addItem (container);
+    mainLayout->setStretchFactor (container, 0);
 }
 
 void

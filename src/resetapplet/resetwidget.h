@@ -24,6 +24,9 @@
 
 #include "resetbusinesslogic.h"
 
+class MLinearLayoutPolicy;
+class MButton;
+
 class ResetWidget : public DcpWidget
 {
     Q_OBJECT
@@ -50,6 +53,12 @@ private slots:
     void clearActivated ();
 
     void doTheWork ();
+
+private:
+    void addButtonContainer (
+            MLinearLayoutPolicy *mainLayout,
+            MButton             *button1,
+            MButton             *button2);
 
 private:
     QPointer<ResetBusinessLogic>    m_ResetBusinessLogic;
