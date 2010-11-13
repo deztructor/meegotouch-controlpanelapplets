@@ -3,7 +3,7 @@ meegotouch-controlpanelapplets (0.17.5~1) meegotouch; urgency=low
   * Fixes: NB#203210 - Unable to close the profile dialog by tapping outside
     it.
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 09 Nov 2010 13:58:23 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Sat, 13 Nov 2010 13:48:59 +0100
 
 meegotouch-controlpanelapplets (0.17.4-1) meegotouch; urgency=low
 
