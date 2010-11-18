@@ -40,10 +40,13 @@ PUBLIC_HEADERS = \
     $$WALLPAPER_PATH/wallpaperdescriptor.h \
     $$WALLPAPER_PATH/wallpapercurrentdescriptor.h \
     $$WALLPAPER_PATH/wallpaperitrans.h \
+    $$WALLPAPER_PATH/wallpapereditorwidget.h \
+    $$WALLPAPER_PATH/wallpaperinfoheader.h \
     WallpaperBusinessLogic \
     WallpaperDescriptor \
     WallpaperCurrentDescriptor \
     WallpaperITrans \
+    WallpaperEditorWidget \
     meegocontrol.h
 
 HEADERS = \
@@ -52,14 +55,18 @@ HEADERS = \
     $$WALLPAPER_PATH/wallpaperitrans.h \
     $$WALLPAPER_PATH/wallpaperdescriptor.h \
     $$WALLPAPER_PATH/wallpapercurrentdescriptor.h \
-    $$WALLPAPER_PATH/wallpaperbusinesslogic.h 
+    $$WALLPAPER_PATH/wallpaperbusinesslogic.h \
+    $$WALLPAPER_PATH/wallpapereditorwidget.h \
+    $$WALLPAPER_PATH/wallpaperinfoheader.h 
 
 SOURCES = \
     ../debug.cpp \
     $$WALLPAPER_PATH/wallpaperitrans.cpp \
     $$WALLPAPER_PATH/wallpaperdescriptor.cpp \
     $$WALLPAPER_PATH/wallpapercurrentdescriptor.cpp \
-    $$WALLPAPER_PATH/wallpaperbusinesslogic.cpp 
+    $$WALLPAPER_PATH/wallpaperbusinesslogic.cpp \
+    $$WALLPAPER_PATH/wallpapereditorwidget.cpp \
+    $$WALLPAPER_PATH/wallpaperinfoheader.cpp 
 
 DESTDIR = lib
 target.path += /usr/lib
