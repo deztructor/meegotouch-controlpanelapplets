@@ -44,10 +44,13 @@
 #define WARNING
 #include "../debug.h"
 
+#define USE_SPACERS
+
 #ifdef USE_SPACERS
-static const int ActivationContainerPosition = 5;
-static const int LabelContainerPosition = 7;
-static const int SliderContainerPosition = 8;
+#include <MSeparator>
+static const int ActivationContainerPosition = 4;
+static const int LabelContainerPosition = 6;
+static const int SliderContainerPosition = 7;
 #else
 static const int ActivationContainerPosition = 2;
 static const int LabelContainerPosition = 3;
@@ -71,6 +74,19 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
         m_UILocked (false)
 {
     SYS_DEBUG ("Starting in %p", this);
+
+    /*
+     * We currently have 5 separators
+     */
+    for (int n = 0; n < 5; ++n)
+        m_Separators[n] = 0;
+
+    m_SeparatorPlacement[0] = 1;
+    m_SeparatorPlacement[1] = 3;
+    m_SeparatorPlacement[2] = 5;
+    m_SeparatorPlacement[3] = 8;
+    m_SeparatorPlacement[4] = 10;
+
     /*
      * One can assume, that when the applet is started the power save mode is
      * not active.
@@ -87,8 +103,7 @@ BatteryWidget::~BatteryWidget ()
 {
     SYS_DEBUG ("Destroying %p", this);
 
-    if (m_logic)
-    {
+    if (m_logic) {
         delete m_logic;
         m_logic = 0;
     }
@@ -117,24 +132,36 @@ BatteryWidget::initWidget ()
      * Adding the rows of widgets.
      */
     #ifdef USE_SPACERS
-    // Row 1: The title label
+    // Row 0: The title label
     addHeaderContainer ();
-    // Row 2: A spacer
-    addSpacer ("CommonSmallSpacerInverted");
-    // Row 3: Remaining capacity widget
+    // Row 1: A spacer
+    m_Separators[0] = addSpacer (
+            "CommonSmallSpacerInverted",
+            m_SeparatorPlacement[0]);
+    // Row 2: Remaining capacity widget
     addRemainingCapacityWidget ();
-    // Row 4: A spacer
-    addSpacer ("CommonItemDivider");
-    // Row 5: PSM Auto activation switch
+    // Row 3: A spacer
+    m_Separators[1] = addSpacer (
+            "CommonItemDivider",
+            m_SeparatorPlacement[1]);
+    // Row 4: PSM Auto activation switch
     addAutoActivationWidget ();
-    // Row 6: A spacer
-    addSpacer ("CommonItemDivider");
-    // Row 7-8: PSM Auto activation text and slider
+    // Row 5: A spacer
+    m_Separators[2] = addSpacer (
+            "CommonItemDivider",
+            m_SeparatorPlacement[2]);
+    // Row 6-7: PSM Auto activation text and slider
     addSliderContainer ();
-    // Row 9: A spacer
-    addSpacer ("CommonItemDivider");
-    // Row 10: PSM forced activation button.
+    // Row 8: A spacer
+    m_Separators[3] = addSpacer (
+            "CommonItemDivider",
+            m_SeparatorPlacement[3]);
+    // Row 9: PSM forced activation button.
     addPowerSaveButton ();
+    // Row 10: another divider
+    m_Separators[4] = addSpacer (
+            "CommonSmallSpacerInverted",
+            m_SeparatorPlacement[4]);
     #else
     // Row 1: The title label
     addHeaderContainer ();
@@ -252,7 +279,7 @@ BatteryWidget::addAutoActivationWidget ()
     m_ActivationContainer->setStyleName ("CommonPanelInverted");
     m_ActivationContainer->setHeaderVisible (false);
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
-    //layout->setSpacing (0.);
+    layout->setSpacing (0.);
     
     m_ActivationContainer->centralWidget()->setLayout (layout);
 
@@ -397,19 +424,19 @@ BatteryWidget::addPowerSaveButton ()
     m_MainLayout->setStretchFactor (container, 0);
 }
 
-void
+MSeparator *
 BatteryWidget::addSpacer (
-        const QString &styleName)
+        const QString &styleName, 
+        int            index)
 {
-    MStylableWidget   *spacer;
+    MSeparator   *spacer;
 
     Q_ASSERT (m_MainLayout);
 
-    spacer = new MStylableWidget;
-    spacer->setStyleName (styleName);
-    m_MainLayout->addItem (spacer);
+    spacer = new MSeparator;
+    spacer->setStyleName (styleName + QString::number(index));
+    m_MainLayout->insertItem (index, spacer);
     m_MainLayout->setStretchFactor (spacer, 0);
-
 }
 
 /*!

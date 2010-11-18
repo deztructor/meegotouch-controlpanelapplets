@@ -109,7 +109,7 @@ SliderContainer::createWidgets ()
     m_SliderContainer->setStyleName ("CommonPanelInverted");
     m_SliderContainer->setHeaderVisible (false);
 
-    sliderLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    sliderLayout = new QGraphicsLinearLayout (Qt::Horizontal);
     m_SliderContainer->centralWidget()->setLayout (sliderLayout);
 
     /*
@@ -121,8 +121,15 @@ SliderContainer::createWidgets ()
     m_PSMSlider->setOrientation (Qt::Horizontal);
     m_PSMSlider->setHandleLabelVisible (true);
     m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
-
+    
+    /*
+     * Adding the slider to its panel. Please note that the slider size might be
+     * set in the theme, so we need to add stretchers to move the short slider
+     * into the middle of the box.
+     */
+    sliderLayout->addStretch ();
     sliderLayout->addItem (m_PSMSlider);
+    sliderLayout->addStretch ();
     sliderLayout->setAlignment (m_PSMSlider, Qt::AlignHCenter);
 
     /*

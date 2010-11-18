@@ -30,6 +30,7 @@ class BatteryBusinessLogic;
 class BatteryImage;
 class SliderContainer;
 class PercentageContainer;
+class MSeparator;
 
 class BatteryWidget : public DcpWidget
 {
@@ -57,7 +58,9 @@ private:
     void addAutoActivationWidget ();
     void addSliderContainer ();
     void addPowerSaveButton ();
-    void addSpacer (const QString &styleName); 
+    MSeparator *addSpacer (
+            const QString &styleName, 
+            int            index);
 
     void showSlider (bool show);
     void updatePSMButton ();
@@ -77,6 +80,8 @@ private:
     bool                     m_UILocked;
     // true means we are believed to be in power save mode
     bool                     m_PSMButtonToggle;
+    MSeparator              *m_Separators[5];
+    int                      m_SeparatorPlacement[5];
 };
 
 #endif // BATTERYWIDGET_H
