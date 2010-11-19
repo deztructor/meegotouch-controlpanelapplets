@@ -26,13 +26,16 @@
 #include "alerttone.h"
 #include "qtrackedvariant.h"
 #include <QtTracker/Tracker>
+#ifdef HAVE_LIBPROFILE
 #include <profiled/libprofile.h>
+#endif
 #include <QDebug>
 
 #define DEBUG 
 #define WARNING 
 #include "debug.h"
 
+#ifdef HAVE_LIBPROFILE
 /******************************************************************************
  * Stubbing the profile library here. We absolutely need this because we don't
  * want to be dependent on that library.
@@ -78,7 +81,7 @@ profile_get_type (
 
     return strdup (retval);
 }
-
+#endif
 
 /******************************************************************************
  * Ut_ProfileValue implementation.
@@ -175,6 +178,7 @@ Ut_ProfileValueTests::profilevaluefetchFromBackend_data()
 void
 Ut_ProfileValueTests::profilevaluefetchFromBackend()
 {
+#ifdef HAVE_LIBPROFILE
     QFETCH(QString, key);
 
     QString type (profile_get_type(key.toAscii().constData()));
@@ -191,6 +195,7 @@ Ut_ProfileValueTests::profilevaluefetchFromBackend()
     } else {
         SYS_WARNING ("Unhandled type: %s", SYS_STR(type));
     }
+#endif
 }
 
 
@@ -230,6 +235,7 @@ Ut_ProfileValueTests::profilevalueGetType()
 void
 Ut_ProfileValueTests::profilevalueNotifyValue()
 {
+#ifdef HAVE_LIBPROFILE
       cnt = 0;
       QProfileValue  pv("ringing.alert.volume");
       QObject::connect(&pv, SIGNAL(changed()), this, SLOT( catchsignal() ));
@@ -252,6 +258,7 @@ Ut_ProfileValueTests::profilevalueNotifyValue()
 
       QProfileValue::notifyValue( profile.toAscii(), "system.sound.level", 0, 0, &pv);
       QVERIFY( !cnt );
+#endif
 }
 
 QTEST_APPLESS_MAIN(Ut_ProfileValueTests)

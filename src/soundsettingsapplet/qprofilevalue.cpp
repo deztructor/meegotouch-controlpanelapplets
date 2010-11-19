@@ -20,7 +20,9 @@
 #include <QDebug>
 #include <QStringList>
 #include <QFile>
+#ifdef HAVE_LIBPROFILE
 #include <profiled/libprofile.h>
+#endif
 
 #include "qprofilevalue.h"
 
@@ -55,9 +57,11 @@ QProfileValue::notifyValue(const char *profile, const char *key, const char *val
 	if (self->key().contains('@'))
 		compareString = self->key();
 	else {
+#ifdef HAVE_LIBPROFILE
 		char *currentProfile = profile_get_profile();
 		compareString = self->key() + "@" + currentProfile;
 		free(currentProfile);
+#endif
 	}
 
 	if (compareString == (QString(key) + "@" + profile)) {
@@ -69,28 +73,33 @@ QProfileValue::notifyValue(const char *profile, const char *key, const char *val
 void
 QProfileValue::addNotify()
 {
+#ifdef HAVE_LIBPROFILE
 	if (0 == nTrackedValues)
 		profile_tracker_init();
 	nTrackedValues++;
 
 	profile_track_add_active_cb((profile_track_value_fn_data)notifyValue, this, NULL);
 	profile_track_add_change_cb((profile_track_value_fn_data)notifyValue, this, NULL);
+#endif
 }
 
 void
 QProfileValue::delNotify()
 {
+#ifdef HAVE_LIBPROFILE
 	profile_track_remove_active_cb((profile_track_value_fn_data)notifyValue, this);
 	profile_track_remove_change_cb((profile_track_value_fn_data)notifyValue, this);
 
 	nTrackedValues--;
 	if (0 == nTrackedValues)
 		profile_tracker_quit();
+#endif
 }
 
 void
 QProfileValue::realSetValue(const QVariant &newValue)
 {
+#ifdef HAVE_LIBPROFILE
 	m_val.clear();
 
 	QVariant convertedValue = newValue;
@@ -155,11 +164,13 @@ QProfileValue::realSetValue(const QVariant &newValue)
 			profiles = NULL;
 		}
 	}
+#endif
 }
 
 void
 QProfileValue::fetchFromBackend()
 {
+#ifdef HAVE_LIBPROFILE
 	QString      theKey, theProfile;
 	QStringList  lsType = getType(theKey, theProfile);
 	QVariant     var;
@@ -214,13 +225,15 @@ QProfileValue::fetchFromBackend()
 
 	if (!var.isNull())
 		m_val = var;
+#endif
 }
 
 QStringList
 QProfileValue::getType(QString &theKey, QString &theProfile)
 {
-	QStringList    lsKey;
 	QStringList    lsType;
+#ifdef HAVE_LIBPROFILE
+	QStringList    lsKey;
 	char          *the_type;
 
 	lsKey = key().split('@');
@@ -234,7 +247,7 @@ QProfileValue::getType(QString &theKey, QString &theProfile)
 
 	lsType = QString(the_type).split(' ');
 	free(the_type); the_type = NULL;
-
+#endif
 	return lsType;
 }
 

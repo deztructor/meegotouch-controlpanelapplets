@@ -38,6 +38,14 @@ if [ $? -eq 0 ]; then
     if [ $? -eq 0 ]; then
         echo "DEFINES += HAVE_CONTENT_MANAGER" >> ${FILENAME}
     fi
+
+    #
+    # Soundsettings applet needs the low level libprofile API
+    #
+    pkg-config --exists profile
+    if [ $? -eq 0 ]; then
+	echo "DEFINES += HAVE_LIBPROFILE" >> ${FILENAME}
+    fi
 fi
 
 #

@@ -7,7 +7,9 @@
 #include "alerttonetoplevel.h"
 #include "ut_alerttonetoplevel.h"
 #include <QtTracker/Tracker>
+#ifdef HAVE_LIBPROFILE
 #include <profiled/libprofile.h>
+#endif
 #include <QDebug>
 
 /******************************************************************************

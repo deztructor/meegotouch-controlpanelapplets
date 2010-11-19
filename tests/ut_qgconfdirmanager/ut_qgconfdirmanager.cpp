@@ -6,7 +6,6 @@
 #include "ut_qgconfdirmanager.h"
 #include "qgconfdirmanager.h"
 #include <QtTracker/Tracker>
-#include <profiled/libprofile.h>
 #include <QDebug>
 
 /******************************************************************************

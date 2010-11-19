@@ -1,3 +1,4 @@
+include(../common_top.pri)
 include(../coverage.pri)
 include(../check.pri)
 
