@@ -58,6 +58,8 @@ UsbView::UsbView (void *logic) :
 
 UsbView::~UsbView ()
 {
+    delete m_btn_group;
+
     if (m_error != 0)
     {
         m_error->remove ();
