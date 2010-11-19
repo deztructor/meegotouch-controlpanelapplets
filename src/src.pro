@@ -1,14 +1,16 @@
 TEMPLATE = subdirs
-SUBDIRS = batteryapplet   \
-          displayapplet   \
-          profileapplet   \
-          themeapplet     \
-          testapplet      \
-          profileplugin   \
-          usbapplet       \
-          wallpaperapplet \
-          libmeegocontrol \
-          resetapplet     \
-          aboutapplet     \
-          warrantyapplet  \
-          offlineapplet
+SUBDIRS =               \
+    aboutapplet         \
+    batteryapplet       \
+    displayapplet       \
+    libmeegocontrol     \
+    offlineapplet       \
+    profileapplet       \
+    profileplugin       \
+    resetapplet         \
+    soundsettingsapplet \
+    testapplet          \
+    themeapplet         \
+    usbapplet           \
+    wallpaperapplet     \
+    warrantyapplet      

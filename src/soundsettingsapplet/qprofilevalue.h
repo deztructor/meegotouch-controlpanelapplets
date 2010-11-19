@@ -1,0 +1,68 @@
+/****************************************************************************
+**
+** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (directui@nokia.com)
+**
+** This file is part of meegotouch-controlpanelsoundsettingsapplet.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at directui@nokia.com.
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation
+** and appearing in the file LICENSE.LGPL included in the packaging
+** of this file.
+**
+****************************************************************************/
+
+#ifndef _Q_PROFILE_VALUE_H_
+#define _Q_PROFILE_VALUE_H_
+
+#include <QPointer>
+#include <QFileSystemWatcher>
+#include <QString>
+
+#include "qtrackedvariant.h"
+
+class QProfileValue : public QTrackedVariant
+{
+   	Q_OBJECT
+
+public:
+	QProfileValue(const QString &key, bool setAllProfiles = false);
+	~QProfileValue();
+
+	enum RangeType {
+		Interval,
+		List,
+		Invalid
+	};
+
+	QList<QVariant> possibleValues(RangeType *p_rangeType = NULL);
+
+protected:
+	virtual void fetchFromBackend();
+	virtual void realSetValue(const QVariant &newValue);
+    virtual bool stopWatchFiles ();
+    virtual bool startWatchFile (const QString &filename);
+
+private slots:
+    void fileChanged (const QString &filename);
+
+private:
+	static int nTrackedValues;
+	static void notifyValue(const char *profile, const char *key, const char *val, const char *type, QProfileValue *self);
+	void addNotify();
+	void delNotify();
+	QStringList getType(QString &theKey, QString &theProfile);
+
+	bool m_setAllProfiles;
+    QPointer<QFileSystemWatcher> m_FileWatcher;
+#ifdef UNIT_TEST
+    friend class Ut_ProfileValueTests;
+#endif
+};
+
+#endif /* !_Q_PROFILE_VALUE_H_ */

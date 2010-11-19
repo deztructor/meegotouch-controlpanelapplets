@@ -136,3 +136,9 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
          systemui-applets-l10n-engineering-english
 Description: Profile status indicator menu plugin.
 
+Package: duicontrolpanel-soundsettingsapplet
+Section: sound
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Sound Settings Applet
+
