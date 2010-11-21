@@ -4,6 +4,9 @@ meegotouch-controlpanelapplets (0.17.5~1) meegotouch; urgency=low
     it.
   * The first version with a wallpaper editor widget in the libmeegocontrol
     library.
+  * Added demo application for the wallpaper editor widget.
+  * Removed the fullscreen mode for the wallpaper editor: we must have a
+    libMeeGoTouch bug.
 
  -- David Kedves <dkedves@blumsoft.eu>  Sat, 13 Nov 2010 13:48:59 +0100
 
