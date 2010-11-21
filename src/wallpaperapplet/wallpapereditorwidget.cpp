@@ -49,7 +49,7 @@ M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
 static const qreal ScaleLowerLimit = 0.15;
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -70,9 +70,15 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_HasPendingRedraw (false)
 {
     MWindow *win = MApplication::activeWindow ();
-
+    
+#if 0
+    /*
+     * FIXME: With the new demo program this will not work. This must be a bug
+     * in the libMeegoTouch!
+     */
     if (win)
         win->showFullScreen();
+#endif
 
     setObjectName ("WallpaperEditorWidget");
     QTimer::singleShot (0, this, SLOT(createContent()));
@@ -314,6 +320,8 @@ WallpaperEditorWidget::polishEvent ()
 
     if (!page)
         return;
+
+    page->setPannable (false);
     /**************************************************************************
      * Hiding the home button and the escape button from the page. 
      */
@@ -389,13 +397,15 @@ WallpaperEditorWidget::slotDoneActivated ()
      * the list.
      */
     SYS_DEBUG ("Calling changeWidget()");
+    emit doneClicked ();
     changeWidget (0);
 }
 
 void
 WallpaperEditorWidget::slotCancelActivated ()
 {
-    emit closePage();
+    emit cancelClicked ();
+    emit closePage ();
 }
 
 bool 

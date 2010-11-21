@@ -3,11 +3,30 @@
 #ifndef TEST_H
 #define TEST_H
 
-#include <QObject>
+#include <QString>
+#include <QPointer>
 
-class MyApplication : public QObject {
+#include <MApplication>
+#include <MButton>
+#include <WallpaperEditorWidget>
+
+class MApplicationWindow;
+class MApplicationPage;
+
+class MyApplication : public MApplication {
     Q_OBJECT
     public:
-        MyApplication ();
+        MyApplication (int &argc, char **argv);
+
+    public slots:
+        void startEditor ();
+        void closeEditor (int widgetID = 0);
+
+    private:
+        MApplicationWindow            *mainwindow;
+        QPointer<MApplicationPage>     page1;
+        QPointer<MApplicationPage>     page2;
+        QString                        file1;
+        QString                        file2;
 };
 #endif

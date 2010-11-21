@@ -109,6 +109,10 @@ protected:
             QGestureEvent *event, 
             QPinchGesture *gesture);
 
+signals:
+    void doneClicked ();
+    void cancelClicked ();
+    
 private slots:
     void redrawImage ();
     void queueRedrawImage ();
