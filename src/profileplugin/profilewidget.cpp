@@ -50,7 +50,7 @@ ProfileWidget::ProfileWidget (
 
     setViewType (MButton::iconType);
     setObjectName("StatusIndicatorMenuTopRowExtensionButton");
-    connect(this, SIGNAL (clicked ()), this, SLOT (showProfileDialog ()));
+    connect (this, SIGNAL (clicked ()), this, SLOT (showProfileDialog ()));
     connect (dataIf, SIGNAL (currentProfile (int)), SLOT (profileChanged ()));
 
     profileChanged ();
@@ -73,7 +73,8 @@ ProfileWidget::profileChanged()
     setIconID(dataIf->mapId2StatusIconId(dataIf->getCurrentProfile()));
 }
 
-void ProfileWidget::showProfileDialog ()
+void
+ProfileWidget::showProfileDialog ()
 {
     MStatusIndicatorMenuInterface *menu;
 
