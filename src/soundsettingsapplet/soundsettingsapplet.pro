@@ -1,5 +1,10 @@
+include(../coverage.pri)
+include(../../localconfig.pri)
+
 TEMPLATE = lib
+
 include($$[QT_INSTALL_DATA]/mkspecs/dcpconfig.pri)
+
 CONFIG +=           \
     plugin          \
     gui             \
@@ -12,7 +17,8 @@ CONFIG +=           \
 PKGCONFIG += meegotouch dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
 
 LIBS += -lqttracker
-INCLUDEPATH += /usr/include/qt4/dui \
+INCLUDEPATH +=  \
+    /usr/include/qt4/dui \
     /usr/include/duicontrolpanel
 
 QT += dbus
@@ -88,10 +94,11 @@ message("The .css file will be installed to:    " $$css.path)
 INSTALLS += \
     target  \
     desktop \
-		css     \
-		$$(NULL)
+    css     \
+    $$(NULL)
     
 OTHER_FILES +=                  \
     soundsettingsapplet.desktop \
-		soundsettingsapplet.css     \
-		$$(NULL)
+    soundsettingsapplet.css     \
+    $$(NULL)
+

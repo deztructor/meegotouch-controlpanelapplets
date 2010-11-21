@@ -20,7 +20,9 @@
 #include "trackerconnection.h"
 
 #include <QtTracker/Tracker>
+#ifdef HAVE_LIBPROFILE
 #include <profiled/libprofile.h>
+#endif
 
 //#define DEBUG
 #define WARNING
@@ -42,6 +44,8 @@ QList<AlertTone *>
 AlertTone::alertTones()
 {
 	QList<AlertTone *> v;
+
+#ifdef HAVE_LIBPROFILE
     QList<QString> keys;
     
 	profileval_t *vals = profile_get_values(NULL);
@@ -78,6 +82,7 @@ AlertTone::alertTones()
 	v << new AlertTone(QString(keys.at(Nix)));
 
 	profile_free_values(vals);
+#endif
 
 	return v;
 }

@@ -32,6 +32,7 @@ qtTrId (
     return retVal;
 }
 
+#ifdef HAVE_LIBPROFILE
 /******************************************************************************
  * Stubbing the profile library here. We absolutely need this because we don't
  * want to be dependent on that library.
@@ -115,6 +116,7 @@ profile_get_value_as_int (
      */
     return 0;
 }
+#endif
 
 /******************************************************************************
  * Ut_ProfileintCombo implementation.
@@ -181,8 +183,10 @@ Ut_ProfileintComboTests::profileintcomboCurrentIndexChanged()
      */
     SYS_DEBUG ("Changing to index %d", itemindex);
     pc.setCurrentIndex (itemindex);
+#ifdef HAVE_LIBPROFILE
     QCOMPARE (lastProfileKey, profilekey);
     QCOMPARE (lastProfileValue.toInt(), itemindex);
+#endif
     QCOMPARE (uistring, pc.currentText());
 }
 
