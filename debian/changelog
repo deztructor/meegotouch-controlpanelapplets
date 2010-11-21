@@ -7,8 +7,10 @@ meegotouch-controlpanelapplets (0.17.5~1) meegotouch; urgency=low
   * Added demo application for the wallpaper editor widget.
   * Removed the fullscreen mode for the wallpaper editor: we must have a
     libMeeGoTouch bug.
+  * Moved soundsettings applet to this source-tree
+  - Fixes: NB#204415 - duicontrolpanel crashed due to change in LMT
 
- -- David Kedves <dkedves@blumsoft.eu>  Sat, 13 Nov 2010 13:48:59 +0100
+ -- David Kedves <kedz@kedz-VirtualBox>  Sun, 21 Nov 2010 20:16:39 +0100
 
 meegotouch-controlpanelapplets (0.17.4-1) meegotouch; urgency=low
 
