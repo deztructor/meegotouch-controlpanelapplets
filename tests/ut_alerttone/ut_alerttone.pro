@@ -10,15 +10,12 @@ QT += \
     testlib \
     dbus
 
-
 LIBS += -lqttracker
-INCLUDEPATH += /usr/include/qt4/dui \
-    /usr/include/duicontrolpanel
 
 TEMPLATE = app
 DEFINES += UNIT_TEST
 TARGET = ut_alerttone
-target.path = /usr/lib/duicontrolpanel-soundsettingsapplet-tests
+target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
     gui             \
@@ -48,7 +45,6 @@ SOURCES += \
     $$SRC_PREFIX/qprofilevalue.cpp \
     $$SRC_PREFIX/qtrackedvariant.cpp \
     $$SRC_PREFIX/alerttonepreview.cpp
-
 
 INSTALLS += target
 

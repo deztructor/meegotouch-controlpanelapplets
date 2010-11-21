@@ -10,13 +10,11 @@ QT += \
     dbus
 
 LIBS += -lqttracker
-INCLUDEPATH += /usr/include/qt4/dui \
-    /usr/include/duicontrolpanel
 
 TEMPLATE = app
 DEFINES += UNIT_TEST
 TARGET = ut_alerttonedefaultsmodel
-target.path = /usr/lib/duicontrolpanel-soundsettingsapplet-tests
+target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
     plugin          \
@@ -39,9 +37,6 @@ HEADERS += \
     $$SRC_PREFIX/alerttonedefaults.h \
     $$SRC_PREFIX/alerttonedefaultsmodel.h
 
-
-
-
 SOURCES += \
     ut_alerttonedefaultsmodel.cpp  \
     $$SRC_PREFIX/debug.cpp \
@@ -53,9 +48,5 @@ SOURCES += \
     $$SRC_PREFIX/alerttonedefaults.cpp \
     $$SRC_PREFIX/alerttonedefaultsmodel.cpp
 
-
-
 INSTALLS += target
-
-
 

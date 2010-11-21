@@ -11,13 +11,11 @@ QT += \
     dbus
 
 LIBS += -lqttracker
-INCLUDEPATH += /usr/include/qt4/dui \
-    /usr/include/duicontrolpanel
 
 TEMPLATE = app
 DEFINES += UNIT_TEST
 TARGET = ut_qgconfvalue
-target.path = /usr/lib/duicontrolpanel-soundsettingsapplet-tests
+target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
     plugin          \
@@ -36,8 +34,6 @@ HEADERS += \
     $$SRC_PREFIX/qtrackedvariant.h \
     $$SRC_PREFIX/qgconfvalue.h
 
-
-
 SOURCES += \
     ut_qgconfvalue.cpp  \
     $$SRC_PREFIX/debug.cpp \
@@ -45,9 +41,5 @@ SOURCES += \
     $$SRC_PREFIX/qtrackedvariant.cpp \
     $$SRC_PREFIX/qgconfvalue.cpp
 
-
-
 INSTALLS += target
-
-
 
