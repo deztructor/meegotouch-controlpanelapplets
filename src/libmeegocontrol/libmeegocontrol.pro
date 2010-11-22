@@ -23,6 +23,12 @@ contains(DEFINES, HAVE_CONTENT_MANAGER) {
     PKGCONFIG += ContentManager
 }
 
+#
+# This way the code wil always know that it is running outside the controlpanel
+#
+DEFINES += \
+    LIBMEEGOCONTROL
+
 LIBS += \
     -lqttracker \
     -lthumbnailer

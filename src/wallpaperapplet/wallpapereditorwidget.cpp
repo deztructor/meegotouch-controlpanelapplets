@@ -71,13 +71,13 @@ WallpaperEditorWidget::WallpaperEditorWidget (
 {
     MWindow *win = MApplication::activeWindow ();
     
-#if 0
+#ifndef LIBMEEGOCONTROL
     /*
      * FIXME: With the new demo program this will not work. This must be a bug
      * in the libMeegoTouch!
      */
-    if (win)
-        win->showFullScreen();
+    //if (win)
+    //    win->showFullScreen();
 #endif
 
     setObjectName ("WallpaperEditorWidget");
