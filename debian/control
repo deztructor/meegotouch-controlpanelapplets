@@ -114,7 +114,7 @@ Package: duicontrolpanel-aboutapplet
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english, libcellular-qt1
+         systemui-applets-l10n-engineering-english
 Description: The about-product applet that shows device and software
  informations.
 
