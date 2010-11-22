@@ -186,10 +186,10 @@ QProfileValue::fetchFromBackend()
         needReread = startWatchFile (filename);
 
         SYS_DEBUG ("*** needReread = %s", SYS_BOOL(needReread));
-	if (needReread) {
+
+        if (needReread) {
             free (filename);
             realSetValue (QVariant (""));
-            fetchFromBackend ();
 
             filename = profile_get_value (
                         theProfile.isNull() ? NULL : TO_STRING(theProfile), 
