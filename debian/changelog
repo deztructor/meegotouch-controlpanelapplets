@@ -12,7 +12,7 @@ meegotouch-controlpanelapplets (0.17.5~1) meegotouch; urgency=low
   * Fixes: NB#189576 - Progress spinner is not showing during the theme 
     changing/selection progress
 
- -- David Kedves <kedz@kedz-VirtualBox>  Sun, 21 Nov 2010 20:16:39 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 22 Nov 2010 09:32:41 +0100
 
 meegotouch-controlpanelapplets (0.17.4-1) meegotouch; urgency=low
 
