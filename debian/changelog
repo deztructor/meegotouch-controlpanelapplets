@@ -15,7 +15,7 @@ meegotouch-controlpanelapplets (0.17.5-1) meegotouch; urgency=low
     'ProfileWidget::showProfileDialog() QMetaObject::metacall 
     QMetaObject::activate MButton::clicked'
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 22 Nov 2010 13:46:53 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 22 Nov 2010 17:10:30 +0100
 
 meegotouch-controlpanelapplets (0.17.4-1) meegotouch; urgency=low
 
