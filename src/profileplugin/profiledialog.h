@@ -31,7 +31,7 @@ class ProfileDialog : public MDialog
     Q_OBJECT
 
 public:
-    ProfileDialog(ProfileDataInterface *dataIf);
+    ProfileDialog ();
     virtual ~ProfileDialog();
 
 signals:

@@ -45,15 +45,13 @@ void
 Ut_ProfileDialog::initTestCase ()
 {
     app = new MApplication (argc, argv);
-    dataIf = new ProfileDataInterface;
-    profileDialog = new ProfileDialog (dataIf);
+    profileDialog = new ProfileDialog ();
 }
 
 void
 Ut_ProfileDialog::cleanupTestCase ()
 {
     delete profileDialog;
-    delete dataIf;
 
     app->deleteLater ();
 }

@@ -42,7 +42,6 @@ private slots:
 
 private:
     MApplication            *app;
-    ProfileDataInterface    *dataIf;
     ProfileDialog           *profileDialog;
 };
 

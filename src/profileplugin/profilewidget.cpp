@@ -83,11 +83,11 @@ ProfileWidget::showProfileDialog ()
         menu->hideStatusIndicatorMenu ();
     }
 
-    ProfileDialog dialog (dataIf);
-
-    connect (&dialog, SIGNAL (profileChanged (int)), SLOT (profileChanged ()));
-
-    dialog.exec ();
+    ProfileDialog profileDialog;
+    // Removed this connect() because we thing it caused NB#204361.
+    //connect (&dialog, SIGNAL (profileChanged (int)), 
+    // SLOT (profileChanged ()));
+    profileDialog.exec ();
 }
 
 void

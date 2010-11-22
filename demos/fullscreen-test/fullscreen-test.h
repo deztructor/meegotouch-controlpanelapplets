@@ -8,7 +8,6 @@
 
 #include <MApplication>
 #include <MButton>
-#include <WallpaperEditorWidget>
 
 class MApplicationWindow;
 class MApplicationPage;

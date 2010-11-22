@@ -11,6 +11,9 @@ meegotouch-controlpanelapplets (0.17.5~1) meegotouch; urgency=low
   * Fixes: NB#204415 - duicontrolpanel crashed due to change in LMT
   * Fixes: NB#189576 - Progress spinner is not showing during the theme 
     changing/selection progress
+  * Fixes: NB#204361 - COREWEB: /usr/bin/sysuid 
+    'ProfileWidget::showProfileDialog() QMetaObject::metacall 
+    QMetaObject::activate MButton::clicked'
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 22 Nov 2010 09:32:41 +0100
 

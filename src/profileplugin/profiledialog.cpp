@@ -37,9 +37,9 @@ M_LIBRARY
 #include "../debug.h"
 
 
-ProfileDialog::ProfileDialog(ProfileDataInterface *dataIf) :
+ProfileDialog::ProfileDialog () :
     MDialog (),
-    dataIf (dataIf)
+    dataIf (new ProfileDataInterface)
 {
     setSystem (true);
     setModal (false);
@@ -55,7 +55,7 @@ ProfileDialog::ProfileDialog(ProfileDataInterface *dataIf) :
 
 ProfileDialog::~ProfileDialog()
 {
-
+    delete dataIf;
 }
 
 void

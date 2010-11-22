@@ -5,8 +5,6 @@ INCLUDEPATH += .
 
 CONFIG +=           \
     meegotouch      \
-    duicontrolpanel \
-    meegocontrol    \
     qt              \
     silent
 
