@@ -124,7 +124,7 @@ Ut_ThemeDialog::testAccept ()
     dialog->showDialog ();
     QVERIFY (dialog->m_SelectButton);
     QVERIFY (dialog->m_CancelButton);
-    QVERIFY (lastDialogTitle == themes[0]->name());
+    QCOMPARE (lastDialogTitle, themes[0]->name());
 
     /*
      * Clicking the button and checking if everything is all right. The
@@ -132,9 +132,13 @@ Ut_ThemeDialog::testAccept ()
      */
     GConfLastKey = "";
     GConfLastValue = "";
-    dialog->m_SelectButton->click();
-    QVERIFY (GConfLastKey == themeKey);
-    QVERIFY (GConfLastValue == themes[0]->codeName());
+    //dialog->m_SelectButton->click();
+
+    dialog->accept ();
+    dialog->dialogDisappeared ();
+
+    QCOMPARE (GConfLastKey, themeKey);
+    QCOMPARE (GConfLastValue, themes[0]->codeName());
 }
 
 void 
@@ -142,7 +146,7 @@ Ut_ThemeDialog::testCancel ()
 {
     QList<ThemeDescriptor *>   themes;
     QPointer<ThemeDialog>      dialog;
-    
+
     /*
      * Getting the themes so we have at least one theme descriptor. The data
      * source is stubbed, no file manpulation here.
@@ -158,7 +162,7 @@ Ut_ThemeDialog::testCancel ()
     dialog->showDialog ();
     QVERIFY (dialog->m_SelectButton);
     QVERIFY (dialog->m_CancelButton);
-    QVERIFY (lastDialogTitle == themes[0]->name());
+    QCOMPARE (lastDialogTitle, themes[0]->name());
 
     /*
      * Clicking the button and checking if everything is all right. The
@@ -167,8 +171,8 @@ Ut_ThemeDialog::testCancel ()
     GConfLastKey = "";
     GConfLastValue = "";
     dialog->m_CancelButton->click();
-    QVERIFY (GConfLastKey == "");
-    QVERIFY (GConfLastValue == "");
+    QCOMPARE (GConfLastKey, QString (""));
+    QCOMPARE (GConfLastValue, QString (""));
 }
 
 QTEST_APPLESS_MAIN(Ut_ThemeDialog)

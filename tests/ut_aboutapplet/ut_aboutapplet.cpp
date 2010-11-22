@@ -185,7 +185,3 @@ Ut_AboutApplet::testConstructbrief ()
 
 
 QTEST_APPLESS_MAIN(Ut_AboutApplet)
-
-
-
-

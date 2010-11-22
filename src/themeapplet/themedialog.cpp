@@ -180,3 +180,4 @@ ThemeDialog::dialogDisappeared ()
 {
     m_ThemeBusinessLogic->changeTheme (m_ThemeDesc->codeName());
 }
+
