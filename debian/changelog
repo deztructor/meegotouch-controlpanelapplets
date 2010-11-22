@@ -8,7 +8,9 @@ meegotouch-controlpanelapplets (0.17.5~1) meegotouch; urgency=low
   * Removed the fullscreen mode for the wallpaper editor: we must have a
     libMeeGoTouch bug.
   * Moved soundsettings applet to this source-tree
-  - Fixes: NB#204415 - duicontrolpanel crashed due to change in LMT
+  * Fixes: NB#204415 - duicontrolpanel crashed due to change in LMT
+  * Fixes: NB#189576 - Progress spinner is not showing during the theme 
+    changing/selection progress
 
  -- David Kedves <kedz@kedz-VirtualBox>  Sun, 21 Nov 2010 20:16:39 +0100
 

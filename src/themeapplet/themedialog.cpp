@@ -153,10 +153,17 @@ void
 ThemeDialog::acceptClicked ()
 {
     SYS_DEBUG ("");
+    
+    /*
+     * We need to delay the actual theme changing until the dialog disappeared
+     * since libMeegoTouch does not like the theme dialog disappearing while the
+     * theme is changing.
+     */
+    connect (this, SIGNAL(disappeared()), 
+            this, SLOT(dialogDisappeared()));
+
     accept();
     disappear ();
-
-    m_ThemeBusinessLogic->changeTheme (m_ThemeDesc->codeName());
 }
 
 void 
@@ -168,4 +175,8 @@ ThemeDialog::cancelClicked ()
     disappear ();
 }
 
-
+void
+ThemeDialog::dialogDisappeared ()
+{
+    m_ThemeBusinessLogic->changeTheme (m_ThemeDesc->codeName());
+}

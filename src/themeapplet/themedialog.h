@@ -44,6 +44,7 @@ signals:
 private slots:
     void acceptClicked ();
     void cancelClicked ();
+    void dialogDisappeared ();
 
 private:
     QPointer<ThemeBusinessLogic>  m_ThemeBusinessLogic;
