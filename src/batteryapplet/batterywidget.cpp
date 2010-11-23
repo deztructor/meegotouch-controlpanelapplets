@@ -441,6 +441,8 @@ BatteryWidget::addSpacer (
     spacer->setStyleName (styleName + QString::number(index));
     m_MainLayout->insertItem (index, spacer);
     m_MainLayout->setStretchFactor (spacer, 0);
+
+    return spacer;
 }
 
 /*!
