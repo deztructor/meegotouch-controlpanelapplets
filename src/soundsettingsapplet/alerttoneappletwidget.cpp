@@ -240,7 +240,6 @@ AlertToneAppletWidget::createAlertTonesList(QGraphicsWidget *parent)
 	QGraphicsWidget *centralWidget;
 	AlertToneWidget *alertToneWidget;
 
-	//% "Event tones"
 	container = createEmptyContainer(parent, &policy, &centralWidget);
 
     /*
