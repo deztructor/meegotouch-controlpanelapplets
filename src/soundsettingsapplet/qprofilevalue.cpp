@@ -181,7 +181,7 @@ QProfileValue::fetchFromBackend()
 	QStringList  lsType = getType(theKey, theProfile);
 	QVariant     var;
 
-    SYS_WARNING ("*** lsType[0] = %s", SYS_STR(lsType[0]));
+    SYS_DEBUG ("*** lsType[0] = %s", SYS_STR(lsType[0]));
     if ("SOUNDFILE" == lsType[0]) {
         char *filename;
         bool  needReread;

@@ -178,17 +178,10 @@ AlertToneDefaults::AlertToneDefaults (
             this, SLOT(userPanningStarted()));
    
     /*
-     * When we got the MApplicationPage we got a chance to set the spinner.
-     * However it seems that the layoutChanged() is not reliable, so we also
-     * connect to the model's signal and register a timeout.
      * Please note that the loadingFinished() will hide the spinner.
      */
-	connect (this, SIGNAL(layoutChanged()), 
-            this, SLOT(checkSpinner()));
     connect (m_DefaultsModel, SIGNAL(loading()), 
             this, SLOT(checkSpinner()));
-
-    QTimer::singleShot(10, this, SLOT(checkSpinner()));
 }
 
 /*!
@@ -371,6 +364,13 @@ AlertToneDefaults::userPanningStarted ()
     m_PanningStarted = true;
 }
 
+void
+AlertToneDefaults::polishEvent ()
+{
+    SYS_DEBUG ("");
+    checkSpinner ();
+}
+
 /*
  * This slot is called when the widget sends the layoutChanged signal (sent when
  * the widget already have an MApplicationPage parent) and when the model
@@ -407,5 +407,7 @@ AlertToneDefaults::checkSpinner ()
     }
 
     m_ShowingSpinner = !m_DefaultsModel->isFinished();
+    SYS_DEBUG ("calling page->setProgressIndicatorVisible (%s)", 
+            SYS_BOOL(m_ShowingSpinner));
     page->setProgressIndicatorVisible (m_ShowingSpinner);
 }

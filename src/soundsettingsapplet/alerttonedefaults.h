@@ -55,6 +55,9 @@ public:
         const QString &fileName,
         const QString &niceName = QString(""));
 
+protected:
+    virtual void polishEvent ();
+
 private slots:
 	void itemClicked(const QModelIndex &item);
 	void toneChanged();
