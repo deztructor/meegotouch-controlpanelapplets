@@ -30,9 +30,11 @@
 
 class MContainer;
 class MLinearLayoutPolicy;
+class MLabel;
 class MList;
 class WallpaperList;
 class MContentItem;
+class MLinearLayoutPolicy;
 
 class WallpaperWidget : public DcpWidget
 {
@@ -59,7 +61,12 @@ private slots:
     #endif
 
 private:
+    void addHeaderContainer (MLinearLayoutPolicy *mainLayout);
+    void retranslateUi ();
+
+private:
     QPointer<WallpaperBusinessLogic>       m_WallpaperBusinessLogic;
+    MLabel                                *m_TitleLabel;
     WallpaperList                         *m_ImageList;
     #ifdef HAVE_CONTENT_MANAGER
     QPointer<SelectSingleContentItemPage>  m_ImageBrowser;

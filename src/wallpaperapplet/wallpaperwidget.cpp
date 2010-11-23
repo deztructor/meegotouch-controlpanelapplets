@@ -21,16 +21,18 @@
 #include "wallpaperlist.h"
 
 #include <MApplicationPage>
-#include <QGraphicsLinearLayout>
 #include <MLayout>
+#include <MLinearLayoutPolicy>
 #include <MContainer>
 #include <QTimer>
 #include <MContentItem>
 #include <MAction>
+#include <QGraphicsLinearLayout>
 #include <QDebug>
 #include <QtTracker/Tracker>
+#include <MLabel>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -62,11 +64,22 @@ WallpaperWidget::~WallpaperWidget ()
 void
 WallpaperWidget::createContent ()
 {
-    QGraphicsLinearLayout *mainLayout;
+    MLayout              *layout;
+    MLinearLayoutPolicy  *mainLayout;
 
-    mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
-    mainLayout->setContentsMargins (0, 0, 0, 0);
-    setLayout (mainLayout);
+    /*
+     * Creating a layout that holds the rows of the internal widgets.
+     */
+    layout = new MLayout (this);
+    mainLayout = new MLinearLayoutPolicy (layout, Qt::Vertical);
+    mainLayout->setContentsMargins (0., 0., 0., 0.);
+    mainLayout->setSpacing (0.);
+    setLayout (layout);
+
+    /*
+     * Adding the header/title
+     */
+    addHeaderContainer (mainLayout);
 
     /*
      * The list of the available images.
@@ -87,6 +100,50 @@ WallpaperWidget::createContent ()
 
     connect (m_WallpaperBusinessLogic, SIGNAL(imageEditRequested()),
             this, SLOT(slotImageActivated()));
+}
+
+void 
+WallpaperWidget::addHeaderContainer (
+        MLinearLayoutPolicy *mainLayout)
+{
+    MContainer            *container;
+    QGraphicsLinearLayout *layout;
+
+    Q_ASSERT (mainLayout);
+
+    SYS_DEBUG ("***********************************************************");
+    /*
+     * Creating a lcontainer and a layout.
+     */
+    container = new MContainer (this);
+    container->setStyleName ("CommonXLargeGroupHeaderPanelInverted");
+    container->setHeaderVisible (false);
+
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    container->centralWidget()->setLayout (layout);
+
+    /*
+     * The label that we use as title.
+     */
+    //% "Wallpaper"
+    m_TitleLabel = new MLabel (qtTrId("qtn_wall_wallpaper"));
+    m_TitleLabel->setStyleName ("CommonXLargeGroupHeaderInverted");
+    layout->addItem (m_TitleLabel);
+    layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
+
+    /*
+     * Adding the whole row to the main container.
+     */
+    mainLayout->addItem (container);
+    mainLayout->setStretchFactor (container, 0);
+}
+
+void
+WallpaperWidget::retranslateUi ()
+{
+    if (m_TitleLabel)
+        //% "Wallpaper"
+        m_TitleLabel->setText (qtTrId("qtn_wall_wallpaper"));
 }
 
 
