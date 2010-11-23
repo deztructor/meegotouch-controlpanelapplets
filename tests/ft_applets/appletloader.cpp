@@ -26,8 +26,6 @@
 
 #define APPLET_PATH "/usr/lib/duicontrolpanel/applets/"
 
-#undef TEST_NEW_TITLE_METHODS
-
 void
 Ft_AppletLoader::initTestCase ()
 {
@@ -86,10 +84,6 @@ Ft_AppletLoader::DoAppletTest (const char *soname, bool hasBrief)
      */
     applet->init ();
 
-#ifndef TEST_NEW_TITLE_METHODS
-    QVERIFY (! applet->title ().isEmpty ());
-#endif
-
     /*
      * Checking if the applet brief is constructed.
      */
@@ -98,12 +92,6 @@ Ft_AppletLoader::DoAppletTest (const char *soname, bool hasBrief)
     {
         QVERIFY2(brief, 
 		    "Error when creating brief widget");
-#ifdef TEST_NEW_TITLE_METHODS
-        /*
-         * Checking if the applet has a non-empty title string.
-         */
-        QVERIFY (! brief->titleText ().isEmpty ());
-#endif
     }
     else
         QVERIFY2(!brief, 
@@ -116,13 +104,6 @@ Ft_AppletLoader::DoAppletTest (const char *soname, bool hasBrief)
      */
     DcpWidget *widget = applet->constructWidget (0);
     QVERIFY2 (widget, "Error when creating applet's main widget");
-
-#ifdef TEST_NEW_TITLE_METHODS
-    /*
-     * Check if the applet widget has a non-empty title string.
-     */
-    QVERIFY (! widget->title ().isEmpty ());
-#endif
 
     QTest::qWait (1000);
 
