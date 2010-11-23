@@ -10,7 +10,6 @@ QT += \
     testlib \
     dbus
 
-
 LIBS += -lqttracker
 
 TEMPLATE = app
@@ -22,6 +21,7 @@ CONFIG += \
     plugin          \
     gui             \
     meegotouch      \
+    silent          \
     debug           \
     link_pkgconfig  \
     duicontrolpanel

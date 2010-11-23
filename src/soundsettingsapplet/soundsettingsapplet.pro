@@ -9,7 +9,7 @@ CONFIG +=           \
     plugin          \
     gui             \
     meegotouch      \
-    debug           \
+    silent          \
     link_pkgconfig  \
     duicontrolpanel \
     $$(NULL)
