@@ -57,13 +57,7 @@ PUBLIC_HEADERS = \
 
 HEADERS = \
     ../debug.h \
-    $$PUBLIC_HEADERS \
-    $$WALLPAPER_PATH/wallpaperitrans.h \
-    $$WALLPAPER_PATH/wallpaperdescriptor.h \
-    $$WALLPAPER_PATH/wallpapercurrentdescriptor.h \
-    $$WALLPAPER_PATH/wallpaperbusinesslogic.h \
-    $$WALLPAPER_PATH/wallpapereditorwidget.h \
-    $$WALLPAPER_PATH/wallpaperinfoheader.h 
+    $$PUBLIC_HEADERS
 
 SOURCES = \
     ../debug.cpp \
