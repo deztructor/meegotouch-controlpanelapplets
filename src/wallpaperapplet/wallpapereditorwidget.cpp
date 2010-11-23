@@ -75,9 +75,21 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     /*
      * FIXME: With the new demo program this will not work. This must be a bug
      * in the libMeegoTouch!
+     * NOTE: It also freezes the controlpanel sometimes, so I had to completely
+     * remove.
      */
     //if (win)
     //    win->showFullScreen();
+#endif
+
+#if 0
+    /*
+     * This one unfortunately will not turn to full-screen at all.
+     */
+    if (win) {
+        Qt::WindowStates state = win->windowState();
+        win->setWindowState(state | Qt::WindowFullScreen);
+    }
 #endif
 
     setObjectName ("WallpaperEditorWidget");
