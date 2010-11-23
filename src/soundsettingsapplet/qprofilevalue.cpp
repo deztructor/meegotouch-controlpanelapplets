@@ -35,8 +35,9 @@
 int QProfileValue::nTrackedValues = 0;
 
 QProfileValue::QProfileValue(const QString &key, bool setAllProfiles) :
-	QTrackedVariant(key),
-	m_setAllProfiles(setAllProfiles)
+	QTrackedVariant (key),
+	m_setAllProfiles (setAllProfiles),
+    m_MissingFile (false)
 {
     SYS_DEBUG ("*** key = %s", SYS_STR(key));
 	addNotify();
@@ -48,7 +49,12 @@ QProfileValue::~QProfileValue()
 }
 
 void
-QProfileValue::notifyValue(const char *profile, const char *key, const char *val, const char *type, QProfileValue *self)
+QProfileValue::notifyValue (
+        const char      *profile, 
+        const char      *key, 
+        const char      *val, 
+        const char      *type, 
+        QProfileValue   *self)
 {
 	QString compareString;
 	Q_UNUSED(val)
@@ -175,7 +181,7 @@ QProfileValue::fetchFromBackend()
 	QStringList  lsType = getType(theKey, theProfile);
 	QVariant     var;
 
-    SYS_DEBUG ("*** lsType[0] = %s", SYS_STR(lsType[0]));
+    SYS_WARNING ("*** lsType[0] = %s", SYS_STR(lsType[0]));
     if ("SOUNDFILE" == lsType[0]) {
         char *filename;
         bool  needReread;
@@ -184,24 +190,20 @@ QProfileValue::fetchFromBackend()
                 theProfile.isNull() ? NULL : TO_STRING(theProfile), 
                 TO_STRING(theKey));
         needReread = startWatchFile (filename);
-
         SYS_DEBUG ("*** needReread = %s", SYS_BOOL(needReread));
-
-        if (needReread) {
-            free (filename);
+        
+        if (needReread && !m_MissingFile) {
+            SYS_DEBUG ("Need re-read, was not missing before: %s",
+                    filename);
+            m_MissingFile = true;
             realSetValue (QVariant (""));
-
-            filename = profile_get_value (
-                        theProfile.isNull() ? NULL : TO_STRING(theProfile), 
-                        TO_STRING(theKey));
-            needReread = startWatchFile (filename);
-
-            if (needReread)
-            {
-                SYS_WARNING ("The current profile refers to"
-                             " a non-existant file (%s)!",
-                             filename);
-            }
+        } else if (needReread && m_MissingFile) {
+            SYS_WARNING ("Need re-read but already missing: giving up: %s",
+                    filename);
+        } else if (!needReread && m_MissingFile) {
+            SYS_DEBUG ("Was missing before, but now found: %s",
+                    filename);
+            m_MissingFile = false;
         }
 
         var = QVariant(QString::fromUtf8(filename));
@@ -318,8 +320,8 @@ QProfileValue::fileChanged (
     QFile thisFile (filename);
     bool  exists = thisFile.exists (filename);
     
-    SYS_DEBUG ("*** path   = %s", SYS_STR(filename));
-    SYS_DEBUG ("*** exists = %s", SYS_BOOL(exists));
+    SYS_WARNING ("*** path   = %s", SYS_STR(filename));
+    SYS_WARNING ("*** exists = %s", SYS_BOOL(exists));
     if (!exists) {
         realSetValue (QVariant (""));
     }
@@ -356,8 +358,9 @@ QProfileValue::startWatchFile (
      * If the file does not exists to begin with we don't need to watch. We will
      * return true, that means the file name must be fixed.
      */
-    if (!exists)
+    if (!exists) {
         goto finalize;
+    }
     
     m_FileWatcher = new QFileSystemWatcher (this);
     m_FileWatcher->addPath (filename);

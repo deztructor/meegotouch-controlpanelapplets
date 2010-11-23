@@ -58,8 +58,11 @@ private:
 	void delNotify();
 	QStringList getType(QString &theKey, QString &theProfile);
 
-	bool m_setAllProfiles;
+private:
+	bool                         m_setAllProfiles;
     QPointer<QFileSystemWatcher> m_FileWatcher;
+    bool                         m_MissingFile;
+
 #ifdef UNIT_TEST
     friend class Ut_ProfileValueTests;
 #endif
