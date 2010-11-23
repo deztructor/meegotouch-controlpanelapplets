@@ -186,6 +186,7 @@ AlertToneDefaultsModel::dataReceived (
             const QString   &title,
             const QString   &trackerId)
 {
+    Q_UNUSED (trackerId);
     int Idx = findItemByFileName (filename);
 
     SYS_DEBUG ("*** filename = %s", SYS_STR(filename));
