@@ -464,7 +464,6 @@ BatteryWidget::PSMButtonReleased ()
     if (newPSMValue == false)
     {
         m_logic->setPSMAutoValue (false);
-        m_SliderContainer->initPSMAutoButton (false);
     }
 
     // UI will change only in PSMValueReceived slot...
