@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "batterywidget.h"
 #include "batteryimage.h"
 #include "batterybusinesslogic.h"
@@ -207,6 +206,13 @@ BatteryWidget::initWidget ()
     
     // Initialize the values from the business logic
     m_logic->requestValues ();
+
+    /*
+     * And finally set the PSMAutoValue based on backend value,
+     * this possibly triggers the slider container visibility also,
+     * that is why we should call this after layout is set
+     */
+    m_PSMAutoButton->setChecked (m_logic->PSMAutoValue());
 }
 
 void 
@@ -266,7 +272,6 @@ void
 BatteryWidget::addAutoActivationWidget ()
 {
     QGraphicsLinearLayout *layout;
-    
     MLabel                *activationLevelLabel;
 
     Q_ASSERT (m_MainLayout);
@@ -280,7 +285,7 @@ BatteryWidget::addAutoActivationWidget ()
     m_ActivationContainer->setHeaderVisible (false);
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
     layout->setSpacing (0.);
-    
+
     m_ActivationContainer->centralWidget()->setLayout (layout);
 
     /*
@@ -290,7 +295,7 @@ BatteryWidget::addAutoActivationWidget ()
     activationLevelLabel = new MLabel(qtTrId ("qtn_ener_autops"));
     activationLevelLabel->setStyleName ("CommonSingleTitleInverted");
     activationLevelLabel->setObjectName ("activationLevel");
-    
+
     /*
      * A help button for the PSM auto activation.
      */
@@ -299,7 +304,7 @@ BatteryWidget::addAutoActivationWidget ()
     helpButton->setViewType(MButton::iconType);
     helpButton->setIconID ("icon-m-content-description");
     #endif
-    
+
     /*
      * A switch that turns the auto PSM mode on and off
      */
@@ -308,11 +313,10 @@ BatteryWidget::addAutoActivationWidget ()
     m_PSMAutoButton->setObjectName ("AutoActivatePowerSaveButton");
     m_PSMAutoButton->setCheckable (true);
     m_PSMAutoButton->setViewType (MButton::switchType);
-    //m_PSMAutoButton->setChecked (m_logic->PSMAutoValue());
-    
+
     connect (m_PSMAutoButton, SIGNAL (toggled (bool)),
              this, SLOT (PSMAutoToggled (bool)));
-   
+
     /*
      * Adding the widgets to the layout.
      */
