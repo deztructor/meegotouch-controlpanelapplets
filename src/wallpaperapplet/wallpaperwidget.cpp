@@ -32,7 +32,7 @@
 #include <QtTracker/Tracker>
 #include <MLabel>
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
