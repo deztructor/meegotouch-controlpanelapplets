@@ -130,4 +130,3 @@ Ut_BatteryApplet::testConstructbrief ()
 
 QTEST_APPLESS_MAIN(Ut_BatteryApplet)
 
-
