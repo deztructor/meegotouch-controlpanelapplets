@@ -21,21 +21,21 @@ HEADERS =                   \
     aboutbusinesslogic.h    \
     aboutapplet.h           \
     aboutwidget.h           \
-    aboutbrief.h 
+    aboutbrief.h
 
 SOURCES =                   \
     ../debug.cpp            \
     aboutbusinesslogic.cpp  \
     aboutapplet.cpp         \
     aboutwidget.cpp         \
-    aboutbrief.cpp 
+    aboutbrief.cpp
 
 DESTDIR = lib
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 
-css.files = aboutapplet.css
-css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/duicontrolpanel/style
+css.files = libaboutapplet.css
+css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libaboutapplet/style
 
 target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 
@@ -43,3 +43,4 @@ message("The plugin will be installed to: " $$target.path)
 INSTALLS += target  \
             desktop \
             css
+

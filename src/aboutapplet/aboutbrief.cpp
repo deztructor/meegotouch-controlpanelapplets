@@ -23,9 +23,7 @@
 #undef DEBUG
 #include "../debug.h"
 
-AboutBrief::AboutBrief (
-        AboutBusinessLogic *businessLogic) :
-    m_AboutBusinessLogic (businessLogic)
+AboutBrief::AboutBrief ()
 {
 }
 
