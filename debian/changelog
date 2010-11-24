@@ -8,6 +8,8 @@ meegotouch-controlpanelapplets (0.17.6~2) meegotouch; urgency=low
   * Fixes: NB#206939 - Change pinch gesture handling to use totalScaleFactor 
                        instead of scaleFactor
   * Fixes: NB#206923 - styleName fixes for title / sub-title headers 
+  * Fixes: NB#206918 - Save/Cancel/Done buttons on tool bar are shown as text 
+                       instead of buttons.
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 24 Nov 2010 12:23:49 +0100
 
