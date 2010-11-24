@@ -101,7 +101,7 @@ DisplayWidget::addHeaderContainer ()
      * Creating a lcontainer and a layout.
      */
     container = new MContainer (this);
-    container->setStyleName ("CommonXLargeGroupHeaderPanelInverted");
+    container->setStyleName ("CommonXLargeHeaderPanelInverted");
     container->setHeaderVisible (false);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
@@ -112,7 +112,7 @@ DisplayWidget::addHeaderContainer ()
      */
     //% "Display"
     m_TitleLabel = new MLabel (qtTrId("qtn_disp_display"));
-    m_TitleLabel->setStyleName ("CommonXLargeGroupHeaderInverted");
+    m_TitleLabel->setStyleName ("CommonXLargeHeaderInverted");
     layout->addItem (m_TitleLabel);
     layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
     /*
@@ -134,7 +134,7 @@ DisplayWidget::addSecHeaderContainer ()
      * Creating a lcontainer and a layout.
      */
     container = new MContainer (this);
-    container->setStyleName ("CommonSmallGroupHeaderPanelInverted");
+    container->setStyleName ("CommonGroupHeaderPanelInverted");
     container->setHeaderVisible (false);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
@@ -145,7 +145,7 @@ DisplayWidget::addSecHeaderContainer ()
      */
     //% "Brightness"
     m_SubTitleLabel = new MLabel (qtTrId("qtn_disp_bright"));
-    m_SubTitleLabel->setStyleName ("CommonSmallGroupHeaderInverted");
+    m_SubTitleLabel->setStyleName ("CommonGroupHeaderInverted");
     layout->addItem (m_SubTitleLabel);
     layout->setAlignment (m_SubTitleLabel, Qt::AlignLeft);
     /*

@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "displayapplet.h"
 #include "displaywidget.h"
 #include "displaybrief.h"
@@ -26,8 +25,12 @@
 
 #include <QtPlugin>
 
-#include <MTheme>
 #include <MAction>
+
+#ifndef UNIT_TEST
+#include <MLibrary>
+M_LIBRARY
+#endif
 
 #undef DEBUG
 #include "../debug.h"
@@ -47,10 +50,9 @@ DcpWidget* DisplayApplet::constructWidget(int widgetId)
 
 DcpWidget* DisplayApplet::pageMain()
 {
-    MTheme::loadCSS (QString (CSSDIR) + "display.css");
-
     if (m_MainWidget == NULL)
         m_MainWidget = new DisplayWidget();
+
     return m_MainWidget;
 }
 
@@ -72,3 +74,4 @@ DcpBrief* DisplayApplet::constructBrief(int partId)
     Q_UNUSED(partId);
     return new DisplayBrief();
 }
+

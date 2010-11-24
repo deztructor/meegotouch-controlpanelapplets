@@ -129,15 +129,15 @@ AlertToneAppletWidget::createContents()
      */
     m_Title = addTitleLabel (
             centralWidget, policy, 
-            "CommonXLargeGroupHeaderPanelInverted", 
-            "CommonXLargeGroupHeaderInverted");
+            "CommonXLargeHeaderPanelInverted", 
+            "CommonXLargeHeaderInverted");
     /*
      * A secondary title
      */
     m_EventTonesLabel = addTitleLabel (
             centralWidget, policy, 
-            "CommonSmallGroupHeaderPanelInverted", 
-            "CommonSmallGroupHeaderInverted");
+            "CommonGroupHeaderPanelInverted", 
+            "CommonGroupHeaderInverted");
 
     /*
      * A list with the sound file setting widgets.
@@ -150,8 +150,8 @@ AlertToneAppletWidget::createContents()
      */
     m_FeedbackLabel = addTitleLabel (
             centralWidget, policy, 
-            "CommonSmallGroupHeaderPanelInverted", 
-            "CommonSmallGroupHeaderInverted");
+            "CommonGroupHeaderPanelInverted", 
+            "CommonGroupHeaderInverted");
 
     /*
      * The list with the feedback setting widgets.

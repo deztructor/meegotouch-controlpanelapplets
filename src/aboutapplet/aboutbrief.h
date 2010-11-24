@@ -19,24 +19,17 @@
 #ifndef ABOUTBRIEF_H
 #define ABOUTBRIEF_H
 
-#include <QPointer>
 #include "dcpbrief.h"
-
-#include "aboutbusinesslogic.h"
-
 
 class AboutBrief: public DcpBrief
 {
     Q_OBJECT
 
 public:
-    AboutBrief (AboutBusinessLogic *businessLogic);
+    AboutBrief ();
 
     virtual QString valueText() const;
     virtual int widgetTypeID() const;
-
-private:
-    QPointer<AboutBusinessLogic> m_AboutBusinessLogic;
 };
 
 #endif

@@ -16,24 +16,23 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "aboutapplet.h"
 #include "aboutwidget.h"
 #include "aboutbrief.h"
 
-#include <MTheme>
 #include <MAction>
+
+#ifndef UNIT_TEST
+#include <MLibrary>
+M_LIBRARY
+#endif
 
 #undef DEBUG
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(aboutapplet, AboutApplet)
 
-const QString cssDir = 
-    "/usr/share/themes/base/meegotouch/duicontrolpanel/style/";
-
-AboutApplet::AboutApplet() :
-    m_AboutBusinessLogic (new AboutBusinessLogic)
+AboutApplet::AboutApplet() : m_AboutBusinessLogic (0)
 {
 }
 
@@ -44,14 +43,17 @@ AboutApplet::~AboutApplet()
 void 
 AboutApplet::init()
 {
-    MTheme::loadCSS(cssDir + "aboutapplet.css");
 }
 
 DcpWidget *
 AboutApplet::pageMain(
         int widgetId)
 {
+    if (m_AboutBusinessLogic.isNull ())
+        m_AboutBusinessLogic = new AboutBusinessLogic;
+
     SYS_DEBUG ("widgetId = %d", widgetId);
+
     switch (widgetId) {
         case 0:
             if (m_MainWidget == 0) 
@@ -94,5 +96,6 @@ AboutApplet::constructBrief (
         int partId)
 {
     Q_UNUSED (partId);
-    return new AboutBrief (m_AboutBusinessLogic);
+    return new AboutBrief ();
 }
+

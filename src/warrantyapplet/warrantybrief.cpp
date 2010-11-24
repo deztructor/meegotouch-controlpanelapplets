@@ -23,9 +23,7 @@
 #undef DEBUG
 #include "../debug.h"
 
-WarrantyBrief::WarrantyBrief (
-        WarrantyBusinessLogic *businessLogic) :
-    m_WarrantyBusinessLogic (businessLogic)
+WarrantyBrief::WarrantyBrief ()
 {
 }
 
