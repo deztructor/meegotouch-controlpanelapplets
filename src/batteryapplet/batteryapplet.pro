@@ -9,7 +9,6 @@ CONFIG += plugin \
           duicontrolpanel
 
 contains(DEFINES, HAVE_USERGUIDE) {
-    # FIXME: this has to be removed if the functionality has merged into meegotouch
     CONFIG += userguide
 }
 
@@ -51,8 +50,8 @@ SOURCES =                    \
 DESTDIR = lib
 target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 
-css.files = batteryapplet.css
-css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/duicontrolpanel/style
+css.files = libbatteryapplet.css
+css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libbatteryapplet/style
 
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel

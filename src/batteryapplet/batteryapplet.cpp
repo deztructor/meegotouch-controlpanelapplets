@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "batteryapplet.h"
 #include "batterywidget.h"
 #include "batterybrief.h"
@@ -27,18 +26,17 @@
 #include <dcpwidget.h>
 
 #include <QtGui>
-#include <QDebug>
-#include <QDBusInterface>
-
-#include <MTheme>
 #include <MAction>
+
+#ifndef UNIT_TEST
+#include <MLibrary>
+M_LIBRARY
+#endif
 
 #undef DEBUG
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(batteryapplet, BatteryApplet)
-
-const QString cssDir = "/usr/share/themes/base/meegotouch/duicontrolpanel/style/";
 
 BatteryApplet::BatteryApplet ():
 	m_MainWidget (0)
@@ -52,7 +50,6 @@ BatteryApplet::~BatteryApplet ()
 
 void BatteryApplet::init()
 {
-    MTheme::loadCSS(cssDir + "batteryapplet.css");
 }
 
 DcpWidget *
