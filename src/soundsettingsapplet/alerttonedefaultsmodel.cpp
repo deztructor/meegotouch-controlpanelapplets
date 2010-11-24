@@ -66,7 +66,7 @@ AlertToneDefaultsModel::AlertToneDefaultsModel() : QStandardItemModel(),
      * We need to give the UI a chance to process the tap events, but we also
      * want to be as fast as possible... this is not a perfect solution though.
      */
-	QTimer::singleShot(20, this, SLOT(addSingleItem()));
+	QTimer::singleShot(0, this, SLOT(addSingleItem()));
     #else 
 	while (!m_isFinished)
         addSingleItem();
@@ -124,7 +124,11 @@ AlertToneDefaultsModel::addSingleItem()
     m_dirIdx[currentLevel]++;
 
     #ifdef USE_ASYNC_LOADING
-    QTimer::singleShot(20, this, SLOT(addSingleItem()));
+    /*
+     * We have to keep this delay at 0, otherwise the loading of the list is
+     * going to be sooooo slow!
+     */
+    QTimer::singleShot(0, this, SLOT(addSingleItem()));
     #endif
 }
 
