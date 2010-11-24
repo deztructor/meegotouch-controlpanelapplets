@@ -16,24 +16,23 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "warrantyapplet.h"
 #include "warrantywidget.h"
 #include "warrantybrief.h"
 
-#include <MTheme>
 #include <MAction>
+
+#ifndef UNIT_TEST
+#include <MLibrary>
+M_LIBRARY
+#endif
 
 #undef DEBUG
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(warrantyapplet, WarrantyApplet)
 
-const QString cssDir = 
-    "/usr/share/themes/base/meegotouch/duicontrolpanel/style/";
-
-WarrantyApplet::WarrantyApplet() :
-    m_WarrantyBusinessLogic (new WarrantyBusinessLogic)
+WarrantyApplet::WarrantyApplet()
 {
 }
 
@@ -44,14 +43,17 @@ WarrantyApplet::~WarrantyApplet()
 void 
 WarrantyApplet::init()
 {
-    MTheme::loadCSS(cssDir + "warrantyapplet.css");
 }
 
 DcpWidget *
 WarrantyApplet::pageMain(
         int widgetId)
 {
+    if (m_WarrantyBusinessLogic.isNull ())
+        m_WarrantyBusinessLogic = new WarrantyBusinessLogic;
+
     SYS_DEBUG ("widgetId = %d", widgetId);
+
     switch (widgetId) {
         case 0:
             if (m_MainWidget == 0) 
@@ -94,6 +96,6 @@ WarrantyApplet::constructBrief (
         int partId)
 {
     Q_UNUSED (partId);
-    return new WarrantyBrief (m_WarrantyBusinessLogic);
+    return new WarrantyBrief;
 }
 
