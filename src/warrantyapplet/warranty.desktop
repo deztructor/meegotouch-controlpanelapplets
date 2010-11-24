@@ -16,7 +16,7 @@ X-DUIApplet-ImageLandscape=Widget_landscape_weather.png
 X-DUIApplet-ImagePortrait=Widget_portrait_weather.png
 
 [DCP]
-Category=qtn_sett_main_about
+Category=qtn_sett_main_aboutmy
 Order=1
 WidgetType=Label
 

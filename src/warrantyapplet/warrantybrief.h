@@ -19,24 +19,17 @@
 #ifndef WARRANTYBRIEF_H
 #define WARRANTYBRIEF_H
 
-#include <QPointer>
 #include "dcpbrief.h"
-
-#include "warrantybusinesslogic.h"
-
 
 class WarrantyBrief: public DcpBrief
 {
     Q_OBJECT
 
 public:
-    WarrantyBrief (WarrantyBusinessLogic *businessLogic);
+    WarrantyBrief ();
 
     virtual QString valueText() const;
     virtual int widgetTypeID() const;
-
-private:
-    QPointer<WarrantyBusinessLogic> m_WarrantyBusinessLogic;
 };
 
 #endif

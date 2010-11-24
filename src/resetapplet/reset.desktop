@@ -16,7 +16,7 @@ X-DUIApplet-ImageLandscape=Widget_landscape_weather.png
 X-DUIApplet-ImagePortrait=Widget_portrait_weather.png
 
 [DCP]
-Category=qtn_sett_main_data
-Order=5
-WidgetType=Label
+Category=MainData
+Order=1
+WidgetType=Special
 HelpId=IDUG_MEEGO_SETT_CLEARDEVICE.html
