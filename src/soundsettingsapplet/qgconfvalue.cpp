@@ -16,7 +16,9 @@
 ** of this file.
 **
 ****************************************************************************/
+#include <gconf/gconf-client.h>
 #include <QDebug>
+
 #include "qgconfvalue.h"
 #include "qgconfdirmanager.h"
 
@@ -141,9 +143,9 @@ QGConfValue::fetchFromBackend()
 
 void
 QGConfValue::notifyValue(
-        GConfClient *client, 
-        guint connection_id, 
-        GConfEntry *entry, 
+        void *client,
+        quint32 connection_id,
+        void *entry,
         QGConfValue *val)
 {
 	Q_UNUSED(client)

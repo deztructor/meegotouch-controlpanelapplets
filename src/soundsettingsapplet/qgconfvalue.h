@@ -20,7 +20,6 @@
 #define QGCONFVALUE_H
 
 #include <QStringList>
-#include <gconf/gconf-client.h>
 #include "qtrackedvariant.h"
 
 class QGConfValue : public QTrackedVariant
@@ -30,14 +29,14 @@ public:
 	~QGConfValue();
 
 private:
-	static void notifyValue(GConfClient *client, guint connection_id, GConfEntry *entry, QGConfValue *val);
+	static void notifyValue(void *client, quint32 connection_id, void *entry, QGConfValue *val);
 
 	void addNotify();
 	void delNotify();
 	void realSetValue(const QVariant &newValue);
 	void fetchFromBackend();
 
-	guint m_notifyId;
+	quint32 m_notifyId;
 	QStringList m_lsDir;
 #ifdef UNIT_TEST
     friend class Ut_QGConfValueTests;

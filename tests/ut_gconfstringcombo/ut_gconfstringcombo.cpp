@@ -47,7 +47,7 @@ Ut_GConfStringComboTests::_setGConfReturnString (
     SYS_DEBUG ("*** newValue   = %s", SYS_STR(newValue));
     MyGConfDatabase[key] = newValue;
     if (toNotify)
-        QGConfValue::notifyValue (NULL, 0, 0, toNotify);
+        QGConfValue::notifyValue (0, 0, 0, toNotify);
 }
 
 GConfValue *
