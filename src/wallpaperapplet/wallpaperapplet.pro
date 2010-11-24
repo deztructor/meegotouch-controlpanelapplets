@@ -68,9 +68,9 @@ backupscripts.path  = $$(DEBIAN_DESTDIR)/usr/share/wallpaper/
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 
-css.files = wallpaper.css
+css.files = libwallpaperapplet.css
 css.path = \
-  $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/duicontrolpanel/style
+  $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libwallpaperapplet/style
 
 message("target path         :" $$target.path)
 message("desktop path        :" $$desktop.path)

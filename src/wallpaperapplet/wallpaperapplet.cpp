@@ -22,16 +22,17 @@
 #include "wallpapereditorwidget.h"
 #include "wallpaperbrief.h"
 
-#include <MTheme>
 #include <MAction>
-#include <QDBusInterface>
+
+#ifndef UNIT_TEST
+#include <MLibrary>
+M_LIBRARY
+#endif
 
 //#define DEBUG
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(wallpaperapplet, WallpaperApplet)
-
-const QString cssDir = "/usr/share/themes/base/meegotouch/duicontrolpanel/style/";
 
 WallpaperApplet::WallpaperApplet() :
     m_WallpaperBusinessLogic (new WallpaperBusinessLogic)
@@ -45,12 +46,6 @@ WallpaperApplet::~WallpaperApplet()
 void 
 WallpaperApplet::init()
 {
-    QString themeFile = cssDir + "wallpaper.css";
-   
-    SYS_DEBUG ("Adding pixmap dir %s", SYS_STR(cssDir));
-    MTheme::addPixmapDirectory (cssDir, M::Recursive);
-    SYS_DEBUG ("Loading theme %s", SYS_STR(themeFile));
-    MTheme::loadCSS (themeFile);
 }
 
 DcpWidget *
@@ -94,21 +89,8 @@ WallpaperApplet::title() const
 QVector<MAction*>
 WallpaperApplet::viewMenuItems()
 {
-    //MAction            *helpAction;
     QVector<MAction*>   vector;
-#if 0
-    SYS_DEBUG ("");
-    helpAction = new MAction (
-            //% "User guide"
-            qtTrId ("qtn_comm_userguide"), 
-            pageMain (0));
-    helpAction->setLocation (MAction::ApplicationMenuLocation);
-    
-    vector.append(helpAction);
 
-    connect (helpAction, SIGNAL (triggered (bool)),
-             this, SLOT (userGuide ()));
-#endif
     return vector;
 }
 
@@ -121,14 +103,3 @@ WallpaperApplet::constructBrief (
     return new WallpaperBrief (m_WallpaperBusinessLogic);
 }
 
-#if 0
-void
-WallpaperApplet::userGuide ()
-{
-    SYS_DEBUG ("");
-
-    QDBusInterface userguide ("com.nokia.userguide", "/",
-                              "com.nokia.UserGuideIf");
-    userguide.call ("pageByPath", "fullguide-1-2-list-1.cfg");
-}
-#endif
