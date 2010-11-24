@@ -5,6 +5,8 @@ meegotouch-controlpanelapplets (0.17.6~2) meegotouch; urgency=low
   * Fixes: NB#206529 - Auto-activate power saver button getting turned off
                        when battery view is opened for the next time.
   * Fixes: NB#206534 - Reset settings should reset touch-screen and vibration
+  * Fixes: NB#206939 - Change pinch gesture handling to use totalScaleFactor 
+                       instead of scaleFactor
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 24 Nov 2010 10:15:53 +0100
 
