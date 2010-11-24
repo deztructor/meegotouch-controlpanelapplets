@@ -817,7 +817,7 @@ WallpaperEditorWidget::pinchGestureUpdate (
     /*
      * Updating the scale, we have a lower limit for this.
      */
-    newScale = gesture->scaleFactor() * m_OriginalScaleFactor;
+    newScale = gesture->totalScaleFactor() * m_OriginalScaleFactor;
     if (newScale < ScaleLowerLimit)
         newScale = ScaleLowerLimit;
     m_Trans.setScale (newScale);
