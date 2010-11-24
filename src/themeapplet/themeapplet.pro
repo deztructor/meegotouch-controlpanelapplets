@@ -52,13 +52,7 @@ desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 css.files = themeapplet.css
 css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/duicontrolpanel/style
 
-rfs.files = theme-rfs.sh
-rfs.path += $$(DEBIAN_DESTDIR)/$$RFS_DIR
-
-message("The plugin will be installed to: " $$target.path)
-message("CSS path will be: " $$css.path)
 INSTALLS += target \
             css \
-            rfs \
             desktop 
 

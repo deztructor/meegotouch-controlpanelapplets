@@ -32,6 +32,10 @@ desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 
-message("The plugin will be installed to: " $$target.path)
+rfs.files = mcpapplets-rfs.sh
+rfs.path += $$(DEBIAN_DESTDIR)/$$RFS_DIR
+
 INSTALLS += target \
+            rfs \
             desktop
+

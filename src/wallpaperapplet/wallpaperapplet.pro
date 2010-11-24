@@ -72,9 +72,6 @@ css.files = wallpaper.css
 css.path = \
   $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/duicontrolpanel/style
 
-rfs.files = wallpaper-rfs.sh
-rfs.path += $$(DEBIAN_DESTDIR)/$$RFS_DIR
-
 message("target path         :" $$target.path)
 message("desktop path        :" $$desktop.path)
 message("css path:           :" $$css.path)
@@ -84,7 +81,6 @@ message("backup scripts path :" $$backups.path)
 INSTALLS += \
     target \
     css \
-    rfs \
     desktop \
     backupscripts \
     backup 

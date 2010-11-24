@@ -37,17 +37,11 @@ target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 
-rfs.files = display-rfs.sh
-rfs.path += $$(DEBIAN_DESTDIR)/$$RFS_DIR
-
 css.files = display.css
 css.path = \
   $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/duicontrolpanel/style
 
-message("The plugin will be installed to: " $$target.path)
-
 INSTALLS += target \
             desktop \
-            rfs \
             css
 
