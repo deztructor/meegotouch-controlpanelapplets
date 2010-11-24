@@ -18,8 +18,8 @@ class MyApplication : public MApplication {
         MyApplication (int &argc, char **argv);
 
     public slots:
-        void startEditor ();
-        void closeEditor (int widgetID = 0);
+        void startBrowser ();
+        void closeBrowser ();
 
     private:
         MApplicationWindow            *mainwindow;

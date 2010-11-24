@@ -1,5 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
 /* vim:set et ai sw=4 ts=4 sts=4: tw=80 cino="(0,W2s,i2s,t0,l1,:0" */
+#include "soundsettings.h"
+
 #include <QWidget>
 #include <QDebug>
 #include <QString>
@@ -14,7 +16,8 @@
 #include <MGConfItem>
 #include <MButton>
 
-#include "soundsettings.h"
+#include <alerttone.h>
+#include <alerttonebrowser.h>
 
 MyApplication::MyApplication (int &argc, char **argv) :
     MApplication (argc, argv)
@@ -26,7 +29,7 @@ MyApplication::MyApplication (int &argc, char **argv) :
      */
     mainwindow = new MApplicationWindow;
     page1 = new MApplicationPage;
-    button = new MButton ("Edit...");
+    button = new MButton ("Start browser...");
     
     page1->setCentralWidget (button);
     page1->appear (mainwindow);
@@ -34,30 +37,41 @@ MyApplication::MyApplication (int &argc, char **argv) :
     mainwindow->show ();
 
     connect (button, SIGNAL(clicked()),
-            this, SLOT(startEditor()));
+            this, SLOT(startBrowser()));
 }
 
 void
-MyApplication::startEditor ()
+MyApplication::startBrowser ()
 {
+    AlertTone  *alertTone;
+    AlertToneBrowser *alertToneBrowser;
+
+    /*
+     * This string is going to identify the event for which we get/set the sound
+     * setting.
+     */
+    alertTone = new AlertTone ("ringing.alert.tone");
+
+    /*
+     * The alerttonebrowser is fully automatic widget with a gallery item, an
+     * ovi item and a list with the default sound file.
+     */
+    alertToneBrowser = new AlertToneBrowser (alertTone);
+
     page2 = new MApplicationPage;
+
     /*
      * This is just a test.
      */
-    MButton *button = new MButton ("second");
-    page2->setCentralWidget (button);
+    page2->setCentralWidget (alertToneBrowser);
     page2->appear(mainwindow);
-#if 0
-    connect (testWidget, SIGNAL(doneClicked()),
-            this, SLOT(closeEditor()));
-    connect (testWidget, SIGNAL(cancelClicked()),
-            this, SLOT(closeEditor()));
-#endif
+
+    connect (alertToneBrowser, SIGNAL(closePage()),
+            this, SLOT(closeBrowser()));
 }
 
 void
-MyApplication::closeEditor(
-        int widgetID)
+MyApplication::closeBrowser ()
 {
     if (page2)
         page2->dismiss ();

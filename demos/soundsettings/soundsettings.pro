@@ -3,6 +3,17 @@ TARGET = soundsettings
 DEPENDPATH += .
 INCLUDEPATH += .
 
+#
+# FIXME: We assume that we found the content manager.
+#
+DEFINES += \
+    HAVE_CONTENT_MANAGER
+
+contains(DEFINES, HAVE_CONTENT_MANAGER) {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += ContentManager
+}
+
 CONFIG +=           \
     meegotouch      \
     duicontrolpanel \

@@ -58,6 +58,7 @@ PUBLIC_HEADERS = \
     $$WALLPAPER_PATH/wallpaperitrans.h             \
     $$WALLPAPER_PATH/wallpapereditorwidget.h       \
     $$WALLPAPER_PATH/wallpaperinfoheader.h         \
+    $$SOUNDSETTINGS_PATH/static.h                  \
     $$SOUNDSETTINGS_PATH/alerttone.h               \
     $$SOUNDSETTINGS_PATH/alerttonedefaults.h       \
     $$SOUNDSETTINGS_PATH/alerttonetoplevel.h       \
@@ -85,6 +86,7 @@ HEADERS =                                          \
     $$WALLPAPER_PATH/wallpaperbusinesslogic.h      \
     $$WALLPAPER_PATH/wallpapereditorwidget.h       \
     $$WALLPAPER_PATH/wallpaperinfoheader.h         \ 
+    $$SOUNDSETTINGS_PATH/static.h                  \
     $$SOUNDSETTINGS_PATH/alerttone.h               \
     $$SOUNDSETTINGS_PATH/alerttonedefaults.h       \
     $$SOUNDSETTINGS_PATH/alerttonetoplevel.h       \

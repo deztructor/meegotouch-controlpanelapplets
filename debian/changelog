@@ -1,6 +1,7 @@
 meegotouch-controlpanelapplets (0.17.6~1) meegotouch; urgency=low
 
   * Fixes: NB#206416 - Wallpaper settings layout is not as per layout guide. 
+  * Fixes: NB#205284 - Need an API to access Sound Settings applet
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 23 Nov 2010 09:00:30 +0100
 

@@ -12,12 +12,12 @@ application. To compile and test the application follow these steps:
 
 (3) Go into the demo source directory and build the demo application:
 
-    cd demos/wallpapereditor/
+    cd demos/soundsettings/
     qmake
     make
 
 (4) Run the demo application with one or two image files in the command line:
 
-    ./test -software $HOME/MyDocs/DSCF2595.JPG $HOME/MyDocs/untitled-50.jpg
+    ./soundsettings -software
 
-(5) Click on the 'edit...' button to start the wallpaper editor widget.
+(5) Click on the 'start browser...' button to start the sound file browser.
