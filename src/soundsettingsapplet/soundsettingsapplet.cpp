@@ -45,7 +45,7 @@ SoundSettingsApplet::~SoundSettingsApplet()
 }
 
 static int    gst_argc = 1;
-static char*  gst_argv[] = { "/usr/bin/duicontrolpanel", 0 };
+static char*  gst_argv[] = { (char*) "arg", 0 };
 
 void
 SoundSettingsApplet::init()
