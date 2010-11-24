@@ -21,16 +21,18 @@
 #include "themewidget.h"
 #include "themebrief.h"
 
-#include <MTheme>
 #include <MAction>
+
+#ifndef UNIT_TEST
+#include <MLibrary>
+M_LIBRARY
+#endif
 
 #define DEBUG
 #define WARNING
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(themeapplet, ThemeApplet)
-
-const QString cssDir = "/usr/share/themes/base/meegotouch/duicontrolpanel/style/";
 
 #ifdef DEBUG
 static int nApplets = 0;
@@ -56,10 +58,6 @@ ThemeApplet::~ThemeApplet()
 void 
 ThemeApplet::init()
 {
-    QString themeFile = cssDir + "themeapplet.css";
-
-    SYS_DEBUG ("Loading theme file: %s", SYS_STR(themeFile));
-    MTheme::loadCSS (themeFile);
 }
 
 DcpWidget *
@@ -113,3 +111,4 @@ ThemeApplet::constructBrief (
     SYS_DEBUG ("Creating brief");
     return new ThemeBrief (m_ThemeBusinessLogic);
 }
+

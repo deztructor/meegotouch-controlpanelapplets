@@ -49,8 +49,8 @@ target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 
-css.files = themeapplet.css
-css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/duicontrolpanel/style
+css.files = libthemeapplet.css
+css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libthemeapplet/style
 
 INSTALLS += target \
             css \
