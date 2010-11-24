@@ -8,18 +8,27 @@ OBJECTS_DIR = .objects
 
 QT += dbus
 
-CONFIG += plugin \
-          gui \
-          meegotouch \
-          silent \
-          duicontrolpanel
+CONFIG +=          \
+    plugin         \
+    gui            \
+    meegotouch     \
+    silent         \
+    link_pkgconfig \
+    duicontrolpanel
+
 # TODO: ^ remove duicontrolpanel
+
+#
+# FIXME: These are needed for the soundssettingsapplet. We maybe could remove
+# some of these, but for that we need to use the LIBMEEGOCONTROL define in the
+# soundsettingsapplet source.
+#
+PKGCONFIG += meegotouch dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
 
 #########################################
 # wallpaper setting extra dependencies  #
 #########################################
 contains(DEFINES, HAVE_CONTENT_MANAGER) {
-    CONFIG += link_pkgconfig
     PKGCONFIG += ContentManager
 }
 
@@ -39,40 +48,74 @@ INCLUDEPATH += \
     ../wallpaperapplet
 
 WALLPAPER_PATH = ../wallpaperapplet
+SOUNDSETTINGS_PATH = ../soundsettingsapplet
 
 # TODO: FIXME: updatethis
 PUBLIC_HEADERS = \
-    $$WALLPAPER_PATH/wallpaperbusinesslogic.h \
-    $$WALLPAPER_PATH/wallpaperdescriptor.h \
-    $$WALLPAPER_PATH/wallpapercurrentdescriptor.h \
-    $$WALLPAPER_PATH/wallpaperitrans.h \
-    $$WALLPAPER_PATH/wallpapereditorwidget.h \
-    $$WALLPAPER_PATH/wallpaperinfoheader.h \
-    WallpaperBusinessLogic \
-    WallpaperDescriptor \
-    WallpaperCurrentDescriptor \
-    WallpaperITrans \
-    WallpaperEditorWidget \
+    $$WALLPAPER_PATH/wallpaperbusinesslogic.h      \
+    $$WALLPAPER_PATH/wallpaperdescriptor.h         \
+    $$WALLPAPER_PATH/wallpapercurrentdescriptor.h  \
+    $$WALLPAPER_PATH/wallpaperitrans.h             \
+    $$WALLPAPER_PATH/wallpapereditorwidget.h       \
+    $$WALLPAPER_PATH/wallpaperinfoheader.h         \
+    $$SOUNDSETTINGS_PATH/alerttone.h               \
+    $$SOUNDSETTINGS_PATH/alerttonedefaults.h       \
+    $$SOUNDSETTINGS_PATH/alerttonetoplevel.h       \
+    $$SOUNDSETTINGS_PATH/alerttonebrowser.h        \
+    $$SOUNDSETTINGS_PATH/alerttoneappletmaps.h     \
+    $$SOUNDSETTINGS_PATH/trackerconnection.h       \
+    $$SOUNDSETTINGS_PATH/drilldownitem.h           \
+    $$SOUNDSETTINGS_PATH/qprofilevalue.h           \
+    $$SOUNDSETTINGS_PATH/qtrackedvariant.h         \
+    $$SOUNDSETTINGS_PATH/alerttonedefaultsmodel.h  \
+    $$SOUNDSETTINGS_PATH/alerttonepreview.h        \
+    WallpaperBusinessLogic                         \
+    WallpaperDescriptor                            \
+    WallpaperCurrentDescriptor                     \
+    WallpaperITrans                                \
+    WallpaperEditorWidget                          \
     meegocontrol.h
 
-HEADERS = \
-    ../debug.h \
-    $$PUBLIC_HEADERS \
-    $$WALLPAPER_PATH/wallpaperitrans.h \
-    $$WALLPAPER_PATH/wallpaperdescriptor.h \
-    $$WALLPAPER_PATH/wallpapercurrentdescriptor.h \
-    $$WALLPAPER_PATH/wallpaperbusinesslogic.h \
-    $$WALLPAPER_PATH/wallpapereditorwidget.h \
-    $$WALLPAPER_PATH/wallpaperinfoheader.h 
+HEADERS =                                          \
+    ../debug.h                                     \
+    $$PUBLIC_HEADERS                               \
+    $$WALLPAPER_PATH/wallpaperitrans.h             \
+    $$WALLPAPER_PATH/wallpaperdescriptor.h         \
+    $$WALLPAPER_PATH/wallpapercurrentdescriptor.h  \
+    $$WALLPAPER_PATH/wallpaperbusinesslogic.h      \
+    $$WALLPAPER_PATH/wallpapereditorwidget.h       \
+    $$WALLPAPER_PATH/wallpaperinfoheader.h         \ 
+    $$SOUNDSETTINGS_PATH/alerttone.h               \
+    $$SOUNDSETTINGS_PATH/alerttonedefaults.h       \
+    $$SOUNDSETTINGS_PATH/alerttonetoplevel.h       \
+    $$SOUNDSETTINGS_PATH/alerttonebrowser.h        \
+    $$SOUNDSETTINGS_PATH/alerttoneappletmaps.h     \
+    $$SOUNDSETTINGS_PATH/trackerconnection.h       \
+    $$SOUNDSETTINGS_PATH/drilldownitem.h           \
+    $$SOUNDSETTINGS_PATH/qprofilevalue.h           \
+    $$SOUNDSETTINGS_PATH/qtrackedvariant.h         \
+    $$SOUNDSETTINGS_PATH/alerttonedefaultsmodel.h  \
+    $$SOUNDSETTINGS_PATH/alerttonepreview.h        
 
-SOURCES = \
-    ../debug.cpp \
-    $$WALLPAPER_PATH/wallpaperitrans.cpp \
-    $$WALLPAPER_PATH/wallpaperdescriptor.cpp \
+SOURCES =                                          \
+    ../debug.cpp                                   \
+    $$WALLPAPER_PATH/wallpaperitrans.cpp           \
+    $$WALLPAPER_PATH/wallpaperdescriptor.cpp       \
     $$WALLPAPER_PATH/wallpapercurrentdescriptor.cpp \
-    $$WALLPAPER_PATH/wallpaperbusinesslogic.cpp \
-    $$WALLPAPER_PATH/wallpapereditorwidget.cpp \
-    $$WALLPAPER_PATH/wallpaperinfoheader.cpp 
+    $$WALLPAPER_PATH/wallpaperbusinesslogic.cpp    \
+    $$WALLPAPER_PATH/wallpapereditorwidget.cpp     \
+    $$WALLPAPER_PATH/wallpaperinfoheader.cpp       \
+    $$SOUNDSETTINGS_PATH/alerttone.cpp             \
+    $$SOUNDSETTINGS_PATH/alerttonedefaults.cpp     \
+    $$SOUNDSETTINGS_PATH/alerttonetoplevel.cpp     \
+    $$SOUNDSETTINGS_PATH/alerttonebrowser.cpp      \
+    $$SOUNDSETTINGS_PATH/alerttoneappletmaps.cpp   \
+    $$SOUNDSETTINGS_PATH/trackerconnection.cpp     \
+    $$SOUNDSETTINGS_PATH/drilldownitem.cpp         \
+    $$SOUNDSETTINGS_PATH/qprofilevalue.cpp         \
+    $$SOUNDSETTINGS_PATH/qtrackedvariant.cpp       \
+    $$SOUNDSETTINGS_PATH/alerttonedefaultsmodel.cpp \
+    $$SOUNDSETTINGS_PATH/alerttonepreview.cpp      
 
 DESTDIR = lib
 target.path += /usr/lib

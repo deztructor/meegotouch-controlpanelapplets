@@ -231,6 +231,7 @@ AlertToneDefaults::itemClicked(const QModelIndex &item)
 {
     QModelIndex  proxyIndex = filtering()->proxy()->mapToSource (item); 
     QString      fileName;
+
     /*
      * It is possible that the user clicks on an item before all the ites are
      * loaded. In this case we shall not select the current item when the

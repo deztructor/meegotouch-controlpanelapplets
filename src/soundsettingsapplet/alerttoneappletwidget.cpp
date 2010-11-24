@@ -302,7 +302,6 @@ AlertToneAppletWidget::polishEvent ()
         parent = parent->parentWidget();
     }
 
-    SYS_WARNING ("*** page = %p", page);
     if (!page)
         return;
 

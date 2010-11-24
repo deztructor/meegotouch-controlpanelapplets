@@ -38,6 +38,7 @@
 #include <MWidgetAction>
 #include <MImageWidget>
 
+// FIXME: Seems that this is not used any more...
 #define M_UNDO_PROPERTY "enabled"
 
 /*
@@ -46,7 +47,7 @@
  */
 //#define EMULATE_PICKER
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "debug.h"
 
@@ -453,7 +454,6 @@ AlertToneBrowser::polishEvent ()
         parent = parent->parentWidget();
     }
 
-    SYS_WARNING ("*** page = %p", page);
     if (!page)
         return;
 
