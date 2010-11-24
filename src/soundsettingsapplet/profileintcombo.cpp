@@ -23,7 +23,7 @@
 
 //#define DEBUG
 #define WARNING
-#include "debug.h"
+#include "../debug.h"
 
 ProfileIntCombo::ProfileIntCombo(const QString &key, bool setAllProfiles, QGraphicsItem *parent):
 	MComboBox(parent),

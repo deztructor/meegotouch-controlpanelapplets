@@ -16,15 +16,15 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #ifndef _SOUND_SETTINGS_APPLET_H_
 #define _SOUND_SETTINGS_APPLET_H_
 
-#include <MAction>
 #include <QStack>
 #include "dcpappletif.h"
-#include "alerttone.h"
-#include "alerttonetoplevel.h"
+
+class AlertTone;
+class AlertToneToplevel;
+class MAction;
 
 class SoundSettingsApplet : public QObject, public DcpAppletIf
 {
@@ -48,8 +48,6 @@ public:
 private:
 #endif /* !UNIT_TEST */
 	QStack<AlertToneToplevel *>m_stack;
-	int m_argc;
-	char **m_argv;
 	QList<AlertTone *> m_alertTones;
 
 #ifdef UNIT_TEST

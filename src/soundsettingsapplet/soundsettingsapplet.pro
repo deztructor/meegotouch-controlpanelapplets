@@ -31,7 +31,7 @@ MOC_DIR = .moc
 OBJECTS_DIR = .objects
 
 HEADERS =                    \
-    debug.h                  \
+    ../debug.h               \
     drilldownitem.h          \
     trackerconnection.h      \
     alerttone.h              \
@@ -55,7 +55,7 @@ HEADERS =                    \
     $$(NULL)
 
 SOURCES =                      \
-    debug.cpp                  \
+    ../debug.cpp               \
     drilldownitem.cpp          \
     trackerconnection.cpp      \
     alerttone.cpp              \
@@ -79,8 +79,8 @@ SOURCES =                      \
 
 DESTDIR = lib
 
-css.files = soundsettingsapplet.css
-css.path += $$(DEBIAN_DESTDIR)/$$DCP_CSS_DIR
+css.files = libsoundsettingsapplet.css
+css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libsoundsettingsapplet/style
 
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/$$DCP_DESKTOP_DIR
@@ -94,11 +94,5 @@ message("The .css file will be installed to:    " $$css.path)
 INSTALLS += \
     target  \
     desktop \
-    css     \
-    $$(NULL)
-    
-OTHER_FILES +=                  \
-    soundsettingsapplet.desktop \
-    soundsettingsapplet.css     \
-    $$(NULL)
+    css
 

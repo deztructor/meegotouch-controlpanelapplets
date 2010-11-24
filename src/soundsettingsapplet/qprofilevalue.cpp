@@ -28,7 +28,7 @@
 
 //#define DEBUG 
 #define WARNING
-#include "debug.h"
+#include "../debug.h"
 
 #define TO_STRING(string) ((string).toUtf8().constData())
 

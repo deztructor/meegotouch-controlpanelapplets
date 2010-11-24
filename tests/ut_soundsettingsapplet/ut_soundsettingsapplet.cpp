@@ -34,9 +34,6 @@ Ut_SoundSettingsAppletTests::soundsettingsappletConstructor ()
 {
       MApplicationWindow aw;
       SoundSettingsApplet  ssa;
-
-      QCOMPARE(ssa.m_argc             , 1);
-      QCOMPARE(QString(*(ssa.m_argv)) , QString("my_argv"));
 }
 
 void

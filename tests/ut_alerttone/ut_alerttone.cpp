@@ -27,7 +27,7 @@
 
 #define DEBUG 
 #define WARNING
-#include "debug.h"
+#include "../debug.h"
 
 static const QString validSoundFile1 = "/usr/share/sounds/ring-tones/Beep.aac";
 
@@ -56,15 +56,14 @@ Ut_AlertToneTests::cleanupTestCase()
 void
 Ut_AlertToneTests::alerttonesAlertTones()
 {
-      QList<AlertTone *>  tones;
-      tones = AlertTone::alertTones();
+    QList<AlertTone *>  tones;
+    tones = AlertTone::alertTones();
 
-      for ( int i = 0 ; i <tones.size() ;++i)
-      {
-          
-          qDebug ()  <<  tones[i]->key() << "\n\n\n";
-            QVERIFY(checkIfAlarmTone (tones[i]->key()) );
-      }
+    for ( int i = 0 ; i <tones.size() ;++i)
+    {
+        SYS_DEBUG ("%s\n\n\n", SYS_STR (tones[i]->key ()));
+        QVERIFY(checkIfAlarmTone (tones[i]->key()) );
+    }
 }
 
 #if 0
@@ -118,7 +117,7 @@ Ut_AlertToneTests::alerttoneFetchFromBackend()
 void
 Ut_AlertToneTests::alertToneChanged()
 {
-	called_alertToneChanged = true;
+    called_alertToneChanged = true;
 }
 
 /*!
@@ -133,7 +132,7 @@ void
 Ut_AlertToneTests::alerttoneRealSetValue()
 {
     AlertTone at("email.alert.tone");
-	
+
     connect(&at, SIGNAL(changed()), this, SLOT(alertToneChanged()));
 
     at.realSetValue(QVariant(validSoundFile1));
@@ -143,7 +142,7 @@ Ut_AlertToneTests::alerttoneRealSetValue()
         if (called_alertToneChanged)
             break;
     }
-	
+
     called_alertToneChanged = false;
     QVERIFY (at.value() == QVariant(validSoundFile1));
 }
@@ -160,17 +159,9 @@ Ut_AlertToneTests::alerttoneMaybeUpdate()
 bool
 Ut_AlertToneTests::checkIfAlarmTone (QString name)
 {
-      if (  "calendar.alert.tone" ==  name ||
-            "email.alert.tone" ==  name ||
-            "im.alert.tone" ==  name ||
-            "ringing.alert.tone" ==  name ||
-            "voip.alert.tone" ==  name ||
-            "sms.alert.tone" ==  name )
-      return  true;
-
-      return  false;
-
+    return name.contains ("alert.tone");
 }
 
 
 QTEST_APPLESS_MAIN(Ut_AlertToneTests)
+

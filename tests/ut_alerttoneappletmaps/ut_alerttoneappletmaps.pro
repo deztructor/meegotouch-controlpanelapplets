@@ -30,13 +30,13 @@ PKGCONFIG += meegotouch dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
 
 HEADERS += \
     ut_alerttoneappletmaps.h \
-    $$SRC_PREFIX/debug.h \
+    $$SRC_PREFIX/../debug.h \
     $$SRC_PREFIX/alerttoneappletmaps.h \
     $$SRC_PREFIX/qtrackedvariant.h
 
 SOURCES += \
     ut_alerttoneappletmaps.cpp \
-    $$SRC_PREFIX/debug.cpp \
+    $$SRC_PREFIX/../debug.cpp \
     $$SRC_PREFIX/alerttoneappletmaps.cpp \
     $$SRC_PREFIX/qtrackedvariant.cpp
 

@@ -24,7 +24,7 @@
 
 #define DEBUG
 #define WARNING
-#include "debug.h"
+#include "../debug.h"
 
 DrillDownItem::DrillDownItem (
         MBasicListItem::ItemStyle  style, 

@@ -33,7 +33,7 @@
 
 #define DEBUG 
 #define WARNING 
-#include "debug.h"
+#include "../debug.h"
 
 #ifdef HAVE_LIBPROFILE
 /******************************************************************************

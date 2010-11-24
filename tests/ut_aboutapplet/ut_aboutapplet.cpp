@@ -67,19 +67,6 @@ Ut_AboutApplet::initTestCase()
      * for which we check that the data collection is not started.
      */
     m_Applet = new AboutApplet;
-    QVERIFY (m_Applet->m_AboutBusinessLogic);
-
-    /*
-     * We are not testing the AboutBusinesslogic here, so the following lines
-     * act as a kind of mocking, the aboutbusinesslogic will not initiate
-     * outside communication if it has the data already.
-     */
-    m_Applet->m_AboutBusinessLogic->m_BluetoothAddress = "fakeBluetooth";
-    m_Applet->m_AboutBusinessLogic->m_Imei = "FakeImei";
-    m_Applet->m_AboutBusinessLogic->m_WifiAddress = "FakeWifi";
-    m_Applet->m_AboutBusinessLogic->m_OsName = "FakeOsName";
-    m_Applet->m_AboutBusinessLogic->m_OsVersion = "FakeOsVersion";
-
 
     QVERIFY (!m_Applet->m_MainWidget);
     m_Applet->init ();
@@ -140,6 +127,24 @@ Ut_AboutApplet::testConstructWidget ()
      * FIXME: These are not much checking, more like coverage making calls.
      */
     widget->retranslateUi ();
+
+    /*
+     * logic only should be created, when view is ready
+     */
+    QVERIFY (m_Applet->m_AboutBusinessLogic);
+
+    /*
+     * We are not testing the AboutBusinesslogic here, so the following lines
+     * act as a kind of mocking, the aboutbusinesslogic will not initiate
+     * outside communication if it has the data already.
+     */
+    m_Applet->m_AboutBusinessLogic->m_BluetoothAddress = "fakeBluetooth";
+    m_Applet->m_AboutBusinessLogic->m_Imei = "FakeImei";
+    m_Applet->m_AboutBusinessLogic->m_WifiAddress = "FakeWifi";
+    m_Applet->m_AboutBusinessLogic->m_OsName = "FakeOsName";
+    m_Applet->m_AboutBusinessLogic->m_OsVersion = "FakeOsVersion";
+
+
 
     /*
      * Testing if the widget accepts the back. Our applets always accept back.

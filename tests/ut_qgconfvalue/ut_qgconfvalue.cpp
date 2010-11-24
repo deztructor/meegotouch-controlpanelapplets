@@ -10,7 +10,7 @@
 
 #define DEBUG
 #define WARNING
-#include "debug.h"
+#include "../debug.h"
 
 static const QString testKey = "/meegotouch/input_feedback/volume/pulse";
 

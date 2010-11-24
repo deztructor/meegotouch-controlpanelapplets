@@ -30,7 +30,7 @@ PKGCONFIG += meegotouch dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
 
 HEADERS += \
     ut_gconfstringcombo.h \
-    $$SRC_PREFIX/debug.h \
+    $$SRC_PREFIX/../debug.h \
     $$SRC_PREFIX/trackerconnection.h \
     $$SRC_PREFIX/alerttoneappletmaps.h \
     $$SRC_PREFIX/qprofilevalue.h \
@@ -41,7 +41,7 @@ HEADERS += \
 
 SOURCES += \
     ut_gconfstringcombo.cpp  \
-    $$SRC_PREFIX/debug.cpp \
+    $$SRC_PREFIX/../debug.cpp \
     $$SRC_PREFIX/trackerconnection.cpp \
     $$SRC_PREFIX/alerttoneappletmaps.cpp \
     $$SRC_PREFIX/qprofilevalue.cpp \

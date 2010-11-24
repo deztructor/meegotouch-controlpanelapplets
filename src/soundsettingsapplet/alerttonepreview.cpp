@@ -23,7 +23,7 @@
 
 //#define DEBUG
 #define WARNING
-#include "debug.h"
+#include "../debug.h"
 
 AlertTonePreview::AlertTonePreview(const QString &fname):
 	m_gstPipeline(NULL),

@@ -22,7 +22,7 @@
 
 //#define DEBUG 
 #define WARNING
-#include "debug.h"
+#include "../debug.h"
 
 AlertToneVolume::AlertToneVolume(QGraphicsItem *parent):
 	MSlider(parent),

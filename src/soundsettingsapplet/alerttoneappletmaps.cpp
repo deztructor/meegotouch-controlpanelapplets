@@ -23,7 +23,7 @@
 
 //#define DEBUG
 #define WARNING
-#include "debug.h"
+#include "../debug.h"
 
 const AlertToneAppletMaps AlertToneAppletMaps::maps;
 

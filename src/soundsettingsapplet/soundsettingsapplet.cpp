@@ -16,43 +16,42 @@
 ** of this file.
 **
 ****************************************************************************/
-
-#include <QDebug>
-#include <MTheme>
-
-#include <stdlib.h>
-#include <string.h>
 #include <gst/gst.h>
+#include <MAction>
+
 #include "soundsettingsapplet.h"
+#include "alerttone.h"
+#include "alerttonetoplevel.h"
 #include "alerttonebrowser.h"
 #include "alerttoneappletwidget.h"
+
+#define WARNING
+#include "../debug.h"
+
+#ifndef UNIT_TEST
+#include <MLibrary>
+M_LIBRARY
+#endif
 
 Q_EXPORT_PLUGIN2(soundsettingsapplet, SoundSettingsApplet)
 
 SoundSettingsApplet::SoundSettingsApplet()
 {
-	char *argv1;
-
-	m_argc = 1;
-	m_argv = (char **)malloc(2 * sizeof(char *));
-	memset(m_argv, 0, 2 * sizeof(char *));
-	argv1 = (char *)malloc(strlen("my_argv") + 1);
-	strcpy(argv1, "my_argv");
-	(*m_argv) = argv1;
 }
 
 SoundSettingsApplet::~SoundSettingsApplet()
 {
-	gst_deinit();
-	free((*m_argv));
-	free(m_argv);
+	gst_deinit ();
 }
+
+static int    gst_argc = 1;
+static char*  gst_argv[] = { "/usr/bin/duicontrolpanel", 0 };
 
 void
 SoundSettingsApplet::init()
 {
-	gst_init(&m_argc, &m_argv);
-	MTheme::loadCSS(QString(CSSDIR) + "soundsettingsapplet.css");
+	gst_init (&gst_argc, (char ***) &gst_argv);
+
 	m_alertTones = AlertTone::alertTones();
 }
 
@@ -77,7 +76,7 @@ SoundSettingsApplet::constructWidget(int widgetId)
 	if (AlertToneBrowser_id == realWidgetId && alertToneIdx >= 0 && alertToneIdx < m_alertTones.size())
 		newWidget = new AlertToneBrowser(m_alertTones[alertToneIdx]);
 	else
-		qWarning() << "SoundSettingsApplet::constructWidget: Invalid widgetId" << widgetId;
+		SYS_WARNING ("Invalid widgetId = %d", widgetId);
 
 	if (newWidget) {
 		m_stack.push(newWidget);
@@ -125,3 +124,4 @@ SoundSettingsApplet::constructBrief (
     Q_UNUSED (partId);
     return NULL;
 }
+

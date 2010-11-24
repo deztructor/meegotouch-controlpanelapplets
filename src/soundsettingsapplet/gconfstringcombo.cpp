@@ -25,7 +25,7 @@
 
 //#define DEBUG
 #define WARNING
-#include "debug.h"
+#include "../debug.h"
 
 GConfStringCombo::GConfStringCombo (
         const QString &gconfKey, 

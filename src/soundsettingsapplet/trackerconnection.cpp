@@ -22,7 +22,7 @@
 
 //#define DEBUG
 #define WARNING
-#include "debug.h"
+#include "../debug.h"
 
 TrackerConnection *TrackerConnection::s_Instance = 0;
 

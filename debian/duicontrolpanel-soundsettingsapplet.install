@@ -1,3 +1,3 @@
-usr/share/themes/base/meegotouch/duicontrolpanel/style/soundsettingsapplet.css
+usr/share/themes/base/meegotouch/libsoundsettingsapplet/style/libsoundsettingsapplet.css
 usr/lib/duicontrolpanel/applets/libsoundsettingsapplet.so
 usr/lib/duicontrolpanel/soundsettingsapplet.desktop
