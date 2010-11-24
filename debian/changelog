@@ -1,9 +1,12 @@
-meegotouch-controlpanelapplets (0.17.6~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.17.6~2) meegotouch; urgency=low
 
   * Fixes: NB#206416 - Wallpaper settings layout is not as per layout guide. 
   * Fixes: NB#205284 - Need an API to access Sound Settings applet
+  * Fixes: NB#206529 - Auto-activate power saver button getting turned off
+                       when battery view is opened for the next time.
+  * Fixes: NB#206534 - Reset settings should reset touch-screen and vibration
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 23 Nov 2010 09:00:30 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 24 Nov 2010 10:15:53 +0100
 
 meegotouch-controlpanelapplets (0.17.5-1) meegotouch; urgency=low
 

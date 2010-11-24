@@ -2,7 +2,7 @@
 Type=ControlPanelApplet
 Name=About product
 X-logical-id=qtn_prod_about_product
-X-translation-catalog=about-product
+X-translation-catalog=systemui-applets,about-product
 X-Maemo-Service=com.nokia.DuiControlPanel
 X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
 X-Maemo-Object-Path=/

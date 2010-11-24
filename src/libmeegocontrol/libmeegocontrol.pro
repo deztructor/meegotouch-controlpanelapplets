@@ -50,7 +50,6 @@ INCLUDEPATH += \
 WALLPAPER_PATH = ../wallpaperapplet
 SOUNDSETTINGS_PATH = ../soundsettingsapplet
 
-# TODO: FIXME: updatethis
 PUBLIC_HEADERS = \
     $$WALLPAPER_PATH/wallpaperbusinesslogic.h      \
     $$WALLPAPER_PATH/wallpaperdescriptor.h         \
@@ -79,25 +78,7 @@ PUBLIC_HEADERS = \
 
 HEADERS =                                          \
     ../debug.h                                     \
-    $$PUBLIC_HEADERS                               \
-    $$WALLPAPER_PATH/wallpaperitrans.h             \
-    $$WALLPAPER_PATH/wallpaperdescriptor.h         \
-    $$WALLPAPER_PATH/wallpapercurrentdescriptor.h  \
-    $$WALLPAPER_PATH/wallpaperbusinesslogic.h      \
-    $$WALLPAPER_PATH/wallpapereditorwidget.h       \
-    $$WALLPAPER_PATH/wallpaperinfoheader.h         \ 
-    $$SOUNDSETTINGS_PATH/static.h                  \
-    $$SOUNDSETTINGS_PATH/alerttone.h               \
-    $$SOUNDSETTINGS_PATH/alerttonedefaults.h       \
-    $$SOUNDSETTINGS_PATH/alerttonetoplevel.h       \
-    $$SOUNDSETTINGS_PATH/alerttonebrowser.h        \
-    $$SOUNDSETTINGS_PATH/alerttoneappletmaps.h     \
-    $$SOUNDSETTINGS_PATH/trackerconnection.h       \
-    $$SOUNDSETTINGS_PATH/drilldownitem.h           \
-    $$SOUNDSETTINGS_PATH/qprofilevalue.h           \
-    $$SOUNDSETTINGS_PATH/qtrackedvariant.h         \
-    $$SOUNDSETTINGS_PATH/alerttonedefaultsmodel.h  \
-    $$SOUNDSETTINGS_PATH/alerttonepreview.h        
+    $$PUBLIC_HEADERS
 
 SOURCES =                                          \
     ../debug.cpp                                   \

@@ -56,29 +56,29 @@ static const int filterEditorPosition = 2;
 
 struct  MCustomContentItem: public MContentItem
 {
-	QString fullPath;
-	MCustomContentItem (MContentItem::ContentItemStyle itemStyle=MContentItem::IconAndTwoTextLabels, QGraphicsItem *parent=0)
-	:MContentItem(itemStyle,parent),fullPath("") {}
+    QString fullPath;
+    MCustomContentItem (MContentItem::ContentItemStyle itemStyle=MContentItem::IconAndTwoTextLabels, QGraphicsItem *parent=0)
+    :MContentItem(itemStyle,parent),fullPath("") {}
 };
 
 /******************************************************************************
  * AlertToneBrowser implementation.
  */
 AlertToneBrowser::AlertToneBrowser(AlertTone *tone, QGraphicsWidget *parent):
-	AlertToneToplevel(parent),
-	m_tone(tone),
-	m_current(NULL),
-	m_defaults(NULL),
-	m_preview(NULL),
+    AlertToneToplevel(parent),
+    m_tone(tone),
+    m_current(NULL),
+    m_defaults(NULL),
+    m_preview(NULL),
     m_DoneButton (0),
     m_CancelButton (0)
 {
     /*
      * FIXME: Why do we need to set the title?
      */
-	setProperty ("title", AlertToneAppletMaps::mapToUiString(m_tone->key()));
+    setProperty ("title", AlertToneAppletMaps::mapToUiString(m_tone->key()));
 #ifndef RUN_STANDALONE
-	createContent();
+    createContent();
 #endif /* !RUN_STANDALONE */
 }
 
@@ -92,65 +92,65 @@ void
 AlertToneBrowser::createContent()
 {
 #ifdef RUN_STANDALONE
-	QGraphicsWidget *centralWidget = this->centralWidget();
+    QGraphicsWidget *centralWidget = this->centralWidget();
 #else /* !RUN_STANDALONE */
-	QGraphicsWidget *centralWidget = this/*->centralWidget()*/;
+    QGraphicsWidget *centralWidget = this/*->centralWidget()*/;
 #endif /* RUN_STANDALONE */
 
     m_MainLayout = new QGraphicsLinearLayout (Qt::Vertical);
     m_MainLayout->setContentsMargins (0., 0., 0., 0.);
     m_MainLayout->setSpacing (0.);
     centralWidget->setLayout (m_MainLayout);
-	
-    //% "Pick from My Music"
-	m_my_music = new DrillDownItem;
+
+    // "Pick from My Music"
+    m_my_music = new DrillDownItem;
     m_my_music->setLayoutPosition (M::VerticalTopPosition);
-	m_my_music->imageWidget()->setImage("icon-l-music");
-	m_my_music->setObjectName("MContentItem_pickFromMyMusic");
+    m_my_music->imageWidget()->setImage("icon-l-music");
+    m_my_music->setObjectName("MContentItem_pickFromMyMusic");
     m_MainLayout->addItem (m_my_music);
-	connect(m_my_music, SIGNAL(clicked()), 
+    connect(m_my_music, SIGNAL(clicked()), 
             this, SLOT(launchMusicBrowser()));
 
-	//% "Get more from Ovi store"
-	m_ovi_store = new DrillDownItem;
+    // "Get more from Ovi store"
+    m_ovi_store = new DrillDownItem;
     m_ovi_store->setLayoutPosition (M::VerticalBottomPosition);
-	m_ovi_store->imageWidget()->setImage("icon-m-common-ovi");
-	m_ovi_store->setObjectName("MContentItem_getMoreFromOviStore");
+    m_ovi_store->imageWidget()->setImage("icon-m-common-ovi");
+    m_ovi_store->setObjectName("MContentItem_getMoreFromOviStore");
     m_MainLayout->addItem (m_ovi_store);
-	connect (m_ovi_store, SIGNAL(clicked()), 
+    connect (m_ovi_store, SIGNAL(clicked()), 
             this, SLOT(launchOviStore()));
 
-	//% "Current tone"
-	m_current = new MCustomContentItem(MContentItem::TwoTextLabels, centralWidget);
-	m_current->setObjectName("AlertToneCurrent");
-	connect(m_current, SIGNAL(clicked()), 
+    // "Current tone"
+    m_current = new MCustomContentItem(MContentItem::TwoTextLabels, centralWidget);
+    m_current->setObjectName("AlertToneCurrent");
+    connect(m_current, SIGNAL(clicked()), 
             this, SLOT(currentClicked()));
 
     /*
      * The list with the available sound files.
      */
-	m_defaults = new AlertToneDefaults(m_tone, 0);
+    m_defaults = new AlertToneDefaults(m_tone, 0);
     m_defaults->filtering()->setEnabled (true);
     m_defaults->filtering()->setFilterMode (
             MListFilter::FilterAsBeginningOfLine);
     m_LiveFilterEditor = m_defaults->filtering()->editor();
-	m_MainLayout->addItem(m_defaults);
-	connect(m_defaults, SIGNAL(displayEntered()), 
+    m_MainLayout->addItem(m_defaults);
+    connect(m_defaults, SIGNAL(displayEntered()), 
             this, SLOT(defaultsDisplayEntered()));
-    
+
     // We need this stretch to keep the widgets growing in size when too much
     // lines are filtered out from the list.
     m_MainLayout->addStretch ();
-		
-	retranslateUi();
-    
+
+    retranslateUi();
+
     m_defaults->selectAndScroll (m_tone->fileName(), m_tone->niceName());
 
     connect (m_LiveFilterEditor, SIGNAL(textChanged()),
             this, SLOT(textChanged ()));
 
-	connect(m_defaults, SIGNAL(defaultItemClicked(const QString &)), 
-            this, SLOT(defaultItemClicked(const QString &)));	
+    connect(m_defaults, SIGNAL(defaultItemClicked(const QString &)), 
+            this, SLOT(defaultItemClicked(const QString &)));    
 }
 
 
@@ -162,14 +162,14 @@ AlertToneBrowser::defaultsDisplayEntered()
      * this scenario
      */
     if (!m_LiveFilterEditor || !m_LiveFilterEditor->isOnDisplay())
-    	m_defaults->setFocus();
+        m_defaults->setFocus();
 }
 
 void
 AlertToneBrowser::retranslateUi()
 {
-	m_my_music->setProperty ("title", qtTrId("qtn_sond_pick_music"));
-	m_ovi_store->setProperty("title", qtTrId("qtn_sond_store"));
+    m_my_music->setProperty ("title", qtTrId("qtn_sond_pick_music"));
+    m_ovi_store->setProperty("title", qtTrId("qtn_sond_store"));
 
     if (m_DoneButton)
         //% "Done"
@@ -183,7 +183,7 @@ AlertToneBrowser::retranslateUi()
 void 
 AlertToneBrowser::cancel()
 {
-	emit closePage();
+    emit closePage();
 }
 
 void
@@ -201,23 +201,23 @@ AlertToneBrowser::launchMusicBrowser()
     #ifdef EMULATE_PICKER
     selectingMusicItem ("trackerid");
     #else
-	if (!m_MusicBrowser) {
+    if (!m_MusicBrowser) {
         SYS_DEBUG ("launching content picker...");
-		m_MusicBrowser = new SelectSingleContentItemPage(
+        m_MusicBrowser = new SelectSingleContentItemPage(
                 QString(), 
                 QStringList() << "http://www.tracker-project.org/temp/nmm#MusicPiece", 
                 m_tone->trackerId());
 
-		m_MusicBrowser->setObjectName(
+        m_MusicBrowser->setObjectName(
                 "SelectSingleContentItemPage_musicBrowser");
-		connect(m_MusicBrowser, SIGNAL(backButtonClicked()), 
+        connect(m_MusicBrowser, SIGNAL(backButtonClicked()), 
                 this, SLOT(browserBackButtonClicked()));
-		connect(m_MusicBrowser, SIGNAL(contentItemSelected(const QString &)), 
+        connect(m_MusicBrowser, SIGNAL(contentItemSelected(const QString &)), 
                 this, SLOT(selectingMusicItem(const QString &)));
 
-		m_MusicBrowser->appear(MSceneWindow::DestroyWhenDismissed);
-	} else {
-		m_MusicBrowser->appear(MSceneWindow::DestroyWhenDismissed);
+        m_MusicBrowser->appear(MSceneWindow::DestroyWhenDismissed);
+    } else {
+        m_MusicBrowser->appear(MSceneWindow::DestroyWhenDismissed);
     }
     #endif
 }
@@ -226,9 +226,9 @@ AlertToneBrowser::launchMusicBrowser()
 void
 AlertToneBrowser::launchOviStore()
 {
-	QString cmdline = "webwidgetrunner /usr/share/webwidgets/applications/d34177b1c241ea44cb132005b63ee6527c9f6040-wrt-widget.desktop -widgetparameter ringtones " /* + m_tone->key() */ + QString("&");
-	qDebug() << "AlertToneBrowser(" << m_tone->key() << ")::launchOviStore:" << cmdline;
-	system(cmdline.toUtf8().constData());
+    QString cmdline = "webwidgetrunner /usr/share/webwidgets/applications/d34177b1c241ea44cb132005b63ee6527c9f6040-wrt-widget.desktop -widgetparameter ringtones " /* + m_tone->key() */ + QString("&");
+    qDebug() << "AlertToneBrowser(" << m_tone->key() << ")::launchOviStore:" << cmdline;
+    system(cmdline.toUtf8().constData());
 }
 
 static QString
@@ -243,27 +243,27 @@ trackerIdToFilename(const QString &trackerId)
      * ::tracker()->setConsoleVerbosity (5);
      */
     #endif
-	QVector<QStringList> result = ::tracker()->rawSparqlQuery(query);
+    QVector<QStringList> result = ::tracker()->rawSparqlQuery(query);
 
     SYS_DEBUG ("*** query         = %s", SYS_STR(query));
     SYS_DEBUG ("*** result.size() = %d", result.size());
-	for (int Nix = 0; Nix < result.size() ; Nix++) {
-		for (int Nix1 = 0 ; Nix1 < result[Nix].size() ; Nix1++) {
-			QUrl url(result[Nix][Nix1]);
+    for (int Nix = 0; Nix < result.size() ; Nix++) {
+        for (int Nix1 = 0 ; Nix1 < result[Nix].size() ; Nix1++) {
+            QUrl url(result[Nix][Nix1]);
             SYS_DEBUG ("*** result[%d][%d] = %s", 
                     Nix, Nix1, SYS_STR(result[Nix][Nix1]));
-			if (url.isValid() && url.scheme() == "file")
-				return QUrl::fromPercentEncoding(url.path().toUtf8());
-		}
+            if (url.isValid() && url.scheme() == "file")
+                return QUrl::fromPercentEncoding(url.path().toUtf8());
+        }
     }
 
-	return QString("");
+    return QString("");
 }
 
 void
 AlertToneBrowser::currentClicked()
 {
-	setAlertTone(m_current->fullPath, true);
+    setAlertTone(m_current->fullPath, true);
 }
 
 /*
@@ -276,7 +276,7 @@ AlertToneBrowser::setAlertTone (
 {
     SYS_DEBUG ("*** fname = %s", SYS_STR(fname));
 
-	currSelectedFile = fname;
+    currSelectedFile = fname;
 
     if (setGui) {
         /*
@@ -409,7 +409,7 @@ void
 AlertToneBrowser::selectingMusicItem (
         const QString &item)
 {
-	QString fname = trackerIdToFilename(item);
+    QString fname = trackerIdToFilename(item);
     
     #ifdef EMULATE_PICKER
     fname = "//usr/share/sounds/ring-tones/Xylophone.aac";
@@ -423,8 +423,8 @@ AlertToneBrowser::selectingMusicItem (
     SYS_DEBUG ("*** trackerID = %s", SYS_STR(item));
     SYS_DEBUG ("*** fname     = %s", SYS_STR(fname));
 
-	m_current->fullPath = fname;
-	setAlertTone(fname, true);
+    m_current->fullPath = fname;
+    setAlertTone(fname, true);
     startPlayingSound (fname);
 }
 
@@ -506,20 +506,21 @@ AlertToneBrowser::polishEvent ()
 int
 main(int argc, char **argv)
 {
-	int i = 0;
-	MApplication app(argc, argv);
-	MApplicationWindow w;
-	AlertTone *tone = new AlertTone("ringing.alert.tone");
-	AlertToneBrowser b(tone);
+    int i = 0;
+    MApplication app(argc, argv);
+    MApplicationWindow w;
+    AlertTone *tone = new AlertTone("ringing.alert.tone");
+    AlertToneBrowser b(tone);
 
-	gst_init(&argc, &argv);
+    gst_init(&argc, &argv);
 
-	w.show();
-	b.appear();
+    w.show();
+    b.appear();
 
-	i = app.exec();
+    i = app.exec();
 
-	delete tone;
-	return i;
+    delete tone;
+    return i;
 }
 #endif /* RUN_STANDALONE */
+

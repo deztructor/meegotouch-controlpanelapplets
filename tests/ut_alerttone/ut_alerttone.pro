@@ -23,6 +23,7 @@ CONFIG += \
     gui             \
     meegotouch      \
     debug           \
+    silent          \
     link_pkgconfig  \
     duicontrolpanel
 

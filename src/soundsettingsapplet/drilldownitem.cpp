@@ -53,9 +53,7 @@ DrillDownItem::createLayout()
     drillIconWidget = new MImageWidget ();
     drillIconWidget->setImage ("icon-m-common-drilldown-arrow");
     
-    // FIXME: According to the layout guide we should use CommonDrilldownIcon,
-    // but that does not look good. It makes the icon pixelated.
-    drillIconWidget->setStyleName ("CommonMainIcon");
+    drillIconWidget->setStyleName ("CommonDrillDownIcon");
     titleLabel->setStyleName("CommonTitleInverted");
     subTitleLabel->setStyleName("CommonSubTitleInverted");
 

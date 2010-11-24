@@ -57,15 +57,7 @@ css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/duicontrolpanel/
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 
-rfs.files = battery-rfs.sh
-rfs.path += $$(DEBIAN_DESTDIR)/$$RFS_DIR
-
-message("The plugin will be installed to: " $$target.path)
-message("CSS path will be: " $$css.path)
-message("Restore script path: " $$rfs.path)
-
 INSTALLS += target \
             css \
-            rfs \
             desktop
 

@@ -20,14 +20,10 @@
 #include "slidercontainer.h"
 
 #include <QGraphicsLinearLayout>
-#include <MButton>
-#include <MLinearLayoutPolicy>
 #include <MLabel>
-#include <MLayout>
 #include <MSlider>
 
 #include "percentagecontainer.h"
-
 
 //#define DEBUG
 //#define WARNING
@@ -39,7 +35,6 @@ SliderContainer::SliderContainer (MWidget *parent) :
         QObject (parent),
         m_LabelContainer (0),
         m_SliderContainer (0),
-        m_PSMAutoButton (0),
         m_PSMSlider (0),
         m_SliderValue (-1),
         m_SliderExists (false)
@@ -213,21 +208,6 @@ SliderContainer::sliderValueChanged (
     updateSliderValueLabel ();
 
     emit PSMThresholdValueChanged (m_SliderValues.at (value).toInt ());
-}
-
-/*!
- * This function is called when the dackend decides if the automatic power save
- * mode is enabled or disabled, so we can toggle the switch widget. Everything
- * else is following the switch widget change.
- */
-void
-SliderContainer::initPSMAutoButton (
-        bool toggle)
-{
-    SYS_DEBUG ("toggle = %s", SYS_BOOL (toggle));
-
-    if (m_SliderValue >= 0)
-        m_PSMSlider->setValue (m_SliderValue);
 }
 
 /*!

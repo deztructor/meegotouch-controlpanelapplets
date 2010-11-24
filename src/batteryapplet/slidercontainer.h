@@ -50,13 +50,11 @@ public:
 public slots:
     void initSlider (const QStringList &values);
     void updateSlider (const int value);
-    void initPSMAutoButton (bool toggle);
 
 private slots:
     void sliderValueChanged (int value);
 
 signals:
-    void PSMAutoToggled (bool);
     void PSMThresholdValueChanged (int);
 
 private:
@@ -66,7 +64,6 @@ private:
 private:
     MContainer            *m_LabelContainer;
     MContainer            *m_SliderContainer;
-    MButton               *m_PSMAutoButton;
     MSlider               *m_PSMSlider;
     MLabel                *m_AutoPSMLabel;
     MLabel                *m_PsmValueLabel;

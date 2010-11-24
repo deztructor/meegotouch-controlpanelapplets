@@ -176,6 +176,8 @@ GridImageLayout::sizeHint (
         Qt::SizeHint which, 
         const QSizeF &constraint) const
 {
+    Q_UNUSED (which);
+    Q_UNUSED (constraint);
     QSizeF retval (100.0, 100.0);
 
     if (m_Image)

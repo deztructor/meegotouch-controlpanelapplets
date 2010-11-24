@@ -69,14 +69,14 @@ addTitleLabel (
         const char          *panelStyleName,
         const char          *labelStyleName)
 {
-    MContainer   *container;
-    QGraphicsLinearLayout *layout;
-    MLabel       *label;
+    MContainer              *container;
+    QGraphicsLinearLayout   *layout;
+    MLabel                  *label;
 
     label = new MLabel;
     label->setStyleName (labelStyleName);
 
-    container = new MContainer;
+    container = new MContainer (parent);
     container->setContentsMargins (0., 0., 0., 0.);
     container->setStyleName (panelStyleName);
     container->setHeaderVisible (false);
@@ -240,7 +240,6 @@ AlertToneAppletWidget::createAlertTonesList(QGraphicsWidget *parent)
 	QGraphicsWidget *centralWidget;
 	AlertToneWidget *alertToneWidget;
 
-	//% "Event tones"
 	container = createEmptyContainer(parent, &policy, &centralWidget);
 
     /*

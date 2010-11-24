@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "batterybusinesslogic.h"
 #include <MGConfItem>
 #include <QVariant>
@@ -202,6 +201,7 @@ void
 BatteryBusinessLogic::setPSMAutoValue (
         bool toggle)
 {
+    SYS_DEBUG ("toggle = %s", SYS_BOOL (toggle));
     MGConfItem PSMAutoKey (psm_auto_key);
     PSMAutoKey.set (toggle);
 }
@@ -214,6 +214,7 @@ bool
 BatteryBusinessLogic::PSMAutoValue ()
 {
     MGConfItem PSMAutoKey (psm_auto_key);
+    SYS_DEBUG ("value = %s", SYS_BOOL (PSMAutoKey.value ().toBool ()));
     return PSMAutoKey.value ().toBool ();
 }
 

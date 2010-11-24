@@ -2,7 +2,7 @@
 Type=DUIApplet
 Name=Alert Tones
 X-logical-id=qtn_sond_sounds
-X-translation-catalog=sounds
+X-translation-catalog=systemui-applets,sounds
 Icon=
 Exec=
 
