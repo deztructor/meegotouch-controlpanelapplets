@@ -21,7 +21,6 @@
 #define _ALERT_TONE_H_
 
 #include "qprofilevalue.h"
-#include "alerttonepreview.h"
 
 class AlertTone: public QProfileValue
 {

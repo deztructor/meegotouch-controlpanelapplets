@@ -22,13 +22,7 @@
 #include "trackerconnection.h"
 #include "drilldownitem.h"
 
-#include <stdlib.h>
-
-#include <QPixmap>
-#include <QGraphicsSceneMouseEvent>
 #include <QtTracker/Tracker>
-#include <MTheme>
-#include <MLayout>
 #include <MList>
 #include <MListFilter>
 #include <QGraphicsLinearLayout>
@@ -37,6 +31,7 @@
 #include <MButton>
 #include <MWidgetAction>
 #include <MImageWidget>
+#include <MContentItem>
 
 // FIXME: Seems that this is not used any more...
 #define M_UNDO_PROPERTY "enabled"
@@ -54,11 +49,13 @@
 static const int filterEditorPosition = 2;
 
 
-struct  MCustomContentItem: public MContentItem
+class MCustomContentItem: public MContentItem
 {
-    QString fullPath;
+public:
     MCustomContentItem (MContentItem::ContentItemStyle itemStyle=MContentItem::IconAndTwoTextLabels, QGraphicsItem *parent=0)
     :MContentItem(itemStyle,parent),fullPath("") {}
+
+    QString fullPath;
 };
 
 /******************************************************************************
