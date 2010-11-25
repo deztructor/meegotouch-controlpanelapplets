@@ -16,10 +16,12 @@
 ** of this file.
 **
 ****************************************************************************/
+#include "soundsettingsapplet.h"
+
 #include <gst/gst.h>
 #include <MAction>
+#include <QByteArray>
 
-#include "soundsettingsapplet.h"
 #include "alerttone.h"
 #include "alerttonetoplevel.h"
 #include "alerttonebrowser.h"
