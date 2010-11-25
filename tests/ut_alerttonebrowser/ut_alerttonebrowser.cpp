@@ -16,11 +16,13 @@ static const QString validSoundFile1 = "/usr/share/sounds/ring-tones/Beep.aac";
 /******************************************************************************
  * Ut_AlertToneBrowser implementation.
  */
-struct  MCustomContentItem: public MContentItem
+class MCustomContentItem: public MContentItem
 {
-	QString fullPath;
+public:
 	MCustomContentItem (MContentItem::ContentItemStyle itemStyle=MContentItem::IconAndTwoTextLabels, QGraphicsItem *parent=0)
 	:MContentItem(itemStyle,parent),fullPath("") {}
+
+	QString fullPath;
 };
 
 void
