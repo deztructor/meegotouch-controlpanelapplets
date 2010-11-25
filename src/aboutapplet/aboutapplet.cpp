@@ -32,6 +32,14 @@ M_LIBRARY
 
 Q_EXPORT_PLUGIN2(aboutapplet, AboutApplet)
 
+#define LOAD_THEME_FILE
+
+#ifdef LOAD_THEME_FILE
+#include <MTheme>
+const QString cssDir = 
+    "/usr/share/themes/base/meegotouch/libaboutapplet/style/";
+#endif
+
 AboutApplet::AboutApplet() : m_AboutBusinessLogic (0)
 {
 }
@@ -43,6 +51,10 @@ AboutApplet::~AboutApplet()
 void 
 AboutApplet::init()
 {
+    #ifdef LOAD_THEME_FILE
+    QString themeFile = cssDir + "libaboutapplet.css";
+    MTheme::loadCSS (themeFile);
+    #endif
 }
 
 DcpWidget *

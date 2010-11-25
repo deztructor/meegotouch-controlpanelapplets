@@ -32,6 +32,14 @@ M_LIBRARY
 
 Q_EXPORT_PLUGIN2(warrantyapplet, WarrantyApplet)
 
+#define LOAD_THEME_FILE
+#ifdef LOAD_THEME_FILE
+#include <MTheme>
+const QString cssDir = 
+    "/usr/share/themes/base/meegotouch/libwarrantyapplet/style/";
+#endif
+
+
 WarrantyApplet::WarrantyApplet()
 {
 }
@@ -43,6 +51,10 @@ WarrantyApplet::~WarrantyApplet()
 void 
 WarrantyApplet::init()
 {
+    #ifdef LOAD_THEME_FILE
+    QString themeFile = cssDir + "libwarrantyapplet.css";
+    MTheme::loadCSS (themeFile);
+    #endif
 }
 
 DcpWidget *
