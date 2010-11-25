@@ -34,6 +34,14 @@ M_LIBRARY
 
 Q_EXPORT_PLUGIN2(wallpaperapplet, WallpaperApplet)
 
+#define LOAD_THEME_FILE
+
+#ifdef LOAD_THEME_FILE
+#include <MTheme>
+const QString cssDir = 
+    "/usr/share/themes/base/meegotouch/libwallpaperapplet/style/";
+#endif
+
 WallpaperApplet::WallpaperApplet() :
     m_WallpaperBusinessLogic (new WallpaperBusinessLogic)
 {
@@ -46,6 +54,10 @@ WallpaperApplet::~WallpaperApplet()
 void 
 WallpaperApplet::init()
 {
+    #ifdef LOAD_THEME_FILE
+    QString themeFile = cssDir + "libwallpaperapplet.css";
+    MTheme::loadCSS (themeFile);
+    #endif
 }
 
 DcpWidget *
