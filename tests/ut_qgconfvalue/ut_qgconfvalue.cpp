@@ -5,8 +5,8 @@
 #include <MApplicationWindow>
 #include <QString>
 #include <QStringList>
-#include  "ut_qgconfvalue.h"
-#include  "qgconfvalue.h"
+#include "ut_qgconfvalue.h"
+#include "qgconfvalue.h"
 
 #define DEBUG
 #define WARNING
@@ -132,7 +132,7 @@ Ut_QGConfValueTests::qgconfvalueNotifyValue ()
 
     // This is the static method we are checking, it does not use the first
     // three parameters.
-    QGConfValue::notifyValue (NULL, 0, 0, &qgcv);
+    QGConfValue::notifyValue (0, 0, 0, &qgcv);
     QVERIFY (m_SignalFlag);
     QCOMPARE ((int)qgcv.m_val.type(), (int) QVariant::Invalid);
 }
