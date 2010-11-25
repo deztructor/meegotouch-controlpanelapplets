@@ -8,6 +8,7 @@
 #include "alerttonebrowser.h"
 #include "drilldownitem.h"
 
+#include <MContentItem>
 #include <QGraphicsLinearLayout>
 
 static const QString validSoundFile1 = "/usr/share/sounds/ring-tones/Beep.aac";
