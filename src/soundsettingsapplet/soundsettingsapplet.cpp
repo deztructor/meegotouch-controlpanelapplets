@@ -37,8 +37,8 @@ M_LIBRARY
 
 Q_EXPORT_PLUGIN2(soundsettingsapplet, SoundSettingsApplet)
 
-static int    gst_argc = 1;
-static char** gst_argv = NULL;
+int    gst_argc = 1;
+char** gst_argv = NULL;
 
 SoundSettingsApplet::SoundSettingsApplet()
 {
@@ -62,7 +62,7 @@ SoundSettingsApplet::init()
     gst_argv[0] = qstrdup ("app");
     gst_argv[1] = NULL;
 
-	gst_init (&gst_argc, (char ***) &gst_argv);
+	gst_init (&gst_argc, &gst_argv);
 
 	m_alertTones = AlertTone::alertTones();
 }
