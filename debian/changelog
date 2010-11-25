@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.17.6-1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.17.7-1) meegotouch; urgency=low
 
   * Fixes: NB#206416 - Wallpaper settings layout is not as per layout guide. 
   * Fixes: NB#205284 - Need an API to access Sound Settings applet
@@ -12,7 +12,7 @@ meegotouch-controlpanelapplets (0.17.6-1) meegotouch; urgency=low
                        instead of buttons.
   * Fixes: NB#206889 - USB Connectivity options is not inverted
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 25 Nov 2010 10:56:12 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 25 Nov 2010 12:18:35 +0100
 
 meegotouch-controlpanelapplets (0.17.5-1) meegotouch; urgency=low
 
