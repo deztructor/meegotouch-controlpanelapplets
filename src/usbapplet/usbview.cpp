@@ -122,7 +122,9 @@ UsbView::initWidget ()
     {
         int id;
         m_buttons[i] = new MButton;
-        m_buttons[i]->setViewType(MButton::groupType);
+/*  XXX: this breaks the styling:
+ *      m_buttons[i]->setViewType(MButton::groupType);
+ */
         m_buttons[i]->setCheckable (true);
 
         portraitButtonsPolicy->addItem (m_buttons[i]);
