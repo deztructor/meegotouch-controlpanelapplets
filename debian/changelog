@@ -1,3 +1,9 @@
+meegotouch-controlpanelapplets (0.17.8~1) meegotouch; urgency=low
+
+  * [NEW VERSION]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 26 Nov 2010 09:45:40 +0100
+
 meegotouch-controlpanelapplets (0.17.7-1) meegotouch; urgency=low
 
   * Fixes: NB#206416 - Wallpaper settings layout is not as per layout guide. 
