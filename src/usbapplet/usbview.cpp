@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "usbview.h"
 
 #include <QGraphicsLinearLayout>
@@ -27,7 +26,6 @@
 #include <MButtonGroup>
 #include <MNotification>
 #include <MContainer>
-#include <MLocale>
 
 #undef DEBUG
 #include "../debug.h"
@@ -126,6 +124,7 @@ UsbView::initWidget ()
         m_buttons[i] = new MButton;
         m_buttons[i]->setViewType(MButton::groupType);
         m_buttons[i]->setCheckable (true);
+
         portraitButtonsPolicy->addItem (m_buttons[i]);
         landscapeButtonsPolicy->addItem (m_buttons[i]);
 
@@ -133,17 +132,17 @@ UsbView::initWidget ()
         {
         case BUTTON_ALWAYS_ASK:
             m_buttons[i]->setObjectName("AlwaysAsk");
-            m_buttons[i]->setStyleName("CommonLeftSplitButtonInverted");
+            m_buttons[i]->setStyleName ("CommonTopSplitButtonInverted");
             id = (int) QmUSBMode::Ask;
             break;
         case BUTTON_MASS_STORAGE:
             m_buttons[i]->setObjectName("MassStorage");
-            m_buttons[i]->setStyleName("CommonHorizontalCenterSplitButtonInverted");
+            m_buttons[i]->setStyleName ("CommonVerticalCenterSplitButtonInverted");
             id = (int) QmUSBMode::MassStorage;
             break;
         case BUTTON_OVI_SUITE:
             m_buttons[i]->setObjectName("OviSuite");
-            m_buttons[i]->setStyleName("CommonRightSplitButtonInverted");
+            m_buttons[i]->setStyleName ("CommonBottomSplitButtonInverted");
             id = (int) QmUSBMode::OviSuite;
             break;
         default:
@@ -159,6 +158,7 @@ UsbView::initWidget ()
 
     buttonsWidget->centralWidget ()->setLayout (buttonsLayout);
     mainPolicy->addItem (buttonsWidget);
+    mainPolicy->setAlignment (buttonsWidget, Qt::AlignCenter);
 
     // init the button-group value & connect to its signal
     int current_setting = (int) m_logic->getDefaultMode ();

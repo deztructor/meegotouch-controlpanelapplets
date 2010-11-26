@@ -1,8 +1,8 @@
 meegotouch-controlpanelapplets (0.17.8~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  * Fixes: NB#207581 - LANKKU: USB settings Page is not properly aligned. 
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 26 Nov 2010 09:45:40 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 26 Nov 2010 13:30:40 +0100
 
 meegotouch-controlpanelapplets (0.17.7-1) meegotouch; urgency=low
 
