@@ -55,5 +55,6 @@ private:
 private:
     QPointer<ProfileDataInterface>   m_ProfileIf;
     QHash<int, ProfileContainer*>    m_Containers;
+    bool                             m_switchEnabled;
 };
 #endif

@@ -193,7 +193,7 @@ UsbView::selectionChanged (int id)
      * Do nothing if we just tapped on the
      * currently selected one...
      */
-    if ((int) active == id)
+    if ((int) m_logic->getDefaultMode() == id)
         return;
 
     /*

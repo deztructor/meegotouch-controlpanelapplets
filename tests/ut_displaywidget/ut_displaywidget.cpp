@@ -30,10 +30,8 @@
 #include <MApplication>
 #include <MGConfItem>
 #include <MSlider>
-#include <MContentItem>
-#include <MBasicListItem>
+#include <MComboBox>
 #include <MDialog>
-#include <MPopupList>
 #include <MButton>
 #include <MLabel>
 
@@ -42,34 +40,6 @@
 
 #define DEBUG
 #include "../../src/debug.h"
-
-static bool     AcceptDialogs = false;
-static int      SelectIndex = 0;
-static QString  LastDialogTitle;
-int
-MDialog::exec (
-        MWindow *window)
-{
-    Q_UNUSED(window);
-
-    MPopupList         *popuplist = qobject_cast<MPopupList *>(this);
-    QAbstractItemModel *model;
-    QModelIndex         index;
-
-    SYS_DEBUG ("*** this      = %p", this);
-    SYS_DEBUG ("*** title     = %s", SYS_STR(title()));
-    SYS_DEBUG ("*** popuplist = %p", popuplist);
-    LastDialogTitle = title();
-    if (!popuplist)
-        goto finalize;
-
-    model = popuplist->itemModel();
-    index = model->index (SelectIndex, 0);
-    popuplist->setCurrentIndex (index);
-    
-finalize:
-    return AcceptDialogs ? MDialog::Accepted : MDialog::Rejected;
-}
 
 /******************************************************************************
  * Stubbing the MGConfItem.
@@ -173,6 +143,7 @@ Ut_DisplayWidget::testScreenTimeout ()
 {
     DisplayWidget *widget;
     int            screenLightsValue;
+    int            SelectIndex;
 
     widget = new DisplayWidget;
     QVERIFY (widget->m_logic);
@@ -181,12 +152,12 @@ Ut_DisplayWidget::testScreenTimeout ()
     /*
      * Go through the values by accepting every one of them.
      */
-    AcceptDialogs = true;
     for (SelectIndex = 0; SelectIndex <= 4; ++SelectIndex) {
-        LastDialogTitle = "";
         widget->m_screenTimeout->click();
-        QVERIFY (LastDialogTitle == "qtn_disp_screenoff");
 
+        // simulate click on selected value...
+        widget->m_screenTimeout->setProperty ("currentIndex", SelectIndex);
+        
         screenLightsValue = widget->m_logic->selectedScreenLightsValue ();
         SYS_DEBUG ("*** screenLightsValue = %d", screenLightsValue);
         QVERIFY (screenLightsValue == SelectIndex);
@@ -195,11 +166,8 @@ Ut_DisplayWidget::testScreenTimeout ()
     /*
      * Then the same with rejecting the dialog.
      */
-    AcceptDialogs = false;
     for (SelectIndex = 0; SelectIndex <= 4; ++SelectIndex) {
-        LastDialogTitle = "";
         widget->m_screenTimeout->click();
-        QVERIFY (LastDialogTitle == "qtn_disp_screenoff");
 
         screenLightsValue = widget->m_logic->selectedScreenLightsValue ();
         SYS_DEBUG ("*** screenLightsValue = %d", screenLightsValue);
