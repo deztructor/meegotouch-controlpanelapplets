@@ -1,0 +1,15 @@
+
+Make test cases for:
+    - batterwidget
+    - trackerconnection
+    - themewidget
+    - themelistmodel
+    - theme/drilldownitem
+
+Improive test cases:
+    - profilecontainer
+    - profilewidget
+    - alerttonebrowser
+    - wallpaperbusinesslogic
+    - wallpapereditorwidget
+    - wallpaperwidget
