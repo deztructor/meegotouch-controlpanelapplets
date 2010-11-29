@@ -34,7 +34,17 @@
 
 int QProfileValue::nTrackedValues = 0;
 
-QProfileValue::QProfileValue(const QString &key, bool setAllProfiles) :
+/*!
+ * \param key The key identifies the profile entry.
+ * \param setAllProfiles If true the changing of the value will be reflected in
+ *   every profile.
+ *
+ * The constructor the class sets the key identifies the profile entry. The key
+ * will not be changed for the full lifetime of the object.
+ */
+QProfileValue::QProfileValue(
+        const QString  &key, 
+        bool            setAllProfiles) :
 	QTrackedVariant (key),
 	m_setAllProfiles (setAllProfiles),
     m_MissingFile (false)
@@ -253,7 +263,11 @@ QProfileValue::getType(QString &theKey, QString &theProfile)
 	return lsType;
 }
 
-
+/*!
+ * \param p_rangeType Textual representation of the range or NULL to retrieve
+ *   the range from the profile database.
+ * \returns The list of the acceptable values of the profile key.
+ */
 QList<QVariant>
 QProfileValue::possibleValues(RangeType *p_rangeType)
 {
@@ -327,6 +341,11 @@ QProfileValue::fileChanged (
     }
 }
 
+/*!
+ * \returns true if a file was watched before the method is called.
+ *
+ * Stops the file watching.
+ */
 bool
 QProfileValue::stopWatchFiles ()
 {
@@ -339,6 +358,19 @@ QProfileValue::stopWatchFiles ()
     return false;
 }
 
+/*!
+ * \filename The full path of the file to watch.
+ * \returns true if the file exists, false otherwise.
+ *
+ * The QProfileValue is able to watch the file system to sense when the sound file
+ * is removed/deleted. This virtual method will start watching the file if the
+ * file exists. If the file is watched and removed the class will set the value
+ * to "" in order to get the file name of the default sound file from the
+ * profile daemon and emit the changed() signal when the default file is
+ * returned. Setting the file name to the empty string is necessary because
+ * every event has its own unique default file name that can be retrieved only
+ * when the value set to "".
+ */
 bool 
 QProfileValue::startWatchFile (
         const QString &filename)

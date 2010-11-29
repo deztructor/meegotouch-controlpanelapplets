@@ -22,6 +22,23 @@
 
 #include "qprofilevalue.h"
 
+/*!
+ * Class that provides information about an alert tone set to be used when a
+ * specific event occurs (e.g. incoming call, new email, etc.). Tracks the
+ * changes and emits signals when some change detected.
+ *
+ * The AlertTone is created with a specific key called the profile key that
+ * identifies the event to which the AlertTone belongs. Here is an example on
+ * the available keys:
+\code
+AlertTone  *alertTone;
+
+alertTone = new AlertTone ("ringing.alert.tone");
+\endcode
+ *
+ * Please check the documentation for the profile-data package or the profile
+ * daemon files under /etc/profiled/
+ */
 class AlertTone: public QProfileValue
 {
     Q_OBJECT
@@ -40,6 +57,12 @@ protected:
 	virtual void realSetValue(const QVariant &newValue);
 
 signals:
+    /*! This signal is emitted when the value is not changed but a new detail
+     * becomes available so the UI should be refreshed. Currently there is one
+     * such a case, the asynchronous tracker connection that reports the song
+     * title (nice name of the sound file) once the tracker answers to the
+     * qutomatic query.
+     */
     void refreshed();
     
 private slots:

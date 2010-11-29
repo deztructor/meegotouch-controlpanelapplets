@@ -23,18 +23,29 @@
 #define WARNING 
 #include "../debug.h"
 
+/*!
+ * The constructor of the class sets the key that will not be modified during
+ * the lifetime of the object.
+ */
 QTrackedVariant::QTrackedVariant (
         const QString &key) :
 	m_key(key)
 {
 }
 
+/*!
+ * Emits the changed() signal.
+ */
 void
 QTrackedVariant::emit_changed()
 {
 	emit changed();
 }
 
+/*!
+ * Sets the value of the variant, calls the appropriate virtual function to
+ * store the value in the profile database or in the GConf database.
+ */
 void
 QTrackedVariant::set (
         const QVariant &newValue)
@@ -42,14 +53,9 @@ QTrackedVariant::set (
 	realSetValue (newValue);
 }
 
-void
-QTrackedVariant::realSetValue (
-        const QVariant &newValue)
-{
-	m_val = newValue;
-}
-
-
+/*!
+ * \returns The value of the variant.
+ */
 QVariant
 QTrackedVariant::value()
 {
@@ -61,18 +67,43 @@ QTrackedVariant::value()
 	return m_val;
 }
 
+/*!
+ * Virtual method to retrieve the data from the database backend.
+ * FIXME: This method should be pure virtual.
+ */
 void
 QTrackedVariant::fetchFromBackend()
 {
     SYS_WARNING ("This virtual function does nothing!");
 }
 
+/*!
+ * Virtual method to save the data to the database backend.
+ * FIXME: This method should be pure virtual.
+ */
+void
+QTrackedVariant::realSetValue (
+        const QVariant &newValue)
+{
+	m_val = newValue;
+}
+
+
+/*!
+ * \returns The key (id) for the variant.
+ */
 QString
 QTrackedVariant::key() const
 {
 	return m_key;
 }
 
+/*!
+ * \returns The key (id) for the variant.
+ *
+ * Convenience function to retrieve the value of the variant as a null
+ * terminated string.
+ */
 const char *
 QTrackedVariant::keyChar () const
 {

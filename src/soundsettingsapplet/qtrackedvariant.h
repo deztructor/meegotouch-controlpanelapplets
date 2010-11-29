@@ -28,6 +28,14 @@
  * A simple class that is used as a variable that have a constant name (it is
  * called the 'key' here) and a value with an arbitrary type. The class has a
  * signal to be emitted when the value is changed. 
+ *
+ * The storage of the tracked varian might be the profile database (provided by
+ * the profile daemon) or the GConf database depending on the actual
+ * implementation of the class, e.g. the AlertTone class uses the profile
+ * database to store/retrieve data.
+ *
+ * FIXME: This class should be pure virtual but the ut_trackedvariant unit test
+ * should be modified to handle that.
  */
 class QTrackedVariant : public QObject
 {
@@ -43,6 +51,10 @@ public:
     const char *keyChar () const;
 
 Q_SIGNALS:
+    /*!
+     * This signal is emitted when the value for the variant is modified, by the
+     * application or ba an outside process.
+     */
 	void changed();
 
 protected:

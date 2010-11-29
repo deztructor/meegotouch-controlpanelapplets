@@ -28,7 +28,11 @@
 #define WARNING
 #include "../debug.h"
 
-AlertTone::AlertTone(const QString &key):
+/*!
+ * The constructor of the class sets the key that can't be changed later.
+ */
+AlertTone::AlertTone(
+        const QString &key):
 	QProfileValue(key, true)
 {
     /*
@@ -87,6 +91,17 @@ AlertTone::alertTones()
 	return v;
 }
 
+/*!
+ * \returns The human readable name of the sound file.
+ *
+ * For the sound files under the /home directory this method will return the
+ * sound file title provided by the tracker subsystem by reading the sound file
+ * itself. For files under a different diretory the method will create the nice
+ * name from the filename, because tracker will not provide file information for
+ * these files. In this case the nice name is created from the basename of the
+ * file by removing the file extension and changing underscore ('-') characters
+ * to spaces (' ').
+ */
 QString
 AlertTone::niceName()
 {
@@ -94,6 +109,9 @@ AlertTone::niceName()
 	return m_niceName;
 }
 
+/*!
+ * \returns the tracker-id of the sound file when it is available.
+ */
 QString
 AlertTone::trackerId()
 {
@@ -131,6 +149,9 @@ AlertTone::fetchFromBackend()
             m_val.toString());
 }
 
+/*!
+ * \returns The full path of the currently set sound file.
+ */
 QString 
 AlertTone::fileName()
 {

@@ -26,25 +26,30 @@
 
 #include "qtrackedvariant.h"
 
+/*!
+ * Base class to access (both read and write) for all the information stored in
+ * the profile database to control audio and haptic feedback for specific events
+ * (e.g. incoming call, incoming email, etc.).
+ */
 class QProfileValue : public QTrackedVariant
 {
    	Q_OBJECT
 
 public:
-	QProfileValue(const QString &key, bool setAllProfiles = false);
-	~QProfileValue();
+    QProfileValue(const QString &key, bool setAllProfiles = false);
+    ~QProfileValue();
 
-	enum RangeType {
-		Interval,
-		List,
-		Invalid
-	};
+    enum RangeType {
+        Interval,
+        List,
+        Invalid
+    };
 
-	QList<QVariant> possibleValues(RangeType *p_rangeType = NULL);
+    QList<QVariant> possibleValues(RangeType *p_rangeType = NULL);
 
 protected:
-	virtual void fetchFromBackend();
-	virtual void realSetValue(const QVariant &newValue);
+    virtual void fetchFromBackend();
+    virtual void realSetValue(const QVariant &newValue);
     virtual bool stopWatchFiles ();
     virtual bool startWatchFile (const QString &filename);
 
@@ -52,14 +57,19 @@ private slots:
     void fileChanged (const QString &filename);
 
 private:
-	static int nTrackedValues;
-	static void notifyValue(const char *profile, const char *key, const char *val, const char *type, QProfileValue *self);
-	void addNotify();
-	void delNotify();
-	QStringList getType(QString &theKey, QString &theProfile);
+    static int nTrackedValues;
+    static void notifyValue (
+            const char *profile, 
+            const char *key, 
+            const char *val, 
+            const char *type, 
+            QProfileValue *self);
+    void addNotify();
+    void delNotify();
+    QStringList getType(QString &theKey, QString &theProfile);
 
 private:
-	bool                         m_setAllProfiles;
+    bool                         m_setAllProfiles;
     QPointer<QFileSystemWatcher> m_FileWatcher;
     bool                         m_MissingFile;
 
