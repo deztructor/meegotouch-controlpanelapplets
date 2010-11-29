@@ -24,10 +24,14 @@
 #include <QGraphicsLinearLayout>
 #include <MContainer>
 #include <MLabel>
-#include <QDebug>
+#include <QVariant>
+#include <MGConfItem>
 
 #undef DEBUG
 #include "../debug.h"
+
+const QString switchEnabledKey =
+    "/meegotouch/settings/profileapplet/switch_enabled";
 
 ProfileWidget::ProfileWidget (
         ProfileDataInterface *api,
@@ -36,6 +40,10 @@ ProfileWidget::ProfileWidget (
     m_ProfileIf (api)
 {
     SYS_DEBUG ("");
+
+    MGConfItem switchEnabled(switchEnabledKey);
+    m_switchEnabled = switchEnabled.value (false).toBool ();
+
     initWidget ();
 }
 
@@ -115,16 +123,24 @@ ProfileWidget::initProfiles ()
             d.vibrationEnabled);
         // For testability driver: set some object name...
         cont->setObjectName (ProfileDataInterface::mapId (d.profileId));
-        cont->setSelected(false);
         cont->setIconId(m_ProfileIf->mapId2StatusIconId(d.profileId));
 
         connect (cont, SIGNAL (toggled (bool)), SLOT (vibrationChanged (bool)));
-        connect (cont, SIGNAL (clicked ()), SLOT (selectionChanged ()));
+
+        if (m_switchEnabled)
 
         m_Containers.insert(d.profileId, cont);
         vibraLayout->addItem(cont);
 
-        cont->setSelected (d.profileId == m_ProfileIf->getCurrentProfile ());
+        if (m_switchEnabled)
+        {
+            /*
+             * If profile switching is enabled, connect the clicked signal,
+             * and select the profile
+             */
+            cont->setSelected (d.profileId == m_ProfileIf->getCurrentProfile ());
+            connect (cont, SIGNAL (clicked ()), SLOT (selectionChanged ()));
+        }
     }
     listContainer->centralWidget ()->setLayout (vibraLayout);
 
@@ -155,6 +171,10 @@ ProfileWidget::vibrationChanged (
 void
 ProfileWidget::selectionChanged ()
 {
+    /*
+     * INFO: this slot is called only when profile-switiching
+     * feature is set to 'true'
+     */
     ProfileContainer *profile =
         static_cast<ProfileContainer*> (this->sender ());
 
@@ -170,6 +190,12 @@ ProfileWidget::selectionChanged ()
 void
 ProfileWidget::profileChanged (int id)
 {
+    /*
+     * No-op if profile-switching feature is disabled...
+     */
+    if (m_switchEnabled == false)
+        return;
+
     /* 
      * this function called when the profile is changed
      * in an other process
