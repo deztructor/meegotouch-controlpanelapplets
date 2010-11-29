@@ -26,7 +26,7 @@ class MButton;
 class MSlider;
 class MLabel;
 class MContainer;
-class MBasicListItem;
+class MComboBox;
 class DisplayBusinessLogic;
 class MLinearLayoutPolicy;
 
@@ -42,7 +42,7 @@ protected:
     void initWidget();
 
 private slots:
-    void screenTimeoutClicked ();
+    void screenTimeoutChanged (int index);
     void sliderUpdated (int val);
 
 private:
@@ -52,6 +52,7 @@ private:
     void addScreenTimeoutContainer ();
     void addBlankInhibitContainer ();
     void addStretcher (const QString &styleName);
+    void updateScreenTimeoutCombo ();
     void retranslateUi ();
 
 private:
@@ -64,7 +65,7 @@ private:
     MLabel                  *m_SubTitleLabel;
 
     MSlider                *m_brightnessSlider;
-    MBasicListItem         *m_screenTimeout;
+    MComboBox              *m_screenTimeout;
     MButton                *m_blankInhibitButton;
     MLabel                 *m_screenlightLabel;
     MLabel                 *m_blankInhibitLabel;
