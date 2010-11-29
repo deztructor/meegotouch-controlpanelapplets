@@ -42,8 +42,17 @@ char *argv[] = {
 void
 Ut_AlertToneTests::initTestCase()
 {
-      called_alertToneChanged = false;
-      m_App = new MApplication(argc, argv);
+    called_alertToneChanged = false;
+    m_App = new MApplication(argc, argv);
+
+/*
+ * XXX: FIXME: TODO: fix the test cases to not depend on libprofile!
+ */
+#ifdef HAVE_LIBPROFILE
+    SYS_DEBUG ("*** Yes! we have libprofile!");
+#else
+    SYS_WARNING ("*** No! we don't have libprofile, some cases may fail...");
+#endif
 }
 
 void
@@ -108,10 +117,12 @@ Ut_AlertToneTests::alerttonesNiceNameFromFileName()
 void
 Ut_AlertToneTests::alerttoneFetchFromBackend()
 {
+      const QString testData = "xxxTESTDATAxxx";
+
       AlertTone at("email.alert.tone");
-      at.m_niceName= "";
+      at.m_niceName= testData;
       at.fetchFromBackend();
-      QVERIFY (at.m_niceName != QString(""));
+      QVERIFY (at.m_niceName != testData);
 }
 
 void
@@ -124,7 +135,7 @@ Ut_AlertToneTests::alertToneChanged()
  * This test will set the value an AlerTone object and check if the signal about
  * the value change is indeed emitted.
  *
- * FIXME: This test rely on the sounfile being available in the filesystem. The
+ * FIXME: This test rely on the soundfile being available in the filesystem. The
  * AlertTone object will reject the value if it is not a file path of an 
  * existing file.
  */
@@ -137,14 +148,14 @@ Ut_AlertToneTests::alerttoneRealSetValue()
 
     at.realSetValue(QVariant(validSoundFile1));
 
-    for (int Nix = 0 ; Nix < 300; Nix += 1000) {
+    for (int i = 0 ; i < 300; i += 1000) {
         QTest::qWait(100);
         if (called_alertToneChanged)
             break;
     }
 
     called_alertToneChanged = false;
-    QVERIFY (at.value() == QVariant(validSoundFile1));
+    QCOMPARE (at.value().toString (), validSoundFile1);
 }
 
 void

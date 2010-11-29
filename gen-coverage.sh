@@ -20,8 +20,13 @@ rm -fr ./coverage/*
 echo "qmake BUILD_FEATURES=coverage"
 qmake BUILD_FEATURES=coverage
 
-echo "make coverage"
+echo "make clean"
 make clean
+
+echo "./configure"
+./configure
+
+echo "make coverage"
 make coverage
 
 ls -lh ./coverage/index.html
