@@ -26,6 +26,7 @@
 #include <dcpbrief.h>
 
 #include <MApplication>
+#include <MComboBox>
 #include <MAction>
 #include <QVector>
 
