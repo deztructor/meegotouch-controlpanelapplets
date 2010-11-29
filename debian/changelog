@@ -5,6 +5,7 @@ meegotouch-controlpanelapplets (0.17.8~1) meegotouch; urgency=low
   * Fixes: NB#204285 - vibration profile setting is confusing
   * Fixes: NB#207909 - No error banner displayed when changing USB modes in a
     particular scenario
+  * Added documentation for the soundsettingsapplet libmeegocontrol parts.
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 29 Nov 2010 12:03:18 +0100
 
