@@ -568,9 +568,10 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = \
-    src \
-    src/wallpaperapplet
+INPUT                  =    \
+    src                     \
+    src/wallpaperapplet     \
+    src/soundsettingsapplet 
 
 
 # This tag can be used to specify the character encoding of the source files
@@ -594,7 +595,9 @@ FILE_PATTERNS          = \
     wallpaperdescriptor.* \
     wallpapercurrentdescriptor.* \
     wallpaperbusinesslogic.* \
-    wallpapereditorwidget.*
+    wallpapereditorwidget.* \
+    alerttonebrowser.* \
+    alerttone.*
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories
 # should be searched for input files as well. Possible values are YES and NO.
