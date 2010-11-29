@@ -180,6 +180,12 @@ Ut_AboutBusinessLogic::testOsVersion ()
     name = m_Api->osVersion();
 
     QCOMPARE (name, QString ("VERSION13"));
+
+    m_Api->m_OsVersion = "";
+
+    // check the LSB release file version
+    systeminfo_firmware_retval = "";
+    QVERIFY (name != m_Api->osVersion ());
 }
 
 void

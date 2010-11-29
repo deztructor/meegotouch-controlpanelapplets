@@ -82,7 +82,7 @@ AboutBusinessLogic::osVersion ()
     if (index > 0)
         retval = retval.mid (index);
 
-    if (retval.isNull () == false)
+    if ((retval.isNull () == false) && (retval != ""))
     {
       m_OsVersion = retval;
       return m_OsVersion;
