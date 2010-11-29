@@ -22,6 +22,8 @@ contains(BUILD_FEATURES,nocheck) {
 }
 
 check.target = check
+check.depends =
+check.commands =
 check.CONFIG = recursive
 QMAKE_EXTRA_TARGETS += check
 
@@ -35,6 +37,7 @@ QMAKE_CLEAN += **/*.log.xml **/*.log
 contains(BUILD_FEATURES,coverage) {
   QMAKE_EXTRA_TARGETS += coverage
   coverage.target = coverage
+  coverage.commands =
   coverage.CONFIG = recursive
 }
 

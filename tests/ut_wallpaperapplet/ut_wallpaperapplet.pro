@@ -5,27 +5,27 @@ STUB_PREFIX = ../stubs
 
 INCLUDEPATH = \
         $$STUB_PREFIX \
-	$$SRC_PREFIX \
-	$$INCLUDEPATH
+        $$SRC_PREFIX \
+        $$INCLUDEPATH
 
 QT += \
-    	testlib \
-	dbus 
+        testlib \
+        dbus
 
 TEMPLATE = app
 
 DEFINES += \
-	UNIT_TEST 
+        UNIT_TEST
 
 TARGET = ut_wallpaperapplet
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
-	gui \
-	meegotouch \
-	plugin \
-	duicontrolpanel \
+        gui \
+        meegotouch \
+        plugin \
         silent \
+        duicontrolpanel \
         link_pkgconfig
 
 PKGCONFIG += ContentManager
@@ -34,7 +34,7 @@ HEADERS += \
     $$STUB_PREFIX/thumbnailerstub.h \
     $$STUB_PREFIX/trackerstub.h \
     $$STUB_PREFIX/mdesktopentry.h \
-    $$STUB_PREFIX/filesystemstub.h \    
+    $$STUB_PREFIX/filesystemstub.h \
     ../../src/debug.h \
     ut_wallpaperapplet.h \
     $$SRC_PREFIX/gridimagewidget.h \
