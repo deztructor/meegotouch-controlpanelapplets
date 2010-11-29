@@ -187,18 +187,28 @@ Ut_UsbApplet::testConstructWidget ()
                 lastPublishedNotification = "";
                 widget->selectionChanged (id);
 
-                if (id == mode) {
+                if (id == defaultMode) {
                     // If we want to change to the current mode nothing happens.
                     QVERIFY (lastPublishedNotification.isEmpty());
                 } else if (mode == QmUSBMode::MassStorage ||
-                        mode == QmUSBMode::OviSuite) {
+                           mode == QmUSBMode::OviSuite)  {
+
+                    switch (defaultMode) {
+                        case QmUSBMode::OviSuite:
+                        case QmUSBMode::MassStorage:
+                        case QmUSBMode::Ask:
+                            /* check only ^^ these cased for notification... */
+                            break;
+                        default:
+                            continue;
+                    }
+
                     // If we are connected and try to change the mode we got the
                     // error message and we stay in the same mode we were in.
-                    QVERIFY (lastPublishedNotification == 
-                            "<p>qtn_usb_change_incorrect</p>");
-                    QVERIFY (m_Applet->m_logic->getDefaultMode() == 
-                            defaultMode);
-                    QVERIFY (m_Applet->m_logic->getMode() == mode);
+                    QCOMPARE (lastPublishedNotification,
+                              QString ("<p>qtn_usb_change_incorrect</p>"));
+                    QCOMPARE (m_Applet->m_logic->getDefaultMode(), defaultMode);
+                    QCOMPARE (m_Applet->m_logic->getMode(), mode);
                 } else {
                     // Otherwise we should have reached the new mode.
                     QVERIFY (lastPublishedNotification.isEmpty());
