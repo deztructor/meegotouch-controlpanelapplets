@@ -3,8 +3,10 @@ meegotouch-controlpanelapplets (0.17.8~1) meegotouch; urgency=low
   * Fixes: NB#207581 - LANKKU: USB settings Page is not properly aligned. 
   * DisplayApplet: Use ComboBox instead of own maked widget...
   * Fixes: NB#204285 - vibration profile setting is confusing
+  * Fixes: NB#207909 - No error banner displayed when changing USB modes in a
+    particular scenario
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 29 Nov 2010 11:55:46 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 29 Nov 2010 12:03:18 +0100
 
 meegotouch-controlpanelapplets (0.17.7-1) meegotouch; urgency=low
 
