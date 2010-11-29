@@ -46,6 +46,8 @@ WarrantyApplet::WarrantyApplet()
 
 WarrantyApplet::~WarrantyApplet() 
 {
+    if (!m_WarrantyBusinessLogic.isNull ())
+        delete m_WarrantyBusinessLogic.data ();
 }
 
 void 

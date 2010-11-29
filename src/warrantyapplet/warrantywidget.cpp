@@ -170,7 +170,7 @@ WarrantyWidget::retranslateUi ()
     if (expirationDays > 0)
     {
       //% "Product warranty will expire in <b>%L1</b> day."
-      m_labelExpiration->setText (qtTrId ("qtn_warr_expiration").arg (expirationDays));
+      m_labelExpiration->setText (qtTrId ("qtn_warr_expiration", expirationDays).arg (expirationDays));
     }
     else if (expirationDays == 0)
     {
