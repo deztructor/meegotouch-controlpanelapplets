@@ -14,7 +14,7 @@ meegotouch-controlpanelapplets (0.17.8-1) meegotouch; urgency=low
   * Added documentation for the soundsettingsapplet libmeegocontrol parts.
   * Fixes: NB#208227 - Missing dependencies in libmeegocontrol-dev
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 30 Nov 2010 09:06:50 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 30 Nov 2010 14:57:25 +0100
 
 meegotouch-controlpanelapplets (0.17.7-1) meegotouch; urgency=low
 
