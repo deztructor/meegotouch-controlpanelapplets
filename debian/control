@@ -42,13 +42,14 @@ Description: Documentation for libmeegocontrol
 Package: libmeegocontrol0
 Architecture: any
 Section: libs
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, libgstreamer0.10-0, libgconf2-6, libprofile0
 Description: libmeegocontrol to use some controlpanel applet as a library
 
 Package: libmeegocontrol-dev
 Architecture: any
 Section: libdevel
-Depends: libmeegocontrol0 (= ${binary:Version}), libthumbnailer-dev
+Depends: libmeegocontrol0 (= ${binary:Version}), libthumbnailer-dev,
+         libduicontrolpanel-dev, libcontentmanager-dev, libqttracker-dev
 Description: libmeegocontrol development files
 
 Package: duicontrolpanel-offlineapplet

@@ -7,7 +7,9 @@ DEPENDPATH += /usr/include/libmeegocontrol
 LIBS += -lmeegocontrol
 
 CONFIG += \
-    meegotouch 
+    meegotouch \
+    contentmanager \
+    duicontrolpanel
 
 LIBS += \
     -lqttracker \
