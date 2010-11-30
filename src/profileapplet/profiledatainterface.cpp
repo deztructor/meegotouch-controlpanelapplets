@@ -16,8 +16,8 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "profiledatainterface.h"
+#include "profilebackend.h"
 
 /*
  * In the functional tests we use the real thing, in the unit tests we use the
@@ -67,6 +67,9 @@ bool ProfileDataLessThan (
  */
 ProfileDataInterface::ProfileDataInterface ()
 {
+    // XXX: use this in the future
+    ProfileBackend backend;
+
     #ifdef HAVE_PROFILE_QT
     m_ProfileAPI = new Profile ();
     connect (m_ProfileAPI, SIGNAL(activeProfileChanged(QString)), 

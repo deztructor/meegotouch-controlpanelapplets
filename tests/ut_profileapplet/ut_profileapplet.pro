@@ -22,7 +22,12 @@ CONFIG += \
 	meegotouch \
 	plugin \
 	duicontrolpanel \
-	silent 
+    link_pkgconfig \
+	silent
+
+PKGCONFIG += \
+    profile \
+    dbus-1
 
 HEADERS += \
     $$STUB_PREFIX/profilestub.h \
@@ -31,6 +36,7 @@ HEADERS += \
     $$SRC_PREFIX/dcpprofile.h \
     $$SRC_PREFIX/profileapplet.h \
     $$SRC_PREFIX/profilecontainer.h \
+    $$SRC_PREFIX/profilebackend.h \
     $$SRC_PREFIX/profiledatainterface.h \
     $$SRC_PREFIX/profilewidget.h
 
@@ -40,6 +46,7 @@ SOURCES += \
     ut_profileapplet.cpp \
     $$SRC_PREFIX/profileapplet.cpp \
     $$SRC_PREFIX/profilecontainer.cpp \
+    $$SRC_PREFIX/profilebackend.cpp \
     $$SRC_PREFIX/profiledatainterface.cpp \
     $$SRC_PREFIX/profilewidget.cpp
 
