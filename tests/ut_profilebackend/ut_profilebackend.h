@@ -24,7 +24,7 @@
 
 class ProfileBackend;
 
-class Ut_ProfileBackend : public QObject 
+class Ut_ProfileBackend : public QObject
 {
 Q_OBJECT
 
@@ -34,7 +34,10 @@ private slots:
     void initTestCase ();
     void cleanupTestCase ();
 
-    void testCase1 ();
+    void testActiveProfile ();
+    void testGetProfiles ();
+    void testVolumeLevel ();
+    void testVibration ();
 
 private:
     ProfileBackend  *m_backend;

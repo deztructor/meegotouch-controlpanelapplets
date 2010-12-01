@@ -26,8 +26,14 @@
 const char *keyVolume    = "ringing.alert.volume";
 const char *keyVibration = "vibrating.alert.enabled";
 
+inline const char* toCharArray (QString &str)
+{
+    return str.toLatin1().constData();
+}
+
 ProfileBackend::ProfileBackend (QObject *parent) :
-    QObject (parent)
+    QObject (parent),
+    m_initialized (false)
 {
     initialize ();
 }
@@ -40,13 +46,11 @@ ProfileBackend::~ProfileBackend ()
 void
 ProfileBackend::initialize ()
 {
-    static bool initialized;
-
     // initialization should be done only once...
-    if (initialized)
+    if (m_initialized)
         return;
 
-    initialized = true;
+    m_initialized = true;
 
     // get the current profile name
     m_activeProfile = profile_get_profile ();
@@ -105,7 +109,7 @@ ProfileBackend::setActiveProfile (QString profileName)
 {
     bool success;
 
-    success = profile_set_profile (SYS_STR (profileName)) == 0;
+    success = profile_set_profile (toCharArray (profileName)) == 0;
 
     if (success)
         m_activeProfile = profileName;
@@ -129,7 +133,7 @@ bool
 ProfileBackend::setVolumeLevel (QString profileName, int level)
 {
     bool success =
-      profile_set_value_as_int (SYS_STR (profileName), keyVolume, level) == 0;
+      profile_set_value_as_int (toCharArray (profileName), keyVolume, level) == 0;
 
     if (success)
         m_profileVolumes[profileName] = level;
@@ -148,7 +152,7 @@ bool
 ProfileBackend::setVibration (QString profileName, bool vibration)
 {
     bool success =
-      profile_set_value_as_bool (SYS_STR (profileName),
+      profile_set_value_as_bool (toCharArray (profileName),
                                  keyVibration, vibration) == 0;
 
     if (success)

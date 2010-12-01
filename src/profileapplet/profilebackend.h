@@ -67,11 +67,14 @@ private:
     void initialize ();
 
 private:
+    bool                    m_initialized;
     QString                 m_activeProfile;
     QHash<QString, bool>    m_profileVibrations;
     QHash<QString, int>     m_profileVolumes;
 
     Q_DISABLE_COPY(ProfileBackend)
+
+    friend class Ut_ProfileBackend;
 };
 
 #endif
