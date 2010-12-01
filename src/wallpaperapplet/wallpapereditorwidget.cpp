@@ -49,7 +49,7 @@ M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
 static const qreal ScaleLowerLimit = 0.15;
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -280,13 +280,13 @@ WallpaperEditorWidget::createWidgets ()
     SYS_DEBUG ("");
     setContentsMargins (0, 0, 0, 0);
     setWindowFrameMargins (0.0, 0.0, 0.0, 0.0);
-
+    
+    #ifdef USE_INFOHEADER
     /*
      *
      */
     layout = new MLayout;
     policy = new MLinearLayoutPolicy (layout, Qt::Vertical);
-
     layout->setContentsMargins (0, 0, 0, 0);
 
     /*
@@ -300,6 +300,7 @@ WallpaperEditorWidget::createWidgets ()
     policy->addStretch ();
 
     setLayout (layout);
+    #endif
 }
 
 /*
@@ -489,13 +490,17 @@ WallpaperEditorWidget::toggleTitlebars (
             currentPage->setComponentsDisplayMode (
                     MApplicationPage::NavigationBar,
                     MApplicationPageModel::Show); 
+            #ifdef USE_INFOHEADER
             m_InfoHeader->show ();
+            #endif
         } else {
             SYS_DEBUG ("Hiding titlebar");
             currentPage->setComponentsDisplayMode (
                     MApplicationPage::NavigationBar, 
                     MApplicationPageModel::Hide);
+            #ifdef USE_INFOHEADER
             m_InfoHeader->hide ();
+            #endif
         }
     }
 

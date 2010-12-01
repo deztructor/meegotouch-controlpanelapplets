@@ -68,19 +68,13 @@ backupscripts.path  = $$(DEBIAN_DESTDIR)/usr/share/wallpaper/
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 
-css.files = libwallpaperapplet.css
-css.path = \
-  $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libwallpaperapplet/style
-
 message("target path         :" $$target.path)
 message("desktop path        :" $$desktop.path)
-message("css path:           :" $$css.path)
 message("backup conf path    :" $$backup.path)
 message("backup scripts path :" $$backups.path)
 
 INSTALLS += \
     target \
-    css \
     desktop \
     backupscripts \
     backup 

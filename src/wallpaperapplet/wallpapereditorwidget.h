@@ -133,6 +133,8 @@ private:
 private:
     QPointer<WallpaperBusinessLogic>  m_WallpaperBusinessLogic;
 
+    // FIXME: The infoheader is not used any more, but removing this pointer
+    // would cause ABI break.
     WallpaperInfoHeader  *m_InfoHeader;
     QPixmap               m_bgLandscape;
     QPixmap               m_bgPortrait;
