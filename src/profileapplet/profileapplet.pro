@@ -9,12 +9,6 @@ CONFIG += plugin \
           link_pkgconfig \
           silent
 
-# TODO: removethis
-contains(DEFINES, HAVE_PROFILE_QT) {
-    LIBS += -lprofile-qt
-    INCLUDEPATH += /usr/include/profile-qt
-}
-
 contains(DEFINES, HAVE_LIBPROFILE) {
     PKGCONFIG += profile dbus-1
 }
