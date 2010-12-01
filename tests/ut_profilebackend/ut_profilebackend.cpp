@@ -31,6 +31,7 @@
 extern const char *keyVibration;
 extern const char *keyVolume;
 
+#ifdef HAVE_LIBPROFILE
 /******************************************************************************
  * libprofile stub...
  */
@@ -127,6 +128,7 @@ profile_tracker_quit ()
 }
 
 } // extern "C"
+#endif // HAVE_LIBPROFILE
 
 /******************************************************************************
  * Ut_ProfileBackend implementation.
@@ -134,8 +136,10 @@ profile_tracker_quit ()
 void
 Ut_ProfileBackend::init()
 {
+#ifdef HAVE_LIBPROFILE
     // init stub:
     profile_set_profile (stub_profiles[0]);
+#endif
 
     m_backend = new ProfileBackend;
 }

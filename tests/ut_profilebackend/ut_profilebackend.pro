@@ -22,10 +22,11 @@ CONFIG += \
     link_pkgconfig \
     silent 
 
-# TODO: stub this
-PKGCONFIG += \
-    profile \
-    dbus-1
+contains(DEFINES, HAVE_LIBPROFILE) {
+    PKGCONFIG += \
+        profile \
+        dbus-1
+}
 
 HEADERS += \
     ../../src/debug.h \

@@ -21,9 +21,7 @@
 
 #include <QObject>
 
-#ifdef HAVE_PROFILE_QT
-class Profile;
-#endif
+class ProfileBackend;
 
 class ProfileDataInterface : public QObject
 {
@@ -79,9 +77,7 @@ private:
     static QString id2Name (const QString &id);
 
 private:
-    #ifdef HAVE_PROFILE_QT
-    Profile *m_ProfileAPI;
-    #endif
+    ProfileBackend  *m_backend;
 };
 
 #endif

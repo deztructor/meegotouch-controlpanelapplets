@@ -19,35 +19,18 @@
 #include "profiledatainterface.h"
 #include "profilebackend.h"
 
-/*
- * In the functional tests we use the real thing, in the unit tests we use the
- * stubbed version.
- *
- * FIXME: This should be eliminated, the code should not be different for
- * testing.
- */
-#ifdef HAVE_PROFILE_QT
-#  if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
-#    include "profilestub.h"
-#  else
-#    include <Profile>
-#  endif
-#else
-  namespace ProfileName {
-    const QString ringing = "general";  /*!< Profile name 'ringing' */
-    const QString silent = "silent";    /*!< Profile name 'silent' */
-    const QString beep = "meeting";        /*!< Profile name 'beep' */
-    const QString loud = "outdoors";        /*!< Profile name 'loud' */
-  }
-#endif
+namespace ProfileName {
+  const QString ringing = "general";  /*!< Profile name 'ringing' */
+  const QString silent = "silent";    /*!< Profile name 'silent' */
+  const QString beep = "meeting";     /*!< Profile name 'beep' */
+  const QString loud = "outdoors";    /*!< Profile name 'loud' */
+}
 
 #include <QStringList>
 #include <QList>
 
 #undef DEBUG
 #include "../debug.h"
-
-using namespace ProfileName;
 
 
 /******************************************************************************
@@ -67,22 +50,17 @@ bool ProfileDataLessThan (
  */
 ProfileDataInterface::ProfileDataInterface ()
 {
-    // XXX: use this in the future
-    ProfileBackend backend;
+    m_backend = new ProfileBackend;
 
-    #ifdef HAVE_PROFILE_QT
-    m_ProfileAPI = new Profile ();
-    connect (m_ProfileAPI, SIGNAL(activeProfileChanged(QString)), 
-            this, SLOT(currentProfileNameChanged(QString)));
-    #endif
+    connect (m_backend, SIGNAL (activeProfileChanged (QString)),
+             SLOT (currentProfileNameChanged (QString)));
 }
 
 ProfileDataInterface::~ProfileDataInterface ()
 {
-    #ifdef HAVE_PROFILE_QT
-    delete m_ProfileAPI;
-    m_ProfileAPI = NULL;
-    #endif
+    if (m_backend)
+        delete m_backend;
+    m_backend = NULL;
 }
 
 
@@ -114,40 +92,28 @@ ProfileDataInterface::mapId2StatusIconId (int id)
     return iconId;
 }
 
-void 
+void
 ProfileDataInterface::currentProfileNameChanged (
         const QString &prof)
 {
     emit currentProfile(mapId(prof));
 }
 
-int 
+int
 ProfileDataInterface::getCurrentProfile ()
 {
     SYS_DEBUG ("");
-    
-    #ifdef HAVE_PROFILE_QT
-    QString prof = m_ProfileAPI->activeProfile();
+
+    QString prof = m_backend->getActiveProfile ();
     return mapId (prof);
-    #else
-    /*
-     * FIXME: To implement the code that works without the ProfileQt library.
-     */
-    SYS_WARNING ("Not implemented.");
-    return 0;
-    #endif
 }
 
-
-#ifdef HAVE_PROFILE_QT
-QList<ProfileDataInterface::ProfileData> 
+QList<ProfileDataInterface::ProfileData>
 ProfileDataInterface::getProfilesData ()
 {
     SYS_DEBUG ("");
     QList<ProfileData> data;
-
-    // send profile <name, is> map
-    QStringList ids = m_ProfileAPI->profileNames ();
+    QStringList ids = m_backend->getProfiles ();
 
     // send...
     for (int i = 0; i < ids.count(); ++i) {
@@ -161,8 +127,8 @@ ProfileDataInterface::getProfilesData ()
             continue;
 
         d.profileName       = id2Name (id);
-        d.vibrationEnabled  = m_ProfileAPI->isVibrationEnabled (id);
-        d.volumeLevel       = m_ProfileAPI->volumeLevel (id);
+        d.vibrationEnabled  = m_backend->getVibration (id);
+        d.volumeLevel       = m_backend->getVolumeLevel (id);
         data.append(d);
     }
 
@@ -173,23 +139,8 @@ ProfileDataInterface::getProfilesData ()
     qSort (data.begin(), data.end(), ProfileDataLessThan);
     return data;
 }
-#else
-QList<ProfileDataInterface::ProfileData> 
-ProfileDataInterface::getProfilesData ()
-{
-    QList<ProfileData> data;
 
-    /*
-     * FIXME: To implement a variant that does not depend on the ProfileQt
-     * library.
-     */
-    SYS_WARNING ("Unimplemented.");
-
-    return data;
-}
-#endif
-
-void 
+void
 ProfileDataInterface::setProfile (
         int value)
 {
@@ -197,47 +148,31 @@ ProfileDataInterface::setProfile (
 
     SYS_DEBUG ("value = %d", value);
 
-    #ifdef HAVE_PROFILE_QT
-    success = m_ProfileAPI->setActiveProfile (mapId(value));
+    success = m_backend->setActiveProfile (mapId(value));
     if (!success) {
         SYS_WARNING ("Failed setting profile.");
     }
-    #else
-    /*
-     * FIXME: To implement a codepiece that sets the current profile without the
-     * help of the ProfileQt library.
-     */
-    SYS_WARNING ("Not implemented.");
-    #endif
 }
 
-void 
+void
 ProfileDataInterface::setVibration (
-        int    id, 
+        int    id,
         bool   value)
 {
     bool success;
 
     SYS_DEBUG ("id = %d, value = %s", id, SYS_BOOL (value));
 
-    #ifdef HAVE_PROFILE_QT
-    success = m_ProfileAPI->setVibration(mapId(id), value);
+    success = m_backend->setVibration(mapId(id), value);
     if (!success) {
         SYS_WARNING ("Failed setting the vibration.");
     }
-    #else
-    /*
-     * FIXME: To implement a codepiece that sets the vibration for a specific
-     * profile without the help of the ProfileQt library.
-     */
-    SYS_WARNING ("Not implemented.");
-    #endif
 }
 
 /*!
  * returns The icon ID representing the given profile.
  */
-QString 
+QString
 ProfileDataInterface::mapId2IconId (int id)
 {
     QString iconId = "";
@@ -259,7 +194,7 @@ ProfileDataInterface::mapId2IconId (int id)
 
     return iconId;
 }
-QString 
+QString
 ProfileDataInterface::id2Name (
         const QString &id)
 {
@@ -282,7 +217,7 @@ ProfileDataInterface::id2Name (
     return localised;
 }
 
-ProfileDataInterface::ProfileId 
+ProfileDataInterface::ProfileId
 ProfileDataInterface::mapId (
         const QString &id)
 {
@@ -301,7 +236,7 @@ ProfileDataInterface::mapId (
     return intId;
 }
 
-QString 
+QString
 ProfileDataInterface::mapId (
         int id)
 {
@@ -324,5 +259,4 @@ ProfileDataInterface::mapId (
 
     return stringId;
 }
-
 

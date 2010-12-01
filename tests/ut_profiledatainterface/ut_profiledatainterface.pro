@@ -22,23 +22,16 @@ CONFIG += \
     link_pkgconfig \
     silent 
 
-# TODO: stub this
-PKGCONFIG += \
-    profile \
-    dbus-1
-
 HEADERS += \
-    $$STUB_PREFIX/profilestub.h \
     ../../src/debug.h \
     ut_profiledatainterface.h \
     $$SRC_PREFIX/profilebackend.h \
     $$SRC_PREFIX/profiledatainterface.h
 
 SOURCES += \
-    $$STUB_PREFIX/profilestub.cpp \
+    $$STUB_PREFIX/profilebackend_stub.cpp \
     ../../src/debug.cpp \
     ut_profiledatainterface.cpp \
-    $$SRC_PREFIX/profilebackend.cpp \
     $$SRC_PREFIX/profiledatainterface.cpp
 
 INSTALLS += target

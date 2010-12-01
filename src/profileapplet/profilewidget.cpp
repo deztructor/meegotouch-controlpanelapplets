@@ -42,7 +42,7 @@ ProfileWidget::ProfileWidget (
     SYS_DEBUG ("");
 
     MGConfItem switchEnabled(switchEnabledKey);
-    m_switchEnabled = switchEnabled.value (false).toBool ();
+    m_switchEnabled = true; /*switchEnabled.value (false).toBool ();*/
 
     initWidget ();
 }

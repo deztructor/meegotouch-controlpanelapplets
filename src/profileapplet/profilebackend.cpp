@@ -17,9 +17,12 @@
 **
 ****************************************************************************/
 #include "profilebackend.h"
-#include <libprofile.h>
 
-#define DEBUG
+#ifdef HAVE_LIBPROFILE
+#include <libprofile.h>
+#endif
+
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -40,7 +43,9 @@ ProfileBackend::ProfileBackend (QObject *parent) :
 
 ProfileBackend::~ProfileBackend ()
 {
+#ifdef HAVE_LIBPROFILE
     profile_tracker_quit ();
+#endif
 }
 
 void
@@ -52,6 +57,7 @@ ProfileBackend::initialize ()
 
     m_initialized = true;
 
+#ifdef HAVE_LIBPROFILE
     // get the current profile name
     m_activeProfile = profile_get_profile ();
 
@@ -102,14 +108,17 @@ ProfileBackend::initialize ()
     // start the tracking of changes...
     profile_connection_enable_autoconnect ();
     profile_tracker_init ();
+#endif // HAVE_LIBPROFILE
 }
 
 bool
 ProfileBackend::setActiveProfile (QString profileName)
 {
-    bool success;
+    bool success = false;
 
+#ifdef HAVE_LIBPROFILE
     success = profile_set_profile (toCharArray (profileName)) == 0;
+#endif
 
     if (success)
         m_activeProfile = profileName;
@@ -133,7 +142,11 @@ bool
 ProfileBackend::setVolumeLevel (QString profileName, int level)
 {
     bool success =
+#ifdef HAVE_LIBPROFILE
       profile_set_value_as_int (toCharArray (profileName), keyVolume, level) == 0;
+#else
+    false;
+#endif
 
     if (success)
         m_profileVolumes[profileName] = level;
@@ -152,8 +165,12 @@ bool
 ProfileBackend::setVibration (QString profileName, bool vibration)
 {
     bool success =
+#ifdef HAVE_LIBPROFILE
       profile_set_value_as_bool (toCharArray (profileName),
                                  keyVibration, vibration) == 0;
+#else
+    false;
+#endif
 
     if (success)
         m_profileVibrations[profileName] = vibration;
@@ -215,6 +232,7 @@ ProfileBackend::changeProfileValue (
     const char      *key,
     const char      *value)
 {
+#ifdef HAVE_LIBPROFILE
     QString profileName = profile;
 
     if (m_profileVolumes.value (profileName, -1) < 0)
@@ -243,5 +261,6 @@ ProfileBackend::changeProfileValue (
     {
         SYS_WARNING ("Error, invalid key: %s", key);
     }
+#endif
 }
 
