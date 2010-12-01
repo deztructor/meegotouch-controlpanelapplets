@@ -7,6 +7,7 @@ meegotouch-controlpanelapplets (0.17.8-1) meegotouch; urgency=low
     particular scenario
   * Added documentation for the soundsettingsapplet libmeegocontrol parts.
   * Fixes: NB#208227 - Missing dependencies in libmeegocontrol-dev
+  * WallpaperApplet: removed infoheader because of the layout guide changes.
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 30 Nov 2010 14:57:25 +0100
 
