@@ -75,7 +75,6 @@ private:
     QString                        m_NiceNameToSelect;
     bool                           m_PanningStarted;
     bool                           m_ShowingSpinner;
-    int                            m_LastIndex;
 #ifdef UNIT_TEST
     friend class Ut_AlertToneDefaultsTests;
 #endif
