@@ -271,7 +271,8 @@ AlertToneBrowser::setAlertTone (
         const QString &fname,
         bool           setGui)
 {
-    SYS_DEBUG ("*** fname = %s", SYS_STR(fname));
+    SYS_DEBUG ("*** fname  = %s", SYS_STR(fname));
+    SYS_DEBUG ("*** setGui = %s", SYS_BOOL(setGui));
 
     currSelectedFile = fname;
 
@@ -394,6 +395,7 @@ AlertToneBrowser::defaultItemClicked (
 void
 AlertToneBrowser::browserBackButtonClicked ()
 {
+    SYS_DEBUG ("--->");
     stopPlayingSound ();
     m_MusicBrowser->dismiss ();
 }

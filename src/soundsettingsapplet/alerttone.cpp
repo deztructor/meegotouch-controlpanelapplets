@@ -130,7 +130,8 @@ AlertTone::maybeUpdate()
 }
 
 void
-AlertTone::realSetValue(const QVariant &newValue)
+AlertTone::realSetValue(
+        const QVariant &newValue)
 {
 	QVariant oldValue = m_val;
 
