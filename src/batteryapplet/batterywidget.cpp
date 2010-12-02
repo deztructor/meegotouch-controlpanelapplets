@@ -39,7 +39,7 @@
 #include <HelpButton>
 #endif
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -210,9 +210,11 @@ BatteryWidget::initWidget ()
     /*
      * And finally set the PSMAutoValue based on backend value,
      * this possibly triggers the slider container visibility also,
-     * that is why we should call this after layout is set
+     * that is why we should call this after layout is set,
+     * !! Only when we aren't in power save mode...
      */
-    m_PSMAutoButton->setChecked (m_logic->PSMAutoValue());
+    if (m_logic->PSMValue () == false)
+        m_PSMAutoButton->setChecked (m_logic->PSMAutoValue());
 }
 
 void 
@@ -556,13 +558,14 @@ BatteryWidget::PSMValueReceived (
     if (m_MainLayout && m_ActivationContainer) {
         if (!PSMEnabled) {
             if (m_MainLayout->indexOf(m_ActivationContainer) == -1) {
-                m_PSMAutoButton->setChecked(false);
+                m_PSMAutoButton->setChecked (m_logic->PSMAutoValue());
                 m_MainLayout->insertItem (
                         ActivationContainerPosition, m_ActivationContainer);
                 m_MainLayout->setStretchFactor (m_ActivationContainer, 0);
             }
             m_logic->remainingCapacityRequired();
         } else {
+            m_PSMAutoButton->setChecked(false);
             showSlider (false);
             m_MainLayout->removeAt(m_MainLayout->indexOf(m_ActivationContainer));
             //% "Power save mode"

@@ -103,10 +103,9 @@ BatteryBusinessLogic::requestValues ()
              SIGNAL (devicePSMStateChanged (MeeGo::QmDeviceMode::PSMState)),
              this, SLOT (PSMStateChanged (MeeGo::QmDeviceMode::PSMState)));
 
-    SYS_DEBUG ("Emitting PSMValueReceived(%s)",
-            SYS_BOOL(m_devicemode->getPSMState () == QmDeviceMode::PSMStateOn));
-    emit PSMValueReceived (m_devicemode->getPSMState () ==
-                           QmDeviceMode::PSMStateOn);
+    bool powerSaveMode = PSMValue ();
+    SYS_DEBUG ("Emitting PSMValueReceived(%s)", SYS_BOOL (powerSaveMode));
+    emit PSMValueReceived (powerSaveMode);
     #else
     /*
      * FIXME: To create an implementation without the QmSystem
@@ -190,6 +189,18 @@ BatteryBusinessLogic::setPSMValue (
                 enabled ? 
                 "QmDeviceMode::PSMStateOn" : "QmDeviceMode::PSMStateOff");
     }
+}
+
+bool
+BatteryBusinessLogic::PSMValue ()
+{
+    bool ret = false;
+
+#ifdef HAVE_QMSYSTEM
+    ret = (m_devicemode->getPSMState () == QmDeviceMode::PSMStateOn);
+#endif
+
+    return ret;
 }
 
 /*!

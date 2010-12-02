@@ -47,6 +47,7 @@ public:
     QStringList PSMThresholdValues ();
     int PSMThresholdValue ();
     bool PSMAutoValue ();
+    bool PSMValue ();
     bool isCharging();
 
 public slots:
