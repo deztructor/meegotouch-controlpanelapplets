@@ -50,52 +50,6 @@ AlertToneWidget::AlertToneWidget (
 	setProperty ("subtitle", QVariant(m_tone->niceName()));
 }
 
-#if 0
-QGraphicsLayout *
-AlertToneWidget::createLayout()
-{
-    QGraphicsGridLayout *layout;
-    MLabel              *titleLabel;
-    MLabel              *subTitleLabel;
-    MImageWidget        *iconWidget;
-    
-    layout = new QGraphicsGridLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
-
-    
-    titleLabel =  titleLabelWidget ();
-    subTitleLabel = subtitleLabelWidget ();
-    iconWidget = imageWidget();
-
-    /*
-     * The title label.
-     */
-    titleLabel->setStyleName("CommonTitleInverted");
-    layout->addItem (titleLabel, 0, 0, Qt::AlignLeft | Qt::AlignVCenter);
-
-    /*
-     * The sub-title label.
-     */
-    subTitleLabel->setStyleName("CommonSubTitleInverted");
-    layout->addItem (subTitleLabel, 1, 0, Qt::AlignLeft | Qt::AlignVCenter);
-
-    /*
-     * The drill down icon.
-     */
-    iconWidget->setImage("icon-m-common-drilldown-arrow");
-    // FIXME: According to the layout guide we should use CommonDrilldownIcon,
-    // but that does not look good. It makes the icon pixelated.
-    iconWidget->setStyleName("CommonMainIcon");
-    layout->addItem(iconWidget, 0, 1, 2, 1);
-    layout->setAlignment (iconWidget, Qt::AlignVCenter | Qt::AlignRight);
-
-    setStyleName ("CommonPanelInverted");
-
-    return layout;
-}
-#endif
-
 void
 AlertToneWidget::alertToneChanged()
 {

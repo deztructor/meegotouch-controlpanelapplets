@@ -50,7 +50,7 @@ ThemeCellCreator::createCell(
     if (!cell) {
         cell = new MAdvancedListItem (
             MAdvancedListItem::IconWithTitleProgressIndicatorAndTwoSideIcons);
-        cell->setStyleName ("commonPanelInverted");
+        cell->setStyleName ("CommonPanelInverted");
         cell->progressIndicator()->setUnknownDuration (true);
         cell->sideTopImageWidget()->hide();
         cell->sideBottomImageWidget()->hide();
@@ -137,7 +137,7 @@ ThemeCellCreator::updateListItemMode (
     else 
         listItem->setLayoutPosition (M::VerticalBottomPosition);
         
-    listItem->setStyleName ("commonPanelInverted");
+    listItem->setStyleName ("CommonPanelInverted");
 }
 
 void 

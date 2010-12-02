@@ -35,10 +35,7 @@ public:
             int                    idx, 
             AlertToneToplevel     *changer, 
             QGraphicsItem         *parent = 0);
-#if 0
-protected:
-    virtual QGraphicsLayout *createLayout();
-#endif
+
 private:
 	void retranslateUi();
 
