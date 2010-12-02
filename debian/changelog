@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.17.9~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.17.9-1) meegotouch; urgency=low
 
   * Drop profile-qt dependency
   * Fixes: NB#208326 - When the content picker is closed in soundsettingsapplet
@@ -9,7 +9,7 @@ meegotouch-controlpanelapplets (0.17.9~1) meegotouch; urgency=low
   * Fixes: NB#208873 - Soundsettings: stop ringtone playing when window exits
     the display
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 02 Dec 2010 12:19:18 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 02 Dec 2010 12:34:28 +0100
 
 meegotouch-controlpanelapplets (0.17.8-1) meegotouch; urgency=low
 
