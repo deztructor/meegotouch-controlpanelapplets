@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QTimer>
 #include <QGraphicsWidget>
+#include <QShowEvent>
 #include <MApplicationPage>
 #include <MLabel>
 #include <MBasicListItem>
@@ -102,7 +103,6 @@ AlertToneDefaultsCellCreator::updateCell(
     item = qobject_cast<MyListItem *>(cell);
     title = index.data().toString();
    
-    SYS_DEBUG ("*** title = %s", SYS_STR(title));
     if (m_HighlightText.isEmpty()) {
         item->setTitle (title);
     } else if (title.startsWith(m_HighlightText, Qt::CaseInsensitive)) {
@@ -209,6 +209,16 @@ void
 AlertToneDefaults::loadingFinished()
 {
     SYS_DEBUG ("*** m_FileNameToSelect = %s", SYS_STR(m_FileNameToSelect));
+    SYS_DEBUG ("*** isVisible() = %s", SYS_BOOL(isVisible()));
+
+    /*
+     * If we are not shown on the screen we will handle this finished thingy
+     * from the showEvent() callback. We have to abort this method so the 
+     * m_FileNameToSelect and other variables are kept in their state.
+     */
+    if (!isVisible())
+        return;
+
     if (!m_FileNameToSelect.isEmpty()) {
         selectAndScroll (m_FileNameToSelect, m_NiceNameToSelect);
     }
@@ -277,8 +287,17 @@ bool
 AlertToneDefaults::selectAndScroll (
         int    idx)
 {
+    SYS_DEBUG ("*** idx       = %d", idx);
+    SYS_DEBUG ("*** isVisible = %s", SYS_BOOL(isVisible()));
     if (idx < 0)
         return false;
+
+    /*
+     * If the list is not visible it will not handle our requests anyway.
+     */
+    if (!isVisible()) {
+        return true;
+    }
 
     /*
      * We need to use the proxy model here, fixes #199749 - Current selected
@@ -322,8 +341,22 @@ AlertToneDefaults::selectAndScroll (
     int      idx;
     bool     success;
 
-    SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
-    SYS_DEBUG ("*** niceName = %s", SYS_STR(niceName));
+    SYS_DEBUG ("*** fileName    = %s", SYS_STR(fileName));
+    SYS_DEBUG ("*** niceName    = %s", SYS_STR(niceName));
+    SYS_DEBUG ("*** isVisible() = %s", SYS_BOOL(isVisible()));
+
+    /*
+     * When we are invisible (e.g. the selectandscroll is coming from the
+     * contentpicker) we have no chance to manipulate the list thus we will not
+     * remember the selection. The setting of the AlertTone fails.
+     * We handle this with the mechanism designed for the loading process: we
+     * are going to delay the list manipulation.
+     */
+    if (!isVisible()) {
+        m_PanningStarted = false;
+        m_FileNameToSelect = fileName;
+        m_NiceNameToSelect = niceName;
+    }
 
     idx = m_DefaultsModel->findItemByFileName (fileName);
     success = selectAndScroll (idx);
@@ -370,6 +403,25 @@ AlertToneDefaults::polishEvent ()
 {
     SYS_DEBUG ("");
     checkSpinner ();
+}
+
+void
+AlertToneDefaults::showEvent (
+        QShowEvent *event)
+{
+    SYS_DEBUG ("*** isVisible() = %s", SYS_BOOL(isVisible()));
+    SYS_DEBUG ("*** m_FileNameToSelect = %s", SYS_STR(m_FileNameToSelect));
+
+    event->accept ();
+
+    /*
+     * If there is a pending selection we need to handle it but not now,
+     * unfortunately we need to do it when the widget becomes visible.
+     * FIXME: maybe we can solve this without calling the singleShot, but please
+     * keep an eye on bug NB#208326!
+     */
+    if (!m_FileNameToSelect.isEmpty())
+        QTimer::singleShot(100, this, SLOT(loadingFinished()));
 }
 
 /*

@@ -28,6 +28,7 @@
 class QString;
 class AlertToneDefaultsCellCreator;
 class AlertToneDefaultsModel;
+class ShowEvent;
 
 class MyListItem : public MBasicListItem {
 	Q_OBJECT
@@ -57,11 +58,12 @@ public:
 
 protected:
     virtual void polishEvent ();
+    virtual void showEvent (QShowEvent *event);
 
 private slots:
 	void itemClicked(const QModelIndex &item);
-	void toneChanged();
 	void loadingFinished ();
+	void toneChanged();
     void userPanningStarted ();
     void checkSpinner ();
 

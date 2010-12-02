@@ -1,6 +1,8 @@
 meegotouch-controlpanelapplets (0.17.9~1) meegotouch; urgency=low
 
   * Drop profile-qt dependency
+  * Fixes: NB#208326 - When the content picker is closed in soundsettingsapplet
+    the list is not scrolling to the selected file 
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 01 Dec 2010 13:52:18 +0100
 
