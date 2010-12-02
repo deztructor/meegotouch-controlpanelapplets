@@ -28,14 +28,14 @@ CONFIG += \
 	silent
 
 HEADERS += \
-    $$STUB_PREFIX/profilestub.h \
     ../../src/debug.h \
     ut_profiledialog.h \
+    $$APPLET_PREFIX/profilebackend.h \
     $$APPLET_PREFIX/profiledatainterface.h \
     $$SRC_PREFIX/profiledialog.h
 
 SOURCES += \
-    $$STUB_PREFIX/profilestub.cpp \
+    $$STUB_PREFIX/profilebackend_stub.cpp \
     ../../src/debug.cpp \
     ut_profiledialog.cpp \
     $$APPLET_PREFIX/profiledatainterface.cpp \

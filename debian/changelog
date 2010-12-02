@@ -1,3 +1,9 @@
+meegotouch-controlpanelapplets (0.17.9~1) meegotouch; urgency=low
+
+  * Drop profile-qt dependency
+
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 01 Dec 2010 13:52:18 +0100
+
 meegotouch-controlpanelapplets (0.17.8-1) meegotouch; urgency=low
 
   * Fixes: NB#207581 - LANKKU: USB settings Page is not properly aligned.

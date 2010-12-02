@@ -40,20 +40,12 @@ if [ $? -eq 0 ]; then
     fi
 
     #
-    # Soundsettings applet needs the low level libprofile API
+    # Soundsettings applet and profile uis needs the low level libprofile API
     #
     pkg-config --exists profile
     if [ $? -eq 0 ]; then
 	echo "DEFINES += HAVE_LIBPROFILE" >> ${FILENAME}
     fi
-fi
-
-#
-# We also have some dependency towards the profile Qt library in the profile
-# applet.
-#
-if [ -e /usr/include/profile-qt/profile.h ]; then
-    echo "DEFINES += HAVE_PROFILE_QT" >> ${FILENAME}
 fi
 
 #

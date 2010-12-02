@@ -13,7 +13,7 @@ QT += \
 
 TEMPLATE = app
 DEFINES += UNIT_TEST
-TARGET = ut_profiledatainterface
+TARGET = ut_profilebackend
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
@@ -22,16 +22,20 @@ CONFIG += \
     link_pkgconfig \
     silent 
 
+contains(DEFINES, HAVE_LIBPROFILE) {
+    PKGCONFIG += \
+        profile \
+        dbus-1
+}
+
 HEADERS += \
     ../../src/debug.h \
-    ut_profiledatainterface.h \
-    $$SRC_PREFIX/profilebackend.h \
-    $$SRC_PREFIX/profiledatainterface.h
+    ut_profilebackend.h \
+    $$SRC_PREFIX/profilebackend.h
 
 SOURCES += \
-    $$STUB_PREFIX/profilebackend_stub.cpp \
     ../../src/debug.cpp \
-    ut_profiledatainterface.cpp \
-    $$SRC_PREFIX/profiledatainterface.cpp
+    ut_profilebackend.cpp \
+    $$SRC_PREFIX/profilebackend.cpp
 
 INSTALLS += target

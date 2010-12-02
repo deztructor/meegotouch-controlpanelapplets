@@ -22,20 +22,20 @@ CONFIG += \
 	meegotouch \
 	plugin \
 	duicontrolpanel \
-	silent 
+	silent
 
 HEADERS += \
-    $$STUB_PREFIX/profilestub.h \
     ../../src/debug.h \
     ut_profileapplet.h \
     $$SRC_PREFIX/dcpprofile.h \
     $$SRC_PREFIX/profileapplet.h \
     $$SRC_PREFIX/profilecontainer.h \
+    $$SRC_PREFIX/profilebackend.h \
     $$SRC_PREFIX/profiledatainterface.h \
     $$SRC_PREFIX/profilewidget.h
 
 SOURCES += \
-    $$STUB_PREFIX/profilestub.cpp \
+    $$STUB_PREFIX/profilebackend_stub.cpp \
     ../../src/debug.cpp \
     ut_profileapplet.cpp \
     $$SRC_PREFIX/profileapplet.cpp \

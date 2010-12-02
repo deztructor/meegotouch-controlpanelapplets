@@ -13,12 +13,12 @@ CONFIG += \
     meegotouch \
     duicontrolpanel \
     system-ui \
+    link_pkgconfig \
     silent
 
-contains(DEFINES, HAVE_PROFILE_QT) {
-    LIBS += -lprofile-qt
-    INCLUDEPATH += /usr/include/profile-qt
-}
+PKGCONFIG += \
+    profile \
+    dbus-1
 
 CXXFLAGS += -DM_LIBRARY_NAME=libstatusindicatormenu-profile
 
@@ -28,12 +28,14 @@ INCLUDEPATH  += ../profileapplet
 HEADERS = profileplugin.h \
           profilewidget.h \
           profiledialog.h \
+          ../profileapplet/profilebackend.h \
           ../profileapplet/profiledatainterface.h \
           ../debug.h
           
 SOURCES = profileplugin.cpp \
           profilewidget.cpp \
           profiledialog.cpp \
+          ../profileapplet/profilebackend.cpp \
           ../profileapplet/profiledatainterface.cpp \
           ../debug.cpp
 
