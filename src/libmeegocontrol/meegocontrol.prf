@@ -9,7 +9,11 @@ LIBS += -lmeegocontrol
 CONFIG += \
     meegotouch \
     contentmanager \
+    link_pkgconfig \
     duicontrolpanel
+
+PKGCONFIG += \
+    gstreamer-0.10
 
 LIBS += \
     -lqttracker \

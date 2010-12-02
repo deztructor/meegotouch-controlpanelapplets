@@ -79,8 +79,8 @@ SOURCES =                      \
 
 DESTDIR = lib
 
-css.files = libsoundsettingsapplet.css
 css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libsoundsettingsapplet/style
+css.files = libsoundsettingsapplet.css
 
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/$$DCP_DESKTOP_DIR

@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.8.0),
                libprofile-dev, system-ui-dev (>= 0.16), libqttracker-dev,
                libthumbnailer-dev, libcontentmanager-dev, devicelock-dev,
                doxygen, clean-device-dev (>= 0.0.3), libuserguide-dev,
-               libqtm-dev, libqtm-systeminfo-dev,
+               libqtm-dev, libqtm-systeminfo-dev, libgstreamer0.10-dev
 Standards-Version: 3.8.0
 
 Package: systemui-applets-tests
@@ -48,7 +48,8 @@ Package: libmeegocontrol-dev
 Architecture: any
 Section: libdevel
 Depends: libmeegocontrol0 (= ${binary:Version}), libthumbnailer-dev,
-         libduicontrolpanel-dev, libcontentmanager-dev, libqttracker-dev
+         libduicontrolpanel-dev, libcontentmanager-dev, libqttracker-dev,
+         libgstreamer0.10-dev
 Description: libmeegocontrol development files
 
 Package: duicontrolpanel-offlineapplet
