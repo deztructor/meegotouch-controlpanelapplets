@@ -47,7 +47,9 @@ ResetBusinessLogic::ResetBusinessLogic() :
 
 ResetBusinessLogic::~ResetBusinessLogic()
 {
+#ifdef HAVE_DEVICELOCK
     delete m_devlock;
+#endif
 }
 
 /*!
