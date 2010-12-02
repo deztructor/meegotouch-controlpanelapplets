@@ -84,9 +84,9 @@ ProfileWidget::showProfileDialog ()
     }
 
     ProfileDialog profileDialog;
-    // Removed this connect() because we thing it caused NB#204361.
-    //connect (&dialog, SIGNAL (profileChanged (int)), 
-    // SLOT (profileChanged ()));
+
+    profileDialog.setProperty("followsCurrentApplicationWindowOrientation", true);
+
     profileDialog.exec ();
 }
 
