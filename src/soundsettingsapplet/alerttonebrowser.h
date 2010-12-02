@@ -63,6 +63,7 @@ private slots:
     void currentClicked();
     void textChanged ();
     void browserBackButtonClicked ();
+    void stopPlayingSound ();
 
 protected:
     virtual void retranslateUi();
@@ -70,7 +71,6 @@ protected:
     
 private:
     void startPlayingSound (const QString &filename);
-    void stopPlayingSound ();
     virtual void createContent();
 
     AlertTone *m_tone;

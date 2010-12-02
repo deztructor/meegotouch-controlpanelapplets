@@ -23,9 +23,13 @@
 #include "drilldownitem.h"
 
 #include <QtTracker/Tracker>
+#include <QGraphicsLinearLayout>
+
 #include <MList>
 #include <MListFilter>
-#include <QGraphicsLinearLayout>
+#include <MApplication>
+#include <MApplicationWindow>
+#include <MWindow>
 #include <MAction>
 #include <MTextEdit>
 #include <MButton>
@@ -442,6 +446,14 @@ AlertToneBrowser::polishEvent ()
      */
     if (m_DoneButton)
         return;
+
+    MWindow *win = MApplication::activeWindow ();
+    if (win) {
+        connect (win, SIGNAL(displayExited()),
+                this, SLOT(stopPlayingSound()));
+    }
+
+
     /*
      * We need to find the MApplicationPage among our parents.
      */
@@ -502,8 +514,6 @@ AlertToneBrowser::polishEvent ()
 
 
 #ifdef RUN_STANDALONE
-#include <MApplication>
-#include <MApplicationWindow>
 int
 main(int argc, char **argv)
 {
