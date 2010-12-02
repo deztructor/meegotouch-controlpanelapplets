@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QString>
 
+#include <MLocale>
 #include <MApplication>
 #include <MApplicationWindow>
 #include <MApplicationPage>
@@ -23,6 +24,12 @@ MyApplication::MyApplication (int &argc, char **argv) :
     MApplication (argc, argv)
 {
     MButton *button;
+
+    /*
+     * Load the necessary translation for soundsettings widget
+     */
+    MLocale locale;
+    locale.installTrCatalog ("sounds");
     
     /*
      *
