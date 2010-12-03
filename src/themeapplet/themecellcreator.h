@@ -23,6 +23,15 @@
 #include <MAdvancedListItem>
 #include <MAbstractCellCreator>
 
+class CustomListItem : public MAdvancedListItem 
+{
+    Q_OBJECT
+    public:
+        CustomListItem (
+            ItemStyle itemStyle = IconWithTitleProgressIndicatorAndTwoSideIcons, 
+            QGraphicsItem *parent = 0);
+};
+
 class ThemeCellCreator : public MAbstractCellCreator<MAdvancedListItem>
 {
     public:

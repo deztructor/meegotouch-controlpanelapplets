@@ -25,6 +25,7 @@
 #include <QVariant>
 #include <MAdvancedListItem>
 #include <MImageWidget>
+#include <MLabel>
 #include <MProgressIndicator>
 #include <QGraphicsLayout>
 
@@ -37,20 +38,28 @@
 static const char *SelectionStartTag = "<font color='blue'>";
 static const char *SelectionEndTag   = "</font>";
 
+CustomListItem::CustomListItem (
+        ItemStyle         itemStyle,
+        QGraphicsItem    *parent) :
+    MAdvancedListItem (itemStyle, parent)
+{
+    setStyleName ("CommonPanelInverted");
+    titleLabelWidget ()->setStyleName ("CommonTitleInverted");
+}
+
 MWidget *
 ThemeCellCreator::createCell(
         const QModelIndex &index, 
         MWidgetRecycler   &recycler) const
 {
-    MAdvancedListItem *cell;
+    CustomListItem *cell;
     
-    cell = qobject_cast <MAdvancedListItem *> (
-            recycler.take(MAdvancedListItem::staticMetaObject.className()));
+    cell = qobject_cast <CustomListItem *> (
+            recycler.take(CustomListItem::staticMetaObject.className()));
 
     if (!cell) {
-        cell = new MAdvancedListItem (
+        cell = new CustomListItem (
             MAdvancedListItem::IconWithTitleProgressIndicatorAndTwoSideIcons);
-        cell->setStyleName ("CommonPanelInverted");
         cell->progressIndicator()->setUnknownDuration (true);
         cell->sideTopImageWidget()->hide();
         cell->sideBottomImageWidget()->hide();
@@ -66,7 +75,7 @@ ThemeCellCreator::updateCell (
         const QModelIndex &index, 
         MWidget           *cell) const
 {
-    MAdvancedListItem    *listItem;
+    CustomListItem       *listItem;
     QString               title;
     QString               codeName;
     QString               iconName;
@@ -76,7 +85,7 @@ ThemeCellCreator::updateCell (
     if(!cell || !index.isValid()) 
         return;
 
-    listItem = qobject_cast<MAdvancedListItem *>(cell);
+    listItem = qobject_cast<CustomListItem *>(cell);
     
     changingTheme = index.data (ThemeListModel::ChangingNameRole).toString();
     title = index.data (ThemeListModel::NameRole).toString();
@@ -136,8 +145,6 @@ ThemeCellCreator::updateListItemMode (
         listItem->setLayoutPosition (M::VerticalCenterPosition);
     else 
         listItem->setLayoutPosition (M::VerticalBottomPosition);
-        
-    listItem->setStyleName ("CommonPanelInverted");
 }
 
 void 
