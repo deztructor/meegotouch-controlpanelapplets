@@ -206,7 +206,7 @@ Ut_UsbApplet::testConstructWidget ()
                     // If we are connected and try to change the mode we got the
                     // error message and we stay in the same mode we were in.
                     QCOMPARE (lastPublishedNotification,
-                              QString ("<p>qtn_usb_change_incorrect</p>"));
+                              qtTrId ("qtn_usb_change_incorrect"));
                     QCOMPARE (m_Applet->m_logic->getDefaultMode(), defaultMode);
                     QCOMPARE (m_Applet->m_logic->getMode(), mode);
                 } else {

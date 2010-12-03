@@ -234,7 +234,7 @@ UsbView::selectionChanged (int id)
         m_error = new MNotification (
             MNotification::DeviceErrorEvent,
 //% "You cannot change USB mode while USB is connecting.<br/>Eject USB device first, and then change setting."
-            "", QString ("<p>%1</p>").arg (qtTrId ("qtn_usb_change_incorrect")));
+            "", qtTrId ("qtn_usb_change_incorrect"));
 
         /*
          * And show it
