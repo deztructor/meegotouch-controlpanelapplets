@@ -40,12 +40,6 @@
 // FIXME: Seems that this is not used any more...
 #define M_UNDO_PROPERTY "enabled"
 
-/*
- * Temporary macro to test the contentpicker under scrachbox where it does not
- * work. :-(
- */
-//#define EMULATE_PICKER
-
 //#define DEBUG
 #define WARNING
 #include "../debug.h"
@@ -158,6 +152,8 @@ AlertToneBrowser::createContent()
 void
 AlertToneBrowser::defaultsDisplayEntered()
 {
+    SYS_DEBUG ("");
+
     /*
      * A fix for the NB#198788 - Live filtering text editor loses focus in 
      * this scenario
@@ -184,12 +180,15 @@ AlertToneBrowser::retranslateUi()
 void 
 AlertToneBrowser::cancel()
 {
+    SYS_DEBUG ("");
+    m_defaults->toneChanged ();
     emit closePage();
 }
 
 void
 AlertToneBrowser::accept()
 {
+    SYS_DEBUG ("");
     if (!currSelectedFile.isEmpty())
         m_tone->set(currSelectedFile);
 
@@ -199,9 +198,6 @@ AlertToneBrowser::accept()
 void
 AlertToneBrowser::launchMusicBrowser()
 {
-    #ifdef EMULATE_PICKER
-    selectingMusicItem ("trackerid");
-    #else
     if (!m_MusicBrowser) {
         SYS_DEBUG ("launching content picker...");
         m_MusicBrowser = new SelectSingleContentItemPage(
@@ -220,7 +216,6 @@ AlertToneBrowser::launchMusicBrowser()
     } else {
         m_MusicBrowser->appear(MSceneWindow::DestroyWhenDismissed);
     }
-    #endif
 }
 
 
@@ -399,7 +394,7 @@ AlertToneBrowser::defaultItemClicked (
 void
 AlertToneBrowser::browserBackButtonClicked ()
 {
-    SYS_DEBUG ("--->");
+    SYS_DEBUG ("");
     stopPlayingSound ();
     m_MusicBrowser->dismiss ();
 }
@@ -414,9 +409,6 @@ AlertToneBrowser::selectingMusicItem (
 {
     QString fname = trackerIdToFilename(item);
     
-    #ifdef EMULATE_PICKER
-    fname = "//usr/share/sounds/ring-tones/Xylophone.aac";
-    #endif
     if (fname.isEmpty()) {
         SYS_WARNING ("TrackerID '%s' is not valid.", SYS_STR(item));
         stopPlayingSound ();
@@ -441,6 +433,8 @@ AlertToneBrowser::polishEvent ()
     QGraphicsWidget  *parent;
     MApplicationPage *page = 0;
     MWidgetAction    *widgetAction;
+    
+    SYS_DEBUG ("");
     /*
      * Just a protection about double adding the actions.
      */

@@ -289,6 +289,7 @@ AlertToneDefaults::selectAndScroll (
 {
     SYS_DEBUG ("*** idx       = %d", idx);
     SYS_DEBUG ("*** isVisible = %s", SYS_BOOL(isVisible()));
+    SYS_DEBUG ("*** m_PanningStarted = %s", SYS_BOOL(m_PanningStarted));
     if (idx < 0)
         return false;
 
@@ -310,9 +311,12 @@ AlertToneDefaults::selectAndScroll (
      * Once the user started a panning we don't want to scroll to the just
      * selected item, the user knows what to do.
      */
-    if (!m_PanningStarted)
+    if (!m_PanningStarted) {
+        SYS_DEBUG ("calling MList::scrollTo(%d)", idx);
         MList::scrollTo (index, MList::PositionAtCenterHint);
+    }
 
+    m_PanningStarted = false;
     return true;
 }
 
@@ -395,7 +399,9 @@ void
 AlertToneDefaults::userPanningStarted ()
 {
     SYS_DEBUG ("");
-    m_PanningStarted = true;
+
+    if (m_ShowingSpinner)
+        m_PanningStarted = true;
 }
 
 void

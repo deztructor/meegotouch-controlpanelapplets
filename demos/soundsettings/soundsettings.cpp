@@ -50,31 +50,37 @@ MyApplication::MyApplication (int &argc, char **argv) :
 void
 MyApplication::startBrowser ()
 {
-    AlertTone  *alertTone;
-    AlertToneBrowser *alertToneBrowser;
+    AlertTone         *alertTone;
+    AlertToneBrowser  *alertToneBrowser;
 
-    /*
-     * This string is going to identify the event for which we get/set the sound
-     * setting.
-     */
-    alertTone = new AlertTone ("ringing.alert.tone");
+    if (!page2) {
+        /*
+         * This string is going to identify the event for which we get/set the
+         * sound setting.
+         */
+        alertTone = new AlertTone ("ringing.alert.tone");
 
-    /*
-     * The alerttonebrowser is fully automatic widget with a gallery item, an
-     * ovi item and a list with the default sound file.
-     */
-    alertToneBrowser = new AlertToneBrowser (alertTone);
+        /*
+         * The alerttonebrowser is fully automatic widget with a gallery item,
+         * an ovi item and a list with the default sound file.
+         */
+        alertToneBrowser = new AlertToneBrowser (alertTone);
+        connect (alertToneBrowser, SIGNAL(closePage()),
+                this, SLOT(closeBrowser()));
 
-    page2 = new MApplicationPage;
+        page2 = new MApplicationPage;
+        page2->setCentralWidget (alertToneBrowser);
+    }
 
-    /*
-     * This is just a test.
-     */
-    page2->setCentralWidget (alertToneBrowser);
-    page2->appear(mainwindow);
-
-    connect (alertToneBrowser, SIGNAL(closePage()),
-            this, SLOT(closeBrowser()));
+    #if 1
+    // This one will keep the browser page in the memory while the program is
+    // running.
+    page2->appear(mainwindow, MSceneWindow::KeepWhenDone);
+    #else
+    // This one will destroy the browser page when it is dismissed by either the
+    // done or the cancel button.
+    page2->appear(mainwindow, MSceneWindow::DestroyWhenDismissed);
+    #endif
 }
 
 void

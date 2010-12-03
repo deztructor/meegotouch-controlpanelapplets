@@ -56,6 +56,9 @@ public:
         const QString &fileName,
         const QString &niceName = QString(""));
 
+public slots:
+	void toneChanged();
+
 protected:
     virtual void polishEvent ();
     virtual void showEvent (QShowEvent *event);
@@ -63,7 +66,6 @@ protected:
 private slots:
 	void itemClicked(const QModelIndex &item);
 	void loadingFinished ();
-	void toneChanged();
     void userPanningStarted ();
     void checkSpinner ();
 
