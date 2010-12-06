@@ -34,8 +34,8 @@
  * Apparently the test engine can not tolerate the debug messages when there are
  * weird file names around.
  */
-#define LOTDEBUG
-#define DEBUG
+//#define LOTDEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -741,11 +741,8 @@ WallpaperDescriptor::initiateThumbnailer ()
     connect (m_Thumbnailer, SIGNAL(finished(int)),
             this, SLOT(thumbnailLoadingFinished(int)));
 
-    #ifdef USE_PAINTER
-    m_Thumbnailer->request (urisList, mimeList, false, flavor);
-    #else
-    m_Thumbnailer->request (urisList, mimeList, true, flavor);
-    #endif
+    m_Thumbnailer->request (urisList, mimeList, true, "grid");
+    //m_Thumbnailer->request (urisList, mimeList, true, "screen");
 }
 
 /*!
@@ -764,7 +761,8 @@ WallpaperDescriptor::thumbnailReady (
     Q_UNUSED (thumbnailUri);
     Q_UNUSED (flavor);
 
-    SYS_DEBUG ("*** thumbnail size = %dx%d", pixmap.width(), pixmap.height());
+    SYS_DEBUG ("*** flavor = %s", SYS_STR(flavor));
+    SYS_DEBUG ("*** size   = %dx%d", pixmap.width(), pixmap.height());
     /*
      * FIXME: should store the thumbnail URL as well.
      * FIXME: maybe we should emit a signal for every variant...
@@ -822,6 +820,8 @@ WallpaperDescriptor::thumbnailLoadingFinished (
             int          left)
 {
     Q_UNUSED (left);
+
+    SYS_DEBUG ("*** left = %d", left);
     if (!m_Thumbnailer.isNull() && left == 0)
         delete m_Thumbnailer;
 }

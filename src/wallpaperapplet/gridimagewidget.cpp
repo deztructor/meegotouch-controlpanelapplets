@@ -26,7 +26,7 @@ GridImageLayout::~GridImageLayout()
       while ((item = takeAt(0)))
           delete item;
 #endif
- }
+}
 
 
 int 
@@ -86,14 +86,17 @@ GridImageLayout::addItem (
 {
     switch (role) {
         case Image:
+            SYS_DEBUG ("Adding image");
             m_Image = layoutItem;
             break;
 
         case ProgressIndicator:
+            SYS_DEBUG ("Adding progress indicator");
             m_ProgressBar = layoutItem;
             break;
 
         case CheckMark:
+            SYS_DEBUG ("Adding checkmark");
             m_TopRightImageWidget = layoutItem;
     }
 
@@ -293,6 +296,7 @@ GridImageWidget::progressIndicator (
         createLayout ();
 
     if (!m_ProgressIndicator && create) {
+        SYS_DEBUG ("Creating a progress indicator.");
         m_ProgressIndicator = new MProgressIndicator (this, progressType);
         m_ProgressIndicator->setObjectName ("WallpaperLoadingSpinner");
         m_ProgressIndicator->setStyleName ("CommonProgressBarInverted");
@@ -300,6 +304,11 @@ GridImageWidget::progressIndicator (
         m_Layout->addItem (
                 m_ProgressIndicator, 
                 GridImageLayout::ProgressIndicator);
+        // This seems to solve the issue in NB#208329. FIXME: We should at least
+        // use some stored/calculated values instead of these litarals.
+        m_Layout->setGeometry (QRectF(0.0, 0.0, 172.0, 172.0));
+    } else {
+        SYS_DEBUG ("Already have a progress indicator.");
     }
 
     return m_ProgressIndicator;
@@ -327,7 +336,6 @@ GridImageWidget::createLayout()
     setLayout (m_Layout);
 }
 
-#if 1
 void GridImageWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     MListItem::mousePressEvent(event);
@@ -345,4 +353,3 @@ void GridImageWidget::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     MListItem::contextMenuEvent(event);
     emit longPressed();
 }
-#endif

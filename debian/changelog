@@ -2,6 +2,8 @@ meegotouch-controlpanelapplets (0.17.10~1) meegotouch; urgency=low
 
   * Fixes: NB#209139 - Tone in content picker remains selected even after 
     doing a cancel
+  * Fixes: NB#208329 - When you first select an image in the wallpaper editor 
+    the spinner is not aligned in the middle of the image 
 
  -- David Kedves <dkedves@blumsoft.eu>  Sat, 04 Dec 2010 08:00:19 +0100
 
