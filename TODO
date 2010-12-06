@@ -1,15 +1,17 @@
+* Update the yaml/spec files
 
-Make test cases for:
+* Make test cases for:
     - batterwidget
     - trackerconnection
     - themewidget
     - themelistmodel
     - theme/drilldownitem
 
-Improive test cases:
+* Improve test cases:
     - profilecontainer
     - profilewidget
     - alerttonebrowser
     - wallpaperbusinesslogic
     - wallpapereditorwidget
     - wallpaperwidget
+
