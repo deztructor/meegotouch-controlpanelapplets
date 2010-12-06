@@ -21,10 +21,12 @@
 
 #include <QObject>
 #include <QtTest/QtTest>
-#include <MApplication>
-#include <MApplicationWindow>
 
-class Ft_AppletLoader : public QObject
+class MApplication;
+class MApplicationWindow;
+class MApplicationPage;
+
+class Ft_Applets : public QObject
 {
     Q_OBJECT
 
@@ -43,12 +45,17 @@ private slots:
     void testthemeapplet ();
     void testwallpaperapplet ();
     void testwarrantyapplet ();
+    void testofflineapplet ();
+    void testsoundsettingsapplet ();
+
+private:
+    void doAppletTest (const char *soName,
+                       bool hasBrief = true,
+                       bool hasView = true);
 
 private:
     MApplication            *m_app;
     MApplicationWindow      *m_window;
-
-    void    DoAppletTest (const char *desktopfile, bool hasBrief);
 };
 
 #endif
