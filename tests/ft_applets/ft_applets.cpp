@@ -138,8 +138,6 @@ Ft_Applets::doAppletTest (const char *soname, bool hasBrief, bool hasView)
         QVERIFY2 (!widget, "Error the applet should not have view!");
     }
 
-    QTest::qWait (100);
-
     delete brief;
     delete widget;
     loader.unload ();
