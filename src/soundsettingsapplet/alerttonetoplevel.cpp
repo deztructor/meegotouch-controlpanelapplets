@@ -21,11 +21,7 @@
 #include "alerttonetoplevel.h"
 
 AlertToneToplevel::AlertToneToplevel(QGraphicsWidget *parent):
-#ifdef RUN_STANDALONE
-	MApplicationPage(parent)
-#else /* !RUN_STANDALONE */
 	DcpWidget(parent)
-#endif /* RUN_STANDALONE */
 {
 }
 

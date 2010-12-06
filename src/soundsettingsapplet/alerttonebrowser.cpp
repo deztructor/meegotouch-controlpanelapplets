@@ -72,9 +72,8 @@ AlertToneBrowser::AlertToneBrowser(AlertTone *tone, QGraphicsWidget *parent):
      * FIXME: Why do we need to set the title?
      */
     setProperty ("title", AlertToneAppletMaps::mapToUiString(m_tone->key()));
-#ifndef RUN_STANDALONE
+
     createContent();
-#endif /* !RUN_STANDALONE */
 }
 
 AlertToneBrowser::~AlertToneBrowser()
@@ -86,16 +85,10 @@ AlertToneBrowser::~AlertToneBrowser()
 void
 AlertToneBrowser::createContent()
 {
-#ifdef RUN_STANDALONE
-    QGraphicsWidget *centralWidget = this->centralWidget();
-#else /* !RUN_STANDALONE */
-    QGraphicsWidget *centralWidget = this/*->centralWidget()*/;
-#endif /* RUN_STANDALONE */
-
     m_MainLayout = new QGraphicsLinearLayout (Qt::Vertical);
     m_MainLayout->setContentsMargins (0., 0., 0., 0.);
     m_MainLayout->setSpacing (0.);
-    centralWidget->setLayout (m_MainLayout);
+    setLayout (m_MainLayout);
 
     // "Pick from My Music"
     m_my_music = new DrillDownItem;
@@ -116,7 +109,7 @@ AlertToneBrowser::createContent()
             this, SLOT(launchOviStore()));
 
     // "Current tone"
-    m_current = new MCustomContentItem(MContentItem::TwoTextLabels, centralWidget);
+    m_current = new MCustomContentItem(MContentItem::TwoTextLabels, this);
     m_current->setObjectName("AlertToneCurrent");
     connect(m_current, SIGNAL(clicked()), 
             this, SLOT(currentClicked()));
@@ -504,28 +497,4 @@ AlertToneBrowser::polishEvent ()
     connect(m_CancelButton, SIGNAL(clicked()), 
             this, SLOT(cancel()));
 }
-
-
-
-#ifdef RUN_STANDALONE
-int
-main(int argc, char **argv)
-{
-    int i = 0;
-    MApplication app(argc, argv);
-    MApplicationWindow w;
-    AlertTone *tone = new AlertTone("ringing.alert.tone");
-    AlertToneBrowser b(tone);
-
-    gst_init(&argc, &argv);
-
-    w.show();
-    b.appear();
-
-    i = app.exec();
-
-    delete tone;
-    return i;
-}
-#endif /* RUN_STANDALONE */
 
