@@ -490,6 +490,6 @@ AlertToneBrowser::polishEvent ()
     widgetAction->setLocation (MAction::ToolBarLocation);
     widgetAction->setWidget (m_CancelButton);
     page->addAction (widgetAction);
-    connect (m_CancelButton, SIGNAL (clicked ()), SLOT (cance l()));
+    connect (m_CancelButton, SIGNAL (clicked ()), SLOT (cancel ()));
 }
 
