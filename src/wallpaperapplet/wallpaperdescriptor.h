@@ -106,6 +106,7 @@ private:
     QImage   *m_Image;
     QImage   *m_ScaledImage;
 
+    friend class WallpaperDescriptor;
     #ifdef UNIT_TEST
     friend class Ut_WallpaperDescriptor;
     friend class Ft_WallpaperDescriptor;

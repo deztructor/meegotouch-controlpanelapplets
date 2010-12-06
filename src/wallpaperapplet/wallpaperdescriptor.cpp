@@ -34,8 +34,8 @@
  * Apparently the test engine can not tolerate the debug messages when there are
  * weird file names around.
  */
-//#define LOTDEBUG
-//#define DEBUG
+#define LOTDEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -286,8 +286,8 @@ Image::cache (
     SYS_DEBUG ("Caching %p", this);
     SYS_DEBUG ("*** threadSafe = %s", SYS_BOOL(threadSafe));
     SYS_DEBUG ("*** m_Cached   = %s", SYS_BOOL(m_Cached));
-    SYS_DEBUG ("*** filename() = %s", SYS_STR(filename()));
-    SYS_DEBUG ("*** m_ImageID  = %s", SYS_STR(m_ImageID));
+    SYS_DEBUG ("*** filename() = '%s'", SYS_STR(filename()));
+    SYS_DEBUG ("*** m_ImageID  = '%s'", SYS_STR(m_ImageID));
 
     if (m_Cached) {
         return;
@@ -302,6 +302,7 @@ Image::cache (
             delete m_Image;
 
         m_Image = new QImage ();
+        SYS_DEBUG ("*** Calling QImage::load(%s) 0", SYS_STR(filename()));
         if (!m_Image->load(filename())) {
             SYS_WARNING ("Loading image from %s failed", SYS_STR(filename()));
             delete m_Image;
@@ -314,7 +315,7 @@ Image::cache (
      * Loading from a previously loaded QImage.
      */
     if (m_Image) {
-        SYS_DEBUG ("Have a thread-save QImage, converting it.");
+        SYS_DEBUG ("*** Calling QPixmap::fromImage()");
         m_Pixmap = QPixmap::fromImage (*m_Image);
 
         delete m_Image;
@@ -357,6 +358,7 @@ Image::cache (
      * Main thread file loading.
      */
     if (!threadSafe && !filename().isEmpty()) {
+        SYS_DEBUG ("*** calling QImage::load(%s) 1", SYS_STR(filename()));
         success = m_Pixmap.load (filename());
         if (!success) {
             QFile file (filename());
@@ -473,10 +475,12 @@ Image::thumbnail (
         }
     }
 
+    #if 0
     SYS_DEBUG ("Returning %s for ID:%s File:%s", 
             SYS_BOOL(retval),
             SYS_STR(m_ImageID),
             SYS_STR(m_Filename));
+    #endif
     return retval;
 }
 
@@ -627,7 +631,6 @@ WallpaperDescriptor::unCache (
 bool
 WallpaperDescriptor::loading () const
 {
-    SYS_DEBUG ("Returning %s", SYS_BOOL(m_Loading));
     return m_Loading;
 }
 
@@ -725,7 +728,7 @@ WallpaperDescriptor::initiateThumbnailer ()
         return;
 
     m_Thumbnailer = new Thumbnailer;
-    #ifdef DEBUG
+    #ifdef LOTDEBUG
     QStringList list = Thumbnailer::getFlavors();
     foreach (QString flavor, list) {
         SYS_DEBUG ("*** flavor = %s", SYS_STR(flavor));
@@ -1021,7 +1024,31 @@ WallpaperDescriptor::loadAll ()
      */
     SYS_DEBUG ("secondary thread = %s", SYS_BOOL(threadSafe));
     for (int n = 0; n < m_Images.size(); ++n) {
+        bool alreadyFound = false;
         SYS_DEBUG ("*************** %d ***", n);
+
+        if (m_Images[n].m_Cached)
+            continue;
+
+        for (int i = 0; i < n; ++i) {
+            if (!m_Images[n].filename().isEmpty() &&
+                    m_Images[n].filename() == m_Images[i].filename()) {
+                alreadyFound = true;
+                SYS_DEBUG ("Not loading %d, it is the same as %d.", n, i);
+                if (threadSafe) {
+                    if (m_Images[i].m_Image)
+                        m_Images[n].m_Image =  new QImage (*(m_Images[i].m_Image));
+                } else {
+                    m_Images[n].m_Pixmap = m_Images[i].m_Pixmap;
+                }
+                break;
+            }
+        }
+        
+        if (alreadyFound) {
+            continue;
+        }
+
         m_Images[n].cache (threadSafe);
     }
 
