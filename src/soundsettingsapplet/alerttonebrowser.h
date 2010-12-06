@@ -20,11 +20,10 @@
 #define _ALERT_TONE_BROWSER_H_
 
 #include <QPointer>
-#include <SelectSingleContentItemPage.h>
+class SelectSingleContentItemPage;
 
 #include "alerttone.h"
 #include "alerttonepreview.h"
-#include "alerttonedefaults.h"
 #include "alerttonetoplevel.h"
 
 class QString;
@@ -33,7 +32,7 @@ class QGraphicsLinearLayout;
 class MCustomContentItem;
 class MButton;
 class DrillDownItem;
-
+class AlertToneDefaults;
 
 /*!
  * A compound widget that holds two buttons and a list widget. The two buttons
@@ -68,25 +67,25 @@ private slots:
 protected:
     virtual void retranslateUi();
     virtual void polishEvent ();
-    
+
 private:
     void startPlayingSound (const QString &filename);
     virtual void createContent();
 
-    AlertTone *m_tone;
-    MCustomContentItem *m_current;
-    DrillDownItem              *m_my_music;
-    DrillDownItem              *m_ovi_store;
+    AlertTone                       *m_tone;
+    MCustomContentItem              *m_current;
+    DrillDownItem                   *m_my_music;
+    DrillDownItem                   *m_ovi_store;
 
-    QGraphicsLinearLayout      *m_MainLayout;
-    AlertToneDefaults          *m_defaults;
-    MTextEdit                  *m_LiveFilterEditor;
-    QString                     currSelectedFile;
-    QPointer<AlertTonePreview>            m_preview;
-    QPointer<SelectSingleContentItemPage> m_MusicBrowser;
+    QGraphicsLinearLayout           *m_MainLayout;
+    AlertToneDefaults               *m_defaults;
+    MTextEdit                       *m_LiveFilterEditor;
+    QString                          currSelectedFile;
+    QPointer<AlertTonePreview>       m_preview;
+    SelectSingleContentItemPage     *m_MusicBrowser;
 
-    MButton                    *m_DoneButton;
-    MButton                    *m_CancelButton;
+    MButton                         *m_DoneButton;
+    MButton                         *m_CancelButton;
 
 #ifdef UNIT_TEST
     friend class Ut_AlertToneBrowserTests;

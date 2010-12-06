@@ -16,8 +16,8 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "alerttonebrowser.h"
+#include "alerttonedefaults.h"
 #include "alerttoneappletmaps.h"
 #include "trackerconnection.h"
 #include "drilldownitem.h"
@@ -25,9 +25,14 @@
 #include <QtTracker/Tracker>
 #include <QGraphicsLinearLayout>
 
+#ifdef HAVE_CONTENT_MANAGER
+#include <SelectSingleContentItemPage.h>
+#endif
+
 #include <MList>
 #include <MListFilter>
 #include <MApplication>
+#include <MApplicationPage>
 #include <MApplicationWindow>
 #include <MWindow>
 #include <MAction>
@@ -36,9 +41,6 @@
 #include <MWidgetAction>
 #include <MImageWidget>
 #include <MContentItem>
-
-// FIXME: Seems that this is not used any more...
-#define M_UNDO_PROPERTY "enabled"
 
 //#define DEBUG
 #define WARNING
@@ -60,18 +62,19 @@ public:
  * AlertToneBrowser implementation.
  */
 AlertToneBrowser::AlertToneBrowser(AlertTone *tone, QGraphicsWidget *parent):
-    AlertToneToplevel(parent),
-    m_tone(tone),
-    m_current(NULL),
-    m_defaults(NULL),
-    m_preview(NULL),
+    AlertToneToplevel (parent),
+    m_tone (tone),
+    m_current (0),
+    m_defaults (0),
+    m_preview (0),
+    m_MusicBrowser (0),
     m_DoneButton (0),
     m_CancelButton (0)
 {
     /*
      * FIXME: Why do we need to set the title?
      */
-    setProperty ("title", AlertToneAppletMaps::mapToUiString(m_tone->key()));
+    setProperty ("title", AlertToneAppletMaps::mapToUiString (m_tone->key ()));
 
     createContent();
 }
@@ -90,14 +93,15 @@ AlertToneBrowser::createContent()
     m_MainLayout->setSpacing (0.);
     setLayout (m_MainLayout);
 
+#ifdef HAVE_CONTENT_MANAGER
     // "Pick from My Music"
     m_my_music = new DrillDownItem;
     m_my_music->setLayoutPosition (M::VerticalTopPosition);
     m_my_music->imageWidget()->setImage("icon-l-music");
     m_my_music->setObjectName("MContentItem_pickFromMyMusic");
     m_MainLayout->addItem (m_my_music);
-    connect(m_my_music, SIGNAL(clicked()), 
-            this, SLOT(launchMusicBrowser()));
+    connect (m_my_music, SIGNAL (clicked ()), SLOT (launchMusicBrowser ()));
+#endif
 
     // "Get more from Ovi store"
     m_ovi_store = new DrillDownItem;
@@ -105,14 +109,12 @@ AlertToneBrowser::createContent()
     m_ovi_store->imageWidget()->setImage("icon-m-common-ovi");
     m_ovi_store->setObjectName("MContentItem_getMoreFromOviStore");
     m_MainLayout->addItem (m_ovi_store);
-    connect (m_ovi_store, SIGNAL(clicked()), 
-            this, SLOT(launchOviStore()));
+    connect (m_ovi_store, SIGNAL (clicked ()), SLOT (launchOviStore ()));
 
     // "Current tone"
-    m_current = new MCustomContentItem(MContentItem::TwoTextLabels, this);
+    m_current = new MCustomContentItem (MContentItem::TwoTextLabels, this);
     m_current->setObjectName("AlertToneCurrent");
-    connect(m_current, SIGNAL(clicked()), 
-            this, SLOT(currentClicked()));
+    connect (m_current, SIGNAL (clicked ()), SLOT (currentClicked ()));
 
     /*
      * The list with the available sound files.
@@ -123,8 +125,8 @@ AlertToneBrowser::createContent()
             MListFilter::FilterAsBeginningOfLine);
     m_LiveFilterEditor = m_defaults->filtering()->editor();
     m_MainLayout->addItem(m_defaults);
-    connect(m_defaults, SIGNAL(displayEntered()), 
-            this, SLOT(defaultsDisplayEntered()));
+    connect (m_defaults, SIGNAL (displayEntered ()),
+             SLOT (defaultsDisplayEntered ()));
 
     // We need this stretch to keep the widgets growing in size when too much
     // lines are filtered out from the list.
@@ -137,8 +139,8 @@ AlertToneBrowser::createContent()
     connect (m_LiveFilterEditor, SIGNAL(textChanged()),
             this, SLOT(textChanged ()));
 
-    connect(m_defaults, SIGNAL(defaultItemClicked(const QString &)), 
-            this, SLOT(defaultItemClicked(const QString &)));    
+    connect(m_defaults, SIGNAL(defaultItemClicked(const QString &)),
+            this, SLOT(defaultItemClicked(const QString &)));
 }
 
 
@@ -148,7 +150,7 @@ AlertToneBrowser::defaultsDisplayEntered()
     SYS_DEBUG ("");
 
     /*
-     * A fix for the NB#198788 - Live filtering text editor loses focus in 
+     * A fix for the NB#198788 - Live filtering text editor loses focus in
      * this scenario
      */
     if (!m_LiveFilterEditor || !m_LiveFilterEditor->isOnDisplay())
@@ -158,7 +160,9 @@ AlertToneBrowser::defaultsDisplayEntered()
 void
 AlertToneBrowser::retranslateUi()
 {
+#ifdef HAVE_CONTENT_MANAGER
     m_my_music->setProperty ("title", qtTrId("qtn_sond_pick_music"));
+#endif
     m_ovi_store->setProperty("title", qtTrId("qtn_sond_store"));
 
     if (m_DoneButton)
@@ -170,7 +174,7 @@ AlertToneBrowser::retranslateUi()
         m_CancelButton->setText (qtTrId("qtn_comm_cancel"));
 }
 
-void 
+void
 AlertToneBrowser::cancel()
 {
     SYS_DEBUG ("");
@@ -191,26 +195,28 @@ AlertToneBrowser::accept()
 void
 AlertToneBrowser::launchMusicBrowser()
 {
-    if (!m_MusicBrowser) {
-        SYS_DEBUG ("launching content picker...");
-        m_MusicBrowser = new SelectSingleContentItemPage(
-                QString(), 
-                QStringList() << "http://www.tracker-project.org/temp/nmm#MusicPiece", 
-                m_tone->trackerId());
+#ifdef HAVE_CONTENT_MANAGER
+    SYS_DEBUG ("launching content picker...");
 
-        m_MusicBrowser->setObjectName(
+    if (! m_MusicBrowser)
+    {
+        m_MusicBrowser = new SelectSingleContentItemPage (
+                QString (),
+                QStringList () <<
+                  "http://www.tracker-project.org/temp/nmm#MusicPiece",
+                m_tone->trackerId ());
+
+        m_MusicBrowser->setObjectName (
                 "SelectSingleContentItemPage_musicBrowser");
-        connect(m_MusicBrowser, SIGNAL(backButtonClicked()), 
-                this, SLOT(browserBackButtonClicked()));
-        connect(m_MusicBrowser, SIGNAL(contentItemSelected(const QString &)), 
-                this, SLOT(selectingMusicItem(const QString &)));
-
-        m_MusicBrowser->appear(MSceneWindow::DestroyWhenDismissed);
-    } else {
-        m_MusicBrowser->appear(MSceneWindow::DestroyWhenDismissed);
+        connect (m_MusicBrowser, SIGNAL (backButtonClicked ()),
+                 SLOT (browserBackButtonClicked ()));
+        connect (m_MusicBrowser, SIGNAL (contentItemSelected (const QString&)),
+                 SLOT (selectingMusicItem (const QString&)));
     }
-}
 
+    m_MusicBrowser->appear (MSceneWindow::DestroyWhenDismissed);
+#endif
+}
 
 void
 AlertToneBrowser::launchOviStore()
@@ -225,13 +231,6 @@ trackerIdToFilename(const QString &trackerId)
 {
     const QString query = "select ?u where { <" + trackerId + "> nie:url ?u }";
 
-    #ifdef DEBUG
-    /* XXX: Deprecated, causes build failure:
-     * XXX: error: 'class SopranoLive::RDFService' has no member named 'setConsoleVerbosity'
-     *
-     * ::tracker()->setConsoleVerbosity (5);
-     */
-    #endif
     QVector<QStringList> result = ::tracker()->rawSparqlQuery(query);
 
     SYS_DEBUG ("*** query         = %s", SYS_STR(query));
@@ -239,7 +238,7 @@ trackerIdToFilename(const QString &trackerId)
     for (int Nix = 0; Nix < result.size() ; Nix++) {
         for (int Nix1 = 0 ; Nix1 < result[Nix].size() ; Nix1++) {
             QUrl url(result[Nix][Nix1]);
-            SYS_DEBUG ("*** result[%d][%d] = %s", 
+            SYS_DEBUG ("*** result[%d][%d] = %s",
                     Nix, Nix1, SYS_STR(result[Nix][Nix1]));
             if (url.isValid() && url.scheme() == "file")
                 return QUrl::fromPercentEncoding(url.path().toUtf8());
@@ -271,11 +270,11 @@ AlertToneBrowser::setAlertTone (
     if (setGui) {
         /*
          * The nice name is most probably already in the cache. If not the model
-         * will do receive a signal. 
+         * will do receive a signal.
          * FIXME: how could we test this? Do we need to teszt what happens when
          * this item is not cached yet?
          */
-        m_defaults->selectAndScroll (fname, 
+        m_defaults->selectAndScroll (fname,
                 TrackerConnection::instance()->niceNameFromFileName(fname));
 #if 0
     } else {
@@ -293,9 +292,9 @@ AlertToneBrowser::setAlertTone (
  * This slot is called when the text in the live filtering text editor has been
  * changed.
  */
-void 
+void
 AlertToneBrowser::textChanged ()
-{ 
+{
     bool     visible;
     QString  text;
 
@@ -346,7 +345,7 @@ AlertToneBrowser::startPlayingSound (
     if (playingTheSame) {
         delete m_preview;
     } else {
-        if (m_preview) 
+        if (m_preview)
             delete m_preview;
         m_preview = new AlertTonePreview(filename);
     }
@@ -355,7 +354,7 @@ AlertToneBrowser::startPlayingSound (
 /*
  * This method will stop the playback unconditionaly.
  */
-void 
+void
 AlertToneBrowser::stopPlayingSound ()
 {
     if (m_preview)
@@ -378,7 +377,7 @@ AlertToneBrowser::defaultItemClicked (
 
 /*
  * This slot is activated when the browser back button is clicked. Stopping the
- * playback will fix NB#199653 - Music preview doesn't stop when leaving from 
+ * playback will fix NB#199653 - Music preview doesn't stop when leaving from
  * "Select from My music" view.
  *
  * FIXME: Maybe watching the back button signal is not robus enough, the
@@ -389,7 +388,9 @@ AlertToneBrowser::browserBackButtonClicked ()
 {
     SYS_DEBUG ("");
     stopPlayingSound ();
+#ifdef HAVE_CONTENT_MANAGER
     m_MusicBrowser->dismiss ();
+#endif
 }
 
 /*
@@ -401,7 +402,7 @@ AlertToneBrowser::selectingMusicItem (
         const QString &item)
 {
     QString fname = trackerIdToFilename(item);
-    
+
     if (fname.isEmpty()) {
         SYS_WARNING ("TrackerID '%s' is not valid.", SYS_STR(item));
         stopPlayingSound ();
@@ -418,7 +419,7 @@ AlertToneBrowser::selectingMusicItem (
 
 /*
  * This virtual method is called when the MApplicationPage for the widget is
- * already there, so we can initialize it. 
+ * already there, so we can initialize it.
  */
 void
 AlertToneBrowser::polishEvent ()
@@ -426,7 +427,7 @@ AlertToneBrowser::polishEvent ()
     QGraphicsWidget  *parent;
     MApplicationPage *page = 0;
     MWidgetAction    *widgetAction;
-    
+
     SYS_DEBUG ("");
     /*
      * Just a protection about double adding the actions.
@@ -456,7 +457,7 @@ AlertToneBrowser::polishEvent ()
         return;
 
     /**************************************************************************
-     * Hiding the home button and the escape button from the page. 
+     * Hiding the home button and the escape button from the page.
      */
     page->setComponentsDisplayMode (
             MApplicationPage::EscapeButton,
@@ -468,33 +469,27 @@ AlertToneBrowser::polishEvent ()
     /**************************************************************************
      * Creating the 'done' button and adding it to the page.
      */
-    m_DoneButton = new MButton (
-            //% "Done"
-            qtTrId("qtn_comm_command_done"),
-            this);
-    m_DoneButton->setViewType("toolbar");
-    m_DoneButton->setStyleName ("CommonToolbarButton");    
+    //% "Done"
+    m_DoneButton = new MButton (qtTrId("qtn_comm_command_done"), this);
+    m_DoneButton->setViewType ("toolbar");
+    m_DoneButton->setStyleName ("CommonToolbarButton");
     widgetAction = new MWidgetAction (this);
-    widgetAction->setLocation(MAction::ToolBarLocation);
+    widgetAction->setLocation (MAction::ToolBarLocation);
     widgetAction->setWidget (m_DoneButton);
-    page->addAction(widgetAction);
-    connect(m_DoneButton, SIGNAL(clicked()), 
-            this, SLOT(accept()));
-    
+    page->addAction (widgetAction);
+    connect (m_DoneButton, SIGNAL (clicked ()), SLOT (accept ()));
+
     /**************************************************************************
      * Creating the 'cancel' button and adding it to the page.
      */
-    m_CancelButton = new MButton (
-            //% "Cancel"
-            qtTrId("qtn_comm_cancel"),
-            this);
-    m_CancelButton->setViewType("toolbar");
-    m_CancelButton->setStyleName ("CommonToolbarButton");    
+    //% "Cancel"
+    m_CancelButton = new MButton (qtTrId("qtn_comm_cancel"), this);
+    m_CancelButton->setViewType ("toolbar");
+    m_CancelButton->setStyleName ("CommonToolbarButton");
     widgetAction = new MWidgetAction (this);
-    widgetAction->setLocation(MAction::ToolBarLocation);
+    widgetAction->setLocation (MAction::ToolBarLocation);
     widgetAction->setWidget (m_CancelButton);
-    page->addAction(widgetAction);
-    connect(m_CancelButton, SIGNAL(clicked()), 
-            this, SLOT(cancel()));
+    page->addAction (widgetAction);
+    connect (m_CancelButton, SIGNAL (clicked ()), SLOT (cance l()));
 }
 
