@@ -89,8 +89,8 @@ public:
     void cache (bool threadSafe = false);
     void unCache ();
 
-    QPixmap pixmap ();
-    QPixmap scaled (QSize size);
+    QImage image ();
+    QImage scaledImage (QSize size);
     void preScale (QSize size, bool threadSafe = false);
 
 private:
@@ -102,7 +102,6 @@ private:
     QUrl      m_Url;  
     QPixmap   m_ThumbnailPixmap;
     bool      m_HasThumbnail;
-    QPixmap   m_Pixmap;
     QImage   *m_Image;
     QImage   *m_ScaledImage;
 
@@ -198,10 +197,9 @@ public:
     
     bool loading () const;
     void setLoading (bool loading = true);
-    
-    QPixmap pixmap (
+    QImage image (
             ImageVariant   variant = WallpaperDescriptor::Landscape);
-    QPixmap scaled (
+    QImage scaledImage (
             QSize size,
             ImageVariant   variant = WallpaperDescriptor::Landscape);
 

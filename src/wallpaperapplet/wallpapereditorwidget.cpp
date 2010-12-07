@@ -27,6 +27,7 @@
 #include <QGraphicsLinearLayout>
 #include <QGraphicsGridLayout>
 #include <QPixmap>
+#include <QImage>
 #include <QTimer>
 
 #include <QGestureEvent>
@@ -125,15 +126,25 @@ WallpaperEditorWidget::paint (
             QColor ("black"));
 
     if (portrait) {
+        painter->drawImage (
+                QRect (imageX(), imageY(), imageDX(), imageDY()),
+                m_bgPortrait);
+#if 0
         painter->drawPixmap (
                 imageX(), imageY(),
                 imageDX(), imageDY(),
                 m_bgPortrait);
+#endif
     } else if (!portrait) {
+        painter->drawImage (
+                QRect (imageX(), imageY(), imageDX(), imageDY()),
+                m_bgLandscape);
+#if 0
         painter->drawPixmap (
                 imageX(), imageY(),
                 imageDX(), imageDY(),
                 m_bgLandscape);
+#endif
     }
 
     MWidget::paint (painter, option, widget);
@@ -187,25 +198,13 @@ WallpaperEditorWidget::createContent ()
          * be more generic, and use the original only when it differs from the
          * edited, then we could move it to the WallpaperDescriptor class...
          */
-        m_bgLandscape = cdesc->scaled (
+        m_bgLandscape = cdesc->scaledImage (
                 m_LandscapeTrans.expectedSize(),
                 WallpaperDescriptor::OriginalLandscape);
 
-        m_bgPortrait = cdesc->scaled (
+        m_bgPortrait = cdesc->scaledImage (
                 m_PortraitTrans.expectedSize(),
                 WallpaperDescriptor::OriginalPortrait);
-#if 0
-        QPixmap landscapePixmap = cdesc->originalPixmap (M::Landscape);
-        m_bgLandscape = landscapePixmap.scaled (
-                m_LandscapeTrans.expectedSize(), 
-                Qt::KeepAspectRatioByExpanding);
-
-        QPixmap portraitPixmap = cdesc->originalPixmap (M::Portrait);
-        m_bgPortrait = portraitPixmap.scaled (
-                m_PortraitTrans.expectedSize(), 
-                Qt::KeepAspectRatioByExpanding);
-#endif
-
         /*
          * Need to copy back...
          */
@@ -236,16 +235,11 @@ not_current_wallpaper:
      * If the image is very big the handling might be slow, so we scale it
      * down.
      */
-#if 0
-    desc->cache();
-    m_bgLandscape = desc->scaled (m_LandscapeTrans.expectedSize());
-    m_bgPortrait = desc->scaled (m_PortraitTrans.expectedSize());
-#endif
-    m_bgLandscape = desc->scaled (
+    m_bgLandscape = desc->scaledImage (
             m_LandscapeTrans.expectedSize(),
             WallpaperDescriptor::Landscape);
 
-    m_bgPortrait = desc->scaled (
+    m_bgPortrait = desc->scaledImage (
            m_PortraitTrans.expectedSize(),
            WallpaperDescriptor::Portrait);
 

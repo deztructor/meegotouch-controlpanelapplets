@@ -50,7 +50,7 @@
 #include <MGConfItem>
 
 //#define LOTDEBUG
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -479,34 +479,34 @@ WallpaperBusinessLogic::saveOriginal (
     
     imageID = desc->imageID (WallpaperDescriptor::OriginalLandscape);
     if (!imageID.isEmpty()) {
-        QPixmap pixmap;
+        QImage image;
         QString filename;
 
-        pixmap = desc->pixmap (WallpaperDescriptor::OriginalLandscape);
+        image = desc->image (WallpaperDescriptor::OriginalLandscape);
         ensureHasDirectory ();
         filename = dirPath () +
             MTheme::currentTheme () + "-" +
             imageID + 
             saveFileExtension;
 
-        pixmap.save (filename);
+        image.save (filename);
         desc->setFilename (filename, WallpaperDescriptor::OriginalLandscape);
         desc->setMimeType (saveFileMimeType, WallpaperDescriptor::OriginalLandscape);
     }
 
     imageID = desc->imageID (WallpaperDescriptor::OriginalPortrait);
     if (!imageID.isEmpty()) {
-        QPixmap pixmap;
+        QImage  image;
         QString filename;
 
-        pixmap = desc->pixmap (WallpaperDescriptor::OriginalPortrait);
+        image = desc->image (WallpaperDescriptor::OriginalPortrait);
         ensureHasDirectory ();
         filename = dirPath () +
             MTheme::currentTheme () + "-" +
             imageID + 
             saveFileExtension;
 
-        pixmap.save (filename);
+        image.save (filename);
         desc->setFilename (filename, WallpaperDescriptor::OriginalPortrait);
         desc->setMimeType (saveFileMimeType, WallpaperDescriptor::OriginalPortrait);
     }
@@ -610,8 +610,6 @@ WallpaperBusinessLogic::writeFiles (
     makeImageFile (portraitFilePath, desc, portraitITrans);
     makeImageFile (landscapeFilePath, desc, landscapeITrans);
     
-    SYS_DEBUG ("saving landscape = %s", SYS_STR(landscapeFilePath));
-    SYS_DEBUG ("saving portrait  = %s", SYS_STR(portraitFilePath));
     m_PortraitGConfItem->set (portraitFilePath);
     m_LandscapeGConfItem->set (landscapeFilePath);
 
@@ -637,7 +635,7 @@ WallpaperBusinessLogic::makeImageFile (
     QPixmap   pixmap (transformations->expectedSize());
     QPainter  painter (&pixmap);
     qreal     scale = transformations->scale();
-    QPixmap   image;
+    QImage    image;
     qreal     ratio, ratio1;
     bool      success;
 
@@ -654,7 +652,7 @@ WallpaperBusinessLogic::makeImageFile (
         cdesc = qobject_cast<WallpaperCurrentDescriptor*> (desc);
         image.load (cdesc->originalImageFile (transformations->orientation()));
     } else {
-        image = desc->pixmap();
+        image = desc->image();
     }
 
     ratio = 
@@ -677,11 +675,12 @@ WallpaperBusinessLogic::makeImageFile (
     /*
      * Then we draw the scaled image with the appropriate offset.
      */
-    painter.drawPixmap (
-                transformations->x(), transformations->y(),
+    painter.drawImage (
+            QRectF (transformations->x(), 
+                transformations->y(),
                 (scale * image.width ()) * ratio,
-                (scale * image.height ()) * ratio,
-                image);
+                (scale * image.height ()) * ratio),
+            image);
 
     SYS_DEBUG ("Saving file into %s", SYS_STR(filePath));
     success = pixmap.save (filePath);

@@ -84,7 +84,6 @@ Image::Image (
     m_Url      = orig.m_Url;  
     m_ThumbnailPixmap = orig.m_ThumbnailPixmap;
     m_HasThumbnail = orig.m_HasThumbnail;
-    m_Pixmap   = orig.m_Pixmap;
 }
 
 void 
@@ -101,8 +100,6 @@ Image::reset ()
     m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
     m_HasThumbnail = false;
 
-    m_Pixmap = QPixmap ();
-    
     if (m_Image) {
         delete m_Image;
         m_Image = 0;
@@ -127,7 +124,6 @@ Image::operator= (
         m_Url      = rhs.m_Url;  
         m_ThumbnailPixmap = rhs.m_ThumbnailPixmap;
         m_HasThumbnail = rhs.m_HasThumbnail;
-        m_Pixmap   = rhs.m_Pixmap;
         m_Image    = 0;
         m_ScaledImage = 0;
     }
@@ -296,7 +292,7 @@ Image::cache (
     /*
      * Secondary thread file loading.
      */
-    if (threadSafe && !filename().isEmpty()) {
+    if (!filename().isEmpty()) {
         SYS_DEBUG ("Doing a thread-safe loading.");
         if (m_Image)
             delete m_Image;
@@ -308,18 +304,7 @@ Image::cache (
             delete m_Image;
             m_Image = 0;
         }
-        return;
-    }
 
-    /*
-     * Loading from a previously loaded QImage.
-     */
-    if (m_Image) {
-        SYS_DEBUG ("*** Calling QPixmap::fromImage()");
-        m_Pixmap = QPixmap::fromImage (*m_Image);
-
-        delete m_Image;
-        m_Image = NULL;
         m_Cached = true;
         return;
     }
@@ -338,7 +323,7 @@ Image::cache (
          */
         cPixmap = MTheme::instance()->pixmap (m_ImageID);
         if (cPixmap->width() > 1 && cPixmap->height()) {
-            m_Pixmap = *cPixmap;
+            m_Image = new QImage (cPixmap->toImage());
             m_Cached = true;
             MTheme::instance()->releasePixmap (cPixmap);
             return;
@@ -348,28 +333,11 @@ Image::cache (
 
 
         pixmap = MTheme::instance()->pixmapCopy (m_ImageID);
-        m_Pixmap = *pixmap;
+        m_Image = new QImage (pixmap->toImage());
+        
         delete pixmap;
         m_Cached = true;
         return;
-    }
-
-    /*
-     * Main thread file loading.
-     */
-    if (!threadSafe && !filename().isEmpty()) {
-        SYS_DEBUG ("*** calling QImage::load(%s) 1", SYS_STR(filename()));
-        success = m_Pixmap.load (filename());
-        if (!success) {
-            QFile file (filename());
-        
-            SYS_WARNING ("Loading of %s has been failed: %m", 
-                    SYS_STR(filename()));
-            SYS_WARNING ("*** exists = %s", SYS_BOOL(file.exists()));
-            return;
-        }
-    
-        m_Cached = true;
     }
 }
 
@@ -380,19 +348,25 @@ Image::unCache ()
     if (!m_Cached)
         return;
 
-    m_Pixmap = QPixmap();
     m_Cached = false;
+
+    if (m_Image) {
+        delete m_Image;
+        m_Image = 0;
+    }
 }
 
-QPixmap
-Image::pixmap ()
+QImage
+Image::image ()
 {
-    cache();
-    return m_Pixmap;
+    cache ();
+    // FIXME: we should not use pointer ever!
+    Q_ASSERT (m_Image);
+    return *m_Image;
 }
 
-QPixmap 
-Image::scaled (
+QImage 
+Image::scaledImage (
         QSize size)
 {
     SYS_DEBUG ("*** size = %dx%d", size.width(), size.height());
@@ -405,10 +379,11 @@ Image::scaled (
             (m_ScaledImage->width() == size.width() ||
             m_ScaledImage->height() == size.height())) {
         SYS_DEBUG ("Pre-scale hit.");
-        return QPixmap::fromImage (*m_ScaledImage);
+        return *m_ScaledImage;
     }
 
-    return m_Pixmap.scaled (size, Qt::KeepAspectRatioByExpanding);
+    Q_ASSERT (m_Image);
+    return m_Image->scaled (size, Qt::KeepAspectRatioByExpanding);
 }
 
 void
@@ -466,21 +441,20 @@ Image::thumbnail (
          * And if the force was set that means we have to make our own thumbnail
          * most probably the thumbler failed.
          */
+        // FIXME: Do we still need this?
+        SYS_WARNING ("No thumbnail available!");
         cache ();
-        if (m_Cached) {
-            m_ThumbnailPixmap = m_Pixmap.scaled (
-                    defaultThumbnailWidth, defaultThumbnailHeight);
+        if (m_Image) {
+            m_ThumbnailPixmap = 
+                QPixmap::fromImage (m_Image->scaled (
+                    defaultThumbnailWidth, defaultThumbnailHeight));
             m_HasThumbnail = true;
             retval = true;
+        } else {
+            SYS_WARNING ("No image after caching?");
         }
     }
 
-    #if 0
-    SYS_DEBUG ("Returning %s for ID:%s File:%s", 
-            SYS_BOOL(retval),
-            SYS_STR(m_ImageID),
-            SYS_STR(m_Filename));
-    #endif
     return retval;
 }
 
@@ -646,24 +620,24 @@ WallpaperDescriptor::setLoading (
     emit changed (this);
 }
 
+QImage 
+WallpaperDescriptor::image (
+            ImageVariant   variant)
+{
+    return m_Images[variant].image();
+}
+
 /*!
  * Will cache the pixmap, then returns the loaded QPixmap.
  */
-QPixmap
-WallpaperDescriptor::pixmap (
-        ImageVariant variant)
-{
-    return m_Images[variant].pixmap();
-}
-
-QPixmap 
-WallpaperDescriptor::scaled (
+QImage 
+WallpaperDescriptor::scaledImage (
         QSize          size,
         ImageVariant   variant)
 {
     SYS_DEBUG ("");
     cache ();
-    return m_Images[variant].scaled(size);
+    return m_Images[variant].scaledImage(size);
 }
 
 void
@@ -1038,8 +1012,6 @@ WallpaperDescriptor::loadAll ()
                 if (threadSafe) {
                     if (m_Images[i].m_Image)
                         m_Images[n].m_Image =  new QImage (*(m_Images[i].m_Image));
-                } else {
-                    m_Images[n].m_Pixmap = m_Images[i].m_Pixmap;
                 }
                 break;
             }

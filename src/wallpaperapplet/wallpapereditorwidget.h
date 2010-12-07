@@ -32,6 +32,7 @@ class QGraphicsSceneWheelEvent;
 class MButton;
 class QSize;
 class QPixmap;
+class QImage;
 class QPointF;
 class QGestureEvent;
 class WallpaperInfoHeader;
@@ -136,8 +137,8 @@ private:
     // FIXME: The infoheader is not used any more, but removing this pointer
     // would cause ABI break.
     WallpaperInfoHeader  *m_InfoHeader;
-    QPixmap               m_bgLandscape;
-    QPixmap               m_bgPortrait;
+    QImage                m_bgLandscape;
+    QImage                m_bgPortrait;
     MButton              *m_DoneButton;
     MButton              *m_CancelButton;
     bool                  m_NoTitlebar;
