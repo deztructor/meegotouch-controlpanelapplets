@@ -35,7 +35,7 @@
  * weird file names around.
  */
 //#define LOTDEBUG
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -63,10 +63,14 @@ Image::Image () :
 
 Image::~Image ()
 {
+    SYS_DEBUG ("*** m_Image        = %p", m_Image);
+    SYS_DEBUG ("*** m_ScaledImage  = %p", m_ScaledImage);
+#if 0
     if (m_Image) 
         delete m_Image;
     if (m_ScaledImage)
         delete m_ScaledImage;
+#endif
 }
 
 
@@ -382,7 +386,11 @@ Image::scaledImage (
         return *m_ScaledImage;
     }
 
-    Q_ASSERT (m_Image);
+    cache ();
+    // FIXME: We should not use pointers.
+    if (!m_Image)
+        m_Image = new QImage();
+
     return m_Image->scaled (size, Qt::KeepAspectRatioByExpanding);
 }
 

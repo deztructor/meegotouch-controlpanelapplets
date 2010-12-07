@@ -73,6 +73,20 @@ QPixmap::scaled (
     return retval;
 }
 
+#include <QImage>
+bool
+QImage::load (
+        const QString &fileName, 
+        const char     *format)
+{
+    Q_UNUSED (format);
+    SYS_WARNING ("Emulating load of %s", SYS_STR(fileName));
+    *this = QImage (QSize(864, 480), QImage::Format_RGB16);
+    this->fill (0);
+
+    return true;
+}
+
 /******************************************************************************
  * QGraphicsView stub.
  */

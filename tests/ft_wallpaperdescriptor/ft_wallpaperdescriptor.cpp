@@ -125,12 +125,11 @@ Ft_WallpaperDescriptor::testCacheUncache ()
     m_Desc->cache ();
 
     QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Cached);
-    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Pixmap.width() == 864);
-    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Pixmap.height() == 480);
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Image->width() == 864);
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Image->height() == 480);
 
     m_Desc->unCache ();
-    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Pixmap.width() == 0);
-    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Pixmap.height() == 0);
+    QVERIFY (!m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Image);
 
     dropDescriptor ();
 }

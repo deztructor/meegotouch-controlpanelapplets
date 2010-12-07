@@ -129,22 +129,10 @@ WallpaperEditorWidget::paint (
         painter->drawImage (
                 QRect (imageX(), imageY(), imageDX(), imageDY()),
                 m_bgPortrait);
-#if 0
-        painter->drawPixmap (
-                imageX(), imageY(),
-                imageDX(), imageDY(),
-                m_bgPortrait);
-#endif
     } else if (!portrait) {
         painter->drawImage (
                 QRect (imageX(), imageY(), imageDX(), imageDY()),
                 m_bgLandscape);
-#if 0
-        painter->drawPixmap (
-                imageX(), imageY(),
-                imageDX(), imageDY(),
-                m_bgLandscape);
-#endif
     }
 
     MWidget::paint (painter, option, widget);
