@@ -342,18 +342,3 @@ AlertToneDefaultsModel::fileChanged (
     m_FileWatcher->removePath (filename);
 }
 
-
-#ifdef ALERT_TONE_DEFAULTS_MODEL_RUN_STANDALONE
-#include <MApplication>
-#include "alerttonedefaultsmodel.h"
-
-int
-main(int argc, char **argv)
-{
-	MApplication app(argc, argv);
-
-	AlertToneDefaultsModel atdm;
-
-	return app.exec();
-}
-#endif /* ALERT_TONE_DEFAULTS_MODEL_RUN_STANDALONE */

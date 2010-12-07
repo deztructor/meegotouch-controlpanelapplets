@@ -21,19 +21,10 @@
 #define _ALERT_TONE_TOPLEVEL_H_
 
 #include <MAction>
-#ifdef RUN_STANDALONE
-#include <MApplicationPage>
-#else /* !RUN_STANDALONE */
-#include "dcpwidget.h"
-#endif /* RUN_STANDALONE */
+#include <dcpwidget.h>
 
 class AlertToneToplevel :
-#ifdef RUN_STANDALONE
-public MApplicationPage
-#else /* !RUN_STANDALONE */
 public DcpWidget
-#endif /* RUN_STANDALONE */
-
 {
 	Q_OBJECT
 
@@ -47,11 +38,6 @@ public:
 	QVector<MAction *>viewMenuItems() const;
 
 	void emit_changeWidget(int widgetId);
-
-#ifdef RUN_STANDALONE
-Q_SIGNALS:
-	void changeWidget(int widgetId);
-#endif /* RUN_STANDALONE */
 
 private:
 	QString m_title;

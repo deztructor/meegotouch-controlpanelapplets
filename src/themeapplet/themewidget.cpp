@@ -35,7 +35,7 @@
 #include <MImageWidget>
 #include <QTimer>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -55,6 +55,7 @@ ThemeWidget::ThemeWidget (
 
 ThemeWidget::~ThemeWidget ()
 {
+    SYS_DEBUG ("");
     m_LiveFilterEditor->setParentLayoutItem (0);
 }
 

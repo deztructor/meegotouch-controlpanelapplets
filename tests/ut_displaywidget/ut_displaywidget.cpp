@@ -126,7 +126,7 @@ Ut_DisplayWidget::testBrightnessSlider ()
 
     for (int n = 0; n < brightnessValues.size(); ++n) {
         widget->m_brightnessSlider->setValue (n);
-        QVERIFY (widget->m_logic->selectedBrightnessValueIndex() == n);
+        QCOMPARE (widget->m_logic->selectedBrightnessValueIndex(), n);
     }
 
     delete widget;
@@ -160,7 +160,7 @@ Ut_DisplayWidget::testScreenTimeout ()
         
         screenLightsValue = widget->m_logic->selectedScreenLightsValue ();
         SYS_DEBUG ("*** screenLightsValue = %d", screenLightsValue);
-        QVERIFY (screenLightsValue == SelectIndex);
+        QCOMPARE (screenLightsValue, SelectIndex);
     }
 
     /*
@@ -171,7 +171,7 @@ Ut_DisplayWidget::testScreenTimeout ()
 
         screenLightsValue = widget->m_logic->selectedScreenLightsValue ();
         SYS_DEBUG ("*** screenLightsValue = %d", screenLightsValue);
-        QVERIFY (screenLightsValue == 4);
+        QCOMPARE (screenLightsValue, 4);
     }
 
     delete widget;
@@ -190,12 +190,12 @@ Ut_DisplayWidget::testBlankInhibit ()
 
     QVERIFY (widget->m_logic);
     QVERIFY (widget->m_blankInhibitButton);
-    QVERIFY (widget->m_blankInhibitButton->isChecked() == 
-            widget->m_logic->blankInhibitValue ());
+    QCOMPARE (widget->m_blankInhibitButton->isChecked(),
+              widget->m_logic->blankInhibitValue ());
 
     widget->m_blankInhibitButton->click();
-    QVERIFY (widget->m_blankInhibitButton->isChecked() == 
-            widget->m_logic->blankInhibitValue ());
+    QCOMPARE (widget->m_blankInhibitButton->isChecked(),
+              widget->m_logic->blankInhibitValue ());
 }
 
 void 
@@ -206,11 +206,10 @@ Ut_DisplayWidget::testTranslation ()
     widget = new DisplayWidget;
     widget->retranslateUi ();
 
-    // FIXME: Should stub the qtTrId() method.
-    QVERIFY (widget->m_TitleLabel->text() == "qtn_disp_display");
-    QVERIFY (widget->m_SubTitleLabel->text() == "qtn_disp_bright");
-    QVERIFY (widget->m_screenTimeout->title() == "qtn_disp_screenoff");
-    QVERIFY (widget->m_blankInhibitLabel->text() == "qtn_disp_screenon");
+    QCOMPARE (widget->m_TitleLabel->text(), qtTrId ("qtn_disp_display"));
+    QCOMPARE (widget->m_SubTitleLabel->text(), qtTrId ("qtn_disp_bright"));
+    QCOMPARE (widget->m_screenTimeout->title(), qtTrId ("qtn_disp_screenoff"));
+    QCOMPARE (widget->m_blankInhibitLabel->text(), qtTrId ("qtn_disp_screenon"));
 }
 
 QTEST_APPLESS_MAIN(Ut_DisplayWidget)
