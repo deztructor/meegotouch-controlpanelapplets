@@ -52,6 +52,23 @@ QPixmap::load (
     return pixmapLoadSuccess;
 }
 
+#include <QImage>
+bool
+QImage::load (
+        const QString &fileName, 
+        const char     *format)
+{
+    Q_UNUSED (format);
+    SYS_WARNING ("Emulating load of %s", SYS_STR(fileName));
+    if (pixmapLoadSuccess) {
+        *this = QImage (QSize(864, 480), QImage::Format_RGB16);
+        this->fill (0);
+    }
+
+    return pixmapLoadSuccess;
+}
+
+
 /******************************************************************************
  * SignalSink implementation.
  */
@@ -322,7 +339,7 @@ Ut_WallpaperDescriptor::testThumbnailingFailure ()
 
     /*
      * Ok, now we emulate the case when the thumbnail creation is finished with
-     * an error. We have to make the pixmap loader stub simulate failure,
+     * an error. We have to make the QImage loader stub simulate failure,
      * otherwise the descriptor does the thumbnailing by itself.
      */
     pixmapLoadSuccess = false;

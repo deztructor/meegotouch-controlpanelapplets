@@ -89,7 +89,7 @@ public:
     void cache (bool threadSafe = false);
     void unCache ();
 
-    QImage image ();
+    QImage &image ();
     QImage scaledImage (QSize size);
     void preScale (QSize size, bool threadSafe = false);
 
@@ -102,7 +102,7 @@ private:
     QUrl      m_Url;  
     QPixmap   m_ThumbnailPixmap;
     bool      m_HasThumbnail;
-    QImage   *m_Image;
+    QImage    m_Image;
     QImage   *m_ScaledImage;
 
     friend class WallpaperDescriptor;
@@ -197,7 +197,7 @@ public:
     
     bool loading () const;
     void setLoading (bool loading = true);
-    QImage image (
+    QImage &image (
             ImageVariant   variant = WallpaperDescriptor::Landscape);
     QImage scaledImage (
             QSize size,
