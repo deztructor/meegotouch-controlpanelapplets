@@ -36,7 +36,6 @@ HEADERS += \
     ../../src/debug.h \
     ut_aboutapplet.h \
     $$SRC_PREFIX/aboutapplet.h \
-    $$SRC_PREFIX/aboutbrief.h \
     $$SRC_PREFIX/aboutbusinesslogic.h \
     $$SRC_PREFIX/aboutwidget.h
 
@@ -44,7 +43,6 @@ SOURCES += \
     ../../src/debug.cpp \
     ut_aboutapplet.cpp \
     $$SRC_PREFIX/aboutapplet.cpp \
-    $$SRC_PREFIX/aboutbrief.cpp \
     $$SRC_PREFIX/aboutbusinesslogic.cpp \
     $$SRC_PREFIX/aboutwidget.cpp
 

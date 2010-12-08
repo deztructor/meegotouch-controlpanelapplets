@@ -18,7 +18,6 @@
 ****************************************************************************/
 #include "aboutapplet.h"
 #include "aboutwidget.h"
-#include "aboutbrief.h"
 
 #include <MAction>
 
@@ -32,14 +31,6 @@ M_LIBRARY
 
 Q_EXPORT_PLUGIN2(aboutapplet, AboutApplet)
 
-#define LOAD_THEME_FILE
-
-#ifdef LOAD_THEME_FILE
-#include <MTheme>
-const QString cssDir = 
-    "/usr/share/themes/base/meegotouch/libaboutapplet/style/";
-#endif
-
 AboutApplet::AboutApplet() : m_AboutBusinessLogic (0)
 {
 }
@@ -51,15 +42,10 @@ AboutApplet::~AboutApplet()
 void 
 AboutApplet::init()
 {
-    #ifdef LOAD_THEME_FILE
-    QString themeFile = cssDir + "libaboutapplet.css";
-    MTheme::loadCSS (themeFile);
-    #endif
 }
 
-DcpWidget *
-AboutApplet::pageMain(
-        int widgetId)
+DcpStylableWidget *
+AboutApplet::constructStylableWidget (int widgetId)
 {
     if (m_AboutBusinessLogic.isNull ())
         m_AboutBusinessLogic = new AboutBusinessLogic;
@@ -77,15 +63,7 @@ AboutApplet::pageMain(
     }
 
     return 0;
-}
 
-DcpWidget *
-AboutApplet::constructWidget (
-        int widgetId)
-{
-    SYS_DEBUG ("-----------------------------------");
-    SYS_DEBUG ("*** widgetId = %d", widgetId);
-    return pageMain (widgetId);
 }
 
 QString
@@ -95,19 +73,11 @@ AboutApplet::title() const
     return qtTrId ("qtn_prod_about_product");
 }
 
-QVector<MAction*>
-AboutApplet::viewMenuItems()
+QVector<MAction *>
+AboutApplet::viewMenuItems ()
 {
-    QVector<MAction*>   vector;
+    QVector<MAction *> vector;
 
     return vector;
-}
-
-DcpBrief *
-AboutApplet::constructBrief (
-        int partId)
-{
-    Q_UNUSED (partId);
-    return new AboutBrief ();
 }
 

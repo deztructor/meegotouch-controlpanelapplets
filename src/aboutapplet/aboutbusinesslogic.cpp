@@ -55,6 +55,7 @@ AboutBusinessLogic::AboutBusinessLogic()
 
 AboutBusinessLogic::~AboutBusinessLogic()
 {
+    SYS_WARNING ("");
     if (m_ManagerDBusIf)
         delete m_ManagerDBusIf;
     if (m_AdapterDBusIf)

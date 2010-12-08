@@ -2,7 +2,7 @@ Source: meegotouch-controlpanelapplets
 Section: devel
 Priority: optional
 Maintainer: David Kedves <dkedves@blumsoft.eu>
-Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.8.0),
+Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.9.7),
                libmeegotouch-dev (>= 0.20.37), libqmsystem2-dev,
                libprofile-dev, system-ui-dev (>= 0.16), libqttracker-dev,
                libthumbnailer-dev, libcontentmanager-dev, devicelock-dev,
@@ -55,7 +55,7 @@ Description: libmeegocontrol development files
 Package: duicontrolpanel-offlineapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libduicontrolpanel,
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
          systemui-applets-l10n-engineering-english
 Description: Offline settings applet.
 
@@ -70,7 +70,7 @@ Package: duicontrolpanel-batteryapplet
 Provides: duistatusindicatormenu-batteryplugin
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libduicontrolpanel,
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
          systemui-applets-l10n-engineering-english, libuserguide
 Description: Battery settings applet.
 

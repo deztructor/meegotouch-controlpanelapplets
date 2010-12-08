@@ -20,15 +20,13 @@ HEADERS =                   \
     ../debug.h              \
     aboutbusinesslogic.h    \
     aboutapplet.h           \
-    aboutwidget.h           \
-    aboutbrief.h
+    aboutwidget.h
 
 SOURCES =                   \
     ../debug.cpp            \
     aboutbusinesslogic.cpp  \
     aboutapplet.cpp         \
-    aboutwidget.cpp         \
-    aboutbrief.cpp
+    aboutwidget.cpp
 
 DESTDIR = lib
 desktop.files += *.desktop

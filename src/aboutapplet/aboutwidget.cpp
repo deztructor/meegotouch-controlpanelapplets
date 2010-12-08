@@ -33,10 +33,13 @@
 #undef DEBUG
 #include "../debug.h"
 
+#include <MWidgetCreator>
+M_REGISTER_WIDGET_NO_CREATE(AboutWidget)
+
 AboutWidget::AboutWidget (
         AboutBusinessLogic     *aboutBusinessLogic,
         QGraphicsWidget        *parent) :
-    DcpWidget (parent),
+    DcpStylableWidget (parent),
     m_AboutBusinessLogic (aboutBusinessLogic),
     m_MainLayout (0),
     m_TitleLabel (0),

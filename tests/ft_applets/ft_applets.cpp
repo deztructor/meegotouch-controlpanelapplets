@@ -21,15 +21,22 @@
 #include <QTest>
 #include <QDir>
 #include <QTimer>
+#include <QGraphicsWidget>
 #include <dcpappletif.h>
 #include <dcpbrief.h>
 #include <dcpwidget.h>
+#include <dcpstylablewidget.h>
 #include <MApplication>
 #include <MApplicationWindow>
 
 #define DEBUG
 #define WARNING
 #include "debug.h"
+
+#define SYS_DEBUG_VIEW(type) \
+            SYS_DEBUG ("have view: " TERM_YELLOW "%s" TERM_NORMAL, \
+                type == Ft_Applets::NoView ? "No" : \
+                  type == Ft_Applets::HaveView ? "Yes" : "Stylable");
 
 /*
  * Stub QTimer singleShot to avoid random crashing due to
@@ -78,7 +85,7 @@ Ft_Applets::cleanup ()
  * This function will do the basic loading/unloading tests on the applet.
  */
 void
-Ft_Applets::doAppletTest (const char *soname, bool hasBrief, bool hasView)
+Ft_Applets::doAppletTest (const char *soname, bool hasBrief, view viewType)
 {
     QPluginLoader loader;
     QDir appletPath (APPLET_LIBS);
@@ -118,30 +125,31 @@ Ft_Applets::doAppletTest (const char *soname, bool hasBrief, bool hasView)
         QVERIFY2(!brief, "This applet should not have a Brief");
     }
 
-    /*
-     * Checking if the the main view (the applet widget) is constructed. FIXME:
-     * We should call the getMainWidgetId here, but I'm not sure how it is done
-     * after the refactoring.
-     */
-    DcpWidget *widget = applet->constructWidget (0);
-    /* TODO:
-     * once duicontrolpanel 0.9.7 is out we need to check this:
-     * constructStylableWidget
-     */
-
-    if (hasView)
+    SYS_DEBUG_VIEW(viewType);
+    if (viewType > 0)
     {
-        QVERIFY2 (widget, "Error when creating applet's main widget");
-    }
-    else
-    {
-        QVERIFY2 (!widget, "Error the applet should not have view!");
+        doViewTest (applet, viewType == HaveStylableView); 
     }
 
     delete brief;
-    delete widget;
     loader.unload ();
+}
 
+void
+Ft_Applets::doViewTest (DcpAppletIf *applet, bool stylableView)
+{
+    QGraphicsWidget *widget = 0;
+
+    QVERIFY (applet != 0);
+
+    if (stylableView == false)
+        widget = applet->constructWidget (0);
+    else
+        widget = applet->constructStylableWidget (0);
+
+    QVERIFY2 (widget, "Error when creating applet's main widget!");
+
+    delete widget;
 }
 
 void
@@ -177,7 +185,7 @@ Ft_Applets::testresetapplet ()
 void
 Ft_Applets::testaboutapplet ()
 {
-    doAppletTest ("libaboutapplet.so");
+    doAppletTest ("libaboutapplet.so", false, HaveStylableView);
 }
 
 void
@@ -201,7 +209,7 @@ Ft_Applets::testwarrantyapplet ()
 void
 Ft_Applets::testofflineapplet ()
 {
-    doAppletTest ("libofflineapplet.so", true, false);
+    doAppletTest ("libofflineapplet.so", true, NoView);
 }
 
 void

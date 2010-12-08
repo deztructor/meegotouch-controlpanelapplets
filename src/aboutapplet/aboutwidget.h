@@ -20,14 +20,14 @@
 #define ABOUTWIDGET_H
 
 #include <QPointer>
-#include "dcpwidget.h"
+#include <DcpStylableWidget>
 
 #include "aboutbusinesslogic.h"
 
 class MLabel;
 class MLinearLayoutPolicy;
 
-class AboutWidget : public DcpWidget
+class AboutWidget : public DcpStylableWidget
 {
     Q_OBJECT
 

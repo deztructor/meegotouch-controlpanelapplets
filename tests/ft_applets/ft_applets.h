@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QtTest/QtTest>
 
+class DcpAppletIf;
 class MApplication;
 class MApplicationWindow;
 class MApplicationPage;
@@ -29,6 +30,13 @@ class MApplicationPage;
 class Ft_Applets : public QObject
 {
     Q_OBJECT
+
+public:
+    enum view {
+        NoView = 0,
+        HaveView,
+        HaveStylableView
+    };
 
 private slots:
     void init ();
@@ -51,7 +59,9 @@ private slots:
 private:
     void doAppletTest (const char *soName,
                        bool hasBrief = true,
-                       bool hasView = true);
+                       view viewType = HaveView);
+    void doViewTest (DcpAppletIf *applet,
+                     bool stylableView = false);
 
 private:
     MApplication            *m_app;

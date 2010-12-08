@@ -19,7 +19,9 @@
 #ifndef ABOUTAPPLET_H
 #define ABOUTAPPLET_H
 
-#include "dcpappletif.h"
+#include <dcpappletif.h>
+
+#include "aboutwidget.h"
 #include "aboutbusinesslogic.h"
 
 #include <QObject>
@@ -38,15 +40,14 @@ public:
     ~AboutApplet ();
 
     virtual void init();
-    virtual DcpWidget *constructWidget (int widgetId);
-    virtual DcpWidget *pageMain (int widgetId);
+    virtual DcpStylableWidget *constructStylableWidget (int widgetId);
     virtual QString title() const;
-    virtual QVector<MAction *> viewMenuItems();
-    virtual DcpBrief* constructBrief(int partId);
+    virtual QVector<MAction *> viewMenuItems ();
 
 private:
     QPointer<AboutWidget>        m_MainWidget;
     QPointer<AboutBusinessLogic> m_AboutBusinessLogic;
+
     #ifdef UNIT_TEST
     friend class Ut_AboutApplet;
     #endif
