@@ -21,7 +21,6 @@
 #include "testwidget.h"
 #include "testbrief.h"
 
-#include <MTheme>
 #include <MAction>
 
 #undef DEBUG
@@ -41,7 +40,6 @@ TestApplet::~TestApplet()
 void 
 TestApplet::init()
 {
-    //MTheme::loadCSS(cssDir + "themeapplet.css");
 }
 
 DcpWidget *
