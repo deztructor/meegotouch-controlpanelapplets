@@ -1,4 +1,5 @@
-#WarrantyAppletExpirationLabel {
+
+WarrantyWidget MLabelStyle#WarrantyAppletExpirationLabel {
     color:           $COLOR_INVERTED_FOREGROUND;
     font:            $FONT_SMALL_BOLD;
     margin-top:      $MARGIN_XLARGE;
@@ -7,7 +8,7 @@
     margin-right:    $MARGIN_XLARGE;
 }
 
-#WarrantyAppletTermsLabel {
+WarrantyWidget MLabelStyle#WarrantyAppletTermsLabel {
     color:           $COLOR_INVERTED_FOREGROUND;
     font:            $FONT_SMALL;
     margin-top:      $MARGIN_XLARGE;
@@ -15,3 +16,4 @@
     margin-left:     $MARGIN_XLARGE;
     margin-right:    $MARGIN_XLARGE;
 }
+

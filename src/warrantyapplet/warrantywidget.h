@@ -20,14 +20,13 @@
 #define WARRANTYWIDGET_H
 
 #include <QPointer>
-#include "dcpwidget.h"
-
+#include <dcpstylablewidget.h>
 #include "warrantybusinesslogic.h"
 
 class MLinearLayoutPolicy;
 class MLabel;
 
-class WarrantyWidget : public DcpWidget
+class WarrantyWidget : public DcpStylableWidget
 {
     Q_OBJECT
 

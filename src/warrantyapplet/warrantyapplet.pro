@@ -21,15 +21,13 @@ HEADERS = \
     ../debug.h \
     warrantybusinesslogic.h \
     warrantyapplet.h \
-    warrantywidget.h \
-    warrantybrief.h 
+    warrantywidget.h
 
 SOURCES = \
     ../debug.cpp \
     warrantybusinesslogic.cpp \
     warrantyapplet.cpp \
-    warrantywidget.cpp \
-    warrantybrief.cpp 
+    warrantywidget.cpp
 
 DESTDIR = lib
 desktop.files += *.desktop

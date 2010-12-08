@@ -40,7 +40,6 @@ HEADERS += \
     ../../src/debug.h \
     ut_warrantyapplet.h \
     $$SRC_PREFIX/warrantyapplet.h \
-    $$SRC_PREFIX/warrantybrief.h \
     $$SRC_PREFIX/warrantybusinesslogic.h \
     $$SRC_PREFIX/warrantywidget.h
 
@@ -48,7 +47,6 @@ SOURCES += \
     ../../src/debug.cpp \
     ut_warrantyapplet.cpp \
     $$SRC_PREFIX/warrantyapplet.cpp \
-    $$SRC_PREFIX/warrantybrief.cpp \
     $$SRC_PREFIX/warrantybusinesslogic.cpp \
     $$SRC_PREFIX/warrantywidget.cpp 
 

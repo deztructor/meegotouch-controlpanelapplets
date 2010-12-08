@@ -29,10 +29,13 @@
 #undef DEBUG
 #include "../debug.h"
 
+#include <MWidgetCreator>
+M_REGISTER_WIDGET_NO_CREATE (WarrantyWidget);
+
 WarrantyWidget::WarrantyWidget (
         WarrantyBusinessLogic  *warrantyBusinessLogic, 
         QGraphicsWidget        *parent) :
-    DcpWidget (parent),
+    DcpStylableWidget (parent),
     m_WarrantyBusinessLogic (warrantyBusinessLogic)
 {
     createContent ();

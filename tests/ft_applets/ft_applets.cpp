@@ -203,7 +203,7 @@ Ft_Applets::testwallpaperapplet ()
 void
 Ft_Applets::testwarrantyapplet ()
 {
-    doAppletTest ("libwarrantyapplet.so");
+    doAppletTest ("libwarrantyapplet.so", false, HaveStylableView);
 }
 
 void

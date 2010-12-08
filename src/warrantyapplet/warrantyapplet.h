@@ -38,11 +38,9 @@ public:
     ~WarrantyApplet ();
 
     virtual void init();
-    virtual DcpWidget *constructWidget (int widgetId);
-    virtual DcpWidget *pageMain (int widgetId);
+    virtual DcpStylableWidget *constructStylableWidget (int widgetId);
     virtual QString title() const;
     virtual QVector<MAction *> viewMenuItems();
-    virtual DcpBrief* constructBrief(int partId);
 
 private:
     QPointer<WarrantyWidget>        m_MainWidget;
@@ -51,4 +49,5 @@ private:
     friend class Ut_WarrantyApplet;
     #endif
 };
+
 #endif

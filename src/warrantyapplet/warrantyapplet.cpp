@@ -18,7 +18,6 @@
 ****************************************************************************/
 #include "warrantyapplet.h"
 #include "warrantywidget.h"
-#include "warrantybrief.h"
 
 #include <MAction>
 
@@ -31,14 +30,6 @@ M_LIBRARY
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(warrantyapplet, WarrantyApplet)
-
-#define LOAD_THEME_FILE
-#ifdef LOAD_THEME_FILE
-#include <MTheme>
-const QString cssDir = 
-    "/usr/share/themes/base/meegotouch/libwarrantyapplet/style/";
-#endif
-
 
 WarrantyApplet::WarrantyApplet()
 {
@@ -53,15 +44,10 @@ WarrantyApplet::~WarrantyApplet()
 void 
 WarrantyApplet::init()
 {
-    #ifdef LOAD_THEME_FILE
-    QString themeFile = cssDir + "libwarrantyapplet.css";
-    MTheme::loadCSS (themeFile);
-    #endif
 }
 
-DcpWidget *
-WarrantyApplet::pageMain(
-        int widgetId)
+DcpStylableWidget *
+WarrantyApplet::constructStylableWidget (int widgetId)
 {
     if (m_WarrantyBusinessLogic.isNull ())
         m_WarrantyBusinessLogic = new WarrantyBusinessLogic;
@@ -81,15 +67,6 @@ WarrantyApplet::pageMain(
     return 0;
 }
 
-DcpWidget *
-WarrantyApplet::constructWidget (
-        int widgetId)
-{
-    SYS_DEBUG ("-----------------------------------");
-    SYS_DEBUG ("*** widgetId = %d", widgetId);
-    return pageMain (widgetId);
-}
-
 QString
 WarrantyApplet::title() const
 {
@@ -103,13 +80,5 @@ WarrantyApplet::viewMenuItems()
     QVector<MAction*>   vector;
 
     return vector;
-}
-
-DcpBrief *
-WarrantyApplet::constructBrief (
-        int partId)
-{
-    Q_UNUSED (partId);
-    return new WarrantyBrief;
 }
 

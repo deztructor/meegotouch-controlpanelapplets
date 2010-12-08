@@ -21,10 +21,7 @@
 #include "warrantyapplet.h"
 #include "warrantywidget.h"
 
-#include "warrantybrief.h"
-
 #include <dcpwidgettypes.h>
-#include <dcpbrief.h>
 
 #include <mdesktopentry.h>
 #include <MApplication>
@@ -115,30 +112,5 @@ Ut_WarrantyApplet::testMenuItems ()
     QVERIFY (items.size() == 0);
 }
 
-void 
-Ut_WarrantyApplet::testConstructbrief ()
-{
-    WarrantyBrief *brief1 = (WarrantyBrief *) m_Applet->constructBrief(0);
-    QString   iconName;
-    QString   text;
-
-    QVERIFY (brief1);
-    QVERIFY (brief1->widgetTypeID() == DcpWidgetType::Label);
-
-    iconName = brief1->icon ();
-    QVERIFY (iconName.isEmpty());
-
-    text = brief1->valueText ();
-    QVERIFY (text.isEmpty());
-
-    // FIXME: Why does this method has an argument, it must be some leftover
-    // code. Also: we should check if the signal is emitted.
-    delete brief1;
-}
-
-
 QTEST_APPLESS_MAIN(Ut_WarrantyApplet)
-
-
-
 
