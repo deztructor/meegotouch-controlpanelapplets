@@ -59,7 +59,6 @@ private slots:
     void selectingMusicItem(const QString &item);
     void cancel();
     void accept();
-    void currentClicked();
     void textChanged ();
     void browserBackButtonClicked ();
     void stopPlayingSound ();
@@ -73,7 +72,6 @@ private:
     virtual void createContent();
 
     AlertTone                       *m_tone;
-    MCustomContentItem              *m_current;
     DrillDownItem                   *m_my_music;
     DrillDownItem                   *m_ovi_store;
 

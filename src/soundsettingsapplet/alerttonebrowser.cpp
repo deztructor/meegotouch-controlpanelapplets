@@ -64,7 +64,6 @@ public:
 AlertToneBrowser::AlertToneBrowser(AlertTone *tone, QGraphicsWidget *parent):
     AlertToneToplevel (parent),
     m_tone (tone),
-    m_current (0),
     m_defaults (0),
     m_preview (0),
     m_MusicBrowser (0),
@@ -110,11 +109,6 @@ AlertToneBrowser::createContent()
     m_ovi_store->setObjectName("MContentItem_getMoreFromOviStore");
     m_MainLayout->addItem (m_ovi_store);
     connect (m_ovi_store, SIGNAL (clicked ()), SLOT (launchOviStore ()));
-
-    // "Current tone"
-    m_current = new MCustomContentItem (MContentItem::TwoTextLabels, this);
-    m_current->setObjectName("AlertToneCurrent");
-    connect (m_current, SIGNAL (clicked ()), SLOT (currentClicked ()));
 
     /*
      * The list with the available sound files.
@@ -248,12 +242,6 @@ trackerIdToFilename(const QString &trackerId)
     return QString("");
 }
 
-void
-AlertToneBrowser::currentClicked()
-{
-    setAlertTone(m_current->fullPath, true);
-}
-
 /*
  * NOTE: This method will not start the playing of the sound file any more.
  */
@@ -276,15 +264,6 @@ AlertToneBrowser::setAlertTone (
          */
         m_defaults->selectAndScroll (fname,
                 TrackerConnection::instance()->niceNameFromFileName(fname));
-#if 0
-    } else {
-        // FIXME: this is a temprary code, i will create an elegant solution for
-        // this.
-        m_current->hide();
-        if (m_current == m_MainLayout->itemAt (1) ) {
-            m_MainLayout->removeAt (1);
-        }
-#endif
     }
 }
 
@@ -412,7 +391,6 @@ AlertToneBrowser::selectingMusicItem (
     SYS_DEBUG ("*** trackerID = %s", SYS_STR(item));
     SYS_DEBUG ("*** fname     = %s", SYS_STR(fname));
 
-    m_current->fullPath = fname;
     setAlertTone(fname, true);
     startPlayingSound (fname);
 }

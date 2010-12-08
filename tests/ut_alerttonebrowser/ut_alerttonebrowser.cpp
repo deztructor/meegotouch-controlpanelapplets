@@ -1,6 +1,21 @@
-/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
-/* vim:set et sw=4 ts=4 sts=4: */
-
+/****************************************************************************
+**
+** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (directui@nokia.com)
+**
+** This file is part of meegotouch-controlpanelsoundsettingsapplet.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at directui@nokia.com.
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation
+** and appearing in the file LICENSE.LGPL included in the packaging
+** of this file.
+**
+****************************************************************************/
 #include <MApplication>
 #include <QString>
 #include <QStringList>
@@ -102,21 +117,6 @@ Ut_AlertToneBrowserTests::alerttonebrowserRetranslateUi()
               qtTrId ("qtn_sond_store"));
 }
 
-/*
- * FIXME: This test causes segmentation fault, the contentpicker should be
- * stubbed.
- */
-#if 0
-void
-Ut_AlertToneBrowserTests::alerttonebrowserLaunchMusicBrowser()
-{
-    AlertToneBrowser atbt (at);
-
-    atbt.launchMusicBrowser();
-    QVERIFY (atbt.m_MusicBrowser);
-}
-#endif
-
 void
 Ut_AlertToneBrowserTests::alerttonebrowserSetAlertTone()
 {
@@ -141,16 +141,6 @@ Ut_AlertToneBrowserTests::alerttonebrowserSetAlertTone()
     // Setting the same filename again should stop the playback!
     atbt.startPlayingSound (filename);
     QVERIFY(atbt.m_preview == NULL);
-}
-
-
-void
-Ut_AlertToneBrowserTests::alerttonebrowserCurrentClicked()
-{
-    AlertToneBrowser atbt(at);
-    atbt.m_current->fullPath = "test_value";
-    atbt.currentClicked();
-    QCOMPARE(atbt.currSelectedFile, QString("test_value"));
 }
 
 /*!
