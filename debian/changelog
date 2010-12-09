@@ -8,6 +8,7 @@ meegotouch-controlpanelapplets (0.20.1~1) meegotouch; urgency=low
   * Fixes: NB#210603 - In Clock default tone picker widget there is 
     inconsistency in the display color of [Done] and [Cancel] buttons in 
     Landscape and Portrait mode
+  * Fixes: NB#208873 - Ringtone doesn't stop when tasked away from picker.
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 08 Dec 2010 15:58:57 +0100
 
