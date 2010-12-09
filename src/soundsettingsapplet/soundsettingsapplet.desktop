@@ -1,8 +1,13 @@
 [Desktop Entry]
-Type=DUIApplet
+Type=ControlPanelApplet
 Name=Alert Tones
 X-logical-id=qtn_sond_sounds
 X-translation-catalog=systemui-applets,sounds
+X-Maemo-Service=com.nokia.DuiControlPanel
+X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
+X-Maemo-Object-Path=/
+X-Maemo-Fixed-Args=Alert Tones
+
 Icon=
 Exec=
 
