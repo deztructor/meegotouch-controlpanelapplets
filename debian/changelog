@@ -5,6 +5,9 @@ meegotouch-controlpanelapplets (0.20.1~1) meegotouch; urgency=low
   * Fixes: NB#208329 - When you first select an image in the wallpaper editor 
     the spinner is not aligned in the middle of the image 
   * Eliminate loadCSS from warranty and about applets
+  * Fixes: NB#210603 - In Clock default tone picker widget there is 
+    inconsistency in the display color of [Done] and [Cancel] buttons in 
+    Landscape and Portrait mode
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 08 Dec 2010 15:58:57 +0100
 

@@ -139,6 +139,49 @@ profile_tracker_quit ()
 }
 
 } // extern "C"
+
+char *
+profile_get_type (
+        const char *key)
+{
+    const QString  myKey = key;
+    char          *retval = NULL;
+
+    SYS_WARNING ("*** key = %s", SYS_STR(myKey));
+    if (myKey == "clock.alarm.enabled")
+        retval = "BOOLEAN";
+    else if (myKey == "ringing.alert.type")
+        retval = "STRING \"Ringing\" \"Silent\" \"Beep\"";
+    else if (myKey == "ringing.alert.tone")
+        retval = "SOUNDFILE";
+    else if (myKey == "im.alert.tone")
+        retval = "SOUNDFILE";
+    else if (myKey == "ringing.alert.volume")
+        retval = "INTEGER 0-100";
+    else if (myKey == "system.sound.level")
+        retval = "INTEGER 0-3";
+    else if (myKey == "ringing.alert.tone")
+        retval = "SOUNDFILE";
+    else if (myKey == "clock.alarm.enabled")
+        retval = "BOOLEAN";
+    else if (myKey == "ringing.alert.type")
+        retval = "STRING \"Ringing\" \"Silent\" \"Beep\"";
+    else if (myKey == "ringing.alert.tone")
+        retval = "SOUNDFILE";
+    else if (myKey == "im.alert.tone")
+        retval = "SOUNDFILE";
+    else if (myKey == "ringing.alert.volume")
+        retval = "INTEGER 0-100";
+
+    if (!retval) {
+        SYS_WARNING ("The stub does not know about this key. %s",
+                SYS_STR(myKey));
+        retval = "";
+    }
+
+    return strdup (retval);
+}
+
 #endif // HAVE_LIBPROFILE
 
 /******************************************************************************

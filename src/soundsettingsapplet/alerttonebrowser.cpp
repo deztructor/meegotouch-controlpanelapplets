@@ -452,7 +452,7 @@ AlertToneBrowser::polishEvent ()
     //% "Done"
     m_DoneButton = new MButton (qtTrId("qtn_comm_command_done"), this);
     m_DoneButton->setViewType ("toolbar");
-    m_DoneButton->setStyleName ("CommonToolbarButton");
+    m_DoneButton->setStyleName ("ToolBarLabelOnlyCommonButton");
     widgetAction = new MWidgetAction (this);
     widgetAction->setLocation (MAction::ToolBarLocation);
     widgetAction->setWidget (m_DoneButton);
@@ -465,7 +465,7 @@ AlertToneBrowser::polishEvent ()
     //% "Cancel"
     m_CancelButton = new MButton (qtTrId("qtn_comm_cancel"), this);
     m_CancelButton->setViewType ("toolbar");
-    m_CancelButton->setStyleName ("CommonToolbarButton");
+    m_CancelButton->setStyleName ("ToolBarLabelOnlyCommonButton");
     widgetAction = new MWidgetAction (this);
     widgetAction->setLocation (MAction::ToolBarLocation);
     widgetAction->setWidget (m_CancelButton);

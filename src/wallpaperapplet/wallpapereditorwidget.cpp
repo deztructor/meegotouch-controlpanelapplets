@@ -335,7 +335,7 @@ WallpaperEditorWidget::polishEvent ()
             qtTrId("qtn_comm_save"),
             this);
     m_DoneButton->setViewType("toolbar");
-    m_DoneButton->setStyleName ("CommonToolbarButton");
+    m_DoneButton->setStyleName ("ToolBarLabelOnlyCommonButton");
     widgetAction = new MWidgetAction (this);
     widgetAction->setLocation(MAction::ToolBarLocation);
     widgetAction->setWidget (m_DoneButton);
@@ -351,7 +351,7 @@ WallpaperEditorWidget::polishEvent ()
             qtTrId("qtn_comm_cancel"),
             this);
     m_CancelButton->setViewType("toolbar");
-    m_CancelButton->setStyleName ("CommonToolbarButton");
+    m_CancelButton->setStyleName ("ToolBarLabelOnlyCommonButton");
     widgetAction = new MWidgetAction (this);
     widgetAction->setLocation(MAction::ToolBarLocation);
     widgetAction->setWidget (m_CancelButton);
