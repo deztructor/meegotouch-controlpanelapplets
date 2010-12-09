@@ -22,6 +22,7 @@
 #include "warrantywidget.h"
 
 #include <dcpwidgettypes.h>
+#include <dcpstylablewidget.h>
 
 #include <mdesktopentry.h>
 #include <MApplication>
@@ -81,13 +82,13 @@ Ut_WarrantyApplet::testTitle ()
 void
 Ut_WarrantyApplet::testConstructWidget ()
 {
-    DcpWidget *widget;
-    bool       backAccepted;
+    DcpStylableWidget   *widget;
+    bool                 backAccepted;
 
     /*
      * Testing if the applet creates a widget the first time.
      */
-    widget = m_Applet->constructWidget (0);
+    widget = m_Applet->constructStylableWidget (0);
     QVERIFY (widget);
     QVERIFY (m_Applet->m_MainWidget == widget);
     
