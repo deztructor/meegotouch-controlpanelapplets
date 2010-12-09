@@ -50,7 +50,7 @@ M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
 static const qreal ScaleLowerLimit = 0.15;
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 

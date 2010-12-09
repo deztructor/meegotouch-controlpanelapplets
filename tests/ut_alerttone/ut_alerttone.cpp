@@ -148,28 +148,20 @@ profile_get_type (
     char          *retval = NULL;
 
     SYS_WARNING ("*** key = %s", SYS_STR(myKey));
-    if (myKey == "clock.alarm.enabled")
-        retval = "BOOLEAN";
-    else if (myKey == "ringing.alert.type")
-        retval = "STRING \"Ringing\" \"Silent\" \"Beep\"";
-    else if (myKey == "ringing.alert.tone")
-        retval = "SOUNDFILE";
-    else if (myKey == "im.alert.tone")
-        retval = "SOUNDFILE";
-    else if (myKey == "ringing.alert.volume")
-        retval = "INTEGER 0-100";
-    else if (myKey == "system.sound.level")
-        retval = "INTEGER 0-3";
-    else if (myKey == "ringing.alert.tone")
+    if (myKey.endsWith(".tone"))
         retval = "SOUNDFILE";
     else if (myKey == "clock.alarm.enabled")
         retval = "BOOLEAN";
     else if (myKey == "ringing.alert.type")
         retval = "STRING \"Ringing\" \"Silent\" \"Beep\"";
-    else if (myKey == "ringing.alert.tone")
-        retval = "SOUNDFILE";
-    else if (myKey == "im.alert.tone")
-        retval = "SOUNDFILE";
+    else if (myKey == "ringing.alert.volume")
+        retval = "INTEGER 0-100";
+    else if (myKey == "system.sound.level")
+        retval = "INTEGER 0-3";
+    else if (myKey == "clock.alarm.enabled")
+        retval = "BOOLEAN";
+    else if (myKey == "ringing.alert.type")
+        retval = "STRING \"Ringing\" \"Silent\" \"Beep\"";
     else if (myKey == "ringing.alert.volume")
         retval = "INTEGER 0-100";
 
