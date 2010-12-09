@@ -21,6 +21,7 @@
 #include "aboutapplet.h"
 #include "aboutwidget.h"
 
+#include <dcpstylablewidget.h>
 #include <dcpwidgettypes.h>
 
 #include <QSystemInfo>
@@ -109,16 +110,16 @@ Ut_AboutApplet::testTitle ()
 void
 Ut_AboutApplet::testConstructWidget ()
 {
-    AboutWidget *widget;
-    bool       backAccepted;
+    AboutWidget     *widget;
+    bool             backAccepted;
 
     /*
      * Testing if the applet creates a widget the first time.
      */
-    widget = (AboutWidget *) m_Applet->constructWidget (0);
+    widget = (AboutWidget *) m_Applet->constructStylableWidget (0);
     QVERIFY (widget);
     QVERIFY (m_Applet->m_MainWidget == widget);
-    QVERIFY (!m_Applet->constructWidget (1));
+    QVERIFY (!m_Applet->constructStylableWidget (1));
 
     /*
      * FIXME: These are not much checking, more like coverage making calls.
