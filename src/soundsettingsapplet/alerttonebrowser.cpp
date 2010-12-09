@@ -417,6 +417,8 @@ AlertToneBrowser::polishEvent ()
     if (win) {
         connect (win, SIGNAL(displayExited()),
                 this, SLOT(stopPlayingSound()));
+        connect (win, SIGNAL(switcherEntered()),
+                this, SLOT(stopPlayingSound()));
     }
 
 
