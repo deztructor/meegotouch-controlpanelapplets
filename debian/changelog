@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.1~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.1-1) meegotouch; urgency=low
 
   * Fixes: NB#209139 - Tone in content picker remains selected even after 
     doing a cancel
@@ -10,7 +10,7 @@ meegotouch-controlpanelapplets (0.20.1~1) meegotouch; urgency=low
     Landscape and Portrait mode
   * Fixes: NB#208873 - Ringtone doesn't stop when tasked away from picker.
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 08 Dec 2010 15:58:57 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 09 Dec 2010 11:53:51 +0100
 
 meegotouch-controlpanelapplets (0.17.9-1) meegotouch; urgency=low
 
