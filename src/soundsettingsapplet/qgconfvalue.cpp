@@ -46,6 +46,8 @@ QGConfValue::~QGConfValue()
 void
 QGConfValue::addNotify()
 {
+    // FIXME: If we are not using the error we should send a NULL pointer
+    // instead?
 	GError *err = NULL;
 
 	QGConfDirManager::instance().addDir(m_lsDir);

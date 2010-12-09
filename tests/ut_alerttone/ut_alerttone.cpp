@@ -31,6 +31,116 @@
 
 static const QString validSoundFile1 = "/usr/share/sounds/ring-tones/Beep.aac";
 
+#ifdef HAVE_LIBPROFILE
+/******************************************************************************
+ * libprofile stub...
+ */
+#include <libprofile.h>
+
+char *stub_active_profile = NULL;
+char *stub_profiles[] = { (char *) "testprofile1",
+                          (char *) "testprofile2",
+                          NULL };
+int stub_volumelevel = 0;
+int stub_vibration = 0;
+
+extern "C" {
+
+char **
+profile_get_profiles ()
+{
+    SYS_WARNING ("");
+    return stub_profiles;
+}
+
+void
+profile_free_profiles (char **profiles)
+{
+    SYS_WARNING ("");
+    Q_UNUSED (profiles);
+}
+
+char *
+profile_get_profile ()
+{
+    SYS_WARNING ("");
+    return stub_active_profile;
+}
+
+int
+profile_set_profile (const char *profile)
+{
+    SYS_WARNING ("");
+    if (stub_active_profile != NULL)
+        delete[] stub_active_profile;
+
+    stub_active_profile = qstrdup (profile);
+
+    return 0;
+}
+
+int
+profile_get_value_as_int (const char *profile, const char *key)
+{
+    SYS_WARNING ("");
+    Q_UNUSED (profile);
+    Q_UNUSED (key);
+    return stub_volumelevel;
+}
+
+int
+profile_set_value_as_int (const char *profile, const char *key, int val)
+{
+    SYS_WARNING ("");
+    Q_UNUSED (profile);
+    Q_UNUSED (key);
+    stub_volumelevel = val;
+
+    return 0;
+}
+
+int
+profile_get_value_as_bool (const char *profile, const char *key)
+{
+    SYS_WARNING ("");
+    Q_UNUSED (profile);
+    Q_UNUSED (key);
+    return stub_vibration;
+}
+
+int
+profile_set_value_as_bool (const char *profile, const char *key, int val)
+{
+    SYS_WARNING ("");
+    Q_UNUSED (profile);
+    Q_UNUSED (key);
+    stub_vibration = val;
+
+    return 0;
+}
+
+void
+profile_connection_enable_autoconnect ()
+{
+    SYS_WARNING ("");
+}
+
+int
+profile_tracker_init ()
+{
+    SYS_WARNING ("");
+    return 0;
+}
+
+void
+profile_tracker_quit ()
+{
+    SYS_WARNING ("");
+}
+
+} // extern "C"
+#endif // HAVE_LIBPROFILE
+
 /******************************************************************************
  * Ut_AlertTone implementation.
  */
@@ -75,43 +185,6 @@ Ut_AlertToneTests::alerttonesAlertTones()
     }
 }
 
-#if 0
-/*
- * AlertTone::niceNameFromFileName() has been removed, use
- * TrackerConnection::niceNameFromFileName() instead.
- */
-void
-Ut_AlertToneTests::alerttonesNiceNameFromFileName()
-{
-      QString trackerID;
-      QString niceName;
-      QVector<QStringList> result = ::tracker()->rawSparqlQuery(QString( "SELECT ?u WHERE { ?x a nmm:MusicPiece; tracker:available true; nie:url ?u }"));
-
-      if (result.size() > 0)
-      {
-            QStringList  list,secondlist;
-            list = result.at(0).at(0).split ( "//");
-            secondlist = list.at(1).split ( "/");
-
-            QString  expectName =  secondlist.at(secondlist.size() - 1);
-
-            expectName = expectName.left(expectName.lastIndexOf('.'));
-
-            niceName = AlertTone::niceNameFromFileName(list.at(1), true, &trackerID);
-            QVERIFY( expectName.contains (niceName) );
-            QVERIFY(!trackerID.isEmpty ());
-
-            niceName = AlertTone::niceNameFromFileName(list.at(1), false, &trackerID);
-            QCOMPARE( niceName , expectName );
-      }
-
-      niceName = AlertTone::niceNameFromFileName("something.test", true, &trackerID);
-      QCOMPARE( niceName , QString("something") );
-
-      niceName = AlertTone::niceNameFromFileName("directory/something.test", true, &trackerID);
-      QCOMPARE( niceName , QString("something") );
-}
-#endif
 
 
 void

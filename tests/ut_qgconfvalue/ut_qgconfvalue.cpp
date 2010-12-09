@@ -8,7 +8,7 @@
 #include "ut_qgconfvalue.h"
 #include "qgconfvalue.h"
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -25,11 +25,12 @@ static QVariant lastGConfValue;
 
 gboolean
 gconf_client_set_bool (
-        GConfClient *client, 
-        const gchar *key,
-        gboolean val, 
-        GError** err)
+        GConfClient  *client, 
+        const gchar  *key,
+        gboolean      val, 
+        GError      **err)
 {
+    SYS_DEBUG ("*** key = %s", key);
     lastGConfKey = key;
     lastGConfValue = val;
     return true;
@@ -42,6 +43,7 @@ gconf_client_set_string (
         const gchar* val, 
         GError** err)
 {
+    SYS_DEBUG ("*** key = %s", key);
     lastGConfKey = key;
     lastGConfValue = val;
     return true;
@@ -54,6 +56,7 @@ gconf_client_set_int (
         gint val, 
         GError** err)
 {
+    SYS_DEBUG ("*** key = %s", key);
     lastGConfKey = key;
     lastGConfValue = val;
     return true;
@@ -66,6 +69,7 @@ gconf_client_set_float (
         gdouble val, 
         GError** err)
 {
+    SYS_DEBUG ("*** key = %s", key);
     lastGConfKey = key;
     lastGConfValue = val;
     return true;

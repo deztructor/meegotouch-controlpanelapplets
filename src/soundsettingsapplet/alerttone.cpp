@@ -24,7 +24,7 @@
 #include <profiled/libprofile.h>
 #endif
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 

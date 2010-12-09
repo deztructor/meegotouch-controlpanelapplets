@@ -38,11 +38,6 @@ private slots:
       void cleanupTestCase();
       void alerttonesAlertTones_data(){};
       void alerttonesAlertTones();
-/*
- * AlertTone::niceNameFromFileName() has been removed, use
- * TrackerConnection::niceNameFromFileName() instead.
- */
-      //void alerttonesNiceNameFromFileName();
       void alerttoneFetchFromBackend();
       void alerttoneRealSetValue();
       void alerttoneMaybeUpdate();

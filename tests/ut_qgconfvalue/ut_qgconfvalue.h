@@ -8,6 +8,10 @@
 #include <QtTest/QtTest>
 #include <MApplication>
 
+/*!
+ * FIXME: It seems that this test checks only the setting of the values, it does
+ * not sheck the reading of the values.
+ */
 class Ut_QGConfValueTests : public QObject
 {
 Q_OBJECT
