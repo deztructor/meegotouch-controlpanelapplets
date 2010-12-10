@@ -151,7 +151,10 @@ ProfileDataInterface::setProfile (
     success = m_backend->setActiveProfile (mapId(value));
     if (!success) {
         SYS_WARNING ("Failed setting profile.");
+        return;
     }
+
+    emit currentProfile (value);
 }
 
 void

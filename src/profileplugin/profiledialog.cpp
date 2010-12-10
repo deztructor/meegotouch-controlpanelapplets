@@ -55,7 +55,7 @@ ProfileDialog::ProfileDialog () :
 
 ProfileDialog::~ProfileDialog()
 {
-    delete dataIf;
+    // Don't! delete dataIf here... not ours...
 }
 
 void
