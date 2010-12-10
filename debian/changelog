@@ -1,10 +1,10 @@
-meegotouch-controlpanelapplets (0.20.2~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.2-1) meegotouch; urgency=low
 
   * Fixes: highlight in profile-settings
   * Fixes: update status-menu icon after profile-switching
   * Fixes: NB#210859 - Profile in status menu not according to layout guide.
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 10 Dec 2010 15:57:03 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 10 Dec 2010 15:57:36 +0100
 
 meegotouch-controlpanelapplets (0.20.1-2) meegotouch; urgency=low
 
