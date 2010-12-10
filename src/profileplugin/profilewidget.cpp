@@ -21,21 +21,22 @@
 #include "profiledialog.h"
 #include "profileplugin.h"
 
-#undef DEBUG
-#include "../debug.h"
-
+#include <MLabel>
+#include <MImageWidget>
 #include <DuiControlPanelIf>
 #include <MLocale>
 #include <MStatusIndicatorMenuExtensionInterface>
-
 #include <QGraphicsLinearLayout>
+
+#undef DEBUG
+#include "../debug.h"
 
 static const char *profiles_translation = "profiles";
 
 ProfileWidget::ProfileWidget (
     ProfilePlugin *profilePlugin,
     QGraphicsItem *parent) :
-        MButton (parent),
+        MBasicListItem (MBasicListItem::IconWithTitle, parent),
         plugin (profilePlugin),
         dataIf (0)
 {
@@ -48,8 +49,8 @@ ProfileWidget::ProfileWidget (
     locale.installTrCatalog (profiles_translation);
     MLocale::setDefault (locale);
 
-    setViewType (MButton::iconType);
-    setObjectName("StatusIndicatorMenuTopRowExtensionButton");
+    setStyleName ("CommonBasicListItemInverted");
+
     connect (this, SIGNAL (clicked ()), this, SLOT (showProfileDialog ()));
     connect (dataIf, SIGNAL (currentProfile (int)), SLOT (profileChanged ()));
 
@@ -67,10 +68,14 @@ ProfileWidget::~ProfileWidget ()
 void
 ProfileWidget::profileChanged()
 {
-    //% "Profile"
-    setText (qtTrId ("qtn_prof_profile"));
+    QString iconId;
 
-    setIconID(dataIf->mapId2StatusIconId(dataIf->getCurrentProfile()));
+    //% "Profile"
+    setTitle (qtTrId ("qtn_prof_profile"));
+
+    iconId = dataIf->mapId2StatusIconId (dataIf->getCurrentProfile ());
+
+    imageWidget ()->setImage (iconId);
 }
 
 void
@@ -94,6 +99,6 @@ void
 ProfileWidget::retranslateUi ()
 {
     //% "Profile"
-    setText (qtTrId ("qtn_prof_profile"));
+    setTitle (qtTrId ("qtn_prof_profile"));
 }
 
