@@ -1,3 +1,9 @@
+meegotouch-controlpanelapplets (0.20.2~1) meegotouch; urgency=low
+
+  * Do not enable profile switching in profile-settings 
+
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 10 Dec 2010 09:56:22 +0100
+
 meegotouch-controlpanelapplets (0.20.1-2) meegotouch; urgency=low
 
   * Fixes: NB#209139 - Tone in content picker remains selected even after 
