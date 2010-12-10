@@ -1,8 +1,9 @@
 meegotouch-controlpanelapplets (0.20.2~1) meegotouch; urgency=low
 
-  * Do not enable profile switching in profile-settings 
+  * Fixes: highlight in profile-settings
+  * Fixes: update status-menu icon after profile-switching
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 10 Dec 2010 09:56:22 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 10 Dec 2010 15:03:30 +0100
 
 meegotouch-controlpanelapplets (0.20.1-2) meegotouch; urgency=low
 
