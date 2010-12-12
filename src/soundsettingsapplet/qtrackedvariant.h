@@ -53,7 +53,7 @@ public:
 Q_SIGNALS:
     /*!
      * This signal is emitted when the value for the variant is modified, by the
-     * application or ba an outside process.
+     * application or by an outside process.
      */
 	void changed();
 

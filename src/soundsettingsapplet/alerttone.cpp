@@ -24,7 +24,7 @@
 #include <profiled/libprofile.h>
 #endif
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -35,8 +35,10 @@ AlertTone::AlertTone(
         const QString &key):
 	QProfileValue(key, true)
 {
+    SYS_DEBUG ("*** key = %s", SYS_STR(key));
     /*
-     * TrackerConnection might send a signal about the trtacker answer.
+     * TrackerConnection might send a signal about the tracker answer when it is
+     * available.
      */
     connect (TrackerConnection::instance(), 
             SIGNAL(dataReady(QString,QString,QString)),
@@ -123,19 +125,21 @@ void
 AlertTone::maybeUpdate()
 {
 	if (m_val.isNull()) {
-		m_niceName = "";
+        SYS_DEBUG ("m_val is NULL...");
+		m_niceName =  "";
 		m_trackerId = "";
 		fetchFromBackend();
-	}
+	} else if (m_niceName.isEmpty()) {
+        m_niceName = TrackerConnection::instance()->niceNameFromFileName (
+            m_val.toString());
+    }
 }
 
 void
 AlertTone::realSetValue(
         const QVariant &newValue)
 {
-	QVariant oldValue = m_val;
-
-	if (oldValue != newValue) {
+	if (m_val != newValue) {
 		m_niceName.clear();
 		m_trackerId.clear();
 		QProfileValue::realSetValue(newValue);

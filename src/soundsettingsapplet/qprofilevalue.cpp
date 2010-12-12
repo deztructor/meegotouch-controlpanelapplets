@@ -26,7 +26,7 @@
 
 #include "qprofilevalue.h"
 
-#define DEBUG 
+//#define DEBUG 
 #define WARNING
 #include "../debug.h"
 
@@ -113,10 +113,30 @@ QProfileValue::delNotify()
 }
 
 void
-QProfileValue::realSetValue(const QVariant &newValue)
+QProfileValue::realSetValue(
+        const QVariant &newValue)
 {
-#ifdef HAVE_LIBPROFILE
+    /*
+     * FIXME: Should not we silently ignore the request if the value is the same
+     * as it was before?
+     */
 	m_val.clear();
+
+    /*
+     * The empty key shows that this value is handled manually by the caller.
+     * This special case is used for custom settings.
+     */
+    SYS_DEBUG ("*** key() = %s", SYS_STR(key()));
+    if (key() == "custom.alert.tone") {
+        SYS_DEBUG ("The key is 'custom.alert.tone', not in backend.");
+        SYS_DEBUG ("*** Storing '%s'", SYS_STR(newValue.toString()));
+        m_val = newValue;
+        emit_changed ();
+        return;
+    }
+
+
+#ifdef HAVE_LIBPROFILE
 
 	QVariant convertedValue = newValue;
 	QVariant::Type neededType = QVariant::Invalid;
@@ -186,12 +206,18 @@ QProfileValue::realSetValue(const QVariant &newValue)
 void
 QProfileValue::fetchFromBackend()
 {
+
 #ifdef HAVE_LIBPROFILE
 	QString      theKey, theProfile;
 	QStringList  lsType = getType(theKey, theProfile);
 	QVariant     var;
 
     SYS_DEBUG ("*** lsType[0] = %s", SYS_STR(lsType[0]));
+    SYS_DEBUG ("*** theKey = '%s'", SYS_STR(theKey));
+    SYS_DEBUG ("*** key()  = '%s'", SYS_STR(key()));
+    if (theKey == "custom.alert.tone")
+        return;
+
     if ("SOUNDFILE" == lsType[0]) {
         char *filename;
         bool  needReread;
@@ -241,25 +267,45 @@ QProfileValue::fetchFromBackend()
 }
 
 QStringList
-QProfileValue::getType(QString &theKey, QString &theProfile)
+QProfileValue::getType (
+        QString &theKey, 
+        QString &theProfile)
 {
 	QStringList    lsType;
-#ifdef HAVE_LIBPROFILE
 	QStringList    lsKey;
 	char          *the_type;
 
+    /*
+     * The key looks like this: custom.alert.tone@general
+     *   where @general is optional and
+     *     o custom.alert.tone = theKey
+     *     o general = theprofile
+     */
 	lsKey = key().split('@');
 	theKey = lsKey[0];
 
 	if (lsKey.size() > 1)
 		theProfile = lsKey[1];
 
+    SYS_DEBUG ("*** theKey = '%s'", SYS_STR(theKey));
+    SYS_DEBUG ("*** key()  = '%s'", SYS_STR(key()));
+    if (theKey == "custom.alert.tone") {
+        lsType << "SOUNDFILE";
+        goto finalize;
+    }
+
+#ifdef HAVE_LIBPROFILE
 	the_type = profile_get_type(lsKey[0].toUtf8().constData());
     SYS_DEBUG ("*** %s = %s", SYS_STR(theKey), the_type);
 
 	lsType = QString(the_type).split(' ');
-	free(the_type); the_type = NULL;
+	free(the_type); 
+    the_type = NULL;
 #endif
+
+finalize:
+    SYS_DEBUG ("Returning %s",
+            lsType.size() == 0 ? "<nothing>" : SYS_STR(lsType[0]));
 	return lsType;
 }
 
@@ -275,6 +321,8 @@ QProfileValue::possibleValues(RangeType *p_rangeType)
 	QString theKey, theProfile;
 	QStringList lsType = getType(theKey, theProfile);
 
+    SYS_DEBUG ("*** theKey = '%s'", SYS_STR(theKey));
+    SYS_DEBUG ("*** key()  = '%s'", SYS_STR(key()));
     SYS_DEBUG ("*** p_rangeType = %p");
     SYS_DEBUG ("*** lsType[0]   = %s", SYS_STR(lsType[0]));
 
@@ -334,8 +382,9 @@ QProfileValue::fileChanged (
     QFile thisFile (filename);
     bool  exists = thisFile.exists (filename);
     
-    SYS_WARNING ("*** path   = %s", SYS_STR(filename));
-    SYS_WARNING ("*** exists = %s", SYS_BOOL(exists));
+    SYS_DEBUG ("*** key()  = '%s'", SYS_STR(key()));
+    SYS_DEBUG ("*** path   = %s", SYS_STR(filename));
+    SYS_DEBUG ("*** exists = %s", SYS_BOOL(exists));
     if (!exists) {
         realSetValue (QVariant (""));
     }
