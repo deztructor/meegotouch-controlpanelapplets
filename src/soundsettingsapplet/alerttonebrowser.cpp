@@ -208,7 +208,7 @@ AlertToneBrowser::launchMusicBrowser()
                  SLOT (selectingMusicItem (const QString&)));
     }
 
-    m_MusicBrowser->appear ();
+    m_MusicBrowser->appear (MSceneWindow::DestroyWhenDismissed);
 #endif
 }
 
@@ -369,6 +369,7 @@ AlertToneBrowser::browserBackButtonClicked ()
     stopPlayingSound ();
 #ifdef HAVE_CONTENT_MANAGER
     m_MusicBrowser->dismiss ();
+    m_MusicBrowser = 0;
 #endif
 }
 
