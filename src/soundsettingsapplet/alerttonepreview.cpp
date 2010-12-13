@@ -25,40 +25,55 @@
 #define WARNING
 #include "../debug.h"
 
+static const char *GstStartCommand = 
+    "filesrc name=alerttonepreviewfilesrc ! "
+        "decodebin ! volume name=alerttonepreviewvolume ! autoaudiosink";
+
 AlertTonePreview::AlertTonePreview(const QString &fname):
 	m_gstPipeline(NULL),
 	m_gstFilesrc(NULL),
 	m_gstVolume(NULL),
 	m_profileVolume(QString(ALERT_TONE_VOLUME_VOLUME_KEY))
 {
-    SYS_DEBUG ("*** fname = %s", SYS_STR(fname));	
-    SYS_WARNING ("Starting the playback.");
-
 	GError *err = NULL;
+    SYS_DEBUG ("*** fname = %s", SYS_STR(fname));	
+    SYS_DEBUG ("Starting the playback.");
 
-	m_gstPipeline = gst_parse_launch(
-		QString("filesrc name=alerttonepreviewfilesrc ! decodebin ! volume name=alerttonepreviewvolume ! autoaudiosink").toUtf8().constData(),
-		&err);
+	m_gstPipeline = gst_parse_launch (GstStartCommand, &err);
 	if (err) {
-		qWarning() << "AlertTonePreview::AlertTonePreview:" << (err->message ? err->message : "Unknown error");
+		SYS_WARNING ("ERROR from gst_parse_launch: %s",
+                err->message ? err->message : "Unknown error");
 		g_error_free(err);
+        goto finalize;
 	}
 
-	m_gstVolume = gst_bin_get_by_name(GST_BIN(m_gstPipeline), "alerttonepreviewvolume");
-	m_gstFilesrc = gst_bin_get_by_name(GST_BIN(m_gstPipeline), "alerttonepreviewfilesrc");
+	m_gstVolume = gst_bin_get_by_name(
+            GST_BIN(m_gstPipeline), "alerttonepreviewvolume");
+	m_gstFilesrc = gst_bin_get_by_name(
+            GST_BIN(m_gstPipeline), "alerttonepreviewfilesrc");
 
-	g_object_set(G_OBJECT(m_gstVolume), "volume", profileToGstVolume(), NULL);
-	g_object_set(G_OBJECT(m_gstFilesrc), "location", fname.toUtf8().constData(), NULL);
+    if (m_gstVolume && m_gstFilesrc) {
+    	g_object_set (G_OBJECT(m_gstVolume), 
+                "volume", profileToGstVolume(), 
+                NULL);
+    	g_object_set (G_OBJECT(m_gstFilesrc), 
+                "location", fname.toUtf8().constData(), 
+                NULL);
+    }
+
 	gst_bus_add_signal_watch(gst_element_get_bus(m_gstPipeline));
-	g_signal_connect(G_OBJECT(gst_element_get_bus(m_gstPipeline)), "message", (GCallback)gstSignalHandler, this);
+	g_signal_connect(G_OBJECT(gst_element_get_bus(m_gstPipeline)), 
+            "message", (GCallback)gstSignalHandler, this);
 	gst_element_set_state(m_gstPipeline, GST_STATE_PLAYING);
 
-	QObject::connect(&m_profileVolume, SIGNAL(changed()), this, SLOT(profileVolumeChanged()));
+finalize:
+	connect(&m_profileVolume, SIGNAL(changed()), 
+            this, SLOT(profileVolumeChanged()));
 }
 
 AlertTonePreview::~AlertTonePreview()
 {
-	SYS_WARNING ("Stopping the playback.");
+	SYS_DEBUG ("Stopping the playback.");
 	gst_element_set_state(m_gstPipeline, GST_STATE_NULL);
 	gst_bus_remove_signal_watch(gst_element_get_bus(m_gstPipeline));
 	gst_object_unref(m_gstPipeline);

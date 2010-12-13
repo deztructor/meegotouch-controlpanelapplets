@@ -235,10 +235,12 @@ TrackerConnection::poorNiceName (
 {
     QString niceName;
 
+    SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
     niceName = fileName.split('/').last();
 	niceName = niceName.left(niceName.lastIndexOf('.'));
     niceName.replace ("_", " ");
     
+    SYS_DEBUG ("*** niceName = %s", SYS_STR(niceName));
     return niceName;
 }
 

@@ -31,6 +31,7 @@ QTrackedVariant::QTrackedVariant (
         const QString &key) :
 	m_key(key)
 {
+    SYS_DEBUG ("*** key = %s", SYS_STR(key));
 }
 
 /*!
@@ -39,6 +40,7 @@ QTrackedVariant::QTrackedVariant (
 void
 QTrackedVariant::emit_changed()
 {
+    SYS_DEBUG ("Emitting changed()");
 	emit changed();
 }
 
