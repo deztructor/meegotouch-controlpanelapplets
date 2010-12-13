@@ -1,3 +1,10 @@
+meegotouch-controlpanelapplets (0.20.3~1) meegotouch; urgency=low
+
+  * Fixes: NB#211460 - Clock application crashes on revisiting the content
+    picker after selecting a user defined tone
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 13 Dec 2010 12:26:23 +0100
+
 meegotouch-controlpanelapplets (0.20.2-1) meegotouch; urgency=low
 
   * Fixes: highlight in profile-settings

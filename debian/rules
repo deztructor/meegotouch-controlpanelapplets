@@ -44,17 +44,13 @@ QMAKE_OPTIONS = COV_OPTION=off $(QMAKE_PARAMS) QMAKE_CXXFLAGS="$(CXXFLAGS)"
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
-
 	@qmake $(QMAKE_OPTIONS) > /dev/null
-
 	touch configure-stamp
 
 build: build-stamp
 build-stamp: configure-stamp
 	dh_testdir
-
 	make $(PARALLEL_MAKEFLAGS)
-
 	touch build-stamp
 
 clean:
