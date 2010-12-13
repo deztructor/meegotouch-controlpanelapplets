@@ -1,7 +1,8 @@
-meegotouch-controlpanelapplets (0.20.3~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.3-1) meegotouch; urgency=low
 
   * Fixes: NB#211460 - Clock application crashes on revisiting the content
     picker after selecting a user defined tone
+  * Fixes: NB#210859 - Profile in status menu not according to layout guide.
   * Added support and demo for custom alert tone handling.
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 13 Dec 2010 12:34:56 +0100
