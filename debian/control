@@ -3,11 +3,11 @@ Section: devel
 Priority: optional
 Maintainer: David Kedves <dkedves@blumsoft.eu>
 Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.9.7),
-               libmeegotouch-dev (>= 0.20.37), libqmsystem2-dev,
+               libmeegotouch-dev (>= 0.20.60), libqmsystem2-dev,
                libprofile-dev, system-ui-dev (>= 0.16), libqttracker-dev,
                libthumbnailer-dev, libcontentmanager-dev, devicelock-dev,
-               doxygen, clean-device-dev (>= 0.0.3), libuserguide-dev,
-               libqtm-dev, libqtm-systeminfo-dev, libgstreamer0.10-dev
+               doxygen, clean-device-dev (>= 0.0.3), libgstreamer0.10-dev,
+               libqtm-dev, libqtm-systeminfo-dev
 Standards-Version: 3.8.0
 
 Package: systemui-applets-tests
@@ -71,7 +71,7 @@ Provides: duistatusindicatormenu-batteryplugin
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english, libuserguide
+         systemui-applets-l10n-engineering-english
 Description: Battery settings applet.
 
 Package: duicontrolpanel-displayapplet

@@ -271,8 +271,6 @@ void
 Image::cache (
         bool threadSafe)
 {
-    bool success;
-
     if (m_Cached) {
         return;
     } else if (filename().isEmpty() && m_ImageID.isEmpty()) {

@@ -33,11 +33,8 @@
 #include <MContainer>
 #include <MLabel>
 #include <MSlider>
+#include <MHelpButton>
 #include <MBasicLayoutAnimation>
-
-#ifdef HAVE_USERGUIDE
-#include <HelpButton>
-#endif
 
 #define DEBUG
 #define WARNING
@@ -301,11 +298,9 @@ BatteryWidget::addAutoActivationWidget ()
     /*
      * A help button for the PSM auto activation.
      */
-    #ifdef HAVE_USERGUIDE
-    HelpButton* helpButton = new HelpButton ("IDUG_MEEGO_BATTERY.html");
+    MHelpButton* helpButton = new MHelpButton ("IDUG_MEEGO_BATTERY.html");
     helpButton->setViewType(MButton::iconType);
     helpButton->setIconID ("icon-m-content-description");
-    #endif
 
     /*
      * A switch that turns the auto PSM mode on and off

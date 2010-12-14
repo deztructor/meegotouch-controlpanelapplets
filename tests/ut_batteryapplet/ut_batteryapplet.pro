@@ -27,11 +27,6 @@ CONFIG += \
     duicontrolpanel \
     silent 
 
-contains(DEFINES, HAVE_USERGUIDE) {
-    # FIXME: this has to be removed if the functionality has merged into meegotouch
-    CONFIG += userguide
-}
-
 HEADERS += \
     $$STUB_PREFIX/qmbattery.h \
     $$STUB_PREFIX/qmdevicemode.h \

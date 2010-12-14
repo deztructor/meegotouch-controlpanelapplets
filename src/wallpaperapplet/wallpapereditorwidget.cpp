@@ -256,14 +256,13 @@ finalize:
 void
 WallpaperEditorWidget::createWidgets ()
 {
-    MLayout               *layout;
-    MLinearLayoutPolicy   *policy;
-
     SYS_DEBUG ("");
     setContentsMargins (0, 0, 0, 0);
     setWindowFrameMargins (0.0, 0.0, 0.0, 0.0);
     
     #ifdef USE_INFOHEADER
+    MLayout               *layout;
+    MLinearLayoutPolicy   *policy;
     /*
      *
      */

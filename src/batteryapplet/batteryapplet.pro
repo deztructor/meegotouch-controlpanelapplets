@@ -8,10 +8,6 @@ CONFIG += plugin \
           silent \
           duicontrolpanel
 
-contains(DEFINES, HAVE_USERGUIDE) {
-    CONFIG += userguide
-}
-
 contains(DEFINES, HAVE_QMSYSTEM) {
     CONFIG += qmsystem2
 }
