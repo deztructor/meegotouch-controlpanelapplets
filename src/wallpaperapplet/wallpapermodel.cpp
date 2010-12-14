@@ -65,6 +65,8 @@ WallpaperImageLoader::loadPictures (
             lastVisibleRow.row());
 
     for (int n = from; n <= to; ++n) {
+        if (! firstVisibleRow.model ())
+            break;
         //QModelIndex index(firstVisibleRow.sibling (n, 0));
         QModelIndex index = firstVisibleRow.model()->index(n, 0);
         if(!index.isValid())

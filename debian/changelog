@@ -1,8 +1,9 @@
 meegotouch-controlpanelapplets (0.20.4~1) meegotouch; urgency=low
 
   * Drop libuserguide dependency
+  * Fixes: NB#211721 - Settings application closes after tap on wallpaper
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 14 Dec 2010 10:06:25 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 14 Dec 2010 11:03:43 +0100
 
 meegotouch-controlpanelapplets (0.20.3-1) meegotouch; urgency=low
 
