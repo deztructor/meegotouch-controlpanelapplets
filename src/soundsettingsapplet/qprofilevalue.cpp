@@ -225,7 +225,7 @@ QProfileValue::fetchFromBackend()
         filename = profile_get_value (
                 theProfile.isNull() ? NULL : TO_STRING(theProfile), 
                 TO_STRING(theKey));
-        needReread = startWatchFile (filename);
+        needReread = startWatchFile (QString::fromUtf8(filename));
         SYS_DEBUG ("*** needReread = %s", SYS_BOOL(needReread));
         
         if (needReread && !m_MissingFile) {
@@ -426,12 +426,12 @@ QProfileValue::startWatchFile (
 {
     QFile thisFile (filename);
     bool  exists = thisFile.exists (filename);
-     
+
     SYS_DEBUG ("filename = %s", SYS_STR(filename));
     SYS_DEBUG ("exists   = %s", SYS_BOOL(exists));
    
     /*
-     * We stop waatching if we did before.
+     * We stop watching if we did before.
      */
     stopWatchFiles ();
     

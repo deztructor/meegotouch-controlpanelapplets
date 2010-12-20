@@ -1,3 +1,9 @@
+meegotouch-controlpanelapplets (0.20.5~1) meegotouch; urgency=low
+
+  * Fixes: NB#211493 - Not able to set a song with a Russian title as a ringtone
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 20 Dec 2010 14:22:32 +0100
+
 meegotouch-controlpanelapplets (0.20.4-1) meegotouch; urgency=low
 
   * Drop libuserguide dependency
