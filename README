@@ -7,8 +7,8 @@ DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -rfakeroot -b
 
 # UT/FT TESTING:
 
- dpkg-buildpackage -rfakeroot -b; fakeroot dpkg -i ../*deb;
- testrunner.py -f /usr/share/systemui-applets-tests/tests.xml -o result.xml
+ # build and install eg.: qmake; make -j3 install
+ testrunner-lite -f /usr/share/systemui-applets-tests/tests.xml -o result.xml
 
 # TESTING COVERAGE:
 
