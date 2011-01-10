@@ -16,6 +16,8 @@ MOBILITY += systeminfo
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
 
+QMAKE_LFLAGS_RPATH = -Wl
+
 HEADERS =                   \
     ../debug.h              \
     aboutbusinesslogic.h    \

@@ -2,6 +2,7 @@ include(../../localconfig.pri)
 include(../coverage.pri)
 
 TEMPLATE = lib
+VERSION = 0.1.0
 MOC_DIR = .moc
 TARGET = meegocontrol
 OBJECTS_DIR = .objects
@@ -9,12 +10,14 @@ OBJECTS_DIR = .objects
 QT += dbus
 
 CONFIG +=          \
-    plugin         \
+    dll            \
     gui            \
     meegotouch     \
     silent         \
     link_pkgconfig \
     duicontrolpanel
+
+QMAKE_LFLAGS_RPATH = -Wl
 
 # TODO: ^ remove duicontrolpanel
 

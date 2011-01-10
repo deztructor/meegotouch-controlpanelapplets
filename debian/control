@@ -33,7 +33,7 @@ Architecture: all
 Description: Engineering English translations for meegotouch-controlpanelapplets packages.
 
 Package: libmeegocontrol-doc
-Section: devel
+Section: doc
 Priority: optional
 Architecture: all
 Description: Documentation for libmeegocontrol
