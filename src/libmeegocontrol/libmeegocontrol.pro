@@ -110,7 +110,9 @@ headers.files = $$PUBLIC_HEADERS
 headers.path += $$(DEBIAN_DESTDIR)/usr/include/libmeegocontrol
 
 qtfeature.path = $$[QT_INSTALL_DATA]/mkspecs/features
-qtfeature.files = meegocontrol.prf
+qtfeature.files = \
+    meegocontrol.prf \
+    meegocontrol_sound.prf
 
 # css.files = wallpaper.css
 # css.path =  ??
