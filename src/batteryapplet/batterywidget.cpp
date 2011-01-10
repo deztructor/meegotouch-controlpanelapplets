@@ -251,8 +251,8 @@ BatteryWidget::addRemainingCapacityWidget ()
 {
     Q_ASSERT (m_MainLayout);
     
-    m_BatteryImage = new BatteryImage (this);
-    m_BatteryImage->setStyleName ("CommonMainIconInverted");
+    m_BatteryImage = new BatteryImage;
+    m_BatteryImage->setStyleName ("CommonMainIcon");
 
     //% "Battery level \%L1\%"
     m_RemainingContainer = new PercentageContainer (

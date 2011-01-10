@@ -44,6 +44,7 @@ ProfileDialog::ProfileDialog () :
     setSystem (true);
     setModal (false);
     setObjectName ("ProfileChooserDialog");
+    setProperty("followsCurrentApplicationWindowOrientation", true);
 
     //% "Select profile"
     setTitle (qtTrId ("qtn_prof_select"));

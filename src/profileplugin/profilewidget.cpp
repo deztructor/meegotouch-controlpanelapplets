@@ -81,6 +81,7 @@ ProfileWidget::profileChanged()
 void
 ProfileWidget::showProfileDialog ()
 {
+    ProfileDialog   *dialog = new ProfileDialog;
     MStatusIndicatorMenuInterface *menu;
 
     menu = plugin->statusIndicatorMenuInterface ();
@@ -88,11 +89,13 @@ ProfileWidget::showProfileDialog ()
         menu->hideStatusIndicatorMenu ();
     }
 
-    ProfileDialog profileDialog;
+    dialog->exec ();
 
-    profileDialog.setProperty("followsCurrentApplicationWindowOrientation", true);
-
-    profileDialog.exec ();
+    /*
+     * Err. i have to use deletelater here, because
+     * window transitions must finish before deletion
+     */
+    dialog->deleteLater ();
 }
 
 void

@@ -84,9 +84,9 @@ PercentageContainer::setLayout()
 
     // add the widgets
     layout->addItem (m_Image);
-    layout->setAlignment (m_Image, Qt::AlignVCenter);
+    layout->setAlignment (m_Image, Qt::AlignLeft | Qt::AlignVCenter);
     layout->addItem (m_TextLabel);
-    layout->setAlignment (m_TextLabel, Qt::AlignVCenter);
+    layout->setAlignment (m_TextLabel, Qt::AlignLeft | Qt::AlignVCenter);
 
     mainLayout->addItem (layout);
 
