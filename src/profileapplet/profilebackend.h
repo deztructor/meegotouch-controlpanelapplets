@@ -29,7 +29,7 @@ class ProfileBackend : public QObject
     Q_OBJECT
 
 public:
-    ProfileBackend (QObject *parent = 0);
+    static ProfileBackend *getInstance ();
     virtual ~ProfileBackend ();
 
     bool setActiveProfile (QString profileName);
@@ -42,6 +42,9 @@ public:
 
     bool setVibration (QString profileName, bool vibration);
     bool getVibration (QString profileName);
+
+protected:
+    ProfileBackend (QObject *parent = 0);
 
 signals:
     void activeProfileChanged (QString currentProfile);

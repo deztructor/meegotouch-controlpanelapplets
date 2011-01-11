@@ -68,6 +68,7 @@ ProfileWidget::~ProfileWidget ()
 void
 ProfileWidget::profileChanged()
 {
+    SYS_DEBUG ("");
     QString iconId;
 
     //% "Profile"
@@ -90,6 +91,9 @@ ProfileWidget::showProfileDialog ()
     if (menu) {
         menu->hideStatusIndicatorMenu ();
     }
+
+    connect (dialog, SIGNAL (profileChanged (int)),
+             SLOT (profileChanged ()));
 
     dialog->exec ();
 

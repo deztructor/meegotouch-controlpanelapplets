@@ -1,12 +1,13 @@
-meegotouch-controlpanelapplets (0.20.7~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.7-1) meegotouch; urgency=low
 
   * Fixes: NB#211868 - Possible memory leak during Profile change
+  * The selectAndScoll() is not called when the widget is not visible.
+  * Fixed Ushas finding (status-menu icon and label is not updated issue)
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 11 Jan 2011 15:23:56 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 11 Jan 2011 16:18:57 +0100
 
 meegotouch-controlpanelapplets (0.20.6-1) meegotouch; urgency=low
 
-  * The selectAndScoll() is not called when the widget is not visible.
   * Profile-selection-dialog memory leak fixes
   * Show active profile name in status-menu as subtitle
 

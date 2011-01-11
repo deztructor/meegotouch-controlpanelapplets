@@ -29,7 +29,7 @@ namespace ProfileName {
 #include <QStringList>
 #include <QList>
 
-#undef DEBUG
+#define DEBUG
 #include "../debug.h"
 
 
@@ -50,7 +50,7 @@ bool ProfileDataLessThan (
  */
 ProfileDataInterface::ProfileDataInterface ()
 {
-    m_backend = new ProfileBackend;
+    m_backend = ProfileBackend::getInstance ();
 
     connect (m_backend, SIGNAL (activeProfileChanged (QString)),
              SLOT (currentProfileNameChanged (QString)));
@@ -58,9 +58,6 @@ ProfileDataInterface::ProfileDataInterface ()
 
 ProfileDataInterface::~ProfileDataInterface ()
 {
-    if (m_backend)
-        delete m_backend;
-    m_backend = NULL;
 }
 
 
@@ -96,6 +93,7 @@ void
 ProfileDataInterface::currentProfileNameChanged (
         const QString &prof)
 {
+    SYS_DEBUG ("prof = %s", SYS_STR (prof));
     emit currentProfile(mapId(prof));
 }
 

@@ -33,6 +33,17 @@ ProfileBackend::~ProfileBackend ()
 {
 }
 
+ProfileBackend *
+ProfileBackend::getInstance ()
+{
+    static ProfileBackend *backend;
+
+    if (! backend)
+        backend = new ProfileBackend;
+
+    return backend;
+}
+
 void
 ProfileBackend::initialize ()
 {

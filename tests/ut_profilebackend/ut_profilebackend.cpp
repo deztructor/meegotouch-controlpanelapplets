@@ -141,15 +141,12 @@ Ut_ProfileBackend::init()
     profile_set_profile (stub_profiles[0]);
 #endif
 
-    m_backend = new ProfileBackend;
+    m_backend = ProfileBackend::getInstance ();
 }
 
 void
 Ut_ProfileBackend::cleanup()
 {
-    if (m_backend)
-        delete m_backend;
-    m_backend = 0;
 }
 
 void

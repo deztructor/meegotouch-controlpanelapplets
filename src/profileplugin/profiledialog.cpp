@@ -150,13 +150,13 @@ ProfileDialog::clickedOnProfile ()
     // select the current profile
     currentProfileChanged (id);
 
-    emit profileChanged (id);
-
     // set the profile in the backend
     dataIf->setProfile (id);
 
     // and close the dialog
     accept ();
+
+    emit profileChanged (id);
 }
 
 void

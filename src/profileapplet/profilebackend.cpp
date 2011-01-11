@@ -22,7 +22,7 @@
 #include <libprofile.h>
 #endif
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -31,7 +31,7 @@ const char *keyVibration = "vibrating.alert.enabled";
 
 inline const char* toCharArray (QString &str)
 {
-    return str.toLatin1().constData();
+    return str.toAscii().constData();
 }
 
 ProfileBackend::ProfileBackend (QObject *parent) :
@@ -46,6 +46,17 @@ ProfileBackend::~ProfileBackend ()
 #ifdef HAVE_LIBPROFILE
     profile_tracker_quit ();
 #endif
+}
+
+ProfileBackend *
+ProfileBackend::getInstance ()
+{
+    static ProfileBackend *backend;
+
+    if (! backend)
+        backend = new ProfileBackend;
+
+    return backend;
 }
 
 void
@@ -221,6 +232,7 @@ ProfileBackend::profileValueChanged (
 void
 ProfileBackend::changeActiveProfile (const char *profile)
 {
+    SYS_DEBUG ("profile = %s", profile);
     m_activeProfile = profile;
 
     emit activeProfileChanged (m_activeProfile);
