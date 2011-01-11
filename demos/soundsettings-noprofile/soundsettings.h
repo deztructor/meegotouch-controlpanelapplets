@@ -28,5 +28,6 @@ class MyApplication : public MApplication {
         QPointer<MApplicationPage>     page1;
         QPointer<MApplicationPage>     page2;
         QPointer<AlertTone>            alertTone;
+        int                            count;
 };
 #endif

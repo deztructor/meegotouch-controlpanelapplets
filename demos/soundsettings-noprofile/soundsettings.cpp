@@ -18,9 +18,8 @@
 #include <MButton>
 
 #include <alerttonebrowser.h>
-
 MyApplication::MyApplication (int &argc, char **argv) :
-    MApplication (argc, argv)
+    MApplication (argc, argv),count(0)
 {
     MButton *button;
 
@@ -50,7 +49,16 @@ void
 MyApplication::startBrowser ()
 {
     AlertToneBrowser  *alertToneBrowser;
+    QString file;
+    
+    if (count % 2)
+        file = "Alablaster.aac";
+    else
+        file = "Alarm 2.aac";
+    
+    count++;
 
+    qDebug()<<"File to be shown selected as"<<file<<endl;
     if (!page2) {
         /*
          * This demo program implements a selection page for custom alert tones.
@@ -75,6 +83,9 @@ MyApplication::startBrowser ()
         page2->setCentralWidget (alertToneBrowser);
     }
 
+
+    alertTone->set (QVariant(QString("/usr/share/sounds/ring-tones/") + file));
+
     #if 1
     // This one will keep the browser page in the memory while the program is
     // running.
@@ -89,6 +100,7 @@ MyApplication::startBrowser ()
 void
 MyApplication::closeBrowser ()
 {
+    qDebug("closeBrowser");
     if (page2)
         page2->dismiss ();
 }
@@ -96,6 +108,7 @@ MyApplication::closeBrowser ()
 void
 MyApplication::valueChanged ()
 {
+    qDebug("valueChanged");
     printf ("*** fileName  = '%s'\n", 
             qPrintable(alertTone->fileName()));
     printf ("*** niceName  = '%s'\n", 

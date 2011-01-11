@@ -198,7 +198,12 @@ AlertToneDefaults::toneChanged()
      */
     SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
     SYS_DEBUG ("*** niceName = %s", SYS_STR(niceName));
-    selectAndScroll (fileName, niceName);
+    if (isVisible()) {
+        selectAndScroll (fileName, niceName);
+    } else {
+        m_FileNameToSelect = fileName;
+        m_NiceNameToSelect = niceName;
+    }
 }
 
 /*!

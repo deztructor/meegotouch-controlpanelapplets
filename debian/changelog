@@ -1,6 +1,6 @@
 meegotouch-controlpanelapplets (0.20.6~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  * The selectAndScoll() is not called when the widget is not visible.
 
  -- David Kedves <dkedves@blumsoft.eu>  Thu, 06 Jan 2011 10:06:48 +0100
 
