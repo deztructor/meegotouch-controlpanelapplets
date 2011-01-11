@@ -6,6 +6,7 @@ meegotouch-controlpanelapplets (0.20.7~1) meegotouch; urgency=low
 
 meegotouch-controlpanelapplets (0.20.6-1) meegotouch; urgency=low
 
+  * The selectAndScoll() is not called when the widget is not visible.
   * Profile-selection-dialog memory leak fixes
   * Show active profile name in status-menu as subtitle
 
