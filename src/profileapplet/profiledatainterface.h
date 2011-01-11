@@ -62,6 +62,7 @@ public:
     QString mapId2StatusIconId (int id);
     QString mapId2IconId (int id);
     QString getCurrentProfileIconId ();
+    QString getCurrentProfileName ();
     int getCurrentProfile ();
     QList<ProfileData> getProfilesData ();
     void setVibration (int id, bool value);

@@ -33,6 +33,13 @@
 //#endif
 
 /*
+ * In production releases, we have to disable all the debug messages
+ */
+#ifdef PUBLIC_RELEASE
+#   undef DEBUG
+#endif
+
+/*
  * If the debug facility is enabled we also enable all the warning messages.
  */
 #if defined(DEBUG) && !defined(WARNING)

@@ -36,7 +36,7 @@ static const char *profiles_translation = "profiles";
 ProfileWidget::ProfileWidget (
     ProfilePlugin *profilePlugin,
     QGraphicsItem *parent) :
-        MBasicListItem (MBasicListItem::IconWithTitle, parent),
+        MBasicListItem (MBasicListItem::IconWithTitleAndSubtitle, parent),
         plugin (profilePlugin),
         dataIf (0)
 {
@@ -75,6 +75,8 @@ ProfileWidget::profileChanged()
 
     iconId = dataIf->mapId2StatusIconId (dataIf->getCurrentProfile ());
 
+    setSubtitle (dataIf->getCurrentProfileName ());
+
     imageWidget ()->setImage (iconId);
 }
 
@@ -91,11 +93,7 @@ ProfileWidget::showProfileDialog ()
 
     dialog->exec ();
 
-    /*
-     * Err. i have to use deletelater here, because
-     * window transitions must finish before deletion
-     */
-    dialog->deleteLater ();
+    delete dialog;
 }
 
 void
@@ -103,5 +101,6 @@ ProfileWidget::retranslateUi ()
 {
     //% "Profile"
     setTitle (qtTrId ("qtn_prof_profile"));
+    setSubtitle (dataIf->getCurrentProfileName ());
 }
 

@@ -10,6 +10,8 @@ comma :=,
 empty :=
 space := $(empty) $(empty)
 
+# Define PUBLIC_RELEASE if changelog is not contains ~ in version number
+CXXFLAGS += `head -n 1 debian/changelog | grep '~' > /dev/null || echo -DPUBLIC_RELEASE`
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 	CXXFLAGS += -O0

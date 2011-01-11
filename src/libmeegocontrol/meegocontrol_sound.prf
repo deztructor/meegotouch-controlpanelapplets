@@ -1,0 +1,18 @@
+QMAKE_LFLAGS_RPATH = -Wl
+
+# Use this feature only when you need only the soundsettings widgets
+
+# extending include path
+INCLUDEPATH += /usr/include/libmeegocontrol
+DEPENDPATH += /usr/include/libmeegocontrol
+
+LIBS += -lmeegocontrol
+
+CONFIG += \
+    meegotouch \
+    link_pkgconfig \
+    duicontrolpanel
+
+PKGCONFIG += \
+    gstreamer-0.10
+
