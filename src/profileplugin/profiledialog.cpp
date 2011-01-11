@@ -41,6 +41,7 @@ ProfileDialog::ProfileDialog () :
     MDialog (),
     dataIf (new ProfileDataInterface)
 {
+    SYS_DEBUG ("");
     setSystem (true);
     setModal (false);
     setObjectName ("ProfileChooserDialog");
@@ -56,6 +57,7 @@ ProfileDialog::ProfileDialog () :
 
 ProfileDialog::~ProfileDialog()
 {
+    SYS_DEBUG ("");
     delete dataIf;
     dataIf = 0;
 }

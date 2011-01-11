@@ -197,6 +197,15 @@ ProfileDataInterface::mapId2IconId (int id)
 
     return iconId;
 }
+
+QString
+ProfileDataInterface::getCurrentProfileName ()
+{
+    QString prof = m_backend->getActiveProfile ();
+
+    return id2Name (prof);
+}
+
 QString
 ProfileDataInterface::id2Name (
         const QString &id)
