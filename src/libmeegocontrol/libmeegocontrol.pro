@@ -19,8 +19,6 @@ CONFIG +=          \
 
 QMAKE_LFLAGS_RPATH = -Wl
 
-# TODO: ^ remove duicontrolpanel
-
 #
 # FIXME: These are needed for the soundssettingsapplet. We maybe could remove
 # some of these, but for that we need to use the LIBMEEGOCONTROL define in the

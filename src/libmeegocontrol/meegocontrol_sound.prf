@@ -10,9 +10,11 @@ LIBS += -lmeegocontrol
 
 CONFIG += \
     meegotouch \
-    link_pkgconfig \
-    duicontrolpanel
+    link_pkgconfig
 
 PKGCONFIG += \
     gstreamer-0.10
+
+INCLUDEPATH += \
+    /usr/include/duicontrolpanel
 

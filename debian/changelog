@@ -4,7 +4,7 @@ meegotouch-controlpanelapplets (0.20.7-1) meegotouch; urgency=low
   * The selectAndScoll() is not called when the widget is not visible.
   * Fixed Ushas finding (status-menu icon and label is not updated issue)
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 11 Jan 2011 16:18:57 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 12 Jan 2011 09:05:35 +0100
 
 meegotouch-controlpanelapplets (0.20.6-1) meegotouch; urgency=low
 

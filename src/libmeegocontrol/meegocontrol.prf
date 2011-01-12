@@ -9,8 +9,7 @@ LIBS += -lmeegocontrol
 CONFIG += \
     meegotouch \
     contentmanager \
-    link_pkgconfig \
-    duicontrolpanel
+    link_pkgconfig
 
 PKGCONFIG += \
     gstreamer-0.10
@@ -21,5 +20,6 @@ LIBS += \
 
 INCLUDEPATH += \
     /usr/include/QtTracker \
-    /usr/include/thumbnailer 
+    /usr/include/thumbnailer \
+    /usr/include/duicontrolpanel
 
