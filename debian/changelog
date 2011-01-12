@@ -1,3 +1,9 @@
+meegotouch-controlpanelapplets (0.20.8~1) meegotuch; urgency=low
+
+  * [NEW VERSION]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 12 Jan 2011 14:16:16 +0100
+
 meegotouch-controlpanelapplets (0.20.7-1) meegotouch; urgency=low
 
   * Fixes: NB#211868 - Possible memory leak during Profile change
