@@ -1,3 +1,9 @@
+meegotouch-controlpanelapplets (0.20.9~1) meegotouch; urgency=low
+
+  * [NEW VERSION] 
+
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 13 Jan 2011 14:04:50 +0100
+
 meegotouch-controlpanelapplets (0.20.8-1) meegotuch; urgency=low
 
   * Fixes: NB#217706 - save/cancel buttons are not displaying after selecting
