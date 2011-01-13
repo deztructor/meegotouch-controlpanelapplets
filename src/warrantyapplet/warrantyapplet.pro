@@ -37,8 +37,6 @@ target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 css.files = libwarrantyapplet.css
 css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libwarrantyapplet/style
 
-message("The plugin will be installed to: " $$target.path)
-
 INSTALLS +=   \
     target    \
     desktop   \

@@ -20,7 +20,6 @@
 #define _ALERT_TONE_BROWSER_H_
 
 #include <QPointer>
-class SelectSingleContentItemPage;
 
 #include "alerttone.h"
 #include "alerttonepreview.h"
@@ -33,6 +32,7 @@ class MCustomContentItem;
 class MAction;
 class DrillDownItem;
 class AlertToneDefaults;
+class MApplicationPage;
 
 /*!
  * A compound widget that holds two buttons and a list widget. The two buttons
@@ -80,7 +80,7 @@ private:
     MTextEdit                       *m_LiveFilterEditor;
     QString                          currSelectedFile;
     QPointer<AlertTonePreview>       m_preview;
-    SelectSingleContentItemPage     *m_MusicBrowser;
+    MApplicationPage                *m_MusicBrowser;
 
     MAction                         *m_DoneAction;
     MAction                         *m_CancelAction;

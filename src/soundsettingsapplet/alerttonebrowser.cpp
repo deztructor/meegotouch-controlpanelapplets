@@ -26,7 +26,15 @@
 #include <QGraphicsLinearLayout>
 
 #ifdef HAVE_CONTENT_MANAGER
+/*
+ * Defining this for now...
+ * it seems it crashes somehow..
+ * and i couldn't get any usable backtrace as
+ * gdb is crashes too :-S
+ */
+#define SINGLE_CONTENTITEM
 #include <SelectSingleContentItemPage.h>
+#include <ContentItemsPage.h>
 #endif
 
 #include <MList>
@@ -192,18 +200,37 @@ AlertToneBrowser::launchMusicBrowser()
 
     if (! m_MusicBrowser)
     {
-        m_MusicBrowser = new SelectSingleContentItemPage (
+#ifdef SINGLE_CONTENTITEM
+        SelectSingleContentItemPage *page =
+            = new SelectSingleContentItemPage (
                 QString (),
                 QStringList () <<
                   "http://www.tracker-project.org/temp/nmm#MusicPiece",
                 m_tone->trackerId ());
 
-        m_MusicBrowser->setObjectName (
-                "SelectSingleContentItemPage_musicBrowser");
-        connect (m_MusicBrowser, SIGNAL (backButtonClicked ()),
+        m_MusicBrowser = page;
+
+        page->setObjectName ("SelectSingleContentItemPage_musicBrowser");
+        connect (page, SIGNAL (backButtonClicked ()),
                  SLOT (browserBackButtonClicked ()));
-        connect (m_MusicBrowser, SIGNAL (contentItemSelected (const QString&)),
+        connect (page, SIGNAL (contentItemSelected (const QString&)),
                  SLOT (selectingMusicItem (const QString&)));
+#else
+        ContentItemsPage *page = new ContentItemsPage;
+        page->setCommonLayoutSuffix ("Inverted");
+        page->setContentTypes (
+                QStringList () <<
+                  "http://www.tracker-project.org/temp/nmm#MusicPiece");
+        page->selectItem (m_tone->trackerId ());
+
+        m_MusicBrowser = page;
+
+        page->setObjectName ("SelectSingleContentItemPage_musicBrowser");
+        connect (page, SIGNAL (backButtonClicked ()),
+                 SLOT (browserBackButtonClicked ()));
+        connect (page, SIGNAL (itemClicked (const QString&)),
+                 SLOT (selectingMusicItem (const QString&)));
+#endif
     }
 
     m_MusicBrowser->appear (MSceneWindow::DestroyWhenDismissed);
@@ -390,7 +417,11 @@ AlertToneBrowser::selectingMusicItem (
     SYS_DEBUG ("*** trackerID = %s", SYS_STR(item));
     SYS_DEBUG ("*** fname     = %s", SYS_STR(fname));
 
-    setAlertTone(fname, true);
+    #ifndef SINGLE_CONTENTITEM
+    m_MusicBrowser->dismiss ();
+    #endif
+
+    setAlertTone (fname, true);
     startPlayingSound (fname);
 }
 

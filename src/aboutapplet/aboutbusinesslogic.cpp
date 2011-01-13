@@ -203,6 +203,14 @@ AboutBusinessLogic::IMEI ()
     return m_Imei;
 }
 
+QString
+AboutBusinessLogic::productName ()
+{
+    QSystemDeviceInfo sdi;
+
+    return sdi.productName ();
+}
+
 /*!
  * Initiates a query to receive the default bluetooth adapter name. Later on an
  * other query is going to be initiated to get the address of the default

@@ -23,7 +23,6 @@ INCLUDEPATH +=  \
 
 QT += dbus
 contains(cov, true) { 
-    message("Coverage options enabled")
     QMAKE_CXXFLAGS += --coverage
     QMAKE_LFLAGS += --coverage
 }
@@ -86,10 +85,6 @@ desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/$$DCP_DESKTOP_DIR
 
 target.path += $$(DEBIAN_DESTDIR)/$$DCP_APPLET_DIR
-
-message("The plugin will be installed to:       " $$target.path)
-message("The desktop file will be installed to: " $$desktop.path)
-message("The .css file will be installed to:    " $$css.path)
 
 INSTALLS += \
     target  \

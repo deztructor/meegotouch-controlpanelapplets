@@ -15,7 +15,6 @@ contains(DEFINES, HAVE_QMSYSTEM) {
 QT += dbus
 
 contains(cov, true) {
-    message("Coverage options enabled")
     QMAKE_CXXFLAGS += --coverage
     QMAKE_LFLAGS += --coverage
 }

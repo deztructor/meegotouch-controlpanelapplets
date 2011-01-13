@@ -68,11 +68,6 @@ backupscripts.path  = $$(DEBIAN_DESTDIR)/usr/share/wallpaper/
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 
-message("target path         :" $$target.path)
-message("desktop path        :" $$desktop.path)
-message("backup conf path    :" $$backup.path)
-message("backup scripts path :" $$backups.path)
-
 INSTALLS += \
     target \
     desktop \

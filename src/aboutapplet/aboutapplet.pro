@@ -39,7 +39,6 @@ css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libaboutapplet/s
 
 target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 
-message("The plugin will be installed to: " $$target.path)
 INSTALLS += target  \
             desktop \
             css

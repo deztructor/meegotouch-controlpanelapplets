@@ -42,6 +42,7 @@ public:
 
     QString osName ();
     QString osVersion ();
+    QString productName ();
     QString WiFiAddress ();
     QString BluetoothAddress ();
     QString IMEI ();

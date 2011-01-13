@@ -36,7 +36,6 @@ target.path +=  $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 desktop.files += usbapplet.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 
-message("The plugin will be installed to: " $$target.path)
 INSTALLS += target \
             desktop
 
