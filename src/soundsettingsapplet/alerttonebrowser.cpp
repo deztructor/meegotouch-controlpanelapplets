@@ -202,7 +202,7 @@ AlertToneBrowser::launchMusicBrowser()
     {
 #ifdef SINGLE_CONTENTITEM
         SelectSingleContentItemPage *page =
-            = new SelectSingleContentItemPage (
+            new SelectSingleContentItemPage (
                 QString (),
                 QStringList () <<
                   "http://www.tracker-project.org/temp/nmm#MusicPiece",
