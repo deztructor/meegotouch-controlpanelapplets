@@ -39,8 +39,7 @@
 
 #include <MLayout>
 #include <MLinearLayoutPolicy>
-#include <MButton>
-#include <MWidgetAction>
+#include <MAction>
 #include <MApplicationWindow>
 #include <MApplication>
 #include <MApplicationPage>
@@ -63,8 +62,8 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     DcpWidget (parent),
     m_WallpaperBusinessLogic (wallpaperBusinessLogic),
     m_InfoHeader (0),
-    m_DoneButton (0),
-    m_CancelButton (0),
+    m_DoneAction (0),
+    m_CancelAction (0),
     m_NoTitlebar (false),
     m_PinchOngoing (false),
     m_MotionOngoing (false),
@@ -293,12 +292,11 @@ WallpaperEditorWidget::polishEvent ()
 {
     QGraphicsWidget  *parent;
     MApplicationPage *page = 0;
-    MWidgetAction    *widgetAction;
 
     /*
      * Just a protection about double adding the actions.
      */
-    if (m_DoneButton)
+    if (m_DoneAction)
         return;
     
     /*
@@ -326,37 +324,17 @@ WallpaperEditorWidget::polishEvent ()
             MApplicationPage::HomeButton,
             MApplicationPageModel::Hide);
 
-    /**************************************************************************
-     * Creating the 'done' button and adding it to the page.
-     */
-    m_DoneButton = new MButton (
-            //% "Save"
-            qtTrId("qtn_comm_save"),
-            this);
-    m_DoneButton->setViewType("toolbar");
-    m_DoneButton->setStyleName ("ToolBarLabelOnlyCommonButton");
-    widgetAction = new MWidgetAction (this);
-    widgetAction->setLocation(MAction::ToolBarLocation);
-    widgetAction->setWidget (m_DoneButton);
-    page->addAction(widgetAction);
-    connect(m_DoneButton, SIGNAL(clicked()), 
-            this, SLOT(slotDoneActivated()));
-    
-    /**************************************************************************
-     * Creating the 'cancel' button and adding it to the page.
-     */
-    m_CancelButton = new MButton (
-            //% "Cancel"
-            qtTrId("qtn_comm_cancel"),
-            this);
-    m_CancelButton->setViewType("toolbar");
-    m_CancelButton->setStyleName ("ToolBarLabelOnlyCommonButton");
-    widgetAction = new MWidgetAction (this);
-    widgetAction->setLocation(MAction::ToolBarLocation);
-    widgetAction->setWidget (m_CancelButton);
-    page->addAction(widgetAction);
-    connect(m_CancelButton, SIGNAL(clicked()), 
-            this, SLOT(slotCancelActivated()));
+    //% "Save"
+    m_DoneAction = new MAction(qtTrId("qtn_comm_save"), this);
+    m_DoneAction->setLocation(MAction::ToolBarLocation);
+    page->addAction(m_DoneAction);
+    connect(m_DoneAction, SIGNAL(triggered()), this, SLOT(slotDoneActivated()));
+
+    //% "Cancel"
+    m_CancelAction = new MAction(qtTrId("qtn_comm_cancel"), this);
+    m_CancelAction->setLocation(MAction::ToolBarLocation);
+    page->addAction(m_CancelAction);
+    connect(m_CancelAction, SIGNAL(triggered()), this, SLOT(slotCancelActivated()));
 }
 
 /*
@@ -665,13 +643,13 @@ WallpaperEditorWidget::mouseMoveEvent (
 void
 WallpaperEditorWidget::retranslateUi()
 {
-    if (m_DoneButton)
+    if (m_DoneAction)
         //% "Save"
-        m_DoneButton->setText (qtTrId("qtn_comm_save"));
+        m_DoneAction->setText (qtTrId("qtn_comm_save"));
 
-    if (m_CancelButton)
+    if (m_CancelAction)
         //% "Cancel"
-        m_CancelButton->setText (qtTrId("qtn_comm_cancel"));
+        m_CancelAction->setText (qtTrId("qtn_comm_cancel"));
 }
 
 void

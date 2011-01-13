@@ -37,8 +37,7 @@
 #include <MWindow>
 #include <MAction>
 #include <MTextEdit>
-#include <MButton>
-#include <MWidgetAction>
+#include <MAction>
 #include <MImageWidget>
 #include <MContentItem>
 
@@ -67,8 +66,8 @@ AlertToneBrowser::AlertToneBrowser(AlertTone *tone, QGraphicsWidget *parent):
     m_defaults (0),
     m_preview (0),
     m_MusicBrowser (0),
-    m_DoneButton (0),
-    m_CancelButton (0)
+    m_DoneAction (0),
+    m_CancelAction (0)
 {
     /*
      * FIXME: Why do we need to set the title?
@@ -159,13 +158,13 @@ AlertToneBrowser::retranslateUi()
 #endif
     m_ovi_store->setProperty("title", qtTrId("qtn_sond_store"));
 
-    if (m_DoneButton)
+    if (m_DoneAction)
         //% "Done"
-        m_DoneButton->setText (qtTrId("qtn_comm_command_done"));
+        m_DoneAction->setText (qtTrId("qtn_comm_command_done"));
 
-    if (m_CancelButton)
+    if (m_CancelAction)
         //% "Cancel"
-        m_CancelButton->setText (qtTrId("qtn_comm_cancel"));
+        m_CancelAction->setText (qtTrId("qtn_comm_cancel"));
 }
 
 void
@@ -405,13 +404,12 @@ AlertToneBrowser::polishEvent ()
 {
     QGraphicsWidget  *parent;
     MApplicationPage *page = 0;
-    MWidgetAction    *widgetAction;
 
     SYS_DEBUG ("");
     /*
      * Just a protection about double adding the actions.
      */
-    if (m_DoneButton)
+    if (m_DoneAction)
         return;
 
     MWindow *win = MApplication::activeWindow ();
@@ -447,30 +445,16 @@ AlertToneBrowser::polishEvent ()
             MApplicationPage::HomeButton,
             MApplicationPageModel::Hide);
 
-    /**************************************************************************
-     * Creating the 'done' button and adding it to the page.
-     */
     //% "Done"
-    m_DoneButton = new MButton (qtTrId("qtn_comm_command_done"), this);
-    m_DoneButton->setViewType ("toolbar");
-    m_DoneButton->setStyleName ("ToolBarLabelOnlyCommonButton");
-    widgetAction = new MWidgetAction (this);
-    widgetAction->setLocation (MAction::ToolBarLocation);
-    widgetAction->setWidget (m_DoneButton);
-    page->addAction (widgetAction);
-    connect (m_DoneButton, SIGNAL (clicked ()), SLOT (accept ()));
+    m_DoneAction = new MAction(qtTrId("qtn_comm_command_done"), this);
+    m_DoneAction->setLocation(MAction::ToolBarLocation);
+    page->addAction(m_DoneAction);
+    connect(m_DoneAction, SIGNAL(triggered()), SLOT(accept()));
 
-    /**************************************************************************
-     * Creating the 'cancel' button and adding it to the page.
-     */
     //% "Cancel"
-    m_CancelButton = new MButton (qtTrId("qtn_comm_cancel"), this);
-    m_CancelButton->setViewType ("toolbar");
-    m_CancelButton->setStyleName ("ToolBarLabelOnlyCommonButton");
-    widgetAction = new MWidgetAction (this);
-    widgetAction->setLocation (MAction::ToolBarLocation);
-    widgetAction->setWidget (m_CancelButton);
-    page->addAction (widgetAction);
-    connect (m_CancelButton, SIGNAL (clicked ()), SLOT (cancel ()));
+    m_CancelAction = new MAction(qtTrId("qtn_comm_cancel"), this);
+    m_CancelAction->setLocation(MAction::ToolBarLocation);
+    page->addAction(m_CancelAction);
+    connect(m_CancelAction, SIGNAL(triggered()), SLOT(cancel()));
 }
 

@@ -30,7 +30,7 @@ class QString;
 class MTextEdit;
 class QGraphicsLinearLayout;
 class MCustomContentItem;
-class MButton;
+class MAction;
 class DrillDownItem;
 class AlertToneDefaults;
 
@@ -82,8 +82,8 @@ private:
     QPointer<AlertTonePreview>       m_preview;
     SelectSingleContentItemPage     *m_MusicBrowser;
 
-    MButton                         *m_DoneButton;
-    MButton                         *m_CancelButton;
+    MAction                         *m_DoneAction;
+    MAction                         *m_CancelAction;
 
 #ifdef UNIT_TEST
     friend class Ut_AlertToneBrowserTests;

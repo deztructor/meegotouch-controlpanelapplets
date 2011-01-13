@@ -29,7 +29,7 @@ class MContainer;
 class MLinearLayoutPolicy;
 class QGraphicsSceneMouseEvent;
 class QGraphicsSceneWheelEvent;
-class MButton;
+class MAction;
 class QSize;
 class QPixmap;
 class QImage;
@@ -139,8 +139,8 @@ private:
     WallpaperInfoHeader  *m_InfoHeader;
     QImage                m_bgLandscape;
     QImage                m_bgPortrait;
-    MButton              *m_DoneButton;
-    MButton              *m_CancelButton;
+    MAction              *m_DoneAction;
+    MAction              *m_CancelAction;
     bool                  m_NoTitlebar;
     M::Orientation        m_Orientation;
 
