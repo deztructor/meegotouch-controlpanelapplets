@@ -1,10 +1,10 @@
-meegotouch-controlpanelapplets (0.20.8~1) meegotuch; urgency=low
+meegotouch-controlpanelapplets (0.20.8-1) meegotuch; urgency=low
 
   * Fixes: NB#217706 - save/cancel buttons are not displaying after selecting
     image from wallpaper settings
   * Same fix applied for Sound settings applet
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 13 Jan 2011 09:13:46 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 13 Jan 2011 12:18:21 +0100
 
 meegotouch-controlpanelapplets (0.20.7-1) meegotouch; urgency=low
 
