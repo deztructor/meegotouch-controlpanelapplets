@@ -37,7 +37,6 @@
 #include <MWindow>
 #include <MAction>
 #include <MTextEdit>
-#include <MAction>
 #include <MImageWidget>
 #include <MContentItem>
 

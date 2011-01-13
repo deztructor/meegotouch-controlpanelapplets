@@ -211,8 +211,8 @@ Ut_WallpaperEditorWidget::testCreateContentFail ()
 {
     createObjects ();
     QVERIFY (!m_Widget->m_InfoHeader);
-    QVERIFY (!m_Widget->m_DoneButton);
-    QVERIFY (!m_Widget->m_CancelButton);
+    QVERIFY (!m_Widget->m_DoneAction);
+    QVERIFY (!m_Widget->m_CancelAction);
     QVERIFY (m_Widget->back());
     QVERIFY (!m_Widget->pagePans());
     dropObjects ();
