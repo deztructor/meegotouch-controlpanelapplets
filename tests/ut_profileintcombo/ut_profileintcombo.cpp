@@ -179,9 +179,12 @@ Ut_ProfileintComboTests::profileintcomboCurrentIndexChanged()
 
     /*
      * We change to the given index, then we check if the profile was actually
-     * set (we are using a stub of course).
+     * set (we are using a stub of course). In order to be sure that a change is
+     * happening we do two changes, otherwise changing to the default index (0) 
+     * will not initiate a signal.
      */
     SYS_DEBUG ("Changing to index %d", itemindex);
+    pc.setCurrentIndex (1 - itemindex);
     pc.setCurrentIndex (itemindex);
 #ifdef HAVE_LIBPROFILE
     QCOMPARE (lastProfileKey, profilekey);

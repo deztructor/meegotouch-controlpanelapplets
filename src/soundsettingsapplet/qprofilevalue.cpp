@@ -117,9 +117,11 @@ QProfileValue::realSetValue(
         const QVariant &newValue)
 {
     /*
-     * FIXME: Should not we silently ignore the request if the value is the same
-     * as it was before?
+     * Not doing anything if the value is the same. 
      */
+    if (m_val == newValue)
+        return;
+
 	m_val.clear();
 
     /*
