@@ -7,7 +7,7 @@ DEPENDPATH += /usr/include/libmeegocontrol
 LIBS += -lmeegocontrol
 
 CONFIG += \
-    meegotouch \
+    meegotouchcore \
     contentmanager \
     link_pkgconfig
 

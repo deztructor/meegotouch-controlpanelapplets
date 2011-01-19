@@ -1,6 +1,4 @@
 include(../common_top.pri)
-include(../coverage.pri)
-include(../check.pri)
 
 SRC_PREFIX = ../../src/soundsettingsapplet
 STUB_PREFIX = ../stubs
@@ -20,13 +18,13 @@ target.path = /usr/lib/$$TEST_PKG_NAME
 CONFIG += \
     plugin          \
     gui             \
-    meegotouch      \
+    meegotouchcore  \
     debug           \
     silent          \
     link_pkgconfig  \
     duicontrolpanel
 
-PKGCONFIG += meegotouch dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
+PKGCONFIG += dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
 
 HEADERS += \
     ut_soundsettingsapplet.h \

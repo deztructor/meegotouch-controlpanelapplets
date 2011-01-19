@@ -4,7 +4,7 @@ include(../coverage.pri)
 TEMPLATE = lib
 CONFIG += plugin \
           gui \
-          meegotouch \
+          meegotouchcore \
           duicontrolpanel \
           link_pkgconfig \
           silent

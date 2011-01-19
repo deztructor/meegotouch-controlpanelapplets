@@ -1,0 +1,3 @@
+usr/share/meegotouch-controlpanelapplets-tests/tests.xml
+usr/lib/meegotouch-controlpanelapplets-tests
+/bin/cylontest.sh

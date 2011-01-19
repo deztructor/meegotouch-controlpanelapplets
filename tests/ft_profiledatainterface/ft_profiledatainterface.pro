@@ -16,7 +16,7 @@ target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
     gui \
-    meegotouch \
+    meegotouchcore \
     link_pkgconfig \
     silent 
 

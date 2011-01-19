@@ -8,13 +8,13 @@ include($$[QT_INSTALL_DATA]/mkspecs/dcpconfig.pri)
 CONFIG +=           \
     plugin          \
     gui             \
-    meegotouch      \
+    meegotouchcore  \
     silent          \
     link_pkgconfig  \
     duicontrolpanel \
     $$(NULL)
 
-PKGCONFIG += meegotouch dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
+PKGCONFIG += dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
 
 LIBS += -lqttracker
 INCLUDEPATH +=  \

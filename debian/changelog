@@ -1,8 +1,9 @@
 meegotouch-controlpanelapplets (0.20.9~1) meegotouch; urgency=low
 
-  * [NEW VERSION] 
+  * Rename test-pkg to : meegotouch-controlpanelapplets-tests
+  * Do not send a signal in alerttonebrowser when nothing is changed
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 13 Jan 2011 14:04:50 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 18 Jan 2011 15:21:51 +0100
 
 meegotouch-controlpanelapplets (0.20.8-1) meegotuch; urgency=low
 

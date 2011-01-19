@@ -19,7 +19,7 @@ TARGET = ut_batteryimage
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
-    meegotouch \
+    meegotouchcore \
     silent 
 
 contains(DEFINES, HAVE_QMSYSTEM) {

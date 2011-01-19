@@ -9,7 +9,7 @@ QT += dbus
 
 CONFIG += plugin \
           gui \
-          meegotouch \
+          meegotouchcore \
           duicontrolpanel \
           silent
 

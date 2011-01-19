@@ -4,7 +4,7 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 CONFIG +=           \
-    meegotouch      \
+    meegotouchcore  \
     qt              \
     silent
 

@@ -4,7 +4,7 @@ TEMPLATE = app
 QT += testlib
 
 CONFIG += \
-    meegotouch \
+    meegotouchcore \
     system-ui \
     silent
 

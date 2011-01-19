@@ -4,7 +4,7 @@ include(../../localconfig.pri)
 TEMPLATE = lib
 CONFIG += plugin \
           gui \
-          meegotouch \
+          meegotouchcore \
           duicontrolpanel \
           silent
 

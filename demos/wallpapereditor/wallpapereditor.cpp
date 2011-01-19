@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QString>
 
+#include <MLocale>
 #include <MApplication>
 #include <MApplicationWindow>
 #include <MApplicationPage>
@@ -44,6 +45,11 @@ MyApplication::MyApplication (int &argc, char **argv) :
     fprintf(stderr, "file1 = %s\n", file1.toUtf8().constData());
     fprintf(stderr, "file2 = %s\n", file2.toUtf8().constData());
     fflush (stderr);
+
+    MLocale locale;
+    locale.installTrCatalog ("wallpaper");
+    locale.installTrCatalog ("meegotouchcp-applets");
+    MLocale::setDefault (locale);
     /*
      *
      */

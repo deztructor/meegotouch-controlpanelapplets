@@ -6,8 +6,8 @@ STUB_PREFIX = ../stubs
 
 INCLUDEPATH = \
         $$STUB_PREFIX \
-	$$SRC_PREFIX \
-	$$INCLUDEPATH
+        $$SRC_PREFIX \
+        $$INCLUDEPATH
 
 QT += testlib
 
@@ -19,7 +19,7 @@ TARGET = ut_batterybusinesslogic
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
-    meegotouch \
+    meegotouchcore \
     silent 
 
 HEADERS += \

@@ -11,7 +11,7 @@ INCLUDEPATH = \
 
 CONFIG += \
         gui \
-        meegotouch \
+        meegotouchcore \
         mobility \
         debug \
         link_pkgconfig \

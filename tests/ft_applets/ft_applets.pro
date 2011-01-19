@@ -6,7 +6,7 @@ SRCDIR = ../../src
 INCLUDEPATH += $$SRCDIR
 
 CONFIG += \
-    meegotouch \
+    meegotouchcore \
     duicontrolpanel \
     silent
 

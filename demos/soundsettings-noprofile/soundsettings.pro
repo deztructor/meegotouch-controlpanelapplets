@@ -15,7 +15,7 @@ contains(DEFINES, HAVE_CONTENT_MANAGER) {
 }
 
 CONFIG +=           \
-    meegotouch      \
+    meegotouchcore  \
     duicontrolpanel \
     meegocontrol    \
     qt              \

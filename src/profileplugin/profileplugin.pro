@@ -10,7 +10,7 @@ OBJECTS_DIR = .obj
 CONFIG += \
     plugin \
     gui \
-    meegotouch \
+    meegotouchcore \
     duicontrolpanel \
     system-ui \
     link_pkgconfig \

@@ -5,7 +5,7 @@ TEMPLATE = lib
 CONFIG += plugin \
           gui \
           dbus \
-          meegotouch \
+          meegotouchcore \
           meegotouch_defines \
           duicontrolpanel \
           silent

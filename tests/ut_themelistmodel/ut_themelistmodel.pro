@@ -6,12 +6,12 @@ STUB_PREFIX = ../stubs
 
 INCLUDEPATH = \
         $$STUB_PREFIX \
-	$$SRC_PREFIX \
-	$$INCLUDEPATH
+        $$SRC_PREFIX \
+        $$INCLUDEPATH
 
 CONFIG += \
 	gui \
-	meegotouch \
+	meegotouchcore \
 	debug \
 	silent 
 

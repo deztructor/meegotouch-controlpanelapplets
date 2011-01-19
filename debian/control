@@ -10,11 +10,11 @@ Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.9.7),
                libqtm-dev, libqtm-systeminfo-dev
 Standards-Version: 3.8.0
 
-Package: systemui-applets-tests
+Package: meegotouch-controlpanelapplets-tests
 Section: devel
 Priority: optional
-Replaces: duicontrolpanel-soundsettingsapplet-tests
-Conflicts: duicontrolpanel-soundsettingsapplet-tests
+Replaces: systemui-applets-tests
+Conflicts: systemui-applets-tests
 Architecture: any
 Depends: ${shlibs:Depends}, duicontrolpanel-usbapplet,
          duicontrolpanel-batteryapplet, duicontrolpanel-aboutapplet,

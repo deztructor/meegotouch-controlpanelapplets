@@ -15,17 +15,17 @@ QT += \
 TEMPLATE = app
 
 DEFINES += \
-	UNIT_TEST 
+    UNIT_TEST 
 
 TARGET = ut_wallpaperwidget
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
-	gui \
-	meegotouch \
-	plugin \
-	duicontrolpanel \
-        silent 
+    gui \
+    meegotouchcore \
+    plugin \
+    duicontrolpanel \
+    silent 
 
 contains(DEFINES, HAVE_CONTENT_MANAGER) {
     CONFIG += link_pkgconfig

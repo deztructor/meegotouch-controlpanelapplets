@@ -8,7 +8,7 @@ INCLUDEPATH += \
 
 CONFIG += \
 	gui \
-	meegotouch \
+	meegotouchcore \
 	debug \
 	silent 
 

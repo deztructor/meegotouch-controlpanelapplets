@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
 
-include(common_top.pri)
+include(common.pri)
 #
 # The coverage target will not build the functional tests.
 #
@@ -26,10 +26,6 @@ check.depends =
 check.commands =
 check.CONFIG = recursive
 QMAKE_EXTRA_TARGETS += check
-
-check-xml.target = check-xml
-check-xml.CONFIG = recursive
-QMAKE_EXTRA_TARGETS += check-xml
 
 QMAKE_STRIP = echo
 QMAKE_CLEAN += **/*.log.xml **/*.log 

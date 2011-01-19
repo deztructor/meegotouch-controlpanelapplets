@@ -12,7 +12,7 @@ QT += dbus
 CONFIG +=          \
     dll            \
     gui            \
-    meegotouch     \
+    meegotouchcore \
     silent         \
     link_pkgconfig \
     duicontrolpanel
@@ -24,7 +24,7 @@ QMAKE_LFLAGS_RPATH = -Wl
 # some of these, but for that we need to use the LIBMEEGOCONTROL define in the
 # soundsettingsapplet source.
 #
-PKGCONFIG += meegotouch dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
+PKGCONFIG += dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
 
 #########################################
 # wallpaper setting extra dependencies  #

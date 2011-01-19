@@ -9,7 +9,7 @@ DEPENDPATH += /usr/include/libmeegocontrol
 LIBS += -lmeegocontrol
 
 CONFIG += \
-    meegotouch \
+    meegotouchcore \
     link_pkgconfig
 
 PKGCONFIG += \

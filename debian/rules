@@ -61,7 +61,7 @@ clean:
 
 	rm -f build-stamp configure-stamp
 
-	-@make clean
+	-@make $(PARALLEL_MAKEFLAGS) clean
 	-@make distclean
 
 	dh_clean
@@ -78,22 +78,19 @@ install: build
 # Build architecture-independent files here.
 binary-indep: build install
 	# install the translation source file to doc.
-	install -m 644 -D -p $(CURDIR)/translations/systemui-applets.ts \
-		$(CURDIR)/debian/tmp/usr/share/doc/systemui-applets-l10n-engineering-english/systemui-applets.ts
+	install -m 644 -D -p $(CURDIR)/translations/meegotouchcp-applets.ts \
+		$(CURDIR)/debian/tmp/usr/share/doc/systemui-applets-l10n-engineering-english/meegotouchcp-applets.ts
 
 # Build architecture-dependent files here.
 binary-arch: build install
 	dh_testdir
 	dh_testroot
 #	dh_installchangelogs
-#	dh_installdocs
 	dh_install --sourcedir=debian/tmp -v
 	dh_link
 	dh_strip
 	dh_compress
 	dh_fixperms
-#	dh_perl
-#	dh_python
 	dh_makeshlibs
 	dh_installdeb
 	dh_shlibdeps

@@ -10,7 +10,7 @@ INCLUDEPATH = \
 
 CONFIG += \
     gui \
-    meegotouch \
+    meegotouchcore \
     silent 
 
 QT += \

@@ -29,10 +29,10 @@ target.path = /usr/lib/$$TEST_PKG_NAME
 CONFIG += \
 	plugin \
 	gui \
-	meegotouch \
+	meegotouchcore \
 	duicontrolpanel \
-        silent \
-        link_pkgconfig
+    silent \
+    link_pkgconfig
 
 PKGCONFIG += ContentManager
 

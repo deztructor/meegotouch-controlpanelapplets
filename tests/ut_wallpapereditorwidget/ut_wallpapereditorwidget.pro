@@ -5,27 +5,27 @@ STUB_PREFIX = ../stubs
 
 INCLUDEPATH = \
         $$STUB_PREFIX \
-	$$SRC_PREFIX \
-	$$INCLUDEPATH
+        $$SRC_PREFIX \
+        $$INCLUDEPATH
 
 QT += \
-    	testlib \
-	dbus 
+    testlib \
+    dbus 
 
 TEMPLATE = app
 
 DEFINES += \
-	UNIT_TEST 
+    UNIT_TEST 
 
 TARGET = ut_wallpapereditorwidget
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
-	gui \
-	meegotouch \
-	plugin \
-	duicontrolpanel \
-	silent 
+    gui \
+    meegotouchcore \
+    plugin \
+    duicontrolpanel \
+    silent 
 
 HEADERS += \
     $$STUB_PREFIX/thumbnailerstub.h \

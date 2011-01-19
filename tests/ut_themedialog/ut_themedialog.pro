@@ -11,7 +11,7 @@ INCLUDEPATH = \
 
 CONFIG += \
 	gui \
-	meegotouch \
+	meegotouchcore \
 	debug \
 	plugin \
 	duicontrolpanel \

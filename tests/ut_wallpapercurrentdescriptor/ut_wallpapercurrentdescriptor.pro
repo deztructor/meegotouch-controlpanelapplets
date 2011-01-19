@@ -6,8 +6,8 @@ STUB_PREFIX = ../stubs
 
 INCLUDEPATH = \
         $$STUB_PREFIX \
-	$$SRC_PREFIX \
-	$$INCLUDEPATH
+        $$SRC_PREFIX \
+        $$INCLUDEPATH
 
 QT += \
     testlib \
@@ -21,7 +21,7 @@ target.path = /usr/lib/$$TEST_PKG_NAME
 CONFIG += \
 	plugin \
 	gui \
-	meegotouch \
+	meegotouchcore \
 	duicontrolpanel \
 	silent 
 

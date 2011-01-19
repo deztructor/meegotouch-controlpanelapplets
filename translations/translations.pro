@@ -5,7 +5,7 @@ contains(BUILD_FEATURES,coverage) {
 }
 
 LANGUAGES =
-CATALOGNAME = systemui-applets
+CATALOGNAME = meegotouchcp-applets
 SOURCEDIR = $$PWD/../src/displayapplet \
             $$PWD/../src/batteryapplet \
             $$PWD/../src/profileapplet \

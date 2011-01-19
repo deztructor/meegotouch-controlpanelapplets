@@ -12,8 +12,9 @@ SUBDIRS = \
 
 QMAKE_CLEAN += \
 	configure-stamp \
-	build-stamp \
-	localconfig.pri
+	build-stamp
+# this causes slowdown, and too much warnings:
+#	localconfig.pri
 
 contains(BUILD_FEATURES,coverage) {
 	QMAKE_EXTRA_TARGETS += coverage
