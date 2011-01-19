@@ -54,6 +54,9 @@ private slots:
     void setAlertTone (
             const QString &fname,
             bool           setGui = false);
+    void set (
+        const QVariant &filename);
+
     void launchMusicBrowser();
     void launchOviStore();
     void selectingMusicItem(const QString &item);

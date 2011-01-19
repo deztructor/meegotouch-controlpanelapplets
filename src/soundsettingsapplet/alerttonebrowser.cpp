@@ -293,6 +293,18 @@ AlertToneBrowser::setAlertTone (
 }
 
 /*!
+ * Selects the given item in the browser. This method is going to work even if 
+ * called before the widget is shown.
+ */
+void
+AlertToneBrowser::set (
+        const QVariant &filename)
+{
+    currSelectedFile = filename.toString();
+    m_tone->set(filename);
+}
+
+/*!
  * This slot is called when the text in the live filtering text editor has been
  * changed.
  */
