@@ -2,6 +2,8 @@ meegotouch-controlpanelapplets (0.20.9~1) meegotouch; urgency=low
 
   * Rename test-pkg to : meegotouch-controlpanelapplets-tests
   * Do not send a signal in alerttonebrowser when nothing is changed
+  * Fixes: NB#220291 - AlertToneBrowser has no public API to pre-set the
+    suggested tone file name.
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 18 Jan 2011 15:21:51 +0100
 
