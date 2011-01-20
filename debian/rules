@@ -85,8 +85,8 @@ binary-indep: build install
 binary-arch: build install
 	dh_testdir
 	dh_testroot
-#	dh_installchangelogs
-	dh_install --sourcedir=debian/tmp -v
+	dh_installchangelogs
+	dh_install --sourcedir=debian/tmp
 	dh_link
 	dh_strip
 	dh_compress
