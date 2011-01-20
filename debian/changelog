@@ -1,3 +1,10 @@
+meegotouch-controlpanelapplets (0.20.11~1) meegotouch; urgency=low
+
+  * New Version
+  * Add an API file (debian/api)
+
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 20 Jan 2011 12:24:42 +0100
+
 meegotouch-controlpanelapplets (0.20.10-1) meegotouch; urgency=low
 
   * Fix a debianizing error...
