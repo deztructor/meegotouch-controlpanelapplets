@@ -48,14 +48,15 @@ public:
     AlertToneBrowser(AlertTone *tone, QGraphicsWidget *parent = 0);
     ~AlertToneBrowser();
 
+    void set (
+        const QVariant &filename);
+
 private slots:
     void defaultItemClicked (const QString &filename);
     void defaultsDisplayEntered();
     void setAlertTone (
             const QString &fname,
             bool           setGui = false);
-    void set (
-        const QVariant &filename);
 
     void launchMusicBrowser();
     void launchOviStore();
