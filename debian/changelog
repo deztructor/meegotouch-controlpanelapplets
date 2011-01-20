@@ -1,6 +1,7 @@
 meegotouch-controlpanelapplets (0.20.13~1) meegotouch; urgency=low
 
   * Fixes: "Display stays on while charging" label doesn't fit on screen
+  * New: add debian/api file
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 28 Jan 2011 15:43:07 +0100
 
