@@ -28,7 +28,10 @@ check.CONFIG = recursive
 QMAKE_EXTRA_TARGETS += check
 
 QMAKE_STRIP = echo
-QMAKE_CLEAN += **/*.log.xml **/*.log 
+QMAKE_CLEAN += \
+    **/*.log.xml \
+    **/*.log \
+    $$OUT_PWD/tests.xml
 
 contains(BUILD_FEATURES,coverage) {
   QMAKE_EXTRA_TARGETS += coverage
