@@ -42,6 +42,7 @@ Description: Documentation for libmeegocontrol
 
 Package: libmeegocontrol0
 Architecture: any
+Replaces: libmeegocontrol-dev
 Section: libs
 Depends: ${shlibs:Depends}, ${misc:Depends}, libgstreamer0.10-0,
          libgconf2-6, libprofile0
@@ -49,7 +50,6 @@ Description: libmeegocontrol to use some controlpanel applet as a library
 
 Package: libmeegocontrol-dev
 Architecture: any
-Replaces: libmeegocontrol0
 Section: libdevel
 Depends: ${shlibs:Depends}, ${misc:Depends}, libgstreamer0.10-dev,
          libmeegocontrol0 (= ${binary:Version}), libthumbnailer-dev,
