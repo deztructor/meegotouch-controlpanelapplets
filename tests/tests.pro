@@ -31,7 +31,7 @@ QMAKE_STRIP = echo
 QMAKE_CLEAN += \
     **/*.log.xml \
     **/*.log \
-    $$OUT_PWD/tests.xml
+    tests.xml
 
 contains(BUILD_FEATURES,coverage) {
   QMAKE_EXTRA_TARGETS += coverage

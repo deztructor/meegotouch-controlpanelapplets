@@ -118,15 +118,16 @@ Ut_OfflineApplet::initTestCase()
     m_App->setQuitOnLastWindowClosed (false);
 
     m_Applet = new OfflineApplet;
-
-    m_Applet->init ();
-
 }
 
 void
 Ut_OfflineApplet::cleanupTestCase()
 {
-    m_Applet->deleteLater ();
+    delete m_Applet;
+    m_Applet = 0;
+
+    m_App->deleteLater ();
+    m_App = 0;
 }
 
 void
@@ -164,7 +165,6 @@ Ut_OfflineApplet::testBriefConstruct ()
 
     QVERIFY (widget);
     QCOMPARE (int(widget->widgetTypeID()), int(DcpWidgetType::Button));
-    QVERIFY(dynamic_cast<OfflineBrief*> (widget));
     delete widget;
     #endif
 }
