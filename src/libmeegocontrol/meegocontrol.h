@@ -112,6 +112,6 @@ main (int argc, char** argv)
 #include <WallpaperDescriptor>
 #include <WallpaperCurrentDescriptor>
 #include <WallpaperITrans>
-#include "init.h"
+#include <init.h>
 
 #endif
