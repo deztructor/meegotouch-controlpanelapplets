@@ -33,7 +33,7 @@ http://meego.gitorious.org/meegotouch/meegotouch-controlpanelapplets
  * Controlpanel as a GUI applet, it is not intended to be used as a standalone
  * library. Taking part of the applet code and using it outside its normal
  * operational environment is highly experimental and while it is stable, it
- * might be not as efficient as it could be.
+ * might not be as efficient as it could be.
  *
  * Currently the libMeegoControl library holds only a few classes from the
  * controlpanel applets to support the setting of the wallpaper, the background
@@ -101,12 +101,17 @@ main (int argc, char** argv)
 }
 \endcode
  *
- * Once the wallpaper set the files are saved into the ~/.wallpapers directory
+ * Once the wallpaper is set the files are saved into the ~/.wallpapers directory
  * of the user's home and the actual settings are changed in the GConf database.
+ *
+ * To use any of the sound-playing features of the library (such as AlertTonePreview)
+ * you must call meegocontrol_init() or meegocontrol_init_check() before instantiating
+ * any such object(s).
  */
 #include <WallpaperBusinessLogic>
 #include <WallpaperDescriptor>
 #include <WallpaperCurrentDescriptor>
 #include <WallpaperITrans>
+#include "init.h"
 
 #endif

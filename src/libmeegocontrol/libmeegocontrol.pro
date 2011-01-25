@@ -75,6 +75,7 @@ PUBLIC_HEADERS = \
     WallpaperCurrentDescriptor                     \
     WallpaperITrans                                \
     WallpaperEditorWidget                          \
+    init.h                                         \
     meegocontrol.h
 
 HEADERS =                                          \
@@ -83,6 +84,7 @@ HEADERS =                                          \
 
 SOURCES =                                          \
     ../debug.cpp                                   \
+    init.c                                         \
     $$WALLPAPER_PATH/wallpaperitrans.cpp           \
     $$WALLPAPER_PATH/wallpaperdescriptor.cpp       \
     $$WALLPAPER_PATH/wallpapercurrentdescriptor.cpp \

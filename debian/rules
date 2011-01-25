@@ -30,14 +30,8 @@ endif
 
 TMP_BUILD_OPTS = $(subst $(comma),$(space),$(DEB_BUILD_OPTIONS))
 
-ARCH = $(shell dpkg --print-architecture)
-
 ifneq (,$(filter parallel=%,$(TMP_BUILD_OPTS)))
-    ifneq (,$(findstring arm,$(ARCH)))
-        NUMJOBS = 1
-    else
-        NUMJOBS = $(patsubst parallel=%,%,$(filter parallel=%,$(TMP_BUILD_OPTS)))
-    endif
+    NUMJOBS = $(patsubst parallel=%,%,$(filter parallel=%,$(TMP_BUILD_OPTS)))
     PARALLEL_MAKEFLAGS += -j$(NUMJOBS)
 endif
 

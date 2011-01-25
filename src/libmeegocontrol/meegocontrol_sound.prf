@@ -9,12 +9,17 @@ DEPENDPATH += /usr/include/libmeegocontrol
 LIBS += -lmeegocontrol
 
 CONFIG += \
-    meegotouchcore \
-    link_pkgconfig
+    meegotouchcore
 
-PKGCONFIG += \
+PKGCONFIG_CFLAGS += \
     gstreamer-0.10
 
 INCLUDEPATH += \
     /usr/include/duicontrolpanel
 
+# Include pkg-config CFLAGS, but not pkg-config LIBS
+isEmpty(PKG_CONFIG):PKG_CONFIG=pkg-config
+for (PKGCONFIG_CFLAGS_ENTRY, $$list($$unique(PKGCONFIG_CFLAGS))) {
+    QMAKE_CXXFLAGS += $$system($$PKG_CONFIG --cflags $$PKGCONFIG_CFLAGS_ENTRY)
+    QMAKE_CFLAGS += $$system($$PKG_CONFIG --cflags $$PKGCONFIG_CFLAGS_ENTRY)
+}
