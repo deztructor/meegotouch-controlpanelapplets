@@ -19,7 +19,7 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel-usbapplet,
          duicontrolpanel-batteryapplet, duicontrolpanel-aboutapplet,
          duicontrolpanel-displayapplet, duicontrolpanel-profileapplet,
-         duistatusindicatormenu-profileplugin, duicontrolpanel-themeapplet,
+         duistatusindicatormenu-profileplugin,
          duicontrolpanel-wallpaperapplet, duicontrolpanel-resetapplet,
          duicontrolpanel-warrantyapplet, duicontrolpanel-offlineapplet,
          duicontrolpanel-soundsettingsapplet
@@ -92,13 +92,6 @@ Provides: duicontrolpanel-ledapplet
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
          systemui-applets-l10n-engineering-english
 Description: Profiles settings applet.
-
-Package: duicontrolpanel-themeapplet
-Section: misc
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english
-Description: Theme changing applet.
 
 Package: duicontrolpanel-wallpaperapplet
 Section: misc

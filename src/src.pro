@@ -10,7 +10,6 @@ SUBDIRS =               \
     resetapplet         \
     soundsettingsapplet \
     testapplet          \
-    themeapplet         \
     usbapplet           \
     wallpaperapplet     \
     warrantyapplet      
