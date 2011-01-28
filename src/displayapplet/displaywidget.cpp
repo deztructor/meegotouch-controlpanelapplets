@@ -284,6 +284,7 @@ DisplayWidget::addBlankInhibitContainer ()
     //% "Display stays lit when charging"
     m_blankInhibitLabel = new MLabel (qtTrId ("qtn_disp_screenon"));
     m_blankInhibitLabel->setStyleName("CommonSingleTitleInverted");
+    m_blankInhibitLabel->setWordWrap (true);
 
     // Blank inhibit
     m_blankInhibitButton = new MButton;

@@ -1,8 +1,8 @@
 meegotouch-controlpanelapplets (0.20.13~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  * Fixes: "Display stays on while charging" label doesn't fit on screen
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 26 Jan 2011 09:22:22 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 28 Jan 2011 15:43:07 +0100
 
 meegotouch-controlpanelapplets (0.20.12-1) meegotouch; urgency=low
 
