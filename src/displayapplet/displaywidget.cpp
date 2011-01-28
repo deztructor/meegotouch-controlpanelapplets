@@ -95,7 +95,7 @@ DisplayWidget::addHeaderContainer ()
      * Creating a lcontainer and a layout.
      */
     container = new MContainer (this);
-    container->setStyleName ("CommonXLargeHeaderPanelInverted");
+    container->setStyleName ("CommonXLargeGroupHeaderPanelInverted");
     container->setHeaderVisible (false);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
@@ -106,7 +106,7 @@ DisplayWidget::addHeaderContainer ()
      */
     //% "Display"
     m_TitleLabel = new MLabel (qtTrId("qtn_disp_display"));
-    m_TitleLabel->setStyleName ("CommonXLargeHeaderInverted");
+    m_TitleLabel->setStyleName ("CommonXLargeGroupHeaderInverted");
     layout->addItem (m_TitleLabel);
     layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
     /*

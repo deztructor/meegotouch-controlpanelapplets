@@ -100,7 +100,7 @@ AboutWidget::addHeaderContainer ()
      * Creating a lcontainer and a layout.
      */
     container = new MContainer (this);
-    container->setStyleName ("CommonXLargeHeaderPanelInverted");
+    container->setStyleName ("CommonXLargeGroupHeaderPanelInverted");
     container->setHeaderVisible (false);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
@@ -111,7 +111,7 @@ AboutWidget::addHeaderContainer ()
      */
     //% "About product"
     m_TitleLabel = new MLabel (qtTrId("qtn_prod_about_product"));
-    m_TitleLabel->setStyleName ("CommonXLargeHeaderInverted");
+    m_TitleLabel->setStyleName ("CommonXLargeGroupHeaderInverted");
     layout->addItem (m_TitleLabel);
     layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
     /*

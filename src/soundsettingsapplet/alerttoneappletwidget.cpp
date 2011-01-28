@@ -129,8 +129,8 @@ AlertToneAppletWidget::createContents()
      */
     m_Title = addTitleLabel (
             centralWidget, policy, 
-            "CommonXLargeHeaderPanelInverted", 
-            "CommonXLargeHeaderInverted");
+            "CommonXLargeGroupHeaderPanelInverted", 
+            "CommonXLargeGroupHeaderInverted");
     /*
      * A secondary title
      */
