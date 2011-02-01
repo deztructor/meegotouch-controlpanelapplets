@@ -85,6 +85,8 @@ MNotification::MNotification (
     const QString &summary,
     const QString &body)
 {
+    Q_UNUSED (eventType);
+    Q_UNUSED (body);
     mbannerSubtitle = summary;
 }
 
