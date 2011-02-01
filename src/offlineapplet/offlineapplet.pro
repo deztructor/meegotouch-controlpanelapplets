@@ -2,6 +2,10 @@ include(../coverage.pri)
 include(../../localconfig.pri)
 
 TEMPLATE = lib
+
+QT += \
+    dbus
+
 CONFIG += plugin \
           gui \
           meegotouchcore \

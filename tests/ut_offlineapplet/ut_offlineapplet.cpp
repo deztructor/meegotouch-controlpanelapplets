@@ -23,7 +23,7 @@
 #include <MMessageBox>
 #include <MDialog>
 #include <MApplication>
-#include <MBanner>
+#include <MNotification>
 
 #include "offlineapplet.h"
 #include "offlinebrief.h"
@@ -75,23 +75,30 @@ MDialog::appear (MSceneWindow::DeletionPolicy policy)
 }
 
 /******************************************************************************
- * Stub for MBanner
+ * Stub for MNotification
  */
 static QString mbannerSubtitle;
 static bool mbannerAppereance;
 
-void
-MBanner::setSubtitle (const QString &text)
+MNotification::MNotification (
+    const QString &eventType,
+    const QString &summary,
+    const QString &body)
 {
-    mbannerSubtitle = text;
+    mbannerSubtitle = summary;
 }
 
-void
-MSceneWindow::appear (MSceneWindow::DeletionPolicy policy)
+MNotification::~MNotification ()
 {
-    Q_UNUSED (policy);
 
+}
+
+bool
+MNotification::publish ()
+{
     mbannerAppereance = true;
+
+    return true;
 }
 
 /******************************************************************************

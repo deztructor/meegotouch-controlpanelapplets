@@ -16,6 +16,7 @@ INCLUDEPATH = \
     $$TOOLS_PREFIX
 
 QT += \
+    dbus \
     testlib
 
 TEMPLATE = app
