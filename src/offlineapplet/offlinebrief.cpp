@@ -110,6 +110,7 @@ OfflineBrief::setToggle (
     {
         if (m_DevMode->setMode(QmDeviceMode::Flight))
         {
+            SYS_DEBUG ("Show the Notification");
             //% "Closing all connections. Switching to offline mode."
             MNotification banner (MNotification::NetworkDisconnectedEvent,
                                   qtTrId ("qtn_offl_entering"));
