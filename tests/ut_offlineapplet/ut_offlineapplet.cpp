@@ -54,6 +54,7 @@ MMessageBox::MMessageBox (
     const QString          &text,
     M::StandardButtons      buttons)
 {
+    SYS_DEBUG ("");
     Q_UNUSED (title);
     Q_UNUSED (buttons);
 
@@ -85,6 +86,7 @@ MNotification::MNotification (
     const QString &summary,
     const QString &body)
 {
+    SYS_DEBUG ("");
     Q_UNUSED (eventType);
     Q_UNUSED (body);
     mbannerSubtitle = summary;
@@ -98,6 +100,7 @@ MNotification::~MNotification ()
 bool
 MNotification::publish ()
 {
+    SYS_DEBUG ("");
     mbannerAppereance = true;
 
     return true;
