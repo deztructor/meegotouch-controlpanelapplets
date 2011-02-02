@@ -193,29 +193,6 @@ Ut_DisplayBusinessLogic::testSetBrightness ()
 }
 
 /*!
- * Testing the setBlankInhibitValue() method. It is just inverting the argument
- * and sends to the backend.
- */
-void
-Ut_DisplayBusinessLogic::testSetBlankInhibitValue ()
-{
-    #ifdef HAVE_QMSYSTEM
-    m_Api->setBlankInhibitValue (true);
-    QVERIFY (m_Api->m_Display->getBlankingWhenCharging() == false);
-
-    m_Api->setBlankInhibitValue (false);
-    QVERIFY (m_Api->m_Display->getBlankingWhenCharging() == true);
-
-    m_Api->setBlankInhibitValue (true);
-    QVERIFY (m_Api->m_Display->getBlankingWhenCharging() == false);
-    #else
-    /*
-     * FIXME: To implement the test when the QmSystem is not available.
-     */
-    #endif
-}
-
-/*!
  * testing the screenLightsValues() method. This method has a built in fallback
  * list, we stub the same and we check if it returns the right list.
  */

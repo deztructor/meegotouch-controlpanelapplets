@@ -45,9 +45,7 @@ DisplayWidget::DisplayWidget (QGraphicsWidget *parent) :
         m_SubTitleLabel (0),
         m_brightnessSlider (0),
         m_screenTimeout (0),
-        m_blankInhibitButton (0),
-        m_screenlightLabel (0),
-        m_blankInhibitLabel (0)
+        m_screenlightLabel (0)
 {
     setReferer (DcpDisplay::None);
     setContentsMargins (0, 0, 0, 0);
@@ -80,7 +78,6 @@ void DisplayWidget::initWidget ()
     addSliderContainer ();
     addStretcher ("CommonItemDivider");
     addScreenTimeoutContainer ();
-    addBlankInhibitContainer ();
     addStretcher ("CommonSmallSpacerInverted");
 }
 
@@ -262,57 +259,6 @@ DisplayWidget::updateScreenTimeoutCombo ()
 }
 
 void 
-DisplayWidget::addBlankInhibitContainer ()
-{
-    MContainer            *container;
-    QGraphicsLinearLayout *layout;
-
-    Q_ASSERT (m_MainLayout);
-    /*
-     * Creating a lcontainer and a layout.
-     */
-    container = new MContainer (this);
-    container->setStyleName ("CommonPanelInverted");
-    container->setHeaderVisible (false);
-
-    layout = new QGraphicsLinearLayout (Qt::Horizontal);
-    container->centralWidget()->setLayout (layout);
-
-    /*
-     * 
-     */
-    //% "Display stays lit when charging"
-    m_blankInhibitLabel = new MLabel (qtTrId ("qtn_disp_screenon"));
-    m_blankInhibitLabel->setStyleName("CommonSingleTitleInverted");
-    m_blankInhibitLabel->setWordWrap (true);
-
-    // Blank inhibit
-    m_blankInhibitButton = new MButton;
-    m_blankInhibitButton->setStyleName ("CommonSwitchInverted");
-    m_blankInhibitButton->setObjectName ("BlankInhibitButton");
-    m_blankInhibitButton->setCheckable (true);
-    m_blankInhibitButton->setViewType (MButton::switchType);
-
-    connect (m_blankInhibitButton, SIGNAL (toggled (bool)),
-             m_logic, SLOT (setBlankInhibitValue (bool)));
-
-    m_blankInhibitButton->setChecked (m_logic->blankInhibitValue ());
-
-    /*
-     *
-     */
-    layout->addItem (m_blankInhibitLabel);
-    layout->addItem (m_blankInhibitButton);
-    layout->setAlignment (m_blankInhibitButton, Qt::AlignVCenter);
-
-    /*
-     * Adding the whole row to the main container.
-     */
-    m_MainLayout->addItem (container);
-    m_MainLayout->setStretchFactor (container, 0);
-}
-
-void 
 DisplayWidget::addStretcher (
         const QString &styleName)
 {
@@ -351,6 +297,5 @@ DisplayWidget::retranslateUi ()
     m_TitleLabel->setText (qtTrId("qtn_disp_display"));
     m_SubTitleLabel->setText (qtTrId("qtn_disp_bright"));
     m_screenTimeout->setTitle (qtTrId ("qtn_disp_screenoff"));
-    m_blankInhibitLabel->setText (qtTrId ("qtn_disp_screenon"));
 }
 
