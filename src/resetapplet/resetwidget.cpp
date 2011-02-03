@@ -159,7 +159,9 @@ ResetWidget::restoreActivated ()
     question.replace ("\n", "<br>");
 
     SYS_DEBUG ("");
-    dialog = new MMessageBox ("", question, M::YesButton | M::NoButton);
+    //% "Restore original settings?"
+    dialog = new MMessageBox (qtTrId ("qtn_rset_restore_query_title"),
+                              question, M::YesButton | M::NoButton);
     dialog->setTitleBarVisible (false);
     
     retval = dialog->exec();
@@ -194,7 +196,9 @@ ResetWidget::clearActivated ()
     question.replace ("\n", "<br>");
 
     SYS_DEBUG ("");
-    dialog = new MMessageBox ("", question, M::YesButton | M::NoButton);
+    //% "Clear all data?"
+    dialog = new MMessageBox (qtTrId ("qtn_rset_clear_query_title"),
+                              question, M::YesButton | M::NoButton);
     dialog->setTitleBarVisible (false);
     
     retval = dialog->exec();
