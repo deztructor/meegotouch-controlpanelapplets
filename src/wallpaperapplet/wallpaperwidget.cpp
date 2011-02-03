@@ -116,7 +116,7 @@ WallpaperWidget::addHeaderContainer (
      * Creating a lcontainer and a layout.
      */
     container = new MContainer (this);
-    container->setStyleName ("CommonXLargeGroupHeaderPanelInverted");
+    container->setStyleName ("CommonXLargeHeaderPanelInverted");
     container->setHeaderVisible (false);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
@@ -127,7 +127,7 @@ WallpaperWidget::addHeaderContainer (
      */
     //% "Wallpaper"
     m_TitleLabel = new MLabel (qtTrId("qtn_wall_wallpaper"));
-    m_TitleLabel->setStyleName ("CommonXLargeGroupHeaderInverted");
+    m_TitleLabel->setStyleName ("CommonXLargeHeaderInverted");
     layout->addItem (m_TitleLabel);
     layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
 
