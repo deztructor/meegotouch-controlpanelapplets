@@ -1,12 +1,8 @@
 meegotouch-controlpanelapplets (0.20.14~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
-
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 03 Feb 2011 10:52:58 +0200
-
-meegotouch-controlpanelapplets (0.20.13-1) meegotouch; urgency=low
-
-  * Fixes: "Display stays on while charging" label doesn't fit on screen
+  * Theme problems fixed...
+  * Drop "Display stays on while charging" label
+  * Disable theme-applet
   * New: add debian/api file
   * Fixes: NB#223021 - libmeegocontrol is missing API file
 
