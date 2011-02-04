@@ -18,6 +18,7 @@ TEMPLATE = app
 DEFINES += \
     UNIT_TEST 
 
+DEFINES += LICENSE_PATH=\\\"\\\"
 TARGET = ut_aboutapplet
 target.path = /usr/lib/$$TEST_PKG_NAME
 

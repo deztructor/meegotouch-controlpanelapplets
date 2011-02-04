@@ -13,6 +13,15 @@ CONFIG += plugin \
 QT += dbus
 MOBILITY += systeminfo
 
+LICENSE_FILENAME = license.txt
+LICENSE_DIR = /usr/share/duicontrolpanel-aboutapplet
+LICENSE_PATH = $$LICENSE_DIR/$$LICENSE_FILENAME
+DEFINES += LICENSE_PATH=\\\"$${LICENSE_PATH}\\\"
+
+license.files += $$LICENSE_FILENAME
+license.path = $$LICENSE_DIR
+INSTALLS += license
+
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
 
