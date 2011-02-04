@@ -20,7 +20,6 @@ target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
     meegotouchcore \
-    silent 
 
 contains(DEFINES, HAVE_QMSYSTEM) {
     CONFIG += qmsystem2

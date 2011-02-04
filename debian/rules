@@ -35,62 +35,65 @@ ifneq (,$(filter parallel=%,$(TMP_BUILD_OPTS)))
     PARALLEL_MAKEFLAGS += -j$(NUMJOBS)
 endif
 
-QMAKE_OPTIONS = COV_OPTION=off $(QMAKE_PARAMS) QMAKE_CXXFLAGS="$(CXXFLAGS)"
+# Don't build documentation by setting DEB_BUILD_OPTION=nodocs,...
+ifneq (,$(findstring nodoc,$(DEB_BUILD_OPTIONS)))
+     EXCLUSIONS += --no-package=libmeegocontrol-doc
+else  
+     QMAKE_OPTIONS += CONFIG+=docs
+endif 
+
+QMAKE_OPTIONS += COV_OPTION=off $(QMAKE_PARAMS) QMAKE_CXXFLAGS="$(CXXFLAGS)"
 
 configure: configure-stamp
 configure-stamp:
-	dh_testdir
+	dh_testdir $(EXCLUSIONS)
 	@qmake $(QMAKE_OPTIONS) > /dev/null
 	touch configure-stamp
 
 build: build-stamp
 build-stamp: configure-stamp
-	dh_testdir
-	make $(PARALLEL_MAKEFLAGS)
+	dh_testdir $(EXCLUSIONS)
+	$(MAKE) $(PARALLEL_MAKEFLAGS)
 	touch build-stamp
 
 clean:
-	dh_testdir
-	dh_testroot
+	dh_testdir $(EXCLUSIONS)
+	dh_testroot $(EXCLUSIONS)
 
 	rm -f build-stamp configure-stamp
 
-	-@make $(PARALLEL_MAKEFLAGS) clean
-	-@make distclean
+	-@$(MAKE) $(PARALLEL_MAKEFLAGS) distclean
 
-	dh_clean
+	dh_clean $(EXCLUSIONS)
 
 install: build
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
+	dh_testdir $(EXCLUSIONS)
+	dh_testroot $(EXCLUSIONS)
+	dh_clean -k $(EXCLUSIONS)
+	dh_installdirs $(EXCLUSIONS)
 
 	# Add here commands to install the package into debian/tmp
-	INSTALL_ROOT=$(CURDIR)/debian/tmp make  $(PARALLEL_MAKEFLAGS) install
+	INSTALL_ROOT=$(CURDIR)/debian/tmp $(MAKE) $(PARALLEL_MAKEFLAGS) install
 
 # Build architecture-independent files here.
 binary-indep: build install
-	# install the translation source file to doc.
-	install -m 644 -D -p $(CURDIR)/translations/meegotouchcp-applets.ts \
-		$(CURDIR)/debian/tmp/usr/share/doc/systemui-applets-l10n-engineering-english/meegotouchcp-applets.ts
 
 # Build architecture-dependent files here.
 binary-arch: build install
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs
-	dh_install --sourcedir=debian/tmp
-	dh_link
-	dh_strip
-	dh_compress
-	dh_fixperms
-	dh_makeshlibs
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb --destdir=$(DEBDIR)
+	dh_testdir $(EXCLUSIONS)
+	dh_testroot $(EXCLUSIONS)
+	dh_installchangelogs $(EXCLUSIONS)
+	dh_install --sourcedir=debian/tmp $(EXCLUSIONS)
+	dh_link $(EXCLUSIONS)
+	dh_strip $(EXCLUSIONS)
+	dh_compress $(EXCLUSIONS)
+	dh_fixperms $(EXCLUSIONS)
+	dh_makeshlibs $(EXCLUSIONS)
+	dh_installdeb $(EXCLUSIONS)
+	dh_shlibdeps $(EXCLUSIONS)
+	dh_gencontrol $(EXCLUSIONS)
+	dh_md5sums $(EXCLUSIONS)
+	dh_builddeb --destdir=$(DEBDIR) $(EXCLUSIONS)
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install configure

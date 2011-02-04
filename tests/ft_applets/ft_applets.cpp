@@ -92,6 +92,12 @@ Ft_Applets::doAppletTest (const char *soname, bool hasBrief, view viewType)
     QString fileName = appletPath.absoluteFilePath (soname);
     SYS_DEBUG ("fileName = \ˇ%s\"", SYS_STR (fileName));
 
+    if (! QFile::exists (appletPath.absoluteFilePath (soname)))
+    {
+        SYS_WARNING ("Skipping this plugin as not installed.");
+        return;
+    }
+
     loader.setFileName (fileName);
     loader.setLoadHints (QLibrary::ResolveAllSymbolsHint);
 

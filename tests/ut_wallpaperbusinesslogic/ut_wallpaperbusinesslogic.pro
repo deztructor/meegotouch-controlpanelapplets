@@ -22,7 +22,6 @@ CONFIG += \
 	gui \
 	meegotouchcore \
 	duicontrolpanel \
-	silent 
 
 HEADERS += \
     $$STUB_PREFIX/thumbnailerstub.h \

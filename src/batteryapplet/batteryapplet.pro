@@ -5,7 +5,6 @@ TEMPLATE = lib
 CONFIG += plugin \
           gui \
           meegotouchcore \
-          silent \
           duicontrolpanel
 
 contains(DEFINES, HAVE_QMSYSTEM) {

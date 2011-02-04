@@ -13,7 +13,6 @@ CONFIG += \
 	gui \
 	meegotouchcore \
 	debug \
-	silent 
 
 QT += \
     testlib \

@@ -3,12 +3,15 @@
 # ##########################################################################
 
 system(./configure)
-
+include(shared.pri)
 TEMPLATE = subdirs
-SUBDIRS = \
-	src \
-	tests \
-	translations
+addSubDirs(src) 
+addSubDirs(tests)
+addSubDirs(translations)
+
+CONFIG(docs) {
+    addSubDirs(doc)
+}
 
 QMAKE_CLEAN += \
 	configure-stamp \
@@ -25,22 +28,3 @@ contains(BUILD_FEATURES,coverage) {
                    -t \"MeeGo Touch Controlpanel Applets Coverage Report\" \
                 tests/ut_*/selected.cov
 }
-
-# DOXYGEN_BIN=$$findFile(doxygen)
-DOXYGEN_BIN=doxygen
-
-QMAKE_EXTRA_TARGETS += doc
-doc.target = doc
-isEmpty(DOXYGEN_BIN) {
-    doc.commands = @echo "Unable to detect doxygen in PATH"
-} else {
-    doc.commands = @$${DOXYGEN_BIN} Doxyfile ;
-}
-doc.files += $$OUT_PWD/html/*
-doc.path += /usr/share/libmeegocontrol-doc
-doc.CONFIG += no_check_exist
-doc.depends = FORCE
-
-INSTALLS += \
-    doc
-

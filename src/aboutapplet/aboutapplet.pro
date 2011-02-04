@@ -7,7 +7,6 @@ CONFIG += plugin \
           meegotouchcore \
           mobility \
           duicontrolpanel \
-          silent \
           link_pkgconfig
 
 QT += dbus

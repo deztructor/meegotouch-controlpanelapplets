@@ -28,7 +28,6 @@ CONFIG += \
     plugin \
     duicontrolpanel \
     link_pkgconfig \
-    silent 
 
 MOBILITY += systeminfo
 

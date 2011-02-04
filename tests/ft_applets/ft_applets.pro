@@ -8,7 +8,6 @@ INCLUDEPATH += $$SRCDIR
 CONFIG += \
     meegotouchcore \
     duicontrolpanel \
-    silent
 
 TARGET = ft_applets
 target.path = /usr/lib/$$TEST_PKG_NAME

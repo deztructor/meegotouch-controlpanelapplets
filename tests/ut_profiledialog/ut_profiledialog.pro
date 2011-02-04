@@ -25,7 +25,6 @@ CONFIG += \
 	meegotouchcore \
 	plugin \
 	duicontrolpanel \
-	silent
 
 HEADERS += \
     ../../src/debug.h \
