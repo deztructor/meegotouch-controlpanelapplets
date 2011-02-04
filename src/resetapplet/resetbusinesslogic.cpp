@@ -74,7 +74,7 @@ ResetBusinessLogic::performRestoreSettings ()
 void 
 ResetBusinessLogic::performClearData ()
 {
-    char *command = (char *) "/usr/sbin/clean-device.sh --cud";
+    char *command = (char *) "/usr/sbin/clean-device.sh --cud-reset";
     int   retval;
 
     SYS_DEBUG ("*** executing command: %s", command);
