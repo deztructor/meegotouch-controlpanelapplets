@@ -14,7 +14,6 @@ CONFIG += \
     duicontrolpanel \
     system-ui \
     link_pkgconfig \
-    silent
 
 PKGCONFIG += \
     profile \

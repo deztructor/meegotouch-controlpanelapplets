@@ -26,7 +26,6 @@ CONFIG += \
 	meegotouchcore \
 	plugin \
 	duicontrolpanel \
-	silent 
 
 HEADERS += \
     $$STUB_PREFIX/qmusbmode.h \

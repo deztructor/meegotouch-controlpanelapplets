@@ -50,11 +50,11 @@ private slots:
     void testusbapplet ();
     void testresetapplet ();
     void testaboutapplet ();
-    void testthemeapplet ();
     void testwallpaperapplet ();
     void testwarrantyapplet ();
     void testofflineapplet ();
     void testsoundsettingsapplet ();
+    void testthemeapplet ();
 
 private:
     void doAppletTest (const char *soName,

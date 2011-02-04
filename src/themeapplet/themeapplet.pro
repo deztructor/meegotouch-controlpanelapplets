@@ -8,7 +8,6 @@ CONFIG += plugin \
           meegotouchcore \
           meegotouch_defines \
           duicontrolpanel \
-          silent
 
 MOC_DIR = .moc
 OBJECTS_DIR = .objects

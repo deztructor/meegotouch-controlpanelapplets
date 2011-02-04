@@ -15,7 +15,6 @@ CONFIG += \
 	debug \
 	plugin \
 	duicontrolpanel \
-	silent 
 
 QT += \
     testlib \

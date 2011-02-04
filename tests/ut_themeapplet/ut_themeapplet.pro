@@ -26,7 +26,6 @@ CONFIG += \
 	meegotouchcore \
 	plugin \
 	duicontrolpanel \
-	silent 
 
 load(meegotouch_defines)
 DEFINES += \

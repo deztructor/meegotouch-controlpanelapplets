@@ -19,7 +19,6 @@ CONFIG += \
     plugin          \
     gui             \
     meegotouchcore  \
-    silent          \
     debug           \
     link_pkgconfig  \
     duicontrolpanel

@@ -15,7 +15,6 @@ CONFIG += \
         mobility \
         debug \
         link_pkgconfig \
-        silent
 
 QT += \
     testlib \

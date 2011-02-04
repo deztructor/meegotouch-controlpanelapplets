@@ -12,7 +12,6 @@ CONFIG += \
     gui \
     meegotouchcore \
     plugin \
-    silent \
     duicontrolpanel 
 
 QT += \
