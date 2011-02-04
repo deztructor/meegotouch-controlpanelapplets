@@ -50,7 +50,6 @@ private:
     void addSecHeaderContainer ();
     void addSliderContainer ();
     void addScreenTimeoutContainer ();
-    void addBlankInhibitContainer ();
     void addStretcher (const QString &styleName);
     void updateScreenTimeoutCombo ();
     void retranslateUi ();
@@ -66,9 +65,7 @@ private:
 
     MSlider                *m_brightnessSlider;
     MComboBox              *m_screenTimeout;
-    MButton                *m_blankInhibitButton;
     MLabel                 *m_screenlightLabel;
-    MLabel                 *m_blankInhibitLabel;
     #ifdef UNIT_TEST
     friend class Ut_DisplayWidget;
     #endif

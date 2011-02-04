@@ -203,24 +203,6 @@ DisplayBusinessLogic::selectedScreenLightsValue ()
     return index;
 }
 
-bool 
-DisplayBusinessLogic::blankInhibitValue ()
-{
-    /*
-     * Actually the UI string is a negative.
-     */
-    #if HAVE_QMSYSTEM
-    return !m_Display->getBlankingWhenCharging();
-    #else
-    /*
-     * FIXME: To add the code that gets the value when QmSystem is not
-     * available.
-     */
-    SYS_WARNING ("Not implemented!");
-    return false;
-    #endif
-}
-
 /*!
  * \param value The slider value, that starts from 0, the qmsystem value starts
  *   from 1, so we add +1 to this parameter.
@@ -272,26 +254,4 @@ DisplayBusinessLogic::setScreenLightTimeouts (
     #endif
 }
 
-/*!
- * \param value If true the screen lights will remain on while the charger is
- *   connected.
- */
-void 
-DisplayBusinessLogic::setBlankInhibitValue (
-        bool value)
-{
-    /*
-     * Actually the UI string is a negative 'keep the lights on'.
-     */
-    value = !value;
-    SYS_DEBUG ("*** blanking when charging = %s", value ? "true" : "false");
-    #ifdef HAVE_QMSYSTEM
-    m_Display->setBlankingWhenCharging(value);
-    #else
-    /*
-     * FIXME: To add the code that is used when there is no QmSystem.
-     */
-    SYS_WARNING ("Not implemented!");
-    #endif
-}
 

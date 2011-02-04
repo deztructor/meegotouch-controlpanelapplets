@@ -23,7 +23,7 @@
 #include <MMessageBox>
 #include <MDialog>
 #include <MApplication>
-#include <MBanner>
+#include <MNotification>
 
 #include "offlineapplet.h"
 #include "offlinebrief.h"
@@ -54,6 +54,7 @@ MMessageBox::MMessageBox (
     const QString          &text,
     M::StandardButtons      buttons)
 {
+    SYS_DEBUG ("");
     Q_UNUSED (title);
     Q_UNUSED (buttons);
 
@@ -75,23 +76,34 @@ MDialog::appear (MSceneWindow::DeletionPolicy policy)
 }
 
 /******************************************************************************
- * Stub for MBanner
+ * Stub for MNotification
  */
 static QString mbannerSubtitle;
 static bool mbannerAppereance;
 
-void
-MBanner::setSubtitle (const QString &text)
+MNotification::MNotification (
+    const QString &eventType,
+    const QString &summary,
+    const QString &body)
 {
-    mbannerSubtitle = text;
+    SYS_DEBUG ("");
+    Q_UNUSED (eventType);
+    Q_UNUSED (body);
+    mbannerSubtitle = summary;
 }
 
-void
-MSceneWindow::appear (MSceneWindow::DeletionPolicy policy)
+MNotification::~MNotification ()
 {
-    Q_UNUSED (policy);
 
+}
+
+bool
+MNotification::publish ()
+{
+    SYS_DEBUG ("");
     mbannerAppereance = true;
+
+    return true;
 }
 
 /******************************************************************************

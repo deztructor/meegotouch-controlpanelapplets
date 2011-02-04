@@ -6,7 +6,6 @@ CONFIG += plugin \
           gui \
           meegotouchcore \
           duicontrolpanel \
-          silent
 
 MOC_DIR = .moc
 OBJECTS_DIR = .objects

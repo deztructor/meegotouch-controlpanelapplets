@@ -25,7 +25,6 @@ CONFIG += \
     meegotouchcore \
     plugin \
     duicontrolpanel \
-    silent 
 
 contains(DEFINES, HAVE_CONTENT_MANAGER) {
     CONFIG += link_pkgconfig

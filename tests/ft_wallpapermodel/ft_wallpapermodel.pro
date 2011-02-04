@@ -31,8 +31,7 @@ CONFIG += \
 	gui \
 	meegotouchcore \
 	duicontrolpanel \
-    silent \
-    link_pkgconfig
+        link_pkgconfig
 
 PKGCONFIG += ContentManager
 

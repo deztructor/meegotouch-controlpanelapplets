@@ -143,6 +143,22 @@ QmDeviceMode::DeviceMode QmDeviceMode::getMode() const{
 bool QmDeviceMode::setMode(QmDeviceMode::DeviceMode mode){
     return gQmDeviceModeStub->setMode (mode);
 }
+
+void
+QmDeviceMode::connectNotify (const char *signal)
+{
+    Q_UNUSED (signal);
+    /* no-op */
+}
+
+void
+QmDeviceMode::disconnectNotify (const char *signal)
+{
+    Q_UNUSED (signal);
+    /* no-op */
+}
+
+
 } /* namespace MeeGo */
 
 #endif

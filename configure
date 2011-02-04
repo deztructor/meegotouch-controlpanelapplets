@@ -56,6 +56,13 @@ if [ -e /usr/include/devicelock/devicelock.h ]; then
     echo "DEFINES += HAVE_DEVICELOCK" >> ${FILENAME}
 fi
 
+# 
+# silent builds make debugging build failures in integration servers
+# pain in the neck. So lets make the silent build configurable from 
+# central place  ..
+
+echo "CONFIG += silent" >> ${FILENAME}
+
 #echo "# All values were removed for testing purposes..." > ${FILENAME}
 
 echo Configured meegotouch-controlpanelapplets as follows:

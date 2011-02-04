@@ -36,7 +36,6 @@ private slots:
 
     void testBrightnessSlider ();
     void testScreenTimeout ();
-    void testBlankInhibit ();
     void testTranslation ();
     
 private:

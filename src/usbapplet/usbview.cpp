@@ -89,15 +89,15 @@ UsbView::initWidget ()
 // Create the title-bar
     MLabel *title =
         addTitleLabel (mainPolicy,
-                       "CommonXLargeGroupHeaderPanelInverted",
-                       "CommonXLargeGroupHeaderInverted");
+                       "CommonXLargeHeaderPanelInverted",
+                       "CommonXLargeHeaderInverted");
     //% "USB"
     title->setText (qtTrId ("qtn_usb_title"));
 
 // Info label
     m_info_label = addTitleLabel (mainPolicy,
                                   "CommonSmallPanelInverted",
-                                  "CommonGroupHeaderInverted");
+                                  "CommonHeaderInverted");
 
 // Creating, filling and adding the mode-list
     m_btn_group = new MButtonGroup;

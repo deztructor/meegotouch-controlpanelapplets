@@ -177,27 +177,6 @@ Ut_DisplayWidget::testScreenTimeout ()
     delete widget;
 }
 
-/*!
- * This test will check if the blank inhibit button is properly initialized and
- * it is actually setting the value in the DisplayBusinessLogic class.
- */
-void 
-Ut_DisplayWidget::testBlankInhibit ()
-{
-    DisplayWidget *widget;
-
-    widget = new DisplayWidget;
-
-    QVERIFY (widget->m_logic);
-    QVERIFY (widget->m_blankInhibitButton);
-    QCOMPARE (widget->m_blankInhibitButton->isChecked(),
-              widget->m_logic->blankInhibitValue ());
-
-    widget->m_blankInhibitButton->click();
-    QCOMPARE (widget->m_blankInhibitButton->isChecked(),
-              widget->m_logic->blankInhibitValue ());
-}
-
 void 
 Ut_DisplayWidget::testTranslation ()
 {
@@ -209,7 +188,6 @@ Ut_DisplayWidget::testTranslation ()
     QCOMPARE (widget->m_TitleLabel->text(), qtTrId ("qtn_disp_display"));
     QCOMPARE (widget->m_SubTitleLabel->text(), qtTrId ("qtn_disp_bright"));
     QCOMPARE (widget->m_screenTimeout->title(), qtTrId ("qtn_disp_screenoff"));
-    QCOMPARE (widget->m_blankInhibitLabel->text(), qtTrId ("qtn_disp_screenon"));
 }
 
 QTEST_APPLESS_MAIN(Ut_DisplayWidget)

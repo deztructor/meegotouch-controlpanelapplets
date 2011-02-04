@@ -1,15 +1,19 @@
 TEMPLATE = subdirs
-SUBDIRS =               \
-    aboutapplet         \
-    batteryapplet       \
-    displayapplet       \
-    libmeegocontrol     \
-    offlineapplet       \
-    profileapplet       \
-    profileplugin       \
-    resetapplet         \
-    soundsettingsapplet \
-    testapplet          \
-    usbapplet           \
-    wallpaperapplet     \
-    warrantyapplet      
+
+include(../shared.pri)
+
+addSubDirs(libmeegocontrol)
+addSubDirs(aboutapplet)
+addSubDirs(batteryapplet)
+addSubDirs(displayapplet)
+addSubDirs(offlineapplet)
+addSubDirs(profileapplet)
+addSubDirs(profileplugin)
+addSubDirs(resetapplet)
+addSubDirs(soundsettingsapplet)
+addSubDirs(testapplet)
+addSubDirs(themeapplet)
+addSubDirs(usbapplet)
+addSubDirs(wallpaperapplet)
+addSubDirs(warrantyapplet)
+

@@ -20,6 +20,8 @@
 #include "aboutwidget.h"
 
 #include <QGraphicsLinearLayout>
+#include <QFile>
+#include <QTextStream>
 
 #include <MImageWidget>
 #include <MLabel>
@@ -35,6 +37,8 @@
 
 #include <MWidgetCreator>
 M_REGISTER_WIDGET_NO_CREATE(AboutWidget)
+
+static const char *LicensePath = LICENSE_PATH;
 
 AboutWidget::AboutWidget (
         AboutBusinessLogic     *aboutBusinessLogic,
@@ -100,7 +104,7 @@ AboutWidget::addHeaderContainer ()
      * Creating a lcontainer and a layout.
      */
     container = new MContainer (this);
-    container->setStyleName ("CommonXLargeGroupHeaderPanelInverted");
+    container->setStyleName ("CommonXLargeHeaderPanelInverted");
     container->setHeaderVisible (false);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
@@ -111,7 +115,7 @@ AboutWidget::addHeaderContainer ()
      */
     //% "About product"
     m_TitleLabel = new MLabel (qtTrId("qtn_prod_about_product"));
-    m_TitleLabel->setStyleName ("CommonXLargeGroupHeaderInverted");
+    m_TitleLabel->setStyleName ("CommonXLargeHeaderInverted");
     layout->addItem (m_TitleLabel);
     layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
     /*
@@ -285,35 +289,15 @@ AboutWidget::licenseText()
 {
     QString retval;
 
-    // TODO: make this customizable [eg.: for meego.com]
+    QFile licenseFile(LicensePath);
+    if (!licenseFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Unable to open: " << LicensePath;
+        return QString();
+    }
 
-    retval += "<p>This product includes certain free/open source software</p>";
-    retval += "<p>The exact terms of the licenses, disclaimers, "
-              "aknowledgements and notices are provided in the "
-              "following document/through the following links:"
-              "<a href=\"http://somethink.here\">[insert document/link]</a>. "
-              "You may obtain the source code of the relevant free and open "
-              "source software at "
-              "<a href=\"http://somethink.here\">[insert the URL]</a>. "
-              "Alternatively, Nokia offers to provide such source code to you "
-              "on a CD-ROM upon written request to Nokia at:</p>";
-    retval += "<p>MeeGo Source Code Requests<br>";
-    retval += "Nokia Corporation<br>";
-    retval += "P.O.Box 407<br>";
-    retval += "FI-00045 Nokia Group<br>";
-    retval += "Finland<br>";
-    retval += "<p>This offer is valid for a period of three (3) years "
-              "from the date of the distribution of t his product by "
-              "Nokia.</p>";
-    retval += "<p>The Graphics Interchange Format (c) is the Copyright "
-              "property of CompuServe Incorporated. GIF(sm) is a "
-              "Service Mark property of Compuserve Incorporated.</p>";
-    retval += "<p>AdobeAE FlashAE Player. Copyright (c) 1996 - 2007 "
-              "Adobe Systems Incorporated. All Rights Reserved. "
-              "Protected by U.S. Patent 6,879,327; Patents Pending in the "
-              "United States and other countries. Adobe and Flas are either "
-              "trademarks or registered trademarks in the United States "
-              "and/or other countries.</p>";
+    QTextStream inStream(&licenseFile);
+
+    retval = inStream.readAll();
 
     return retval;
 }

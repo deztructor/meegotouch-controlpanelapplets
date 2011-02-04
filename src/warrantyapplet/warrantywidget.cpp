@@ -75,7 +75,7 @@ WarrantyWidget::createContent ()
      */
     addLabelContainer (policy, m_labelExpiration, m_labelTerms);
 
-    //policy->addStretch ();
+    policy->addStretch ();
 
     retranslateUi ();
 
@@ -109,7 +109,7 @@ WarrantyWidget::addHeaderContainer (
      * Creating a lcontainer and a layout.
      */
     container = new MContainer (this);
-    container->setStyleName ("CommonXLargeGroupHeaderPanelInverted");
+    container->setStyleName ("CommonXLargeHeaderPanelInverted");
     container->setHeaderVisible (false);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
@@ -120,7 +120,7 @@ WarrantyWidget::addHeaderContainer (
      */
     //% "Warranty"
     m_TitleLabel = new MLabel (qtTrId("qtn_warr_title"));
-    m_TitleLabel->setStyleName ("CommonXLargeGroupHeaderInverted");
+    m_TitleLabel->setStyleName ("CommonXLargeHeaderInverted");
     layout->addItem (m_TitleLabel);
     layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
     /*
@@ -173,7 +173,7 @@ WarrantyWidget::retranslateUi ()
     if (expirationDays > 0)
     {
       //% "Product warranty will expire in <b>%L1</b> day."
-      m_labelExpiration->setText (qtTrId ("qtn_warr_expiration", expirationDays).arg (expirationDays));
+      m_labelExpiration->setText (qtTrId ("qtn_warr_expiration").arg (expirationDays));
     }
     else if (expirationDays == 0)
     {

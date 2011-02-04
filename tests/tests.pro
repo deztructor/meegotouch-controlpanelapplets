@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
-
+include(../shared.pri)
 include(common.pri)
 #
 # The coverage target will not build the functional tests.
@@ -8,11 +8,15 @@ contains(BUILD_FEATURES,coverage) {
     #
     # Sometimes it is good to disable all but one unit tests.
     #
-    #SUBDIRS =  ut_themelistmodel
-    #SUBDIRS =  $$system(ls -1d ut_wallpaper*/)
-    SUBDIRS = $$system(./unit_tests.sh)
+    LIST = $$system(./unit_tests.sh)
+    for(testdir, LIST) {
+        addSubDirs($${testdir})
+    }
 } else {
-    SUBDIRS = $$system(ls -1d ut_*/ ft_*/)
+    LIST = $$system(ls -1d ut_* ft_*)
+    for(testdir, LIST) {
+        addSubDirs($${testdir})
+    }
 }
 
 # nocheck option disables the test building

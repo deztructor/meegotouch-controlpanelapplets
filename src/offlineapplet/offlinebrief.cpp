@@ -20,7 +20,7 @@
 #include "offlinebrief.h"
 
 #include <DcpWidgetTypes>
-#include <MBanner>
+#include <MNotification>
 #include <MMessageBox>
 #include <MLabel>
 
@@ -110,10 +110,11 @@ OfflineBrief::setToggle (
     {
         if (m_DevMode->setMode(QmDeviceMode::Flight))
         {
-            MBanner *infoBanner = new MBanner();
+            SYS_DEBUG ("Show the Notification");
             //% "Closing all connections. Switching to offline mode."
-            infoBanner->setSubtitle(qtTrId("qtn_offl_entering"));
-            infoBanner->appear(MSceneWindow::DestroyWhenDone);
+            MNotification banner (MNotification::NetworkDisconnectedEvent,
+                                  qtTrId ("qtn_offl_entering"));
+            banner.publish ();
         }
     }
     #endif

@@ -16,6 +16,7 @@ INCLUDEPATH = \
     $$TOOLS_PREFIX
 
 QT += \
+    dbus \
     testlib
 
 TEMPLATE = app
@@ -31,7 +32,6 @@ CONFIG += \
     meegotouchcore \
     plugin \
     duicontrolpanel \
-    silent 
 
 #
 # If we will use the QmSystem library we shall stub it here. 

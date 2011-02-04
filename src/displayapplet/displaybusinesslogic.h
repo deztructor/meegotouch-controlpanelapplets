@@ -51,12 +51,10 @@ public:
     int selectedBrightnessValue ();
     QList<int> screenLightsValues();
     int selectedScreenLightsValue();
-    bool blankInhibitValue();
 
 public slots:
     void setBrightnessValue(int value);
     void setScreenLightTimeouts (int index);
-    void setBlankInhibitValue(bool value);
 
 private: 
     #ifdef HAVE_QMSYSTEM

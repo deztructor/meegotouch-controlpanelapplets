@@ -38,7 +38,6 @@ private slots:
     void testGetBrightnessValues ();
     void testLightTimeouts ();
     void testSetBrightness ();
-    void testSetBlankInhibitValue ();
     void testScreenLightsValues ();
 
 private:
