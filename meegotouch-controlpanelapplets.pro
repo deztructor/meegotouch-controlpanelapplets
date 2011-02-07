@@ -1,23 +1,22 @@
-# ##########################################################################
-# MeeGo Touch Controlpanel applets (ex. system-ui-applets) main projectfile
-# ##########################################################################
+# ##################################################
+# MeeGo Touch Controlpanel applets main projectfile
+# ##################################################
 
 system(./configure)
 include(shared.pri)
 TEMPLATE = subdirs
-addSubDirs(src) 
-addSubDirs(tests)
-addSubDirs(translations)
 
 CONFIG(docs) {
     addSubDirs(doc)
 }
 
+addSubDirs(translations)
+addSubDirs(src)
+addSubDirs(tests)
+
 QMAKE_CLEAN += \
 	configure-stamp \
 	build-stamp
-# this causes slowdown, and too much warnings:
-#	localconfig.pri
 
 contains(BUILD_FEATURES,coverage) {
 	QMAKE_EXTRA_TARGETS += coverage
@@ -28,3 +27,4 @@ contains(BUILD_FEATURES,coverage) {
                    -t \"MeeGo Touch Controlpanel Applets Coverage Report\" \
                 tests/ut_*/selected.cov
 }
+
