@@ -131,6 +131,11 @@ AlertToneAppletWidget::createContents()
             centralWidget, policy, 
             "CommonXLargeHeaderPanelInverted", 
             "CommonXLargeHeaderInverted");
+// TODO: FIXME: this should be used here,
+// but the theme is messing up the word wrapping
+// as there is an maximal height... this needs to be checked!!!
+//    m_Title->setWordWrap (true);
+
     /*
      * A secondary title
      */
