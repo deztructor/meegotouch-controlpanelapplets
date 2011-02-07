@@ -1,4 +1,11 @@
-meegotouch-controlpanelapplets (0.20.14~2) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.15~1) meegotouch; urgency=low
+
+  [ Sandor Pinter ]
+  * Reading about applet's license str from a file
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 07 Feb 2011 16:46:36 +0200
+
+meegotouch-controlpanelapplets (0.20.14-1) meegotouch; urgency=low
 
   [ David Kedves ]
   * Theme problems fixed...
@@ -6,9 +13,6 @@ meegotouch-controlpanelapplets (0.20.14~2) meegotouch; urgency=low
   * Disable theme-applet
   * New: add debian/api file
   * Fixes: NB#223021 - libmeegocontrol is missing API file
-
-  [ Sandor Pinter ]
-  * Reading about applet's license str from a file
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 07 Feb 2011 12:59:10 +0200
 
