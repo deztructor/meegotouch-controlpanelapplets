@@ -25,6 +25,10 @@
 #include <QString>
 #include "qprofilevalue.h"
 
+#if HAVE_LIBRESOURCEQT
+#include <policy/resource-set.h>
+#endif
+
 class AlertTonePreview : public QObject
 {
 	Q_OBJECT
@@ -39,14 +43,28 @@ private:
 	GstElement *m_gstFilesrc;
 	GstElement *m_gstVolume;
 	QProfileValue m_profileVolume;
+        QString     m_Filename;
 
+        void gstInit();
 	void rewind();
 	double profileToGstVolume();
 
 	static void gstSignalHandler(GstBus *bus, GstMessage *msg, AlertTonePreview *atp);
 
+#if (HAVE_LIBRESOURCEQT)
+    void        getResources();
+    ResourcePolicy::ResourceSet *resources;
+#endif
+
 private slots:
 	void profileVolumeChanged();
+#if (HAVE_LIBRESOURCEQT)
+    //! An internal slot to handle the case when we got the hardware volume keys resource
+    void audioResourceAcquired();
+    //! An internal slot to handle the case when we lost the hardware volume keys resource
+    void audiResourceLost();
+#endif
+
 #ifdef UNIT_TEST
     friend class Ut_AlertTonePreviewTests;
 #endif

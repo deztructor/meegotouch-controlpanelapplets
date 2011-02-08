@@ -46,6 +46,14 @@ if [ $? -eq 0 ]; then
     if [ $? -eq 0 ]; then
 	echo "DEFINES += HAVE_LIBPROFILE" >> ${FILENAME}
     fi
+
+    #
+    # Soundsettings applet and profile uis needs libresourceqt
+    #
+    pkg-config --exists libresourceqt1    
+    if [ $? -eq 0 ]; then
+        echo "DEFINES += HAVE_LIBRESOURCEQT" >> ${FILENAME}
+    fi
 fi
 
 #

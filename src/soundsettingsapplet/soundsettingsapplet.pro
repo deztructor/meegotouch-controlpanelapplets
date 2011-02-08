@@ -16,6 +16,10 @@ CONFIG +=           \
 
 PKGCONFIG += dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
 
+contains(DEFINES, HAVE_LIBRESOURCEQT) {
+    PKGCONFIG += libresourceqt1
+}
+
 LIBS += -lqttracker
 INCLUDEPATH +=  \
     /usr/include/qt4/dui \

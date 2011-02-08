@@ -26,6 +26,10 @@ CONFIG += \
 
 PKGCONFIG += dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
 
+contains(DEFINES, HAVE_LIBRESOURCEQT) {
+    PKGCONFIG += libresourceqt1
+}
+
 HEADERS += \
     ut_alerttonedefaults.h \
     $$SRC_PREFIX/../debug.h \

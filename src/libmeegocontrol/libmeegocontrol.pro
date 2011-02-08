@@ -33,6 +33,10 @@ contains(DEFINES, HAVE_CONTENT_MANAGER) {
     PKGCONFIG += ContentManager
 }
 
+contains(DEFINES, HAVE_LIBRESOURCEQT) {
+    PKGCONFIG += libresourceqt1
+}
+
 #
 # This way the code wil always know that it is running outside the controlpanel
 #

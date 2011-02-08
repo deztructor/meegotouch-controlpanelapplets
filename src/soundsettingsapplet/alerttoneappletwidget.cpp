@@ -109,6 +109,7 @@ AlertToneAppletWidget::AlertToneAppletWidget(QList<AlertTone *>alertTones, QGrap
     createContents ();
 }
 
+
 void
 AlertToneAppletWidget::createContents()
 {

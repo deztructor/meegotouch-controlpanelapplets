@@ -20,6 +20,7 @@
 #include <QDebug>
 #include "static.h"
 #include "alerttonepreview.h"
+#include <QApplication>
 
 //#define DEBUG
 #define WARNING
@@ -27,57 +28,125 @@
 
 static const char *GstStartCommand = 
     "filesrc name=alerttonepreviewfilesrc ! "
-        "decodebin ! volume name=alerttonepreviewvolume ! autoaudiosink";
+        "decodebin ! volume name=alerttonepreviewvolume ! pulsesink name=alerttonepreviewpulsesink";
 
 AlertTonePreview::AlertTonePreview(const QString &fname):
 	m_gstPipeline(NULL),
 	m_gstFilesrc(NULL),
 	m_gstVolume(NULL),
-	m_profileVolume(QString(ALERT_TONE_VOLUME_VOLUME_KEY))
+        m_profileVolume(QString(ALERT_TONE_VOLUME_VOLUME_KEY)),
+        m_Filename(fname)
 {
-	GError *err = NULL;
-    SYS_DEBUG ("*** fname = %s", SYS_STR(fname));	
-    SYS_DEBUG ("Starting the playback.");
-
-	m_gstPipeline = gst_parse_launch (GstStartCommand, &err);
-	if (err) {
-		SYS_WARNING ("ERROR from gst_parse_launch: %s",
-                err->message ? err->message : "Unknown error");
-		g_error_free(err);
-        goto finalize;
-	}
-
-	m_gstVolume = gst_bin_get_by_name(
-            GST_BIN(m_gstPipeline), "alerttonepreviewvolume");
-	m_gstFilesrc = gst_bin_get_by_name(
-            GST_BIN(m_gstPipeline), "alerttonepreviewfilesrc");
-
-    if (m_gstVolume && m_gstFilesrc) {
-    	g_object_set (G_OBJECT(m_gstVolume), 
-                "volume", profileToGstVolume(), 
-                NULL);
-    	g_object_set (G_OBJECT(m_gstFilesrc), 
-                "location", fname.toUtf8().constData(), 
-                NULL);
-    }
-
-	gst_bus_add_signal_watch(gst_element_get_bus(m_gstPipeline));
-	g_signal_connect(G_OBJECT(gst_element_get_bus(m_gstPipeline)), 
-            "message", (GCallback)gstSignalHandler, this);
-	gst_element_set_state(m_gstPipeline, GST_STATE_PLAYING);
-
-finalize:
-	connect(&m_profileVolume, SIGNAL(changed()), 
-            this, SLOT(profileVolumeChanged()));
+#if (HAVE_LIBRESOURCEQT)
+    getResources();
+#else
+    gstInit();
+#endif
 }
 
 AlertTonePreview::~AlertTonePreview()
 {
-	SYS_DEBUG ("Stopping the playback.");
-	gst_element_set_state(m_gstPipeline, GST_STATE_NULL);
-	gst_bus_remove_signal_watch(gst_element_get_bus(m_gstPipeline));
-	gst_object_unref(m_gstPipeline);
+    SYS_DEBUG ("Stopping the playback.");
+    gst_element_set_state(m_gstPipeline, GST_STATE_NULL);
+    gst_bus_remove_signal_watch(gst_element_get_bus(m_gstPipeline));
+    gst_object_unref(m_gstPipeline);
+#if (HAVE_LIBRESOURCEQT)
+    resources->release ();
+#endif
 }
+
+void
+AlertTonePreview::gstInit()
+{
+    GError *err = NULL;
+    SYS_DEBUG ("*** fname = %s", SYS_STR(m_Filename));
+    SYS_DEBUG ("Starting the playback.");
+    GstElement *pulsesink;
+    GstStructure *props;
+
+    m_gstPipeline = gst_parse_launch (GstStartCommand, &err);
+    if (err) {
+            SYS_WARNING ("ERROR from gst_parse_launch: %s",
+            err->message ? err->message : "Unknown error");
+            g_error_free(err);
+    goto finalize;
+    }
+
+    m_gstVolume = gst_bin_get_by_name(
+        GST_BIN(m_gstPipeline), "alerttonepreviewvolume");
+    m_gstFilesrc = gst_bin_get_by_name(
+        GST_BIN(m_gstPipeline), "alerttonepreviewfilesrc");
+    pulsesink = gst_bin_get_by_name(
+        GST_BIN(m_gstPipeline), "alerttonepreviewpulsesink");
+
+    if (m_gstVolume && m_gstFilesrc) {
+        g_object_set (G_OBJECT(m_gstVolume),
+                "volume", profileToGstVolume(),
+                NULL);
+        g_object_set (G_OBJECT(m_gstFilesrc),
+                "location", m_Filename.toUtf8().constData(),
+                NULL);
+    }
+
+    props = gst_structure_from_string ("props,media.role=AlertTonePreview", NULL);
+    if(pulsesink && props)
+        g_object_set (G_OBJECT(pulsesink),
+                      "stream-properties", props,
+                      NULL);
+    else
+        SYS_DEBUG("Cannot set media.role property!");
+    gst_structure_free(props);
+
+    gst_bus_add_signal_watch(gst_element_get_bus(m_gstPipeline));
+    g_signal_connect(G_OBJECT(gst_element_get_bus(m_gstPipeline)),
+        "message", (GCallback)gstSignalHandler, this);
+    gst_element_set_state(m_gstPipeline, GST_STATE_PLAYING);
+
+finalize:
+        connect(&m_profileVolume, SIGNAL(changed()),
+            this, SLOT(profileVolumeChanged()));
+}
+
+#if (HAVE_LIBRESOURCEQT)
+void
+AlertTonePreview::getResources()
+{
+    resources = new ResourcePolicy::ResourceSet("player");
+    resources->addResource(ResourcePolicy::AudioPlaybackType);
+
+    ResourcePolicy::AudioResource *audioResource =
+            new ResourcePolicy::AudioResource("player");
+
+    audioResource->setProcessID(QApplication::applicationPid());
+    /*
+     * This is for the libresource to be able to identify our pulseaudio stream,
+     * so this is very important that the same key-value pair should be set
+     * for the pulsesink. The value should be uniqe.
+     */
+    audioResource->setStreamTag("media.role", "AlertTonePreview");
+
+    resources->addResourceObject(audioResource);
+    connect(resources, SIGNAL(resourcesGranted(QList<ResourcePolicy::ResourceType>)),
+            this, SLOT(audioResourceAcquired()));
+    connect(resources, SIGNAL(lostResources()), this, SLOT(audiResourceLost()));
+    resources->acquire();
+}
+
+
+void
+AlertTonePreview::audioResourceAcquired()
+{
+    SYS_DEBUG("Resource Acquired");
+    gstInit();
+}
+
+void
+AlertTonePreview::audiResourceLost()
+{
+    SYS_DEBUG("Resource lost");
+}
+
+#endif
 
 void
 AlertTonePreview::profileVolumeChanged()
@@ -88,21 +157,21 @@ AlertTonePreview::profileVolumeChanged()
 double
 AlertTonePreview::profileToGstVolume()
 {
-	QList<QVariant> range = m_profileVolume.possibleValues(NULL);
-	return (((double)(m_profileVolume.value().toInt() - range[0].toInt())) / ((double)(range[1].toInt() - range[0].toInt())));
+    QList<QVariant> range = m_profileVolume.possibleValues(NULL);
+    return (((double)(m_profileVolume.value().toInt() - range[0].toInt())) / ((double)(range[1].toInt() - range[0].toInt())));
 }
 
 QString
 AlertTonePreview::fname() const
 {
-	char *fname = NULL;
+    char *fname = NULL;
 
-	g_object_get(G_OBJECT(m_gstFilesrc), "location", &fname, NULL);
-	QString str(fname);
-	g_free(fname);
+    g_object_get(G_OBJECT(m_gstFilesrc), "location", &fname, NULL);
+    QString str(fname);
+    g_free(fname);
 
     SYS_DEBUG ("returning %s", SYS_STR(str));
-	return str;
+    return str;
 }
 
 void

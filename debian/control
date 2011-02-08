@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.9.7),
                libprofile-dev, system-ui-dev (>= 0.16), libqttracker-dev,
                libthumbnailer-dev, libcontentmanager-dev, devicelock-dev,
                doxygen, clean-device-dev (>= 0.0.3), libgstreamer0.10-dev,
-               libqtm-dev, libqtm-systeminfo-dev
+               libqtm-dev, libqtm-systeminfo-dev, libresourceqt-dev
 Standards-Version: 3.8.0
 
 Package: meegotouch-controlpanelapplets-tests
@@ -45,7 +45,7 @@ Architecture: any
 Replaces: libmeegocontrol-dev
 Section: libs
 Depends: ${shlibs:Depends}, ${misc:Depends}, libgstreamer0.10-0,
-         libgconf2-6, libprofile0
+         libgconf2-6, libprofile0, libresourceqt1
 Description: libmeegocontrol to use some controlpanel applet as a library
 
 Package: libmeegocontrol-dev
@@ -54,6 +54,7 @@ Section: libdevel
 Depends: ${shlibs:Depends}, ${misc:Depends}, libgstreamer0.10-dev,
          libmeegocontrol0 (= ${binary:Version}), libthumbnailer-dev,
          libduicontrolpanel-dev, libcontentmanager-dev, libqttracker-dev,
+         libresourceqt-dev
 Description: libmeegocontrol development files
 
 Package: duicontrolpanel-offlineapplet
@@ -141,6 +142,6 @@ Description: Profile status indicator menu plugin.
 Package: duicontrolpanel-soundsettingsapplet
 Section: sound
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, libresourceqt1
 Description: Sound Settings Applet
 
