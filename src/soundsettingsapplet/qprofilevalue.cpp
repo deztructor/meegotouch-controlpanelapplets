@@ -26,7 +26,7 @@
 
 #include "qprofilevalue.h"
 
-//#define DEBUG 
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -143,7 +143,7 @@ QProfileValue::realSetValue(
 	QVariant convertedValue = newValue;
 	QVariant::Type neededType = QVariant::Invalid;
 	QString theKey, theProfile;
-	QStringList lsType = getType(theKey, theProfile);
+        QStringList lsType = getType(theKey, theProfile);
 
 	char *currentProfile = profile_get_profile();
 	if (theProfile.isNull())
@@ -338,14 +338,14 @@ QProfileValue::possibleValues(RangeType *p_rangeType)
             *p_rangeType = List;
 
 		for (int Nix = 1 ; Nix < lsType.size() ; Nix++) {
-			ret.append(QVariant(lsType[Nix].remove('"')));
+                        ret.append(QVariant(lsType[Nix].remove('"')));
         }
 	}
 	else
 	if ("BOOLEAN" == lsType[0]) {
 		if (p_rangeType) (*p_rangeType) = List;
 		ret.append(QVariant(false));
-		ret.append(QVariant(true));
+                ret.append(QVariant(true));
 	}
 	else
 	if ("INTEGER" == lsType[0]) {
@@ -365,7 +365,7 @@ QProfileValue::possibleValues(RangeType *p_rangeType)
 		}
 
 		ret.append(lower);
-		ret.append(upper);
+                ret.append(upper);
 	}
 
 	return ret;

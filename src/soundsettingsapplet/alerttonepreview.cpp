@@ -28,12 +28,12 @@
 
 static const char *GstStartCommand = 
     "filesrc name=alerttonepreviewfilesrc ! "
-        "decodebin ! volume name=alerttonepreviewvolume ! pulsesink name=alerttonepreviewpulsesink";
+"decodebin ! volume name=alerttonepreviewvolume ! pulsesink name=alerttonepreviewpulsesink";
 
 AlertTonePreview::AlertTonePreview(const QString &fname):
-	m_gstPipeline(NULL),
-	m_gstFilesrc(NULL),
-	m_gstVolume(NULL),
+       m_gstPipeline(NULL),
+       m_gstFilesrc(NULL),
+       m_gstVolume(NULL),
         m_profileVolume(QString(ALERT_TONE_VOLUME_VOLUME_KEY)),
         m_Filename(fname)
 {
@@ -143,7 +143,9 @@ AlertTonePreview::audioResourceAcquired()
 void
 AlertTonePreview::audiResourceLost()
 {
-    SYS_DEBUG("Resource lost");
+    gst_element_set_state(m_gstPipeline, GST_STATE_NULL);
+    gst_bus_remove_signal_watch(gst_element_get_bus(m_gstPipeline));
+    gst_object_unref(m_gstPipeline);
 }
 
 #endif
@@ -164,14 +166,7 @@ AlertTonePreview::profileToGstVolume()
 QString
 AlertTonePreview::fname() const
 {
-    char *fname = NULL;
-
-    g_object_get(G_OBJECT(m_gstFilesrc), "location", &fname, NULL);
-    QString str(fname);
-    g_free(fname);
-
-    SYS_DEBUG ("returning %s", SYS_STR(str));
-    return str;
+    return m_Filename;
 }
 
 void

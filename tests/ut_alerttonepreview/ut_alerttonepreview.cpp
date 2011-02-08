@@ -10,6 +10,72 @@
 #include  "ut_alerttonepreview.h"
 #include  "alerttonepreview.h"
 
+#include "qprofilevalue.h"
+
+#if HAVE_LIBRESOURCEQT
+#include <policy/resource-set.h>
+#endif
+
+/******************************************************************************
+ * Stubs
+ */
+
+#if HAVE_LIBRESOURCEQT
+namespace ResourcePolicy {
+//ResourceSet::ResourceSet(const QString &applicationClass, QObject *parent)
+//{
+//    Q_UNUSED(applicationClass);
+//    Q_UNUSED(parent);
+//}
+
+bool
+ResourceSet::addResource (ResourceType resourceType)
+{
+    Q_UNUSED(resourceType);
+    return true;
+}
+
+void
+ResourceSet::addResourceObject (Resource *resource)
+{
+    Q_UNUSED(resource);
+}
+
+bool
+ResourceSet::acquire ()
+{
+    return true;
+}
+
+bool
+ResourceSet::release ()
+{
+    return true;
+}
+
+//AudioResource::AudioResource (const QString &audioGroup)
+//{
+//    Q_UNUSED(audioGroup);
+//}
+
+void
+AudioResource::setProcessID (quint32 newPID)
+{
+    Q_UNUSED(newPID);
+}
+
+void
+AudioResource::setStreamTag (const QString &name, const QString &value)
+{
+    Q_UNUSED(name);
+    Q_UNUSED(value);
+}
+
+}
+
+#endif
+
+
 /******************************************************************************
  * Ut_AlertTonePreview implementation.
  */
@@ -45,6 +111,7 @@ Ut_AlertTonePreviewTests::alerttonepreviewConstructor ()
 {
       MApplicationWindow aw;
       AlertTonePreview  atp("/usr/share/sounds/ring-tones/Lucid dreaming.aac");
+      atp.gstInit();
 
       QVERIFY(atp.m_gstPipeline != 0 );
       QVERIFY(atp.m_gstFilesrc != 0 );
@@ -57,6 +124,7 @@ Ut_AlertTonePreviewTests::alerttonepreviewfname()
 {
       MApplicationWindow aw;
       AlertTonePreview  atp("/usr/share/sounds/ring-tones/Lucid dreaming.aac");
+      atp.gstInit();
       QCOMPARE(atp.fname(), QString( "/usr/share/sounds/ring-tones/Lucid dreaming.aac" ));
 }
 
@@ -65,13 +133,11 @@ Ut_AlertTonePreviewTests::alerttonepreviewProfileToGstVolume()
 {
       MApplicationWindow aw;
       AlertTonePreview  atp("/usr/share/sounds/ring-tones/Lucid dreaming.aac");
+      atp.gstInit();
       qDebug() << atp.profileToGstVolume();
       double  volume;
       volume = atp.profileToGstVolume();
       QVERIFY ( volume >= 0 && volume <= 1 );
-
-
-
 }
 
 void
@@ -79,7 +145,7 @@ Ut_AlertTonePreviewTests::alerttonepreviewProfileVolumeChanged()
 {
       MApplicationWindow aw;
       AlertTonePreview  atp("/usr/share/sounds/ring-tones/Lucid dreaming.aac");
-
+      atp.gstInit();
       double  *  cnt = new double;
       atp.m_profileVolume.set(QVariant(50));
       atp.m_profileVolume.emit_changed();

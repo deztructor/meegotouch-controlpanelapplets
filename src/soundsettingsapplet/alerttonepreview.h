@@ -67,6 +67,7 @@ private slots:
 
 #ifdef UNIT_TEST
     friend class Ut_AlertTonePreviewTests;
+    friend class Ut_AlertToneBrowserTests;
 #endif
 };
 

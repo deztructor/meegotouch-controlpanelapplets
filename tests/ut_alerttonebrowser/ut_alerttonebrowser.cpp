@@ -28,6 +28,69 @@
 
 static const QString validSoundFile1 = "/usr/share/sounds/ring-tones/Beep.aac";
 
+#if HAVE_LIBRESOURCEQT
+#include <policy/resource-set.h>
+#endif
+
+/******************************************************************************
+ * Stubs
+ */
+
+#if HAVE_LIBRESOURCEQT
+namespace ResourcePolicy {
+//ResourceSet::ResourceSet(const QString &applicationClass, QObject *parent)
+//{
+//    Q_UNUSED(applicationClass);
+//    Q_UNUSED(parent);
+//}
+
+bool
+ResourceSet::addResource (ResourceType resourceType)
+{
+    Q_UNUSED(resourceType);
+    return true;
+}
+
+void
+ResourceSet::addResourceObject (Resource *resource)
+{
+    Q_UNUSED(resource);
+}
+
+bool
+ResourceSet::acquire ()
+{
+    return true;
+}
+
+bool
+ResourceSet::release ()
+{
+    return true;
+}
+
+//AudioResource::AudioResource (const QString &audioGroup)
+//{
+//    Q_UNUSED(audioGroup);
+//}
+
+void
+AudioResource::setProcessID (quint32 newPID)
+{
+    Q_UNUSED(newPID);
+}
+
+void
+AudioResource::setStreamTag (const QString &name, const QString &value)
+{
+    Q_UNUSED(name);
+    Q_UNUSED(value);
+}
+
+}
+
+#endif
+
 /******************************************************************************
  * Ut_AlertToneBrowser implementation.
  */
