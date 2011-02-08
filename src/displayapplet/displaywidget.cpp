@@ -95,9 +95,11 @@ DisplayWidget::addHeaderContainer ()
     container = new MContainer (this);
     container->setStyleName ("CommonXLargeHeaderPanelInverted");
     container->setHeaderVisible (false);
+    container->setContentsMargins (0,0,0,0);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
     container->centralWidget()->setLayout (layout);
+    layout->setContentsMargins (0,0,0,0);
 
     /*
      * The label that we use as title.
@@ -128,9 +130,11 @@ DisplayWidget::addSecHeaderContainer ()
     container = new MContainer (this);
     container->setStyleName ("CommonGroupHeaderPanelInverted");
     container->setHeaderVisible (false);
+    container->setContentsMargins (0,0,0,0);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
     container->centralWidget()->setLayout (layout);
+    layout->setContentsMargins (0,0,0,0);
 
     /*
      * The label that we use as title.
