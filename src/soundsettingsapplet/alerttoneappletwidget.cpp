@@ -129,9 +129,9 @@ AlertToneAppletWidget::createContents()
      * The main title
      */
     m_Title = addTitleLabel (
-            centralWidget, policy, 
-            "CommonXLargeHeaderPanelInverted", 
-            "CommonXLargeHeaderInverted");
+            centralWidget, policy,
+            "CommonXLargeHeaderPanelInverted",
+            "CommonLargeHeaderInverted");
     /*
      * A secondary title
      */
@@ -278,7 +278,7 @@ AlertToneAppletWidget::retranslateUi()
 
     if (m_Title)
         //% "Sounds"
-	    m_Title->setText(qtTrId("qtn_sond_sounds"));
+        m_Title->setText(qtTrId("qtn_sond_sounds"));
 }
 
 /*
