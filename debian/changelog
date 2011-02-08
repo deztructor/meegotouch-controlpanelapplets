@@ -6,11 +6,10 @@ meegotouch-controlpanelapplets (0.20.15~1) meegotouch; urgency=low
   [ David Kedves ]
   * Fix 223087 - Texts are not properly aligned in Display settings
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 08 Feb 2011 08:43:59 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 08 Feb 2011 13:09:24 +0200
 
-meegotouch-controlpanelapplets (0.20.14-1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.14-2) meegotouch; urgency=low
 
-  [ David Kedves ]
   * Theme problems fixed...
   * Drop "Display stays on while charging" label
   * Disable theme-applet
