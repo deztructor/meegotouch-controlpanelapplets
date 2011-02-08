@@ -13,8 +13,9 @@ Standards-Version: 3.8.0
 Package: meegotouch-controlpanelapplets-tests
 Section: devel
 Priority: optional
-Replaces: systemui-applets-tests
-Conflicts: systemui-applets-tests
+Replaces: systemui-applets-tests, duicontrolpanel-soundsettingsapplet-tests
+Conflicts: systemui-applets-tests, duicontrolpanel-soundsettingsapplet-tests
+Provides: systemui-applets-tests, duicontrolpanel-soundsettingsapplet-tests
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel-usbapplet,
          duicontrolpanel-batteryapplet, duicontrolpanel-aboutapplet,
