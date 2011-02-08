@@ -1,0 +1,28 @@
+<p>This product includes certain free/open source software</p>
+<p>The exact terms of the licenses, disclaimers, 
+aknowledgements and notices are provided in the 
+following document/through the following links:
+<a href=\"http://somethink.here\">[insert document/link]</a>. 
+You may obtain the source code of the relevant free and open 
+source software at 
+<a href=\"http://somethink.here\">[insert the URL]</a>. 
+Alternatively, Nokia offers to provide such source code to you 
+on a CD-ROM upon written request to Nokia at:</p>
+<p>MeeGo Source Code Requests<br>
+Nokia Corporation<br>
+P.O.Box 407<br>
+FI-00045 Nokia Group<br>
+Finland<br>
+<p>This offer is valid for a period of three (3) years 
+from the date of the distribution of t his product by 
+Nokia.</p>
+<p>The Graphics Interchange Format (c) is the Copyright 
+property of CompuServe Incorporated. GIF(sm) is a 
+Service Mark property of Compuserve Incorporated.</p>
+<p>AdobeAE FlashAE Player. Copyright (c) 1996 - 2007 
+Adobe Systems Incorporated. All Rights Reserved. 
+Protected by U.S. Patent 6,879,327; Patents Pending in the 
+United States and other countries. Adobe and Flas are either 
+trademarks or registered trademarks in the United States 
+and/or other countries.</p>
+

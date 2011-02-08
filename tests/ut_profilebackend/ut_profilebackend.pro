@@ -20,7 +20,6 @@ CONFIG += \
     gui \
     meegotouchcore \
     link_pkgconfig \
-    silent 
 
 contains(DEFINES, HAVE_LIBPROFILE) {
     PKGCONFIG += \

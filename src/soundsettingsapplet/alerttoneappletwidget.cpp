@@ -132,6 +132,7 @@ AlertToneAppletWidget::createContents()
             centralWidget, policy,
             "CommonXLargeHeaderPanelInverted",
             "CommonLargeHeaderInverted");
+
     /*
      * A secondary title
      */

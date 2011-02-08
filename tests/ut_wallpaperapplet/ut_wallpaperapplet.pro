@@ -24,7 +24,6 @@ CONFIG += \
         gui \
         meegotouchcore \
         plugin \
-        silent \
         duicontrolpanel \
         link_pkgconfig
 

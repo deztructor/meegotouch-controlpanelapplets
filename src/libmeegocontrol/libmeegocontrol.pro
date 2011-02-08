@@ -13,7 +13,6 @@ CONFIG +=          \
     dll            \
     gui            \
     meegotouchcore \
-    silent         \
     link_pkgconfig \
     duicontrolpanel
 

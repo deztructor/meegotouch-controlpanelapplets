@@ -188,7 +188,7 @@ Ut_ResetApplet::testConstructWidget ()
     dialogExecuted = false;
     widget->clearActivated ();
     widget->doTheWork ();
-    QVERIFY (lastExecutedCommand == "/usr/sbin/clean-device.sh --cud");
+    QVERIFY (lastExecutedCommand == "/usr/sbin/clean-device.sh --cud-reset");
     QVERIFY (dialogExecuted);
 
     /*
@@ -242,7 +242,7 @@ Ut_ResetApplet::testResetBusinessLogic ()
     QVERIFY (lastExecutedCommand == "/usr/sbin/clean-device.sh --rfs");
 
     m_Applet->m_ResetBusinessLogic->performClearData ();
-    QVERIFY (lastExecutedCommand == "/usr/sbin/clean-device.sh --cud");
+    QVERIFY (lastExecutedCommand == "/usr/sbin/clean-device.sh --cud-reset");
 }
 
 QTEST_APPLESS_MAIN(Ut_ResetApplet)

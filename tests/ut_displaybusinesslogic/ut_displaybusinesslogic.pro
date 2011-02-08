@@ -11,7 +11,6 @@ INCLUDEPATH = \
 CONFIG += \
     gui \
     meegotouchcore \
-    silent 
 
 QT += \
     testlib \

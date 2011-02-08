@@ -20,7 +20,6 @@ CONFIG += \
     gui \
     meegotouchcore \
     link_pkgconfig \
-    silent 
 
 HEADERS += \
     ../../src/debug.h \

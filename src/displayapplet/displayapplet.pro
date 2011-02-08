@@ -6,7 +6,6 @@ CONFIG += plugin \
           gui \
           meegotouchcore \
           duicontrolpanel \
-          silent
 
 contains(DEFINES, HAVE_QMSYSTEM) {
     CONFIG += qmsystem2

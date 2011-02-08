@@ -6,7 +6,6 @@ QT += testlib
 CONFIG += \
     meegotouchcore \
     system-ui \
-    silent
 
 TARGET = ft_statusmenuplugins
 target.path = /usr/lib/$$TEST_PKG_NAME
