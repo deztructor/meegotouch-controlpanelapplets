@@ -6,6 +6,13 @@ meegotouch-controlpanelapplets (0.20.16~1) meegotouch; urgency=low
   [ David Kedves ]
   * Fix 223087 - Texts are not properly aligned in Display settings
 
+  [ Zoltan Nyul ]
+  * Fixes: NB#213666 - Concurrent Application Functions: Unable to preview ringtone
+    during playing music.
+  * Fixes: NB#213863 - The Ringtone preview cannot be resumed automatically after
+    tapping the ‘Stop’ button in the calendar reminder dialog.
+  * Fixes: NB#225708 - Sounds and Feedback dialog title is truncated
+
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 09 Feb 2011 10:42:53 +0200
 
 meegotouch-controlpanelapplets (0.20.15-1) meegotouch; urgency=low
