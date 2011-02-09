@@ -63,6 +63,7 @@ private slots:
     void audioResourceAcquired();
     //! An internal slot to handle the case when we lost the hardware volume keys resource
     void audiResourceLost();
+    void audioResourcesBecameAvailable();
 #endif
 
 #ifdef UNIT_TEST

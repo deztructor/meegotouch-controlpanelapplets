@@ -129,6 +129,8 @@ AlertTonePreview::getResources()
     connect(resources, SIGNAL(resourcesGranted(QList<ResourcePolicy::ResourceType>)),
             this, SLOT(audioResourceAcquired()));
     connect(resources, SIGNAL(lostResources()), this, SLOT(audiResourceLost()));
+    connect(resources, SIGNAL(resourcesBecameAvailable (const QList< ResourcePolicy::ResourceType >)),
+            this, SLOT(audioResourcesBecameAvailable()));
     resources->acquire();
 }
 
@@ -136,16 +138,22 @@ AlertTonePreview::getResources()
 void
 AlertTonePreview::audioResourceAcquired()
 {
-    SYS_DEBUG("Resource Acquired");
+    SYS_DEBUG("");
     gstInit();
 }
 
 void
 AlertTonePreview::audiResourceLost()
 {
-    gst_element_set_state(m_gstPipeline, GST_STATE_NULL);
-    gst_bus_remove_signal_watch(gst_element_get_bus(m_gstPipeline));
-    gst_object_unref(m_gstPipeline);
+    SYS_DEBUG("");
+    gst_element_set_state(m_gstPipeline, GST_STATE_PAUSED);
+}
+
+void
+AlertTonePreview::audioResourcesBecameAvailable()
+{
+    SYS_DEBUG("");
+    gst_element_set_state(m_gstPipeline, GST_STATE_PLAYING);
 }
 
 #endif
