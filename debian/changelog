@@ -1,10 +1,17 @@
-meegotouch-controlpanelapplets (0.20.15~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.16~1) meegotouch; urgency=low
 
   [ Sandor Pinter ]
   * Reading about applet's license str from a file
 
   [ David Kedves ]
   * Fix 223087 - Texts are not properly aligned in Display settings
+
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 09 Feb 2011 10:42:53 +0200
+
+meegotouch-controlpanelapplets (0.20.15-1) meegotouch; urgency=low
+
+  * Fixes: NB#226300 - Not able to build clock due to issue in sound settings
+    applet
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 08 Feb 2011 13:09:24 +0200
 
