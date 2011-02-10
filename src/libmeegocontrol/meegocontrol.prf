@@ -11,8 +11,12 @@ CONFIG += \
     contentmanager \
     link_pkgconfig
 
-PKGCONFIG += \
-    gstreamer-0.10
+# gst / glib headers (only needed for compilation)
+INCLUDEPATH += \
+    /usr/include/gstreamer-0.10 \
+    /usr/include/glib-2.0 \
+    /usr/lib/glib-2.0/include \
+    /usr/include/libxml2
 
 LIBS += \
     -lqttracker \
