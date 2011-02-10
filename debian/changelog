@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.16~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.17~1) meegotouch; urgency=low
 
   [ Sandor Pinter ]
   * Reading about applet's license str from a file
@@ -12,6 +12,13 @@ meegotouch-controlpanelapplets (0.20.16~1) meegotouch; urgency=low
   * Fixes: NB#213863 - The Ringtone preview cannot be resumed automatically after
     tapping the ‘Stop’ button in the calendar reminder dialog.
   * Fixes: NB#225708 - Sounds and Feedback dialog title is truncated
+
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 09 Feb 2011 10:42:53 +0200
+
+meegotouch-controlpanelapplets (0.20.16-1) meegotouch; urgency=low
+
+  * Fixes: NB#226539 - Unable to build gallerycore due to missing header in
+    libmeegocontrol
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 09 Feb 2011 10:42:53 +0200
 
