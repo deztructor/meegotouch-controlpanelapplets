@@ -17,6 +17,10 @@ contains(DEFINES, HAVE_CONTENT_MANAGER) {
     PKGCONFIG += ContentManager
 }
 
+contains(DEFINES, HAVE_QUILL_FILTER) {
+    CONFIG += quillimagefilter
+}
+
 LIBS += \
     -lqttracker \
     -lthumbnailer

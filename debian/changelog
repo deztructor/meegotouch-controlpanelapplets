@@ -13,7 +13,7 @@ meegotouch-controlpanelapplets (0.20.17~1) meegotouch; urgency=low
     tapping the ‘Stop’ button in the calendar reminder dialog.
   * Fixes: NB#225708 - Sounds and Feedback dialog title is truncated
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 09 Feb 2011 10:42:53 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 11 Feb 2011 13:24:48 +0200
 
 meegotouch-controlpanelapplets (0.20.16-1) meegotouch; urgency=low
 

@@ -23,6 +23,11 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QImage>
+/*
+#ifdef HAVE_QUILL_FILTER
+#include <QuillImage>
+#endif
+*/
 #include <QPixmap>
 #include <QPainter>
 #include <QThread>

@@ -1,17 +1,2 @@
-* Update the yaml/spec files
-
-* Make test cases for:
-    - batterwidget
-    - trackerconnection
-    - themewidget
-    - themelistmodel
-    - theme/drilldownitem
-
-* Improve test cases:
-    - profilecontainer
-    - profilewidget
-    - alerttonebrowser
-    - wallpaperbusinesslogic
-    - wallpapereditorwidget
-    - wallpaperwidget
-
+* wallpaperapplet
+ - start using QuillImage without causing API/ABI breaks...
