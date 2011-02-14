@@ -25,7 +25,7 @@
 #include <QString>
 #include "qprofilevalue.h"
 
-#if HAVE_LIBRESOURCEQT
+#ifdef HAVE_LIBRESOURCEQT
 #include <policy/resource-set.h>
 #endif
 
@@ -51,20 +51,16 @@ private:
 
 	static void gstSignalHandler(GstBus *bus, GstMessage *msg, AlertTonePreview *atp);
 
-#if (HAVE_LIBRESOURCEQT)
     void        getResources();
+#ifdef HAVE_LIBRESOURCEQT
     ResourcePolicy::ResourceSet *resources;
 #endif
 
 private slots:
 	void profileVolumeChanged();
-#if (HAVE_LIBRESOURCEQT)
-    //! An internal slot to handle the case when we got the hardware volume keys resource
     void audioResourceAcquired();
-    //! An internal slot to handle the case when we lost the hardware volume keys resource
     void audiResourceLost();
     void audioResourcesBecameAvailable();
-#endif
 
 #ifdef UNIT_TEST
     friend class Ut_AlertTonePreviewTests;

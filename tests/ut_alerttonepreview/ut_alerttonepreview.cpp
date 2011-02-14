@@ -12,7 +12,7 @@
 
 #include "qprofilevalue.h"
 
-#if HAVE_LIBRESOURCEQT
+#ifdef HAVE_LIBRESOURCEQT
 #include <policy/resource-set.h>
 #endif
 
@@ -20,7 +20,7 @@
  * Stubs
  */
 
-#if HAVE_LIBRESOURCEQT
+#ifdef HAVE_LIBRESOURCEQT
 namespace ResourcePolicy {
 //ResourceSet::ResourceSet(const QString &applicationClass, QObject *parent)
 //{

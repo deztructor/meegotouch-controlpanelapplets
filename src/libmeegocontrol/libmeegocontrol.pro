@@ -79,7 +79,6 @@ PUBLIC_HEADERS = \
     $$SOUNDSETTINGS_PATH/qprofilevalue.h           \
     $$SOUNDSETTINGS_PATH/qtrackedvariant.h         \
     $$SOUNDSETTINGS_PATH/alerttonedefaultsmodel.h  \
-    $$SOUNDSETTINGS_PATH/alerttonepreview.h        \
     WallpaperBusinessLogic                         \
     WallpaperDescriptor                            \
     WallpaperCurrentDescriptor                     \
@@ -90,6 +89,7 @@ PUBLIC_HEADERS = \
 
 HEADERS =                                          \
     ../debug.h                                     \
+    $$SOUNDSETTINGS_PATH/alerttonepreview.h        \
     $$PUBLIC_HEADERS
 
 SOURCES =                                          \

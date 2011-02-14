@@ -24,11 +24,12 @@
 #include "drilldownitem.h"
 
 #include <MContentItem>
+#include <gst/gst.h>
 #include <QGraphicsLinearLayout>
 
 static const QString validSoundFile1 = "/usr/share/sounds/ring-tones/Beep.aac";
 
-#if HAVE_LIBRESOURCEQT
+#ifdef HAVE_LIBRESOURCEQT
 #include <policy/resource-set.h>
 #endif
 
@@ -36,7 +37,7 @@ static const QString validSoundFile1 = "/usr/share/sounds/ring-tones/Beep.aac";
  * Stubs
  */
 
-#if HAVE_LIBRESOURCEQT
+#ifdef HAVE_LIBRESOURCEQT
 namespace ResourcePolicy {
 //ResourceSet::ResourceSet(const QString &applicationClass, QObject *parent)
 //{

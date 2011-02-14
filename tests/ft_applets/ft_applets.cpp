@@ -90,7 +90,7 @@ Ft_Applets::doAppletTest (const char *soname, bool hasBrief, view viewType)
     QPluginLoader loader;
     QDir appletPath (APPLET_LIBS);
     QString fileName = appletPath.absoluteFilePath (soname);
-    SYS_DEBUG ("fileName = \ˇ%s\"", SYS_STR (fileName));
+    SYS_DEBUG ("fileName = \"%s\"", SYS_STR (fileName));
 
     if (! QFile::exists (appletPath.absoluteFilePath (soname)))
     {

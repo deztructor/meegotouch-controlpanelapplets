@@ -19,11 +19,8 @@
 #ifndef _ALERT_TONE_BROWSER_H_
 #define _ALERT_TONE_BROWSER_H_
 
-#include <QPointer>
-
-#include "alerttone.h"
-#include "alerttonepreview.h"
 #include "alerttonetoplevel.h"
+#include "alerttone.h"
 
 class QString;
 class MTextEdit;
@@ -31,6 +28,7 @@ class QGraphicsLinearLayout;
 class MCustomContentItem;
 class MAction;
 class DrillDownItem;
+class AlertTonePreview;
 class AlertToneDefaults;
 class MApplicationPage;
 
@@ -83,7 +81,7 @@ private:
     AlertToneDefaults               *m_defaults;
     MTextEdit                       *m_LiveFilterEditor;
     QString                          currSelectedFile;
-    QPointer<AlertTonePreview>       m_preview;
+    AlertTonePreview                *m_preview;
     MApplicationPage                *m_MusicBrowser;
 
     MAction                         *m_DoneAction;

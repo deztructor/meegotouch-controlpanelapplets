@@ -184,7 +184,7 @@ DisplayBusinessLogic::selectedScreenLightsValue ()
 {
     int index;
 
-    #if HAVE_QMSYSTEM
+    #ifdef HAVE_QMSYSTEM
     QList<int> values = screenLightsValues ();
     index = values.indexOf (m_Display->getDisplayDimTimeout ());
 
@@ -212,7 +212,7 @@ DisplayBusinessLogic::setBrightnessValue (
         int value)
 {
     SYS_DEBUG ("*** value + 1 = %d", value + 1);
-    #if HAVE_QMSYSTEM
+    #ifdef HAVE_QMSYSTEM
     m_Display->setDisplayBrightnessValue (value + 1);
     #else
     /*

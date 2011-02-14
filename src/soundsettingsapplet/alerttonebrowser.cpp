@@ -17,6 +17,7 @@
 **
 ****************************************************************************/
 #include "alerttonebrowser.h"
+#include "alerttonepreview.h"
 #include "alerttonedefaults.h"
 #include "alerttoneappletmaps.h"
 #include "trackerconnection.h"
@@ -350,19 +351,23 @@ void
 AlertToneBrowser::startPlayingSound (
         const QString &filename)
 {
-    bool playingTheSame = m_preview && m_preview->fname() == filename;
+    bool playingTheSame = false;
+
+    if (m_preview)
+        playingTheSame = m_preview->fname() == filename;
 
     SYS_DEBUG ("playingTheSame = %s", SYS_BOOL(playingTheSame));
+
     /*
      * If we are already playing the same sound we stop the playback. This is
      * coming from the UI specification: "Second tap of the item will stop the
      * preview while the sound is playing.
      */
-    if (playingTheSame) {
-        delete m_preview;
-    } else {
-        if (m_preview)
-            delete m_preview;
+
+    delete m_preview;
+    m_preview = 0;
+
+    if (! playingTheSame) {
         m_preview = new AlertTonePreview(filename);
     }
 }
@@ -373,8 +378,8 @@ AlertToneBrowser::startPlayingSound (
 void
 AlertToneBrowser::stopPlayingSound ()
 {
-    if (m_preview)
-        delete m_preview;
+    delete m_preview;
+    m_preview = 0;
 }
 
 /*

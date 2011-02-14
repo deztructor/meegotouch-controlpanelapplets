@@ -48,6 +48,7 @@ qtTrId (
         int          n)
 {
     QString retVal (id);
+    Q_UNUSED (n);
 
     /*
      * This will show that the string is actually trabslated.

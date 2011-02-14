@@ -37,7 +37,7 @@ AlertTonePreview::AlertTonePreview(const QString &fname):
         m_profileVolume(QString(ALERT_TONE_VOLUME_VOLUME_KEY)),
         m_Filename(fname)
 {
-#if (HAVE_LIBRESOURCEQT)
+#ifdef HAVE_LIBRESOURCEQT
     getResources();
 #else
     gstInit();
@@ -50,7 +50,7 @@ AlertTonePreview::~AlertTonePreview()
     gst_element_set_state(m_gstPipeline, GST_STATE_NULL);
     gst_bus_remove_signal_watch(gst_element_get_bus(m_gstPipeline));
     gst_object_unref(m_gstPipeline);
-#if (HAVE_LIBRESOURCEQT)
+#ifdef HAVE_LIBRESOURCEQT
     resources->release ();
 #endif
 }
@@ -107,10 +107,10 @@ finalize:
             this, SLOT(profileVolumeChanged()));
 }
 
-#if (HAVE_LIBRESOURCEQT)
 void
 AlertTonePreview::getResources()
 {
+#ifdef HAVE_LIBRESOURCEQT
     resources = new ResourcePolicy::ResourceSet("player");
     resources->addResource(ResourcePolicy::AudioPlaybackType);
 
@@ -132,6 +132,7 @@ AlertTonePreview::getResources()
     connect(resources, SIGNAL(resourcesBecameAvailable (const QList< ResourcePolicy::ResourceType >)),
             this, SLOT(audioResourcesBecameAvailable()));
     resources->acquire();
+#endif
 }
 
 
@@ -155,8 +156,6 @@ AlertTonePreview::audioResourcesBecameAvailable()
     SYS_DEBUG("");
     gst_element_set_state(m_gstPipeline, GST_STATE_PLAYING);
 }
-
-#endif
 
 void
 AlertTonePreview::profileVolumeChanged()
