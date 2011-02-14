@@ -10,7 +10,7 @@ QT += dbus
 CONFIG += plugin \
           gui \
           meegotouchcore \
-          duicontrolpanel \
+          duicontrolpanel
 
 contains(DEFINES, HAVE_CONTENT_MANAGER) {
     CONFIG += link_pkgconfig

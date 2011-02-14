@@ -32,6 +32,13 @@ contains(DEFINES, HAVE_CONTENT_MANAGER) {
     PKGCONFIG += ContentManager
 }
 
+contains(DEFINES, HAVE_QUILL_FILTER) {
+    CONFIG += quillimagefilter
+}
+
+###########################################
+# soundsetting applet extra dependencies  #
+###########################################
 contains(DEFINES, HAVE_LIBRESOURCEQT) {
     PKGCONFIG += libresourceqt1
 }
