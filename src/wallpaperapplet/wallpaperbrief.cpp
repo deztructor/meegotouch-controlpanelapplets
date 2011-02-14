@@ -50,8 +50,7 @@ WallpaperBrief::valueText() const
         return desc->title();
     }
      
-    //% "None"
-    return qtTrId("wallpaper_none");
+    return "";
 }
 
 QString 
