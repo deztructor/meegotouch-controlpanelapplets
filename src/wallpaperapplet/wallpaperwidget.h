@@ -21,7 +21,7 @@
 
 #include <QPointer>
 #ifdef HAVE_CONTENT_MANAGER
-#  include <SelectSingleContentItemPage.h>
+#  include <ContentItemsPage.h>
 #endif
 
 #include "dcpwidget.h"
@@ -68,7 +68,7 @@ private:
     MLabel                                *m_TitleLabel;
     WallpaperList                         *m_ImageList;
     #ifdef HAVE_CONTENT_MANAGER
-    QPointer<SelectSingleContentItemPage>  m_ImageBrowser;
+    QPointer<ContentItemsPage>             m_ImageBrowser;
     #endif
 
     MContentItem                          *m_OviItem;

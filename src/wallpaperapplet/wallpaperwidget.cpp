@@ -241,18 +241,20 @@ WallpaperWidget::galleryActivated ()
      * itself to NULL when it is created.
      */
     if (!m_ImageBrowser) {
-        m_ImageBrowser = new SelectSingleContentItemPage (
-                QString(), 
-                QStringList() << "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Image", 
-                QString());
+        m_ImageBrowser = new ContentItemsPage (this);
+        m_ImageBrowser->setContentTypes (
+          QStringList() <<
+            "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Image");
 
         m_ImageBrowser->setObjectName (
                 "SelectSingleContentItemPage_imageBrowser");
+        m_ImageBrowser->setStyleName ("CommonApplicationPageInverted");
+        m_ImageBrowser->setCommonLayoutSuffix ("Inverted");
 
-        connect (m_ImageBrowser, SIGNAL(backButtonClicked()), 
-                m_ImageBrowser, SLOT(dismiss()));
-        connect (m_ImageBrowser, SIGNAL(contentItemSelected(const QString &)),
-                this, SLOT(galleryImageSelected(const QString &)));
+        connect (m_ImageBrowser, SIGNAL (backButtonClicked ()),
+                 m_ImageBrowser, SLOT (dismiss ()));
+        connect (m_ImageBrowser, SIGNAL (itemClicked (const QString &)),
+                 SLOT (galleryImageSelected (const QString &)));
     }
      
     m_ImageBrowser->appear (MSceneWindow::DestroyWhenDismissed);
@@ -272,3 +274,4 @@ WallpaperWidget::galleryImageSelected (
     m_WallpaperBusinessLogic->addImageFromGallery (uri);
 }
 #endif
+

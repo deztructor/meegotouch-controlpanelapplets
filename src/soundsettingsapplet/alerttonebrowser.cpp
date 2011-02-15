@@ -27,7 +27,6 @@
 #include <QGraphicsLinearLayout>
 
 #ifdef HAVE_CONTENT_MANAGER
-#include <SelectSingleContentItemPage.h>
 #include <ContentItemsPage.h>
 #endif
 
