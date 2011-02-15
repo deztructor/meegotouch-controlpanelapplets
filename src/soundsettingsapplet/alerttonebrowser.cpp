@@ -27,13 +27,6 @@
 #include <QGraphicsLinearLayout>
 
 #ifdef HAVE_CONTENT_MANAGER
-/*
- * Defining this for now...
- * it seems it crashes somehow..
- * and i couldn't get any usable backtrace as
- * gdb is crashes too :-S
- */
-#define SINGLE_CONTENTITEM
 #include <SelectSingleContentItemPage.h>
 #include <ContentItemsPage.h>
 #endif
@@ -77,6 +70,7 @@ AlertToneBrowser::AlertToneBrowser(AlertTone *tone, QGraphicsWidget *parent):
     m_DoneAction (0),
     m_CancelAction (0)
 {
+    SYS_DEBUG ("");
     /*
      * FIXME: Why do we need to set the title?
      */
@@ -201,24 +195,9 @@ AlertToneBrowser::launchMusicBrowser()
 
     if (! m_MusicBrowser)
     {
-#ifdef SINGLE_CONTENTITEM
-        SelectSingleContentItemPage *page =
-            new SelectSingleContentItemPage (
-                QString (),
-                QStringList () <<
-                  "http://www.tracker-project.org/temp/nmm#MusicPiece",
-                m_tone->trackerId ());
+        ContentItemsPage *page = new ContentItemsPage (this);
+        page->enableConfirmationButton (false);
 
-        m_MusicBrowser = page;
-
-        page->setObjectName ("SelectSingleContentItemPage_musicBrowser");
-        connect (page, SIGNAL (backButtonClicked ()),
-                 SLOT (browserBackButtonClicked ()));
-        connect (page, SIGNAL (contentItemSelected (const QString&)),
-                 SLOT (selectingMusicItem (const QString&)));
-#else
-        ContentItemsPage *page = new ContentItemsPage;
-        page->setCommonLayoutSuffix ("Inverted");
         page->setContentTypes (
                 QStringList () <<
                   "http://www.tracker-project.org/temp/nmm#MusicPiece");
@@ -227,11 +206,13 @@ AlertToneBrowser::launchMusicBrowser()
         m_MusicBrowser = page;
 
         page->setObjectName ("SelectSingleContentItemPage_musicBrowser");
+        page->setStyleName ("CommonApplicationPageInverted");
+        page->setCommonLayoutSuffix ("Inverted");
+
         connect (page, SIGNAL (backButtonClicked ()),
                  SLOT (browserBackButtonClicked ()));
         connect (page, SIGNAL (itemClicked (const QString&)),
                  SLOT (selectingMusicItem (const QString&)));
-#endif
     }
 
     m_MusicBrowser->appear (MSceneWindow::DestroyWhenDismissed);
@@ -242,7 +223,6 @@ void
 AlertToneBrowser::launchOviStore()
 {
     QString cmdline = "webwidgetrunner /usr/share/webwidgets/applications/d34177b1c241ea44cb132005b63ee6527c9f6040-wrt-widget.desktop -widgetparameter ringtones " /* + m_tone->key() */ + QString("&");
-    qDebug() << "AlertToneBrowser(" << m_tone->key() << ")::launchOviStore:" << cmdline;
     system(cmdline.toUtf8().constData());
 }
 
@@ -434,9 +414,9 @@ AlertToneBrowser::selectingMusicItem (
     SYS_DEBUG ("*** trackerID = %s", SYS_STR(item));
     SYS_DEBUG ("*** fname     = %s", SYS_STR(fname));
 
-    #ifndef SINGLE_CONTENTITEM
+    /* XXX: Only with SingleContentItem */
     m_MusicBrowser->dismiss ();
-    #endif
+    m_MusicBrowser = 0;
 
     setAlertTone (fname, true);
     startPlayingSound (fname);
