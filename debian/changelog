@@ -5,6 +5,8 @@ meegotouch-controlpanelapplets (0.20.17~1) meegotouch; urgency=low
 
   [ David Kedves ]
   * Fix 223087 - Texts are not properly aligned in Display settings
+  * Fix 208364 - The content picker pages are white in soundsettings applet
+    and wallpaper applet.
 
   [ Zoltan Nyul ]
   * Fixes: NB#213666 - Concurrent Application Functions: Unable to preview ringtone
@@ -16,7 +18,7 @@ meegotouch-controlpanelapplets (0.20.17~1) meegotouch; urgency=low
   [Laszlo Pere]
   * Fixes: NB#223048 - Wallpaper preview view shows blank screen in a scenario.
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 11 Feb 2011 13:24:48 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 15 Feb 2011 12:46:49 +0100
 
 meegotouch-controlpanelapplets (0.20.16-1) meegotouch; urgency=low
 
