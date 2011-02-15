@@ -50,7 +50,7 @@
 #include <MGConfItem>
 
 //#define LOTDEBUG
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -539,12 +539,12 @@ WallpaperBusinessLogic::writeFiles (
      */
     if (landscapeITrans->expectedWidth() <= 0 ||
             landscapeITrans->expectedHeight() <= 0) {
-        landscapeITrans->setExpectedSize (QSize(864, 480));
+        landscapeITrans->setExpectedSize (QSize(854, 480));
     }
     
     if (portraitITrans->expectedWidth() <= 0 ||
             portraitITrans->expectedHeight() <= 0) {
-        portraitITrans->setExpectedSize (QSize(480, 864));
+        portraitITrans->setExpectedSize (QSize(480, 854));
     }
 
     /*
@@ -761,10 +761,15 @@ trackerIdToFilename(const QString &trackerId)
 }
 
 void
-WallpaperBusinessLogic::addImageFromGallery(QString uri)
+WallpaperBusinessLogic::addImageFromGallery(
+        QString uri)
 {
-    WallpaperDescriptor *desc =
-            new WallpaperDescriptor (trackerIdToFilename(uri));
+    QString filename = trackerIdToFilename(uri);
+    WallpaperDescriptor *desc = new WallpaperDescriptor;
+
+    desc->setFilename (filename, WallpaperDescriptor::Landscape);
+    desc->setFilename (filename, WallpaperDescriptor::Portrait);
+
     setEditedImage (desc, false);
     SYS_DEBUG ("Emitting imageEditRequested()");
     emit imageEditRequested ();

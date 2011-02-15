@@ -235,9 +235,15 @@ finalize:
     SYS_DEBUG ("*** m_bgLandscape is %dx%d", 
             m_bgLandscape.width(),
             m_bgLandscape.height());
+    SYS_DEBUG ("*** landscape offset = %d, %d", 
+            m_LandscapeTrans.x(),
+            m_LandscapeTrans.y());
     SYS_DEBUG ("*** m_bgPortrait  is %dx%d", 
             m_bgPortrait.width(),
             m_bgPortrait.height());
+    SYS_DEBUG ("*** portrait offset = %d, %d", 
+            m_PortraitTrans.x(),
+            m_PortraitTrans.y());
 
     this->setMinimumSize (m_Trans.expectedSize());
 
@@ -487,6 +493,7 @@ WallpaperEditorWidget::imageX () const
     retval += m_UserOffset.x();
     retval += m_Trans.x();
 
+    SYS_DEBUG ("returning %d", retval);
     return retval;
 }
 
@@ -497,18 +504,19 @@ int
 WallpaperEditorWidget::imageY () const
 {
     int            retval = 0;
+#if 0
     bool           portrait = (geometry().height() > geometry().width());
     QPointF        r;
     r = mapToScene (0.0, 0.0);
 
-    if (portrait)
-        retval -= r.x();
-    else
-        retval -= r.y(); 
-
+    SYS_WARNING ("*** portrait = %s", SYS_BOOL(portrait));
+    SYS_WARNING ("*** origo    = %g, %g", r.x(), r.y());
+    retval -= r.y(); 
+#endif
     retval += m_UserOffset.y();
     retval += m_Trans.y();
 
+    SYS_DEBUG ("returning %d", retval);
     return retval;
 }
 

@@ -195,9 +195,9 @@ WallpaperList::orientationChangeEvent (
     } else {
         // FIXME: These are the vired in values.
         width = event->orientation() == M::Landscape ?
-            864  / columns : 480 / columns;
+            854  / columns : 480 / columns;
         height = event->orientation() == M::Landscape ?
-            480  / columns : 864 / columns;
+            480  / columns : 854 / columns;
     }
 
     #if 0

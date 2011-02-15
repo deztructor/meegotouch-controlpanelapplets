@@ -299,9 +299,6 @@ Image::cache (
             m_Cached = false;
         } else {
             m_Cached = true;
-            SYS_WARNING ("Loading success: %s (%dx%d)", 
-                    SYS_STR(filename()),
-                    m_Image.width(), m_Image.height());
         }
 
         return;
@@ -361,12 +358,13 @@ QImage
 Image::scaledImage (
         QSize size)
 {
-    SYS_DEBUG ("*** size = %dx%d", size.width(), size.height());
+    SYS_DEBUG ("*** requested size = %dx%d", size.width(), size.height());
 
     /*
      * Let's check if we have some pre-scaling available. We kept the aspect
      * ratio, so most probably only one side is going to be equal.
      */
+    SYS_DEBUG ("1");
     if (m_ScaledImage &&
             (m_ScaledImage->width() == size.width() ||
             m_ScaledImage->height() == size.height())) {
@@ -375,6 +373,8 @@ Image::scaledImage (
     }
 
     cache ();
+    SYS_DEBUG ("*** have  size %dx%d", m_Image.width(), m_Image.height());
+    SYS_DEBUG ("m_Image.scaled (size, Qt::KeepAspectRatioByExpanding);");
     return m_Image.scaled (size, Qt::KeepAspectRatioByExpanding);
 }
 
@@ -392,6 +392,7 @@ Image::preScale (
         if (m_ScaledImage)
             delete m_ScaledImage;
 
+        SYS_DEBUG ("m_Image.scaled(size, Qt::KeepAspectRatioByExpanding)");
         m_ScaledImage = new QImage (m_Image.scaled(size, Qt::KeepAspectRatioByExpanding));
     }
 }
@@ -437,6 +438,7 @@ Image::thumbnail (
         SYS_WARNING ("No thumbnail available!");
         cache ();
         if (m_Cached) {
+            SYS_DEBUG ("m_Image.scaled (");
             m_ThumbnailPixmap = 
                 QPixmap::fromImage (m_Image.scaled (
                     defaultThumbnailWidth, defaultThumbnailHeight));
@@ -584,6 +586,22 @@ WallpaperDescriptor::cache (
     ImageVariant   variant)
 {
     m_Images[variant].cache ();
+
+    SYS_DEBUG ("=>");
+    for (int n = 0; n < m_Images.size(); ++n) {
+        SYS_DEBUG ("*** n = %d", n);
+        SYS_DEBUG ("*** thisfilename  = %s", SYS_STR(m_Images[n].filename()));
+        SYS_DEBUG ("*** otherfilename = %s", SYS_STR(m_Images[variant].filename()));
+        if (n == variant)
+            continue;
+
+        if (!m_Images[n].filename().isEmpty() &&
+                    m_Images[n].filename() == m_Images[variant].filename()) {
+            if (m_Images[variant].m_Cached) {
+                m_Images[n].m_Image =  m_Images[variant].m_Image;
+            }
+        }
+    }
 }
 
 void
@@ -627,8 +645,9 @@ WallpaperDescriptor::scaledImage (
         QSize          size,
         ImageVariant   variant)
 {
-    SYS_DEBUG ("");
-    cache ();
+    SYS_DEBUG ("------------------------------------------------");
+    SYS_DEBUG ("*** variant = %d", variant);
+    cache (variant);
     return m_Images[variant].scaledImage(size);
 }
 
@@ -970,8 +989,8 @@ WallpaperDescriptor::valid () const
 void
 WallpaperDescriptor::loadAll () 
 {
-    QSize landscapeSize (864, 480);
-    QSize portraitSize (480, 864);
+    QSize landscapeSize (854, 480);
+    QSize portraitSize (480, 854);
     bool  threadSafe = false;
 
     /*
