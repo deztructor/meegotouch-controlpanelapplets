@@ -77,6 +77,11 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
      * Trying to load the current wallpaper from the files saved by the theme
      * applet. Will load only if the GConf contains our filenames.
      */
+    SYS_DEBUG ("*** landscape = '%s'", 
+            SYS_STR( m_LandscapeGConfItem->value().toString()));
+    SYS_DEBUG ("*** portrait  = '%s'", 
+            SYS_STR(m_PortraitGConfItem->value().toString()));
+
     success = currentDesc->setFromDesktopFile (
             desktopFile,
             true,

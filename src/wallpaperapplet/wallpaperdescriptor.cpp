@@ -51,7 +51,7 @@
 #endif
 
 static const QString dir = "";
-static const QString flavor = "grid";
+static const QString defaultFlavor = "grid";
 static const int defaultThumbnailWidth = 172;
 static const int defaultThumbnailHeight = 172;
 
@@ -707,7 +707,7 @@ WallpaperDescriptor::initiateThumbnailer ()
     connect (m_Thumbnailer, SIGNAL(finished(int)),
             this, SLOT(thumbnailLoadingFinished(int)));
 
-    m_Thumbnailer->request (urisList, mimeList, true, "grid");
+    m_Thumbnailer->request (urisList, mimeList, true, defaultFlavor);
     //m_Thumbnailer->request (urisList, mimeList, true, "screen");
 }
 
