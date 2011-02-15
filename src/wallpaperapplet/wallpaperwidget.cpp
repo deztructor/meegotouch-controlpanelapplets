@@ -118,8 +118,12 @@ WallpaperWidget::addHeaderContainer (
     container = new MContainer (this);
     container->setStyleName ("CommonXLargeHeaderPanelInverted");
     container->setHeaderVisible (false);
+    container->setContentsMargins (0., 0., 0., 0.);
+    //container->setSpacing (0.);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    layout->setContentsMargins (0., 0., 0., 0.);
+    layout->setSpacing (0.);
     container->centralWidget()->setLayout (layout);
 
     /*
