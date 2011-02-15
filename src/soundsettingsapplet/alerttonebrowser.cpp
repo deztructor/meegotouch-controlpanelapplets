@@ -413,9 +413,11 @@ AlertToneBrowser::selectingMusicItem (
     SYS_DEBUG ("*** trackerID = %s", SYS_STR(item));
     SYS_DEBUG ("*** fname     = %s", SYS_STR(fname));
 
-    /* XXX: Only with SingleContentItem */
-    m_MusicBrowser->dismiss ();
-    m_MusicBrowser = 0;
+    if (m_MusicBrowser)
+    {
+        m_MusicBrowser->dismiss ();
+        m_MusicBrowser = 0;
+    }
 
     setAlertTone (fname, true);
     startPlayingSound (fname);
