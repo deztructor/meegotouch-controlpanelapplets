@@ -9,8 +9,8 @@ meegotouch-controlpanelapplets (0.20.17~2) meegotouch; urgency=low
                     applet and wallpaper applet.
 
   [ Zoltan Nyul ]
-  * Fixes: NB#213666 - Concurrent Application Functions: Unable to preview 
-                       ringtone during playing music.
+  * Partially fix NB#213666 - Concurrent Application Functions:
+                              Unable to preview ringtone during playing music.
   * Fixes: NB#225708 - Sounds and Feedback dialog title is truncated
 
   [Laszlo Pere]
