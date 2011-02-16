@@ -22,11 +22,16 @@
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperdescriptor.h"
 
+#include <MGConfItem>
 #include <MApplication>
 
 #define DEBUG
 #include "../../src/debug.h"
 
+static const QString PortraitKey =
+    "/desktop/meego/background/portrait/picture_filename";
+static const QString LandscapeKey =
+    "/desktop/meego/background/landscape/picture_filename";
 
 /******************************************************************************
  * Ut_WallpaperModel implementation. 
@@ -34,6 +39,17 @@
 void 
 Ut_WallpaperModel::init()
 {
+    MGConfItem gconf_portrait (PortraitKey);
+    MGConfItem gconf_landscape (LandscapeKey);
+
+    /*
+     * In case if gconf values are not valid, we
+     * don't have to fail... lets set some fake values
+     */
+    if (gconf_portrait.value ().toString ().isEmpty ())
+        gconf_portrait.set ("meegotouch-wallpaper-portrait");
+    if (gconf_landscape.value ().toString ().isEmpty ())
+        gconf_landscape.set ("meegotouch-wallpaper-landscape");
 }
 
 void 
@@ -43,7 +59,7 @@ Ut_WallpaperModel::cleanup()
 
 
 static int argc = 1;
-static char *app_name = (char*) "./Ut_WallpaperModel";
+static char *app_name = (char*) "./ut_wallpapermodel";
 
 void 
 Ut_WallpaperModel::initTestCase()
@@ -148,22 +164,22 @@ Ut_WallpaperModel::testCellCreator ()
          * iamge name, the other items should have only the wallpaper name.
          */
         if (desc->isCurrent()) {
-            QVERIFY (contentItem.title() == "qtn_wall_current_wallpaper");
-            //QVERIFY (contentItem.subtitle() == desc->title());
+            QCOMPARE (contentItem.title(), "qtn_wall_current_wallpaper");
+            //QCOMPARE (contentItem.subtitle(), desc->title());
         } else {
-            QVERIFY (contentItem.title() == desc->title());
+            QCOMPARE (contentItem.title(), desc->title());
             //QVERIFY (contentItem.subtitle().isEmpty());
         }
 
         if (n == 0) {
-            QVERIFY (contentItem.layoutPosition () == 
-                    M::VerticalTopPosition);
+            QCOMPARE (contentItem.layoutPosition (),
+                      M::VerticalTopPosition);
         } else if (n + 1 == rows) {
-            QVERIFY (contentItem.layoutPosition() == 
-                    M::VerticalBottomPosition);
+            QCOMPARE (contentItem.layoutPosition(),
+                      M::VerticalBottomPosition);
         } else {
-            QVERIFY (contentItem.layoutPosition () == 
-                    M::VerticalCenterPosition);
+            QCOMPARE (contentItem.layoutPosition (),
+                      M::VerticalCenterPosition);
         }
     }
 
@@ -186,11 +202,10 @@ Ut_WallpaperModel::testImageLoader ()
     QModelIndex           index;
     QVariant              data;
     WallpaperDescriptor  *desc;
-    
 
     imageLoader = new WallpaperImageLoader;
     rows = m_Model->rowCount (firstRow);
-    
+
     firstRow = m_Model->index (0, 0);
     lastRow  = m_Model->index (rows - 1, 0);
 
@@ -221,7 +236,9 @@ Ut_WallpaperModel::testImageLoader ()
 
         // We either have a thumbnailer or we don't need it because this is a 
         // theme based wallpaper.
-        QVERIFY (desc->m_Thumbnailer || !desc->imageID().isEmpty());
+        if (desc->imageID ().isEmpty ())
+            QVERIFY (desc->m_Thumbnailer);
+
         if (desc->m_Thumbnailer) {
             SYS_DEBUG ("Simulating thumbnail-finished");
             desc->m_Thumbnailer->sendThumbnail ();
@@ -252,7 +269,7 @@ Ut_WallpaperModel::isWallpaperDescriptorValid (
         SYS_WARNING ("The pointer should not be NULL.");
         return false;
     }
-   
+
     /*
      * If this is a theme based wallpaper the image informations might be empty.
      */
@@ -314,7 +331,7 @@ no_file_check_necessary:
     title = desc->title();
     if (title.isEmpty())
         valid = false;
-    
+
     if (!valid) {
         SYS_WARNING ("Invalid title: %s", SYS_STR(title));
         return false;
