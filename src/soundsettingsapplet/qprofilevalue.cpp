@@ -195,7 +195,8 @@ QProfileValue::realSetValue(
 		char **profiles = profile_get_profiles();
 		if (profiles) {
 			for (int Nix = 0 ; profiles[Nix] != NULL ; Nix++)
-				if (theProfile != QString(profiles[Nix]))
+				/* Do not set values for "silent" and "meeting" */
+				if (theProfile != QString(profiles[Nix]) && theProfile != QString("meeting") && theProfile != QString("silent"))
 					QProfileValue(key() + "@" + QString(profiles[Nix]), false).set(newValue);
 
 			profile_free_profiles(profiles);
