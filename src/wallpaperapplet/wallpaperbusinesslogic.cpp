@@ -50,7 +50,7 @@
 #include <MGConfItem>
 
 //#define LOTDEBUG
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -71,6 +71,15 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
     m_PortraitGConfItem = new MGConfItem (WALLPAPER_PORTRAIT_KEY);
     m_EditedImage = 0;
     m_EditedImageOurs = false;
+
+    /*
+     * In case if GConf keys are set to "", we have to unset it
+     * to use the schema values
+     */
+    if (m_LandscapeGConfItem->value ().toString ().isEmpty ())
+        m_LandscapeGConfItem->unset ();
+    if (m_PortraitGConfItem->value ().toString ().isEmpty ())
+        m_PortraitGConfItem->unset ();
 
     currentDesc = WallpaperCurrentDescriptor::instance ();
     /*

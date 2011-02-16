@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.17~2) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.17-1) meegotouch; urgency=low
 
   [ Sandor Pinter ]
   * Reading about applet's license str from a file
@@ -9,8 +9,8 @@ meegotouch-controlpanelapplets (0.20.17~2) meegotouch; urgency=low
                     applet and wallpaper applet.
 
   [ Zoltan Nyul ]
-  * Fixes: NB#213666 - Concurrent Application Functions: Unable to preview 
-                       ringtone during playing music.
+  * Partially fix NB#213666 - Concurrent Application Functions:
+                              Unable to preview ringtone during playing music.
   * Fixes: NB#225708 - Sounds and Feedback dialog title is truncated
 
   [Laszlo Pere]
@@ -18,7 +18,7 @@ meegotouch-controlpanelapplets (0.20.17~2) meegotouch; urgency=low
   * Fixes: NB#208373 - The wallpaper applet title letter ('p') touching the 
     images below.
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 15 Feb 2011 12:46:49 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 16 Feb 2011 14:08:57 +0100
 
 meegotouch-controlpanelapplets (0.20.16-1) meegotouch; urgency=low
 

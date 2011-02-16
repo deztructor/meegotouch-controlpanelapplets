@@ -40,13 +40,14 @@
 
 #define UNKNOWN_BORDER_X 10
 #define UNKNOWN_BORDER_Y 0
-#define TITLEBAR_HEIGHT 60
+
+#define TITLEBAR_HEIGHT  60
 
 #include <QPixmap>
 bool
 QPixmap::load (
-        const QString &fileName, 
-        const char     *format, 
+        const QString &fileName,
+        const char     *format,
         Qt::ImageConversionFlags flags)
 {
     Q_UNUSED (format);
@@ -60,7 +61,7 @@ QPixmap::load (
 
 QPixmap
 QPixmap::scaled (
-        const QSize &size, 
+        const QSize &size,
         Qt::AspectRatioMode aspectRatioMode,
         Qt::TransformationMode transformMode) const
 {
@@ -68,7 +69,7 @@ QPixmap::scaled (
     Q_UNUSED (transformMode);
     QPixmap retval (size);
 
-    SYS_DEBUG ("Returning QPixmap of size %dx%d", 
+    SYS_DEBUG ("Returning QPixmap of size %dx%d",
             size.width(), size.height());
     return retval;
 }
@@ -76,7 +77,7 @@ QPixmap::scaled (
 #include <QImage>
 bool
 QImage::load (
-        const QString &fileName, 
+        const QString &fileName,
         const char     *format)
 {
     Q_UNUSED (format);
@@ -95,11 +96,11 @@ QImage::load (
 /*
  * FIXME: Handling of this should be automatic, but we have no window, so we
  * have no page either.- Stubbing all of these would be too much pain in the
- * neck... 
+ * neck...
  */
 static bool titlebarVisible = true;
 
-QPointF 
+QPointF
 QGraphicsItem::mapToScene (
         const QPointF &point) const
 {
@@ -112,7 +113,7 @@ QGraphicsItem::mapToScene (
     if (titlebarVisible)
         y += 60;
 
-    SYS_DEBUG ("%g, %g >>-> %g, %g", 
+    SYS_DEBUG ("%g, %g >>-> %g, %g",
             point.x(), point.y(),
             x, y);
 
@@ -121,7 +122,7 @@ QGraphicsItem::mapToScene (
 
 /******************************************************************************
  * MApplicationPage stub.
- * 
+ *
  * We can't use this because there is no current window, so we don't have a page
  * either. Damn!
  */
@@ -129,7 +130,7 @@ QGraphicsItem::mapToScene (
 
 void
 MApplicationPage::setComponentsDisplayMode (
-        Components components, 
+        Components components,
         MApplicationPageModel::ComponentDisplayMode displayMode)
 {
     Q_UNUSED (components);
@@ -170,14 +171,14 @@ return_string:
 }
 
 /******************************************************************************
- * Ut_WallpaperEditorWidget implementation. 
+ * Ut_WallpaperEditorWidget implementation.
  */
-void 
+void
 Ut_WallpaperEditorWidget::init()
 {
 }
 
-void 
+void
 Ut_WallpaperEditorWidget::cleanup()
 {
 }
@@ -186,15 +187,15 @@ Ut_WallpaperEditorWidget::cleanup()
 static int argc = 1;
 static char *app_name = (char*) "./ut_wallpapereditorwidget";
 
-void 
+void
 Ut_WallpaperEditorWidget::initTestCase()
 {
     m_App = new MApplication (argc, &app_name);
-    m_BusinessLogic = 0; 
-    m_Widget = 0; 
+    m_BusinessLogic = 0;
+    m_Widget = 0;
 }
 
-void 
+void
 Ut_WallpaperEditorWidget::cleanupTestCase()
 {
     dropObjects ();
@@ -204,9 +205,9 @@ Ut_WallpaperEditorWidget::cleanupTestCase()
 /*
  * We crate the widget with no wallpaperdescriptor set to be under editing. In
  * this case the widget will not be able to do anything. In normal use this
- * scenario can not happen, but we need to test it anyway. 
+ * scenario can not happen, but we need to test it anyway.
  */
-void 
+void
 Ut_WallpaperEditorWidget::testCreateContentFail ()
 {
     createObjects ();
@@ -218,7 +219,7 @@ Ut_WallpaperEditorWidget::testCreateContentFail ()
     dropObjects ();
 }
 
-void 
+void
 Ut_WallpaperEditorWidget::testCreateContentCurrent ()
 {
     /*
@@ -235,11 +236,11 @@ Ut_WallpaperEditorWidget::testCreateContentCurrent ()
     // Checking the offset if they are properly calculated. Please note that the
     // -10 is because of the unknown border (should be fixed) and the
     // -70 is because of the window titlebar height (should not be literal).
-    QVERIFY (m_Widget->imageX() == 
-            WALLPAPER_LANDSCAPE_HOROFFSET_NUM - UNKNOWN_BORDER_X);
-    QVERIFY (m_Widget->imageY() == 
-            WALLPAPER_LANDSCAPE_VERTOFFSET_NUM - UNKNOWN_BORDER_Y - 
-            TITLEBAR_HEIGHT);
+    QCOMPARE (m_Widget->imageX (),
+              WALLPAPER_LANDSCAPE_HOROFFSET_NUM - UNKNOWN_BORDER_X);
+    QCOMPARE  (m_Widget->imageY(),
+              WALLPAPER_LANDSCAPE_VERTOFFSET_NUM - UNKNOWN_BORDER_Y
+              /* - TITLEBAR_HEIGHT */);
 
     /*
      * We send the same orientation again. The editor widget should ignore this
@@ -249,11 +250,11 @@ Ut_WallpaperEditorWidget::testCreateContentCurrent ()
     // The offsets sould remain the same.
     SYS_DEBUG ("imageX() = %d", m_Widget->imageX());
     SYS_DEBUG ("imageY() = %d", m_Widget->imageY());
-    QVERIFY (m_Widget->imageX() == 
-            WALLPAPER_LANDSCAPE_HOROFFSET_NUM - UNKNOWN_BORDER_X);
-    QVERIFY (m_Widget->imageY() == 
-            WALLPAPER_LANDSCAPE_VERTOFFSET_NUM - UNKNOWN_BORDER_Y 
-            - TITLEBAR_HEIGHT);
+    QCOMPARE (m_Widget->imageX(),
+              WALLPAPER_LANDSCAPE_HOROFFSET_NUM - UNKNOWN_BORDER_X);
+    QCOMPARE (m_Widget->imageY(),
+              WALLPAPER_LANDSCAPE_VERTOFFSET_NUM - UNKNOWN_BORDER_Y
+              /* - TITLEBAR_HEIGHT */);
 
     /*
      * Changing the orientation, checking if the offset is handled properly.
@@ -261,25 +262,25 @@ Ut_WallpaperEditorWidget::testCreateContentCurrent ()
     m_Widget->orientationChanged (M::Portrait);
     SYS_DEBUG ("imageX() = %d", m_Widget->imageX());
     SYS_DEBUG ("imageY() = %d", m_Widget->imageY());
-    QVERIFY (m_Widget->imageX() == 
-            WALLPAPER_PORTRAIT_HOROFFSET_NUM - UNKNOWN_BORDER_X);
-    QVERIFY (m_Widget->imageY() == 
-            WALLPAPER_PORTRAIT_VERTOFFSET_NUM - UNKNOWN_BORDER_Y 
-            - TITLEBAR_HEIGHT);
-    
+    QCOMPARE (m_Widget->imageX(),
+              WALLPAPER_PORTRAIT_HOROFFSET_NUM - UNKNOWN_BORDER_X);
+    QCOMPARE (m_Widget->imageY(),
+              WALLPAPER_PORTRAIT_VERTOFFSET_NUM - UNKNOWN_BORDER_Y
+              /* - TITLEBAR_HEIGHT */);
+
     /*
      * Then turning to landscape again to test the change now that we are in
-     * portrait mode. 
+     * portrait mode.
      */
     m_Widget->orientationChanged (M::Landscape);
     // The offsets sould remain the same.
     SYS_DEBUG ("imageX() = %d", m_Widget->imageX());
     SYS_DEBUG ("imageY() = %d", m_Widget->imageY());
-    QVERIFY (m_Widget->imageX() == 
-            WALLPAPER_LANDSCAPE_HOROFFSET_NUM - UNKNOWN_BORDER_X);
-    QVERIFY (m_Widget->imageY() == 
-            WALLPAPER_LANDSCAPE_VERTOFFSET_NUM - UNKNOWN_BORDER_Y 
-            - TITLEBAR_HEIGHT);
+    QCOMPARE (m_Widget->imageX(),
+              WALLPAPER_LANDSCAPE_HOROFFSET_NUM - UNKNOWN_BORDER_X);
+    QCOMPARE (m_Widget->imageY(),
+              WALLPAPER_LANDSCAPE_VERTOFFSET_NUM - UNKNOWN_BORDER_Y
+              /* - TITLEBAR_HEIGHT */);
 
     /*
      * Destroying the widget.
@@ -287,18 +288,18 @@ Ut_WallpaperEditorWidget::testCreateContentCurrent ()
     dropObjects ();
 }
 
-void 
+void
 Ut_WallpaperEditorWidget::testCreateContentNonCurrent ()
 {
     createObjects (DescriptorNotCurrent);
-    /* 
-     * Checking the offsets. Please check the comments in 
+    /*
+     * Checking the offsets. Please check the comments in
      * testCreateContentCurrent() for details.
      */
     SYS_DEBUG ("imageX() = %d", m_Widget->imageX());
     SYS_DEBUG ("imageY() = %d", m_Widget->imageY());
-    QVERIFY (m_Widget->imageX() ==  - UNKNOWN_BORDER_X);
-    QVERIFY (m_Widget->imageY() ==  -TITLEBAR_HEIGHT - UNKNOWN_BORDER_Y);
+    QCOMPARE (m_Widget->imageX(),  - UNKNOWN_BORDER_X);
+    QCOMPARE (m_Widget->imageY(), /* -TITLEBAR_HEIGHT */ - UNKNOWN_BORDER_Y);
 
     /*
      * Changing the orientation, checking if the offset is handled properly.
@@ -306,22 +307,22 @@ Ut_WallpaperEditorWidget::testCreateContentNonCurrent ()
     m_Widget->orientationChanged (M::Portrait);
     SYS_DEBUG ("imageX() = %d", m_Widget->imageX());
     SYS_DEBUG ("imageY() = %d", m_Widget->imageY());
-    QVERIFY (m_Widget->imageX() == - UNKNOWN_BORDER_X);
-    QVERIFY (m_Widget->imageY() == -TITLEBAR_HEIGHT - UNKNOWN_BORDER_Y);
+    QCOMPARE (m_Widget->imageX(), - UNKNOWN_BORDER_X);
+    QCOMPARE (m_Widget->imageY(), /* -TITLEBAR_HEIGHT  */ - UNKNOWN_BORDER_Y);
 
     dropObjects ();
 }
 
-void 
+void
 Ut_WallpaperEditorWidget::testMouseEvents ()
 {
     QGraphicsSceneMouseEvent *pressEvent;
     QGraphicsSceneMouseEvent *moveEvent;
     QGraphicsSceneMouseEvent *releaseEvent;
-    QPointF                   pressAt (30, 50);
+    QPointF                   pressAt (30, 100);
     QPointF                   moveToRel (12, 13);
     QPointF                   moveTo (
-            pressAt.x() + moveToRel.x(), 
+            pressAt.x() + moveToRel.x(),
             pressAt.y() + moveToRel.y() + TITLEBAR_HEIGHT);
 
     /*
@@ -334,7 +335,7 @@ Ut_WallpaperEditorWidget::testMouseEvents ()
      */
     pressEvent = new QGraphicsSceneMouseEvent (QEvent::GraphicsSceneMousePress);
     pressEvent->setPos (pressAt);
-    
+
     moveEvent = new QGraphicsSceneMouseEvent (QEvent::GraphicsSceneMouseMove);
     moveEvent->setPos (moveTo);
 
@@ -343,45 +344,50 @@ Ut_WallpaperEditorWidget::testMouseEvents ()
 
     /*
      * Sending the mouse press event. This should turn off the titlebar of the
-     * window and modify the image offsets accordingly. 
+     * window and modify the image offsets accordingly.
      */
-    QVERIFY (m_Widget->m_NoTitlebar == false);
+    QCOMPARE (m_Widget->m_NoTitlebar, false);
     SYS_DEBUG ("*** imageY      = %d", m_Widget->imageY());
     SYS_DEBUG ("*** vertoffset  = %d", WALLPAPER_LANDSCAPE_VERTOFFSET_NUM);
     SYS_DEBUG ("*** unknownborder = %d", UNKNOWN_BORDER_Y);
-    SYS_DEBUG ("*** titlebar    = %d", TITLEBAR_HEIGHT);
+//    SYS_DEBUG ("*** titlebar    = %d", TITLEBAR_HEIGHT);
+
     if (m_Widget->m_Orientation == M::Landscape) {
-        QVERIFY (m_Widget->imageX() == 
+        QCOMPARE (m_Widget->imageX(),
                 WALLPAPER_LANDSCAPE_HOROFFSET_NUM - UNKNOWN_BORDER_X);
         // fails
-        QVERIFY (m_Widget->imageY() == 
-                WALLPAPER_LANDSCAPE_VERTOFFSET_NUM - UNKNOWN_BORDER_Y 
-                - TITLEBAR_HEIGHT);
+        QCOMPARE (m_Widget->imageY(),
+                WALLPAPER_LANDSCAPE_VERTOFFSET_NUM - UNKNOWN_BORDER_Y);
+               // - TITLEBAR_HEIGHT);
     } else {
-        QVERIFY (m_Widget->imageX() == 
+        QCOMPARE (m_Widget->imageX(),
                 WALLPAPER_PORTRAIT_HOROFFSET_NUM - UNKNOWN_BORDER_X);
-        QVERIFY (m_Widget->imageY() == 
-                WALLPAPER_PORTRAIT_VERTOFFSET_NUM - UNKNOWN_BORDER_Y 
-                - TITLEBAR_HEIGHT);
+        QCOMPARE (m_Widget->imageY(),
+                WALLPAPER_PORTRAIT_VERTOFFSET_NUM - UNKNOWN_BORDER_Y);
+//                - TITLEBAR_HEIGHT);
     }
+
+    QCOMPARE (m_Widget->m_PinchOngoing, false);
     //
     // Sending the mouse press event here.
     //
     m_Widget->mousePressEvent (pressEvent);
+
+    QCOMPARE (m_Widget->m_MotionOngoing, true);
     titlebarVisible = false;
     // Checking the changed.
-    QVERIFY (m_Widget->m_LastClick == 
-            QPointF (pressAt.x(), pressAt.y() + TITLEBAR_HEIGHT));
-    QVERIFY (m_Widget->m_NoTitlebar == true);
+    QCOMPARE (m_Widget->m_LastClick,
+              QPointF (pressAt.x(), pressAt.y() + TITLEBAR_HEIGHT));
+    QCOMPARE (m_Widget->m_NoTitlebar, true);
     if (m_Widget->m_Orientation == M::Landscape) {
-        QVERIFY (m_Widget->imageX() == 
+        QCOMPARE (m_Widget->imageX(),
                 WALLPAPER_LANDSCAPE_HOROFFSET_NUM - UNKNOWN_BORDER_X);
-        QVERIFY (m_Widget->imageY() == 
+        QCOMPARE (m_Widget->imageY(),
                 WALLPAPER_LANDSCAPE_VERTOFFSET_NUM - UNKNOWN_BORDER_Y);
     } else {
-        QVERIFY (m_Widget->imageX() == 
+        QCOMPARE (m_Widget->imageX(),
                 WALLPAPER_PORTRAIT_HOROFFSET_NUM - UNKNOWN_BORDER_X);
-        QVERIFY (m_Widget->imageY() == 
+        QCOMPARE (m_Widget->imageY(),
                 WALLPAPER_PORTRAIT_VERTOFFSET_NUM - UNKNOWN_BORDER_Y);
     }
 
@@ -389,22 +395,22 @@ Ut_WallpaperEditorWidget::testMouseEvents ()
      * Sending a mouse move event, dragging the image around the widget.
      */
     m_Widget->mouseMoveEvent (moveEvent);
-    
-    QVERIFY (m_Widget->m_NoTitlebar == true);
+
+    QCOMPARE (m_Widget->m_NoTitlebar, true);
     if (m_Widget->m_Orientation == M::Landscape) {
-        QVERIFY (m_Widget->imageX() == 
-                WALLPAPER_LANDSCAPE_HOROFFSET_NUM - UNKNOWN_BORDER_X +
-                moveToRel.x());
-        QVERIFY (m_Widget->imageY() == 
-                WALLPAPER_LANDSCAPE_VERTOFFSET_NUM - UNKNOWN_BORDER_Y + 
-                moveToRel.y());
+        QCOMPARE (m_Widget->imageX(),
+                (int) (WALLPAPER_LANDSCAPE_HOROFFSET_NUM - UNKNOWN_BORDER_X +
+                moveToRel.x()));
+        QCOMPARE (m_Widget->imageY(),
+                (int) (WALLPAPER_LANDSCAPE_VERTOFFSET_NUM - UNKNOWN_BORDER_Y +
+                moveToRel.y()));
     } else {
-        QVERIFY (m_Widget->imageX() == 
-                WALLPAPER_PORTRAIT_HOROFFSET_NUM - UNKNOWN_BORDER_X +
-                moveToRel.x());
-        QVERIFY (m_Widget->imageY() == 
-                WALLPAPER_PORTRAIT_VERTOFFSET_NUM - UNKNOWN_BORDER_Y + 
-                moveToRel.y());
+        QCOMPARE (m_Widget->imageX(),
+                (int) (WALLPAPER_PORTRAIT_HOROFFSET_NUM - UNKNOWN_BORDER_X +
+                moveToRel.x()));
+        QCOMPARE (m_Widget->imageY(),
+                (int) (WALLPAPER_PORTRAIT_VERTOFFSET_NUM - UNKNOWN_BORDER_Y +
+                moveToRel.y()));
     }
 
     /*
@@ -414,21 +420,21 @@ Ut_WallpaperEditorWidget::testMouseEvents ()
      */
     m_Widget->mouseReleaseEvent (releaseEvent);
     titlebarVisible = true;
-    QVERIFY (m_Widget->m_NoTitlebar == false);
+    QCOMPARE (m_Widget->m_NoTitlebar, false);
     if (m_Widget->m_Orientation == M::Landscape) {
-        QVERIFY (m_Widget->imageX() == 
-                WALLPAPER_LANDSCAPE_HOROFFSET_NUM - UNKNOWN_BORDER_X +
-                moveToRel.x());
-        QVERIFY (m_Widget->imageY() == 
-                WALLPAPER_LANDSCAPE_VERTOFFSET_NUM - UNKNOWN_BORDER_Y -
-                TITLEBAR_HEIGHT + moveToRel.y());
+        QCOMPARE (m_Widget->imageX(),
+                (int) (WALLPAPER_LANDSCAPE_HOROFFSET_NUM - UNKNOWN_BORDER_X +
+                moveToRel.x()));
+        QCOMPARE (m_Widget->imageY(),
+                (int) (WALLPAPER_LANDSCAPE_VERTOFFSET_NUM - UNKNOWN_BORDER_Y
+                /* - TITLEBAR_HEIGHT */ + moveToRel.y()));
     } else {
-        QVERIFY (m_Widget->imageX() == 
-                WALLPAPER_PORTRAIT_HOROFFSET_NUM - UNKNOWN_BORDER_X +
-                moveToRel.x());
-        QVERIFY (m_Widget->imageY() == 
-                WALLPAPER_PORTRAIT_VERTOFFSET_NUM - UNKNOWN_BORDER_Y -
-                TITLEBAR_HEIGHT + moveToRel.y());
+        QCOMPARE (m_Widget->imageX(),
+                (int) (WALLPAPER_PORTRAIT_HOROFFSET_NUM - UNKNOWN_BORDER_X +
+                moveToRel.x()));
+        QCOMPARE (m_Widget->imageY(),
+                (int) (WALLPAPER_PORTRAIT_VERTOFFSET_NUM - UNKNOWN_BORDER_Y
+                /* - TITLEBAR_HEIGHT */ + moveToRel.y()));
     }
 
     /*
@@ -443,12 +449,12 @@ Ut_WallpaperEditorWidget::testMouseEvents ()
 /******************************************************************************
  * Low level helper functions.
  */
-void 
+void
 Ut_WallpaperEditorWidget::createObjects (
        DescriptorType descType)
 {
     QList<WallpaperDescriptor *> descriptors;
-    
+
     m_BusinessLogic = new WallpaperBusinessLogic;
     switch (descType) {
         case DescriptorNone:
@@ -473,7 +479,7 @@ Ut_WallpaperEditorWidget::createObjects (
     QTest::qWait (100);
 }
 
-void 
+void
 Ut_WallpaperEditorWidget::dropObjects ()
 {
     if (m_Widget)
