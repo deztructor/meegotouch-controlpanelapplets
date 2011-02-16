@@ -21,6 +21,7 @@
 #include "dcpdisplay.h"
 
 #undef DEBUG
+#define WARNING
 #include "../debug.h"
 
 // Define this if you want handle-label for brightness-slider

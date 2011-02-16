@@ -15,6 +15,10 @@
 ** and appearing in the file LICENSE.LGPL included in the packaging
 ** of this file.
 **
+** Contact: Karoliina T. Salminen <karoliina.t.salminen@nokia.com>
+** Authors: David Kedves <dkedves@blumsoft.eu>
+**          Laszlo Pere <lpere@blumsoft.eu>
+**
 ****************************************************************************/
 
 #include "warrantywidget.h"
@@ -26,7 +30,7 @@
 #include <MContainer>
 #include <MSeparator>
 
-#undef DEBUG
+#define DEBUG
 #include "../debug.h"
 
 #include <MWidgetCreator>
@@ -165,23 +169,31 @@ WarrantyWidget::addLabelContainer (
     mainLayout->setStretchFactor (container, 0);
 }
 
+/*
+ * gconftool-2 -t string -s /meegotouch/i18n/language hu_HU
+ */
 void
 WarrantyWidget::retranslateUi ()
 {
     int expirationDays = m_WarrantyBusinessLogic->getExpirationDays ();
 
-    if (expirationDays > 0)
-    {
-      //% "Product warranty will expire in <b>%L1</b> day."
-      m_labelExpiration->setText (qtTrId ("qtn_warr_expiration").arg (expirationDays));
-    }
-    else if (expirationDays == 0)
-    {
+    /*
+     * Please check NB#220856 for details. The translation is currently wrong,
+     * but this code should be like this.
+     */
+    SYS_DEBUG ("*** expirationDays = %d", expirationDays);
+    SYS_DEBUG ("*** text = '%s'", 
+            SYS_STR(qtTrId ("qtn_warr_expiration", expirationDays)));
+    SYS_DEBUG ("*** text = '%s'", 
+            SYS_STR(qtTrId ("qtn_warr_expiration")));
+    if (expirationDays > 0) {
+      //% "Product warranty will expire in <b>%Ln</b> day."
+      m_labelExpiration->setText (
+              qtTrId ("qtn_warr_expiration", expirationDays).arg(expirationDays));
+    } else if (expirationDays == 0) {
       //% "Product warranty is expired."
       m_labelExpiration->setText (qtTrId ("qtn_warr_expired"));
-    }
-    else
-    {
+    } else {
       //% "Warranty timer error."
       m_labelExpiration->setText (qtTrId ("qtn_warr_error_timer"));
     }
