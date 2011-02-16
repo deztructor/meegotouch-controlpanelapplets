@@ -63,6 +63,14 @@ SignalSink::wallpaperChanged ()
 void 
 Ft_WallpaperBusinessLogic::init()
 {
+    MGConfItem l(LandscapeKey);
+    MGConfItem p(PortraitKey);
+
+    /*
+     * Unset the gconf keys, in this way schema values will be used
+     */
+    l.unset ();
+    p.unset ();
 }
 
 void 
