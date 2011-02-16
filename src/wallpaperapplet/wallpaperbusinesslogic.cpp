@@ -72,6 +72,15 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
     m_EditedImage = 0;
     m_EditedImageOurs = false;
 
+    /*
+     * In case if GConf keys are set to "", we have to unset it
+     * to use the schema values
+     */
+    if (m_LandscapeGConfItem->value ().toString ().isEmpty ())
+        m_LandscapeGConfItem->unset ();
+    if (m_PortraitGConfItem->value ().toString ().isEmpty ())
+        m_PortraitGConfItem->unset ();
+
     currentDesc = WallpaperCurrentDescriptor::instance ();
     /*
      * Trying to load the current wallpaper from the files saved by the theme
