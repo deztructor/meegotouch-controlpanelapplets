@@ -139,7 +139,7 @@ AlertToneAppletWidget::createContents()
     m_EventTonesLabel = addTitleLabel (
             centralWidget, policy, 
             "CommonHeaderPanelInverted", 
-            "CommonpHeaderInverted");
+            "CommonHeaderInverted");
 
     /*
      * A list with the sound file setting widgets.
