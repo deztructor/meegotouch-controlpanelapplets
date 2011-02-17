@@ -29,6 +29,7 @@
 #include <policy/resource-set.h>
 #endif
 
+#undef HAVE_LIBRESOURCEQT
 class AlertTonePreview : public QObject
 {
 	Q_OBJECT

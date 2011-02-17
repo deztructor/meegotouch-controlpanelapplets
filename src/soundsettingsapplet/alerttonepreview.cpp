@@ -30,6 +30,7 @@ static const char *GstStartCommand =
     "filesrc name=alerttonepreviewfilesrc ! "
 "decodebin ! volume name=alerttonepreviewvolume ! pulsesink name=alerttonepreviewpulsesink";
 
+#undef HAVE_LIBRESOURCEQT
 AlertTonePreview::AlertTonePreview(const QString &fname):
        m_gstPipeline(NULL),
        m_gstFilesrc(NULL),
