@@ -101,7 +101,7 @@ ProfileWidget::initProfiles ()
     MLabel *vibraLabel = new MLabel;
     //% "Vibration"
     vibraLabel->setText (qtTrId ("qtn_prof_vibration"));
-    vibraLabel->setStyleName ("CommonGroupHeaderLightInverted");
+    vibraLabel->setStyleName ("CommonHeaderInverted");
     vibraLabel->setAlignment (Qt::AlignBottom | Qt::AlignRight);
     headerLayout->addItem (vibraLabel);
 
