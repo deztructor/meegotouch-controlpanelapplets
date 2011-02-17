@@ -24,7 +24,15 @@ CONFIG += \
     gui \
     meegotouchcore \
     plugin \
-    duicontrolpanel \
+    duicontrolpanel
+
+contains(DEFINES, HAVE_QUILL_FILTER) {
+    CONFIG += quillimagefilter
+}
+
+contains(DEFINES, HAVE_QUILL_METADATA) {
+    CONFIG += quillmetadata
+}
 
 contains(DEFINES, HAVE_CONTENT_MANAGER) {
     CONFIG += link_pkgconfig

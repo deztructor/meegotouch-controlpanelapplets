@@ -21,7 +21,16 @@ CONFIG += \
 	plugin \
 	gui \
 	meegotouchcore \
-	duicontrolpanel \
+	duicontrolpanel
+
+contains(DEFINES, HAVE_QUILL_FILTER) {
+    CONFIG += quillimagefilter
+}
+
+contains(DEFINES, HAVE_QUILL_METADATA) {
+    CONFIG += quillmetadata
+}
+
 
 HEADERS += \
     $$STUB_PREFIX/thumbnailerstub.h \
