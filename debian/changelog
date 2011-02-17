@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.17-1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.17~3) meegotouch; urgency=low
 
   [ Sandor Pinter ]
   * Reading about applet's license str from a file
@@ -7,6 +7,7 @@ meegotouch-controlpanelapplets (0.20.17-1) meegotouch; urgency=low
   * Fixes: 223087 - Texts are not properly aligned in Display settings
   * Fixes: 208364 - The content picker pages are white in soundsettings
                     applet and wallpaper applet.
+  * Fixes: 227270 - Info text of wallpaper item is shown as "!!None"
 
   [ Zoltan Nyul ]
   * Partially fix NB#213666 - Concurrent Application Functions:
@@ -18,7 +19,10 @@ meegotouch-controlpanelapplets (0.20.17-1) meegotouch; urgency=low
   * Fixes: NB#208373 - The wallpaper applet title letter ('p') touching the 
     images below.
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 16 Feb 2011 14:08:57 +0100
+  [Gabriel Schulhof]
+  * Fixes: 223196 - SMS alert tone doesn't obey Profile setting
+
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 17 Feb 2011 09:11:52 +0100
 
 meegotouch-controlpanelapplets (0.20.16-1) meegotouch; urgency=low
 
