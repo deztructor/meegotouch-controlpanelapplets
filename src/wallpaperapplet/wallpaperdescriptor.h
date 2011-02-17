@@ -22,13 +22,23 @@
 #include <QObject>
 #include <QPointer>
 #include <QMetaType>
-#include <QImage>
 #include <QPixmap>
 #include <QUrl>
 #include <QVector>
 #include <MApplication>
 
+#ifdef HAVE_QUILL_FILTER
+#  include <QuillImage>
+#  include <QuillImageFilterFactory>
+   typedef QuillImage WallPaperImage;
+#else
+#  include <QImage>
+   typedef QImage WallPaperImage;
+#endif
 
+#ifdef HAVE_QUILL_METADATA
+#  include <QuillMetadata>
+#endif
 /*
  * In the functional tests we use the real thing, in the unit tests we use the
  * stubbed version. 
@@ -86,6 +96,7 @@ public:
     bool setThumbnailPixmap (const QPixmap &pixmap); 
     bool thumbnail (bool force = false);
 
+    bool load (const QString &fileName);
     void cache (bool threadSafe = false);
     void unCache ();
 
@@ -102,8 +113,8 @@ private:
     QUrl      m_Url;  
     QPixmap   m_ThumbnailPixmap;
     bool      m_HasThumbnail;
-    QImage    m_Image;
-    QImage   *m_ScaledImage;
+    WallPaperImage  m_Image;
+    WallPaperImage *m_ScaledImage;
 
     friend class WallpaperDescriptor;
     #ifdef UNIT_TEST

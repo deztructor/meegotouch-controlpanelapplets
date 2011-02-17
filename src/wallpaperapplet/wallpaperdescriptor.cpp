@@ -22,12 +22,7 @@
 #include <QUrl>
 #include <QDir>
 #include <QFileInfo>
-#include <QImage>
-/*
-#ifdef HAVE_QUILL_FILTER
-#include <QuillImage>
-#endif
-*/
+
 #include <QPixmap>
 #include <QPainter>
 #include <QThread>
@@ -40,7 +35,7 @@
  * weird file names around.
  */
 //#define LOTDEBUG
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -51,6 +46,11 @@
 #endif
 
 static const QString dir = "";
+
+/*
+ * Good to know: In order to use this flavor under scratchbox one must install
+ * the media-settings-harmattan package. Then restart the desktop...
+ */
 static const QString defaultFlavor = "grid";
 static const int defaultThumbnailWidth = 172;
 static const int defaultThumbnailHeight = 172;
@@ -268,6 +268,62 @@ Image::extension () const
     return fileInfo.suffix();
 }
 
+/*
+ * Low level loading method that will not just load the image, but also will
+ * read the exim metadata and rotate the image if necessary.
+ */
+bool 
+Image::load (
+        const QString &fileName)
+{
+    bool retval;
+    #ifdef HAVE_QUILL_METADATA
+    QString           rFilterName = "org.maemo.rotate";
+    QuillMetadata     metadata (fileName);
+    QVariant      orientation = metadata.entry(QuillMetadata::Tag_Orientation);
+    int               side = orientation.toInt();
+    QuillImageFilter *filter = 0;
+    SYS_DEBUG ("Orientation: %s", SYS_STR(orientation.toString()));
+    SYS_DEBUG ("side       : %d", side);
+    #endif
+
+    SYS_DEBUG ("Loading '%s'", SYS_STR(fileName));
+    retval = m_Image.load(fileName);
+
+    if (!retval)
+        return retval;
+
+#ifdef HAVE_QUILL_METADATA
+    switch (side) {
+        case 1:
+            // Nothing to do
+            break;
+
+        case 6:
+            filter = QuillImageFilterFactory::createImageFilter (rFilterName);
+            filter->setOption (QuillImageFilter::Angle, QVariant(90));
+            break;
+
+        case 8:
+            filter = QuillImageFilterFactory::createImageFilter (rFilterName);
+            filter->setOption (QuillImageFilter::Angle, -90);
+            break;
+        
+        case 3:
+            filter = QuillImageFilterFactory::createImageFilter (rFilterName);
+            filter->setOption (QuillImageFilter::Angle, 180);
+            break;
+    }
+
+    if (filter) {
+        m_Image = filter->apply (m_Image);
+        delete filter;
+    }
+#endif
+
+    return retval;
+}
+
 /*!
  * \param threadSafe Not in main thread, only thread safe operations are
  *   allowed.
@@ -293,11 +349,14 @@ Image::cache (
      */
     if (!filename().isEmpty()) {
         SYS_DEBUG ("Doing a thread-safe loading.");
-        SYS_DEBUG ("*** Calling QImage::load(%s) 0", SYS_STR(filename()));
-        if (!m_Image.load(filename())) {
+        SYS_DEBUG ("*** Calling WallPaperImage::load(%s) 0", 
+                SYS_STR(filename()));
+        if (!load(filename())) {
             SYS_WARNING ("Loading failed: %s", SYS_STR(filename()));
             m_Cached = false;
         } else {
+            SYS_DEBUG ("Loaded %s size %dx%d", SYS_STR(filename()),
+                        m_Image.width(), m_Image.height());
             m_Cached = true;
         }
 
@@ -344,7 +403,7 @@ Image::unCache ()
         return;
 
     m_Cached = false;
-    m_Image = QImage();
+    m_Image = WallPaperImage();
 }
 
 QImage &
@@ -393,7 +452,8 @@ Image::preScale (
             delete m_ScaledImage;
 
         SYS_DEBUG ("m_Image.scaled(size, Qt::KeepAspectRatioByExpanding)");
-        m_ScaledImage = new QImage (m_Image.scaled(size, Qt::KeepAspectRatioByExpanding));
+        m_ScaledImage = new WallPaperImage(
+                m_Image.scaled(size, Qt::KeepAspectRatioByExpanding));
     }
 }
 

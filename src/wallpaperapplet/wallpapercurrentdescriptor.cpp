@@ -241,7 +241,14 @@ WallpaperCurrentDescriptor::setFromIDs  (
    
     SYS_DEBUG ("*** landscapeID = %s", SYS_STR(landscapeID));
     SYS_DEBUG ("*** portraitID  = %s", SYS_STR(portraitID));
+
+    /*
+     * Hack, as nowadays only portrait mode image ids are pre-set...
+     */
     if (landscapeID.isEmpty())
+        landscapeID = portraitID;
+
+    if (landscapeID.isEmpty () && portraitID.isEmpty ())
         goto finalize;
 
     if (landscapeID.startsWith("/")) {
