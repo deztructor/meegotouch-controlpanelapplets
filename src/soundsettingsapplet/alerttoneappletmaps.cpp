@@ -32,12 +32,12 @@ AlertToneAppletMaps::instance() { return maps; }
 AlertToneAppletMaps::AlertToneAppletMaps()
 {
 	/* Alert tone MContentItem widget titles */
-	m_map["ringing.alert.tone"]                      = "qtn_sond_ring_tone";
-	m_map["voip.alert.tone"]                         = "qtn_sond_internet_tone";
-	m_map["email.alert.tone"]                        = "qtn_sond_email_tone";
-	m_map["sms.alert.tone"]                          = "qtn_sond_message_tone";
-	m_map["im.alert.tone"]                           = "qtn_sond_ins_messaging";
-	m_map["calendar.alert.tone"]                     = "qtn_sond_org_reminders";
+	m_map["ringing.alert.tone@general"]                      = "qtn_sond_ring_tone";
+	m_map["voip.alert.tone@general"]                         = "qtn_sond_internet_tone";
+	m_map["email.alert.tone@general"]                        = "qtn_sond_email_tone";
+	m_map["sms.alert.tone@general"]                          = "qtn_sond_message_tone";
+	m_map["im.alert.tone@general"]                           = "qtn_sond_ins_messaging";
+	m_map["calendar.alert.tone@general"]                     = "qtn_sond_org_reminders";
 
 	/* Combo box widget titles */
 	m_map["keypad.sound.level"]                      = "qtn_sond_keyboard";

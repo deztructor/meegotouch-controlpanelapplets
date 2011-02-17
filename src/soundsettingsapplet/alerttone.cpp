@@ -53,6 +53,10 @@ AlertTone::alertTones()
 
 #ifdef HAVE_LIBPROFILE
     QList<QString> keys;
+    	char **profiles = profile_get_profiles();
+	for (int Nix = 0 ; profiles[Nix] != NULL ; Nix++)
+	    SYS_DEBUG("profiles[%d] = %s\n", Nix, SYS_STR(profiles[Nix]));
+	profile_free_profiles(profiles);
     
 	profileval_t *vals = profile_get_values(NULL);
 
@@ -80,7 +84,7 @@ AlertTone::alertTones()
 		if  (keys.contains(list.at(Nix)))
 	    {
 			keys.removeOne(list.at(Nix));
-			v << new AlertTone(QString(list.at(Nix)));
+			v << new AlertTone(QString(list.at(Nix)) + "@general");
 	    }
 	 }	 
 
