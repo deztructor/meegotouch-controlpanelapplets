@@ -17,6 +17,7 @@ meegotouch-controlpanelapplets (0.20.17-1) meegotouch; urgency=low
   * Fixes: NB#223048 - Wallpaper preview view shows blank screen in a scenario.
   * Fixes: NB#208373 - The wallpaper applet title letter ('p') touching the 
     images below.
+  * Fixes: NB#222535 - Wallpaper editor does not handle orientation metadata
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 16 Feb 2011 14:08:57 +0100
 

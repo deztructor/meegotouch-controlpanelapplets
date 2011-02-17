@@ -62,6 +62,14 @@ if [ $? -eq 0 ]; then
     if [ $? -eq 0 ]; then
         echo "DEFINES += HAVE_QUILL_FILTER" >> ${FILENAME}
     fi
+
+    #
+    # Need the quill metadata for the exif information. 
+    #
+    pkg-config --exists quillmetadata
+    if [ $? -eq 0 ]; then
+        echo "DEFINES += HAVE_QUILL_METADATA" >> ${FILENAME}
+    fi
 fi
 
 #
@@ -76,7 +84,9 @@ fi
 # silent builds make debugging build failures in integration servers
 # pain in the neck. So lets make the silent build configurable from 
 # central place  ..
-
+#
+# FIXME: Well, except it is not configurable is it?
+#
 echo "CONFIG += silent" >> ${FILENAME}
 
 #echo "# All values were removed for testing purposes..." > ${FILENAME}
