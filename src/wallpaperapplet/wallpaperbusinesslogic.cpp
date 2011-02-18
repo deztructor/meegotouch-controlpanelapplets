@@ -310,9 +310,11 @@ WallpaperBusinessLogic::setEditedImage (
     if (m_EditedImage == desc)
         return;
 
-    if (m_EditedImage &&
-            m_EditedImageOurs)
+    if (m_EditedImage && m_EditedImageOurs)
         delete m_EditedImage;
+    
+    if (m_EditedImage)
+        m_EditedImage->unCache ();
 
     m_EditedImage = desc;
     m_EditedImageOurs = ours;

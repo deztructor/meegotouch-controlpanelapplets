@@ -379,6 +379,11 @@ WallpaperEditorWidget::slotDoneActivated ()
     SYS_DEBUG ("Calling changeWidget()");
     emit doneClicked ();
     changeWidget (0);
+
+    /*
+     *
+     */
+    m_WallpaperBusinessLogic->setEditedImage (0);
 }
 
 void
@@ -386,6 +391,10 @@ WallpaperEditorWidget::slotCancelActivated ()
 {
     emit cancelClicked ();
     emit closePage ();
+    /*
+     *
+     */
+    m_WallpaperBusinessLogic->setEditedImage (0);
 }
 
 bool 

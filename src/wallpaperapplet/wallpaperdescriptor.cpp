@@ -398,7 +398,7 @@ Image::cache (
 void
 Image::unCache ()
 {
-    SYS_DEBUG ("Uncaching...");
+    SYS_WARNING ("Uncaching...");
     if (!m_Cached)
         return;
 
@@ -668,8 +668,16 @@ void
 WallpaperDescriptor::unCache (
         ImageVariant   variant)
 {
-    SYS_DEBUG ("Uncaching %d...", variant);
+    SYS_WARNING ("Uncaching %d...", variant);
     m_Images[variant].unCache ();
+}
+
+void
+WallpaperDescriptor::unCache ()
+{
+    for (int n = Landscape; n < NVariants; ++n) {
+        m_Images[n].unCache ();
+    }
 }
 
 bool

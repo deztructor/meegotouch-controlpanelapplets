@@ -203,8 +203,8 @@ public:
 
     void cache (
             ImageVariant   variant = WallpaperDescriptor::Landscape);
-    void unCache (
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+    void unCache (ImageVariant variant);
+    void unCache ();
     
     bool loading () const;
     void setLoading (bool loading = true);
