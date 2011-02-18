@@ -20,6 +20,7 @@ meegotouch-controlpanelapplets (0.20.17~3) meegotouch; urgency=low
     images below.
   * Fixes: NB#222535 - Wallpaper editor does not handle orientation metadata
   * Fixes: NB#223167 - Wrong color of toolbar buttons used for Sound settings
+  * Fixes: NB#223171 - Wrong color buttons used in Wallpaper settings
 
   [Gabriel Schulhof]
   * Fixes: 223196 - SMS alert tone doesn't obey Profile setting
