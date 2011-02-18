@@ -398,12 +398,17 @@ Image::cache (
 void
 Image::unCache ()
 {
-    SYS_WARNING ("Uncaching...");
+    SYS_DEBUG ("Uncaching...");
     if (!m_Cached)
         return;
 
     m_Cached = false;
     m_Image = WallPaperImage();
+
+    if (m_ScaledImage) {
+        delete m_ScaledImage;
+        m_ScaledImage = 0;
+    }
 }
 
 QImage &
@@ -668,7 +673,7 @@ void
 WallpaperDescriptor::unCache (
         ImageVariant   variant)
 {
-    SYS_WARNING ("Uncaching %d...", variant);
+    SYS_DEBUG ("Uncaching %d...", variant);
     m_Images[variant].unCache ();
 }
 
