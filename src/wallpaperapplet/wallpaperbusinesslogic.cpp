@@ -328,12 +328,13 @@ WallpaperBusinessLogic::startEdit (
 
     /*
      * If the user double clicked on the same image we are currently loading in
-     * the other thread.
+     * the other thread. Somehow we got this signal twice because of the DBus
+     * interface implementation... no problem though.
      */
     if (threadActive && m_EditedImage && m_EditedImage == desc) {
-        SYS_WARNING ("The same image is already loading?");
         return;
     }
+
 
     /*
      * If we already have and image we are editing and the user clicks on an
