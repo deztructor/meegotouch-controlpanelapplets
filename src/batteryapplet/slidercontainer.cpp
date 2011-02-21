@@ -72,10 +72,12 @@ SliderContainer::createWidgets ()
      * A container for the two labels.
      */
     m_LabelContainer = new MContainer;
+    m_LabelContainer->setContentsMargins (0,0,0,0);
     m_LabelContainer->setStyleName ("CommonPanelInverted");
     m_LabelContainer->setHeaderVisible (false);
 
     labelLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    labelLayout->setContentsMargins (0,0,0,0);
     m_LabelContainer->centralWidget()->setLayout (labelLayout);
 
     /*
@@ -101,10 +103,12 @@ SliderContainer::createWidgets ()
      * A container to hold the slider.
      */
     m_SliderContainer = new MContainer;
+    m_SliderContainer->setContentsMargins (0,0,0,0);
     m_SliderContainer->setStyleName ("CommonPanelInverted");
     m_SliderContainer->setHeaderVisible (false);
 
     sliderLayout = new QGraphicsLinearLayout (Qt::Horizontal);
+    sliderLayout->setContentsMargins (0,0,0,0);
     m_SliderContainer->centralWidget()->setLayout (sliderLayout);
 
     /*
@@ -139,10 +143,7 @@ SliderContainer::createWidgets ()
     connect (m_PSMSlider, SIGNAL (valueChanged (int)),
             this, SLOT (sliderValueChanged (int)),
             Qt::DirectConnection);
-    connect (m_PSMSlider, SIGNAL (valueChanged (int)),
-            this, SLOT (updateSliderHandleLabel(int)),
-            Qt::DirectConnection);
-    
+
     retranslate ();
 }
 

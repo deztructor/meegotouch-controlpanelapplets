@@ -1,3 +1,10 @@
+meegotouch-controlpanelapplets (0.20.18~1) meegotouch; urgency=low
+
+  * Start working on battery condition info
+    FIXME: Layout should be re-checked
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 21 Feb 2011 12:18:58 +0100
+
 meegotouch-controlpanelapplets (0.20.17-4) meegotouch; urgency=low
 
   [ Sandor Pinter ]

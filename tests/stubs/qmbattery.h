@@ -37,6 +37,7 @@ namespace MeeGo
         Q_ENUMS(BatteryState)
         Q_ENUMS(ChargingState)
         Q_ENUMS(RemainingTimeMode)
+	Q_ENUMS(BatteryCondition)
 
         public:
             QmBattery (QObject *parent = 0);
@@ -71,6 +72,12 @@ namespace MeeGo
             PowersaveMode     //!< In powersave mode
         };
 
+	enum BatteryCondition {
+            ConditionGood,
+	    ConditionPoor,
+	    ConditionUnkown
+	};
+
         int getRemainingCapacityPct() const;
         ChargingState getChargingState() const;
         int getRemainingIdleTime(RemainingTimeMode mode) const;
@@ -78,6 +85,8 @@ namespace MeeGo
 
         int getRemainingTalkTime(RemainingTimeMode mode) const;
         ChargerType getChargerType() const;
+
+	BatteryCondition getBatteryCondition() const;
 
         int getMaxBars() const;
 

@@ -158,6 +158,8 @@ BatteryWidget::initWidget ()
     m_Separators[4] = addSpacer (
             "CommonSmallSpacerInverted",
             m_SeparatorPlacement[4]);
+    // Row 11: Battery condition info.
+    addBatteryConditionWidget ();
     #else
     // Row 1: The title label
     addHeaderContainer ();
@@ -169,6 +171,8 @@ BatteryWidget::initWidget ()
     addSliderContainer ();
     // Row 6: PSM forced activation button.
     addPowerSaveButton ();
+    // Row 7: Battery condition info.
+    addBatteryConditionWidget ();
     #endif
     
     m_MainLayout->addStretch();
@@ -229,8 +233,10 @@ BatteryWidget::addHeaderContainer ()
     container = new MContainer (this);
     container->setStyleName ("CommonXLargeHeaderPanelInverted");
     container->setHeaderVisible (false);
+    container->setContentsMargins (0,0,0,0);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    layout->setContentsMargins (0,0,0,0);
     container->centralWidget()->setLayout (layout);
 
     /*
@@ -282,9 +288,11 @@ BatteryWidget::addAutoActivationWidget ()
      * Creating the container and the layout.
      */
     m_ActivationContainer = new MContainer (this);
+    m_ActivationContainer->setContentsMargins (0,0,0,0);
     m_ActivationContainer->setStyleName ("CommonPanelInverted");
     m_ActivationContainer->setHeaderVisible (false);
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    layout->setContentsMargins (0,0,0,0);
     layout->setSpacing (0.);
 
     m_ActivationContainer->centralWidget()->setLayout (layout);
@@ -397,8 +405,10 @@ BatteryWidget::addPowerSaveButton ()
     container = new MContainer (this);
     container->setStyleName ("CommonPanelInverted");
     container->setHeaderVisible (false);
+    container->setContentsMargins (0,0,0,0);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    layout->setContentsMargins (0,0,0,0);
     container->centralWidget()->setLayout (layout);
 
     /*
@@ -426,6 +436,99 @@ BatteryWidget::addPowerSaveButton ()
     m_MainLayout->addItem (container);
     m_MainLayout->setStretchFactor (container, 0);
 }
+
+void 
+BatteryWidget::addBatteryConditionWidget ()
+{
+    MContainer            *container;
+    QGraphicsLinearLayout *containerLayout =
+        new QGraphicsLinearLayout (Qt::Vertical);
+    containerLayout->setContentsMargins (0,0,0,0);
+    containerLayout->setSpacing (0);
+
+    /*
+     * Creating a container and a layout.
+     */
+    container = new MContainer (this);
+    container->setStyleName ("CommonPanelInverted");
+    container->setHeaderVisible (false);
+    container->setContentsMargins (0,0,0,0);
+    container->centralWidget()->setLayout (containerLayout);
+
+    QGraphicsLinearLayout *layout;
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    layout->setContentsMargins (0,0,0,0);
+    layout->setSpacing (0);
+
+    containerLayout->addItem (layout);
+
+    //% "Battery condition"
+    MLabel *keyLabel = new MLabel (qtTrId ("qtn_ener_battery_condition"));
+    keyLabel->setStyleName ("CommonSingleTitleInverted");
+    keyLabel->setAlignment (Qt::AlignLeft | Qt::AlignVCenter);
+    layout->addItem (keyLabel);
+    layout->setStretchFactor (keyLabel, 1);
+
+    MLabel *valueLabel = new MLabel;
+    valueLabel->setStyleName ("CommonSubTitleInverted");
+    valueLabel->setAlignment (Qt::AlignLeft | Qt::AlignVCenter);
+    layout->addItem (valueLabel);
+    layout->setStretchFactor (valueLabel, 2);
+
+    switch (m_logic->getCondition ())
+    {
+        case BatteryBusinessLogic::BExcellent:
+            //% "Excellent"
+            valueLabel->setText (qtTrId ("qtn_ener_condition_excellent"));
+            break;
+        case BatteryBusinessLogic::BGood:
+            //% "Good"
+            valueLabel->setText (qtTrId ("qtn_ener_condition_good"));
+            break;
+        case BatteryBusinessLogic::BPoor:
+            //% "Poor"
+            valueLabel->setText (qtTrId ("qtn_ener_condition_poor"));
+            break;
+        case BatteryBusinessLogic::BUnknown:
+        case BatteryBusinessLogic::BFair:
+        default:
+            //% "Fair"
+            valueLabel->setText (qtTrId ("qtn_ener_condition_fair"));
+            break;
+    }
+
+    if (m_logic->getCondition () == BatteryBusinessLogic::BPoor)
+    {
+        QGraphicsLinearLayout *poorLayout =
+            new QGraphicsLinearLayout (Qt::Horizontal);
+        poorLayout->setContentsMargins (0,0,0,0);
+        poorLayout->setSpacing (0);
+
+        containerLayout->addItem (poorLayout);
+
+        MImageWidget *poorIcon = new MImageWidget;
+        poorIcon->setStyleName ("CommonMainIcon");
+        poorIcon->setImage ("icon-m-energy-management-insufficient-power");
+        poorLayout->addItem (poorIcon);
+
+        MLabel *poorInfo = new MLabel;
+        //% "The battery capacity has decreased. You can
+        // improve battery life by purchasing a new battery."
+        poorInfo->setText (qtTrId ("qtn_ener_condition_poor_info"));
+        poorInfo->setAlignment (Qt::AlignLeft);
+        poorInfo->setStyleName ("CommonSubTextInverted");
+        poorInfo->setSizePolicy (QSizePolicy::Preferred, QSizePolicy::Expanding);
+        poorInfo->setWordWrap (true);
+        poorLayout->addItem (poorInfo);
+    }
+
+    /*
+     * Adding the whole row to the main container.
+     */
+    m_MainLayout->addItem (container);
+    m_MainLayout->setStretchFactor (container, 0);
+}
+
 
 MSeparator *
 BatteryWidget::addSpacer (
