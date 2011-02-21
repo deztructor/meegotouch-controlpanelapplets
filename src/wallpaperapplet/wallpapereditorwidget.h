@@ -130,7 +130,9 @@ private:
     int  imageDX () const;
     int  imageDY () const;
     void gestureWorkaround (QPointF *point);
-
+    bool supportsLandscape () const;
+    bool supportsPortrait () const;
+ 
 private:
     QPointer<WallpaperBusinessLogic>  m_WallpaperBusinessLogic;
 
@@ -142,6 +144,7 @@ private:
     MAction              *m_DoneAction;
     MAction              *m_CancelAction;
     bool                  m_NoTitlebar;
+    bool                  m_OrientationLocked;
     M::Orientation        m_Orientation;
 
     QPointF               m_LastClick;

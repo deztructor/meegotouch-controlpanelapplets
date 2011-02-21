@@ -22,12 +22,7 @@
 #include <QUrl>
 #include <QDir>
 #include <QFileInfo>
-#include <QImage>
-/*
-#ifdef HAVE_QUILL_FILTER
-#include <QuillImage>
-#endif
-*/
+
 #include <QPixmap>
 #include <QPainter>
 #include <QThread>
@@ -40,7 +35,7 @@
  * weird file names around.
  */
 //#define LOTDEBUG
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -51,6 +46,11 @@
 #endif
 
 static const QString dir = "";
+
+/*
+ * Good to know: In order to use this flavor under scratchbox one must install
+ * the media-settings-harmattan package. Then restart the desktop...
+ */
 static const QString defaultFlavor = "grid";
 static const int defaultThumbnailWidth = 172;
 static const int defaultThumbnailHeight = 172;
@@ -268,6 +268,63 @@ Image::extension () const
     return fileInfo.suffix();
 }
 
+/*
+ * Low level loading method that will not just load the image, but also will
+ * read the exim metadata and rotate the image if necessary.
+ */
+bool 
+Image::load (
+        const QString &fileName)
+{
+    bool retval;
+    #ifdef HAVE_QUILL_METADATA
+    QString           rFilterName = "org.maemo.rotate";
+    QuillMetadata     metadata (fileName);
+    QVariant      orientation = metadata.entry(QuillMetadata::Tag_Orientation);
+    int               side = orientation.toInt();
+    QuillImageFilter *filter = 0;
+    SYS_DEBUG ("Loading    : %s", SYS_STR(fileName));
+    SYS_DEBUG ("Orientation: %s", SYS_STR(orientation.toString()));
+    SYS_DEBUG ("side       : %d", side);
+    #endif
+
+    SYS_DEBUG ("Loading '%s'", SYS_STR(fileName));
+    retval = m_Image.load(fileName);
+
+    if (!retval)
+        return retval;
+
+#ifdef HAVE_QUILL_METADATA
+    switch (side) {
+        case 1:
+            // Nothing to do
+            break;
+
+        case 6:
+            filter = QuillImageFilterFactory::createImageFilter (rFilterName);
+            filter->setOption (QuillImageFilter::Angle, QVariant(90));
+            break;
+
+        case 8:
+            filter = QuillImageFilterFactory::createImageFilter (rFilterName);
+            filter->setOption (QuillImageFilter::Angle, -90);
+            break;
+        
+        case 3:
+            filter = QuillImageFilterFactory::createImageFilter (rFilterName);
+            filter->setOption (QuillImageFilter::Angle, 180);
+            break;
+    }
+
+    if (filter) {
+        m_Image = filter->apply (m_Image);
+        delete filter;
+    }
+#endif
+
+    return retval;
+}
+
 /*!
  * \param threadSafe Not in main thread, only thread safe operations are
  *   allowed.
@@ -292,12 +349,12 @@ Image::cache (
      * Secondary thread file loading.
      */
     if (!filename().isEmpty()) {
-        SYS_DEBUG ("Doing a thread-safe loading.");
-        SYS_DEBUG ("*** Calling QImage::load(%s) 0", SYS_STR(filename()));
-        if (!m_Image.load(filename())) {
+        if (!load(filename())) {
             SYS_WARNING ("Loading failed: %s", SYS_STR(filename()));
             m_Cached = false;
         } else {
+            SYS_DEBUG ("Loaded %s size %dx%d", SYS_STR(filename()),
+                        m_Image.width(), m_Image.height());
             m_Cached = true;
         }
 
@@ -344,7 +401,12 @@ Image::unCache ()
         return;
 
     m_Cached = false;
-    m_Image = QImage();
+    m_Image = WallPaperImage();
+
+    if (m_ScaledImage) {
+        delete m_ScaledImage;
+        m_ScaledImage = 0;
+    }
 }
 
 QImage &
@@ -393,7 +455,8 @@ Image::preScale (
             delete m_ScaledImage;
 
         SYS_DEBUG ("m_Image.scaled(size, Qt::KeepAspectRatioByExpanding)");
-        m_ScaledImage = new QImage (m_Image.scaled(size, Qt::KeepAspectRatioByExpanding));
+        m_ScaledImage = new WallPaperImage(
+                m_Image.scaled(size, Qt::KeepAspectRatioByExpanding));
     }
 }
 
@@ -402,8 +465,7 @@ Image::setThumbnailPixmap (
         const QPixmap &pixmap)
 {
     m_ThumbnailPixmap = pixmap;
-    if (pixmap.height() >= 10 &&
-            pixmap.width() >= 10)
+    if (pixmap.height() >= 10 && pixmap.width() >= 10)
         m_HasThumbnail = true;
     else
         m_HasThumbnail = false;
@@ -418,6 +480,8 @@ Image::thumbnail (
     QPixmap *pixmap;
     bool     retval = false;
 
+    //SYS_WARNING ("*** force     = %s", SYS_BOOL(force));   
+    //SYS_WARNING ("*** m_ImageID = %s", SYS_STR(m_ImageID));
     if (!m_ImageID.isEmpty()) {
         /*
          * If we have an image ID instead of a filename the thumbler will not
@@ -569,9 +633,15 @@ WallpaperDescriptor::extension (
 
 
 QPixmap
-WallpaperDescriptor::thumbnailPixmap() const
+WallpaperDescriptor::thumbnailPixmap() const 
 {
-    return m_Images[WallpaperDescriptor::Landscape].thumbnailPixmap();
+    if (m_Images[WallpaperDescriptor::Portrait].hasThumbnail())
+        return m_Images[WallpaperDescriptor::Portrait].thumbnailPixmap();
+
+    if (m_Images[WallpaperDescriptor::Landscape].hasThumbnail())
+        return m_Images[WallpaperDescriptor::Landscape].thumbnailPixmap();
+
+    return m_Images[WallpaperDescriptor::Portrait].thumbnailPixmap();
 }
 
 bool 
@@ -610,6 +680,14 @@ WallpaperDescriptor::unCache (
 {
     SYS_DEBUG ("Uncaching %d...", variant);
     m_Images[variant].unCache ();
+}
+
+void
+WallpaperDescriptor::unCache ()
+{
+    for (int n = Landscape; n < NVariants; ++n) {
+        m_Images[n].unCache ();
+    }
 }
 
 bool
@@ -689,21 +767,17 @@ WallpaperDescriptor::initiateThumbnailer ()
             continue;
 
         if (m_Images[n].thumbnail()) {
-            /*
-             * FIXME: maybe we should emit signal for every variant?
-             */
-            if (n == WallpaperDescriptor::Landscape) {
-                SYS_DEBUG ("emit thumbnailLoaded()");
-                emit thumbnailLoaded (this);
-                emit changed (this);
-            }
+            SYS_DEBUG ("emit thumbnailLoaded()");
+            emit thumbnailLoaded (this);
+            emit changed (this);
 
             continue;
         }
 
         if (m_Images[n].mimeType().isEmpty() ||
-                m_Images[n].filename().isEmpty())
+                m_Images[n].filename().isEmpty()) {
             continue;
+        }
     
         urisList << m_Images[n].url();
         mimeList << m_Images[n].mimeType();
@@ -727,7 +801,6 @@ WallpaperDescriptor::initiateThumbnailer ()
             this, SLOT(thumbnailLoadingFinished(int)));
 
     m_Thumbnailer->request (urisList, mimeList, true, defaultFlavor);
-    //m_Thumbnailer->request (urisList, mimeList, true, "screen");
 }
 
 /*!
@@ -741,31 +814,25 @@ WallpaperDescriptor::thumbnailReady (
             QString      flavor)
 {
     bool success;
-    bool needEmitSignal = false;
 
     Q_UNUSED (thumbnailUri);
     Q_UNUSED (flavor);
 
-    SYS_DEBUG ("*** flavor = %s", SYS_STR(flavor));
-    SYS_DEBUG ("*** size   = %dx%d", pixmap.width(), pixmap.height());
+    //SYS_DEBUG ("*** flavor = %s", SYS_STR(flavor));
+    //SYS_DEBUG ("*** size   = %dx%d", pixmap.width(), pixmap.height());
     /*
      * FIXME: should store the thumbnail URL as well.
-     * FIXME: maybe we should emit a signal for every variant...
      */
     for (int n = Landscape; n < NVariants; ++n) {
         if (m_Images[n].url() == fileUri) {
-            SYS_DEBUG ("Has thumbnail for %dth image", n);
+            //SYS_DEBUG ("Has thumbnail for %dth image", n);
             success = m_Images[n].setThumbnailPixmap (pixmap);
-            if (success && n == 0)
-                needEmitSignal = true;
         }
     }
 
-    if (needEmitSignal) {
-        SYS_DEBUG ("emit thumbnailLoaded()");
-        emit thumbnailLoaded (this);
-        emit changed (this);
-    }
+    //SYS_DEBUG ("emit thumbnailLoaded()");
+    emit thumbnailLoaded (this);
+    emit changed (this);
 }
 
 /*!
@@ -788,7 +855,7 @@ WallpaperDescriptor::thumbnailError (
                     n, SYS_STR(message));
             success = m_Images[n].thumbnail (true);
 
-            if (success && n == WallpaperDescriptor::Landscape) {
+            if (success) {
                 emit thumbnailLoaded (this);
                 emit changed (this);
             }
@@ -806,7 +873,6 @@ WallpaperDescriptor::thumbnailLoadingFinished (
 {
     Q_UNUSED (left);
 
-    SYS_DEBUG ("*** left = %d", left);
     if (!m_Thumbnailer.isNull() && left == 0)
         delete m_Thumbnailer;
 }
@@ -989,7 +1055,9 @@ WallpaperDescriptor::valid () const
 void
 WallpaperDescriptor::loadAll () 
 {
+    #if 0
     QSize landscapeSize (854, 480);
+    #endif
     QSize portraitSize (480, 854);
     bool  threadSafe = false;
 
@@ -1015,7 +1083,10 @@ WallpaperDescriptor::loadAll ()
         if (m_Images[n].m_Cached)
             continue;
 
-        for (int i = 0; i < n; ++i) {
+        for (int i = 0; i <  m_Images.size(); ++i) {
+            SYS_DEBUG ("images[%d] file %s; images[%d] file %s",
+                    n, SYS_STR(m_Images[n].filename()),
+                    i, SYS_STR(m_Images[i].filename()));
             if (!m_Images[n].filename().isEmpty() &&
                     m_Images[n].filename() == m_Images[i].filename()) {
                 alreadyFound = true;
@@ -1031,6 +1102,7 @@ WallpaperDescriptor::loadAll ()
             continue;
         }
 
+        SYS_DEBUG ("caching %d", n);
         m_Images[n].cache (threadSafe);
     }
 
@@ -1039,13 +1111,16 @@ WallpaperDescriptor::loadAll ()
      * Here we try to find out what size we are about to use and we do some
      * thread safe pre-scaling.
      */
+    #if 0
     m_Images[WallpaperDescriptor::Landscape].preScale (
             landscapeSize, threadSafe);
+    #endif
     m_Images[WallpaperDescriptor::Portrait].preScale (
             portraitSize, threadSafe);
-
+    #if 0
     m_Images[WallpaperDescriptor::OriginalLandscape].preScale (
             landscapeSize, threadSafe);
+    #endif
     m_Images[WallpaperDescriptor::OriginalPortrait].preScale (
             portraitSize, threadSafe);
 }

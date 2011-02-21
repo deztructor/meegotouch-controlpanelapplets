@@ -27,6 +27,14 @@ CONFIG += \
         duicontrolpanel \
         link_pkgconfig
 
+contains(DEFINES, HAVE_QUILL_FILTER) {
+    CONFIG += quillimagefilter
+}
+
+contains(DEFINES, HAVE_QUILL_METADATA) {
+    CONFIG += quillmetadata
+}
+
 PKGCONFIG += ContentManager
 
 HEADERS += \

@@ -35,6 +35,8 @@
 #  error "QmBattery is not stubbed, can't continue."
 #endif
 
+using namespace MeeGo;
+
 /******************************************************************************
  * SignalSink implementation. 
  */

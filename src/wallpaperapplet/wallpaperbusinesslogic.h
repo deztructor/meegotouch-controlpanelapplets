@@ -115,14 +115,18 @@ private:
             const QString        &filePath,
             WallpaperDescriptor  *desc,
             WallpaperITrans      *transformations);
-    
-private:
-    MGConfItem   *m_LandscapeGConfItem;
-    MGConfItem   *m_PortraitGConfItem;
 
-    QPointer<WallpaperDescriptor> m_EditedImage;
-    bool                          m_EditedImageOurs;
-    QFutureWatcher <void>         m_FutureWatcher;
+    bool supportsLandscape () const;
+    bool supportsPortrait () const;
+
+private:
+    MGConfItem                    *m_LandscapeGConfItem;
+    MGConfItem                    *m_PortraitGConfItem;
+    QPointer<WallpaperDescriptor>  m_EditedImage;
+    bool                           m_EditedImageOurs;
+    bool                           m_OrientationLocked;
+    M::Orientation                 m_LockedOrientation;
+    QFutureWatcher <void>          m_FutureWatcher;
 
 #ifdef UNIT_TEST
     friend class Ut_WallpaperBusinessLogic;

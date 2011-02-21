@@ -15,6 +15,10 @@
 ** and appearing in the file LICENSE.LGPL included in the packaging
 ** of this file.
 **
+** Contact: Karoliina T. Salminen <karoliina.t.salminen@nokia.com>
+** Authors: David Kedves <dkedves@blumsoft.eu>
+**          Laszlo Pere <lpere@blumsoft.eu>
+**
 ****************************************************************************/
 
 /*
@@ -48,9 +52,11 @@
 #include <QDBusError>
 #include <MTheme>
 #include <MGConfItem>
+#include <MApplication>
+#include <MApplicationWindow>
 
 //#define LOTDEBUG
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -61,20 +67,44 @@ static const QString saveFileExtension = ".png";
 static const QString saveFileMimeType = "image/png";
 static const QString nl = "\n";
 
-WallpaperBusinessLogic::WallpaperBusinessLogic()
+WallpaperBusinessLogic::WallpaperBusinessLogic() :
+    m_OrientationLocked (false)
 {
+    MApplication               *application = MApplication::instance();
+    MApplicationWindow         *window = 0;
     WallpaperCurrentDescriptor *currentDesc;
     QString                     desktopFile = dirPath() + destopFileName;
+    QString                     landscapeString;
+    QString                     portraitString;
     bool                        success;
     
+    if (application) {
+        window = application->activeApplicationWindow ();
+    }
+
+    if (window) {
+        m_OrientationLocked = window->isOrientationLocked ();
+        if (m_OrientationLocked)
+            m_LockedOrientation = window->orientation ();
+    } else {
+        SYS_WARNING ("No window");
+    }
+
+    SYS_WARNING ("m_OrientationLocked = %s", SYS_BOOL(m_OrientationLocked));
+    SYS_WARNING ("supportsLandscape() = %s", SYS_BOOL(supportsLandscape()));
+    SYS_WARNING ("supportsPortrait()  = %s", SYS_BOOL(supportsPortrait()));
+
+    /*
+     * Getting the GConf items storing the current settings.
+     */
     m_LandscapeGConfItem = new MGConfItem (WALLPAPER_LANDSCAPE_KEY);
     m_PortraitGConfItem = new MGConfItem (WALLPAPER_PORTRAIT_KEY);
     m_EditedImage = 0;
     m_EditedImageOurs = false;
 
     /*
-     * In case if GConf keys are set to "", we have to unset it
-     * to use the schema values
+     * In case if GConf keys are set to "", we have to unset it to use the
+     * schema values
      */
     if (m_LandscapeGConfItem->value ().toString ().isEmpty ())
         m_LandscapeGConfItem->unset ();
@@ -86,16 +116,18 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
      * Trying to load the current wallpaper from the files saved by the theme
      * applet. Will load only if the GConf contains our filenames.
      */
-    SYS_DEBUG ("*** landscape = '%s'", 
-            SYS_STR( m_LandscapeGConfItem->value().toString()));
-    SYS_DEBUG ("*** portrait  = '%s'", 
-            SYS_STR(m_PortraitGConfItem->value().toString()));
+    if (supportsLandscape())
+        landscapeString = m_LandscapeGConfItem->value().toString();
+    if (supportsPortrait())
+        portraitString = m_PortraitGConfItem->value().toString();
+
+    SYS_DEBUG ("*** landscape = '%s'", SYS_STR(landscapeString));
+    SYS_DEBUG ("*** portrait  = '%s'", SYS_STR(portraitString));
 
     success = currentDesc->setFromDesktopFile (
             desktopFile,
-            true,
-            m_LandscapeGConfItem->value().toString(),
-            m_PortraitGConfItem->value().toString());
+            true, landscapeString, portraitString);
+    
     /*
      * If not successfull we try to load the files from the GConf database. Will
      * be successfull if both GConf keys reference to images with full path.
@@ -104,8 +136,8 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
         SYS_DEBUG ("Loading of %s failed. Trying image files from GConf.",
                 SYS_STR(desktopFile));
         success = currentDesc->setFromFilenames (
-                m_LandscapeGConfItem->value().toString(),
-                m_PortraitGConfItem->value().toString());
+                landscapeString, 
+                portraitString);
     }
 
     /*
@@ -115,8 +147,8 @@ WallpaperBusinessLogic::WallpaperBusinessLogic()
      */
     if (!success) {
         success = currentDesc->setFromIDs (
-                m_LandscapeGConfItem->value().toString(),
-                m_PortraitGConfItem->value().toString());
+                landscapeString,
+                portraitString);
     }
 
     /*
@@ -246,14 +278,20 @@ WallpaperBusinessLogic::availableWallpapers () const
      * FIXME: This code is experimental. 
      */
     desc = new WallpaperDescriptor;
-    desc->setImageID ("meegotouch-wallpaper-landscape", 
-            WallpaperDescriptor::Landscape);
-    desc->setImageID ("meegotouch-wallpaper-portrait",
-            WallpaperDescriptor::Portrait);
-    desc->setImageID ("meegotouch-wallpaper-landscape", 
-            WallpaperDescriptor::OriginalLandscape);
-    desc->setImageID ("meegotouch-wallpaper-portrait",
-            WallpaperDescriptor::OriginalPortrait);
+
+    if (supportsLandscape()) {
+        desc->setImageID ("meegotouch-wallpaper-landscape", 
+                WallpaperDescriptor::Landscape);
+        desc->setImageID ("meegotouch-wallpaper-landscape", 
+                WallpaperDescriptor::OriginalLandscape);
+    }
+    
+    if (supportsPortrait()) {
+        desc->setImageID ("meegotouch-wallpaper-portrait",
+                WallpaperDescriptor::Portrait);
+        desc->setImageID ("meegotouch-wallpaper-portrait",
+                WallpaperDescriptor::OriginalPortrait);
+    }
 
     list << desc;
 
@@ -310,9 +348,11 @@ WallpaperBusinessLogic::setEditedImage (
     if (m_EditedImage == desc)
         return;
 
-    if (m_EditedImage &&
-            m_EditedImageOurs)
+    if (m_EditedImage && m_EditedImageOurs)
         delete m_EditedImage;
+    
+    if (m_EditedImage)
+        m_EditedImage->unCache ();
 
     m_EditedImage = desc;
     m_EditedImageOurs = ours;
@@ -326,12 +366,13 @@ WallpaperBusinessLogic::startEdit (
 
     /*
      * If the user double clicked on the same image we are currently loading in
-     * the other thread.
+     * the other thread. Somehow we got this signal twice because of the DBus
+     * interface implementation... no problem though.
      */
     if (threadActive && m_EditedImage && m_EditedImage == desc) {
-        SYS_WARNING ("The same image is already loading?");
         return;
     }
+
 
     /*
      * If we already have and image we are editing and the user clicks on an
@@ -603,29 +644,33 @@ WallpaperBusinessLogic::writeFiles (
     out << "Version=" << QString::number(version) << nl;
     out << nl;
 
-    out << "[DCP Landscape Wallpaper]" << nl;
-    out << "OriginalFile=" << desc->originalImageFile(M::Landscape) << nl;
-    out << "EditedFile=" << landscapeFilePath << nl;
-    out << "MimeType=" << desc->suggestedOutputMimeType (M::Landscape) << nl;
-    out << "HorOffset=" << landscapeITrans->x() << nl;
-    out << "VertOffset=" << landscapeITrans->y() << nl;
-    out << "Scale=" << landscapeITrans->scale() << nl;
-    out << nl;
-
-    out << "[DCP Portrait Wallpaper]" << nl;
-    out << "OriginalFile=" << desc->originalImageFile(M::Portrait) << nl;
-    out << "EditedFile=" << portraitFilePath << nl;
-    out << "MimeType=" << desc->suggestedOutputMimeType (M::Portrait) << nl;
-    out << "HorOffset=" << portraitITrans->x() << nl;
-    out << "VertOffset=" << portraitITrans->y() << nl;
-    out << "Scale=" << portraitITrans->scale() << nl;
-    out << nl;
-
-    makeImageFile (portraitFilePath, desc, portraitITrans);
-    makeImageFile (landscapeFilePath, desc, landscapeITrans);
+    if (supportsLandscape()) {
+        out << "[DCP Landscape Wallpaper]" << nl;
+        out << "OriginalFile=" << desc->originalImageFile(M::Landscape) << nl;
+        out << "EditedFile=" << landscapeFilePath << nl;
+        out << "MimeType=" << desc->suggestedOutputMimeType (M::Landscape) << nl;
+        out << "HorOffset=" << landscapeITrans->x() << nl;
+        out << "VertOffset=" << landscapeITrans->y() << nl;
+        out << "Scale=" << landscapeITrans->scale() << nl;
+        out << nl;
     
-    m_PortraitGConfItem->set (portraitFilePath);
-    m_LandscapeGConfItem->set (landscapeFilePath);
+        makeImageFile (landscapeFilePath, desc, landscapeITrans);
+        m_LandscapeGConfItem->set (landscapeFilePath);
+    }
+
+    if (supportsPortrait()) {
+        out << "[DCP Portrait Wallpaper]" << nl;
+        out << "OriginalFile=" << desc->originalImageFile(M::Portrait) << nl;
+        out << "EditedFile=" << portraitFilePath << nl;
+        out << "MimeType=" << desc->suggestedOutputMimeType (M::Portrait) << nl;
+        out << "HorOffset=" << portraitITrans->x() << nl;
+        out << "VertOffset=" << portraitITrans->y() << nl;
+        out << "Scale=" << portraitITrans->scale() << nl;
+        out << nl;
+    
+        makeImageFile (portraitFilePath, desc, portraitITrans);
+        m_PortraitGConfItem->set (portraitFilePath);
+    }
 
     return true;
 }
@@ -827,3 +872,17 @@ WallpaperBusinessLogic::valueChanged ()
 
     emit wallpaperChanged ();
 }
+
+bool
+WallpaperBusinessLogic::supportsLandscape () const
+{
+    return !m_OrientationLocked || m_LockedOrientation == M::Landscape;
+}
+
+bool
+WallpaperBusinessLogic::supportsPortrait () const
+{
+    return !m_OrientationLocked || m_LockedOrientation == M::Portrait;
+}
+
+

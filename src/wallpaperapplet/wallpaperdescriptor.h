@@ -22,13 +22,23 @@
 #include <QObject>
 #include <QPointer>
 #include <QMetaType>
-#include <QImage>
 #include <QPixmap>
 #include <QUrl>
 #include <QVector>
 #include <MApplication>
 
+#ifdef HAVE_QUILL_FILTER
+#  include <QuillImage>
+#  include <QuillImageFilterFactory>
+   typedef QuillImage WallPaperImage;
+#else
+#  include <QImage>
+   typedef QImage WallPaperImage;
+#endif
 
+#ifdef HAVE_QUILL_METADATA
+#  include <QuillMetadata>
+#endif
 /*
  * In the functional tests we use the real thing, in the unit tests we use the
  * stubbed version. 
@@ -86,6 +96,7 @@ public:
     bool setThumbnailPixmap (const QPixmap &pixmap); 
     bool thumbnail (bool force = false);
 
+    bool load (const QString &fileName);
     void cache (bool threadSafe = false);
     void unCache ();
 
@@ -102,8 +113,8 @@ private:
     QUrl      m_Url;  
     QPixmap   m_ThumbnailPixmap;
     bool      m_HasThumbnail;
-    QImage    m_Image;
-    QImage   *m_ScaledImage;
+    WallPaperImage  m_Image;
+    WallPaperImage *m_ScaledImage;
 
     friend class WallpaperDescriptor;
     #ifdef UNIT_TEST
@@ -140,38 +151,38 @@ public:
 
     void setFilename (
             const QString &filename,
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+            ImageVariant   variant = WallpaperDescriptor::Portrait);
     QString filename (
-            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+            ImageVariant   variant = WallpaperDescriptor::Portrait) const;
     
     void setMimeType (
             const QString &mimeType,
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+            ImageVariant   variant = WallpaperDescriptor::Portrait);
     QString mimeType (
-            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+            ImageVariant   variant = WallpaperDescriptor::Portrait) const;
 
 
     void setImageID  (
             const QString &imageID,
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+            ImageVariant   variant = WallpaperDescriptor::Portrait);
     QString imageID (
-            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+            ImageVariant   variant = WallpaperDescriptor::Portrait) const;
 
     void setUrl (
             const QString &urlString,
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+            ImageVariant   variant = WallpaperDescriptor::Portrait);
 
 
     void setTitle (
             const QString &title,
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+            ImageVariant   variant = WallpaperDescriptor::Portrait);
     QString title (
-            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+            ImageVariant   variant = WallpaperDescriptor::Portrait) const;
     
     QString basename (
-            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+            ImageVariant   variant = WallpaperDescriptor::Portrait) const;
     QString extension (
-            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+            ImageVariant   variant = WallpaperDescriptor::Portrait) const;
     
     virtual bool isCurrent () const;
     virtual int version () const;
@@ -186,22 +197,22 @@ public:
     virtual bool valid () const;
 
     bool isThumbnailLoaded (
-            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+            ImageVariant   variant = WallpaperDescriptor::Portrait) const;
 
     QPixmap thumbnailPixmap () const;
 
     void cache (
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
-    void unCache (
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+            ImageVariant   variant = WallpaperDescriptor::Portrait);
+    void unCache (ImageVariant variant);
+    void unCache ();
     
     bool loading () const;
     void setLoading (bool loading = true);
     QImage &image (
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+            ImageVariant   variant = WallpaperDescriptor::Portrait);
     QImage scaledImage (
             QSize size,
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+            ImageVariant   variant = WallpaperDescriptor::Portrait);
 
     void loadAll ();
 

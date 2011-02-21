@@ -21,6 +21,10 @@ contains(DEFINES, HAVE_QUILL_FILTER) {
     CONFIG += quillimagefilter
 }
 
+contains(DEFINES, HAVE_QUILL_METADATA) {
+    CONFIG += quillmetadata
+}
+
 LIBS += \
     -lqttracker \
     -lthumbnailer
@@ -71,9 +75,13 @@ backupscripts.path  = $$(DEBIAN_DESTDIR)/usr/share/wallpaper/
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 
+css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libwallpaperapplet/style
+css.files = libwallpaperapplet.css
+
 INSTALLS += \
     target \
     desktop \
     backupscripts \
-    backup 
+    backup \
+    css
 

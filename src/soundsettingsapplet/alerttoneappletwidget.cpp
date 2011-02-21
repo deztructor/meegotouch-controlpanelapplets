@@ -116,6 +116,7 @@ AlertToneAppletWidget::createContents()
 	QGraphicsWidget       *centralWidget = this/*->centralWidget()*/;
 	MLayout               *mainLayout;
 	MLinearLayoutPolicy   *policy;
+    MLabel                *spacer;
 
 	mainLayout = new MLayout (centralWidget);
 
@@ -130,8 +131,15 @@ AlertToneAppletWidget::createContents()
      */
     m_Title = addTitleLabel (
             centralWidget, policy,
-            "CommonXLargeHeaderPanelInverted",
+            "CommonLargeHeaderPanelInverted",
             "CommonLargeHeaderInverted");
+
+    /*
+     * Adding a spacer.
+     */
+    spacer = new MLabel;
+    spacer->setStyleName ("CommonSmallSpacerInverted");
+    policy->addItem (spacer);
 
     /*
      * A secondary title
@@ -139,7 +147,7 @@ AlertToneAppletWidget::createContents()
     m_EventTonesLabel = addTitleLabel (
             centralWidget, policy, 
             "CommonHeaderPanelInverted", 
-            "CommonpHeaderInverted");
+            "CommonHeaderInverted");
 
     /*
      * A list with the sound file setting widgets.
@@ -147,6 +155,13 @@ AlertToneAppletWidget::createContents()
 	m_tones = createAlertTonesList(centralWidget);
 	policy->addItem(m_tones);
 
+    /*
+     * Adding a spacer.
+     */
+    spacer = new MLabel;
+    spacer->setStyleName ("CommongroupHeaderDividerInverted");
+    policy->addItem (spacer);
+    
     /*
      * An other secondary title.
      */

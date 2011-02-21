@@ -18,6 +18,15 @@ CONFIG +=          \
 
 QMAKE_LFLAGS_RPATH = -Wl
 
+contains(DEFINES, HAVE_QUILL_FILTER) {
+    CONFIG += quillimagefilter
+}
+
+contains(DEFINES, HAVE_QUILL_METADATA) {
+    CONFIG += quillmetadata
+}
+
+
 #
 # FIXME: These are needed for the soundssettingsapplet. We maybe could remove
 # some of these, but for that we need to use the LIBMEEGOCONTROL define in the

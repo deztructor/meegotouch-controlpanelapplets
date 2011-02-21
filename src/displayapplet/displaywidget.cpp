@@ -130,6 +130,7 @@ DisplayWidget::addSecHeaderContainer ()
      */
     container = new MContainer (this);
     container->setStyleName ("CommonGroupHeaderPanelInverted");
+
     container->setHeaderVisible (false);
     container->setContentsMargins (0,0,0,0);
 
