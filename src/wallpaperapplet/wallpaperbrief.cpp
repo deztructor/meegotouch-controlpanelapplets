@@ -23,7 +23,8 @@
 
 #include <dcpwidgettypes.h>
 
-#undef DEBUG
+#define DEBUG
+#define WARNING 
 #include "../debug.h"
 
 WallpaperBrief::WallpaperBrief (
@@ -57,24 +58,27 @@ QString
 WallpaperBrief::image () const
 {
     WallpaperCurrentDescriptor *desc = WallpaperCurrentDescriptor::instance();
+    QString retval;
     
     if (desc->valid()) {
-        // FIXME: We should have a method to get the thumbnail filename
-        return desc->filename();
+        retval = desc->filename();
     }
      
-    return "";
+    SYS_DEBUG ("Returning '%s'", SYS_STR(retval));
+    return retval;
 }
 
 QString
 WallpaperBrief::icon () const
 {
     WallpaperCurrentDescriptor *desc = WallpaperCurrentDescriptor::instance();
-    
+    QString retval;
+
     if (desc->valid()) {
-        return desc->imageID ();
+        retval = desc->imageID ();
     }
      
-    return "";
+    SYS_DEBUG ("Returning '%s'", SYS_STR(retval));
+    return retval;
 }
 

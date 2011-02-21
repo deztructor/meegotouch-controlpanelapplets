@@ -151,38 +151,38 @@ public:
 
     void setFilename (
             const QString &filename,
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+            ImageVariant   variant = WallpaperDescriptor::Portrait);
     QString filename (
-            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+            ImageVariant   variant = WallpaperDescriptor::Portrait) const;
     
     void setMimeType (
             const QString &mimeType,
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+            ImageVariant   variant = WallpaperDescriptor::Portrait);
     QString mimeType (
-            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+            ImageVariant   variant = WallpaperDescriptor::Portrait) const;
 
 
     void setImageID  (
             const QString &imageID,
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+            ImageVariant   variant = WallpaperDescriptor::Portrait);
     QString imageID (
-            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+            ImageVariant   variant = WallpaperDescriptor::Portrait) const;
 
     void setUrl (
             const QString &urlString,
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+            ImageVariant   variant = WallpaperDescriptor::Portrait);
 
 
     void setTitle (
             const QString &title,
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+            ImageVariant   variant = WallpaperDescriptor::Portrait);
     QString title (
-            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+            ImageVariant   variant = WallpaperDescriptor::Portrait) const;
     
     QString basename (
-            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+            ImageVariant   variant = WallpaperDescriptor::Portrait) const;
     QString extension (
-            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+            ImageVariant   variant = WallpaperDescriptor::Portrait) const;
     
     virtual bool isCurrent () const;
     virtual int version () const;
@@ -197,22 +197,22 @@ public:
     virtual bool valid () const;
 
     bool isThumbnailLoaded (
-            ImageVariant   variant = WallpaperDescriptor::Landscape) const;
+            ImageVariant   variant = WallpaperDescriptor::Portrait) const;
 
     QPixmap thumbnailPixmap () const;
 
     void cache (
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+            ImageVariant   variant = WallpaperDescriptor::Portrait);
     void unCache (ImageVariant variant);
     void unCache ();
     
     bool loading () const;
     void setLoading (bool loading = true);
     QImage &image (
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+            ImageVariant   variant = WallpaperDescriptor::Portrait);
     QImage scaledImage (
             QSize size,
-            ImageVariant   variant = WallpaperDescriptor::Landscape);
+            ImageVariant   variant = WallpaperDescriptor::Portrait);
 
     void loadAll ();
 
