@@ -25,7 +25,6 @@
 #ifdef HAVE_QMSYSTEM
 #  include <qmdevicemode.h>
 #  include <qmbattery.h>
-using namespace MeeGo;
 #endif
 
 /*!
@@ -39,16 +38,26 @@ using namespace MeeGo;
 class BatteryBusinessLogic : public QObject
 {
     Q_OBJECT
+    Q_ENUMS (Condition);
 
 public:
     BatteryBusinessLogic (QObject *parent = 0);
     ~BatteryBusinessLogic ();
+
+    typedef enum {
+        BExcellent,
+        BGood,
+        BFair,
+        BPoor,
+        BUnknown
+    } Condition;
     
     QStringList PSMThresholdValues ();
     int PSMThresholdValue ();
     bool PSMAutoValue ();
     bool PSMValue ();
-    bool isCharging();
+    bool isCharging ();
+    Condition getCondition ();
 
 public slots:
     void setPSMThresholdValue (int percentage);
@@ -85,8 +94,8 @@ private:
 
     bool              m_initialized;
     #ifdef HAVE_QMSYSTEM 
-    QmBattery        *m_battery;
-    QmDeviceMode     *m_devicemode;
+    MeeGo::QmBattery    *m_battery;
+    MeeGo::QmDeviceMode *m_devicemode;
     #endif
 
     // If the charger is connected, the battery is not full and the charging is

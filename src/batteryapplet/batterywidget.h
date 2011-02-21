@@ -58,6 +58,7 @@ private:
     void addAutoActivationWidget ();
     void addSliderContainer ();
     void addPowerSaveButton ();
+    void addBatteryConditionWidget ();
     MSeparator *addSpacer (
             const QString &styleName, 
             int            index);

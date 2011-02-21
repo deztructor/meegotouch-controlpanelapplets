@@ -1,4 +1,11 @@
-meegotouch-controlpanelapplets (0.20.17~3) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.18~1) meegotouch; urgency=low
+
+  * Start working on battery condition info
+    FIXME: Layout should be re-checked
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 21 Feb 2011 12:18:58 +0100
+
+meegotouch-controlpanelapplets (0.20.17-4) meegotouch; urgency=low
 
   [ Sandor Pinter ]
   * Reading about applet's license str from a file
@@ -25,7 +32,7 @@ meegotouch-controlpanelapplets (0.20.17~3) meegotouch; urgency=low
   [Gabriel Schulhof]
   * Fixes: 223196 - SMS alert tone doesn't obey Profile setting
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 17 Feb 2011 09:11:52 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 21 Feb 2011 10:27:49 +0100
 
 meegotouch-controlpanelapplets (0.20.16-1) meegotouch; urgency=low
 
