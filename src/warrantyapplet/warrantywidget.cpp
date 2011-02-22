@@ -57,25 +57,29 @@ WarrantyWidget::createContent ()
     MLinearLayoutPolicy *policy;
 
     layout = new MLayout;
+    layout->setContentsMargins (0,0,0,0);
+
     policy = new MLinearLayoutPolicy (layout, Qt::Vertical);
     policy->setContentsMargins (0., 0., 0., 0.);
     policy->setSpacing (0.);
 
-    // Row 1: The title label.
+    // Add the title-bar
     addHeaderContainer (policy);
-    addStretcher (policy, "CommonSmallSpacerInverted");
 
     // The label that shows the expiration date
     m_labelExpiration = new MLabel;
     m_labelExpiration->setObjectName ("WarrantyAppletExpirationLabel");
+    m_labelExpiration->setStyleName ("CommonGroupHeaderInverted");
+    m_labelExpiration->setWordWrap (true);
 
     // The label that shows the terms of the warranty
     m_labelTerms = new MLabel;
     m_labelTerms->setObjectName ("WarrantyAppletTermsLabel");
+    m_labelTerms->setStyleName ("CommonBodyTextInverted");
     m_labelTerms->setWordWrap (true);
     
     /*
-     * Row 2: Adding the two labels with a new container
+     * Adding the two labels with a new container
      */
     addLabelContainer (policy, m_labelExpiration, m_labelTerms);
 
@@ -105,33 +109,20 @@ void
 WarrantyWidget::addHeaderContainer (
         MLinearLayoutPolicy *mainLayout)
 {
-    MContainer            *container;
-    QGraphicsLinearLayout *layout;
-
     Q_ASSERT (mainLayout);
-    /*
-     * Creating a lcontainer and a layout.
-     */
-    container = new MContainer (this);
-    container->setStyleName ("CommonXLargeHeaderPanelInverted");
-    container->setHeaderVisible (false);
-
-    layout = new QGraphicsLinearLayout (Qt::Horizontal);
-    container->centralWidget()->setLayout (layout);
 
     /*
      * The label that we use as title.
      */
     //% "Warranty"
     m_TitleLabel = new MLabel (qtTrId("qtn_warr_title"));
-    m_TitleLabel->setStyleName ("CommonXLargeHeaderInverted");
-    layout->addItem (m_TitleLabel);
-    layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
+    m_TitleLabel->setStyleName ("CommonApplicationHeaderInverted");
+
     /*
      * Adding the whole row to the main container.
      */
-    mainLayout->addItem (container);
-    mainLayout->setStretchFactor (container, 0);
+    mainLayout->addItem (m_TitleLabel);
+    mainLayout->setStretchFactor (m_TitleLabel, 0);
 }
 
 void 
@@ -140,33 +131,21 @@ WarrantyWidget::addLabelContainer (
         MLabel              *label1,
         MLabel              *label2)
 {
-    MContainer            *container;
-    QGraphicsLinearLayout *layout;
-
     Q_ASSERT (mainLayout);
-    /*
-     * Creating a lcontainer and a layout.
-     */
-    container = new MContainer (this);
-    container->setStyleName ("CommonLargePanelInverted");
-    container->setHeaderVisible (false);
-
-    layout = new QGraphicsLinearLayout (Qt::Vertical);
-    container->centralWidget()->setLayout (layout);
 
     /*
-     * Adding the label to the new container widget.
+     * Adding the label to the layout.
      */
-    layout->addItem (label1);
-    layout->setAlignment (label1, Qt::AlignLeft);
-    layout->addItem (label2);
-    layout->setAlignment (label2, Qt::AlignLeft);
+    mainLayout->addItem (label1);
+    mainLayout->setAlignment (label1, Qt::AlignLeft);
 
-    /*
-     * Adding the whole row to the main container.
-     */
-    mainLayout->addItem (container);
-    mainLayout->setStretchFactor (container, 0);
+    MSeparator *separator = new MSeparator;
+    separator->setStyleName ("CommonSpacer");
+
+    mainLayout->addItem (separator);
+
+    mainLayout->addItem (label2);
+    mainLayout->setAlignment (label2, Qt::AlignLeft);
 }
 
 /*
