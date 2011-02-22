@@ -8,6 +8,7 @@ meegotouch-controlpanelapplets (0.20.18~1) meegotouch; urgency=low
   [Laszlo Pere]
   * Fixes: NB#229380 - Tough the wallpaper is set in portrait the thumbnail of
     the image is seen in landscape.
+  * Fixes: NB#222535 - Wallpaper editor does not handle orientation metadata
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 21 Feb 2011 15:30:09 +0100
 
