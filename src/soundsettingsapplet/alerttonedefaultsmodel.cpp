@@ -112,7 +112,8 @@ AlertToneDefaultsModel::addSingleItem()
 		if (subdir.count() > 0) {
 			m_dirStack.push(subdir);
 			m_dirIdx.push(0);
-		} else if (m_dirStack.top()[m_dirIdx.top()].right(4) == ".aac" &&
+                /* A fairly arbitrary filter: File ends in .aac or .mp3, and, if it starts with a letter, that letter is a capital */
+		} else if ((m_dirStack.top()[m_dirIdx.top()].right(4) == ".aac" || m_dirStack.top()[m_dirIdx.top()].right(4) == ".mp3") &&
 					m_dirStack.top()[m_dirIdx.top()].left(1) == m_dirStack.top()[m_dirIdx.top()].left(1).toUpper()) {
             QString niceName = 
                 TrackerConnection::instance()->niceNameFromFileName (fullPath);
