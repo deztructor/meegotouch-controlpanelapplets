@@ -1,6 +1,10 @@
 meegotouch-controlpanelapplets (0.20.19~1) meegotouch; urgency=low
 
-  * 
+  [Laszlo Pere]
+  * Fixes: NB#228108 - Sound settings select sound page list item labels use 
+    wrong style
+  * Fixes: NB228444 - Specific sound setting view is not in accordance with 
+    UI specification
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 22 Feb 2011 13:41:33 +0100
 
