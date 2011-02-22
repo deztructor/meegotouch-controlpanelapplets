@@ -33,12 +33,19 @@ class DisplayApplet : public QObject, public DcpAppletIf
     Q_INTERFACES(DcpAppletIf)
 
 public:
+    enum {
+        DefaultPart,
+        BrightnessPart
+    };
+
     virtual void init();
     virtual DcpWidget* constructWidget(int widgetId);
     virtual DcpWidget* pageMain();
     virtual QString title() const;
     virtual QVector<MAction *> viewMenuItems();
     virtual DcpBrief* constructBrief(int partId);
+
+    virtual int partID (const QString& partStr);
 
 private:
     QPointer<DisplayWidget> m_MainWidget;
@@ -48,3 +55,4 @@ private:
     #endif
 };
 #endif // DISPLAYAPPLET_H
+

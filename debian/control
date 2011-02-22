@@ -2,7 +2,7 @@ Source: meegotouch-controlpanelapplets
 Section: devel
 Priority: optional
 Maintainer: David Kedves <dkedves@blumsoft.eu>
-Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.9.7),
+Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.11.8),
                libmeegotouch-dev (>= 0.20.60), libqmsystem2-dev (>= 1.0),
                libprofile-dev, system-ui-dev (>= 0.16), libqttracker-dev,
                libthumbnailer-dev, libcontentmanager-dev,
