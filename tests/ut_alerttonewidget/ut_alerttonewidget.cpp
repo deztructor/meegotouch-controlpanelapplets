@@ -33,12 +33,6 @@ Ut_AlertToneWidgetTests::cleanupTestCase()
         delete m_App;
 }
 
-void *  getPtr (unsigned  int cnt,void *  ptr)
-{
-      ptr =     (void *) ( (unsigned long )ptr + cnt * sizeof (void *) + sizeof( MContentItem ));
-      return   ptr;
-}
-
 void
 Ut_AlertToneWidgetTests::alerttonewidgetConstructor ()
 {
