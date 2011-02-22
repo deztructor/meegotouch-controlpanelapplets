@@ -91,6 +91,22 @@ addTitleLabel (
     return label;
 }
 
+MLabel *
+addTitleLabel (
+        QGraphicsWidget     *parent,
+        MLinearLayoutPolicy *targetPolicy,
+        const char          *labelStyleName)
+{
+    MLabel                  *label;
+
+    label = new MLabel;
+    label->setStyleName (labelStyleName);
+
+    targetPolicy->addItem (label);
+    return label;
+}
+
+
 /******************************************************************************
  * AlertToneAppletWidget implementation
  */
@@ -131,14 +147,13 @@ AlertToneAppletWidget::createContents()
      */
     m_Title = addTitleLabel (
             centralWidget, policy,
-            "CommonLargeHeaderPanelInverted",
-            "CommonLargeHeaderInverted");
+            "CommonApplicationHeaderInverted");
 
     /*
      * Adding a spacer.
      */
     spacer = new MLabel;
-    spacer->setStyleName ("CommonSmallSpacerInverted");
+    spacer->setStyleName ("CommonHeaderDividerInverted");
     policy->addItem (spacer);
 
     /*
@@ -147,7 +162,7 @@ AlertToneAppletWidget::createContents()
     m_EventTonesLabel = addTitleLabel (
             centralWidget, policy, 
             "CommonHeaderPanelInverted", 
-            "CommonHeaderInverted");
+            "CommonGroupHeaderInverted");
 
     /*
      * A list with the sound file setting widgets.
@@ -159,7 +174,7 @@ AlertToneAppletWidget::createContents()
      * Adding a spacer.
      */
     spacer = new MLabel;
-    spacer->setStyleName ("CommongroupHeaderDividerInverted");
+    spacer->setStyleName ("CommonHeaderDividerInverted");
     policy->addItem (spacer);
     
     /*
@@ -168,7 +183,7 @@ AlertToneAppletWidget::createContents()
     m_FeedbackLabel = addTitleLabel (
             centralWidget, policy, 
             "CommonHeaderPanelInverted", 
-            "CommonHeaderInverted");
+            "CommonGroupHeaderInverted");
 
     /*
      * The list with the feedback setting widgets.

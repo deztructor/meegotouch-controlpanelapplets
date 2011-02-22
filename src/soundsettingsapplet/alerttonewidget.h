@@ -20,7 +20,6 @@
 #ifndef _ALERT_TONE_WIDGET_H_
 #define _ALERT_TONE_WIDGET_H_
 
-#include <MContentItem>
 #include "alerttonetoplevel.h"
 #include "alerttone.h"
 #include "drilldownitem.h"

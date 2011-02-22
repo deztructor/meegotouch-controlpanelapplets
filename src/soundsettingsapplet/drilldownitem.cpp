@@ -50,10 +50,9 @@ DrillDownItem::createLayout()
     subTitleLabel = subtitleLabelWidget ();
     iconWidget = imageWidget();
 
-    drillIconWidget = new MImageWidget ();
-    drillIconWidget->setImage ("icon-m-common-drilldown-arrow");
-    
+    drillIconWidget = new MImageWidget ("icon-m-common-drilldown-arrow-inverse");
     drillIconWidget->setStyleName ("CommonDrillDownIcon");
+
     titleLabel->setStyleName("CommonTitleInverted");
     subTitleLabel->setStyleName("CommonSubTitleInverted");
 
