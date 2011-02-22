@@ -1,4 +1,10 @@
-meegotouch-controlpanelapplets (0.20.18~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.19~1) meegotouch; urgency=low
+
+  * 
+
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 22 Feb 2011 13:41:33 +0100
+
+meegotouch-controlpanelapplets (0.20.18-1) meegotouch; urgency=low
 
   * Start working on battery condition info
   * Wallpaper applet brief fix
