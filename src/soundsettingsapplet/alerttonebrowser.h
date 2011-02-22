@@ -31,6 +31,7 @@ class DrillDownItem;
 class AlertTonePreview;
 class AlertToneDefaults;
 class MApplicationPage;
+class MLabel;
 
 /*!
  * A compound widget that holds two buttons and a list widget. The two buttons
@@ -74,6 +75,7 @@ private:
     virtual void createContent();
 
     AlertTone                       *m_tone;
+    MLabel                          *m_TitleLabel;
     DrillDownItem                   *m_my_music;
     DrillDownItem                   *m_ovi_store;
 

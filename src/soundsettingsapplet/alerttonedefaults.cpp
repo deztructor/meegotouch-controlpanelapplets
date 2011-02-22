@@ -51,7 +51,7 @@ void
 MyListItem::setup()
 {
     setStyleName ("CommonPanelInverted");
-    titleLabelWidget()->setStyleName ("CommonTitleInverted");
+    titleLabelWidget()->setStyleName ("CommonSingleTitleInverted");
 }
 
 /******************************************************************************

@@ -18,9 +18,12 @@
 ****************************************************************************/
 #include "drilldownitem.h"
 
+#include <MContainer>
 #include <MLabel>
 #include <MImageWidget>
 #include <QGraphicsGridLayout>
+#include <QGraphicsLinearLayout>
+#include <MLinearLayoutPolicy>
 
 #define DEBUG
 #define WARNING
@@ -122,4 +125,53 @@ DrillDownItem::createLayout()
     setStyleName ("CommonPanelInverted");
     return layout;
 }
+
+/******************************************************************************
+ *
+ */
+MLabel *
+addTitleLabel (
+        QGraphicsWidget     *parent,
+        MLinearLayoutPolicy *targetPolicy,
+        const char          *panelStyleName,
+        const char          *labelStyleName)
+{
+    MContainer              *container;
+    QGraphicsLinearLayout   *layout;
+    MLabel                  *label;
+
+    label = new MLabel;
+    label->setStyleName (labelStyleName);
+
+    container = new MContainer (parent);
+    container->setContentsMargins (0., 0., 0., 0.);
+    container->setStyleName (panelStyleName);
+    container->setHeaderVisible (false);
+
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    layout->setContentsMargins (0., 0., 0., 0.);
+    layout->addItem (label);
+
+    container->centralWidget()->setLayout (layout);
+
+    targetPolicy->addItem (container);
+    return label;
+}
+
+MLabel *
+addTitleLabel (
+        QGraphicsWidget     *parent,
+        MLinearLayoutPolicy *targetPolicy,
+        const char          *labelStyleName)
+{
+    MLabel                  *label;
+
+    label = new MLabel;
+    label->setStyleName (labelStyleName);
+
+    targetPolicy->addItem (label);
+    return label;
+}
+
+
 

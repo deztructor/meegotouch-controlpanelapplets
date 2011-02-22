@@ -22,6 +22,9 @@
 #include <QObject>
 #include <MBasicListItem>
 
+class QGraphicsWidget;
+class MLinearLayoutPolicy;
+
 /*!
  * A simple list item widget that supports inverted theme and drill down icon at
  * the right hand side.
@@ -36,4 +39,18 @@ Q_OBJECT
     protected:
         virtual QGraphicsLayout *createLayout();
 };
+
+MLabel *
+addTitleLabel (
+        QGraphicsWidget     *parent,
+        MLinearLayoutPolicy *targetPolicy,
+        const char          *panelStyleName,
+        const char          *labelStyleName);
+
+MLabel *
+addTitleLabel (
+        QGraphicsWidget     *parent,
+        MLinearLayoutPolicy *targetPolicy,
+        const char          *labelStyleName);
+
 #endif 

@@ -25,6 +25,7 @@
 
 #include <QtTracker/Tracker>
 #include <QGraphicsLinearLayout>
+#include <MLabel>
 
 #ifdef HAVE_CONTENT_MANAGER
 #include <ContentItemsPage.h>
@@ -92,11 +93,19 @@ AlertToneBrowser::createContent()
     m_MainLayout->setSpacing (0.);
     setLayout (m_MainLayout);
 
+    /*
+     *
+     */
+    m_TitleLabel = new MLabel;
+    m_TitleLabel->setStyleName ("CommonApplicationHeaderInverted");
+    m_MainLayout->addItem (m_TitleLabel);
+
 #ifdef HAVE_CONTENT_MANAGER
     // "Pick from My Music"
     m_my_music = new DrillDownItem;
     m_my_music->setLayoutPosition (M::VerticalTopPosition);
-    m_my_music->imageWidget()->setImage("icon-l-music");
+    m_my_music->imageWidget()->setImage ("icon-l-music");
+    m_my_music->imageWidget()->setStyleName ("CommonMainIcon");
     m_my_music->setObjectName("MContentItem_pickFromMyMusic");
     m_MainLayout->addItem (m_my_music);
     connect (m_my_music, SIGNAL (clicked ()), SLOT (launchMusicBrowser ()));
@@ -105,7 +114,8 @@ AlertToneBrowser::createContent()
     // "Get more from Ovi store"
     m_ovi_store = new DrillDownItem;
     m_ovi_store->setLayoutPosition (M::VerticalBottomPosition);
-    m_ovi_store->imageWidget()->setImage("icon-m-common-ovi");
+    m_ovi_store->imageWidget()->setImage("icon-m-content-ovi-store-inverse");
+    m_ovi_store->imageWidget()->setStyleName ("CommonMainIcon");
     m_ovi_store->setObjectName("MContentItem_getMoreFromOviStore");
     m_MainLayout->addItem (m_ovi_store);
     connect (m_ovi_store, SIGNAL (clicked ()), SLOT (launchOviStore ()));
@@ -158,6 +168,9 @@ AlertToneBrowser::retranslateUi()
     m_my_music->setProperty ("title", qtTrId("qtn_sond_pick_music"));
 #endif
     m_ovi_store->setProperty("title", qtTrId("qtn_sond_store"));
+
+    if (m_TitleLabel)
+        m_TitleLabel->setText (qtTrId("qtn_sond_ringtones"));
 
     if (m_DoneAction)
         //% "Done"
