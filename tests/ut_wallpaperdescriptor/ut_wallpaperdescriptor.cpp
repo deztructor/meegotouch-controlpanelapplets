@@ -135,11 +135,11 @@ Ut_WallpaperDescriptor::testDefaults ()
     createDescriptor ();
 
     QVERIFY (m_Desc->m_Thumbnailer == NULL);
-    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Filename.isEmpty());
-    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Title.isEmpty());
-    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_MimeType.isEmpty());
-    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_HasThumbnail == false);
-    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Cached == false);
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_Filename.isEmpty());
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_Title.isEmpty());
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_MimeType.isEmpty());
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_HasThumbnail == false);
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_Cached == false);
     QVERIFY (m_Desc->isCurrent() == false);
     QVERIFY (m_Desc->version() == 0);
 
@@ -164,20 +164,20 @@ Ut_WallpaperDescriptor::testConstructors ()
      */
     WallpaperDescriptor desc1 ("/nodir/NoSuchFile.png");
     
-    QVERIFY (desc1.m_Images[WallpaperDescriptor::Landscape].filename() == "/nodir/NoSuchFile.png");
-    QVERIFY (desc1.m_Images[WallpaperDescriptor::Landscape].basename() == "NoSuchFile");
-    QVERIFY (desc1.m_Images[WallpaperDescriptor::Landscape].extension() == "png");
-    QVERIFY (desc1.m_Images[WallpaperDescriptor::Landscape].m_Url.toString() == "file:///nodir/NoSuchFile.png");
+    QVERIFY (desc1.m_Images[WallpaperDescriptor::Portrait].filename() == "/nodir/NoSuchFile.png");
+    QVERIFY (desc1.m_Images[WallpaperDescriptor::Portrait].basename() == "NoSuchFile");
+    QVERIFY (desc1.m_Images[WallpaperDescriptor::Portrait].extension() == "png");
+    QVERIFY (desc1.m_Images[WallpaperDescriptor::Portrait].m_Url.toString() == "file:///nodir/NoSuchFile.png");
 
     /*
      * Testing the copy constructor.
      */
     WallpaperDescriptor desc2 (desc1);
 
-    QVERIFY (desc2.m_Images[WallpaperDescriptor::Landscape].filename() == "/nodir/NoSuchFile.png");
-    QVERIFY (desc2.m_Images[WallpaperDescriptor::Landscape].basename() == "NoSuchFile");
-    QVERIFY (desc2.m_Images[WallpaperDescriptor::Landscape].extension() == "png");
-    QVERIFY (desc2.m_Images[WallpaperDescriptor::Landscape].m_Url.toString() == "file:///nodir/NoSuchFile.png");
+    QVERIFY (desc2.m_Images[WallpaperDescriptor::Portrait].filename() == "/nodir/NoSuchFile.png");
+    QVERIFY (desc2.m_Images[WallpaperDescriptor::Portrait].basename() == "NoSuchFile");
+    QVERIFY (desc2.m_Images[WallpaperDescriptor::Portrait].extension() == "png");
+    QVERIFY (desc2.m_Images[WallpaperDescriptor::Portrait].m_Url.toString() == "file:///nodir/NoSuchFile.png");
 }
 
 /*!
@@ -190,7 +190,7 @@ Ut_WallpaperDescriptor::testFilenames ()
     const QString myFilename ("/nodir/NoSuchFile.png");
 
     WallpaperDescriptor desc (myFilename);
-    QString original  = desc.originalImageFile(M::Landscape);
+    QString original  = desc.originalImageFile(M::Portrait);
     QString portrait  = desc.suggestedOutputFilename(M::Portrait);
     QString landscape = desc.suggestedOutputFilename(M::Landscape);
 
@@ -334,8 +334,8 @@ Ut_WallpaperDescriptor::testThumbnailingFailure ()
 
     QVERIFY (m_Desc->m_Thumbnailer != 0);
     QVERIFY (m_Desc->m_Thumbnailer->m_RequestCame);
-    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_MimeType == "image/png");
-    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].mimeType() == "image/png");
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_MimeType == "image/png");
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].mimeType() == "image/png");
 
     /*
      * Ok, now we emulate the case when the thumbnail creation is finished with
@@ -365,7 +365,7 @@ Ut_WallpaperDescriptor::testCache ()
      */
     pixmapLoadSuccess = true;
     m_Desc->cache();
-    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Cached);
+    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_Cached);
 
     /*
      * We have added some other combinations...
@@ -375,7 +375,7 @@ Ut_WallpaperDescriptor::testCache ()
      * Uncaching...
      */
     m_Desc->unCache();
-    QVERIFY (!m_Desc->m_Images[WallpaperDescriptor::Landscape].m_Cached);
+    QVERIFY (!m_Desc->m_Images[WallpaperDescriptor::Portrait].m_Cached);
 
     dropDescriptor ();
 }
