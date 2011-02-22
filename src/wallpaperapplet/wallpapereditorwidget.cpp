@@ -49,7 +49,7 @@ M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
 static const qreal ScaleLowerLimit = 0.15;
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -65,6 +65,7 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_DoneAction (0),
     m_CancelAction (0),
     m_NoTitlebar (false),
+    m_OrientationLocked (false),
     m_PinchOngoing (false),
     m_MotionOngoing (false),
     m_HasPendingRedraw (false)
@@ -97,6 +98,7 @@ WallpaperEditorWidget::WallpaperEditorWidget (
 
     if (win) {
         m_Orientation = win->orientation();
+        m_OrientationLocked = win->isOrientationLocked ();
         connect (win, SIGNAL(orientationChanged(M::Orientation)),
                 this, SLOT(orientationChanged(M::Orientation)));
     } else {
@@ -218,17 +220,18 @@ not_current_wallpaper:
         m_PortraitTrans : m_LandscapeTrans;
 
     /*
-     * Here is what we do when this is not the current image.
-     * If the image is very big the handling might be slow, so we scale it
-     * down.
+     * Here is what we do when this is not the current image.  If the image is
+     * very big the handling might be slow, so we scale it down.
      */
-    m_bgLandscape = desc->scaledImage (
-            m_LandscapeTrans.expectedSize(),
-            WallpaperDescriptor::Landscape);
+    if (supportsLandscape())
+        m_bgLandscape = desc->scaledImage (
+                m_LandscapeTrans.expectedSize(),
+                WallpaperDescriptor::Landscape);
 
-    m_bgPortrait = desc->scaledImage (
-           m_PortraitTrans.expectedSize(),
-           WallpaperDescriptor::Portrait);
+    if (supportsPortrait())
+        m_bgPortrait = desc->scaledImage (
+               m_PortraitTrans.expectedSize(),
+               WallpaperDescriptor::Portrait);
 
 
 finalize:
@@ -502,7 +505,7 @@ WallpaperEditorWidget::imageX () const
     retval += m_UserOffset.x();
     retval += m_Trans.x();
 
-    SYS_DEBUG ("returning %d", retval);
+    //SYS_DEBUG ("returning %d", retval);
     return retval;
 }
 
@@ -525,7 +528,7 @@ WallpaperEditorWidget::imageY () const
     retval += m_UserOffset.y();
     retval += m_Trans.y();
 
-    SYS_DEBUG ("returning %d", retval);
+    //SYS_DEBUG ("returning %d", retval);
     return retval;
 }
 
@@ -868,4 +871,17 @@ WallpaperEditorWidget::gestureWorkaround (
         *point = tmp;
     }
 }
+
+bool
+WallpaperEditorWidget::supportsLandscape () const
+{
+    return !m_OrientationLocked || m_Orientation == M::Landscape;
+}
+
+bool
+WallpaperEditorWidget::supportsPortrait () const
+{
+    return !m_OrientationLocked || m_Orientation == M::Portrait;
+}
+
 

@@ -45,13 +45,15 @@ BatteryBusinessLogic::BatteryBusinessLogic (
         QObject *parent)
     : QObject (parent),
     m_initialized (false),
+    m_battery (0),
+    m_devicemode (0),
     m_ChargingRate (-1),
     m_Charging (false)
 {
-    #ifdef HAVE_QMSYSTEM
-    m_battery    = new QmBattery (this);
-    m_devicemode = new QmDeviceMode (this);
-    #endif
+#ifdef HAVE_QMSYSTEM
+    m_battery    = new MeeGo::QmBattery (this);
+    m_devicemode = new MeeGo::QmDeviceMode (this);
+#endif
 }
 
 BatteryBusinessLogic::~BatteryBusinessLogic ()
@@ -170,8 +172,8 @@ BatteryBusinessLogic::setPSMValue (
     #ifdef HAVE_QMSYSTEM
     ret = m_devicemode->setPSMState (
         enabled ?
-        QmDeviceMode::PSMStateOn :
-        QmDeviceMode::PSMStateOff);
+        MeeGo::QmDeviceMode::PSMStateOn :
+        MeeGo::QmDeviceMode::PSMStateOff);
     #else
     /*
      * FIXME: To implement the setting of the power save mode without the help
@@ -197,7 +199,8 @@ BatteryBusinessLogic::PSMValue ()
     bool ret = false;
 
 #ifdef HAVE_QMSYSTEM
-    ret = (m_devicemode->getPSMState () == QmDeviceMode::PSMStateOn);
+    ret = (m_devicemode->getPSMState () ==
+           MeeGo::QmDeviceMode::PSMStateOn);
 #endif
 
     return ret;
@@ -294,7 +297,8 @@ void
 BatteryBusinessLogic::PSMStateChanged (
         MeeGo::QmDeviceMode::PSMState state)
 {
-    bool enabled = state == QmDeviceMode::PSMStateOn;
+    bool enabled =
+        state == MeeGo::QmDeviceMode::PSMStateOn;
     
     SYS_DEBUG ("Emitting PSMValueReceived (%s)", SYS_BOOL(enabled));
     emit PSMValueReceived (enabled);
@@ -388,12 +392,12 @@ void
 BatteryBusinessLogic::recalculateChargingInfo ()
 {
     #ifdef HAVE_QMSYSTEM
-    QmBattery::ChargingState chargingState;
-    QmBattery::BatteryState  batteryState;
-    QmBattery::ChargerType   chargerType;
-    bool                     charging;
-    bool                     couldBeCharging;
-    int                      chargingRate;
+    MeeGo::QmBattery::ChargingState chargingState;
+    MeeGo::QmBattery::BatteryState  batteryState;
+    MeeGo::QmBattery::ChargerType   chargerType;
+    bool                            charging;
+    bool                            couldBeCharging;
+    int                             chargingRate;
    
     chargerType = m_battery->getChargerType ();
     chargingState = m_battery->getChargingState ();
@@ -404,20 +408,20 @@ BatteryBusinessLogic::recalculateChargingInfo ()
      * charging indicator.
      */
     couldBeCharging =
-        chargingState == QmBattery::StateCharging &&
+        chargingState == MeeGo::QmBattery::StateCharging &&
         // This is actually not necessary, but we even check it in the unit
         // test. Just to be sure.
-        chargerType != QmBattery::None;
+        chargerType != MeeGo::QmBattery::None;
 
     charging = 
-        batteryState != QmBattery::StateFull &&
-        chargerType != QmBattery::None &&
-        chargingState != QmBattery::StateNotCharging &&
-        chargingState != QmBattery::StateChargingFailed;
+        batteryState != MeeGo::QmBattery::StateFull &&
+        chargerType != MeeGo::QmBattery::None &&
+        chargingState != MeeGo::QmBattery::StateNotCharging &&
+        chargingState != MeeGo::QmBattery::StateChargingFailed;
 
     chargingRate = 0;
     if (charging) 
-        chargingRate = chargerType == QmBattery::Wall ?
+        chargingRate = chargerType == MeeGo::QmBattery::Wall ?
             animation_rate_charging_wall : animation_rate_charging_usb;
 
     SYS_DEBUG ("*** charging       = %s", SYS_BOOL(charging));
@@ -446,7 +450,7 @@ BatteryBusinessLogic::recalculateChargingInfo ()
     SYS_DEBUG ("Emitting batteryBarValueReceived(%d)", batteryBarValue (-1));
     emit batteryBarValueReceived (batteryBarValue (-1));
 
-    if(batteryState == QmBattery::StateFull)
+    if(batteryState == MeeGo::QmBattery::StateFull)
     {
         emit batteryFull();
         return;
@@ -463,7 +467,31 @@ BatteryBusinessLogic::recalculateChargingInfo ()
     #endif
 }
 
-bool BatteryBusinessLogic::isCharging()
+bool
+BatteryBusinessLogic::isCharging()
 {
     return m_Charging;
 }
+
+BatteryBusinessLogic::Condition
+BatteryBusinessLogic::getCondition ()
+{
+    Condition ret = BUnknown;
+
+#ifdef HAVE_QMSYSTEM
+    switch (m_battery->getBatteryCondition ())
+    {
+        case MeeGo::QmBattery::ConditionGood:
+            ret = BGood;
+            break;
+        case MeeGo::QmBattery::ConditionPoor:
+            ret = BPoor;
+            break;
+        default:
+            break;
+    }
+#endif
+
+    return ret;
+}
+

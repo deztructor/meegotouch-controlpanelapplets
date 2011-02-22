@@ -24,6 +24,9 @@
 #define WARNING
 #include "../debug.h"
 
+#include <MWidgetCreator>
+M_REGISTER_WIDGET_NO_CREATE(AlertToneVolume)
+
 AlertToneVolume::AlertToneVolume(QGraphicsItem *parent):
 	MSlider(parent),
 	m_fileName(QString(ALERT_TONE_VOLUME_FILE_KEY)),
@@ -33,7 +36,7 @@ AlertToneVolume::AlertToneVolume(QGraphicsItem *parent):
 	QList<QVariant> range;
 	QProfileValue::RangeType rt;
 
-    setStyleName ("CommonSlider");
+    setStyleName ("CommonSliderInverted");
 
 	range = m_volume.possibleValues(&rt);
 	if (rt != QProfileValue::Interval)

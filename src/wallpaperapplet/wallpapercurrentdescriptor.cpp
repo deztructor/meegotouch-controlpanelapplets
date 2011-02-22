@@ -25,8 +25,8 @@
 
 #include <mdesktopentry.h>
 
+#define DEBUG
 #define WARNING
-//#define DEBUG
 #include "../debug.h"
 
 WallpaperCurrentDescriptor *WallpaperCurrentDescriptor::sm_Instance = 0;
@@ -107,7 +107,8 @@ WallpaperCurrentDescriptor::setFromDesktopFile (
         const QString &landscapeFileName,
         const QString &portraitFileName)
 {
-    QString        value, value1;
+    bool           success1, success2;
+    QString        value1, value2;
     qreal          rval;
     bool           retval = false;
 
@@ -123,41 +124,44 @@ WallpaperCurrentDescriptor::setFromDesktopFile (
      * orientation.
      * We should compare these with the values stored in the gconf database.
      */
-    if (!getValue(landscapeGroupKey, editedFilenameKey, value) ||
-            !getValue(portraitGroupKey, editedFilenameKey, value1)) {
+    success1 = getValue(portraitGroupKey, editedFilenameKey, value1);
+    success2 = getValue(landscapeGroupKey, editedFilenameKey, value2);
+    if (!success1 && !success2) {
         goto finalize;
     }
+
     /*
      * If the filenames are provided we check the desktop file data against
-     * them.
+     * them. Even if we support only one orientation one of the filenames must
+     * match.
      */
-    if (checkFilenames && landscapeFileName != value)
-        goto finalize;
-
-    if (checkFilenames && portraitFileName != value1)
-        goto finalize;
-
-    setFilename (value, WallpaperDescriptor::Landscape);
+    if (checkFilenames) {
+        if (landscapeFileName != value1 &&
+                portraitFileName != value2)
+            goto finalize;
+    }
+    
     setFilename (value1, WallpaperDescriptor::Portrait);
+    setFilename (value2, WallpaperDescriptor::Landscape);
 
     /*
      * FIXME: Still no support for separate files in the parent class...
      */
-    setFilename (value);
-    setUrl ("file://" + value);
+    setFilename (value1.isEmpty() ? value2 : value1);
+    setUrl ("file://" + (value1.isEmpty() ? value2 : value1));
 
     /*
      * MimeType. FIXME: This should not depend on the orientation?
      */
-    if (getValue(landscapeGroupKey, mimeTypeKey, value)) {
-        setMimeType (value);
+    if (getValue(landscapeGroupKey, mimeTypeKey, value1)) {
+        setMimeType (value1);
     }
 
     /*
      * The name. This actually is all right.
      */
-    if (getValue(mainGroupKey, nameKey, value)) {
-        setTitle (value);
+    if (getValue(mainGroupKey, nameKey, value1)) {
+        setTitle (value1);
     }
     
     /*
@@ -166,11 +170,11 @@ WallpaperCurrentDescriptor::setFromDesktopFile (
     if (getValue(mainGroupKey, versionKey, &rval))
         m_Version = (int) rval;
 
-    getValue (landscapeGroupKey, originalFilenameKey, value);
-    setFilename (value, WallpaperDescriptor::OriginalLandscape);
+    getValue (landscapeGroupKey, originalFilenameKey, value1);
+    setFilename (value1, WallpaperDescriptor::OriginalLandscape);
 
-    getValue (portraitGroupKey, originalFilenameKey, value);
-    setFilename (value, WallpaperDescriptor::OriginalPortrait);
+    getValue (portraitGroupKey, originalFilenameKey, value1);
+    setFilename (value1, WallpaperDescriptor::OriginalPortrait);
 
     getValue (landscapeGroupKey, m_LandscapeTrans);
     getValue (portraitGroupKey, m_PortraitTrans);
@@ -191,30 +195,17 @@ WallpaperCurrentDescriptor::setFromFilenames  (
             QString     landscapeFile,
             QString     portraitFile)
 {
-    QFile *lFile;
     bool retval = false;
 
     SYS_DEBUG ("*** landscapeFile = %s", SYS_STR(landscapeFile));
     SYS_DEBUG ("*** portraitFile  = %s", SYS_STR(portraitFile));
-    
-    if (landscapeFile.isEmpty() ||
-            portraitFile.isEmpty() ||
-            !landscapeFile.startsWith("/") ||
-            !portraitFile.startsWith("/"))
+   
+    if (!landscapeFile.isEmpty() && !landscapeFile.startsWith("/"))
         goto finalize;
 
-#if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
-#  warning This should be stubbed or something
-    Q_UNUSED (lFile);
-#else
-    lFile  = new QFile(landscapeFile);
-    if (!lFile->exists()) {
-        SYS_WARNING ("File %s does not exists.", SYS_STR(landscapeFile));
-        delete lFile;
+    if (!portraitFile.isEmpty() && !portraitFile.startsWith("/"))
         goto finalize;
-    }
-    delete lFile;
-#endif
+
 
     m_LandscapeTrans = WallpaperITrans();
     m_PortraitTrans = WallpaperITrans();
@@ -245,26 +236,30 @@ WallpaperCurrentDescriptor::setFromIDs  (
     /*
      * Hack, as nowadays only portrait mode image ids are pre-set...
      */
-    if (landscapeID.isEmpty())
-        landscapeID = portraitID;
+    //if (landscapeID.isEmpty())
+    //    landscapeID = portraitID;
 
     if (landscapeID.isEmpty () && portraitID.isEmpty ())
         goto finalize;
 
-    if (landscapeID.startsWith("/")) {
-        setFilename (landscapeID, WallpaperDescriptor::Landscape);
-        setFilename (landscapeID, WallpaperDescriptor::OriginalLandscape);
-    } else {
-        setImageID (landscapeID, WallpaperDescriptor::Landscape);
-        setImageID (landscapeID, WallpaperDescriptor::OriginalLandscape);
+    if (!landscapeID.isEmpty()) {
+        if (landscapeID.startsWith("/")) {
+            setFilename (landscapeID, WallpaperDescriptor::Landscape);
+            setFilename (landscapeID, WallpaperDescriptor::OriginalLandscape);
+        } else {
+            setImageID (landscapeID, WallpaperDescriptor::Landscape);
+            setImageID (landscapeID, WallpaperDescriptor::OriginalLandscape);
+        }
     }
 
-    if (portraitID.startsWith("/")) {
-        setFilename (landscapeID, WallpaperDescriptor::Portrait);
-        setFilename (landscapeID, WallpaperDescriptor::OriginalPortrait);
-    } else {
-        setImageID (portraitID, WallpaperDescriptor::Portrait);
-        setImageID (portraitID, WallpaperDescriptor::OriginalPortrait);
+    if (!portraitID.isEmpty()) {
+        if (portraitID.startsWith("/")) {
+            setFilename (portraitID, WallpaperDescriptor::Portrait);
+            setFilename (portraitID, WallpaperDescriptor::OriginalPortrait);
+        } else {
+            setImageID (portraitID, WallpaperDescriptor::Portrait);
+            setImageID (portraitID, WallpaperDescriptor::OriginalPortrait);
+        }
     }
 
     m_Valid = true;
@@ -371,7 +366,6 @@ WallpaperCurrentDescriptor::getValue (
 
     value = m_DesktopEntry->value (fullKey);
     if (value.isEmpty()) {
-        SYS_WARNING ("The key %s is not set.", SYS_STR(fullKey));
         value = "";
     } else {
         retval = true;
@@ -399,26 +393,17 @@ WallpaperCurrentDescriptor::getValue (
 
     retval = getValue (group, horOffsetKey, &rval1);
     if (!retval) {
-        SYS_WARNING ("Key not found %s/%s", 
-                SYS_STR(group), 
-                SYS_STR(horOffsetKey));
         return retval;
     }
     
     retval = getValue (group, vertOffsetKey, &rval2);
     if (!retval) {
-        SYS_WARNING ("Key not found %s/%s", 
-                SYS_STR(group), 
-                SYS_STR(vertOffsetKey));
         return retval;
     }
     value.setOffset (QPointF(rval1, rval2));
     
     retval = getValue (group, scaleKey, &rval1);
     if (!retval) {
-        SYS_WARNING ("Key not found %s/%s", 
-                SYS_STR(group), 
-                SYS_STR(scaleKey));
         return retval;
     }
     value.setScale (rval1);
@@ -438,7 +423,6 @@ WallpaperCurrentDescriptor::getValue (
     QString sValue;
 
     if (!getValue(group, key, sValue)) {
-        SYS_WARNING ("Key %s/%s not found.", SYS_STR(group), SYS_STR(key));
         *value = 0.0;
         return false;
     }

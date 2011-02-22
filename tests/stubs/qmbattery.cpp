@@ -210,3 +210,10 @@ QmBattery::ChargingStateName (
 
     return "NOSUUCHCHARGINGSTATE";
 }
+
+QmBattery::BatteryCondition
+QmBattery::getBatteryCondition () const
+{
+    return QmBattery::ConditionPoor;
+}
+
