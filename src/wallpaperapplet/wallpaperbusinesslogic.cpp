@@ -57,6 +57,7 @@
 
 //#define LOTDEBUG
 //#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -373,6 +374,9 @@ WallpaperBusinessLogic::startEdit (
         return;
     }
 
+    if (threadActive) {
+        return;
+    }
 
     /*
      * If we already have and image we are editing and the user clicks on an
@@ -380,15 +384,8 @@ WallpaperBusinessLogic::startEdit (
      * one. This is kind a cosmetic fix since we should abort the other thread.
      */
     if (desc && m_EditedImage && desc != m_EditedImage) {
-        SYS_WARNING ("We have an edited image already?");
-        m_EditedImage->setLoading (false);
-    }
-
-    /*
-     * FIXME: We have a thread already, but we can't stop it from here...
-     */
-    if (threadActive) {
-        SYS_WARNING ("The loader thread is active?");
+        SYS_DEBUG ("We have an edited image already.");
+        return;
     }
 
     /*
@@ -818,15 +815,23 @@ void
 WallpaperBusinessLogic::addImageFromGallery(
         QString uri)
 {
-    QString filename = trackerIdToFilename(uri);
-    WallpaperDescriptor *desc = new WallpaperDescriptor;
+    QString filename; 
+    WallpaperDescriptor *desc;
+    
+    if (m_EditedImage) {
+        SYS_DEBUG ("We have an edited image already...");
+        return;
+    }
+
+    filename = trackerIdToFilename(uri);
+    desc = new WallpaperDescriptor;
 
     desc->setFilename (filename, WallpaperDescriptor::Landscape);
     desc->setFilename (filename, WallpaperDescriptor::Portrait);
-
-    setEditedImage (desc, false);
-    SYS_DEBUG ("Emitting imageEditRequested()");
-    emit imageEditRequested ();
+    
+    setEditedImage (desc, true);
+    startEdit ();
+    //emit imageEditRequested ();
 }
 
 void
