@@ -5,6 +5,10 @@ meegotouch-controlpanelapplets (0.20.18~1) meegotouch; urgency=low
   * Fixes: NB#213666 -Concurrent Application Functions:
     Unable to preview ringtone during playing music.
 
+  [Laszlo Pere]
+  * Fixes: NB#229380 - Tough the wallpaper is set in portrait the thumbnail of
+    the image is seen in landscape.
+
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 21 Feb 2011 15:30:09 +0100
 
 meegotouch-controlpanelapplets (0.20.17-4) meegotouch; urgency=low
