@@ -32,7 +32,8 @@
 DrillDownItem::DrillDownItem (
         MBasicListItem::ItemStyle  style, 
         QGraphicsItem             *parent) : 
-    MBasicListItem (style, parent)
+    MBasicListItem (style, parent),
+    m_TitleStyleName ("CommonTitleInverted")
 {
 }
 
@@ -56,7 +57,7 @@ DrillDownItem::createLayout()
     drillIconWidget = new MImageWidget ("icon-m-common-drilldown-arrow-inverse");
     drillIconWidget->setStyleName ("CommonDrillDownIcon");
 
-    titleLabel->setStyleName("CommonTitleInverted");
+    titleLabel->setStyleName(m_TitleStyleName);
     subTitleLabel->setStyleName("CommonSubTitleInverted");
 
     switch (itemStyle()) {
@@ -124,6 +125,13 @@ DrillDownItem::createLayout()
 
     setStyleName ("CommonPanelInverted");
     return layout;
+}
+
+void 
+DrillDownItem::setTitleStyleName (
+        const QString &styleName)
+{
+    m_TitleStyleName = styleName;
 }
 
 /******************************************************************************

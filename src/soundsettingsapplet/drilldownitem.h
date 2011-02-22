@@ -36,8 +36,14 @@ Q_OBJECT
         DrillDownItem (
                 MBasicListItem::ItemStyle style = IconWithTitle, 
                 QGraphicsItem             *parent = NULL);
+
+        void setTitleStyleName (const QString &styleName);
+
     protected:
         virtual QGraphicsLayout *createLayout();
+
+    private:
+        QString m_TitleStyleName;
 };
 
 MLabel *
