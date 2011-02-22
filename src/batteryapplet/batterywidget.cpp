@@ -477,23 +477,14 @@ BatteryWidget::addBatteryConditionWidget ()
 
     switch (m_logic->getCondition ())
     {
-        case BatteryBusinessLogic::BExcellent:
-            //% "Excellent"
-            valueLabel->setText (qtTrId ("qtn_ener_condition_excellent"));
-            break;
         case BatteryBusinessLogic::BGood:
+        case BatteryBusinessLogic::BUnknown:
             //% "Good"
             valueLabel->setText (qtTrId ("qtn_ener_condition_good"));
             break;
         case BatteryBusinessLogic::BPoor:
             //% "Poor"
             valueLabel->setText (qtTrId ("qtn_ener_condition_poor"));
-            break;
-        case BatteryBusinessLogic::BUnknown:
-        case BatteryBusinessLogic::BFair:
-        default:
-            //% "Fair"
-            valueLabel->setText (qtTrId ("qtn_ener_condition_fair"));
             break;
     }
 

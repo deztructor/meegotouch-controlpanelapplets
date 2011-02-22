@@ -45,9 +45,7 @@ public:
     ~BatteryBusinessLogic ();
 
     typedef enum {
-        BExcellent,
         BGood,
-        BFair,
         BPoor,
         BUnknown
     } Condition;
