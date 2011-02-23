@@ -160,4 +160,3 @@ SysDebug::sysPrintMsg (
     fprintf(stdout, "\n");
     fflush (stdout);
 }
-

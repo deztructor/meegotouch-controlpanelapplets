@@ -23,8 +23,8 @@
 #define DEFAULT_RINGTONE_PATH1 "/usr/share/sounds/ring-tones"
 #define DEFAULT_RINGTONE_PATH2 "/usr/share/sounds/short-tones"
 
-#define ALERT_TONE_VOLUME_FILE_KEY   "ringing.alert.tone"
-#define ALERT_TONE_VOLUME_VOLUME_KEY "ringing.alert.volume"
+#define ALERT_TONE_VOLUME_FILE_KEY   "ringing.alert.tone@general"
+#define ALERT_TONE_VOLUME_VOLUME_KEY "ringing.alert.volume@general"
 #define ALERT_TONE_VOLUME_N_STEPS    10
 
 #endif /* !_DEFINES_H_ */
