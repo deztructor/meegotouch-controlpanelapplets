@@ -3,13 +3,16 @@ meegotouch-controlpanelapplets (0.20.19~1) meegotouch; urgency=low
   [Laszlo Pere]
   * Fixes: NB#228108 - Sound settings select sound page list item labels use 
     wrong style
-  * Fixes: NB228444 - Specific sound setting view is not in accordance with 
+  * Fixes: NB#228444 - Specific sound setting view is not in accordance with 
     UI specification
+
+  [David Kedves]
+  * Fixes: NB#Bug 199460 - Customized ringtones not appeared on soundsettings
 
   [Gabriel Schulhof]
   * Fixes: 223196 - SMS alert tone doesn't obey Profile setting
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 22 Feb 2011 13:41:33 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 23 Feb 2011 12:51:48 +0100
 
 meegotouch-controlpanelapplets (0.20.18-1) meegotouch; urgency=low
 

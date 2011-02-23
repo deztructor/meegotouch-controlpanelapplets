@@ -193,31 +193,6 @@ AlertToneAppletWidget::createFeedbackList(QGraphicsWidget *parent)
 	return container;
 }
 
-MContainer *
-AlertToneAppletWidget::createAlertTonePreview(
-        QGraphicsWidget *parent)
-{
-    MContainer            *sliderContainer;
-    QGraphicsLinearLayout *sliderLayout;
-    AlertToneVolume       *slider;
-
-    slider = new AlertToneVolume(parent);
-
-    sliderContainer = new MContainer;
-    sliderContainer->setStyleName ("CommonLargePanelInverted");
-    sliderContainer->setObjectName ("AlertTonePreview");
-    sliderContainer->setHeaderVisible (false);
-
-    sliderLayout = new QGraphicsLinearLayout (Qt::Horizontal);
-
-    sliderLayout->addStretch ();
-    sliderLayout->addItem (slider);
-    sliderLayout->addStretch ();
-    sliderLayout->setAlignment (slider, Qt::AlignHCenter);
-
-    sliderContainer->centralWidget()->setLayout (sliderLayout);
-    return sliderContainer;
-}
 
 MContainer *
 AlertToneAppletWidget::createAlertTonesList(QGraphicsWidget *parent)
@@ -226,6 +201,7 @@ AlertToneAppletWidget::createAlertTonesList(QGraphicsWidget *parent)
 	MLinearLayoutPolicy *policy;
 	QGraphicsWidget *centralWidget;
 	AlertToneWidget *alertToneWidget;
+    AlertToneVolume       *slider;
 
 	container = createEmptyContainer(parent, &policy, &centralWidget);
 
@@ -233,7 +209,8 @@ AlertToneAppletWidget::createAlertTonesList(QGraphicsWidget *parent)
      * According to the UI spec and NB#189565 the slider goes into this
      * container.
      */
-    policy->addItem(createAlertTonePreview(centralWidget));
+    slider = new AlertToneVolume (centralWidget);
+    policy->addItem (slider);
 
     /*
      * And then the list...

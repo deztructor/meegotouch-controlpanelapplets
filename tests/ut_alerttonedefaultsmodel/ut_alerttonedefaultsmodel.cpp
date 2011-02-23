@@ -28,7 +28,6 @@ Ut_AlertToneDefaultsModelTests::initTestCase()
       dir.mkdir ( "complex" );
       createFiles (filesCount2,65,".aac","complex/loadItems");
       
-      createFiles (filesCount2,97,".aac","lowercase");
       createFiles (filesCount2,48,".aac","numbers");
       createFiles (filesCount2,65,".zer","noAcc");
        
@@ -42,7 +41,6 @@ Ut_AlertToneDefaultsModelTests::cleanupTestCase()
       /* load items */
      removeFiles (filesCount1,65,".aac","loadItems");
      removeFiles (filesCount2,65,".aac","complex/loadItems"); 
-     removeFiles (filesCount2,97,".aac","lowercase");
      removeFiles (filesCount2,48,".aac","numbers");
      removeFiles (filesCount2,65,".zer","noAcc");
      
@@ -157,13 +155,6 @@ Ut_AlertToneDefaultsModelTests::alerttonedefaultsmodelAddSingleItem()
       QVERIFY (!atdm.rowCount());
       
       clearData (atdm);
-      atdm.m_dirStack.push(QDir("./lowercase"));
-	atdm.m_dirIdx.push(0); 
-      while (!atdm.m_isFinished)
-      {
-            atdm.addSingleItem();
-      }
-      QVERIFY (!atdm.rowCount());
 }
 
 QTEST_APPLESS_MAIN(Ut_AlertToneDefaultsModelTests)
