@@ -6,7 +6,10 @@ meegotouch-controlpanelapplets (0.20.19~1) meegotouch; urgency=low
   * Fixes: NB#228444 - Specific sound setting view is not in accordance with 
     UI specification
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 22 Feb 2011 13:41:33 +0100
+  [David Kedves]
+  * Fixes: NB#Bug 199460 - Customized ringtones not appeared on soundsettings
+
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 23 Feb 2011 12:51:48 +0100
 
 meegotouch-controlpanelapplets (0.20.18-1) meegotouch; urgency=low
 
