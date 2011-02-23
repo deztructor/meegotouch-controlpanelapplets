@@ -35,16 +35,16 @@
 #include "../debug.h"
 
 AlertToneDefaultsModel::AlertToneDefaultsModel() : QStandardItemModel(),
-	m_isFinished(false)
+    m_isFinished(false)
 {
-	insertColumn(NiceNameColumn);
-	insertColumn(FullPathColumn);
-	insertColumn(ForcedColumn);
+    insertColumn(NiceNameColumn);
+    insertColumn(FullPathColumn);
+    insertColumn(ForcedColumn);
 
-	m_dirStack.push(QDir(DEFAULT_RINGTONE_PATH1));
-	m_dirIdx.push(0);
-	m_dirStack.push(QDir(DEFAULT_RINGTONE_PATH2));
-	m_dirIdx.push(0);
+    m_dirStack.push(QDir(DEFAULT_RINGTONE_PATH1));
+    m_dirIdx.push(0);
+    m_dirStack.push(QDir(DEFAULT_RINGTONE_PATH2));
+    m_dirIdx.push(0);
 
     /*
      * Creatig a file system watcher.
@@ -66,9 +66,9 @@ AlertToneDefaultsModel::AlertToneDefaultsModel() : QStandardItemModel(),
      * We need to give the UI a chance to process the tap events, but we also
      * want to be as fast as possible... this is not a perfect solution though.
      */
-	QTimer::singleShot(0, this, SLOT(addSingleItem()));
+    QTimer::singleShot(0, this, SLOT(addSingleItem()));
     #else 
-	while (!m_isFinished)
+    while (!m_isFinished)
         addSingleItem();
     #endif
 }
@@ -77,7 +77,7 @@ void
 AlertToneDefaultsModel::addSingleItem()
 {
     SYS_DEBUG ("*** m_isFinished = %s", SYS_BOOL(m_isFinished));
-	if (m_isFinished) 
+    if (m_isFinished) 
         return;
 
     while (m_dirStack.count() > 0) {
@@ -93,7 +93,7 @@ AlertToneDefaultsModel::addSingleItem()
         m_isFinished = true;
         emit finished();
         return;
-	} 
+    } 
 
     #if 1
     SYS_DEBUG ("*** path        = %s", 
@@ -107,14 +107,18 @@ AlertToneDefaultsModel::addSingleItem()
         QString fullPath = m_dirStack.top().absolutePath() + 
                 QDir::separator() + m_dirStack.top()[m_dirIdx.top()];
 
-		QDir subdir(fullPath);
+        QDir subdir(fullPath);
 
-		if (subdir.count() > 0) {
-			m_dirStack.push(subdir);
-			m_dirIdx.push(0);
-                /* A fairly arbitrary filter: File ends in .aac or .mp3, and, if it starts with a letter, that letter is a capital */
-		} else if ((m_dirStack.top()[m_dirIdx.top()].right(4) == ".aac" || m_dirStack.top()[m_dirIdx.top()].right(4) == ".mp3") &&
-					m_dirStack.top()[m_dirIdx.top()].left(1) == m_dirStack.top()[m_dirIdx.top()].left(1).toUpper()) {
+        if (subdir.count() > 0)
+        {
+            m_dirStack.push(subdir);
+            m_dirIdx.push(0);
+        }
+        else if (m_dirStack.top()[m_dirIdx.top()].right(4).toLower () == ".aac" ||
+                 m_dirStack.top()[m_dirIdx.top()].right(4).toLower () == ".mp3" ||
+                 m_dirStack.top()[m_dirIdx.top()].right(4).toLower () == ".wma" ||
+                 m_dirStack.top()[m_dirIdx.top()].right(4).toLower () == ".wav")
+        {
             QString niceName = 
                 TrackerConnection::instance()->niceNameFromFileName (fullPath);
             SYS_DEBUG ("calling niceNameFromFileName()");
