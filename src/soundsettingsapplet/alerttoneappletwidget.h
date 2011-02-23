@@ -37,7 +37,6 @@ private:
 	virtual void retranslateUi();
 	MContainer *createAlertTonesList(QGraphicsWidget *parent);
 	MContainer *createFeedbackList(QGraphicsWidget *parent);
-	MContainer *createAlertTonePreview(QGraphicsWidget *parent);
 
 	QList<AlertTone *>  m_alertTones;
 	MContainer         *m_tones;
