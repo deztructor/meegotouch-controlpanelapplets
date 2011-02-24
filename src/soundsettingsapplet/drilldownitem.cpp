@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -172,6 +172,7 @@ addTitleLabel (
         MLinearLayoutPolicy *targetPolicy,
         const char          *labelStyleName)
 {
+    Q_UNUSED (parent);
     MLabel                  *label;
 
     label = new MLabel;

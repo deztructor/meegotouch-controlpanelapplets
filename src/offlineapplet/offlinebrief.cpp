@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -20,9 +20,10 @@
 #include "offlinebrief.h"
 
 #include <DcpWidgetTypes>
-#include <MNotification>
+#include <MInfoBanner>
 #include <MMessageBox>
 #include <MLabel>
+#include <QTimer>
 
 #undef DEBUG
 #include "../debug.h"
@@ -110,11 +111,14 @@ OfflineBrief::setToggle (
     {
         if (m_DevMode->setMode(QmDeviceMode::Flight))
         {
-            SYS_DEBUG ("Show the Notification");
+            MInfoBanner *infoBanner = new MInfoBanner (MInfoBanner::Information);
+
             //% "Closing all connections. Switching to offline mode."
-            MNotification banner (MNotification::NetworkDisconnectedEvent,
-                                  qtTrId ("qtn_offl_entering"));
-            banner.publish ();
+            infoBanner->setBodyText (QString ("<p>") +
+                                     qtTrId ("qtn_offl_entering") +
+                                     QString ("</p>"));
+            infoBanner->appear (MSceneWindow::DestroyWhenDone);
+            QTimer::singleShot (3000, infoBanner, SLOT (disappear ()));
         }
     }
     #endif

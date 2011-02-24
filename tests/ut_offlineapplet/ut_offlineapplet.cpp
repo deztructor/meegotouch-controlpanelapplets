@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -23,7 +23,7 @@
 #include <MMessageBox>
 #include <MDialog>
 #include <MApplication>
-#include <MNotification>
+#include <MInfoBanner>
 
 #include "offlineapplet.h"
 #include "offlinebrief.h"
@@ -79,31 +79,20 @@ MDialog::appear (MSceneWindow::DeletionPolicy policy)
  * Stub for MNotification
  */
 static QString mbannerSubtitle;
-static bool mbannerAppereance;
 
-MNotification::MNotification (
-    const QString &eventType,
-    const QString &summary,
-    const QString &body)
+MInfoBanner::MInfoBanner (BannerType type)
 {
-    SYS_DEBUG ("");
-    Q_UNUSED (eventType);
-    Q_UNUSED (body);
-    mbannerSubtitle = summary;
+    Q_UNUSED (type);
 }
 
-MNotification::~MNotification ()
+MInfoBanner::~MInfoBanner ()
 {
-
 }
 
-bool
-MNotification::publish ()
+void
+MInfoBanner::setBodyText (const QString &text)
 {
-    SYS_DEBUG ("");
-    mbannerAppereance = true;
-
-    return true;
+    mbannerSubtitle = text;
 }
 
 /******************************************************************************
@@ -115,7 +104,6 @@ Ut_OfflineApplet::init()
     mmessageBoxText = "";
     mmessageBoxApereance = false;
     mbannerSubtitle = "";
-    mbannerAppereance = false;
 }
 
 void
@@ -278,8 +266,7 @@ Ut_OfflineApplet::testBriefSetToggle ()
 
     // This should not change the text
     brief->setToggle(true);
-    QVERIFY (mbannerAppereance);
-    QCOMPARE (mbannerSubtitle, qtTrId("qtn_offl_entering"));
+    QCOMPARE (mbannerSubtitle, QString ("<p>") + qtTrId("qtn_offl_entering") + "</p>");
 
     QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
     QCOMPARE (gQmDeviceModeStub->stubCallCount("setMode"), 1);

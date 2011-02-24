@@ -1,5 +1,23 @@
-/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
-/* vim:set et sw=4 ts=4 sts=4: */
+/****************************************************************************
+**
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (directui@nokia.com)
+**
+** This file is part of meegotouch-controlpanelapplets.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at directui@nokia.com.
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation
+** and appearing in the file LICENSE.LGPL included in the packaging
+** of this file.
+**
+****************************************************************************/
+#include "ut_alerttonepreview.h"
+#include "alerttonepreview.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -7,20 +25,15 @@
 #include <MApplicationWindow>
 #include <QString>
 #include <QStringList>
-#include  "ut_alerttonepreview.h"
-#include  "alerttonepreview.h"
 
 #include "qprofilevalue.h"
-
-#ifdef HAVE_LIBRESOURCEQT
-#include <policy/resource-set.h>
-#endif
 
 /******************************************************************************
  * Stubs
  */
 
 #ifdef HAVE_LIBRESOURCEQT
+#include <policy/resource-set.h>
 namespace ResourcePolicy {
 //ResourceSet::ResourceSet(const QString &applicationClass, QObject *parent)
 //{
@@ -116,7 +129,7 @@ Ut_AlertTonePreviewTests::alerttonepreviewConstructor ()
       QVERIFY(atp.m_gstPipeline != 0 );
       QVERIFY(atp.m_gstFilesrc != 0 );
       QVERIFY(atp.m_gstVolume != 0 );
-      QCOMPARE(atp.m_profileVolume.key(), QString( "ringing.alert.volume" ));
+      QCOMPARE(atp.m_profileVolume.key(), QString( "ringing.alert.volume@general" ));
 }
 
 void

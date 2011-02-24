@@ -22,7 +22,9 @@ private slots:
       void alerttoneappletwidgetConstructor();
       void alerttoneappletwidgetRetranslateUi();
       void alerttoneappletwidgetCreateContent();
+#if 0
       void alerttoneappletwidgetCreateAlertTonesList();
+#endif
       void alerttoneappletwidgetCreateFeedbackList();
 private:
       MApplication * m_App;

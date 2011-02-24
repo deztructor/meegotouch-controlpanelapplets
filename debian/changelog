@@ -8,12 +8,14 @@ meegotouch-controlpanelapplets (0.20.19~1) meegotouch; urgency=low
   * Fixes: NB#228102 - Sounds and feedback settings uses wrong styles and icons 
 
   [David Kedves]
-  * Fixes: NB#Bug 199460 - Customized ringtones not appeared on soundsettings
+  * Fixes: NB#199460 - Customized ringtones not appeared on soundsettings
+  * Fixes: NB#228457 - Offline button shows Event banner instead of
+    Information banner
 
   [Gabriel Schulhof]
   * Fixes: 223196 - SMS alert tone doesn't obey Profile setting
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 23 Feb 2011 12:51:48 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 24 Feb 2011 12:15:19 +0100
 
 meegotouch-controlpanelapplets (0.20.18-1) meegotouch; urgency=low
 
