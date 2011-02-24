@@ -15,7 +15,7 @@ meegotouch-controlpanelapplets (0.20.19~1) meegotouch; urgency=low
   [Gabriel Schulhof]
   * Fixes: 223196 - SMS alert tone doesn't obey Profile setting
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 24 Feb 2011 11:07:53 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 24 Feb 2011 12:15:19 +0100
 
 meegotouch-controlpanelapplets (0.20.18-1) meegotouch; urgency=low
 
