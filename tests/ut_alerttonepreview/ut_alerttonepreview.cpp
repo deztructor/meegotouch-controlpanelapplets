@@ -116,7 +116,7 @@ Ut_AlertTonePreviewTests::alerttonepreviewConstructor ()
       QVERIFY(atp.m_gstPipeline != 0 );
       QVERIFY(atp.m_gstFilesrc != 0 );
       QVERIFY(atp.m_gstVolume != 0 );
-      QCOMPARE(atp.m_profileVolume.key(), QString( "ringing.alert.volume" ));
+      QCOMPARE(atp.m_profileVolume.key(), QString( "ringing.alert.volume@general" ));
 }
 
 void

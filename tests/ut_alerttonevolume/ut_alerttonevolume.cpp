@@ -35,8 +35,8 @@ Ut_AlertToneVolumeTests::alerttonevolumeConstructor ()
       MApplicationWindow aw;
       AlertToneVolume   atv;
 
-      QCOMPARE(atv.m_fileName.key() ,QString ("ringing.alert.tone") );
-      QCOMPARE(atv.m_volume.key()   ,QString ("ringing.alert.volume") );
+      QCOMPARE(atv.m_fileName.key() ,QString ("ringing.alert.tone@general") );
+      QCOMPARE(atv.m_volume.key()   ,QString ("ringing.alert.volume@general") );
 }
 
 void

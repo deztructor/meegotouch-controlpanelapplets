@@ -139,6 +139,7 @@ Ut_AlertToneAppletWidgetTests::alerttoneappletwidgetCreateContent()
       QCOMPARE( ataw.m_alertTones.size(), 5);
 }
 
+#if 0
 void
 Ut_AlertToneAppletWidgetTests::alerttoneappletwidgetCreateAlertTonesList()
 {
@@ -175,6 +176,8 @@ Ut_AlertToneAppletWidgetTests::alerttoneappletwidgetCreateAlertTonesList()
     }
 
 }
+#endif
+
 #include  "profileintcombo.h"
 void
 Ut_AlertToneAppletWidgetTests::alerttoneappletwidgetCreateFeedbackList()

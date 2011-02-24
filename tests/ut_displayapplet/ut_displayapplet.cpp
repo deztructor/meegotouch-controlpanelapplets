@@ -128,6 +128,3 @@ Ut_DisplayApplet::testConstructbrief ()
 
 QTEST_APPLESS_MAIN(Ut_DisplayApplet)
 
-
-
-

@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "ut_displaywidget.h"
 #include "displaywidget.h"
 
@@ -52,7 +51,7 @@ MGConfItem::value () const
     SYS_DEBUG ("*** key() = %s", SYS_STR(key()));
 
     if (key() == "/meegotouch/debug/show_async_requests")
-        return QVariant (true);
+        return QVariant (false);
 
     if (key() == "/meegotouch/target/name")
         return QVariant ("Default");
@@ -94,12 +93,12 @@ Ut_DisplayWidget::cleanup()
 
 
 int argc = 1;
-char* app_name = (char*) "./Ut_DisplayWidget";
+char* app_name[] = { (char*) "./ut_displayapplet", 0 };
 
 void 
 Ut_DisplayWidget::initTestCase()
 {
-    m_App = new MApplication (argc, &app_name);
+    m_App = new MApplication (argc, app_name);
 }
 
 void 
