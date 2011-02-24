@@ -46,12 +46,12 @@
 #ifdef USE_SPACERS
 #include <MSeparator>
 static const int ActivationContainerPosition = 4;
-static const int LabelContainerPosition = 6;
-static const int SliderContainerPosition = 7;
+static const int LabelContainerPosition = 8;
+static const int SliderContainerPosition = 9;
 #else
 static const int ActivationContainerPosition = 2;
-static const int LabelContainerPosition = 3;
-static const int SliderContainerPosition = 4;
+static const int LabelContainerPosition = 2;
+static const int SliderContainerPosition = 3;
 #endif
 
 /******************************************************************************
@@ -406,7 +406,7 @@ BatteryWidget::addBatteryConditionWidget ()
     container->centralWidget()->setLayout (containerLayout);
 
     QGraphicsLinearLayout *layout;
-    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    layout = new QGraphicsLinearLayout (Qt::Vertical);
     layout->setContentsMargins (0,0,0,0);
     layout->setSpacing (0);
 

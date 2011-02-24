@@ -1,5 +1,8 @@
 meegotouch-controlpanelapplets (0.20.19~1) meegotouch; urgency=low
 
+  [Laszlo Gal]
+  * Updating Battery Applet UI to the latest ui spec
+
   [Laszlo Pere]
   * Fixes: NB#228108 - Sound settings select sound page list item labels use 
     wrong style
