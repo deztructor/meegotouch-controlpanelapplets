@@ -5,6 +5,7 @@ meegotouch-controlpanelapplets (0.20.19~1) meegotouch; urgency=low
     wrong style
   * Fixes: NB#228444 - Specific sound setting view is not in accordance with 
     UI specification
+  * Fixes: NB#228102 - Sounds and feedback settings uses wrong styles and icons 
 
   [David Kedves]
   * Fixes: NB#Bug 199460 - Customized ringtones not appeared on soundsettings
