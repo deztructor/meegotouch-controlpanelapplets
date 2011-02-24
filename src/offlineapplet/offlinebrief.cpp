@@ -109,12 +109,14 @@ OfflineBrief::setToggle (
     }
     else
     {
-        if (true || m_DevMode->setMode(QmDeviceMode::Flight))
+        if (m_DevMode->setMode(QmDeviceMode::Flight))
         {
             MInfoBanner *infoBanner = new MInfoBanner (MInfoBanner::Information);
 
             //% "Closing all connections. Switching to offline mode."
-            infoBanner->setBodyText (qtTrId ("qtn_offl_entering"));
+            infoBanner->setBodyText (QString ("<p>") +
+                                     qtTrId ("qtn_offl_entering") +
+                                     QString ("</p>"));
             infoBanner->appear (MSceneWindow::DestroyWhenDone);
             QTimer::singleShot (3000, infoBanner, SLOT (disappear ()));
         }
