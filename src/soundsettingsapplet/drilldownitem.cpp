@@ -172,6 +172,7 @@ addTitleLabel (
         MLinearLayoutPolicy *targetPolicy,
         const char          *labelStyleName)
 {
+    Q_UNUSED (parent);
     MLabel                  *label;
 
     label = new MLabel;
