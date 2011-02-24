@@ -35,6 +35,7 @@
 #include <MSlider>
 #include <MHelpButton>
 #include <MBasicLayoutAnimation>
+#include <MComboBox>
 
 #define DEBUG
 #define WARNING
@@ -63,8 +64,7 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
         m_RemainingContainer (0),
         m_ActivationContainer (0),
         m_SliderContainer (0),
-        m_PSMAutoButton (0),
-        PSMButton (0),
+        m_PSMAutoCombo (0),
         m_BatteryImage (0),
         m_TitleLabel (0),
         m_UILocked (false)
@@ -147,19 +147,17 @@ BatteryWidget::initWidget ()
             "CommonItemDivider",
             m_SeparatorPlacement[2]);
     // Row 6-7: PSM Auto activation text and slider
-    addSliderContainer ();
     // Row 8: A spacer
     m_Separators[3] = addSpacer (
             "CommonItemDivider",
             m_SeparatorPlacement[3]);
-    // Row 9: PSM forced activation button.
-    addPowerSaveButton ();
     // Row 10: another divider
+    // Row 11: Battery condition info.
+    addBatteryConditionWidget ();
     m_Separators[4] = addSpacer (
             "CommonSmallSpacerInverted",
             m_SeparatorPlacement[4]);
-    // Row 11: Battery condition info.
-    addBatteryConditionWidget ();
+    addSliderContainer ();
     #else
     // Row 1: The title label
     addHeaderContainer ();
@@ -168,11 +166,9 @@ BatteryWidget::initWidget ()
     // Row 3: PSM Auto activation switch
     addAutoActivationWidget ();
     // Row 4-5: PSM Auto activation text and slider
-    addSliderContainer ();
-    // Row 6: PSM forced activation button.
-    addPowerSaveButton ();
     // Row 7: Battery condition info.
     addBatteryConditionWidget ();
+    addSliderContainer ();
     #endif
     
     m_MainLayout->addStretch();
@@ -217,12 +213,14 @@ BatteryWidget::initWidget ()
      * !! Only when we aren't in power save mode...
      */
     if (m_logic->PSMValue () == false)
-        m_PSMAutoButton->setChecked (m_logic->PSMAutoValue());
+        m_PSMAutoCombo->setCurrentIndex (m_logic->PSMAutoValue());
 }
 
 void 
 BatteryWidget::addHeaderContainer ()
 {
+// In Meego header should be avoided as it has a title bar
+#ifndef MEEGO    
     MContainer            *container;
     QGraphicsLinearLayout *layout;
 
@@ -252,6 +250,7 @@ BatteryWidget::addHeaderContainer ()
      */
     m_MainLayout->addItem (container);
     m_MainLayout->setStretchFactor (container, 0);
+#endif
 }
 
 void 
@@ -279,7 +278,6 @@ void
 BatteryWidget::addAutoActivationWidget ()
 {
     QGraphicsLinearLayout *layout;
-    MLabel                *activationLevelLabel;
 
     Q_ASSERT (m_MainLayout);
     Q_ASSERT (m_logic);
@@ -300,11 +298,6 @@ BatteryWidget::addAutoActivationWidget ()
     /*
      * A label for the PSM auto activation.
      */
-    //% "Auto activate power save"
-    activationLevelLabel = new MLabel(qtTrId ("qtn_ener_autops"));
-    activationLevelLabel->setStyleName ("CommonSingleTitleInverted");
-    activationLevelLabel->setObjectName ("activationLevel");
-
     /*
      * A help button for the PSM auto activation.
      */
@@ -313,27 +306,28 @@ BatteryWidget::addAutoActivationWidget ()
     helpButton->setIconID ("icon-m-content-description");
 
     /*
-     * A switch that turns the auto PSM mode on and off
+     * A combo box choosing the auto PSM mode between on, off and automatic
      */
-    m_PSMAutoButton = new MButton;
-    m_PSMAutoButton->setStyleName ("CommonSwitchInverted");
-    m_PSMAutoButton->setObjectName ("AutoActivatePowerSaveButton");
-    m_PSMAutoButton->setCheckable (true);
-    m_PSMAutoButton->setViewType (MButton::switchType);
+    m_PSMAutoCombo = new MComboBox();
+    m_PSMAutoCombo->setTitle(qtTrId ("qtn_enter_power_save_combo"));
+    m_PSMAutoCombo->setStyleName ("CommonComboBoxInverted");
+    m_PSMAutoCombo->setObjectName ("AutoActivatePowerSaveButton");
+    
+    m_PSMAutoCombo->addItem(qtTrId("qtn_comm_off"));
+    m_PSMAutoCombo->addItem(qtTrId("qtn_comm_on"));
+    m_PSMAutoCombo->addItem(qtTrId("qtn_ener_autops"));
 
-    connect (m_PSMAutoButton, SIGNAL (toggled (bool)),
-             this, SLOT (PSMAutoToggled (bool)));
+   connect (m_PSMAutoCombo, SIGNAL (activated (int)),
+             this, SLOT (PSMAutoActivated (int)));
 
     /*
      * Adding the widgets to the layout.
      */
-    layout->addItem (activationLevelLabel);
-    layout->setAlignment(activationLevelLabel, Qt::AlignLeft|Qt::AlignVCenter);
     #ifdef HAVE_USERGUIDE
     layout->addItem(helpButton);
     #endif
-    layout->addItem (m_PSMAutoButton);
-    layout->setAlignment(m_PSMAutoButton, Qt::AlignRight | Qt::AlignVCenter);
+    layout->addItem (m_PSMAutoCombo);
+    layout->setAlignment(m_PSMAutoCombo, Qt::AlignRight | Qt::AlignVCenter);
 
     /*
      * Adding the new row to the main layout.
@@ -348,7 +342,7 @@ BatteryWidget::addSliderContainer ()
     Q_ASSERT (m_MainLayout);
 
     m_SliderContainer = new SliderContainer (this);
-    showSlider (m_PSMAutoButton->isChecked ());
+    showSlider (m_PSMAutoCombo->currentIndex () == PSMAutoOn);
 }
 
 void 
@@ -391,50 +385,6 @@ BatteryWidget::showSlider (
             m_MainLayout->removeAt(m_MainLayout->indexOf(container));
         }
     }
-}
-
-void 
-BatteryWidget::addPowerSaveButton ()
-{
-    MContainer            *container;
-    QGraphicsLinearLayout *layout;
-
-    /*
-     * Creating a lcontainer and a layout.
-     */
-    container = new MContainer (this);
-    container->setStyleName ("CommonPanelInverted");
-    container->setHeaderVisible (false);
-    container->setContentsMargins (0,0,0,0);
-
-    layout = new QGraphicsLinearLayout (Qt::Horizontal);
-    layout->setContentsMargins (0,0,0,0);
-    container->centralWidget()->setLayout (layout);
-
-    /*
-     * PSMButton is used to immediately turn the power save mode on/off.
-     */
-    PSMButton = new MButton;
-    PSMButton->setStyleName ("CommonSingleButtonInverted");
-    PSMButton->setObjectName ("PSMButton");
-    updatePSMButton ();
-    // FIXME: why here?
-    connect (PSMButton, SIGNAL (released ()),
-             this, SLOT (PSMButtonReleased ()));
-
-    /*
-     * Adding the button to our layout.
-     */
-    layout->addStretch ();
-    layout->addItem (PSMButton);
-    layout->addStretch ();
-    layout->setAlignment (PSMButton, Qt::AlignHCenter);
-
-    /*
-     * Adding the whole row to the main container.
-     */
-    m_MainLayout->addItem (container);
-    m_MainLayout->setStretchFactor (container, 0);
 }
 
 void 
@@ -564,20 +514,26 @@ BatteryWidget::PSMButtonReleased ()
 }
 
 /*!
- * This slot is called when the psm auto switch is toggled.
+ * This slot is called when the psm auto combo is activated.
  */
 void
-BatteryWidget::PSMAutoToggled (
-        bool PSMAutoEnabled)
+BatteryWidget::PSMAutoActivated (
+        int PSMAutoMode)
 {
-    SYS_DEBUG ("*** PSMAutoEnabled = %s", SYS_BOOL(PSMAutoEnabled));
+   // SYS_DEBUG ("*** PSMAutoMode = %s", SYS_INT(PSMAutoMode));
 
+    if (PSMAutoMode == PSMAutoAutomatic)
+    {
+   	 m_logic->setPSMAutoValue (true);
+       //  m_logic->setPSMValue (true);
+    }
+    
     if (m_UILocked) {
         SYS_WARNING ("The UI is locked.");
     } else {
-        m_logic->setPSMAutoValue (PSMAutoEnabled);
+        m_logic->setPSMAutoValue (PSMAutoMode == PSMAutoOn);
 
-        if (PSMAutoEnabled) {
+        if (PSMAutoMode == PSMAutoOn) {
             /*
              * QmSystem returns 0 when PSMAuto is disabled,
              * so when we're enabling it, we've to re-query
@@ -591,17 +547,6 @@ BatteryWidget::PSMAutoToggled (
     }
 }
 
-void 
-BatteryWidget::updatePSMButton ()
-{
-    if (m_PSMButtonToggle) {
-        //% "Deactivate power save now"
-        PSMButton->setText (qtTrId ("qtn_ener_dps"));
-    } else {
-        //% "Activate power save now"
-        PSMButton->setText (qtTrId ("qtn_ener_aps"));
-    }
-}
 
 void BatteryWidget::remainingBatteryCapacityReceived(const   int pct)
 {
@@ -635,7 +580,6 @@ void
 BatteryWidget::PSMValueReceived (
         bool PSMEnabled)
 {
-    SYS_DEBUG ("*** PSMEnabled = %s", SYS_BOOL (PSMEnabled));
 
     if (m_PSMButtonToggle == PSMEnabled) {
         SYS_DEBUG ("toggle already set");
@@ -643,20 +587,19 @@ BatteryWidget::PSMValueReceived (
     }
 
     m_PSMButtonToggle = PSMEnabled;
-    updatePSMButton ();
     m_UILocked = true;
 
     if (m_MainLayout && m_ActivationContainer) {
         if (!PSMEnabled) {
             if (m_MainLayout->indexOf(m_ActivationContainer) == -1) {
-                m_PSMAutoButton->setChecked (m_logic->PSMAutoValue());
+                m_PSMAutoCombo->setCurrentIndex (m_logic->PSMAutoValue());
                 m_MainLayout->insertItem (
                         ActivationContainerPosition, m_ActivationContainer);
                 m_MainLayout->setStretchFactor (m_ActivationContainer, 0);
             }
             m_logic->remainingCapacityRequired();
         } else {
-            m_PSMAutoButton->setChecked(false);
+            m_PSMAutoCombo->setCurrentIndex(PSMAutoOff);
             showSlider (false);
             m_MainLayout->removeAt(m_MainLayout->indexOf(m_ActivationContainer));
             //% "Power save mode"
@@ -674,8 +617,6 @@ BatteryWidget::retranslateUi ()
         //% "Battery"
         m_TitleLabel->setText (qtTrId("qtn_ener_battery"));
 
-    // This call will reload the translated text on PSButton
-    updatePSMButton ();
 
     // This call will retranslate the label (infoText)
     m_SliderContainer->retranslate ();

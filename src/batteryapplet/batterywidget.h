@@ -22,6 +22,7 @@
 #include "dcpwidget.h"
 
 class MButton;
+class MComboBox;
 class MLabel;
 class MLayout;
 class MLinearLayoutPolicy;
@@ -48,23 +49,26 @@ private slots:
     void PSMButtonReleased();
     void remainingBatteryCapacityReceived (const int value);
     void PSMValueReceived (bool PSMEnabled);
-    void PSMAutoToggled (bool PSMAutoEnabled);
+    void PSMAutoActivated (int PSMAutoMode);
     void charging(int animation_rate);
     void chargeComplete ();
 
 private:
+    enum {
+              PSMAutoOff = 0,
+              PSMAutoOn = 1,
+	      PSMAutoAutomatic};
+
     void addHeaderContainer ();
     void addRemainingCapacityWidget ();
     void addAutoActivationWidget ();
     void addSliderContainer ();
-    void addPowerSaveButton ();
     void addBatteryConditionWidget ();
     MSeparator *addSpacer (
             const QString &styleName, 
             int            index);
 
     void showSlider (bool show);
-    void updatePSMButton ();
     void retranslateUi ();
 
 private: 
@@ -74,8 +78,7 @@ private:
     MContainer              *m_ActivationContainer;
     // SliderContainer is not a container any more!
     SliderContainer         *m_SliderContainer;
-    MButton                 *m_PSMAutoButton;
-    MButton                 *PSMButton;
+    MComboBox               *m_PSMAutoCombo;
     BatteryImage            *m_BatteryImage;
     MLabel                  *m_TitleLabel;
     bool                     m_UILocked;
