@@ -22,7 +22,7 @@
 #include "alerttonepreview.h"
 #include <QApplication>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -39,6 +39,7 @@ AlertTonePreview::AlertTonePreview(const QString &fname):
 {
 #ifdef HAVE_LIBRESOURCEQT
     getResources();
+    gstInit();
 #else
     gstInit();
 #endif
@@ -100,7 +101,6 @@ AlertTonePreview::gstInit()
     gst_bus_add_signal_watch(gst_element_get_bus(m_gstPipeline));
     g_signal_connect(G_OBJECT(gst_element_get_bus(m_gstPipeline)),
         "message", (GCallback)gstSignalHandler, this);
-    gst_element_set_state(m_gstPipeline, GST_STATE_PLAYING);
 
 finalize:
         connect(&m_profileVolume, SIGNAL(changed()),
@@ -112,6 +112,7 @@ AlertTonePreview::getResources()
 {
 #ifdef HAVE_LIBRESOURCEQT
     resources = new ResourcePolicy::ResourceSet("player");
+    resources->setAlwaysReply();
     resources->addResource(ResourcePolicy::AudioPlaybackType);
 
     ResourcePolicy::AudioResource *audioResource =
@@ -129,18 +130,17 @@ AlertTonePreview::getResources()
     connect(resources, SIGNAL(resourcesGranted(QList<ResourcePolicy::ResourceType>)),
             this, SLOT(audioResourceAcquired()));
     connect(resources, SIGNAL(lostResources()), this, SLOT(audiResourceLost()));
-    connect(resources, SIGNAL(resourcesBecameAvailable (const QList< ResourcePolicy::ResourceType >)),
+    connect(resources, SIGNAL(resourcesBecameAvailable (const QList< ResourcePolicy::ResourceType > &)),
             this, SLOT(audioResourcesBecameAvailable()));
     resources->acquire();
 #endif
 }
 
-
 void
 AlertTonePreview::audioResourceAcquired()
 {
     SYS_DEBUG("");
-    gstInit();
+    gst_element_set_state(m_gstPipeline, GST_STATE_PLAYING);
 }
 
 void
