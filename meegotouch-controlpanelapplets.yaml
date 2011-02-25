@@ -1,44 +1,53 @@
 Name: meegotouch-controlpanelapplets
 Summary: Various MeeGo Touch Controlpanel Applets
-Version: 0.15.4
+Version: 0.20.17
 Release: 1
 Group: System/GUI/Other
 License: LGPL v2.1
 URL: http://meego.gitorious.org/meegotouch/meegotouch-controlpanelapplets
 Sources:
     - "%{name}-%{version}.tar.bz2"
+Patches:
+   - "docs.patch"
+
 Description: |
     Various Controlpanel applets for MeeGo Touch environment:
-        - Offline switcher
-        - USB settings
-        - Battery info/settings
-        - Display settings
-        - Profiles settings
-        - Theme-switcher
-        - Wallpaper editor/setter
-        - Clear-Device & Restore-Factory-Settings
-        - About product
-        - Warranty applet
-        - Profiles switcher
+      - Offline switcher
+      - USB settings
+      - Battery info/settings
+      - Display settings
+      - Profiles settings
+      - Theme-switcher
+      - Wallpaper editor/setter
+      - About product
+      - Warranty applet
+      - Profiles switcher
+      - Reset applet
+      - Sound settings
+      
 PkgBR:
-    - meegotouch-controlpanel-devel
+    - libmeegocontrolpanel-devel
     - libqttracker-devel
     - meegotouch-systemui-devel
     - libthumbnailer-devel
+    - clean-device-devel >= 0.0.3
+    - qt-mobility-devel
     - doxygen
+    - profiled-devel
+    - gstreamer-devel
 PkgConfigBR:
     - meegotouch >= 0.20.37
     - QtCore >= 4.7.0
     - QtGui >= 4.7.0
 Configure: none
-Builder: make
+Builder: qmake
 NoFiles: True
 
 SubPackages:
     - Name: meegotouchcp-applets-l10n-eng-en
       AsWholeName: True
       Summary: MeeGo Touch Controlpanel applets engineering English messages
-      Group: System/GUI/Other
+      Group: Application Framework/MeeGo Touch Settings
       Description: |
           MeeGo Touch Controlpanel applets engineering English messages for various applets:
               - Offline switcher
@@ -48,15 +57,82 @@ SubPackages:
               - Profiles settings
               - Theme-switcher
               - Wallpaper editor/setter
-              - Clear-Device & Restore-Factory-Settings
               - About product
               - Warranty applet
               - Profiles switcher
+
       Provides:
           - meegotouchcp-applets-l10n
       Files:
-          - "%dir /usr/share/l10n/meegotouch"
-          - /usr/share/l10n/meegotouch/systemui-applets.qm
+          - /usr/share/l10n/meegotouch/meegotouchcp-applets.qm
+          - /usr/share/doc/systemui-applets-l10n-engineering-english/meegotouchcp-applets.ts
+
+
+    - Name: meegotouch-controlpanelapplets-tests
+      AsWholeName: True
+      Summary: Unit and functional test cases for meegotouch-controlpanelapplets
+      Group: Development/Libraries
+      Description: Unit and functional test cases for meegotouch-controlpanelapplets
+      Files:
+          - /bin/cylontest.sh
+          - "%dir /usr/share/meegotouch-controlpanelapplets-tests"
+          - /usr/share/meegotouch-controlpanelapplets-tests/tests.xml
+          - "%dir /usr/lib/meegotouch-controlpanelapplets-tests"
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_wallpaperapplet
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_warrantyapplet
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ft_statusmenuplugins
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_displaywidget
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_themeapplet
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_profiledialog
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_wallpapermodel
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ft_themebusinesslogic
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_themebusinesslogic
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_displayapplet
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_usbapplet
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_displaybusinesslogic
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_themecellcreator
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_offlineapplet
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_wallpapereditorwidget
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_batteryimage
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_wallpaperwidget
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_themedescriptor
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_wallpaperbusinesslogic
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_themelistmodel
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_batterybusinesslogic
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ft_wallpapermodel
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_wallpaperlist
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_aboutbusinesslogic
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ft_wallpaperdescriptor
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_themewidget
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_profiledatainterface
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ft_wallpaperbusinesslogic
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_profileapplet
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_themedialog
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_wallpaperdescriptor
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_wallpapercurrentdescriptor
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_batteryapplet
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ft_applets
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_aboutapplet
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_resetapplet
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ft_profiledatainterface
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_alerttone
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_alerttoneappletmaps
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_alerttoneappletwidget
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_alerttonebrowser
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_alerttonedefaults
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_alerttonedefaultsmodel
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_alerttonepreview
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_alerttonetoplevel
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_alerttonevolume
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_alerttonewidget
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_gconfstringcombo
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_profilebackend
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_profileintcombo
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_profilevalue
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_qgconfdirmanager
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_qgconfvalue
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_soundsettingsapplet
+          - /usr/lib/meegotouch-controlpanelapplets-tests/ut_trackedvariant
 
     - Name: meegotouchcp-profiles
       AsWholeName: True
@@ -67,12 +143,9 @@ SubPackages:
           - meegotouchcp-applets-l10n-eng-en
       Description: MeegoTouch Controlpanel profiles settings
       Files:
-          - "%dir /usr/lib/duicontrolpanel"
-          - "%dir /usr/lib/duicontrolpanel/applets"
-          - "%dir /usr/share/themes/base/meegotouch/duicontrolpanel/style"
           - /usr/lib/duicontrolpanel/profile.desktop
           - /usr/lib/duicontrolpanel/applets/libprofileapplet.so
-          - /usr/share/themes/base/meegotouch/duicontrolpanel/style/profileapplet.css
+
 
     - Name: meegotouchcp-wallpaper
       AsWholeName: True
@@ -84,26 +157,27 @@ SubPackages:
           - meegotouch-controlpanel
           - meegotouchcp-applets-l10n-eng-en
       Files:
-          - "%dir /usr/lib/duicontrolpanel"
-          - "%dir /usr/lib/duicontrolpanel/applets"
-          - "%dir /usr/share/themes/base/meegotouch/duicontrolpanel/style"
           - /usr/lib/duicontrolpanel/wallpaper.desktop
           - /usr/lib/duicontrolpanel/applets/libwallpaperapplet.so
-          - /usr/share/themes/base/meegotouch/duicontrolpanel/style/wallpaper.css
-
+          - /usr/share/wallpaper
+          - /usr/share/backup-framework/applications/wallpaper.conf
+         
+         
     - Name: meegotouchcp-about
       AsWholeName: True
       Summary: MeegoTouch Controlpanel about product applet
       Group: System/GUI/Other
       Requires:
+          - qt-mobility
           - meegotouch-controlpanel
           - meegotouchcp-applets-l10n-eng-en
       Description: MeegoTouch Controlpanel about product applet
       Files:
-          - "%dir /usr/lib/duicontrolpanel"
-          - "%dir /usr/lib/duicontrolpanel/applets"
           - /usr/lib/duicontrolpanel/about.desktop
           - /usr/lib/duicontrolpanel/applets/libaboutapplet.so
+          - /usr/share/themes/base/meegotouch/libaboutapplet/style/libaboutapplet.css
+          - /usr/share/duicontrolpanel-aboutapplet/license.txt
+
 
     - Name: meegotouchcp-usb
       AsWholeName: True
@@ -114,24 +188,8 @@ SubPackages:
           - meegotouchcp-applets-l10n-eng-en
       Description: MeegoTouch Controlpanel USB settings
       Files:
-          - "%dir /usr/lib/duicontrolpanel"
-          - "%dir /usr/lib/duicontrolpanel/applets"
           - /usr/lib/duicontrolpanel/usbapplet.desktop
           - /usr/lib/duicontrolpanel/applets/libusbapplet.so
-
-    - Name: meegotouchcp-reset
-      AsWholeName: True
-      Summary: MeegoTouch Controlpanel reset-settings & clear-user data
-      Group: System/GUI/Other
-      Requires:
-          - meegotouch-controlpanel
-          - meegotouchcp-applets-l10n-eng-en
-      Description: MeegoTouch Controlpanel reset-settings & clear-user data
-      Files:
-          - "%dir /usr/lib/duicontrolpanel"
-          - "%dir /usr/lib/duicontrolpanel/applets"
-          - /usr/lib/duicontrolpanel/reset.desktop
-          - /usr/lib/duicontrolpanel/applets/libresetapplet.so
 
     - Name: meegotouchcp-battery
       AsWholeName: True
@@ -142,12 +200,9 @@ SubPackages:
           - meegotouchcp-applets-l10n-eng-en
       Description: MeegoTouch Controlpanel battery info/settings
       Files:
-          - "%dir /usr/lib/duicontrolpanel"
-          - "%dir /usr/lib/duicontrolpanel/applets"
-          - "%dir /usr/share/themes/base/meegotouch/duicontrolpanel/style"
           - /usr/lib/duicontrolpanel/battery.desktop
           - /usr/lib/duicontrolpanel/applets/libbatteryapplet.so
-          - /usr/share/themes/base/meegotouch/duicontrolpanel/style/batteryapplet.css
+          - /usr/share/themes/base/meegotouch/libbatteryapplet/style/libbatteryapplet.css
 
     - Name: meego-handset-statusindicators-profiles
       AsWholeName: True
@@ -159,9 +214,10 @@ SubPackages:
           - meegotouchcp-applets-l10n-eng-en
           - meegotouch-systemui
       Files:
-          - "%dir /usr/lib/meegotouch/applicationextensions"
           - /usr/lib/meegotouch/applicationextensions/libstatusindicatormenu-profile.so
           - /usr/share/meegotouch/applicationextensions/statusindicatormenu-profile.desktop
+          - /usr/share/themes/base/meegotouch/libstatusindicatormenu-profile/style/libstatusindicatormenu-profile.css
+
 
     - Name: meegotouchcp-warranty
       AsWholeName: True
@@ -172,10 +228,10 @@ SubPackages:
           - meegotouchcp-applets-l10n-eng-en
       Description: MeegoTouch Controlpanel warranty applet
       Files:
-          - "%dir /usr/lib/duicontrolpanel"
-          - "%dir /usr/lib/duicontrolpanel/applets"
           - /usr/lib/duicontrolpanel/warranty.desktop
           - /usr/lib/duicontrolpanel/applets/libwarrantyapplet.so
+          - /usr/share/themes/base/meegotouch/libwarrantyapplet/style/libwarrantyapplet.css
+
 
     - Name: meegotouchcp-theme
       AsWholeName: True
@@ -186,12 +242,11 @@ SubPackages:
           - meegotouchcp-applets-l10n-eng-en
       Description: MeegoTouch Controlpanel theme switcher
       Files:
-          - "%dir /usr/lib/duicontrolpanel"
-          - "%dir /usr/lib/duicontrolpanel/applets"
-          - "%dir /usr/share/themes/base/meegotouch/duicontrolpanel/style"
           - /usr/lib/duicontrolpanel/theme.desktop
           - /usr/lib/duicontrolpanel/applets/libthemeapplet.so
-          - /usr/share/themes/base/meegotouch/duicontrolpanel/style/themeapplet.css
+         # - /usr/share/themes/base/meegotouch/duicontrolpanel/style/libthemeapplet.css
+          - /usr/share/themes/base/meegotouch/libthemeapplet/style/libthemeapplet.css
+         # - /etc/meego-rfs-scripts/theme-rfs.sh
 
     - Name: meegotouchcp-offline
       AsWholeName: True
@@ -202,8 +257,6 @@ SubPackages:
           - meegotouchcp-applets-l10n-eng-en
       Description: MeegoTouch Controlpanel Offline switcher
       Files:
-          - "%dir /usr/lib/duicontrolpanel"
-          - "%dir /usr/lib/duicontrolpanel/applets"
           - /usr/lib/duicontrolpanel/offline.desktop
           - /usr/lib/duicontrolpanel/applets/libofflineapplet.so
 
@@ -216,11 +269,101 @@ SubPackages:
           - meegotouchcp-applets-l10n-eng-en
       Description: MeegoTouch Controlpanel display settings
       Files:
-          - "%dir /usr/lib/duicontrolpanel"
-          - "%dir /usr/lib/duicontrolpanel/applets"
-          - "%dir /usr/share/themes/base/meegotouch/duicontrolpanel/style"
           - /usr/lib/duicontrolpanel/display.desktop
           - /usr/lib/duicontrolpanel/applets/libdisplayapplet.so
-          - /usr/share/themes/base/meegotouch/duicontrolpanel/style/display.css
+          - /usr/share/themes/base/meegotouch/libdisplayapplet/style/libdisplayapplet.css
+
+    - Name: libmeegocontrol-doc
+      AsWholeName: True
+      BuildArch: noarch
+      Summary: Documentation for libmeegocontrol
+      Group: Documentation
+      Requires:
+           - meegotouch-controlpanel
+           - meegotouchcp-applets-l10n-eng-en
+      Description: Documentation for libmeegocontrol
+      Files:
+            - "/usr/share/libmeegocontrol-doc"
+
+    - Name: libmeegocontrol
+      AsWholeName: True
+      Summary: libmeegocontrol to use some controlpanel applet as a library
+      Group: System/GUI/Other
+      Requires:
+            - meegotouch-controlpanel
+            - meegotouchcp-applets-l10n-eng-en
+            - gstreamer
+            - GConf-dbus
+            - libresourceqt
+            - libprofile-qt
+      Description: Documentation for libmeegocontrol
+      Files:
+             
+             -  "/usr/lib/libmeegocontrol.so.*"
+
+    - Name: libmeegocontrol-devel
+      AsWholeName: True
+      Summary: Dev package for libmeegocontrol
+      Group: Development/Libraries
+      Requires:
+            - meegotouchcp-applets-l10n-eng-en
+            - gstreamer-devel
+            - libthumbnailer-devel
+            - libmeegocontrolpanel-devel
+            - libqttracker-devel
+            - libresourceqt-devel
+      Description: Dev package for libmeegocontrol
+      Files:
+             - "/usr/lib/libmeegocontrol.so"
+             - "/usr/include/libmeegocontrol"
+             - "/usr/share/qt4/mkspecs/features"
+
+
+
+    - Name: meegotouchcp-resetapplet
+      AsWholeName: True
+      Summary: Device clearing and restore settings applet
+      Group: System/GUI/Other
+      Requires:
+            - meegotouch-controlpanel
+            - meegotouchcp-applets-l10n-eng-en
+            - clean-device
+            - meegotouch-systemui
+      Description: Device clearing and restore settings applet
+      Files:
+             - "/usr/lib/duicontrolpanel/reset.desktop"
+             - "/usr/lib/duicontrolpanel/applets/libresetapplet.so"
+#             - "/etc/osso-rfs-scripts/mcpapplets-rfs.sh"
+             - "/etc/meego-rfs-scripts/mcpapplets-rfs.sh"
+
+
+    - Name: meegotouchcp-soundsettingsapplet
+      AsWholeName: True
+      Summary: Sound Settings Applet
+      Group: System/GUI/Other
+      Requires:
+            - meegotouch-controlpanel
+            - meegotouchcp-applets-l10n-eng-en
+            - libresourceqt
+      Description: Sound Settings Applet
+      Files:
+             - "/usr/share/themes/base/meegotouch/libsoundsettingsapplet/style/libsoundsettingsapplet.css"
+             - "/usr/lib/duicontrolpanel/applets/libsoundsettingsapplet.so"
+             - "/usr/lib/duicontrolpanel/soundsettingsapplet.desktop"
+
+
+
+    - Name: meegotouchcp-testapplet
+      AsWholeName: True
+      Summary: Testapplet to manual test duicontrolpanel.
+      Group: System/GUI/Other
+      Requires:
+            - meegotouch-controlpanel
+            - meegotouchcp-applets-l10n-eng-en
+            - meegotouch-systemui
+      Description: Testapplet to manual test duicontrolpanel.
+      Files:
+             - "/usr/lib/duicontrolpanel/test.desktop"
+             - "/usr/lib/duicontrolpanel/applets/libtestapplet.so"
 
 
