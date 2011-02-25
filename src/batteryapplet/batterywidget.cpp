@@ -309,12 +309,16 @@ BatteryWidget::addAutoActivationWidget ()
      * A combo box choosing the auto PSM mode between on, off and automatic
      */
     m_PSMAutoCombo = new MComboBox();
+    //% "Power Save More"
     m_PSMAutoCombo->setTitle(qtTrId ("qtn_enter_power_save_combo"));
     m_PSMAutoCombo->setStyleName ("CommonComboBoxInverted");
     m_PSMAutoCombo->setObjectName ("AutoActivatePowerSaveButton");
     
+    //% "Off"
     m_PSMAutoCombo->addItem(qtTrId("qtn_comm_off"));
+    //% "On"
     m_PSMAutoCombo->addItem(qtTrId("qtn_comm_on"));
+    //% "Automatic"
     m_PSMAutoCombo->addItem(qtTrId("qtn_ener_autops"));
 
    connect (m_PSMAutoCombo, SIGNAL (activated (int)),
@@ -453,8 +457,8 @@ BatteryWidget::addBatteryConditionWidget ()
         poorLayout->addItem (poorIcon);
 
         MLabel *poorInfo = new MLabel;
-        //% "The battery capacity has decreased. You can
-        // improve battery life by purchasing a new battery."
+        //% "The battery capacity has decreased. You can "
+        //  "improve battery life by purchasing a new battery."
         poorInfo->setText (qtTrId ("qtn_ener_condition_poor_info"));
         poorInfo->setAlignment (Qt::AlignLeft);
         poorInfo->setStyleName ("CommonSubTextInverted");
