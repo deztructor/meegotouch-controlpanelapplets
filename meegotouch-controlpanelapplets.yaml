@@ -7,8 +7,6 @@ License: LGPL v2.1
 URL: http://meego.gitorious.org/meegotouch/meegotouch-controlpanelapplets
 Sources:
     - "%{name}-%{version}.tar.bz2"
-Patches:
-   - "docs.patch"
 
 Description: |
     Various Controlpanel applets for MeeGo Touch environment:

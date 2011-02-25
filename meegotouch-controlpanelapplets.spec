@@ -14,7 +14,6 @@ License:    LGPL v2.1
 URL:        http://meego.gitorious.org/meegotouch/meegotouch-controlpanelapplets
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  meegotouch-controlpanelapplets.yaml
-Patch0:     docs.patch
 BuildRequires:  pkgconfig(meegotouch) >= 0.20.37
 BuildRequires:  pkgconfig(QtCore) >= 4.7.0
 BuildRequires:  pkgconfig(QtGui) >= 4.7.0
@@ -239,8 +238,6 @@ Testapplet to manual test duicontrolpanel.
 %prep
 %setup -q -n %{name}-%{version}
 
-# docs.patch
-%patch0 -p1
 # >> setup
 # << setup
 
