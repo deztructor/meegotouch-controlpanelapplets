@@ -22,7 +22,7 @@
 #include "alerttonepreview.h"
 #include <QApplication>
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -113,7 +113,6 @@ AlertTonePreview::getResources()
 #ifdef HAVE_LIBRESOURCEQT
     resources = new ResourcePolicy::ResourceSet("player");
     resources->setAlwaysReply();
-    resources->addResource(ResourcePolicy::AudioPlaybackType);
 
     ResourcePolicy::AudioResource *audioResource =
             new ResourcePolicy::AudioResource("player");
@@ -125,13 +124,11 @@ AlertTonePreview::getResources()
      * for the pulsesink. The value should be uniqe.
      */
     audioResource->setStreamTag("media.role", "AlertTonePreview");
-
     resources->addResourceObject(audioResource);
+
     connect(resources, SIGNAL(resourcesGranted(QList<ResourcePolicy::ResourceType>)),
             this, SLOT(audioResourceAcquired()));
     connect(resources, SIGNAL(lostResources()), this, SLOT(audiResourceLost()));
-    connect(resources, SIGNAL(resourcesBecameAvailable (const QList< ResourcePolicy::ResourceType > &)),
-            this, SLOT(audioResourcesBecameAvailable()));
     resources->acquire();
 #endif
 }
@@ -140,21 +137,16 @@ void
 AlertTonePreview::audioResourceAcquired()
 {
     SYS_DEBUG("");
-    gst_element_set_state(m_gstPipeline, GST_STATE_PLAYING);
+    if(m_gstPipeline)
+        gst_element_set_state(m_gstPipeline, GST_STATE_PLAYING);
 }
 
 void
 AlertTonePreview::audiResourceLost()
 {
     SYS_DEBUG("");
-    gst_element_set_state(m_gstPipeline, GST_STATE_PAUSED);
-}
-
-void
-AlertTonePreview::audioResourcesBecameAvailable()
-{
-    SYS_DEBUG("");
-    gst_element_set_state(m_gstPipeline, GST_STATE_PLAYING);
+    if(m_gstPipeline)
+        gst_element_set_state(m_gstPipeline, GST_STATE_PAUSED);
 }
 
 void

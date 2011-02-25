@@ -60,7 +60,6 @@ private slots:
 	void profileVolumeChanged();
     void audioResourceAcquired();
     void audiResourceLost();
-    void audioResourcesBecameAvailable();
 
 #ifdef UNIT_TEST
     friend class Ut_AlertTonePreviewTests;
