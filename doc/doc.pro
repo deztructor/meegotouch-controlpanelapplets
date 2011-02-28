@@ -22,6 +22,6 @@ PRE_TARGETDEPS += $${doc.output}
 # Install rules
 
 htmldocs.files = html/*
-htmldocs.path = /usr/share/libmeegocontrol-doc/
+htmldocs.path = $$(DEBIAN_DESTDIR)/usr/share/libmeegocontrol-doc
 htmldocs.CONFIG += no_check_exist
 INSTALLS += htmldocs
