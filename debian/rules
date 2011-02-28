@@ -85,7 +85,18 @@ binary-arch: build install
 	dh_installchangelogs $(EXCLUSIONS)
 	dh_install --sourcedir=debian/tmp $(EXCLUSIONS)
 	dh_link $(EXCLUSIONS)
-	dh_strip $(EXCLUSIONS)
+	dh_strip --dbg-package=libmeegocontrol-dbg -p libmeegocontrol0
+	dh_strip --dbg-package=duicontrolpanel-offlineapplet-dbg -p duicontrolpanel-offlineapplet
+	dh_strip --dbg-package=duicontrolpanel-usbapplet-dbg -p duicontrolpanel-usbapplet
+	dh_strip --dbg-package=duicontrolpanel-batteryapplet-dbg -p duicontrolpanel-batteryapplet
+	dh_strip --dbg-package=duicontrolpanel-displayapplet-dbg -p duicontrolpanel-displayapplet
+	dh_strip --dbg-package=duicontrolpanel-profileapplet-dbg -p duicontrolpanel-profileapplet
+	dh_strip --dbg-package=duicontrolpanel-wallpaperapplet-dbg -p duicontrolpanel-wallpaperapplet
+	dh_strip --dbg-package=duicontrolpanel-resetapplet-dbg -p duicontrolpanel-resetapplet
+	dh_strip --dbg-package=duicontrolpanel-aboutapplet-dbg -p duicontrolpanel-aboutapplet
+	dh_strip --dbg-package=duicontrolpanel-warrantyapplet-dbg -p duicontrolpanel-warrantyapplet
+	dh_strip --dbg-package=duicontrolpanel-testapplet-dbg -p duicontrolpanel-testapplet
+	dh_strip --dbg-package=duicontrolpanel-soundsettingsapplet-dbg -p duicontrolpanel-soundsettingsapplet
 	dh_compress $(EXCLUSIONS)
 	dh_fixperms $(EXCLUSIONS)
 	dh_makeshlibs $(EXCLUSIONS)

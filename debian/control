@@ -21,7 +21,6 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel-usbapplet,
          duicontrolpanel-batteryapplet, duicontrolpanel-aboutapplet,
          duicontrolpanel-displayapplet, duicontrolpanel-profileapplet,
-         duistatusindicatormenu-profileplugin,
          duicontrolpanel-wallpaperapplet, duicontrolpanel-resetapplet,
          duicontrolpanel-warrantyapplet, duicontrolpanel-offlineapplet,
          duicontrolpanel-soundsettingsapplet
@@ -29,9 +28,12 @@ XB-Maemo-CI-Packages: systemui-applets-tests
 XB-Maemo-CI-Stage: fast, staging
 Description: Test package for meegotouch-controlpanelapplets
 
-Package: systemui-applets-l10n-engineering-english
+Package: meegotouchcp-applets-l10n-engineering-english
 Section: devel
 Architecture: all
+Provides: systemui-applets-l10n-engineering-english
+Conflicts: systemui-applets-l10n-engineering-english
+Replaces: systemui-applets-l10n-engineering-english
 Depends: ${misc:Depends}
 Description: Engineering English translations for meegotouch-controlpanelapplets packages.
 
@@ -59,91 +61,159 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, libgstreamer0.10-dev,
          libresourceqt-dev
 Description: libmeegocontrol development files
 
+Package: libmeegocontrol-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: libmeegocontrol0 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: libmeegocontrol debug symbols
+
 Package: duicontrolpanel-offlineapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
 Description: Offline settings applet.
+
+Package: duicontrolpanel-offlineapplet-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: duicontrolpanel-offlineapplet (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: offline-applet debug symbols
 
 Package: duicontrolpanel-usbapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
 Description: USB applet for the control panel application
+
+Package: duicontrolpanel-usbapplet-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: duicontrolpanel-usbapplet (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: usb-applet debug symbols
 
 Package: duicontrolpanel-batteryapplet
 Provides: duistatusindicatormenu-batteryplugin
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
 Description: Battery settings applet.
+
+Package: duicontrolpanel-batteryapplet-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: duicontrolpanel-batteryapplet (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: battery-applet debug symbols
 
 Package: duicontrolpanel-displayapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
 Description: Display settings applet.
+
+Package: duicontrolpanel-displayapplet-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: duicontrolpanel-displayapplet (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: display-applet debug symbols
 
 Package: duicontrolpanel-profileapplet
 Section: misc
 Architecture: any
-Provides: duicontrolpanel-ledapplet
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english
+Provides: duicontrolpanel-ledapplet, duistatusindicatormenu-profileplugin
+Replaces: duistatusindicatormenu-profileplugin
+Conflicts: duistatusindicatormenu-profileplugin
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
 Description: Profiles settings applet.
+
+Package: duicontrolpanel-profileapplet-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: duicontrolpanel-profileapplet (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: profile-applet debug symbols
 
 Package: duicontrolpanel-wallpaperapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libqttracker1pre6, 
-         tumbler, libthumbnailer0, duicontrolpanel, 
-         systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, ${misc:Depends}, libqttracker1pre6,
+         tumbler, libthumbnailer0, duicontrolpanel
 Description: Desktop wallpaper changing applet.
+
+Package: duicontrolpanel-wallpaperapplet-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: duicontrolpanel-wallpaperapplet (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: wallpaper-applet debug symbols
 
 Package: duicontrolpanel-resetapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english, clean-device
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, clean-device
 Description: Device clearing and restore settings applet.
+
+Package: duicontrolpanel-resetapplet-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: duicontrolpanel-resetapplet (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: reset-applet debug symbols
 
 Package: duicontrolpanel-aboutapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
 Description: The about-product applet that shows device and software
  informations.
+
+Package: duicontrolpanel-aboutapplet-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: duicontrolpanel-aboutapplet (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: about-applet debug symbols
 
 Package: duicontrolpanel-warrantyapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
 Description: The warranty applet that shows the warranty information.
+
+Package: duicontrolpanel-warrantyapplet-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: duicontrolpanel-warrantyapplet (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: warranty-applet debug symbols
 
 Package: duicontrolpanel-testapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel,
-         systemui-applets-l10n-engineering-english
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
 Description: Testapplet to manual test duicontrolpanel.
 
-Package: duistatusindicatormenu-profileplugin
-Section: misc
+Package: duicontrolpanel-testapplet-dbg
+Section: debug
+Priority: extra
 Architecture: any
-Provides: duistatusindicatormenu-volumeplugin
-Depends: ${shlibs:Depends}, ${misc:Depends},
-         systemui-applets-l10n-engineering-english
-Description: Profile status indicator menu plugin.
+Depends: duicontrolpanel-testapplet (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: test-applet debug symbols
 
 Package: duicontrolpanel-soundsettingsapplet
 Section: sound
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libresourceqt1
 Description: Sound Settings Applet
+
+Package: duicontrolpanel-soundsettingsapplet-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: duicontrolpanel-soundsettingsapplet (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: soundsettings-applet debug symbols
 
