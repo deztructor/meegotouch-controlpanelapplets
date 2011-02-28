@@ -25,6 +25,7 @@
 
 #include <QtTracker/Tracker>
 #include <QGraphicsLinearLayout>
+#include <QDBusInterface>
 #include <MLabel>
 
 #ifdef HAVE_CONTENT_MANAGER
@@ -236,8 +237,10 @@ AlertToneBrowser::launchMusicBrowser()
 void
 AlertToneBrowser::launchOviStore()
 {
-    QString cmdline = "webwidgetrunner /usr/share/webwidgets/applications/d34177b1c241ea44cb132005b63ee6527c9f6040-wrt-widget.desktop -widgetparameter ringtones " /* + m_tone->key() */ + QString("&");
-    system(cmdline.toUtf8().constData());
+    static const char OviIf[] = "com.nokia.OviStoreClient";
+    QDBusInterface OviStore (OviIf, "/", OviIf);
+
+    OviStore.call ("LaunchWithKeyword", QString ("ringtones"));
 }
 
 static QString
