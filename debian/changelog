@@ -1,8 +1,14 @@
+meegotouch-controlpanelapplets (0.20.21~1) meegotouch; urgency=low
+
+  [Laszlo Gal]
+  * Updating USB Applet UI to the latest ui spec
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 28 Feb 2011 08:56:27 +0100
+
 meegotouch-controlpanelapplets (0.20.20-1) meegotouch; urgency=low
 
   [Laszlo Gal]
   * Updating Battery Applet UI to the latest ui spec
-  * Updating USB Applet UI to the latest ui spec
 
   [Zoltan Nyul]
   * Fixes: NB#230191 - Ringtone play back does not resume 
