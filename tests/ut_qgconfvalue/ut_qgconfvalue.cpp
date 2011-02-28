@@ -12,7 +12,7 @@
 #define WARNING
 #include "../debug.h"
 
-static const QString testKey = "/meegotouch/input_feedback/volume/pulse";
+static const QString testKey = "/meegotouch/input_feedback/2/volume/pulse";
 
 /******************************************************************************
  * GConf library stub. We are not going to touch the GConf database, this is a

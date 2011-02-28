@@ -50,8 +50,8 @@ void Ut_AlertToneAppletMapsTests::alertToneAppletMapsContent_data()
       QTest::newRow("") << "calendar.alert.tone@general" << "qtn_sond_org_reminders";
       QTest::newRow("") << "keypad.sound.level" << "qtn_sond_keyboard";
       QTest::newRow("") << "system.sound.level" << "qtn_sond_system";
-      QTest::newRow("") << "/meegotouch/input_feedback/volume/pulse" << "qtn_sond_touch_screen";
-      QTest::newRow("") << "/meegotouch/input_feedback/volume/vibra" << "qtn_sond_touch_vibra";
+      QTest::newRow("") << "/meegotouch/input_feedback/2/volume/pulse" << "qtn_sond_touch_screen";
+      QTest::newRow("") << "/meegotouch/input_feedback/2/volume/vibra" << "qtn_sond_touch_vibra";
       QTest::newRow("") << "off" << "qtn_comm_settings_off";
       QTest::newRow("") << "low" << "qtn_sond_level_1";
       QTest::newRow("") << "medium" << "qtn_sond_level_2";

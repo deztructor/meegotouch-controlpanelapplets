@@ -42,8 +42,8 @@ AlertToneAppletMaps::AlertToneAppletMaps()
 	/* Combo box widget titles */
 	m_map["keypad.sound.level"]                      = "qtn_sond_keyboard";
 	m_map["system.sound.level"]                      = "qtn_sond_system";
-	m_map["/meegotouch/input_feedback/volume/pulse"] = "qtn_sond_touch_screen";
-	m_map["/meegotouch/input_feedback/volume/vibra"] = "qtn_sond_touch_vibra";
+	m_map["/meegotouch/input_feedback/2/volume/pulse"] = "qtn_sond_touch_screen";
+	m_map["/meegotouch/input_feedback/2/volume/vibra"] = "qtn_sond_touch_vibra";
 
 	/* GConf combo box values */
 	m_map["off"]                                     = "qtn_comm_settings_off";

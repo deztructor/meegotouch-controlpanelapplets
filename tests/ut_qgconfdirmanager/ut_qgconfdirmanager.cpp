@@ -52,7 +52,7 @@ void
 Ut_QConfDirManager::qconfdirmanagerAddDir ()
 {
       QGConfDirManager  cdm;
-      cdm.addDir("/meegotouch/input_feedback/volume");
+      cdm.addDir("/meegotouch/input_feedback/2/volume");
       GConfListenNode * cln =   cdm.m_root;
 
       cln = cln->m_children.at(0);
@@ -69,8 +69,8 @@ void
 Ut_QConfDirManager::qconfdirmanagerRmDir ()
 {
       QGConfDirManager  cdm;
-      cdm.addDir("/meegotouch/input_feedback/volume");
-      cdm.rmDir("/meegotouch/input_feedback/volume");
+      cdm.addDir("/meegotouch/input_feedback/2/volume");
+      cdm.rmDir("/meegotouch/input_feedback/2/volume");
 
       void *   ptr  =  & cdm;
       GConfListenNode * cln =  * ((GConfListenNode **) ptr);
@@ -80,7 +80,7 @@ void
 Ut_QConfDirManager::qconfdirmanagerPrune()
 {
       QGConfDirManager  cdm;
-      cdm.addDir("/meegotouch/input_feedback/volume");
+      cdm.addDir("/meegotouch/input_feedback/2/volume");
       GConfListenNode * cln =   cdm.m_root;
 
       cln = cln->m_children.at(0);
@@ -90,7 +90,7 @@ void
 Ut_QConfDirManager::qconfdirmanagerUnsetListening()
 {
       QGConfDirManager  cdm;
-      cdm.addDir("/meegotouch/input_feedback/volume");
+      cdm.addDir("/meegotouch/input_feedback/2/volume");
       GConfListenNode * cln =   cdm.m_root;
       
       cln = cln->m_children.at(0);
