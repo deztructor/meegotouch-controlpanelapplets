@@ -24,17 +24,15 @@
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 #include <MButtonGroup>
+#include <MComboBox>
 #include <MNotification>
 #include <MContainer>
 
 #undef DEBUG
 #include "../debug.h"
-
-#define BUTTON_ALWAYS_ASK   0
-#define BUTTON_MASS_STORAGE 1
-#define BUTTON_OVI_SUITE    2
-
 #ifdef HAVE_QMSYSTEM
+
+static QmUSBMode::Mode usbModes[3] = {QmUSBMode::Ask, QmUSBMode::MassStorage, QmUSBMode::OviSuite};
 UsbView::UsbView (MeeGo::QmUSBMode *logic) :
     m_logic (logic),
     m_error (0)
@@ -56,8 +54,6 @@ UsbView::UsbView (void *logic) :
 
 UsbView::~UsbView ()
 {
-    delete m_btn_group;
-
     if (m_error != 0)
     {
         m_error->remove ();
@@ -73,10 +69,6 @@ UsbView::initWidget ()
     MLayout                 *mainLayout;
     MLinearLayoutPolicy     *mainPolicy;
 
-    MLayout                 *buttonsLayout;
-    MLinearLayoutPolicy     *portraitButtonsPolicy;
-    MLinearLayoutPolicy     *landscapeButtonsPolicy;
-
     setObjectName ("CommonPanelInverted");
 
 // Creating the main layout
@@ -86,94 +78,46 @@ UsbView::initWidget ()
     mainLayout->setContentsMargins (0. , 0. , 0. , 0.);
     mainPolicy->setSpacing (0. );
 
+#ifndef MEEGO
 // Create the title-bar
     MLabel *title =
         addTitleLabel (mainPolicy,
-                       "CommonXLargeHeaderPanelInverted",
-                       "CommonXLargeHeaderInverted");
+                       "CommonAppicationHeaderInverted",
+                       "CommonApplitationHeaderInverted");
     //% "USB"
     title->setText (qtTrId ("qtn_usb_title"));
+#endif
 
-// Info label
-    m_info_label = addTitleLabel (mainPolicy,
-                                  "CommonSmallPanelInverted",
-                                  "CommonHeaderInverted");
-
-// Creating, filling and adding the mode-list
-    m_btn_group = new MButtonGroup;
-    m_btn_group->setExclusive (true);
-
-    buttonsLayout = new MLayout;
-    buttonsLayout->setContentsMargins (0, 0, 0, 0);
-
-    portraitButtonsPolicy = new MLinearLayoutPolicy (buttonsLayout, Qt::Vertical);
-    portraitButtonsPolicy->setNotifyWidgetsOfLayoutPositionEnabled (true);
-    portraitButtonsPolicy->setSpacing (0.);
-
-    buttonsLayout->setPortraitPolicy (portraitButtonsPolicy);
-
-    landscapeButtonsPolicy = new MLinearLayoutPolicy (buttonsLayout, Qt::Horizontal);
-    landscapeButtonsPolicy->setNotifyWidgetsOfLayoutPositionEnabled (true);
-    landscapeButtonsPolicy->setSpacing (0.);
-
-    buttonsLayout->setLandscapePolicy (landscapeButtonsPolicy);
-
-    for (int i = 0; i < 3; i++)
+    m_UsbModeCombo = new MComboBox();                                           
+    m_UsbModeCombo->setTitle(qtTrId ("qtn_usb_default_info"));            
+    m_UsbModeCombo->setStyleName ("CommonComboBoxInverted");                    
+    m_UsbModeCombo->setObjectName ("UsbModeCombo");              
+                                                                                
+    m_UsbModeCombo->addItem(qtTrId("qtn_usb_always_ask"));                            
+    m_UsbModeCombo->addItem(qtTrId("qtn_usb_mass_storage"));                             
+    m_UsbModeCombo->addItem(qtTrId("qtn_usb_ovi_suite"));                         
+                                                                                
+    #ifdef HAVE_QMSYSTEM
+    QmUSBMode::Mode active = m_logic->getMode ();
+    int currentIdx;
+    switch (active)
     {
-        int id;
-        m_buttons[i] = new MButton;
-/*  XXX: this breaks the styling:
- *      m_buttons[i]->setViewType(MButton::groupType);
- */
-        m_buttons[i]->setCheckable (true);
+      case QmUSBMode::MassStorage:
+		currentIdx = UsbModeMassStorage;
+		break;
+      case QmUSBMode::OviSuite:
+		currentIdx = UsbModeOviSuite;
+		break;
+      default:
+		currentIdx = UsbModeAlwaysAsk;
+		break;
+     }
+    m_UsbModeCombo->setCurrentIndex(currentIdx);
+    #endif 
+    connect (m_UsbModeCombo, SIGNAL (activated (int)),                           
+             this, SLOT (usbModeActivated (int)));                              
 
-        portraitButtonsPolicy->addItem (m_buttons[i]);
-        landscapeButtonsPolicy->addItem (m_buttons[i]);
-
-        switch (i)
-        {
-        case BUTTON_ALWAYS_ASK:
-            m_buttons[i]->setObjectName("AlwaysAsk");
-            m_buttons[i]->setStyleName ("CommonTopSplitButtonInverted");
-            id = (int) QmUSBMode::Ask;
-            break;
-        case BUTTON_MASS_STORAGE:
-            m_buttons[i]->setObjectName("MassStorage");
-            m_buttons[i]->setStyleName ("CommonVerticalCenterSplitButtonInverted");
-            id = (int) QmUSBMode::MassStorage;
-            break;
-        case BUTTON_OVI_SUITE:
-            m_buttons[i]->setObjectName("OviSuite");
-            m_buttons[i]->setStyleName ("CommonBottomSplitButtonInverted");
-            id = (int) QmUSBMode::OviSuite;
-            break;
-        default:
-            break;
-        }
-
-        m_btn_group->addButton (m_buttons[i], id);
-    }
-
-    MContainer *buttonsWidget = new MContainer;
-    buttonsWidget->setHeaderVisible (false);
-    buttonsWidget->setStyleName ("CommonPanelInverted");
-
-    buttonsWidget->centralWidget ()->setLayout (buttonsLayout);
-    mainPolicy->addItem (buttonsWidget);
-    mainPolicy->setAlignment (buttonsWidget, Qt::AlignCenter);
-
-    // init the button-group value & connect to its signal
-    int current_setting = (int) m_logic->getDefaultMode ();
-
-    if (m_btn_group->button (current_setting) == 0)
-        m_btn_group->button ((int) QmUSBMode::Ask)->setChecked (true);
-    else
-        m_btn_group->button (current_setting)->setChecked (true);
-
-    connect (m_btn_group, SIGNAL (buttonClicked (int)),
-             this, SLOT (selectionChanged (int)));
-
-    //finally add a stretch & set the layout
+    mainPolicy->addItem (m_UsbModeCombo);
     mainPolicy->addStretch ();
 
     setLayout (mainLayout);
@@ -183,17 +127,16 @@ UsbView::initWidget ()
 }
 
 void
-UsbView::selectionChanged (int id)
+UsbView::usbModeActivated (int idx)
 {
     #ifdef HAVE_QMSYSTEM
-    QmUSBMode::Mode newmode = (QmUSBMode::Mode) id;
     QmUSBMode::Mode active = m_logic->getMode ();
 
     /*
      * Do nothing if we just tapped on the
      * currently selected one...
      */
-    if ((int) m_logic->getDefaultMode() == id)
+    if ((int) m_logic->getDefaultMode() == idx)
         return;
 
     /*
@@ -214,19 +157,14 @@ UsbView::selectionChanged (int id)
     if ((active == QmUSBMode::MassStorage) ||
         (active == QmUSBMode::OviSuite))
     {
-        m_btn_group->blockSignals (true);
+        m_UsbModeCombo->blockSignals (true);
 
         /*
          * Set checked on the previously active button
          */
         int current_setting = (int) m_logic->getDefaultMode ();
-
-        if (m_btn_group->button (current_setting) == 0)
-            m_btn_group->button ((int) QmUSBMode::Ask)->setChecked (true);
-        else
-            m_btn_group->button (current_setting)->setChecked (true);
-
-        m_btn_group->blockSignals (false);
+	m_UsbModeCombo->setCurrentIndex(current_setting);
+        m_UsbModeCombo->blockSignals (false);
 
         /*
          * Create the error notification
@@ -244,6 +182,7 @@ UsbView::selectionChanged (int id)
         return;
     }
 
+    QmUSBMode::Mode newmode = usbModes[idx];
     m_logic->setDefaultMode (newmode);
 
     /*
@@ -262,14 +201,10 @@ void
 UsbView::retranslateUi ()
 {
     //% "Default USB device mode"
-    m_info_label->setText (qtTrId ("qtn_usb_default_info"));
-
-    //% "Always ask"
-    m_buttons[BUTTON_ALWAYS_ASK]->setText (qtTrId ("qtn_usb_always_ask"));
-    //% "Mass Storage mode"
-    m_buttons[BUTTON_MASS_STORAGE]->setText (qtTrId ("qtn_usb_mass_storage"));
-    //% "Ovi Suite mode"
-    m_buttons[BUTTON_OVI_SUITE]->setText (qtTrId ("qtn_usb_ovi_suite"));
+    m_UsbModeCombo->setTitle (qtTrId ("qtn_usb_default_info"));
+    m_UsbModeCombo->setItemText (UsbModeAlwaysAsk, qtTrId ("qtn_usb_always_ask"));
+    m_UsbModeCombo->setItemText (UsbModeMassStorage, qtTrId ("qtn_usb_mass_storage"));
+    m_UsbModeCombo->setItemText (UsbModeOviSuite, qtTrId ("qtn_usb_ovi_suite"));
 }
 
 MLabel *

@@ -28,7 +28,7 @@ using namespace MeeGo;
 
 class MLabel;
 class MButton;
-class MButtonGroup;
+class MComboBox;
 class MNotification;
 class MLinearLayoutPolicy;
 
@@ -48,12 +48,17 @@ signals:
     void settingsChanged ();
 
 private slots:
-    void selectionChanged (int id);
+    void usbModeActivated (int idx);
 
 protected:
     void retranslateUi ();
 
 private:
+    enum {
+       UsbModeAlwaysAsk = 0,
+       UsbModeMassStorage,
+       UsbModeOviSuite
+    };
     void initWidget (void);
     MLabel *addTitleLabel (MLinearLayoutPolicy    *targetPolicy,
                            const char             *panelStyleName,
@@ -63,8 +68,7 @@ private:
     #ifdef HAVE_QMSYSTEM
     MeeGo::QmUSBMode    *m_logic;
     #endif
-    MButton             *m_buttons[3];
-    MButtonGroup        *m_btn_group;
+    MComboBox           *m_UsbModeCombo;
     MLabel              *m_info_label;
     MNotification       *m_error;
     #ifdef UNIT_TEST
