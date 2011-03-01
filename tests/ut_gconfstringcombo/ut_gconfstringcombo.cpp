@@ -162,8 +162,8 @@ Ut_GConfStringComboTests::gconfstringcomboConstructor_data ()
       QTest::addColumn<QString>("val3");
       QTest::addColumn<QString>("val4");
 
-      QTest::newRow("") << "/meegotouch/input_feedback/2/volume/pulse" << "off" << "low" << "medium" << "high";
-      QTest::newRow("") << "/meegotouch/input_feedback/2/volume/vibra" << "off" << "low" << "medium" << "high";
+      QTest::newRow("") << "/meegotouch/input_feedback/volume/priority2/volume/pulse" << "off" << "low" << "medium" << "high";
+      QTest::newRow("") << "/meegotouch/input_feedback/volume/priority2/volume/vibra" << "off" << "low" << "medium" << "high";
 }
 
 void
@@ -204,25 +204,25 @@ Ut_GConfStringComboTests::gconfstringcomboChangedInGConf_data()
     QTest::addColumn<QString>("uistring");
 
     QTest::newRow("") << 
-        "/meegotouch/input_feedback/2/volume/pulse" << 
+        "/meegotouch/input_feedback/volume/priority2/volume/pulse" << 
         "off" << "low" << "medium" << "high" <<
         "off" <<
         "qtn_comm_settings_off" + translatedSuffix;
     
     QTest::newRow("") << 
-        "/meegotouch/input_feedback/2/volume/pulse" << 
+        "/meegotouch/input_feedback/volume/priority2/volume/pulse" << 
         "off" << "low" << "medium" << "high" <<
         "low" <<
         "qtn_sond_level_1" + translatedSuffix;
     
     QTest::newRow("") << 
-        "/meegotouch/input_feedback/2/volume/pulse" << 
+        "/meegotouch/input_feedback/volume/priority2/volume/pulse" << 
         "off" << "low" << "medium" << "high" <<
         "medium" <<
         "qtn_sond_level_2" + translatedSuffix;
     
     QTest::newRow("") << 
-        "/meegotouch/input_feedback/2/volume/pulse" << 
+        "/meegotouch/input_feedback/volume/priority2/volume/pulse" << 
         "off" << "low" << "medium" << "high" <<
         "high" <<
         "qtn_sond_level_3" + translatedSuffix;
@@ -277,7 +277,7 @@ Ut_GConfStringComboTests::gconfstringcomboCurrentIndexChanged_data()
     QTest::addColumn<QString>("val4");
 
     QTest::newRow("") << 
-        "/meegotouch/input_feedback/2/volume/pulse" << 
+        "/meegotouch/input_feedback/volume/priority2/volume/pulse" << 
         "off" << "low" << "medium" << "high"; 
 }
 
@@ -330,7 +330,7 @@ Ut_GConfStringComboTests::gconfstringcomboRetranslateUi_data()
        * FIXME: We shoudl add more rows...
        */
       QTest::newRow("") << 
-          "/meegotouch/input_feedback/2/volume/pulse" << 
+          "/meegotouch/input_feedback/volume/priority2/volume/pulse" << 
           "qtn_sond_touch_screen" + translatedSuffix <<
           "off" << "low" << "medium" << "high" <<
           "qtn_comm_settings_off" + translatedSuffix <<

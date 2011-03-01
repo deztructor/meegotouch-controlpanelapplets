@@ -173,7 +173,7 @@ AlertToneAppletWidget::createFeedbackList(QGraphicsWidget *parent)
 	policy->addItem(picombo);
 
 	GConfStringCombo *combo = new GConfStringCombo(
-		"/meegotouch/input_feedback/2/volume/pulse",
+		"/meegotouch/input_feedback/volume/priority2/volume/pulse",
 		QStringList() << "off" << "low" << "medium" << "high",
 		centralWidget);
 	combo->setObjectName("GConfStringCombo_pulse");
@@ -181,7 +181,7 @@ AlertToneAppletWidget::createFeedbackList(QGraphicsWidget *parent)
 	policy->addItem(combo);
 
 	combo = new GConfStringCombo(
-		"/meegotouch/input_feedback/2/volume/vibra",
+		"/meegotouch/input_feedback/volume/priority2/volume/vibra",
 		QStringList() << "off" << "low" << "medium" << "high",
 		centralWidget);
 	combo->setObjectName("GConfStringCombo_vibra");

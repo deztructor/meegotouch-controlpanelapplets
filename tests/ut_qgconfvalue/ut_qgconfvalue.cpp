@@ -28,7 +28,7 @@
 #define WARNING
 #include "../debug.h"
 
-static const QString testKey = "/meegotouch/input_feedback/2/volume/pulse";
+static const QString testKey = "/meegotouch/input_feedback/volume/priority2/volume/pulse";
 
 /******************************************************************************
  * GConf library stub. We are not going to touch the GConf database, this is a
@@ -127,8 +127,9 @@ Ut_QGConfValueTests::qgconfvalueConstructor ()
 
       QCOMPARE(qgcv.m_lsDir[0], QString("meegotouch"));
       QCOMPARE(qgcv.m_lsDir[1], QString("input_feedback"));
-      QCOMPARE(qgcv.m_lsDir[2], QString("2"));
-      QCOMPARE(qgcv.m_lsDir[3], QString("volume"));
+      QCOMPARE(qgcv.m_lsDir[2], QString("volume"));
+      QCOMPARE(qgcv.m_lsDir[3], QString("priority2"));
+      QCOMPARE(qgcv.m_lsDir[4], QString("pulse"));
 }
 
 /*!
