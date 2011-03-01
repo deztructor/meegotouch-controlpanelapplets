@@ -118,7 +118,7 @@ OfflineBrief::setToggle (
                                      qtTrId ("qtn_offl_entering") +
                                      QString ("</p>"));
             infoBanner->appear (MSceneWindow::DestroyWhenDone);
-            QTimer::singleShot (3000, infoBanner, SLOT (disappear ()));
+            QTimer::singleShot (5000, infoBanner, SLOT (disappear ()));
         }
     }
     #endif
