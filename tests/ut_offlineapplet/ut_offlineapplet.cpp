@@ -16,14 +16,13 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "ut_offlineapplet.h"
 #include <DcpWidgetTypes>
 #include <DcpWidget>
 #include <MMessageBox>
 #include <MDialog>
 #include <MApplication>
-#include <MInfoBanner>
+#include <MBanner>
 
 #include "offlineapplet.h"
 #include "offlinebrief.h"
@@ -80,17 +79,16 @@ MDialog::appear (MSceneWindow::DeletionPolicy policy)
  */
 static QString mbannerSubtitle;
 
-MInfoBanner::MInfoBanner (BannerType type)
+MBanner::MBanner ()
 {
-    Q_UNUSED (type);
 }
 
-MInfoBanner::~MInfoBanner ()
+MBanner::~MBanner ()
 {
 }
 
 void
-MInfoBanner::setBodyText (const QString &text)
+MBanner::setTitle (const QString &text)
 {
     mbannerSubtitle = text;
 }
@@ -266,7 +264,7 @@ Ut_OfflineApplet::testBriefSetToggle ()
 
     // This should not change the text
     brief->setToggle(true);
-    QCOMPARE (mbannerSubtitle, QString ("<p>") + qtTrId("qtn_offl_entering") + "</p>");
+    QCOMPARE (mbannerSubtitle, qtTrId("qtn_offl_entering"));
 
     QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
     QCOMPARE (gQmDeviceModeStub->stubCallCount("setMode"), 1);
