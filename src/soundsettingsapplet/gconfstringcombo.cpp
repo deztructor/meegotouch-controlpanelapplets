@@ -23,7 +23,7 @@
 
 #define TO_STRING(string) ((string).toUtf8().constData())
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 

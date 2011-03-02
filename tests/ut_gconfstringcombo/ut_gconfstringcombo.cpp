@@ -1,5 +1,3 @@
-/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
-/* vim:set et sw=4 ts=4 sts=4: */
 /****************************************************************************
 **
 ** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
@@ -18,12 +16,12 @@
 ** of this file.
 **
 ****************************************************************************/
+#include "ut_gconfstringcombo.h"
 
 #include <MApplication>
 #include <QString>
 #include <QStringList>
-#include  "ut_gconfstringcombo.h"
-#include  "gconfstringcombo.h"
+#include "gconfstringcombo.h"
 
 #define DEBUG
 #define WARNING
@@ -59,7 +57,7 @@ gconf_client_get (
     QString myKey = key;
     GConfValue *retval;
 
-    SYS_DEBUG ("*** key = %s", SYS_STR(myKey));
+    SYS_DEBUG ("*** key = '%s' ***", SYS_STR(myKey));
     if (myKey == "/meegotouch/target/name") {
         // FIXME: This maybe is not a good idea, we could read the GConf
         // database from a separate process.
@@ -253,6 +251,8 @@ Ut_GConfStringComboTests::gconfstringcomboChangedInGConf()
     list.push_back(val2);
     list.push_back(val3);
     list.push_back(val4);
+
+    SYS_WARNING ("XXXXXX: key = '%s'", SYS_STR (gconfkey));
 
     /*
      * Creating the object with the given GConf key and possible value list.
