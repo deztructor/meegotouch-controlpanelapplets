@@ -95,7 +95,6 @@ Depends: duicontrolpanel-usbapplet (= ${binary:Version}), ${shlibs:Depends}, ${m
 Description: usb-applet debug symbols
 
 Package: duicontrolpanel-batteryapplet
-Provides: duistatusindicatormenu-batteryplugin
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
@@ -124,9 +123,7 @@ Description: display-applet debug symbols
 Package: duicontrolpanel-profileapplet
 Section: misc
 Architecture: any
-Provides: duicontrolpanel-ledapplet
-Replaces: duistatusindicatormenu-profileplugin
-Conflicts: duistatusindicatormenu-profileplugin
+Provides: duistatusindicatormenu-profileplugin
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
 Description: Profiles settings applet.
 
