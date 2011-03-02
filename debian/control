@@ -65,7 +65,7 @@ Package: libmeegocontrol-dbg
 Section: debug
 Priority: extra
 Architecture: any
-Depends: libmeegocontrol0 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Depends: libmeegocontrol0 (= ${source:Version}), ${misc:Depends}
 Description: libmeegocontrol debug symbols
 
 Package: duicontrolpanel-offlineapplet
