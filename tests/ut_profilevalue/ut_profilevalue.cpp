@@ -179,7 +179,7 @@ Ut_ProfileValueTests::profilevaluefetchFromBackend()
 #ifdef HAVE_LIBPROFILE
     QFETCH(QString, key);
 
-    QString type (profile_get_type(key.toAscii().constData()));
+    QString type (profile_get_type(key.toAscii().data()));
     QProfileValue tc(key);
     tc.fetchFromBackend ();
 

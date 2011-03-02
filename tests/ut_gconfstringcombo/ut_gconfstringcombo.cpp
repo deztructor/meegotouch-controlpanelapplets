@@ -18,7 +18,6 @@
 ****************************************************************************/
 #include "ut_gconfstringcombo.h"
 
-#include <MApplication>
 #include <QString>
 #include <QStringList>
 #include "gconfstringcombo.h"
@@ -54,10 +53,15 @@ gconf_client_get (
         const gchar* key,
         GError** err)
 {
+    Q_UNUSED (client);
+    Q_UNUSED (err);
+    Q_ASSERT (qstrlen (key) >= 10);
+
     QString myKey = key;
     GConfValue *retval;
 
     SYS_DEBUG ("*** key = '%s' ***", SYS_STR(myKey));
+
     if (myKey == "/meegotouch/target/name") {
         // FIXME: This maybe is not a good idea, we could read the GConf
         // database from a separate process.
@@ -77,7 +81,7 @@ gconf_client_get (
     } else {
         const char *retString;
 
-        retString = MyGConfDatabase[myKey].toLatin1().constData();
+        retString = MyGConfDatabase[myKey].toLatin1().data();
         SYS_DEBUG ("returning %s", retString);
         retval = gconf_value_new (GCONF_VALUE_STRING);
         gconf_value_set_string (retval, retString);
@@ -100,6 +104,11 @@ gconf_client_set_string  (
         const gchar* val, 
         GError** err)
 {
+    Q_UNUSED (client);
+    Q_UNUSED (err);
+
+    Q_ASSERT (qstrlen (key) >= 10);
+
     lastChangedKey = key;
     lastStringValue = val;
 
@@ -107,6 +116,62 @@ gconf_client_set_string  (
     SYS_DEBUG ("*** val = %s", SYS_STR(lastStringValue));
 
     return true;
+}
+
+GConfClient *
+gconf_client_get_default ()
+{
+    return NULL;
+}
+
+void
+gconf_client_add_dir (GConfClient *client,
+                      const gchar *dir,
+                      GConfClientPreloadType preload,
+                      GError **error)
+{
+    Q_UNUSED (client);
+    Q_UNUSED (dir);
+    Q_UNUSED (preload);
+    Q_UNUSED (error);
+}
+
+void
+gconf_client_remove_dir (GConfClient *client,
+                         const gchar *dir,
+                         GError** err)
+{
+    Q_UNUSED (client);
+    Q_UNUSED (dir);
+    Q_UNUSED (err);
+}
+
+guint
+gconf_client_notify_add (
+    GConfClient *client,
+    const gchar *namespace_section,
+    GConfClientNotifyFunc func,
+    gpointer user_data,
+    GFreeFunc destroy_notify,
+    GError **err)
+{
+    Q_UNUSED (client);
+    Q_UNUSED (namespace_section);
+    Q_UNUSED (func);
+    Q_UNUSED (user_data);
+    Q_UNUSED (destroy_notify);
+    Q_UNUSED (err);
+
+    return 13;
+}
+
+void
+gconf_client_notify_remove (
+    GConfClient *client,
+    guint cnxn)
+{
+    Q_UNUSED (client);
+    Q_UNUSED (cnxn);
 }
 
 /*******************************************************************************
@@ -118,6 +183,7 @@ qtTrId (
         const char  *id, 
         int          n)
 {
+    Q_UNUSED (n);
     QString retVal (id);
 
     /*
@@ -133,23 +199,6 @@ qtTrId (
 /******************************************************************************
  * Ut_GConfStringCombo implementation.
  */
-int   argc = 1;
-char *argv[] = {
-      (char *) "./ut_gconfstringcombo",
-      NULL };
-
-void
-Ut_GConfStringComboTests::initTestCase()
-{
-      m_App = new MApplication(argc, argv);
-}
-
-void
-Ut_GConfStringComboTests::cleanupTestCase()
-{
-    if (m_App)
-        delete m_App;
-}
 
 void
 Ut_GConfStringComboTests::gconfstringcomboConstructor_data ()
@@ -380,11 +429,10 @@ Ut_GConfStringComboTests::gconfstringcomboRetranslateUi()
         uistring3 << 
         uistring4;
 
-
     GConfStringCombo  gcsc (gconfkey, list);
-    QAbstractItemModel *model = gcsc.itemModel();
 
-    for (int i = 0; i < uistrings.size(); ++i) {
+    for (int i = 0; i < uistrings.size(); ++i)
+    {
         gcsc.m_val.m_val = possiblevalues[i];
         gcsc.retranslateUi();
         QCOMPARE (gcsc.currentText(), uistrings[i]);
@@ -392,4 +440,4 @@ Ut_GConfStringComboTests::gconfstringcomboRetranslateUi()
     } 
 }
 
-QTEST_APPLESS_MAIN(Ut_GConfStringComboTests)
+QTEST_MAIN (Ut_GConfStringComboTests)

@@ -21,21 +21,20 @@
 
 #include <QtTest/QtTest>
 #include <QObject>
-#include <MApplication>
 
 class QGConfValue;
 
 class Ut_GConfStringComboTests : public QObject
 {
 Q_OBJECT
-public:
-      Ut_GConfStringComboTests() { m_App = 0; }
 
 private slots:
-      void init(){};
-      void cleanup(){};
+/*
+      void init();
+      void cleanup();
       void initTestCase();
       void cleanupTestCase();
+ */
       void gconfstringcomboConstructor_data ();
       void gconfstringcomboConstructor ();
       void gconfstringcomboChangedInGConf_data();
@@ -50,8 +49,6 @@ private:
               const QString   &key,
               const QString   &newValue, 
               QGConfValue     *toNotify);
-
-      MApplication * m_App;
 };
 
 #endif
