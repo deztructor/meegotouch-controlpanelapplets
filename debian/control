@@ -124,7 +124,7 @@ Description: display-applet debug symbols
 Package: duicontrolpanel-profileapplet
 Section: misc
 Architecture: any
-Provides: duicontrolpanel-ledapplet, duistatusindicatormenu-profileplugin
+Provides: duicontrolpanel-ledapplet
 Replaces: duistatusindicatormenu-profileplugin
 Conflicts: duistatusindicatormenu-profileplugin
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
