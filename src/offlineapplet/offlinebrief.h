@@ -27,8 +27,12 @@
 using namespace MeeGo;
 #endif
 
-class OfflineBrief: public DcpBrief{
-    Q_OBJECT
+class MBanner;
+
+class OfflineBrief: public DcpBrief
+{
+Q_OBJECT
+
 public:
     OfflineBrief();
     ~OfflineBrief();
@@ -51,6 +55,8 @@ private:
     MeeGo::QmDeviceMode::DeviceMode  m_LastMode;
     MeeGo::QmDeviceMode             *m_DevMode;
     #endif
+
+    MBanner     *m_infoBanner;
 
 #ifdef UNIT_TEST
     friend class Ut_OfflineApplet;

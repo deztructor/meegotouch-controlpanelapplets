@@ -16,28 +16,29 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "offlinebrief.h"
 
 #include <DcpWidgetTypes>
-#include <MInfoBanner>
+#include <MApplication>
+#include <MBanner>
 #include <MMessageBox>
 #include <MLabel>
-#include <QTimer>
 
 #undef DEBUG
 #include "../debug.h"
 
 #ifdef HAVE_QMSYSTEM
-OfflineBrief::OfflineBrief():
-    m_DevMode(new QmDeviceMode())
+OfflineBrief::OfflineBrief () :
+    m_DevMode (new QmDeviceMode()),
+    m_infoBanner (0)
 {
     connect(m_DevMode, SIGNAL(deviceModeChanged(MeeGo::QmDeviceMode::DeviceMode)),
             this, SLOT(devModeChanged(MeeGo::QmDeviceMode::DeviceMode)));
     m_LastMode = m_DevMode->getMode();
 }
 #else
-OfflineBrief::OfflineBrief()
+OfflineBrief::OfflineBrief (),
+    m_infoBanner (0)
 {
     /*
      * FIXME: To install a version that works without the help of the QmSystem
@@ -109,16 +110,18 @@ OfflineBrief::setToggle (
     }
     else
     {
-        if (m_DevMode->setMode(QmDeviceMode::Flight))
+        if (m_DevMode->setMode (QmDeviceMode::Flight))
         {
-            MInfoBanner *infoBanner = new MInfoBanner (MInfoBanner::Information);
+            if (! m_infoBanner)
+            {
+                m_infoBanner = new MBanner;
+                m_infoBanner->setStyleName ("InformationBanner");
+                m_infoBanner->setObjectName ("InfoBanner");
+            }
 
             //% "Closing all connections. Switching to offline mode."
-            infoBanner->setBodyText (QString ("<p>") +
-                                     qtTrId ("qtn_offl_entering") +
-                                     QString ("</p>"));
-            infoBanner->appear (MSceneWindow::DestroyWhenDone);
-            QTimer::singleShot (5000, infoBanner, SLOT (disappear ()));
+            m_infoBanner->setTitle (qtTrId ("qtn_offl_entering"));
+            m_infoBanner->appear (MApplication::activeWindow ());
         }
     }
     #endif
