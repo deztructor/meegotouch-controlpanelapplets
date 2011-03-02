@@ -97,6 +97,7 @@ binary-arch: build install
 	dh_strip --dbg-package=duicontrolpanel-warrantyapplet-dbg -p duicontrolpanel-warrantyapplet
 	dh_strip --dbg-package=duicontrolpanel-testapplet-dbg -p duicontrolpanel-testapplet
 	dh_strip --dbg-package=duicontrolpanel-soundsettingsapplet-dbg -p duicontrolpanel-soundsettingsapplet
+	dh_strip -p meegotouch-controlpanelapplets-tests
 	dh_compress $(EXCLUSIONS)
 	dh_fixperms $(EXCLUSIONS)
 	dh_makeshlibs $(EXCLUSIONS)
