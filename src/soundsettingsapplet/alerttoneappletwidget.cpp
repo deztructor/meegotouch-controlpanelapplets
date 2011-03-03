@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -173,7 +173,7 @@ AlertToneAppletWidget::createFeedbackList(QGraphicsWidget *parent)
 	policy->addItem(picombo);
 
 	GConfStringCombo *combo = new GConfStringCombo(
-		"/meegotouch/input_feedback/volume/pulse",
+		"/meegotouch/input_feedback/volume/priority2/pulse",
 		QStringList() << "off" << "low" << "medium" << "high",
 		centralWidget);
 	combo->setObjectName("GConfStringCombo_pulse");
@@ -181,7 +181,7 @@ AlertToneAppletWidget::createFeedbackList(QGraphicsWidget *parent)
 	policy->addItem(combo);
 
 	combo = new GConfStringCombo(
-		"/meegotouch/input_feedback/volume/vibra",
+		"/meegotouch/input_feedback/volume/priority2/vibra",
 		QStringList() << "off" << "low" << "medium" << "high",
 		centralWidget);
 	combo->setObjectName("GConfStringCombo_vibra");

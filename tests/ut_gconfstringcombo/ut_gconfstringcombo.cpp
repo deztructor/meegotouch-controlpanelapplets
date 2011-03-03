@@ -1,8 +1,6 @@
-/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
-/* vim:set et sw=4 ts=4 sts=4: */
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -18,12 +16,11 @@
 ** of this file.
 **
 ****************************************************************************/
+#include "ut_gconfstringcombo.h"
 
-#include <MApplication>
 #include <QString>
 #include <QStringList>
-#include  "ut_gconfstringcombo.h"
-#include  "gconfstringcombo.h"
+#include "gconfstringcombo.h"
 
 #define DEBUG
 #define WARNING
@@ -56,10 +53,15 @@ gconf_client_get (
         const gchar* key,
         GError** err)
 {
+    Q_UNUSED (client);
+    Q_UNUSED (err);
+    Q_ASSERT (qstrlen (key) >= 10);
+
     QString myKey = key;
     GConfValue *retval;
 
-    SYS_DEBUG ("*** key = %s", SYS_STR(myKey));
+    SYS_DEBUG ("*** key = '%s' ***", SYS_STR(myKey));
+
     if (myKey == "/meegotouch/target/name") {
         // FIXME: This maybe is not a good idea, we could read the GConf
         // database from a separate process.
@@ -79,7 +81,7 @@ gconf_client_get (
     } else {
         const char *retString;
 
-        retString = MyGConfDatabase[myKey].toLatin1().constData();
+        retString = MyGConfDatabase[myKey].toLatin1().data();
         SYS_DEBUG ("returning %s", retString);
         retval = gconf_value_new (GCONF_VALUE_STRING);
         gconf_value_set_string (retval, retString);
@@ -102,6 +104,11 @@ gconf_client_set_string  (
         const gchar* val, 
         GError** err)
 {
+    Q_UNUSED (client);
+    Q_UNUSED (err);
+
+    Q_ASSERT (qstrlen (key) >= 10);
+
     lastChangedKey = key;
     lastStringValue = val;
 
@@ -109,6 +116,62 @@ gconf_client_set_string  (
     SYS_DEBUG ("*** val = %s", SYS_STR(lastStringValue));
 
     return true;
+}
+
+GConfClient *
+gconf_client_get_default ()
+{
+    return NULL;
+}
+
+void
+gconf_client_add_dir (GConfClient *client,
+                      const gchar *dir,
+                      GConfClientPreloadType preload,
+                      GError **error)
+{
+    Q_UNUSED (client);
+    Q_UNUSED (dir);
+    Q_UNUSED (preload);
+    Q_UNUSED (error);
+}
+
+void
+gconf_client_remove_dir (GConfClient *client,
+                         const gchar *dir,
+                         GError** err)
+{
+    Q_UNUSED (client);
+    Q_UNUSED (dir);
+    Q_UNUSED (err);
+}
+
+guint
+gconf_client_notify_add (
+    GConfClient *client,
+    const gchar *namespace_section,
+    GConfClientNotifyFunc func,
+    gpointer user_data,
+    GFreeFunc destroy_notify,
+    GError **err)
+{
+    Q_UNUSED (client);
+    Q_UNUSED (namespace_section);
+    Q_UNUSED (func);
+    Q_UNUSED (user_data);
+    Q_UNUSED (destroy_notify);
+    Q_UNUSED (err);
+
+    return 13;
+}
+
+void
+gconf_client_notify_remove (
+    GConfClient *client,
+    guint cnxn)
+{
+    Q_UNUSED (client);
+    Q_UNUSED (cnxn);
 }
 
 /*******************************************************************************
@@ -120,6 +183,7 @@ qtTrId (
         const char  *id, 
         int          n)
 {
+    Q_UNUSED (n);
     QString retVal (id);
 
     /*
@@ -135,23 +199,6 @@ qtTrId (
 /******************************************************************************
  * Ut_GConfStringCombo implementation.
  */
-int   argc = 1;
-char *argv[] = {
-      (char *) "./ut_gconfstringcombo",
-      NULL };
-
-void
-Ut_GConfStringComboTests::initTestCase()
-{
-      m_App = new MApplication(argc, argv);
-}
-
-void
-Ut_GConfStringComboTests::cleanupTestCase()
-{
-    if (m_App)
-        delete m_App;
-}
 
 void
 Ut_GConfStringComboTests::gconfstringcomboConstructor_data ()
@@ -162,8 +209,8 @@ Ut_GConfStringComboTests::gconfstringcomboConstructor_data ()
       QTest::addColumn<QString>("val3");
       QTest::addColumn<QString>("val4");
 
-      QTest::newRow("") << "/meegotouch/input_feedback/volume/pulse" << "off" << "low" << "medium" << "high";
-      QTest::newRow("") << "/meegotouch/input_feedback/volume/vibra" << "off" << "low" << "medium" << "high";
+      QTest::newRow("") << "/meegotouch/input_feedback/volume/priority2/pulse" << "off" << "low" << "medium" << "high";
+      QTest::newRow("") << "/meegotouch/input_feedback/volume/priority2/vibra" << "off" << "low" << "medium" << "high";
 }
 
 void
@@ -204,25 +251,25 @@ Ut_GConfStringComboTests::gconfstringcomboChangedInGConf_data()
     QTest::addColumn<QString>("uistring");
 
     QTest::newRow("") << 
-        "/meegotouch/input_feedback/volume/pulse" << 
+        "/meegotouch/input_feedback/volume/priority2/pulse" << 
         "off" << "low" << "medium" << "high" <<
         "off" <<
         "qtn_comm_settings_off" + translatedSuffix;
     
     QTest::newRow("") << 
-        "/meegotouch/input_feedback/volume/pulse" << 
+        "/meegotouch/input_feedback/volume/priority2/pulse" << 
         "off" << "low" << "medium" << "high" <<
         "low" <<
         "qtn_sond_level_1" + translatedSuffix;
     
     QTest::newRow("") << 
-        "/meegotouch/input_feedback/volume/pulse" << 
+        "/meegotouch/input_feedback/volume/priority2/pulse" << 
         "off" << "low" << "medium" << "high" <<
         "medium" <<
         "qtn_sond_level_2" + translatedSuffix;
     
     QTest::newRow("") << 
-        "/meegotouch/input_feedback/volume/pulse" << 
+        "/meegotouch/input_feedback/volume/priority2/pulse" << 
         "off" << "low" << "medium" << "high" <<
         "high" <<
         "qtn_sond_level_3" + translatedSuffix;
@@ -254,6 +301,8 @@ Ut_GConfStringComboTests::gconfstringcomboChangedInGConf()
     list.push_back(val3);
     list.push_back(val4);
 
+    SYS_WARNING ("XXXXXX: key = '%s'", SYS_STR (gconfkey));
+
     /*
      * Creating the object with the given GConf key and possible value list.
      */
@@ -277,7 +326,7 @@ Ut_GConfStringComboTests::gconfstringcomboCurrentIndexChanged_data()
     QTest::addColumn<QString>("val4");
 
     QTest::newRow("") << 
-        "/meegotouch/input_feedback/volume/pulse" << 
+        "/meegotouch/input_feedback/volume/priority2/pulse" << 
         "off" << "low" << "medium" << "high"; 
 }
 
@@ -330,7 +379,7 @@ Ut_GConfStringComboTests::gconfstringcomboRetranslateUi_data()
        * FIXME: We shoudl add more rows...
        */
       QTest::newRow("") << 
-          "/meegotouch/input_feedback/volume/pulse" << 
+          "/meegotouch/input_feedback/volume/priority2/pulse" << 
           "qtn_sond_touch_screen" + translatedSuffix <<
           "off" << "low" << "medium" << "high" <<
           "qtn_comm_settings_off" + translatedSuffix <<
@@ -380,11 +429,10 @@ Ut_GConfStringComboTests::gconfstringcomboRetranslateUi()
         uistring3 << 
         uistring4;
 
-
     GConfStringCombo  gcsc (gconfkey, list);
-    QAbstractItemModel *model = gcsc.itemModel();
 
-    for (int i = 0; i < uistrings.size(); ++i) {
+    for (int i = 0; i < uistrings.size(); ++i)
+    {
         gcsc.m_val.m_val = possiblevalues[i];
         gcsc.retranslateUi();
         QCOMPARE (gcsc.currentText(), uistrings[i]);
@@ -392,4 +440,4 @@ Ut_GConfStringComboTests::gconfstringcomboRetranslateUi()
     } 
 }
 
-QTEST_APPLESS_MAIN(Ut_GConfStringComboTests)
+QTEST_MAIN (Ut_GConfStringComboTests)

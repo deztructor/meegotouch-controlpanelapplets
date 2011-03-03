@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -42,8 +42,8 @@ AlertToneAppletMaps::AlertToneAppletMaps()
 	/* Combo box widget titles */
 	m_map["keypad.sound.level"]                      = "qtn_sond_keyboard";
 	m_map["system.sound.level"]                      = "qtn_sond_system";
-	m_map["/meegotouch/input_feedback/volume/pulse"] = "qtn_sond_touch_screen";
-	m_map["/meegotouch/input_feedback/volume/vibra"] = "qtn_sond_touch_vibra";
+	m_map["/meegotouch/input_feedback/volume/priority2/pulse"] = "qtn_sond_touch_screen";
+	m_map["/meegotouch/input_feedback/volume/priority2/vibra"] = "qtn_sond_touch_vibra";
 
 	/* GConf combo box values */
 	m_map["off"]                                     = "qtn_comm_settings_off";

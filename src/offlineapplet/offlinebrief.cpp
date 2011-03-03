@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -16,11 +16,11 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "offlinebrief.h"
 
 #include <DcpWidgetTypes>
-#include <MNotification>
+#include <MApplication>
+#include <MBanner>
 #include <MMessageBox>
 #include <MLabel>
 
@@ -28,15 +28,17 @@
 #include "../debug.h"
 
 #ifdef HAVE_QMSYSTEM
-OfflineBrief::OfflineBrief():
-    m_DevMode(new QmDeviceMode())
+OfflineBrief::OfflineBrief () :
+    m_DevMode (new QmDeviceMode()),
+    m_infoBanner (0)
 {
     connect(m_DevMode, SIGNAL(deviceModeChanged(MeeGo::QmDeviceMode::DeviceMode)),
             this, SLOT(devModeChanged(MeeGo::QmDeviceMode::DeviceMode)));
     m_LastMode = m_DevMode->getMode();
 }
 #else
-OfflineBrief::OfflineBrief()
+OfflineBrief::OfflineBrief (),
+    m_infoBanner (0)
 {
     /*
      * FIXME: To install a version that works without the help of the QmSystem
@@ -108,13 +110,18 @@ OfflineBrief::setToggle (
     }
     else
     {
-        if (m_DevMode->setMode(QmDeviceMode::Flight))
+        if (m_DevMode->setMode (QmDeviceMode::Flight))
         {
-            SYS_DEBUG ("Show the Notification");
+            if (! m_infoBanner)
+            {
+                m_infoBanner = new MBanner;
+                m_infoBanner->setStyleName ("InformationBanner");
+                m_infoBanner->setObjectName ("InfoBanner");
+            }
+
             //% "Closing all connections. Switching to offline mode."
-            MNotification banner (MNotification::NetworkDisconnectedEvent,
-                                  qtTrId ("qtn_offl_entering"));
-            banner.publish ();
+            m_infoBanner->setTitle (qtTrId ("qtn_offl_entering"));
+            m_infoBanner->appear (MApplication::activeWindow ());
         }
     }
     #endif

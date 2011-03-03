@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -23,7 +23,7 @@
 
 #define TO_STRING(string) ((string).toUtf8().constData())
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 

@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -25,6 +25,7 @@
 
 #include <QtTracker/Tracker>
 #include <QGraphicsLinearLayout>
+#include <QDBusInterface>
 #include <MLabel>
 
 #ifdef HAVE_CONTENT_MANAGER
@@ -236,8 +237,10 @@ AlertToneBrowser::launchMusicBrowser()
 void
 AlertToneBrowser::launchOviStore()
 {
-    QString cmdline = "webwidgetrunner /usr/share/webwidgets/applications/d34177b1c241ea44cb132005b63ee6527c9f6040-wrt-widget.desktop -widgetparameter ringtones " /* + m_tone->key() */ + QString("&");
-    system(cmdline.toUtf8().constData());
+    static const char OviIf[] = "com.nokia.OviStoreClient";
+    QDBusInterface OviStore (OviIf, "/", OviIf);
+
+    OviStore.call ("LaunchWithKeyword", QString ("ringtones"));
 }
 
 static QString
@@ -345,6 +348,7 @@ void
 AlertToneBrowser::startPlayingSound (
         const QString &filename)
 {
+    SYS_DEBUG("");
     bool playingTheSame = false;
 
     if (m_preview)
@@ -372,6 +376,7 @@ AlertToneBrowser::startPlayingSound (
 void
 AlertToneBrowser::stopPlayingSound ()
 {
+    SYS_DEBUG("");
     delete m_preview;
     m_preview = 0;
 }
@@ -417,6 +422,7 @@ void
 AlertToneBrowser::selectingMusicItem (
         const QString &item)
 {
+    SYS_DEBUG("");
     QString fname = trackerIdToFilename(item);
 
     if (fname.isEmpty()) {
@@ -457,12 +463,9 @@ AlertToneBrowser::polishEvent ()
 
     MWindow *win = MApplication::activeWindow ();
     if (win) {
-        connect (win, SIGNAL(displayExited()),
-                this, SLOT(stopPlayingSound()));
         connect (win, SIGNAL(switcherEntered()),
                 this, SLOT(stopPlayingSound()));
     }
-
 
     /*
      * We need to find the MApplicationPage among our parents.

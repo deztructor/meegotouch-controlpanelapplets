@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -25,22 +25,24 @@
 class QGConfValue : public QTrackedVariant
 {
 public:
-	QGConfValue(const QString &key);
-	~QGConfValue();
+    QGConfValue(const QString &key);
+    ~QGConfValue();
 
 private:
-	static void notifyValue(void *client, quint32 connection_id, void *entry, QGConfValue *val);
+    static void notifyValue(void *client, quint32 connection_id, void *entry, QGConfValue *val);
 
-	void addNotify();
-	void delNotify();
-	void realSetValue(const QVariant &newValue);
-	void fetchFromBackend();
+    void addNotify();
+    void delNotify();
+    void realSetValue(const QVariant &newValue);
+    void fetchFromBackend();
 
-	quint32 m_notifyId;
-	QStringList m_lsDir;
+    quint32 m_notifyId;
+    QStringList m_lsDir;
 #ifdef UNIT_TEST
     friend class Ut_QGConfValueTests;
     friend class Ut_GConfStringComboTests;
 #endif
 };
+
 #endif
+

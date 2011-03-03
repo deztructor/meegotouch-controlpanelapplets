@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -39,6 +39,7 @@ AlertTonePreview::AlertTonePreview(const QString &fname):
 {
 #ifdef HAVE_LIBRESOURCEQT
     getResources();
+    gstInit();
 #else
     gstInit();
 #endif
@@ -100,7 +101,6 @@ AlertTonePreview::gstInit()
     gst_bus_add_signal_watch(gst_element_get_bus(m_gstPipeline));
     g_signal_connect(G_OBJECT(gst_element_get_bus(m_gstPipeline)),
         "message", (GCallback)gstSignalHandler, this);
-    gst_element_set_state(m_gstPipeline, GST_STATE_PLAYING);
 
 finalize:
         connect(&m_profileVolume, SIGNAL(changed()),
@@ -112,7 +112,7 @@ AlertTonePreview::getResources()
 {
 #ifdef HAVE_LIBRESOURCEQT
     resources = new ResourcePolicy::ResourceSet("player");
-    resources->addResource(ResourcePolicy::AudioPlaybackType);
+    resources->setAlwaysReply();
 
     ResourcePolicy::AudioResource *audioResource =
             new ResourcePolicy::AudioResource("player");
@@ -124,37 +124,29 @@ AlertTonePreview::getResources()
      * for the pulsesink. The value should be uniqe.
      */
     audioResource->setStreamTag("media.role", "AlertTonePreview");
-
     resources->addResourceObject(audioResource);
+
     connect(resources, SIGNAL(resourcesGranted(QList<ResourcePolicy::ResourceType>)),
             this, SLOT(audioResourceAcquired()));
     connect(resources, SIGNAL(lostResources()), this, SLOT(audiResourceLost()));
-    connect(resources, SIGNAL(resourcesBecameAvailable (const QList< ResourcePolicy::ResourceType >)),
-            this, SLOT(audioResourcesBecameAvailable()));
     resources->acquire();
 #endif
 }
-
 
 void
 AlertTonePreview::audioResourceAcquired()
 {
     SYS_DEBUG("");
-    gstInit();
+    if(m_gstPipeline)
+        gst_element_set_state(m_gstPipeline, GST_STATE_PLAYING);
 }
 
 void
 AlertTonePreview::audiResourceLost()
 {
     SYS_DEBUG("");
-    gst_element_set_state(m_gstPipeline, GST_STATE_PAUSED);
-}
-
-void
-AlertTonePreview::audioResourcesBecameAvailable()
-{
-    SYS_DEBUG("");
-    gst_element_set_state(m_gstPipeline, GST_STATE_PLAYING);
+    if(m_gstPipeline)
+        gst_element_set_state(m_gstPipeline, GST_STATE_PAUSED);
 }
 
 void

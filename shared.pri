@@ -1,4 +1,7 @@
 
+QMAKE_LFLAGS_RPATH += -Wl
+QMAKE_LFLAGS += -Wl,--as-needed
+
 defineTest(addSubDirs) {
     for(subdirs, 1) {
         entries = $$files($$subdirs)

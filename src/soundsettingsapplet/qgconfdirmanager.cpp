@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -92,29 +92,56 @@ QGConfDirManager::rmDir(const QString &dir)
 void
 gconf_add_dir(const QString &dir)
 {
-	GError *error = NULL;
+#ifdef DEBUG
+    GError *error = NULL;
+#endif
 
-	gconf_client_add_dir(gconf_client_get_default(), dir.toUtf8().constData(), GCONF_CLIENT_PRELOAD_NONE, &error);
+	gconf_client_add_dir (gconf_client_get_default(),
+                          dir.toUtf8().constData(),
+                          GCONF_CLIENT_PRELOAD_NONE,
+#ifndef DEBUG
+                          NULL
+#else
+                          &error
+#endif
+                          );
 
-	if (error) {
-		qWarning() << "gconf_add_dir: Failed to add" << dir << ":" << QString(error->message);
-		g_error_free(error);
+#ifdef DEBUG
+	if (error)
+    {
+        SYS_DEBUG ("gconf_add_dir: Failed to add %s: %s",
+                   SYS_STR (dir), error->message);
+		g_error_free (error);
 		error = NULL;
 	}
+#endif
 }
 
 void
 gconf_remove_dir(const QString &dir)
 {
+#ifdef DEBUG
 	GError *error = NULL;
+#endif
 
-	gconf_client_remove_dir(gconf_client_get_default(), dir.toUtf8().constData(), &error);
+	gconf_client_remove_dir (gconf_client_get_default(),
+                             dir.toUtf8().constData(),
+#ifdef DEBUG
+                             &error
+#else
+                             NULL
+#endif
+                             );
 
-	if (error) {
-		qWarning() << "gconf_remove_dir: Failed to remove" << dir << ":" << QString(error->message);
-		g_error_free(error);
+#ifdef DEBUG
+	if (error)
+    {
+        SYS_DEBUG ("gconf_remove_dir: Failed to remove %s: %s",
+                   SYS_STR (dir), error->message);
+		g_error_free (error);
 		error = NULL;
 	}
+#endif
 }
 
 void

@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -179,7 +179,7 @@ Ut_ProfileValueTests::profilevaluefetchFromBackend()
 #ifdef HAVE_LIBPROFILE
     QFETCH(QString, key);
 
-    QString type (profile_get_type(key.toAscii().constData()));
+    QString type (profile_get_type(key.toAscii().data()));
     QProfileValue tc(key);
     tc.fetchFromBackend ();
 

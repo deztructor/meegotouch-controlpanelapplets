@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -139,6 +139,7 @@ Ut_AlertToneAppletWidgetTests::alerttoneappletwidgetCreateContent()
       QCOMPARE( ataw.m_alertTones.size(), 5);
 }
 
+#if 0
 void
 Ut_AlertToneAppletWidgetTests::alerttoneappletwidgetCreateAlertTonesList()
 {
@@ -175,6 +176,8 @@ Ut_AlertToneAppletWidgetTests::alerttoneappletwidgetCreateAlertTonesList()
     }
 
 }
+#endif
+
 #include  "profileintcombo.h"
 void
 Ut_AlertToneAppletWidgetTests::alerttoneappletwidgetCreateFeedbackList()

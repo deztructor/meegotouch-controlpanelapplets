@@ -1,12 +1,87 @@
-/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
-/* vim:set et sw=4 ts=4 sts=4: */
+/****************************************************************************
+**
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (directui@nokia.com)
+**
+** This file is part of meegotouch-controlpanelapplets.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at directui@nokia.com.
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation
+** and appearing in the file LICENSE.LGPL included in the packaging
+** of this file.
+**
+****************************************************************************/
+#include "ut_alerttonevolume.h"
+#include "alerttonevolume.h"
 
 #include <MApplication>
 #include <MApplicationWindow>
 #include <QString>
 #include <QStringList>
-#include "ut_alerttonevolume.h"
-#include "alerttonevolume.h"
+
+/******************************************************************************
+ * Stubs
+ */
+
+#ifdef HAVE_LIBRESOURCEQT
+#include <policy/resource-set.h>
+namespace ResourcePolicy {
+//ResourceSet::ResourceSet(const QString &applicationClass, QObject *parent)
+//{
+//    Q_UNUSED(applicationClass);
+//    Q_UNUSED(parent);
+//}
+
+bool
+ResourceSet::addResource (ResourceType resourceType)
+{
+    Q_UNUSED(resourceType);
+    return true;
+}
+
+void
+ResourceSet::addResourceObject (Resource *resource)
+{
+    Q_UNUSED(resource);
+}
+
+bool
+ResourceSet::acquire ()
+{
+    return true;
+}
+
+bool
+ResourceSet::release ()
+{
+    return true;
+}
+
+//AudioResource::AudioResource (const QString &audioGroup)
+//{
+//    Q_UNUSED(audioGroup);
+//}
+
+void
+AudioResource::setProcessID (quint32 newPID)
+{
+    Q_UNUSED(newPID);
+}
+
+void
+AudioResource::setStreamTag (const QString &name, const QString &value)
+{
+    Q_UNUSED(name);
+    Q_UNUSED(value);
+}
+
+}
+#endif
 
 /******************************************************************************
  * Ut_AlertToneVolume implementation.
@@ -17,16 +92,17 @@ char *argv[] = {
       NULL };
 
 void
-Ut_AlertToneVolumeTests::init()
+Ut_AlertToneVolumeTests::initTestCase()
 {
-      m_App = new MApplication(argc, argv);
+    qDebug () << "TEST";
+    m_App = new MApplication(argc, argv);
 }
 
 void
-Ut_AlertToneVolumeTests::cleanup()
+Ut_AlertToneVolumeTests::cleanupTestCase()
 {
-      if ( m_App )
-      delete  m_App;
+    delete m_App;
+    m_App = 0;
 }
 
 void
@@ -35,8 +111,8 @@ Ut_AlertToneVolumeTests::alerttonevolumeConstructor ()
       MApplicationWindow aw;
       AlertToneVolume   atv;
 
-      QCOMPARE(atv.m_fileName.key() ,QString ("ringing.alert.tone") );
-      QCOMPARE(atv.m_volume.key()   ,QString ("ringing.alert.volume") );
+      QCOMPARE(atv.m_fileName.key() ,QString ("ringing.alert.tone@general") );
+      QCOMPARE(atv.m_volume.key()   ,QString ("ringing.alert.volume@general") );
 }
 
 void

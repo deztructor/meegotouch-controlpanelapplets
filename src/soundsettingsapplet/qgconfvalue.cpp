@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -46,22 +46,13 @@ QGConfValue::~QGConfValue()
 void
 QGConfValue::addNotify()
 {
-    // FIXME: If we are not using the error we should send a NULL pointer
-    // instead?
-	GError *err = NULL;
-
 	QGConfDirManager::instance().addDir(m_lsDir);
 
 	m_notifyId = gconf_client_notify_add(
 		gconf_client_get_default(),
 		keyChar(),
 		(GConfClientNotifyFunc)notifyValue,
-		this, NULL, &err);
-
-	if (err) {
-		g_error_free(err);
-		err = NULL;
-	}
+		this, NULL, NULL);
 }
 
 void
@@ -75,49 +66,48 @@ QGConfValue::delNotify()
 void
 QGConfValue::realSetValue(const QVariant &newValue)
 {
-	m_val.clear();
+    SYS_DEBUG ("key = '%s'", keyChar ());
 
-	GError *err = NULL;
-	GConfClient *cli = gconf_client_get_default();
+    m_val.clear();
 
-    SYS_DEBUG ("");
-	if (QVariant::Bool == newValue.type())
-		gconf_client_set_bool(cli, keyChar(), newValue.toBool(), &err);
-	else if (QVariant::String == newValue.type()) {
-        SYS_DEBUG ("*** key() = %s", SYS_STR(key()));
-		gconf_client_set_string(cli, keyChar(), newValue.toString().toUtf8().constData(), &err);
-    } else
-	if (QVariant::Int == newValue.type())
-		gconf_client_set_int(cli, keyChar(), newValue.toInt(), &err);
-	else
-	if (QVariant::Double == newValue.type())
-		gconf_client_set_float(cli, keyChar(), newValue.toFloat(), &err);
-	else
-		qWarning() << "QGConfValue::realSetValue:" << key() << ": unimplemented QGConfValue data type" << newValue;
+    GConfClient *cli = gconf_client_get_default();
 
-	if (err) {
-		g_error_free(err);
-		err = NULL;
-	}
+    switch (newValue.type ())
+    {
+        case QVariant::Bool:
+            gconf_client_set_bool(cli, keyChar(), newValue.toBool(), NULL);
+            break;
+        case QVariant::String:
+            gconf_client_set_string(cli, keyChar(), newValue.toString().toUtf8().constData(), NULL);
+            break;
+        case QVariant::Int:
+            gconf_client_set_int(cli, keyChar(), newValue.toInt(), NULL);
+            break;
+        case QVariant::Double:
+            gconf_client_set_float(cli, keyChar(), newValue.toFloat(), NULL);
+            break;
+        default:
+            SYS_WARNING ("key = '%s' : unimplemented QGconfValue data type = '%s'",
+                         keyChar (), newValue.typeName ());
+            break;
+    }
 }
 
 void
 QGConfValue::fetchFromBackend()
 {
-	GError *err = NULL;
 	GConfValue *val;
 	QVariant var;
+
+#ifdef DEBUG
+    Q_ASSERT (qstrlen (keyChar ()) > 0);
+#endif
 
     SYS_DEBUG ("");
 	val = gconf_client_get(
 		gconf_client_get_default(),
 		keyChar(),
-		&err);
-
-	if (err) {
-		g_error_free(err);
-		err = NULL;
-	}
+        NULL);
 
 	if (val) {
 		if (GCONF_VALUE_BOOL == val->type)

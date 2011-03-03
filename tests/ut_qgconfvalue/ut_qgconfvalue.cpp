@@ -1,5 +1,21 @@
-/* -*- Mode: C; indent-tabs-mode: s; c-basic-offset: 4; tab-width: 4 -*- */
-/* vim:set et sw=4 ts=4 sts=4: */
+/****************************************************************************
+**
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (directui@nokia.com)
+**
+** This file is part of meegotouch-controlpanelapplets.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at directui@nokia.com.
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation
+** and appearing in the file LICENSE.LGPL included in the packaging
+** of this file.
+**
+****************************************************************************/
 
 #include <MApplication>
 #include <MApplicationWindow>
@@ -12,7 +28,7 @@
 #define WARNING
 #include "../debug.h"
 
-static const QString testKey = "/meegotouch/input_feedback/volume/pulse";
+static const QString testKey = "/meegotouch/input_feedback/volume/priority2/pulse";
 
 /******************************************************************************
  * GConf library stub. We are not going to touch the GConf database, this is a
@@ -30,6 +46,9 @@ gconf_client_set_bool (
         gboolean      val, 
         GError      **err)
 {
+    Q_UNUSED (client);
+    Q_UNUSED (err);
+
     SYS_DEBUG ("*** key = %s", key);
     lastGConfKey = key;
     lastGConfValue = val;
@@ -43,6 +62,9 @@ gconf_client_set_string (
         const gchar* val, 
         GError** err)
 {
+    Q_UNUSED (client);
+    Q_UNUSED (err);
+
     SYS_DEBUG ("*** key = %s", key);
     lastGConfKey = key;
     lastGConfValue = val;
@@ -56,6 +78,9 @@ gconf_client_set_int (
         gint val, 
         GError** err)
 {
+    Q_UNUSED (client);
+    Q_UNUSED (err);
+
     SYS_DEBUG ("*** key = %s", key);
     lastGConfKey = key;
     lastGConfValue = val;
@@ -69,6 +94,9 @@ gconf_client_set_float (
         gdouble val, 
         GError** err)
 {
+    Q_UNUSED (client);
+    Q_UNUSED (err);
+
     SYS_DEBUG ("*** key = %s", key);
     lastGConfKey = key;
     lastGConfValue = val;
@@ -107,11 +135,13 @@ Ut_QGConfValueTests::qgconfvalueConstructor ()
       MApplicationWindow aw;
       QGConfValue  qgcv(testKey);
 
-      QVERIFY(qgcv.m_notifyId != 0 );
+      QVERIFY (qgcv.m_notifyId != 0);
 
-      QCOMPARE(qgcv.m_lsDir[0], QString("meegotouch"));
-      QCOMPARE(qgcv.m_lsDir[1], QString("input_feedback"));
-      QCOMPARE(qgcv.m_lsDir[2], QString("volume"));
+      QCOMPARE (qgcv.m_lsDir.count (), 4);
+      QCOMPARE (qgcv.m_lsDir[0], QString("meegotouch"));
+      QCOMPARE (qgcv.m_lsDir[1], QString("input_feedback"));
+      QCOMPARE (qgcv.m_lsDir[2], QString("volume"));
+      QCOMPARE (qgcv.m_lsDir[3], QString("priority2"));
 }
 
 /*!

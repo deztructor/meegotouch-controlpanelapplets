@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -28,6 +28,7 @@
 #include <MContentItem>
 #include <MAction>
 #include <QGraphicsLinearLayout>
+#include <QDBusInterface>
 #include <QDebug>
 #include <QtTracker/Tracker>
 #include <MLabel>
@@ -37,8 +38,6 @@
 #include "../debug.h"
 
 static const int MaxColumns = 2;
-
-static const char *oviCommand = "webwidgetrunner /usr/share/webwidgets/applications/d34177b1c241ea44cb132005b63ee6527c9f6040-wrt-widget.desktop -widgetparameter graphics &";
 
 WallpaperWidget::WallpaperWidget (
         WallpaperBusinessLogic *wallpaperBusinessLogic, 
@@ -179,8 +178,10 @@ WallpaperWidget::slotImageActivated ()
 void 
 WallpaperWidget::oviActivated ()
 {
-    SYS_DEBUG ("Executing %s", oviCommand);
-    system (oviCommand);
+    static const char OviIf[] = "com.nokia.OviStoreClient";
+    QDBusInterface OviStore (OviIf, "/", OviIf);
+
+    OviStore.call ("LaunchWithKeyword", QString ("graphics"));
 }
 
 void

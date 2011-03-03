@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -127,7 +127,4 @@ Ut_DisplayApplet::testConstructbrief ()
 
 
 QTEST_APPLESS_MAIN(Ut_DisplayApplet)
-
-
-
 

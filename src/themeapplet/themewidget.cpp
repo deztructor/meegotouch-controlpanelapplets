@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
@@ -27,6 +27,7 @@
 #include <MApplication>
 #include <MApplicationWindow>
 #include <QGraphicsLinearLayout>
+#include <QDBusInterface>
 #include <MTextEdit>
 #include <MList>
 #include <MListFilter>
@@ -38,8 +39,6 @@
 #define DEBUG
 #define WARNING
 #include "../debug.h"
-
-static const char *oviCommand = "webwidgetrunner /usr/share/webwidgets/applications/d34177b1c241ea44cb132005b63ee6527c9f6040-wrt-widget.desktop -widgetparameter themes &";
 
 ThemeWidget::ThemeWidget (
         ThemeBusinessLogic *themeBusinessLogic, 
@@ -296,8 +295,10 @@ ThemeWidget::themeActivated (
 void
 ThemeWidget::oviActivated ()
 {
-    SYS_DEBUG ("Executing %s", oviCommand);
-    system (oviCommand);
+    static const char OviIf[] = "com.nokia.OviStoreClient";
+    QDBusInterface OviStore (OviIf, "/", OviIf);
+
+    OviStore.call ("LaunchWithKeyword", QString ("themes"));
 }
 
 void 
