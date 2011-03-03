@@ -23,6 +23,7 @@
 #include <QGraphicsLinearLayout>
 #include <MImageWidget>
 #include <MLabel>
+#include <MSeparator>
 #include <MApplicationPage>
 #include <QTimer>
 
@@ -87,7 +88,7 @@ AlertToneAppletWidget::createContents()
 	QGraphicsWidget       *centralWidget = this/*->centralWidget()*/;
 	MLayout               *mainLayout;
 	MLinearLayoutPolicy   *policy;
-    MLabel                *spacer;
+    MSeparator            *spacer;
 
 	mainLayout = new MLayout (centralWidget);
 
@@ -107,7 +108,7 @@ AlertToneAppletWidget::createContents()
     /*
      * Adding a spacer.
      */
-    spacer = new MLabel;
+    spacer = new MSeparator;
     spacer->setStyleName ("CommonHeaderDividerInverted");
     policy->addItem (spacer);
 
@@ -128,7 +129,7 @@ AlertToneAppletWidget::createContents()
     /*
      * Adding a spacer.
      */
-    spacer = new MLabel;
+    spacer = new MSeparator;
     spacer->setStyleName ("CommonHeaderDividerInverted");
     policy->addItem (spacer);
     
