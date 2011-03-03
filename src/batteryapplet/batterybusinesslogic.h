@@ -43,24 +43,30 @@ class BatteryBusinessLogic : public QObject
 public:
     BatteryBusinessLogic (QObject *parent = 0);
     ~BatteryBusinessLogic ();
+    typedef enum {
+        PSMAutoOff=0,
+        PSMAutoOn,
+        PSMAutoAutomatic}PowerSaveOpt;
+
 
     typedef enum {
         BGood,
         BPoor,
         BUnknown
     } Condition;
-    
+        
     QStringList PSMThresholdValues ();
     int PSMThresholdValue ();
     bool PSMAutoValue ();
     bool PSMValue ();
     bool isCharging ();
     Condition getCondition ();
+    unsigned int getBateryLevel();
+
 
 public slots:
     void setPSMThresholdValue (int percentage);
-    void setPSMValue (bool enabled);
-    void setPSMAutoValue (bool toggle);
+    void setPSMOption (PowerSaveOpt);
     void requestValues ();
     void remainingCapacityRequired ();
 
@@ -72,6 +78,7 @@ signals:
     void batteryBarValueReceived (int bar_value);
     void PSMValueReceived (bool enabled);
     void batteryFull ();
+    void updateUIonPowerSaveModeChange (PowerSaveOpt);
 
 #ifdef HAVE_QMSYSTEM
 private slots:

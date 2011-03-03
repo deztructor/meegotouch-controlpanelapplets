@@ -38,6 +38,12 @@ class BatteryWidget : public DcpWidget
     Q_OBJECT
 
 public:
+
+    typedef enum {
+        PSMAutoOff=0,
+        PSMAutoOn,
+        PSMAutoAutomatic}PowerSaveOpt;
+
     BatteryWidget (QGraphicsWidget *parent = 0);
     ~BatteryWidget ();
     bool back ();
@@ -46,19 +52,13 @@ protected:
     void initWidget();
 
 private slots:
-    void PSMButtonReleased();
     void remainingBatteryCapacityReceived (const int value);
     void PSMValueReceived (bool PSMEnabled);
     void PSMAutoActivated (int PSMAutoMode);
     void charging(int animation_rate);
     void chargeComplete ();
-
+    void updateUIonPowerSaveModeChange (PowerSaveOpt powerSaveopt);
 private:
-    enum {
-              PSMAutoOff = 0,
-              PSMAutoOn = 1,
-	      PSMAutoAutomatic};
-
     void addHeaderContainer ();
     void addRemainingCapacityWidget ();
     void addAutoActivationWidget ();
@@ -70,7 +70,8 @@ private:
 
     void showSlider (bool show);
     void retranslateUi ();
-
+    void showHideUi ();
+    void formProperBateryInfo (unsigned int pct = 0);
 private: 
     BatteryBusinessLogic    *m_logic;
     MLinearLayoutPolicy     *m_MainLayout;
@@ -83,7 +84,6 @@ private:
     MLabel                  *m_TitleLabel;
     bool                     m_UILocked;
     // true means we are believed to be in power save mode
-    bool                     m_PSMButtonToggle;
     MSeparator              *m_Separators[5];
     int                      m_SeparatorPlacement[5];
 };
