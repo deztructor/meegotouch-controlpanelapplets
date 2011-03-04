@@ -123,9 +123,13 @@ Description: display-applet debug symbols
 Package: duicontrolpanel-profileapplet
 Section: misc
 Architecture: any
-Provides: duistatusindicatormenu-profileplugin
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
 Description: Profiles settings applet.
+
+Package: duistatusindicatormenu-profileplugin
+Section: misc
+Architecture: any
+Description: dummy package until it is removed...
 
 Package: duicontrolpanel-profileapplet-dbg
 Section: debug
