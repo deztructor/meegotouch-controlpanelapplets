@@ -12,6 +12,7 @@ meegotouch-controlpanelapplets (0.20.22~1) meegotouch; urgency=low
     main view
   * Fixes: NB#223171 - Wrong color buttons used in Wallpaper settings
   * Fixes: NB#223167 - Wrong color of toolbar buttons used for Sound settings
+  * Fixes: NB#218087 - Display settings place is not logical 
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 04 Mar 2011 09:27:25 +0100
 
