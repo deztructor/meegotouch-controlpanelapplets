@@ -208,7 +208,8 @@ Description: test-applet debug symbols
 Package: duicontrolpanel-soundsettingsapplet
 Section: sound
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libresourceqt1
+Depends: ${shlibs:Depends}, ${misc:Depends}, libresourceqt1,
+         meegotouchcp-applets-l10n-engineering-english
 Description: Sound Settings Applet
 
 Package: duicontrolpanel-soundsettingsapplet-dbg
