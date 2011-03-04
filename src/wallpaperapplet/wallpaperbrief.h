@@ -30,15 +30,22 @@ class WallpaperBrief: public DcpBrief
     Q_OBJECT
 
 public:
+#if 0
     WallpaperBrief (WallpaperBusinessLogic *businessLogic);
+#endif
 
     virtual int widgetTypeID() const;
+#if 0
+    /*
+     * Had to remove the whole stuff: see NB#230415 for details.
+     */
     virtual QString valueText() const;
     virtual QString icon () const;
     virtual QString image () const;
 
 private:
     QPointer<WallpaperBusinessLogic> m_WallpaperBusinessLogic;
+#endif
 };
 
 #endif
