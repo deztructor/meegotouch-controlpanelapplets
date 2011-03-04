@@ -21,6 +21,7 @@ HEADERS = \
     displayapplet.h \
     displaywidget.h \
     displaybrief.h \
+    brightnessbrief.h \
     displaybusinesslogic.h
 
 SOURCES = \
@@ -28,6 +29,7 @@ SOURCES = \
     displayapplet.cpp \
     displaywidget.cpp \
     displaybrief.cpp \
+    brightnessbrief.cpp \
     displaybusinesslogic.cpp
 
 DESTDIR = lib
