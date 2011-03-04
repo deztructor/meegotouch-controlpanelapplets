@@ -332,7 +332,7 @@ Ut_BatteryBusinessLogic::testPSMAutoValue ()
     QVERIFY  (lastGConfKey == psmAutoKey);
 
     newValue = !value;
-    m_Logic->setPSMAutoValue (newValue);
+    m_Logic->setPSMOption((BatteryBusinessLogic::PowerSaveOpt)(int)newValue);
     QCOMPARE (psmAutoValue, newValue);
     QVERIFY  (lastGConfKey == psmAutoKey);
 }
@@ -350,14 +350,14 @@ Ut_BatteryBusinessLogic::testPSMValue ()
     
     newValue = true;
     m_SignalSink.reset();
-    m_Logic->setPSMValue (newValue);
+    m_Logic->setPSMOption(BatteryBusinessLogic::PSMAutoOn);
     QVERIFY (m_Logic->m_devicemode->getPSMState() == QmDeviceMode::PSMStateOn);
     QVERIFY (m_SignalSink.m_PSMValueReceived);
     QVERIFY (m_SignalSink.m_PSMValue == newValue);
 
     newValue = false;
     m_SignalSink.reset();
-    m_Logic->setPSMValue (newValue);
+    m_Logic->setPSMOption(BatteryBusinessLogic::PSMAutoOff);
     QVERIFY (m_Logic->m_devicemode->getPSMState() == QmDeviceMode::PSMStateOff);
     QVERIFY (m_SignalSink.m_PSMValueReceived);
     QVERIFY (m_SignalSink.m_PSMValue == newValue);
