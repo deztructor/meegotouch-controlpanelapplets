@@ -325,15 +325,20 @@ void
 Ut_BatteryBusinessLogic::testPSMAutoValue ()
 {
     bool value;
-    bool newValue;
+    BatteryBusinessLogic::PowerSaveOpt newValue;
 
     value = m_Logic->PSMAutoValue ();
     QCOMPARE (value, psmAutoValue);
     QVERIFY  (lastGConfKey == psmAutoKey);
 
-    newValue = !value;
-    m_Logic->setPSMOption((BatteryBusinessLogic::PowerSaveOpt)(int)newValue);
-    QCOMPARE (psmAutoValue, newValue);
+    if (value)
+    {
+        newValue = BatteryBusinessLogic::PSMAutoOff;} else {
+        newValue = BatteryBusinessLogic::PSMAutoAutomatic;
+    }
+    
+    m_Logic->setPSMOption(newValue);
+    QCOMPARE (psmAutoValue, !value);
     QVERIFY  (lastGConfKey == psmAutoKey);
 }
 
