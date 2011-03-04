@@ -17,5 +17,5 @@ X-DUIApplet-ImageLandscape=Widget_landscape_NOT_DEFINED.png
 X-DUIApplet-ImagePortrait=Widget_portrait_NOT_DEFINED.png
 
 [DCP]
-Category=MainPage
+Category=qtn_sett_main_sounds
 Order=3
