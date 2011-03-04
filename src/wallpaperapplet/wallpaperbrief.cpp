@@ -27,6 +27,7 @@
 #define WARNING 
 #include "../debug.h"
 
+#if 0
 WallpaperBrief::WallpaperBrief (
         WallpaperBusinessLogic *businessLogic) :
     m_WallpaperBusinessLogic (businessLogic)
@@ -34,14 +35,17 @@ WallpaperBrief::WallpaperBrief (
     connect (businessLogic, SIGNAL(wallpaperChanged()),
         this, SIGNAL(valuesChanged()));
 }
+#endif
 
 int
 WallpaperBrief::widgetTypeID() const
 {
     SYS_DEBUG ("");
-    return DcpWidgetType::Image;
+    //return DcpWidgetType::Image;
+    return DcpWidgetType::Label;
 }
 
+#if 0
 QString 
 WallpaperBrief::valueText() const
 {
@@ -81,4 +85,4 @@ WallpaperBrief::icon () const
     SYS_DEBUG ("Returning '%s'", SYS_STR(retval));
     return retval;
 }
-
+#endif

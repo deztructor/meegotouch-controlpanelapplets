@@ -1,4 +1,22 @@
-meegotouch-controlpanelapplets (0.20.21~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.22~1) meegotouch; urgency=low
+
+  [Laszlo Pere]
+  * Fixes: NB#232788 - Soundsettingsapplet uses MLabel for separator
+  * Fixes: NB#230407 - Sound settings plugin needs to be moved to Settings 
+    main view
+  * Fixes: NB#230468 - Display settings plugin needs to be moved to Settings 
+    main view
+  * Fixes: NB#230438 - Reset settings and Clear device buttons needs to be 
+    moved to Reset category
+  * Fixes: NB#230415 - Wallpaper settings plugin needs to be moved to Settings 
+    main view
+  * Fixes: NB#223171 - Wrong color buttons used in Wallpaper settings
+  * Fixes: NB#223167 - Wrong color of toolbar buttons used for Sound settings
+  * Fixes: NB#218087 - Display settings place is not logical 
+
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 04 Mar 2011 10:52:10 +0100
+
+meegotouch-controlpanelapplets (0.20.21-2) meegotouch; urgency=low
 
   [Laszlo Gal]
   * Updating USB Applet UI to the latest ui spec
@@ -11,17 +29,6 @@ meegotouch-controlpanelapplets (0.20.21~1) meegotouch; urgency=low
   * Fixes: NB#229968 - packages compiled from meegotouch-controlpanelapplets
     are missing debug symbols
   * Fixes: NB#231545 - Text should wrap in Offline mode info banner
-
-  [Laszlo Pere]
-  * Fixes: NB#232788 - Soundsettingsapplet uses MLabel for separator
-  * Fixes: NB#230407 - Sound settings plugin needs to be moved to Settings 
-    main view
-  * Fixes: NB#230468 - Display settings plugin needs to be moved to Settings 
-    main view
-  * Fixes: NB#230438 - Reset settings and Clear device buttons needs to be 
-    moved to Reset category
-  * Fixes: NB#230415 - Wallpaper settings plugin needs to be moved to Settings 
-    main view
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 02 Mar 2011 09:02:19 +0100
 

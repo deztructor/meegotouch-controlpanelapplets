@@ -61,11 +61,11 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, libgstreamer0.10-dev,
          libresourceqt-dev
 Description: libmeegocontrol development files
 
-Package: libmeegocontrol-dbg
+Package: libmeegocontrol0-dbg
 Section: debug
 Priority: extra
 Architecture: any
-Depends: libmeegocontrol0 (= ${source:Version}), ${misc:Depends}
+Depends: libmeegocontrol0 (= ${binary:Version}), ${misc:Depends}
 Description: libmeegocontrol debug symbols
 
 Package: duicontrolpanel-offlineapplet
@@ -123,9 +123,13 @@ Description: display-applet debug symbols
 Package: duicontrolpanel-profileapplet
 Section: misc
 Architecture: any
-Provides: duistatusindicatormenu-profileplugin
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
 Description: Profiles settings applet.
+
+Package: duistatusindicatormenu-profileplugin
+Section: misc
+Architecture: any
+Description: dummy package until it is removed...
 
 Package: duicontrolpanel-profileapplet-dbg
 Section: debug
