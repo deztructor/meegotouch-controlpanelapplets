@@ -14,6 +14,8 @@ meegotouch-controlpanelapplets (0.20.22~1) meegotouch; urgency=low
   * Fixes: NB#223167 - Wrong color of toolbar buttons used for Sound settings
   * Fixes: NB#218087 - Display settings place is not logical 
   * Fixes: NB#223091 - Brightness label has unnecessary box around it 
+  * Fixes: NB#233099 - USB view page is not themed properly.. Backgound of 
+    title area is white.
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 04 Mar 2011 10:52:10 +0100
 
