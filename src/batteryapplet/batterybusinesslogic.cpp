@@ -182,8 +182,8 @@ BatteryBusinessLogic::setPSMOption (PowerSaveOpt saveOption)
     
     if (saveOption == PSMAutoAutomatic)
     {
+        ret = m_devicemode->setPSMState (MeeGo::QmDeviceMode::PSMStateOff);
         PSMAutoKey.set (true);
-        ret = true;
     } else {
     #ifdef HAVE_QMSYSTEM
 
