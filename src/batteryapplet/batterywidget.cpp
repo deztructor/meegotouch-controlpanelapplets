@@ -316,14 +316,15 @@ BatteryWidget::addAutoActivationWidget ()
      */
     m_PSMAutoCombo = new MComboBox();
     //% "Power Save Mode"
-    m_PSMAutoCombo->setTitle(qtTrId ("qtn_enter_power_save_combo"));
+    m_PSMAutoCombo->setTitle(qtTrId ("qtn_ener_power_save_combo"));
     m_PSMAutoCombo->setStyleName ("CommonComboBoxInverted");
     m_PSMAutoCombo->setObjectName ("AutoActivatePowerSaveButton");
-    
+   
+    // See bug 234041
     //% "Off"
-    m_PSMAutoCombo->addItem(qtTrId("qtn_comm_off"));
+    m_PSMAutoCombo->addItem(qtTrId("qtn_comm_settings_off"));
     //% "On"
-    m_PSMAutoCombo->addItem(qtTrId("qtn_comm_on"));
+    m_PSMAutoCombo->addItem(qtTrId("qtn_comm_settings_on"));
     //% "Automatic"
     m_PSMAutoCombo->addItem(qtTrId("qtn_ener_autops"));
 
