@@ -22,6 +22,7 @@
 #include <QVariant>
 #include <QList>
 
+class MGConfItem;
 class DisplayBusinessLogic;
 
 class BrightnessBrief: public DcpBrief
@@ -37,8 +38,12 @@ public:
     virtual QVariant value() const;
     virtual void setValue(const QVariant& value);
 
+signals:
+    void valuesChanged ();
+
 private:
     DisplayBusinessLogic   *m_logic;
+    MGConfItem             *m_gconfKey;
     QList<int>              m_brightness_vals;
 };
 

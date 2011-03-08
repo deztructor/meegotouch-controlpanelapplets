@@ -24,7 +24,7 @@
 #include <MMessageBox>
 #include <MLabel>
 
-#undef DEBUG
+#define DEBUG
 #include "../debug.h"
 
 #ifdef HAVE_QMSYSTEM
@@ -114,11 +114,12 @@ OfflineBrief::setToggle (
     SYS_DEBUG ("toggle = %s", SYS_BOOL (toggle));
     Q_UNUSED(toggle);
 
-    #ifdef HAVE_QMSYSTEM
+#ifdef HAVE_QMSYSTEM
     SYS_DEBUG("");
     if (m_LastMode == QmDeviceMode::Flight)
     {
-        m_DevMode->setMode(QmDeviceMode::Normal);
+        bool success = m_DevMode->setMode (QmDeviceMode::Normal);
+        SYS_DEBUG ("m_DevMode->>setMode (Normal) success: %s", SYS_BOOL (success));
 #if 0
         //% "Exit offline mode?"
         MMessageBox* dialog = new MMessageBox("", qtTrId("qtn_offl_exiting"),
@@ -129,7 +130,9 @@ OfflineBrief::setToggle (
     }
     else
     {
-        if (m_DevMode->setMode (QmDeviceMode::Flight))
+        bool success = m_DevMode->setMode (QmDeviceMode::Flight);
+        SYS_DEBUG ("m_DevMode->>setMode (Flight) success: %s", SYS_BOOL (success));
+        if (success)
         {
             if (! m_infoBanner)
             {
@@ -143,18 +146,18 @@ OfflineBrief::setToggle (
             m_infoBanner->appear (MApplication::activeWindow ());
         }
     }
-    #endif
+#endif
 }
 
 void OfflineBrief::processDialogResult()
 {
-    #ifdef HAVE_QMSYSTEM
+#ifdef HAVE_QMSYSTEM
     MMessageBox *dialog = static_cast<MMessageBox*>(sender());
     if(dialog->result() == MDialog::Accepted)
     {
         m_DevMode->setMode(QmDeviceMode::Normal);
     }
-    #endif
+#endif
 }
 
 int OfflineBrief::widgetTypeID() const
