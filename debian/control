@@ -24,8 +24,8 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel-usbapplet,
          duicontrolpanel-wallpaperapplet, duicontrolpanel-resetapplet,
          duicontrolpanel-warrantyapplet, duicontrolpanel-offlineapplet,
          duicontrolpanel-soundsettingsapplet
-XB-Maemo-CI-Packages: systemui-applets-tests
-XB-Maemo-CI-Stage: fast, staging
+XB-Maemo-CI-Packages: libmeegocontrol0, duicontrolpanel-soundsettingsapplet
+XB-Maemo-CI-Stage: fast, staging, acceptance, validation
 Description: Test package for meegotouch-controlpanelapplets
 
 Package: meegotouchcp-applets-l10n-engineering-english

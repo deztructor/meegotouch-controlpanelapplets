@@ -94,14 +94,13 @@ char *argv[] = {
 void
 Ut_AlertToneVolumeTests::initTestCase()
 {
-    qDebug () << "TEST";
     m_App = new MApplication(argc, argv);
 }
 
 void
 Ut_AlertToneVolumeTests::cleanupTestCase()
 {
-    delete m_App;
+    m_App->deleteLater ();
     m_App = 0;
 }
 
@@ -174,18 +173,6 @@ Ut_AlertToneVolumeTests::alerttonevolumeSlider()
       QVERIFY( atp == atv.m_preview);
       atv.slotSliderReleased();
       QVERIFY( !atv.m_preview);
-}
-/* ???????????????????why ???????????????? */
-void
-Ut_AlertToneVolumeTests::alerttonevolumeWidgetVolumeChanged()
-{
-      /*
-      MApplicationWindow aw;
-      AlertToneVolume   atv;
-      QVERIFY( 0 == (int)atv.m_preview);
-      atv.m_fileName.m_val =  QVariant("/usr/share/sounds/ring-tones/Lucid dreaming.aac");
-*/
-//setValue(int value)
 }
 
 QTEST_APPLESS_MAIN(Ut_AlertToneVolumeTests)

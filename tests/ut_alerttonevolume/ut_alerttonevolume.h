@@ -37,7 +37,6 @@ private slots:
       void alerttonevolumeVolumeChanged();
       void alerttonevolumeFileNameChanged();
       void alerttonevolumeSlider();
-      void alerttonevolumeWidgetVolumeChanged();
 
 private:
       MApplication * m_App;

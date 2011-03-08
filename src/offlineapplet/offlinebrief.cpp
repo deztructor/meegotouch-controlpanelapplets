@@ -65,17 +65,26 @@ OfflineBrief::devModeChanged (
 }
 #endif
 
-QString OfflineBrief::valueText() const
+QString
+OfflineBrief::titleText () const
 {
-    SYS_DEBUG("");
+    //% "Flight mode"
+    return qtTrId ("qtn_sett_main_flightmode");
+}
+
+QString
+OfflineBrief::valueText() const
+{
+#if 0
     return currentText();
+#endif
+
+    return "";
 }
 
 QString 
 OfflineBrief::currentText() const
 {
-    SYS_DEBUG("");
-
     #ifdef HAVE_QMSYSTEM
     switch (m_LastMode)
     {
@@ -92,21 +101,31 @@ OfflineBrief::currentText() const
     return QString("No QmSystem");
 }
 
+bool
+OfflineBrief::toggle () const
+{
+    return (m_LastMode == QmDeviceMode::Flight);
+}
+
 void 
 OfflineBrief::setToggle (
         bool toggle)
 {
+    SYS_DEBUG ("toggle = %s", SYS_BOOL (toggle));
     Q_UNUSED(toggle);
 
     #ifdef HAVE_QMSYSTEM
     SYS_DEBUG("");
     if (m_LastMode == QmDeviceMode::Flight)
     {
+        m_DevMode->setMode(QmDeviceMode::Normal);
+#if 0
         //% "Exit offline mode?"
         MMessageBox* dialog = new MMessageBox("", qtTrId("qtn_offl_exiting"),
             M::YesButton | M::NoButton);
         connect(dialog, SIGNAL(disappeared()), this, SLOT(processDialogResult()));
-        dialog->appear();
+        dialog->appear(MApplication::activeWindow ());
+#endif
     }
     else
     {
@@ -141,6 +160,6 @@ void OfflineBrief::processDialogResult()
 int OfflineBrief::widgetTypeID() const
 {
     SYS_DEBUG("");
-    return DcpWidgetType::Button;
+    return DcpWidgetType::Toggle;
 }
 

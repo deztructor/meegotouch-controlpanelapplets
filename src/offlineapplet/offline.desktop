@@ -1,9 +1,7 @@
 [Desktop Entry]
 Type=ControlPanelApplet
 Name=OfflineButton
-Icon=
-Exec=
-X-logical-id=qtn_sett_main_display
+X-logical-id=qtn_sett_main_flightmode
 X-translation-catalog=offline
 X-Maemo-Service=com.nokia.DuiControlPanel
 X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
@@ -14,7 +12,8 @@ X-Maemo-Fixed-Args=OfflineButton
 X-DUIApplet-Applet=libofflineapplet.so
 
 [DCP]
-Category=qtn_sett_main_connections
+Category=MainPage
 Order=0
-WidgetType= Button
+WidgetType=Toggle
 HelpId=IDUG_MEEGO_CONN_CLOSE.html
+
