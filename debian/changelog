@@ -3,6 +3,8 @@ meegotouch-controlpanelapplets (0.20.23~1) meegotouch; urgency=low
   [ David Kedves ]
   * Fixes: NB#230465 - Flight mode button needs to be moved to Settings main
     level
+  * Fixes: the display brightness should be sync between the applet and in
+    settings main page
   
   [Laszlo Pere]
   * Fixes: NB#234041 - Power save mode missing translations
@@ -10,7 +12,7 @@ meegotouch-controlpanelapplets (0.20.23~1) meegotouch; urgency=low
   [ Viktor Nagy ]
   * Fixes: NB#230625 - possible memory leak in duicontrolpanel
 
- -- Viktor Nagy <viktor.nagy@blumsoft.eu>  Tue, 08 Mar 2011 12:15:46 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 08 Mar 2011 14:46:49 +0100
 
 meegotouch-controlpanelapplets (0.20.22-3) meegotouch; urgency=low
 
