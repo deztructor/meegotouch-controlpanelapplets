@@ -364,9 +364,7 @@ void
 BatteryWidget::showSlider (
         bool   show)
 {
-    MContainer *container;
-
-    if (!m_SliderContainer || !m_MainLayout)
+    if (!m_SliderContainer)
         return;
 
     if (show) {
