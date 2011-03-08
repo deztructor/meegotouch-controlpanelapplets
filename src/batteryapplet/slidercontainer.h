@@ -59,7 +59,7 @@ signals:
 
 private:
     void updateSliderValueLabel ();
-    void createWidgets ();
+    void createWidgets (MWidget *parent);
 
 private:
     MContainer            *m_LabelContainer;

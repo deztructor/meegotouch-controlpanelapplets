@@ -177,12 +177,12 @@ BatteryWidget::initWidget ()
      * Initializing the wigets and connecting the signals.
      */
     // SliderContainer signals and slots, and initialization
-    m_SliderContainer->initSlider (m_logic->PSMThresholdValues ());
+    m_SliderContainer->initSlider (m_logic->PSMThresholdValues ());   
     m_SliderContainer->updateSlider (m_logic->PSMThresholdValue ());
     connect (m_SliderContainer, SIGNAL (PSMThresholdValueChanged (int)),
              m_logic, SLOT (setPSMThresholdValue (int)),
              Qt::DirectConnection);
-    
+
     // connect the value receive signals
     connect (m_logic, SIGNAL(remainingBatteryCapacityChanged(int)),
              this, SLOT(remainingBatteryCapacityReceived(int)));
@@ -301,9 +301,11 @@ BatteryWidget::addAutoActivationWidget ()
     /*
      * A help button for the PSM auto activation.
      */
+#ifdef HAVE_USERGUIDE
     MHelpButton* helpButton = new MHelpButton ("IDUG_MEEGO_BATTERY.html");
     helpButton->setViewType(MButton::iconType);
     helpButton->setIconID ("icon-m-content-description");
+#endif    
 
     /*
      * A combo box choosing the auto PSM mode between on, off and automatic
@@ -379,13 +381,18 @@ BatteryWidget::showSlider (
 
         if (m_MainLayout->indexOf(container) != -1) {
             container->hide ();
+            // FIXME: this causes a leak, do we need to remove it from
+            // the layout?
             m_MainLayout->removeAt(m_MainLayout->indexOf(container));
+            container->set
         }
         
         container = m_SliderContainer->sliderContainer();
 
         if (m_MainLayout->indexOf(container) != -1) {
             container->hide ();
+            // FIXME: this causes a leak, do we need to remove it from
+            // the layout?
             m_MainLayout->removeAt(m_MainLayout->indexOf(container));
         }
     }

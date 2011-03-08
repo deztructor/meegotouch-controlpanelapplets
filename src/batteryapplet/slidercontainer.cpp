@@ -40,7 +40,7 @@ SliderContainer::SliderContainer (MWidget *parent) :
         m_SliderExists (false)
 {
     SYS_DEBUG ("");
-    createWidgets ();
+    createWidgets (parent);
 }
 
 SliderContainer::~SliderContainer ()
@@ -60,7 +60,7 @@ SliderContainer::retranslate ()
 }
 
 void 
-SliderContainer::createWidgets ()
+SliderContainer::createWidgets (MWidget *parent)
 {
     QGraphicsLinearLayout *labelLayout;
     QGraphicsLinearLayout *sliderLayout;
@@ -71,7 +71,7 @@ SliderContainer::createWidgets ()
     /*
      * A container for the two labels.
      */
-    m_LabelContainer = new MContainer;
+    m_LabelContainer = new MContainer(parent);
     m_LabelContainer->setContentsMargins (0,0,0,0);
     m_LabelContainer->setStyleName ("CommonPanelInverted");
     m_LabelContainer->setHeaderVisible (false);
@@ -102,7 +102,7 @@ SliderContainer::createWidgets ()
     /*
      * A container to hold the slider.
      */
-    m_SliderContainer = new MContainer;
+    m_SliderContainer = new MContainer(parent);
     m_SliderContainer->setContentsMargins (0,0,0,0);
     m_SliderContainer->setStyleName ("CommonPanelInverted");
     m_SliderContainer->setHeaderVisible (false);
