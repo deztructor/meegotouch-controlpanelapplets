@@ -348,6 +348,15 @@ BatteryWidget::addSliderContainer ()
     Q_ASSERT (m_MainLayout);
 
     m_SliderContainer = new SliderContainer (this);
+
+    MContainer *container = m_SliderContainer->labelContainer();
+    m_MainLayout->insertItem (LabelContainerPosition, container);
+    m_MainLayout->setStretchFactor (container, 0);
+        
+    container = m_SliderContainer->sliderContainer();
+    m_MainLayout->insertItem (SliderContainerPosition, container);
+    m_MainLayout->setStretchFactor (container, 0);
+
     showSlider (m_PSMAutoCombo->currentIndex () == PSMAutoOn);
 }
 
@@ -361,40 +370,11 @@ BatteryWidget::showSlider (
         return;
 
     if (show) {
-        container = m_SliderContainer->labelContainer();
-
-        if (m_MainLayout->indexOf(container) == -1) {
-            m_MainLayout->insertItem (LabelContainerPosition, container);
-            m_MainLayout->setStretchFactor (container, 0);
-            container->show ();
-        }
-        
-        container = m_SliderContainer->sliderContainer();
-
-        if (m_MainLayout->indexOf(container) == -1) {
-            m_MainLayout->insertItem (SliderContainerPosition, container);
-            m_MainLayout->setStretchFactor (container, 0);
-            container->show ();
-        }
+        m_SliderContainer->labelContainer()->show();
+        m_SliderContainer->sliderContainer()->show();
     } else {
-        container = m_SliderContainer->labelContainer();
-
-        if (m_MainLayout->indexOf(container) != -1) {
-            container->hide ();
-            // FIXME: this causes a leak, do we need to remove it from
-            // the layout?
-            m_MainLayout->removeAt(m_MainLayout->indexOf(container));
-            container->set
-        }
-        
-        container = m_SliderContainer->sliderContainer();
-
-        if (m_MainLayout->indexOf(container) != -1) {
-            container->hide ();
-            // FIXME: this causes a leak, do we need to remove it from
-            // the layout?
-            m_MainLayout->removeAt(m_MainLayout->indexOf(container));
-        }
+        m_SliderContainer->labelContainer()->hide();
+        m_SliderContainer->sliderContainer()->hide();
     }
 }
 
