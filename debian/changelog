@@ -6,7 +6,7 @@ meegotouch-controlpanelapplets (0.20.23~1) meegotouch; urgency=low
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 07 Mar 2011 12:49:36 +0100
 
-meegotouch-controlpanelapplets (0.20.22-2) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.22-3) meegotouch; urgency=low
 
   [Laszlo Pere]
   * Fixes: NB#232788 - Soundsettingsapplet uses MLabel for separator
@@ -27,7 +27,7 @@ meegotouch-controlpanelapplets (0.20.22-2) meegotouch; urgency=low
   * Fixes: NB#231772 - Music preview does not stop when either Done or Cancel
     button of AlertToneBrowser is selected
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 07 Mar 2011 09:09:10 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 08 Mar 2011 10:26:43 +0100
 
 meegotouch-controlpanelapplets (0.20.21-2) meegotouch; urgency=low
 
