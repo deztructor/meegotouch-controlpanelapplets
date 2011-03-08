@@ -85,7 +85,7 @@ binary-arch: build install
 	dh_installchangelogs $(EXCLUSIONS)
 	dh_install --sourcedir=debian/tmp $(EXCLUSIONS)
 	dh_link $(EXCLUSIONS)
-	dh_strip --dbg-package=libmeegocontrol-dbg -p libmeegocontrol0
+	dh_strip --dbg-package=libmeegocontrol0-dbg -p libmeegocontrol0
 	dh_strip --dbg-package=duicontrolpanel-offlineapplet-dbg -p duicontrolpanel-offlineapplet
 	dh_strip --dbg-package=duicontrolpanel-usbapplet-dbg -p duicontrolpanel-usbapplet
 	dh_strip --dbg-package=duicontrolpanel-batteryapplet-dbg -p duicontrolpanel-batteryapplet

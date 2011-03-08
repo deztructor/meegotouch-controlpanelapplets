@@ -129,7 +129,7 @@ DisplayWidget::addSecHeaderContainer ()
      * Creating a lcontainer and a layout.
      */
     container = new MContainer (this);
-    container->setStyleName ("CommonGroupHeaderPanelInverted");
+    container->setStyleName ("CommonHeaderPanelInverted");
 
     container->setHeaderVisible (false);
     container->setContentsMargins (0,0,0,0);

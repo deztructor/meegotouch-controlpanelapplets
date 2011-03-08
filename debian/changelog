@@ -1,4 +1,38 @@
-meegotouch-controlpanelapplets (0.20.21~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.23~1) meegotouch; urgency=low
+
+  [ David Kedves ]
+  * Fixes: NB#230465 - Flight mode button needs to be moved to Settings main
+    level
+  
+  [Laszlo Pere]
+  * Fixes: NB#234041 - Power save mode missing translations
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 07 Mar 2011 12:49:36 +0100
+
+meegotouch-controlpanelapplets (0.20.22-3) meegotouch; urgency=low
+
+  [Laszlo Pere]
+  * Fixes: NB#232788 - Soundsettingsapplet uses MLabel for separator
+  * Fixes: NB#230407 - Sound settings plugin needs to be moved to Settings 
+    main view
+  * Fixes: NB#230468 - Display settings plugin needs to be moved to Settings 
+    main view
+  * Fixes: NB#230438 - Reset settings and Clear device buttons needs to be 
+    moved to Reset category
+  * Fixes: NB#230415 - Wallpaper settings plugin needs to be moved to Settings 
+    main view
+  * Fixes: NB#223171 - Wrong color buttons used in Wallpaper settings
+  * Fixes: NB#223167 - Wrong color of toolbar buttons used for Sound settings
+  * Fixes: NB#218087 - Display settings place is not logical 
+  * Fixes: NB#223091 - Brightness label has unnecessary box around it 
+  * Fixes: NB#233099 - USB view page is not themed properly.. Backgound of 
+    title area is white.
+  * Fixes: NB#231772 - Music preview does not stop when either Done or Cancel
+    button of AlertToneBrowser is selected
+
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 08 Mar 2011 10:26:43 +0100
+
+meegotouch-controlpanelapplets (0.20.21-2) meegotouch; urgency=low
 
   [Laszlo Gal]
   * Updating USB Applet UI to the latest ui spec

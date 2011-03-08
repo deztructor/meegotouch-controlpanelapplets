@@ -26,6 +26,8 @@ class DisplayBrief: public DcpBrief
     Q_OBJECT
 
 public:
+    DisplayBrief() {};
+    ~DisplayBrief() {};
     /*
      * We don't want to anything at the second line unless we can show something
      * meaningful. Actually the UI spec does not specify what to show...

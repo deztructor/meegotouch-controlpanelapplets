@@ -60,9 +60,18 @@ private:
        UsbModeOviSuite
     };
     void initWidget (void);
-    MLabel *addTitleLabel (MLinearLayoutPolicy    *targetPolicy,
-                           const char             *panelStyleName,
-                           const char             *labelStyleName);
+
+    #if 0
+    MLabel *addTitleLabel (
+            MLinearLayoutPolicy    *targetPolicy,
+            const char             *panelStyleName,
+            const char             *labelStyleName);
+    #endif
+
+    MLabel *addTitleLabel (
+        QGraphicsWidget     *parent,
+        MLinearLayoutPolicy *targetPolicy,
+        const char          *labelStyleName);
 
 private:
     #ifdef HAVE_QMSYSTEM

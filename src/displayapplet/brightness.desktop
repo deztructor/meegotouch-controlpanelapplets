@@ -1,0 +1,22 @@
+[Desktop Entry]
+Type=ControlPanelApplet
+Name=Brightness
+Icon=
+Exec=
+X-Maemo-Service=com.nokia.DuiControlPanel
+X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
+X-Maemo-Object-Path=/
+X-Maemo-Fixed-Args=Brightness
+
+[DUI]
+X-DUIApplet-Applet=libdisplayapplet.so
+
+[DCP]
+Category=MainPage
+Part=Brightness
+Order=5
+WidgetType=Slider
+# FIXME, these are just placeholders, the icons are not specified yet
+SliderLeftImage=icon-m-camera-whitebalance-sunny-screen
+SliderRightImage=icon-m-camera-whitebalance-sunny-selected
+

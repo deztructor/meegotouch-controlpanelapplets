@@ -1,3 +1,4 @@
 #MApplicationWindow {
-    toolbar-style-name: "MToolbarStyleInverted";
+    tool-bar-style-name: "MToolBarStyleInverted";
+    /*toolbar-style-name: "MToolbarStyleInverted";*/
 }

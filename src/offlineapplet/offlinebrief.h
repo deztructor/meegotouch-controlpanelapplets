@@ -36,8 +36,10 @@ Q_OBJECT
 public:
     OfflineBrief();
     ~OfflineBrief();
+    virtual QString titleText() const;
     virtual QString valueText() const;
 
+    virtual bool toggle () const;
     virtual void setToggle (bool toggle);
     virtual int widgetTypeID() const;
 

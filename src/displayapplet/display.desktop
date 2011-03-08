@@ -14,7 +14,7 @@ X-Maemo-Fixed-Args=Display
 X-DUIApplet-Applet=libdisplayapplet.so
 
 [DCP]
-Category=qtn_sett_main_battery
+Category=MainPage
 Order=1
 WidgetType=Label
 

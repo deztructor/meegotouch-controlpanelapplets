@@ -188,6 +188,8 @@ void
 AlertToneBrowser::cancel()
 {
     SYS_DEBUG ("");
+    stopPlayingSound ();
+
     m_defaults->toneChanged ();
     emit closePage();
 }
@@ -196,6 +198,8 @@ void
 AlertToneBrowser::accept()
 {
     SYS_DEBUG ("");
+    stopPlayingSound ();
+
     if (!currSelectedFile.isEmpty())
         m_tone->set(currSelectedFile);
 
@@ -376,9 +380,11 @@ AlertToneBrowser::startPlayingSound (
 void
 AlertToneBrowser::stopPlayingSound ()
 {
-    SYS_DEBUG("");
-    delete m_preview;
-    m_preview = 0;
+    SYS_DEBUG ("** m_preview = %p", m_preview);
+    if (m_preview) {
+        delete m_preview;
+        m_preview = 0;
+    }
 }
 
 /*

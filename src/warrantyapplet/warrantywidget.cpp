@@ -30,7 +30,7 @@
 #include <MContainer>
 #include <MSeparator>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 #include <MWidgetCreator>

@@ -162,7 +162,9 @@ Ut_OfflineApplet::testBriefConstruct ()
     widget = m_Applet->constructBrief(1);
 
     QVERIFY (widget);
-    QCOMPARE (int(widget->widgetTypeID()), int(DcpWidgetType::Button));
+    QCOMPARE (int(widget->widgetTypeID()), int(DcpWidgetType::Toggle));
+
+    QCOMPARE (widget->toggle (), false);
     delete widget;
     #endif
 }
@@ -173,11 +175,15 @@ Ut_OfflineApplet::testCurrentText ()
     #ifdef HAVE_QMSYSTEM
     OfflineBrief brief;
 
+#if 0
     brief.m_LastMode = MeeGo::QmDeviceMode::Normal;
     QCOMPARE (brief.currentText(), qtTrId("qtn_offl_activate"));
 
     brief.m_LastMode = MeeGo::QmDeviceMode::Flight;
     QCOMPARE (brief.currentText(), qtTrId("qtn_offl_deactivate"));
+#endif
+
+    QCOMPARE (brief.titleText (), qtTrId ("qtn_sett_main_flightmode"));
 
 /*
  * Brief never should be empty!
@@ -204,14 +210,16 @@ Ut_OfflineApplet::testBriefInit ()
 
     brief = new OfflineBrief();
     QVERIFY (brief);
-    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
+    QCOMPARE (brief->toggle (), false);
+    // QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
     delete brief;
 
     gQmDeviceModeStub->stubSetReturnValue<MeeGo::QmDeviceMode::DeviceMode> (
         "getMode", MeeGo::QmDeviceMode::Flight);
     brief = new OfflineBrief();
     QVERIFY (brief);
-    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
+    QCOMPARE (brief->toggle (), true);
+    // QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
     delete brief;
     #endif
 }
@@ -228,19 +236,22 @@ Ut_OfflineApplet::testBriefValueText ()
 
     brief = new OfflineBrief();
     QVERIFY (brief);
-    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
+    QCOMPARE (brief->toggle (), false);
+    // QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
 
     SignalChecker m_sChecker(brief);
     m_sChecker.addSignalChecker(signalValuesChanged);
 
     m_sChecker.increaseSigCounter(signalValuesChanged);
     brief->devModeChanged(MeeGo::QmDeviceMode::Flight);
-    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
+    QCOMPARE (brief->toggle (), true);
+    // QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
     m_sChecker.check();
 
     m_sChecker.increaseSigCounter(signalValuesChanged);
     brief->devModeChanged(MeeGo::QmDeviceMode::Normal);
-    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
+    QCOMPARE (brief->toggle (), false);
+    // QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
     delete brief;
     #endif
 }
@@ -257,7 +268,8 @@ Ut_OfflineApplet::testBriefSetToggle ()
 
     brief = new OfflineBrief();
     QVERIFY (brief);
-    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
+    QCOMPARE (brief->toggle (), false);
+    // QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
 
     SignalChecker m_sChecker(brief);
     m_sChecker.addSignalChecker(signalValuesChanged);
@@ -266,26 +278,22 @@ Ut_OfflineApplet::testBriefSetToggle ()
     brief->setToggle(true);
     QCOMPARE (mbannerSubtitle, qtTrId("qtn_offl_entering"));
 
-    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
+    QCOMPARE (brief->toggle (), false);
+    // QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
     QCOMPARE (gQmDeviceModeStub->stubCallCount("setMode"), 1);
     QCOMPARE (gQmDeviceModeStub->stubLastParameters<MeeGo::QmDeviceMode::DeviceMode> (0), MeeGo::QmDeviceMode::Flight);
 
     m_sChecker.increaseSigCounter(signalValuesChanged);
     brief->devModeChanged(MeeGo::QmDeviceMode::Flight);
-    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
+    QCOMPARE (brief->toggle (), true);
+    // QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
     m_sChecker.check();
-
-
-    // This should not change the text nor the QmDeviceMode
-    brief->setToggle(true);
-    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
-    QCOMPARE (gQmDeviceModeStub->stubCallCount("setMode"), 1);
-    QCOMPARE (gQmDeviceModeStub->stubLastParameters<MeeGo::QmDeviceMode::DeviceMode> (0), MeeGo::QmDeviceMode::Flight);
 
     delete brief;
     #endif
 }
 
+#if 0
 void
 Ut_OfflineApplet::testProcessDialogResult()
 {
@@ -313,6 +321,7 @@ Ut_OfflineApplet::testProcessDialogResult()
     delete brief;
     #endif
 }
+#endif
 
 QTEST_APPLESS_MAIN(Ut_OfflineApplet)
 

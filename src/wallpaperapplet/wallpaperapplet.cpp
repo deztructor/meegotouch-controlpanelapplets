@@ -35,7 +35,7 @@ M_LIBRARY
 Q_EXPORT_PLUGIN2(wallpaperapplet, WallpaperApplet)
 
 WallpaperApplet::WallpaperApplet() :
-    m_WallpaperBusinessLogic (new WallpaperBusinessLogic)
+    m_WallpaperBusinessLogic (0)
 {
 }
 
@@ -53,6 +53,9 @@ WallpaperApplet::pageMain(
         int widgetId)
 {
     SYS_DEBUG ("widgetId = %d", widgetId);
+    if (!m_WallpaperBusinessLogic)
+        m_WallpaperBusinessLogic = new WallpaperBusinessLogic;
+
     switch (widgetId) {
         case MainWidget:
             if (m_MainWidget == 0) 
@@ -100,6 +103,7 @@ WallpaperApplet::constructBrief (
 {
     Q_UNUSED (partId);
 
-    return new WallpaperBrief (m_WallpaperBusinessLogic);
+    //return new WallpaperBrief (m_WallpaperBusinessLogic);
+    return new WallpaperBrief ();
 }
 

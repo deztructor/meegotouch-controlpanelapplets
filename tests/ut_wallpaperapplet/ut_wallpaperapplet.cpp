@@ -139,7 +139,7 @@ Ut_WallpaperApplet::testConstructbrief ()
     QString   iconName;
 
     QVERIFY (brief1);
-    QVERIFY (brief1->widgetTypeID() == DcpWidgetType::Image);
+    QVERIFY (brief1->widgetTypeID() == DcpWidgetType::Label);
     
     valueText = brief1->valueText();
     /*

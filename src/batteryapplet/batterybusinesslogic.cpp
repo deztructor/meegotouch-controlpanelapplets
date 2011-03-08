@@ -86,10 +86,6 @@ BatteryBusinessLogic::requestValues ()
         m_battery, SIGNAL(batteryStateChanged(MeeGo::QmBattery::BatteryState)),
         this, SLOT (batteryStateChanged(MeeGo::QmBattery::BatteryState)));
 
-    // This will emit the batteryCharging signal,
-    // and the remainingTimeValuesChanged signal
-    chargingStateChanged (m_battery->getChargingState ());
-
     /*
      * We have two signals showing that the battery energy level has been
      * changed. We listen both of these signals.
@@ -104,15 +100,13 @@ BatteryBusinessLogic::requestValues ()
     connect (m_devicemode,
              SIGNAL (devicePSMStateChanged (MeeGo::QmDeviceMode::PSMState)),
              this, SLOT (PSMStateChanged (MeeGo::QmDeviceMode::PSMState)));
-
-    bool powerSaveMode = PSMValue ();
-    SYS_DEBUG ("Emitting PSMValueReceived(%s)", SYS_BOOL (powerSaveMode));
-    emit PSMValueReceived (powerSaveMode);
     #else
     /*
      * FIXME: To create an implementation without the QmSystem
      */
     #endif
+
+    recalculateChargingInfo ();
 }
 
 void
@@ -163,36 +157,6 @@ BatteryBusinessLogic::PSMThresholdValues ()
     return retval;
 }
 
-void
-BatteryBusinessLogic::setPSMValue (
-        bool enabled)
-{
-    bool ret = false;
-
-    #ifdef HAVE_QMSYSTEM
-    ret = m_devicemode->setPSMState (
-        enabled ?
-        MeeGo::QmDeviceMode::PSMStateOn :
-        MeeGo::QmDeviceMode::PSMStateOff);
-    #else
-    /*
-     * FIXME: To implement the setting of the power save mode without the help
-     * of the QmSystem library.
-     */
-    #endif
-
-    if (ret) {
-        // Change succeed, we don't need to wait for QmSystem reply, we can emit
-        // the PSMValueChanged asap to update the UI.
-        SYS_DEBUG ("Emitting PSMValueReceived(%s)", SYS_BOOL(enabled));
-        emit PSMValueReceived (enabled);
-    } else {
-        SYS_WARNING ("Failed to set PSM mode to %s",
-                enabled ? 
-                "QmDeviceMode::PSMStateOn" : "QmDeviceMode::PSMStateOff");
-    }
-}
-
 bool
 BatteryBusinessLogic::PSMValue ()
 {
@@ -207,17 +171,44 @@ BatteryBusinessLogic::PSMValue ()
 }
 
 /*!
- * Sets the PSMAutoValue, a boolean that sets if the device should go into power
- * save mode automatically. This function only changes a value in the GConf
- * database.
+ * Sets used  power saving option, available are: set power saving off/on
+ * or use a threshold to enable setting saving mode automatically 
  */
 void
-BatteryBusinessLogic::setPSMAutoValue (
-        bool toggle)
+BatteryBusinessLogic::setPSMOption (PowerSaveOpt saveOption)
 {
-    SYS_DEBUG ("toggle = %s", SYS_BOOL (toggle));
+    bool ret = false;
     MGConfItem PSMAutoKey (psm_auto_key);
-    PSMAutoKey.set (toggle);
+    
+    if (saveOption == PSMAutoAutomatic)
+    {
+        ret = m_devicemode->setPSMState (MeeGo::QmDeviceMode::PSMStateOff);
+        PSMAutoKey.set (true);
+    } else {
+    #ifdef HAVE_QMSYSTEM
+
+    PSMAutoKey.set (false);
+    ret = m_devicemode->setPSMState (
+        saveOption == PSMAutoOn ?
+        MeeGo::QmDeviceMode::PSMStateOn :
+        MeeGo::QmDeviceMode::PSMStateOff);
+    #else
+    /*
+     * FIXME: To implement the setting of the power save mode without the help
+     * of the QmSystem library.
+     */
+    #endif
+    }
+
+    if (ret) {
+        // Change succeed, we don't need to wait for QmSystem reply, we can emit
+        // the PSMValueChanged asap to update the UI.
+        emit updateUIonPowerSaveModeChange (saveOption);
+    } else {
+        SYS_WARNING ("Failed to set PSM mode to %s",
+                saveOption == PSMAutoOn ? 
+                "QmDeviceMode::PSMStateOn" : "QmDeviceMode::PSMStateOff");
+    }
 }
 
 /*!
@@ -494,4 +485,15 @@ BatteryBusinessLogic::getCondition ()
 
     return ret;
 }
+
+unsigned int
+BatteryBusinessLogic::getBateryLevel()
+{
+    unsigned int  bateryLevelPct = 0;
+#ifdef HAVE_QMSYSTEM
+    bateryLevelPct = m_battery->getRemainingCapacityPct();
+#endif
+    return  bateryLevelPct;
+}
+
 

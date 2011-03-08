@@ -29,6 +29,7 @@
 #include <MContainer>
 
 #undef DEBUG
+//#define WARNING
 #include "../debug.h"
 #ifdef HAVE_QMSYSTEM
 
@@ -80,10 +81,8 @@ UsbView::initWidget ()
 
 #ifndef MEEGO
 // Create the title-bar
-    MLabel *title =
-        addTitleLabel (mainPolicy,
-                       "CommonAppicationHeaderInverted",
-                       "CommonApplitationHeaderInverted");
+    MLabel *title = addTitleLabel (
+            this, mainPolicy, "CommonApplicationHeaderInverted");
     //% "USB"
     title->setText (qtTrId ("qtn_usb_title"));
 #endif
@@ -209,29 +208,18 @@ UsbView::retranslateUi ()
 
 MLabel *
 UsbView::addTitleLabel (
-    MLinearLayoutPolicy     *targetPolicy,
-    const char              *panelStyleName,
-    const char              *labelStyleName)
+        QGraphicsWidget     *parent,
+        MLinearLayoutPolicy *targetPolicy,
+        const char          *labelStyleName)
 {
+    Q_UNUSED (parent);
     MLabel                  *label;
-    MContainer              *container;
-    QGraphicsLinearLayout   *containerLayout;
 
     label = new MLabel;
     label->setStyleName (labelStyleName);
 
-    container = new MContainer;
-    container->setStyleName (panelStyleName);
-    container->setContentsMargins (0., 0., 0., 0.);
-    container->setHeaderVisible (false);
-
-    containerLayout = new QGraphicsLinearLayout (Qt::Horizontal);
-    containerLayout->setContentsMargins (0., 0., 0., 0.);
-    containerLayout->addItem (label);
-
-    container->centralWidget ()->setLayout (containerLayout);
-
-    targetPolicy->addItem (container);
+    targetPolicy->addItem (label);
     return label;
 }
+
 

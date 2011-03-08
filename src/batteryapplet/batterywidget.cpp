@@ -83,11 +83,6 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
     m_SeparatorPlacement[3] = 8;
     m_SeparatorPlacement[4] = 10;
 
-    /*
-     * One can assume, that when the applet is started the power save mode is
-     * not active.
-     */
-    m_PSMButtonToggle = false;
     setContentsMargins (0., 0., 0., 0.);
 
     // instantiate the batterybusinesslogic
@@ -192,29 +187,40 @@ BatteryWidget::initWidget ()
              m_BatteryImage, SLOT (startCharging (int)));
     connect (m_logic, SIGNAL (batteryBarValueReceived (int)),
              m_BatteryImage, SLOT (updateBatteryLevel (int)));
-    connect (m_logic, SIGNAL (PSMValueReceived (bool)),
-             m_BatteryImage, SLOT (setPSMValue (bool)));
 
     // Connecting the signals of the businesslogic.
     connect (m_logic, SIGNAL (PSMValueReceived (bool)),
              this, SLOT (PSMValueReceived (bool)));
+
+    connect (m_logic, SIGNAL (updateUIonPowerSaveModeChange (PowerSaveOpt)),
+             this, SLOT (updateUIonPowerSaveModeChange (PowerSaveOpt)));
     connect (m_logic, SIGNAL(batteryFull()),
              m_BatteryImage, SLOT(chargeComplete()));
     connect (m_logic, SIGNAL(batteryFull()),
              this, SLOT(chargeComplete()));
     
-    // Initialize the values from the business logic
+    // Connect busines logic
     m_logic->requestValues ();
 
     /*
-     * And finally set the PSMAutoValue based on backend value,
-     * this possibly triggers the slider container visibility also,
-     * that is why we should call this after layout is set,
-     * !! Only when we aren't in power save mode...
+     * now initial state of GUI , combobox, labels, slider
+     * base on psm state, 
      */
-    if (m_logic->PSMValue () == false)
-        m_PSMAutoCombo->setCurrentIndex (m_logic->PSMAutoValue());
+    showHideUi ();
 }
+
+void
+BatteryWidget::showHideUi ()
+{
+    if (m_logic->PSMAutoValue ())
+    {
+        m_PSMAutoCombo->setCurrentIndex((int)PSMAutoAutomatic);
+    } else {
+        m_PSMAutoCombo->setCurrentIndex((int)m_logic->PSMValue());
+    }
+    m_logic->setPSMOption((BatteryBusinessLogic::PowerSaveOpt)m_PSMAutoCombo->currentIndex());
+}
+
 
 void 
 BatteryWidget::addHeaderContainer ()
@@ -311,15 +317,16 @@ BatteryWidget::addAutoActivationWidget ()
      * A combo box choosing the auto PSM mode between on, off and automatic
      */
     m_PSMAutoCombo = new MComboBox();
-    //% "Power Save More"
-    m_PSMAutoCombo->setTitle(qtTrId ("qtn_enter_power_save_combo"));
+    //% "Power Save Mode"
+    m_PSMAutoCombo->setTitle(qtTrId ("qtn_ener_power_save_combo"));
     m_PSMAutoCombo->setStyleName ("CommonComboBoxInverted");
     m_PSMAutoCombo->setObjectName ("AutoActivatePowerSaveButton");
-    
+   
+    // See bug 234041
     //% "Off"
-    m_PSMAutoCombo->addItem(qtTrId("qtn_comm_off"));
+    m_PSMAutoCombo->addItem(qtTrId("qtn_comm_settings_off"));
     //% "On"
-    m_PSMAutoCombo->addItem(qtTrId("qtn_comm_on"));
+    m_PSMAutoCombo->addItem(qtTrId("qtn_comm_settings_on"));
     //% "Automatic"
     m_PSMAutoCombo->addItem(qtTrId("qtn_ener_autops"));
 
@@ -478,61 +485,16 @@ BatteryWidget::addSpacer (
 }
 
 /*!
- * This function is called when the user clicked on the 'power save mode' button
- * that activates and disactivates the power saving mode. The function will call
- * the battery interface, but the UI will be changed only when the power save
- * mode really changed...
- */
-void 
-BatteryWidget::PSMButtonReleased ()
-{
-    bool newPSMValue = !m_PSMButtonToggle;
-    SYS_DEBUG ("Setting PSMvalue to %s", SYS_BOOL (newPSMValue));
-
-    /*
-     * To 'deactivate' the power-save move, we need to turn
-     * off the automatic power-saving...
-     */
-    if (newPSMValue == false)
-    {
-        m_logic->setPSMAutoValue (false);
-    }
-
-    // UI will change only in PSMValueReceived slot...
-    m_logic->setPSMValue (newPSMValue);
-}
-
-/*!
  * This slot is called when the psm auto combo is activated.
  */
 void
 BatteryWidget::PSMAutoActivated (
         int PSMAutoMode)
 {
-   // SYS_DEBUG ("*** PSMAutoMode = %s", SYS_INT(PSMAutoMode));
-
-    if (PSMAutoMode == PSMAutoAutomatic)
-    {
-   	 m_logic->setPSMAutoValue (true);
-       //  m_logic->setPSMValue (true);
-    }
-    
     if (m_UILocked) {
         SYS_WARNING ("The UI is locked.");
     } else {
-        m_logic->setPSMAutoValue (PSMAutoMode == PSMAutoOn);
-
-        if (PSMAutoMode == PSMAutoOn) {
-            /*
-             * QmSystem returns 0 when PSMAuto is disabled,
-             * so when we're enabling it, we've to re-query
-             * the proper value
-             */
-            m_SliderContainer->updateSlider (m_logic->PSMThresholdValue ());
-            showSlider (true);
-        } else {
-            showSlider (false);
-        }
+        m_logic->setPSMOption ((BatteryBusinessLogic::PowerSaveOpt)PSMAutoMode);
     }
 }
 
@@ -540,28 +502,24 @@ BatteryWidget::PSMAutoActivated (
 void BatteryWidget::remainingBatteryCapacityReceived(const   int pct)
 {
     SYS_DEBUG ("percentage = %d", pct);
+    formProperBateryInfo (pct);
+}
 
-    /*
-     * A little extra check just to be sure the widget is fully created.
-     */
+void
+BatteryWidget::formProperBateryInfo (unsigned int pct)
+{
     if (!m_RemainingContainer)
         return;
 
     if (!(m_logic->isCharging())) {
-        if (!m_PSMButtonToggle) {
+        if (!m_logic->PSMValue()) {
             m_RemainingContainer->updateCapacity (pct);
         } else {
             //% "Power save mode"
             m_RemainingContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
         }
     } else {
-        if (!m_PSMButtonToggle) {
-            //% "Charging"
             m_RemainingContainer->setText(qtTrId ("qtn_ener_charging"));
-        } else {
-            //% "Power save mode"
-            m_RemainingContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
-        }
     }
 }
 
@@ -569,34 +527,23 @@ void
 BatteryWidget::PSMValueReceived (
         bool PSMEnabled)
 {
-
-    if (m_PSMButtonToggle == PSMEnabled) {
-        SYS_DEBUG ("toggle already set");
-        return;
-    }
-
-    m_PSMButtonToggle = PSMEnabled;
     m_UILocked = true;
 
     if (m_MainLayout && m_ActivationContainer) {
-        if (!PSMEnabled) {
-            if (m_MainLayout->indexOf(m_ActivationContainer) == -1) {
-                m_PSMAutoCombo->setCurrentIndex (m_logic->PSMAutoValue());
-                m_MainLayout->insertItem (
-                        ActivationContainerPosition, m_ActivationContainer);
-                m_MainLayout->setStretchFactor (m_ActivationContainer, 0);
-            }
-            m_logic->remainingCapacityRequired();
-        } else {
-            m_PSMAutoCombo->setCurrentIndex(PSMAutoOff);
-            showSlider (false);
-            m_MainLayout->removeAt(m_MainLayout->indexOf(m_ActivationContainer));
-            //% "Power save mode"
-            m_RemainingContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
-        }
+        formProperBateryInfo(m_logic->getBateryLevel());
     }
 
     m_UILocked = false;
+}
+
+void BatteryWidget::updateUIonPowerSaveModeChange (PowerSaveOpt powerSaveopt)
+{
+    if (powerSaveopt == PSMAutoAutomatic)
+    {
+        showSlider (true);
+    } else {
+        showSlider (false);
+    }
 }
 
 void
@@ -619,7 +566,8 @@ void BatteryWidget::charging(int animation_rate)
     SYS_DEBUG("Charging rate: %d", animation_rate);
     if(animation_rate > 0) {
         //% "Charging"
-        m_RemainingContainer->setText(qtTrId ("qtn_ener_charging"));
+        formProperBateryInfo ();
+        //m_RemainingContainer->setText(qtTrId ("qtn_ener_charging"));
     }
 }
 
