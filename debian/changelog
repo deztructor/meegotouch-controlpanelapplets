@@ -7,7 +7,10 @@ meegotouch-controlpanelapplets (0.20.23~1) meegotouch; urgency=low
   [Laszlo Pere]
   * Fixes: NB#234041 - Power save mode missing translations
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 07 Mar 2011 12:49:36 +0100
+  [ Viktor Nagy ]
+  * Fixes: NB#230625 - possible memory leak in duicontrolpanel
+
+ -- Viktor Nagy <viktor.nagy@blumsoft.eu>  Tue, 08 Mar 2011 12:15:46 +0100
 
 meegotouch-controlpanelapplets (0.20.22-3) meegotouch; urgency=low
 
