@@ -113,16 +113,33 @@ OfflineBrief::setToggle (
         bool toggle)
 {
     SYS_DEBUG ("toggle = %s", SYS_BOOL (toggle));
-    Q_UNUSED(toggle);
+    /*
+     * Don't do anything if we already in the desired mode
+     */
+    if (toggle && m_LastMode == QmDeviceMode::Flight)
+        return;
+    else if ((! toggle) && m_LastMode == QmDeviceMode::Normal)
+        return;
 
 #ifdef HAVE_QMSYSTEM
     if (! toggle)
     {
         //% "Exit offline mode?"
-        MMessageBox* dialog = new MMessageBox("", qtTrId("qtn_offl_exiting"),
-            M::YesButton | M::NoButton);
-        connect(dialog, SIGNAL(disappeared()), this, SLOT(processDialogResult()));
-        dialog->appear(MApplication::activeWindow ());
+        MMessageBox* dialog =
+            new MMessageBox ("", qtTrId("qtn_offl_exiting"),
+                             M::YesButton | M::NoButton);
+        /*
+         * This will set the 'Normal' mode if dialog accepted
+         */
+        connect (dialog, SIGNAL (accepted ()),
+                 SLOT (processDialogResult ()));
+        /*
+         * This will switch back the button for the proper state
+         */
+        connect (dialog, SIGNAL (rejected ()),
+                 this, SIGNAL (valuesChanged ()));
+        dialog->appear (MApplication::activeWindow (),
+                        MSceneWindow::DestroyWhenDone);
     }
     else
     {
@@ -145,16 +162,16 @@ OfflineBrief::setToggle (
 #endif
 }
 
+/*
+ * FIXME: This slot is only called when the dialog is accepted...
+ *        Re-name this at once...
+ */
 void
 OfflineBrief::processDialogResult ()
 {
 #ifdef HAVE_QMSYSTEM
-    MMessageBox *dialog = static_cast<MMessageBox*>(sender());
-    if(dialog->result() == MDialog::Accepted)
-    {
-        bool success = m_DevMode->setMode (QmDeviceMode::Normal);
-        SYS_DEBUG ("m_DevMode->setMode (Normal) success: %s", SYS_BOOL (success));
-    }
+    bool success = m_DevMode->setMode (QmDeviceMode::Normal);
+    SYS_DEBUG ("m_DevMode->setMode (Normal) success: %s", SYS_BOOL (success));
 
     emit valuesChanged();
 #endif
@@ -163,7 +180,6 @@ OfflineBrief::processDialogResult ()
 int
 OfflineBrief::widgetTypeID () const
 {
-    SYS_DEBUG("");
     return DcpWidgetType::Toggle;
 }
 
