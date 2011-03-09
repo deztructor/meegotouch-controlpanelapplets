@@ -56,7 +56,7 @@ OfflineBrief::~OfflineBrief()
 }
 
 #ifdef HAVE_QMSYSTEM
-void 
+void
 OfflineBrief::devModeChanged (
         MeeGo::QmDeviceMode::DeviceMode mode)
 {
@@ -83,7 +83,7 @@ OfflineBrief::valueText() const
     return "";
 }
 
-QString 
+QString
 OfflineBrief::currentText() const
 {
     #ifdef HAVE_QMSYSTEM
@@ -108,7 +108,7 @@ OfflineBrief::toggle () const
     return (m_LastMode == QmDeviceMode::Flight);
 }
 
-void 
+void
 OfflineBrief::setToggle (
         bool toggle)
 {
@@ -118,15 +118,11 @@ OfflineBrief::setToggle (
 #ifdef HAVE_QMSYSTEM
     if (! toggle)
     {
-        bool success = m_DevMode->setMode (QmDeviceMode::Normal);
-        SYS_DEBUG ("m_DevMode->setMode (Normal) success: %s", SYS_BOOL (success));
-#if 0
         //% "Exit offline mode?"
         MMessageBox* dialog = new MMessageBox("", qtTrId("qtn_offl_exiting"),
             M::YesButton | M::NoButton);
         connect(dialog, SIGNAL(disappeared()), this, SLOT(processDialogResult()));
         dialog->appear(MApplication::activeWindow ());
-#endif
     }
     else
     {
@@ -156,8 +152,11 @@ OfflineBrief::processDialogResult ()
     MMessageBox *dialog = static_cast<MMessageBox*>(sender());
     if(dialog->result() == MDialog::Accepted)
     {
-        m_DevMode->setMode(QmDeviceMode::Normal);
+        bool success = m_DevMode->setMode (QmDeviceMode::Normal);
+        SYS_DEBUG ("m_DevMode->setMode (Normal) success: %s", SYS_BOOL (success));
     }
+
+    emit valuesChanged();
 #endif
 }
 
