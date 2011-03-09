@@ -5,6 +5,7 @@ meegotouch-controlpanelapplets (0.20.23~1) meegotouch; urgency=low
     level
   * Fixes: the display brightness should be sync between the applet and in
     settings main page
+  * Fixes: NB#234226 - Offline applet is not working out-process
   
   [Laszlo Pere]
   * Fixes: NB#234041 - Power save mode missing translations
@@ -12,7 +13,7 @@ meegotouch-controlpanelapplets (0.20.23~1) meegotouch; urgency=low
   [ Viktor Nagy ]
   * Fixes: NB#230625 - possible memory leak in duicontrolpanel
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 08 Mar 2011 14:46:49 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 09 Mar 2011 09:39:51 +0100
 
 meegotouch-controlpanelapplets (0.20.22-3) meegotouch; urgency=low
 
