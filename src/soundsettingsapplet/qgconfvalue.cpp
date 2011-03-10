@@ -17,7 +17,6 @@
 **
 ****************************************************************************/
 #include <gconf/gconf-client.h>
-#include <QDebug>
 
 #include "qgconfvalue.h"
 #include "qgconfdirmanager.h"
@@ -66,7 +65,7 @@ QGConfValue::delNotify()
 void
 QGConfValue::realSetValue(const QVariant &newValue)
 {
-    SYS_DEBUG ("key = '%s'", keyChar ());
+    //SYS_DEBUG ("key = '%s'", keyChar ());
 
     m_val.clear();
 
@@ -99,10 +98,6 @@ QGConfValue::fetchFromBackend()
 	GConfValue *val;
 	QVariant var;
 
-#ifdef DEBUG
-    Q_ASSERT (qstrlen (keyChar ()) > 0);
-#endif
-
     SYS_DEBUG ("");
 	val = gconf_client_get(
 		gconf_client_get_default(),
@@ -113,24 +108,23 @@ QGConfValue::fetchFromBackend()
 		if (GCONF_VALUE_BOOL == val->type)
 			var = QVariant((bool)(gconf_value_get_bool((const GConfValue *)val)));
 		else if (GCONF_VALUE_STRING == val->type) {
-            SYS_DEBUG ("STRING: %s", gconf_value_get_string(val));
-			var = QVariant(QString(gconf_value_get_string((const GConfValue *)val)));
+            //SYS_DEBUG ("STRING: %s", gconf_value_get_string(val));
+			var = QVariant(QString(gconf_value_get_string(
+                            (const GConfValue *)val)));
         }
-		else
-		if (GCONF_VALUE_INT == val->type)
+		else if (GCONF_VALUE_INT == val->type)
 			var = QVariant(gconf_value_get_int((const GConfValue *)val));
-		else
-		if (GCONF_VALUE_FLOAT == val->type)
+		else if (GCONF_VALUE_FLOAT == val->type)
 			var = QVariant(gconf_value_get_float((const GConfValue *)val));
-		else
-			qWarning() << "QGConfValue::value: unimplemented QGConfValue data type" << val->type;
+		else {
+			SYS_WARNING ("unimplemented QGConfValue data type");
+        }
+
 		gconf_value_free(val);
 	}
 
 	if (!var.isNull())
 		m_val = var;
-
-    // FIXME: Here val is leaking out!!
 }
 
 void

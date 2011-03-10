@@ -29,9 +29,18 @@
  */
 QTrackedVariant::QTrackedVariant (
         const QString &key) :
-	m_key(key)
+    m_KeyChar (0)
 {
+    if (key.toUtf8().constData())
+        m_KeyChar = strdup (key.toUtf8().constData());
+
     SYS_DEBUG ("*** key = %s", SYS_STR(key));
+}
+
+QTrackedVariant::~QTrackedVariant()
+{
+    if (m_KeyChar)
+        free (m_KeyChar);
 }
 
 /*!
@@ -97,7 +106,7 @@ QTrackedVariant::realSetValue (
 QString
 QTrackedVariant::key() const
 {
-	return m_key;
+	return QString(m_KeyChar);
 }
 
 /*!
@@ -109,6 +118,6 @@ QTrackedVariant::key() const
 const char *
 QTrackedVariant::keyChar () const
 {
-    return m_key.toUtf8().constData();
+    return m_KeyChar;
 }
 

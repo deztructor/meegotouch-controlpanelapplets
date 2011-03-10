@@ -6,6 +6,9 @@ meegotouch-controlpanelapplets (0.20.23~1) meegotouch; urgency=low
   
   [Laszlo Pere]
   * Fixes: NB#234041 - Power save mode missing translations
+  * Fixes: NB#235353 - UI problem with the sound/haptics settings
+  * Fixes: NB#235042 - Touch screen tones value is not updating and always 
+    showing tap to select.
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 07 Mar 2011 12:49:36 +0100
 

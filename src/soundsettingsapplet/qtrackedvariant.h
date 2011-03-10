@@ -42,7 +42,8 @@ class QTrackedVariant : public QObject
 	Q_OBJECT
 
 public:
-	QTrackedVariant(const QString &key);
+	QTrackedVariant (const QString &key);
+    ~QTrackedVariant ();
 
 	void set(const QVariant &newValue);
 	QVariant value();
@@ -70,7 +71,7 @@ private:
      * protected and the inherited classes are not handling the case when the
      * key has been changed. And indeed the key is never changed. 
      */
-    const QString m_key;
+    char  *m_KeyChar;
 
 #ifdef UNIT_TEST
     friend class Ut_TrackedVariantTests;

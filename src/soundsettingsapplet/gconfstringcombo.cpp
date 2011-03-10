@@ -23,7 +23,7 @@
 
 #define TO_STRING(string) ((string).toUtf8().constData())
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -70,7 +70,6 @@ GConfStringCombo::retranslateUi()
      * Fetching the current value.
      */
 	QString gconfVal = m_val.value().toString();
-    SYS_DEBUG ("*** gconfVal = %s", SYS_STR(gconfVal));
 
     /*
      * Adding a row for every possible value with the UI string and the possible

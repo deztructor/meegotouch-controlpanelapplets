@@ -278,9 +278,10 @@ WallpaperWidget::galleryImageSelected (
 {
     m_WallpaperBusinessLogic->addImageFromGallery (uri);
     SYS_WARNING ("m_ImageBrowser->unselectItem (%s);", SYS_STR(uri));
-
+    #if 0
     if (m_ImageBrowser)
         m_ImageBrowser->unselectItem (uri);
+    #endif
 }
 #endif
 
