@@ -43,6 +43,9 @@ public:
     virtual void setToggle (bool toggle);
     virtual int widgetTypeID() const;
 
+signals:
+    void valuesChanged ();
+
 private:
     QString currentText() const;
 

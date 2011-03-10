@@ -24,7 +24,7 @@
 #include <MMessageBox>
 #include <MLabel>
 
-#undef DEBUG
+#define DEBUG
 #include "../debug.h"
 
 #ifdef HAVE_QMSYSTEM
@@ -32,8 +32,9 @@ OfflineBrief::OfflineBrief () :
     m_DevMode (new QmDeviceMode()),
     m_infoBanner (0)
 {
-    connect(m_DevMode, SIGNAL(deviceModeChanged(MeeGo::QmDeviceMode::DeviceMode)),
-            this, SLOT(devModeChanged(MeeGo::QmDeviceMode::DeviceMode)));
+    connect (m_DevMode,
+             SIGNAL (deviceModeChanged (MeeGo::QmDeviceMode::DeviceMode)),
+             SLOT (devModeChanged (MeeGo::QmDeviceMode::DeviceMode)));
     m_LastMode = m_DevMode->getMode();
 }
 #else
@@ -55,7 +56,7 @@ OfflineBrief::~OfflineBrief()
 }
 
 #ifdef HAVE_QMSYSTEM
-void 
+void
 OfflineBrief::devModeChanged (
         MeeGo::QmDeviceMode::DeviceMode mode)
 {
@@ -82,7 +83,7 @@ OfflineBrief::valueText() const
     return "";
 }
 
-QString 
+QString
 OfflineBrief::currentText() const
 {
     #ifdef HAVE_QMSYSTEM
@@ -107,29 +108,44 @@ OfflineBrief::toggle () const
     return (m_LastMode == QmDeviceMode::Flight);
 }
 
-void 
+void
 OfflineBrief::setToggle (
         bool toggle)
 {
     SYS_DEBUG ("toggle = %s", SYS_BOOL (toggle));
-    Q_UNUSED(toggle);
+    /*
+     * Don't do anything if we already in the desired mode
+     */
+    if (toggle && m_LastMode == QmDeviceMode::Flight)
+        return;
+    else if ((! toggle) && m_LastMode == QmDeviceMode::Normal)
+        return;
 
-    #ifdef HAVE_QMSYSTEM
-    SYS_DEBUG("");
-    if (m_LastMode == QmDeviceMode::Flight)
+#ifdef HAVE_QMSYSTEM
+    if (! toggle)
     {
-        m_DevMode->setMode(QmDeviceMode::Normal);
-#if 0
         //% "Exit offline mode?"
-        MMessageBox* dialog = new MMessageBox("", qtTrId("qtn_offl_exiting"),
-            M::YesButton | M::NoButton);
-        connect(dialog, SIGNAL(disappeared()), this, SLOT(processDialogResult()));
-        dialog->appear(MApplication::activeWindow ());
-#endif
+        MMessageBox* dialog =
+            new MMessageBox ("", qtTrId("qtn_offl_exiting"),
+                             M::YesButton | M::NoButton);
+        /*
+         * This will set the 'Normal' mode if dialog accepted
+         */
+        connect (dialog, SIGNAL (accepted ()),
+                 SLOT (processDialogResult ()));
+        /*
+         * This will switch back the button for the proper state
+         */
+        connect (dialog, SIGNAL (rejected ()),
+                 this, SIGNAL (valuesChanged ()));
+        dialog->appear (MApplication::activeWindow (),
+                        MSceneWindow::DestroyWhenDone);
     }
     else
     {
-        if (m_DevMode->setMode (QmDeviceMode::Flight))
+        bool success = m_DevMode->setMode (QmDeviceMode::Flight);
+        SYS_DEBUG ("m_DevMode->setMode (Flight) success: %s", SYS_BOOL (success));
+        if (success)
         {
             if (! m_infoBanner)
             {
@@ -143,23 +159,27 @@ OfflineBrief::setToggle (
             m_infoBanner->appear (MApplication::activeWindow ());
         }
     }
-    #endif
+#endif
 }
 
-void OfflineBrief::processDialogResult()
+/*
+ * FIXME: This slot is only called when the dialog is accepted...
+ *        Re-name this at once...
+ */
+void
+OfflineBrief::processDialogResult ()
 {
-    #ifdef HAVE_QMSYSTEM
-    MMessageBox *dialog = static_cast<MMessageBox*>(sender());
-    if(dialog->result() == MDialog::Accepted)
-    {
-        m_DevMode->setMode(QmDeviceMode::Normal);
-    }
-    #endif
+#ifdef HAVE_QMSYSTEM
+    bool success = m_DevMode->setMode (QmDeviceMode::Normal);
+    SYS_DEBUG ("m_DevMode->setMode (Normal) success: %s", SYS_BOOL (success));
+
+    emit valuesChanged();
+#endif
 }
 
-int OfflineBrief::widgetTypeID() const
+int
+OfflineBrief::widgetTypeID () const
 {
-    SYS_DEBUG("");
     return DcpWidgetType::Toggle;
 }
 

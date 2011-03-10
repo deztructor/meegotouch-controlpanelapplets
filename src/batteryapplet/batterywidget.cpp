@@ -172,12 +172,12 @@ BatteryWidget::initWidget ()
      * Initializing the wigets and connecting the signals.
      */
     // SliderContainer signals and slots, and initialization
-    m_SliderContainer->initSlider (m_logic->PSMThresholdValues ());
+    m_SliderContainer->initSlider (m_logic->PSMThresholdValues ());   
     m_SliderContainer->updateSlider (m_logic->PSMThresholdValue ());
     connect (m_SliderContainer, SIGNAL (PSMThresholdValueChanged (int)),
              m_logic, SLOT (setPSMThresholdValue (int)),
              Qt::DirectConnection);
-    
+
     // connect the value receive signals
     connect (m_logic, SIGNAL(remainingBatteryCapacityChanged(int)),
              this, SLOT(remainingBatteryCapacityReceived(int)));
@@ -307,9 +307,11 @@ BatteryWidget::addAutoActivationWidget ()
     /*
      * A help button for the PSM auto activation.
      */
+#ifdef HAVE_USERGUIDE
     MHelpButton* helpButton = new MHelpButton ("IDUG_MEEGO_BATTERY.html");
     helpButton->setViewType(MButton::iconType);
     helpButton->setIconID ("icon-m-content-description");
+#endif    
 
     /*
      * A combo box choosing the auto PSM mode between on, off and automatic
@@ -353,47 +355,31 @@ BatteryWidget::addSliderContainer ()
     Q_ASSERT (m_MainLayout);
 
     m_SliderContainer = new SliderContainer (this);
+
+    MContainer *container = m_SliderContainer->labelContainer();
+    m_MainLayout->insertItem (LabelContainerPosition, container);
+    m_MainLayout->setStretchFactor (container, 0);
+        
+    container = m_SliderContainer->sliderContainer();
+    m_MainLayout->insertItem (SliderContainerPosition, container);
+    m_MainLayout->setStretchFactor (container, 0);
+
+    showSlider (m_PSMAutoCombo->currentIndex () == PSMAutoOn);
 }
 
 void 
 BatteryWidget::showSlider (
         bool   show)
 {
-    MContainer *container;
-
-    if (!m_SliderContainer || !m_MainLayout)
+    if (!m_SliderContainer)
         return;
 
     if (show) {
-        container = m_SliderContainer->labelContainer();
-
-        if (m_MainLayout->indexOf(container) == -1) {
-            m_MainLayout->insertItem (LabelContainerPosition, container);
-            m_MainLayout->setStretchFactor (container, 0);
-            container->show ();
-        }
-        
-        container = m_SliderContainer->sliderContainer();
-
-        if (m_MainLayout->indexOf(container) == -1) {
-            m_MainLayout->insertItem (SliderContainerPosition, container);
-            m_MainLayout->setStretchFactor (container, 0);
-            container->show ();
-        }
+        m_SliderContainer->labelContainer()->show();
+        m_SliderContainer->sliderContainer()->show();
     } else {
-        container = m_SliderContainer->labelContainer();
-
-        if (m_MainLayout->indexOf(container) != -1) {
-            container->hide ();
-            m_MainLayout->removeAt(m_MainLayout->indexOf(container));
-        }
-        
-        container = m_SliderContainer->sliderContainer();
-
-        if (m_MainLayout->indexOf(container) != -1) {
-            container->hide ();
-            m_MainLayout->removeAt(m_MainLayout->indexOf(container));
-        }
+        m_SliderContainer->labelContainer()->hide();
+        m_SliderContainer->sliderContainer()->hide();
     }
 }
 
