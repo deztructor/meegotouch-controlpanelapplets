@@ -1,6 +1,9 @@
 meegotouch-controlpanelapplets (0.20.24~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  [Laszlo Pere]
+  * Fixes: NB#235353 - UI problem with the sound/haptics settings
+  * Fixes: NB#235042 - Touch screen tones value is not updating and always 
+    showing tap to select.
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 09 Mar 2011 15:31:12 +0100
 
@@ -15,9 +18,6 @@ meegotouch-controlpanelapplets (0.20.23-1) meegotouch; urgency=low
   
   [Laszlo Pere]
   * Fixes: NB#234041 - Power save mode missing translations
-  * Fixes: NB#235353 - UI problem with the sound/haptics settings
-  * Fixes: NB#235042 - Touch screen tones value is not updating and always 
-    showing tap to select.
 
   [ Viktor Nagy ]
   * Fixes: NB#230625 - possible memory leak in duicontrolpanel
