@@ -53,11 +53,17 @@ QProfileValue::QProfileValue(
 	addNotify();
 }
 
+/*!
+ * QProfileValue destructor
+ */
 QProfileValue::~QProfileValue()
 {
 	delNotify();
 }
 
+/*!
+ * A method for following changes in the profiled
+ */
 void
 QProfileValue::notifyValue (
         const char      *profile, 
@@ -86,6 +92,9 @@ QProfileValue::notifyValue (
 	}
 }
 
+/*!
+ * A method for query notifications from profiled about profile changes
+ */
 void
 QProfileValue::addNotify()
 {
@@ -99,6 +108,9 @@ QProfileValue::addNotify()
 #endif
 }
 
+/*!
+ * A method for remove notifications from profiled
+ */
 void
 QProfileValue::delNotify()
 {
@@ -112,6 +124,11 @@ QProfileValue::delNotify()
 #endif
 }
 
+/*!
+ * This method sets the new value in the profiled
+ *
+ * \param newValue the new value
+ */
 void
 QProfileValue::realSetValue(
         const QVariant &newValue)
@@ -206,6 +223,9 @@ QProfileValue::realSetValue(
 #endif
 }
 
+/*!
+ * Method for fetching the backend (profiled) current values
+ */
 void
 QProfileValue::fetchFromBackend()
 {
@@ -269,6 +289,9 @@ QProfileValue::fetchFromBackend()
 #endif
 }
 
+/*!
+ * An internal method for get the type of the key
+ */
 QStringList
 QProfileValue::getType (
         QString &theKey, 
@@ -411,7 +434,7 @@ QProfileValue::stopWatchFiles ()
 }
 
 /*!
- * \filename The full path of the file to watch.
+ * \param filename The full path of the file to watch.
  * \returns true if the file exists, false otherwise.
  *
  * The QProfileValue is able to watch the file system to sense when the sound file

@@ -61,7 +61,10 @@ class QString;
 // to paint will not solve the problem.
 #undef USE_PAINTER
 
-
+/*!
+ * An asbtraction used for work with image files
+ * in wallpaper applet
+ */
 class Q_DECL_EXPORT Image : public QObject {
     Q_OBJECT
 

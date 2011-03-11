@@ -46,6 +46,12 @@ AlertTone::AlertTone(
             SLOT(dataReceived(QString,QString,QString)));
 }
 
+/*!
+ * A method for getting AlertTone objects for all
+ * available settings (ringing, voip, email, sms, im)
+ *
+ * \return AlertTone instances...
+ */
 QList<AlertTone *>
 AlertTone::alertTones()
 {

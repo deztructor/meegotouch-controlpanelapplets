@@ -71,8 +71,12 @@ QSystemDeviceInfo::imei()
 }
 
 QString
-QSystemInfo::version(QSystemInfo::Version type, const QString &parameter)
+QSystemInfo::version (
+    QSystemInfo::Version type,
+    const QString &parameter)
 {
+    Q_UNUSED (type);
+    Q_UNUSED (parameter);
     return systeminfo_firmware_retval;
 }
 

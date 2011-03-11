@@ -37,6 +37,9 @@ QTrackedVariant::QTrackedVariant (
     SYS_DEBUG ("*** key = %s", SYS_STR(key));
 }
 
+/*!
+ * QTrackedVariant destructor
+ */
 QTrackedVariant::~QTrackedVariant()
 {
     if (m_KeyChar)

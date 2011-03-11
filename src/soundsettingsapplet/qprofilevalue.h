@@ -39,6 +39,9 @@ public:
     QProfileValue(const QString &key, bool setAllProfiles = false);
     ~QProfileValue();
 
+    /*!
+     * Enum for handling the different range-types
+     */
     enum RangeType {
         Interval,
         List,

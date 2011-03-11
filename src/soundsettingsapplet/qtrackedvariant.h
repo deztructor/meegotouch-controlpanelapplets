@@ -63,10 +63,13 @@ protected:
 	virtual void realSetValue(const QVariant &newValue);
 	virtual void fetchFromBackend();
 
+    /*!
+     * The tracked variant object
+     */
 	QVariant m_val;
 
 private:
-	/*
+	/*!
      * This tag is and should be a constant, since it is not private only
      * protected and the inherited classes are not handling the case when the
      * key has been changed. And indeed the key is never changed. 

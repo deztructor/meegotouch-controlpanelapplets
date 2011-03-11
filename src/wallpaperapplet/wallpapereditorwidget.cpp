@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "wallpapereditorwidget.h"
 #include "wallpapercurrentdescriptor.h"
 #include "wallpaperinfoheader.h"
@@ -56,6 +55,12 @@ static const qreal ScaleLowerLimit = 0.15;
 static const int ExtraMargin = 10;
 static const int TitleBarHeight = 60;
 
+/*!
+ * WallpaperEditorWidget constructor
+ *
+ * \param wallpaperBusinessLogic An WallpaperBusinessLogic instance
+ * \param parent The parent widget (if any)
+ */
 WallpaperEditorWidget::WallpaperEditorWidget (
         WallpaperBusinessLogic *wallpaperBusinessLogic, 
         QGraphicsWidget        *parent) :
@@ -108,10 +113,17 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     }
 }
 
+/*!
+ * Destructor for WallpaperEditorWidget
+ */
 WallpaperEditorWidget::~WallpaperEditorWidget ()
 {
 }
 
+/*!
+ * Paint method for WallpaperEditorWidget, used for 
+ * drawing the edited image actual state
+ */
 void
 WallpaperEditorWidget::paint (
         QPainter                          *painter,
@@ -139,6 +151,9 @@ WallpaperEditorWidget::paint (
     MWidget::paint (painter, option, widget);
 }
 
+/*!
+ * Method for creating the editor-widget contents
+ */
 void
 WallpaperEditorWidget::createContent ()
 {
@@ -260,7 +275,9 @@ finalize:
     redrawImage ();
 }
 
-
+/*!
+ * Method for create wallpaper-editor internal widgets
+ */
 void
 WallpaperEditorWidget::createWidgets ()
 {
@@ -292,7 +309,7 @@ WallpaperEditorWidget::createWidgets ()
     #endif
 }
 
-/*
+/*!
  * This virtual method is executed when we already have an MApplicationPage as
  * parent. We initialize the page here.
  */
@@ -346,7 +363,7 @@ WallpaperEditorWidget::polishEvent ()
     connect(m_CancelAction, SIGNAL(triggered()), this, SLOT(slotCancelActivated()));
 }
 
-/*
+/*!
  * This slot is called when the user activates the 'done' action and so we have
  * to store the settings.
  */
@@ -389,6 +406,9 @@ WallpaperEditorWidget::slotDoneActivated ()
     m_WallpaperBusinessLogic->setEditedImage (0);
 }
 
+/*!
+ * A slot for handling the 'Cancel' button presses
+ */
 void
 WallpaperEditorWidget::slotCancelActivated ()
 {
@@ -400,6 +420,9 @@ WallpaperEditorWidget::slotCancelActivated ()
     m_WallpaperBusinessLogic->setEditedImage (0);
 }
 
+/*!
+ * Re-implemented method for setting back the non-fullscreen window-state
+ */
 bool 
 WallpaperEditorWidget::back ()
 {

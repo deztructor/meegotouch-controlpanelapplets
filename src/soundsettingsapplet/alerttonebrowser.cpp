@@ -49,18 +49,35 @@
 
 static const int filterEditorPosition = 2;
 
-
+/*!
+ * An MContentItem sligthly modified
+ */
 class MCustomContentItem: public MContentItem
 {
 public:
-    MCustomContentItem (MContentItem::ContentItemStyle itemStyle=MContentItem::IconAndTwoTextLabels, QGraphicsItem *parent=0)
-    :MContentItem(itemStyle,parent),fullPath("") {}
+    /*!
+     * An overloaded constructor for this custom content-item
+     */
+    MCustomContentItem (MContentItem::ContentItemStyle itemStyle =
+                        MContentItem::IconAndTwoTextLabels,
+                        QGraphicsItem *parent=0)
+    : MContentItem (itemStyle, parent), fullPath ("") {}
 
+    /*!
+     * For storing the ringtone full-path
+     */
     QString fullPath;
 };
 
 /******************************************************************************
  * AlertToneBrowser implementation.
+ */
+
+/*!
+ * Constructor for the AlertToneBrowser widget
+ *
+ * \param tone An AlertTone instance
+ * \param parent The parent widget
  */
 AlertToneBrowser::AlertToneBrowser(AlertTone *tone, QGraphicsWidget *parent):
     AlertToneToplevel (parent),
@@ -80,6 +97,9 @@ AlertToneBrowser::AlertToneBrowser(AlertTone *tone, QGraphicsWidget *parent):
     createContent();
 }
 
+/*!
+ * Destructor for the AlertToneBrowser widget
+ */
 AlertToneBrowser::~AlertToneBrowser()
 {
     SYS_DEBUG ("");
@@ -164,6 +184,10 @@ AlertToneBrowser::defaultsDisplayEntered()
         m_defaults->setFocus();
 }
 
+/*!
+ * This method is called by the framework on language-change,
+ * so it is used internally to reload the translations for widgets
+ */
 void
 AlertToneBrowser::retranslateUi()
 {
@@ -450,7 +474,7 @@ AlertToneBrowser::selectingMusicItem (
     startPlayingSound (fname);
 }
 
-/*
+/*!
  * This virtual method is called when the MApplicationPage for the widget is
  * already there, so we can initialize it.
  */

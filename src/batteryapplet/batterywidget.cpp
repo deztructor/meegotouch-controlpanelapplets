@@ -527,10 +527,12 @@ void
 BatteryWidget::PSMValueReceived (
         bool PSMEnabled)
 {
+    Q_UNUSED (PSMEnabled);
     m_UILocked = true;
 
-    if (m_MainLayout && m_ActivationContainer) {
-        formProperBateryInfo(m_logic->getBateryLevel());
+    if (m_MainLayout && m_ActivationContainer)
+    {
+        formProperBateryInfo (m_logic->getBateryLevel ());
     }
 
     m_UILocked = false;
@@ -564,10 +566,9 @@ BatteryWidget::retranslateUi ()
 void BatteryWidget::charging(int animation_rate)
 {
     SYS_DEBUG("Charging rate: %d", animation_rate);
-    if(animation_rate > 0) {
-        //% "Charging"
+    if (animation_rate > 0)
+    {
         formProperBateryInfo ();
-        //m_RemainingContainer->setText(qtTrId ("qtn_ener_charging"));
     }
 }
 

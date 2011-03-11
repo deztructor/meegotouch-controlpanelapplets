@@ -20,6 +20,7 @@ qtTrId (
         const char  *id, 
         int          n)
 {
+    Q_UNUSED (n);
     QString retVal (id);
 
     /*
@@ -96,6 +97,7 @@ profile_set_value_as_int (
         const char *key, 
         int val)
 {
+    Q_UNUSED (profile);
     lastProfileKey = key;
     lastProfileValue = val;
 
@@ -110,6 +112,7 @@ profile_get_value_as_int (
         const char *profile,
         const char *key)
 {
+    Q_UNUSED (profile);
     /*
      * We only need some well known value to return so that we will not try to
      * change the combo the the index it already uses as current index.
@@ -175,7 +178,6 @@ Ut_ProfileintComboTests::profileintcomboCurrentIndexChanged()
     QFETCH(QString, uistring);
     
     ProfileIntCombo     pc (profilekey, false);
-    QAbstractItemModel *model = pc.itemModel();
 
     /*
      * We change to the given index, then we check if the profile was actually

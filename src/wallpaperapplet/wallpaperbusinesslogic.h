@@ -58,6 +58,11 @@ class WallpaperITrans;
     string:/usr/share/themes/base/meegotouch/images/meegotouch-wallpaper-portrait.jpg \
     string:/usr/share/themes/base/meegotouch/images/meegotouch-wallpaper-landscape.jpg
 */ 
+
+/*!
+ * The logic which handling the loading/saving and management
+ * work for wallpaper settings applet
+ */
 class WallpaperBusinessLogic : public QObject
 {
     Q_OBJECT

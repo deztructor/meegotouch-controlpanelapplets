@@ -26,8 +26,8 @@ static const char brightnessKey[] = "/system/osso/dsm/display/display_brightness
 
 BrightnessBrief::BrightnessBrief():
     m_logic (new DisplayBusinessLogic),
-    m_brightness_vals (m_logic->brightnessValues ()),
-    m_gconfKey (0)
+    m_gconfKey (0),
+    m_brightness_vals (m_logic->brightnessValues ())
 {
     m_gconfKey = new MGConfItem (brightnessKey);
     connect (m_gconfKey, SIGNAL (valueChanged ()),

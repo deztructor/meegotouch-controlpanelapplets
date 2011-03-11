@@ -44,6 +44,9 @@ static const QString horOffsetKey = "HorOffset";
 static const QString vertOffsetKey = "VertOffset";
 static const QString scaleKey = "Scale";
 
+/*!
+ * \returns the current wallpaper instance (as only one can be the current)
+ */
 WallpaperCurrentDescriptor *
 WallpaperCurrentDescriptor::instance ()
 {
@@ -54,6 +57,9 @@ WallpaperCurrentDescriptor::instance ()
     return WallpaperCurrentDescriptor::sm_Instance;
 }
 
+/*!
+ * The default constuctor implementation for the WallpaperCurrentDescriptor
+ */
 WallpaperCurrentDescriptor::WallpaperCurrentDescriptor () :
     m_Valid (false),
     m_DesktopEntry (0),
@@ -63,6 +69,9 @@ WallpaperCurrentDescriptor::WallpaperCurrentDescriptor () :
     m_PortraitTrans.setOrientation (M::Portrait);
 }
 
+/*!
+ * The destructor of the WallpaperCurrentDescriptor
+ */
 WallpaperCurrentDescriptor::~WallpaperCurrentDescriptor ()
 {
     WallpaperCurrentDescriptor::sm_Instance = 0;
@@ -190,6 +199,12 @@ finalize:
     return retval;
 }
 
+/*!
+ * Method for initialize the current-wallpaper-descriptor from filenames
+ *
+ * \param landscapeFile The landscape wallpaper file-name
+ * \param portraitFile The portrait wallpaper file-name
+ */
 bool 
 WallpaperCurrentDescriptor::setFromFilenames  (
             QString     landscapeFile,
@@ -223,6 +238,12 @@ finalize:
     return retval;
 }
 
+/*!
+ * Method for initializing the current wallpaper descriptor from theme ids
+ *
+ * \param landscapeID The theme-image-id for the landscape wallpaper
+ * \param portraitID The theme-image-id for the portrait wallpaper
+ */
 bool 
 WallpaperCurrentDescriptor::setFromIDs  (
             QString     landscapeID,
@@ -272,6 +293,7 @@ finalize:
 
 /*! 
  * \returns The image transformations for the given orientation.
+ * \orientation The wanted orientation
  */
 WallpaperITrans 
 WallpaperCurrentDescriptor::iTrans (
@@ -289,7 +311,10 @@ WallpaperCurrentDescriptor::iTrans (
     return m_LandscapeTrans;
 }
 
-/*
+/*!
+ * \returns the original pixmap of the current wallpaper
+ * \param orientation whether which orientation is wanted
+ *
  * FIXME: handle the difference between the original image and the modified
  * image in the WallpaperDescriptor?
  */

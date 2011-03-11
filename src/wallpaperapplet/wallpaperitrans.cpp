@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "wallpaperitrans.h"
 
 #include <QSize>
@@ -26,12 +25,21 @@
 //#define DEBUG
 #include "../debug.h"
 
+/*!
+ * Constructor for WallpaperITrans
+ */
 WallpaperITrans::WallpaperITrans () :
     m_Orientation (M::Landscape),
     m_Scale (1.0)
 {
 }
 
+/*!
+ * \param orig An another WallpaperITrans instance
+ * where this one should initialize its values
+ *
+ * An overloaded constructor for WallpaperITrans
+ */
 WallpaperITrans::WallpaperITrans (
         const WallpaperITrans &orig) :
         QObject ()
@@ -42,7 +50,9 @@ WallpaperITrans::WallpaperITrans (
     m_ExpectedSize   = orig.m_ExpectedSize;
 }
 
-
+/*!
+ * Copy operator for WallpaperITrans
+ */
 WallpaperITrans &
 WallpaperITrans::operator= (
         const WallpaperITrans &rhs)
@@ -57,6 +67,9 @@ WallpaperITrans::operator= (
     return *this;
 }
 
+/*!
+ * Scale operator for WallpaperITrans
+ */
 int 
 WallpaperITrans::operator* (
         const int i) const
@@ -65,6 +78,9 @@ WallpaperITrans::operator* (
     return m_Scale * i;
 }
 
+/*!
+ * Offset operator for WallpaperITrans
+ */
 WallpaperITrans &
 WallpaperITrans::operator+= (
         const QPointF &rhs)
@@ -74,12 +90,18 @@ WallpaperITrans::operator+= (
     return *this;
 }
 
+/*!
+ * \returns The X offset
+ */
 int
 WallpaperITrans::x () const
 {
     return (int) m_Offset.x ();
 }
 
+/*!
+ * \returns The Y offset
+ */
 int
 WallpaperITrans::y () const
 {
@@ -95,12 +117,20 @@ WallpaperITrans::modScale (
         m_Scale = 0.1;
 }
 
+/*!
+ * \returns The current scale value
+ */
 qreal
 WallpaperITrans::scale () const
 {
     return m_Scale;
 }
 
+/*!
+ * \param size The expected size
+ *
+ * Method for setting the expected size
+ */
 void
 WallpaperITrans::setExpectedSize (
         const QSize &size)
@@ -109,6 +139,11 @@ WallpaperITrans::setExpectedSize (
     m_ExpectedSize = size;
 }
 
+/*!
+ * \param offset The new offset
+ *
+ * Method for setting the offset
+ */
 void
 WallpaperITrans::setOffset (
         const QPointF &offset)
@@ -116,6 +151,11 @@ WallpaperITrans::setOffset (
     m_Offset = offset;
 }
 
+/*!
+ * \param scale The scale value
+ *
+ * Method for setting the scale
+ */
 void 
 WallpaperITrans::setScale (
         qreal scale)
@@ -123,18 +163,27 @@ WallpaperITrans::setScale (
     m_Scale = scale;
 }
 
+/*!
+ * \returns the expected size
+ */
 QSize 
 WallpaperITrans::expectedSize () const
 {
     return m_ExpectedSize;
 }
 
+/*!
+ * \returns the expected width
+ */
 int
 WallpaperITrans::expectedWidth () const
 {
     return m_ExpectedSize.width();
 }
 
+/*!
+ * \returns the expected height
+ */
 int
 WallpaperITrans::expectedHeight () const
 {
@@ -152,6 +201,11 @@ WallpaperITrans::orientation () const
     return m_Orientation;
 }
 
+/*!
+ * Method for set the orientation for the image transformation
+ *
+ * \param orientation The wanted orientation
+ */
 void 
 WallpaperITrans::setOrientation (
         M::Orientation orientation)
