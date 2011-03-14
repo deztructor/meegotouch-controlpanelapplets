@@ -42,7 +42,6 @@ class SliderContainer : public QObject
 public:
     SliderContainer (MWidget *parent = 0);
     ~SliderContainer ();
-    void retranslate ();
     
     MContainer *sliderContainer () const { return m_SliderContainer; };
     MContainer *labelContainer () const { return m_LabelContainer; };
@@ -58,7 +57,7 @@ signals:
     void PSMThresholdValueChanged (int);
 
 private:
-    void updateSliderValueLabel ();
+    void updateSliderValueLabel (int index);
     void createWidgets (MWidget *parent);
 
 private:
@@ -68,7 +67,6 @@ private:
     MLabel                *m_AutoPSMLabel;
     MLabel                *m_PsmValueLabel;
     QStringList            m_SliderValues;
-    int                    m_SliderValue;
     MLinearLayoutPolicy   *m_LayoutPolicy;
     bool                   m_SliderExists;
 };

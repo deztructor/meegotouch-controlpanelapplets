@@ -182,16 +182,15 @@ BatteryBusinessLogic::setPSMOption (PowerSaveOpt saveOption)
     
     if (saveOption == PSMAutoAutomatic)
     {
-        ret = m_devicemode->setPSMState (MeeGo::QmDeviceMode::PSMStateOff);
         PSMAutoKey.set (true);
+        ret = m_devicemode->setPSMState (MeeGo::QmDeviceMode::PSMStateOff);
     } else {
     #ifdef HAVE_QMSYSTEM
-
-    PSMAutoKey.set (false);
     ret = m_devicemode->setPSMState (
         saveOption == PSMAutoOn ?
         MeeGo::QmDeviceMode::PSMStateOn :
         MeeGo::QmDeviceMode::PSMStateOff);
+        PSMAutoKey.set (false);
     #else
     /*
      * FIXME: To implement the setting of the power save mode without the help

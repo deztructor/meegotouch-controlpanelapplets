@@ -172,8 +172,7 @@ BatteryWidget::initWidget ()
      * Initializing the wigets and connecting the signals.
      */
     // SliderContainer signals and slots, and initialization
-    m_SliderContainer->initSlider (m_logic->PSMThresholdValues ());   
-    m_SliderContainer->updateSlider (m_logic->PSMThresholdValue ());
+    m_SliderContainer->initSlider (m_logic->PSMThresholdValues ());
     connect (m_SliderContainer, SIGNAL (PSMThresholdValueChanged (int)),
              m_logic, SLOT (setPSMThresholdValue (int)),
              Qt::DirectConnection);
@@ -375,6 +374,7 @@ BatteryWidget::showSlider (
         return;
 
     if (show) {
+        m_SliderContainer->updateSlider (m_logic->PSMThresholdValue ());
         m_SliderContainer->labelContainer()->show();
         m_SliderContainer->sliderContainer()->show();
     } else {
@@ -554,10 +554,6 @@ BatteryWidget::retranslateUi ()
     if (m_TitleLabel)
         //% "Battery"
         m_TitleLabel->setText (qtTrId("qtn_ener_battery"));
-
-
-    // This call will retranslate the label (infoText)
-    m_SliderContainer->retranslate ();
 
     // FIXME: Why do we need this?
     m_logic->remainingCapacityRequired();

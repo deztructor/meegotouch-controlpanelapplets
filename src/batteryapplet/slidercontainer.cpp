@@ -36,7 +36,6 @@ SliderContainer::SliderContainer (MWidget *parent) :
         m_LabelContainer (0),
         m_SliderContainer (0),
         m_PSMSlider (0),
-        m_SliderValue (-1),
         m_SliderExists (false)
 {
     SYS_DEBUG ("");
@@ -46,17 +45,6 @@ SliderContainer::SliderContainer (MWidget *parent) :
 SliderContainer::~SliderContainer ()
 {
     SYS_DEBUG ("Destroying %p", this);
-}
-
-
-void
-SliderContainer::retranslate ()
-{
-    SYS_DEBUG ("");
-
-    //% "Activation battery level"
-    m_AutoPSMLabel->setText (qtTrId("qtn_ener_activation"));
-    updateSliderValueLabel ();
 }
 
 void 
@@ -131,11 +119,6 @@ SliderContainer::createWidgets (MWidget *parent)
     sliderLayout->addStretch ();
     sliderLayout->setAlignment (m_PSMSlider, Qt::AlignHCenter);
 
-    /*
-     * Set the slider value if available...
-     */
-    if (m_SliderValue >= 0)
-        m_PSMSlider->setValue (m_SliderValue);
 
     /*
      * .. and after connect the slidervalue changed signal
@@ -144,7 +127,7 @@ SliderContainer::createWidgets (MWidget *parent)
             this, SLOT (sliderValueChanged (int)),
             Qt::DirectConnection);
 
-    retranslate ();
+    m_AutoPSMLabel->setText (qtTrId("qtn_ener_activation"));
 }
 
 /*!
@@ -160,8 +143,6 @@ SliderContainer::initSlider (
 
     if (m_PSMSlider)
         m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
-
-    updateSliderValueLabel ();
 }
 
 /*!
@@ -175,21 +156,17 @@ SliderContainer::updateSlider (int value)
 
     // Store the actual value for later
     // (eg for the case when slider isn't ready yet...)
-    m_SliderValue = m_SliderValues.indexOf (QString ("%1").arg (value));
+    value = m_SliderValues.indexOf (QString ("%1").arg (value));
 
-    if (m_SliderValue >= 0) {
-        m_PSMSlider->setValue (m_SliderValue);
+    if (value >= 0) {
+        m_PSMSlider->setValue (value);
     } else {
         SYS_WARNING ("ERROR: got an invalid PSM value: %d", value);
         foreach (QString str, m_SliderValues)
             SYS_DEBUG ("Available slider value: %s", SYS_STR (str));
-        /*
-         * This should not happen, but we show some label anyway.
-         */
-        m_SliderValue = 0;
     }
 
-    updateSliderValueLabel ();
+    updateSliderValueLabel (value);
 }
 
 /*!
@@ -204,9 +181,7 @@ SliderContainer::sliderValueChanged (
     SYS_DEBUG ("*** slider = %p", m_PSMSlider);
     SYS_DEBUG ("*** value  = %d", value);
 
-    m_SliderValue = value;
-
-    updateSliderValueLabel ();
+    updateSliderValueLabel (value);
 
     emit PSMThresholdValueChanged (m_SliderValues.at (value).toInt ());
 }
@@ -216,10 +191,8 @@ SliderContainer::sliderValueChanged (
  * string when the auto power save mode is disabled.
  */
 void
-SliderContainer::updateSliderValueLabel ()
+SliderContainer::updateSliderValueLabel (int index)
 {
-    int index = m_SliderValue;
-
     /*
      * We want to show something, but this should never happen.
      */
