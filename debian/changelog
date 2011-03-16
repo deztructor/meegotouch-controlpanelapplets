@@ -1,6 +1,7 @@
 meegotouch-controlpanelapplets (0.20.25~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  [Laszlo Pere]
+  * Fixes: NB#188154 - Profile cannot be changed through Settings > Profiles
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 11 Mar 2011 11:27:57 +0100
 
