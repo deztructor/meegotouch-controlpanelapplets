@@ -24,6 +24,7 @@
 #include <QGraphicsLinearLayout>
 #include <MContainer>
 #include <MLabel>
+#include <MSlider>
 #include <QVariant>
 #include <MGConfItem>
 
@@ -37,7 +38,8 @@ ProfileWidget::ProfileWidget (
         ProfileDataInterface *api,
         QGraphicsWidget      *parent) :
     DcpWidget (parent),
-    m_ProfileIf (api)
+    m_ProfileIf (api),
+    m_ProfileSlider (0)
 {
     SYS_DEBUG ("");
 
@@ -72,9 +74,15 @@ void
 ProfileWidget::initProfiles ()
 {
     QList<ProfileDataInterface::ProfileData> l = m_ProfileIf->getProfilesData();
+    QGraphicsLinearLayout *mainLayout;
+    QGraphicsLinearLayout *vibraLayout;
+    
 
-    QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
-    QGraphicsLinearLayout *vibraLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    /*
+     *
+     */
+    mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    vibraLayout = new QGraphicsLinearLayout (Qt::Vertical);
 
     SYS_DEBUG ("We have %d profiles.", l.count());
     mainLayout->setContentsMargins (0., 0., 0., 0.);
@@ -98,21 +106,34 @@ ProfileWidget::initProfiles ()
 
     headerLayout->addStretch ();
 
-    MLabel *vibraLabel = new MLabel;
-    //% "Vibration"
-    vibraLabel->setText (qtTrId ("qtn_prof_vibration"));
-    vibraLabel->setStyleName ("CommonHeaderInverted");
-    vibraLabel->setAlignment (Qt::AlignBottom | Qt::AlignRight);
-    headerLayout->addItem (vibraLabel);
 
     headerContainer->centralWidget ()->setLayout (headerLayout);
 
     mainLayout->addItem (headerContainer);
 
+    /*
+     *
+     */
+    m_ProfileSlider = createSlider ();
+    mainLayout->addItem (m_ProfileSlider);
+
+    /*
+     *
+     */
     MContainer *listContainer = new MContainer;
     listContainer->setHeaderVisible (false);
     listContainer->setStyleName ("CommonPanelInverted");
     listContainer->setContentsMargins (0., 0., 0., 0.);
+
+    /*
+     *
+     */
+    MLabel *vibraLabel = new MLabel;
+    //% "Vibration"
+    vibraLabel->setText (qtTrId ("qtn_prof_vibration"));
+    vibraLabel->setStyleName ("CommonHeaderInverted");
+    vibraLabel->setAlignment (Qt::AlignBottom | Qt::AlignRight);
+    vibraLayout->addItem (vibraLabel);
 
     // create profile containers
     for (int i = 0; i < l.count(); ++i) {
@@ -241,3 +262,58 @@ ProfileWidget::retranslateUi ()
     }
 }
 
+MSlider *
+ProfileWidget::createSlider ()
+{
+    MSlider  *slider;
+    int       currentProfile;
+
+    currentProfile = m_ProfileIf->getCurrentProfile ();
+
+    slider = new MSlider;
+    slider->setStyleName ("CommonSliderInverted");
+    slider->setObjectName ("ProfileSlider");
+    slider->setRange (0, 3);
+    slider->setHandleLabelVisible (true);
+    slider->setValue (currentProfile);
+    slider->setHandleLabel (intToSliderTitle(currentProfile));
+
+
+    connect (slider, SIGNAL(valueChanged(int)),
+            this, SLOT(slidervalueChanged(int)));
+    return slider;
+}
+
+void 
+ProfileWidget::slidervalueChanged (
+        int value)
+{
+    SYS_DEBUG ("*** calue = %d", value);
+    m_ProfileIf->setProfile (value);
+    m_ProfileSlider->setHandleLabel (intToSliderTitle(value));
+}
+
+QString 
+ProfileWidget::intToSliderTitle (
+        int sliderValue)
+{
+    switch (sliderValue) {
+        case 0:
+            //% "Silent"
+            return qtTrId("qtn_volu_silent");
+
+        case 1:
+            //% "Beep"
+            return qtTrId("qtn_volu_beep");
+
+        case 2:
+            //% "Ringing"
+            return qtTrId("qtn_volu_ringer");
+        
+        case 3:
+            //% "Profile"
+            return qtTrId("qtn_volu_profile");
+    }
+
+    return QString();
+}

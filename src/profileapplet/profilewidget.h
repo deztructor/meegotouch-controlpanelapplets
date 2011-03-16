@@ -24,6 +24,7 @@
 #include "profiledatainterface.h"
 
 class MLabel;
+class MSlider;
 class MContainer;
 class ProfileContainer;
 
@@ -42,19 +43,22 @@ public:
 protected:
     void initWidget();
 
-private slots:
-   void initProfiles();
-   void setVibration (int profileId, bool enabled);
-   void vibrationChanged (bool enabled);
-   void selectionChanged ();
-   void profileChanged (int id);
+    private slots:
+       void initProfiles();
+       void setVibration (int profileId, bool enabled);
+       void vibrationChanged (bool enabled);
+       void selectionChanged ();
+       void profileChanged (int id);
+       void slidervalueChanged (int value);
 
-private:
-    MContainer* createContainer();
+    private:
+        MSlider *createSlider ();
+        QString intToSliderTitle (int sliderValue);
 
 private:
     QPointer<ProfileDataInterface>   m_ProfileIf;
     QHash<int, ProfileContainer*>    m_Containers;
     bool                             m_switchEnabled;
+    MSlider                         *m_ProfileSlider;
 };
 #endif

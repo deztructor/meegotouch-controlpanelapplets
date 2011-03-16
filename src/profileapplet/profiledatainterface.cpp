@@ -29,7 +29,7 @@ namespace ProfileName {
 #include <QStringList>
 #include <QList>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 
