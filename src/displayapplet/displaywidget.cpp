@@ -26,7 +26,7 @@
 
 // Define this if you want handle-label for brightness-slider
 // XXX: for now it looks very ugly... it is visible over the dialogs :-S
-#define WANT_HANDLE_LABEL
+//#define WANT_HANDLE_LABEL
 
 #include <MButton>
 #include <MContainer>
