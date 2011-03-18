@@ -181,7 +181,6 @@ AlertToneAppletWidget::createProfileSwitches (
 
         // For testability driver: set some object name...
         widget->setObjectName (ProfileDataInterface::mapId (d.profileId));
-        widget->setIconId (m_ProfileIf->mapId2StatusIconId(d.profileId));
 
         connect (widget, SIGNAL (toggled(bool)), 
                 widget, SLOT (vibrationChanged(bool)));

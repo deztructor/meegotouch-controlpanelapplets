@@ -48,14 +48,12 @@ public:
     void setChecked(bool buttonChecked);
     void setText(const QString &text);
     QString text() const;
-    void setIconId(const QString &iconId);
 
 signals:
     void toggled(bool checked);
 
 private:
     const int       m_ProfileId;
-    MImageWidget   *m_Icon;
     MButton        *m_Button;
     MLabel         *m_Label;
 };
