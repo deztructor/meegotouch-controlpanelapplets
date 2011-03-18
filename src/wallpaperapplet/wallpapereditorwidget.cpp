@@ -130,14 +130,16 @@ WallpaperEditorWidget::paint (
         const QStyleOptionGraphicsItem    *option,
         QWidget                           *widget)
 {
+#if 0
     bool portrait = (geometry().height() > geometry().width());
+#endif
 
     painter->fillRect (
             -ExtraMargin, -ExtraMargin, 
             m_Trans.expectedWidth (),
             m_Trans.expectedHeight (),
             QColor ("black"));
-
+#if 0
     if (portrait) {
         painter->drawImage (
                 QRect (imageX(), imageY(), imageDX(), imageDY()),
@@ -147,7 +149,11 @@ WallpaperEditorWidget::paint (
                 QRect (imageX(), imageY(), imageDX(), imageDY()),
                 m_bgLandscape);
     }
-
+#else
+        painter->drawImage (
+                QRect (imageX(), imageY(), imageDX(), imageDY()),
+                m_bgPortrait);
+#endif
     MWidget::paint (painter, option, widget);
 }
 
