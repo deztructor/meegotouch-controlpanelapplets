@@ -124,6 +124,13 @@ AlertToneAppletWidget::createContents()
     /*
      *
      */
+    m_VibrationLabel = addTitleLabel (
+            centralWidget, policy, 
+            "CommonHeaderPanelInverted", 
+            "CommonGroupHeaderInverted");
+    /*
+     *
+     */
     createProfileSwitches (policy, centralWidget);
 
     /*
@@ -273,6 +280,10 @@ AlertToneAppletWidget::createAlertTonesList(QGraphicsWidget *parent)
 void
 AlertToneAppletWidget::retranslateUi()
 {
+    if (m_VibrationLabel)
+        //% "Profile vibration"
+        m_VibrationLabel->setText (qtTrId("qtn_sond_missing_logical_id1"));
+
     if (m_EventTonesLabel)
         //% "Event Tones"
         m_EventTonesLabel->setText (qtTrId("qtn_sond_event_tones"));
