@@ -38,9 +38,6 @@ public:
     virtual QVariant value() const;
     virtual void setValue(const QVariant& value);
 
-signals:
-    void valuesChanged ();
-
 private:
     DisplayBusinessLogic   *m_logic;
     MGConfItem             *m_gconfKey;

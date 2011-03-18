@@ -16,6 +16,7 @@
 ** of this file.
 **
 ****************************************************************************/
+#include "usbapplet.h"
 
 #include <MAction>
 #include <DcpWidget>
@@ -23,7 +24,6 @@
 
 #include "usbbrief.h"
 #include "usbview.h"
-#include "usbapplet.h"
 
 #define DEBUG
 #include "../debug.h"
@@ -54,8 +54,10 @@ UsbApplet::constructWidget (int widgetId)
          */
         m_MainWidget = new UsbView (NULL);
         #endif
-        connect (m_MainWidget,  SIGNAL (settingsChanged ()),
-                m_brief, SLOT (settingsChanged ()));
+
+        if (! m_brief)
+            connect (m_MainWidget,  SIGNAL (settingsChanged ()),
+                     m_brief, SLOT (settingsChanged ()));
     }
 
     return m_MainWidget;
@@ -89,9 +91,6 @@ UsbApplet::constructBrief (int partId)
      */
      m_MainWidget = new UsbView (NULL);
     #endif
-
-    SYS_DEBUG ("applet instance : %p (brief instance : %p)");
-
     return m_brief;
 }
 
