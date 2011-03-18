@@ -55,7 +55,7 @@ UsbApplet::constructWidget (int widgetId)
         m_MainWidget = new UsbView (NULL);
         #endif
 
-        if (! m_brief)
+        if (m_brief)
             connect (m_MainWidget,  SIGNAL (settingsChanged ()),
                      m_brief, SLOT (settingsChanged ()));
     }

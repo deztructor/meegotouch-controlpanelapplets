@@ -18,22 +18,37 @@
 ****************************************************************************/
 #include "usbview.h"
 
-#include <QGraphicsLinearLayout>
 #include <MLabel>
-#include <MButton>
 #include <MLayout>
 #include <MLinearLayoutPolicy>
-#include <MButtonGroup>
 #include <MComboBox>
 #include <MNotification>
-#include <MContainer>
 
 #undef DEBUG
-//#define WARNING
+#define WARNING
 #include "../debug.h"
-#ifdef HAVE_QMSYSTEM
 
-static QmUSBMode::Mode usbModes[3] = {QmUSBMode::Ask, QmUSBMode::MassStorage, QmUSBMode::OviSuite};
+#ifdef HAVE_QMSYSTEM
+using namespace MeeGo;
+
+static QmUSBMode::Mode usbModes[3] =
+       { QmUSBMode::Ask,
+         QmUSBMode::MassStorage,
+         QmUSBMode::OviSuite };
+
+inline int
+usbModeIndex (QmUSBMode::Mode mode)
+{
+    int ret = 0;
+    for (int i = 0; i < 3; i++)
+        if (usbModes[i] == mode)
+        {
+            ret = i;
+            break;
+        }
+    return ret;
+}
+
 UsbView::UsbView (MeeGo::QmUSBMode *logic) :
     m_logic (logic),
     m_error (0)
@@ -66,7 +81,6 @@ UsbView::~UsbView ()
 void
 UsbView::initWidget ()
 {
-#ifdef HAVE_QMSYSTEM
     MLayout                 *mainLayout;
     MLinearLayoutPolicy     *mainPolicy;
 
@@ -87,34 +101,21 @@ UsbView::initWidget ()
     title->setText (qtTrId ("qtn_usb_title"));
 #endif
 
-    m_UsbModeCombo = new MComboBox();                                           
-    m_UsbModeCombo->setTitle(qtTrId ("qtn_usb_default_info"));            
-    m_UsbModeCombo->setStyleName ("CommonComboBoxInverted");                    
-    m_UsbModeCombo->setObjectName ("UsbModeCombo");              
-                                                                                
-    m_UsbModeCombo->addItem(qtTrId("qtn_usb_always_ask"));                            
-    m_UsbModeCombo->addItem(qtTrId("qtn_usb_mass_storage"));                             
-    m_UsbModeCombo->addItem(qtTrId("qtn_usb_ovi_suite"));                         
-                                                                                
-    #ifdef HAVE_QMSYSTEM
-    QmUSBMode::Mode active = m_logic->getMode ();
-    int currentIdx;
-    switch (active)
-    {
-      case QmUSBMode::MassStorage:
-		currentIdx = UsbModeMassStorage;
-		break;
-      case QmUSBMode::OviSuite:
-		currentIdx = UsbModeOviSuite;
-		break;
-      default:
-		currentIdx = UsbModeAlwaysAsk;
-		break;
-     }
-    m_UsbModeCombo->setCurrentIndex(currentIdx);
-    #endif 
-    connect (m_UsbModeCombo, SIGNAL (activated (int)),                           
-             this, SLOT (usbModeActivated (int)));                              
+    m_UsbModeCombo = new MComboBox;
+    m_UsbModeCombo->setTitle (qtTrId ("qtn_usb_default_info"));
+    m_UsbModeCombo->setStyleName ("CommonComboBoxInverted");
+    m_UsbModeCombo->setObjectName ("UsbModeCombo");
+
+    m_UsbModeCombo->insertItem (0, qtTrId ("qtn_usb_always_ask"));
+    m_UsbModeCombo->insertItem (1, qtTrId("qtn_usb_mass_storage"));
+    m_UsbModeCombo->insertItem (2, qtTrId("qtn_usb_ovi_suite"));
+
+#ifdef HAVE_QMSYSTEM
+    m_UsbModeCombo->setCurrentIndex (usbModeIndex (m_logic->getDefaultMode ()));
+#endif
+
+    connect (m_UsbModeCombo, SIGNAL (activated (int)),
+             SLOT (usbModeActivated (int)));
 
     mainPolicy->addItem (m_UsbModeCombo);
     mainPolicy->addStretch ();
@@ -122,20 +123,18 @@ UsbView::initWidget ()
     setLayout (mainLayout);
 
     retranslateUi ();
-#endif
 }
 
 void
 UsbView::usbModeActivated (int idx)
 {
-    #ifdef HAVE_QMSYSTEM
-    QmUSBMode::Mode active = m_logic->getMode ();
-
+    SYS_DEBUG ("idx = %d", idx);
+#ifdef HAVE_QMSYSTEM
     /*
      * Do nothing if we just tapped on the
      * currently selected one...
      */
-    if ((int) m_logic->getDefaultMode() == idx)
+    if (m_logic->getDefaultMode() == usbModes[idx])
         return;
 
     /*
@@ -148,6 +147,9 @@ UsbView::usbModeActivated (int idx)
         m_error = 0;
     }
 
+    QmUSBMode::Mode active = //m_logic->getMode ();
+        QmUSBMode::MassStorage;
+
     /*
      * If we are connected and some mode active, then
      * show an error message and set the mode back
@@ -156,14 +158,13 @@ UsbView::usbModeActivated (int idx)
     if ((active == QmUSBMode::MassStorage) ||
         (active == QmUSBMode::OviSuite))
     {
-        m_UsbModeCombo->blockSignals (true);
-
         /*
          * Set checked on the previously active button
          */
-        int current_setting = (int) m_logic->getDefaultMode ();
-	m_UsbModeCombo->setCurrentIndex(current_setting);
-        m_UsbModeCombo->blockSignals (false);
+        m_UsbModeCombo->setCurrentIndex (usbModeIndex (m_logic->getDefaultMode ()));
+
+        SYS_DEBUG ("newidx = %d", m_UsbModeCombo->currentIndex ());
+        SYS_DEBUG ("text = %s", SYS_STR (m_UsbModeCombo->currentText ()));
 
         /*
          * Create the error notification
@@ -191,9 +192,8 @@ UsbView::usbModeActivated (int idx)
     if (m_logic->getMode () == QmUSBMode::ChargingOnly)
         m_logic->setMode (newmode);
 
-    SYS_DEBUG ("emit settingsChanged ()");
     emit settingsChanged ();
-    #endif
+#endif
 }
 
 void
@@ -201,9 +201,9 @@ UsbView::retranslateUi ()
 {
     //% "Default USB device mode"
     m_UsbModeCombo->setTitle (qtTrId ("qtn_usb_default_info"));
-    m_UsbModeCombo->setItemText (UsbModeAlwaysAsk, qtTrId ("qtn_usb_always_ask"));
-    m_UsbModeCombo->setItemText (UsbModeMassStorage, qtTrId ("qtn_usb_mass_storage"));
-    m_UsbModeCombo->setItemText (UsbModeOviSuite, qtTrId ("qtn_usb_ovi_suite"));
+    m_UsbModeCombo->setItemText (0, qtTrId ("qtn_usb_always_ask"));
+    m_UsbModeCombo->setItemText (1, qtTrId ("qtn_usb_mass_storage"));
+    m_UsbModeCombo->setItemText (2, qtTrId ("qtn_usb_ovi_suite"));
 }
 
 MLabel *
@@ -221,5 +221,4 @@ UsbView::addTitleLabel (
     targetPolicy->addItem (label);
     return label;
 }
-
 
