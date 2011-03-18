@@ -35,6 +35,9 @@ HEADERS += \
     $$SRC_PREFIX/drilldownitem.h \
     $$SRC_PREFIX/trackerconnection.h \
     $$SRC_PREFIX/alerttone.h \
+    $$SRC_PREFIX/profilebackend.h           \
+    $$SRC_PREFIX/profiledatainterface.h     \
+    $$SRC_PREFIX/profilecontainer.h         \
     $$SRC_PREFIX/alerttoneappletwidget.h \
     $$SRC_PREFIX/alerttonewidget.h \
     $$SRC_PREFIX/alerttonevolume.h \
@@ -55,6 +58,9 @@ SOURCES += \
     $$SRC_PREFIX/drilldownitem.cpp \
     $$SRC_PREFIX/trackerconnection.cpp \
     $$SRC_PREFIX/alerttone.cpp \
+    $$SRC_PREFIX/profilebackend.cpp         \
+    $$SRC_PREFIX/profiledatainterface.cpp   \
+    $$SRC_PREFIX/profilecontainer.cpp       \
     $$SRC_PREFIX/alerttoneappletwidget.cpp \
     $$SRC_PREFIX/alerttonewidget.cpp \
     $$SRC_PREFIX/alerttonevolume.cpp \

@@ -32,36 +32,42 @@ contains(cov, true) {
 MOC_DIR = .moc
 OBJECTS_DIR = .objects
 
-HEADERS =                    \
-    ../debug.h               \
-    drilldownitem.h          \
-    trackerconnection.h      \
-    alerttone.h              \
-    alerttoneappletmaps.h    \
-    alerttoneappletwidget.h  \
-    alerttonebrowser.h       \
-    alerttonedefaults.h      \
-    alerttonedefaultsmodel.h \
-    alerttonepreview.h       \
-    alerttonetoplevel.h      \
-    alerttonevolume.h        \
-    alerttonewidget.h        \
-    gconfstringcombo.h       \
-    profileintcombo.h        \
-    qgconfdirmanager.h       \
-    qgconfvalue.h            \
-    qprofilevalue.h          \
-    qtrackedvariant.h        \
-    soundsettingsapplet.h    \
-    static.h                 \
+HEADERS =                      \
+    ../debug.h                 \
+    drilldownitem.h            \
+    trackerconnection.h        \
+    profilebackend.h           \
+    profiledatainterface.h     \
+    alerttone.h                \
+    alerttoneappletmaps.h      \
+    profilecontainer.h         \
+    alerttoneappletwidget.h    \
+    alerttonebrowser.h         \
+    alerttonedefaults.h        \
+    alerttonedefaultsmodel.h   \
+    alerttonepreview.h         \
+    alerttonetoplevel.h        \
+    alerttonevolume.h          \
+    alerttonewidget.h          \
+    gconfstringcombo.h         \
+    profileintcombo.h          \
+    qgconfdirmanager.h         \
+    qgconfvalue.h              \
+    qprofilevalue.h            \
+    qtrackedvariant.h          \
+    soundsettingsapplet.h      \
+    static.h                   \
     $$(NULL)
 
 SOURCES =                      \
     ../debug.cpp               \
     drilldownitem.cpp          \
     trackerconnection.cpp      \
+    profilebackend.cpp         \
+    profiledatainterface.cpp   \
     alerttone.cpp              \
     alerttoneappletmaps.cpp    \
+    profilecontainer.cpp       \
     alerttoneappletwidget.cpp  \
     alerttonebrowser.cpp       \
     alerttonedefaults.cpp      \

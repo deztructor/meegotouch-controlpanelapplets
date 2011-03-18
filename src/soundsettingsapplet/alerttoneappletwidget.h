@@ -21,34 +21,46 @@
 #define _ALERT_TONE_APPLET_WIDGET_H_
 
 #include <MContainer>
+#include <QPointer>
+
+#include "profiledatainterface.h"
 #include "alerttonetoplevel.h"
 #include "alerttone.h"
 
 class MLabel;
+class MLinearLayoutPolicy;
 
 class AlertToneAppletWidget : public AlertToneToplevel
 {
 	Q_OBJECT
 
-public:
-	AlertToneAppletWidget(QList<AlertTone *>alertTones, QGraphicsWidget *parent = 0);
+    public:
+    	AlertToneAppletWidget (
+                QList<AlertTone *>  alertTones, 
+                QGraphicsWidget    *parent = 0);
+        ~AlertToneAppletWidget ();
 
-private:
-	virtual void retranslateUi();
-	MContainer *createAlertTonesList(QGraphicsWidget *parent);
-	MContainer *createFeedbackList(QGraphicsWidget *parent);
 
-	QList<AlertTone *>  m_alertTones;
-	MContainer         *m_tones;
-	MContainer         *m_feedback;
+    protected:
+        virtual void polishEvent ();
+	    virtual void createContents();
 
-    MLabel             *m_Title;
-    MLabel             *m_EventTonesLabel;
-    MLabel             *m_FeedbackLabel;
+    private:
+        virtual void retranslateUi();
+    	MContainer *createAlertTonesList (QGraphicsWidget *parent);
+	    MContainer *createFeedbackList (QGraphicsWidget *parent);
+        void createProfileSwitches (
+                MLinearLayoutPolicy   *policy,
+                QGraphicsWidget       *parent);
 
-protected:
-    virtual void polishEvent ();
-	virtual void createContents();
+    private:
+    	QList<AlertTone *>               m_alertTones;
+        QPointer<ProfileDataInterface>   m_ProfileIf;
+	    MContainer                      *m_tones;
+    	MContainer                      *m_feedback;
+        MLabel                          *m_Title;
+        MLabel                          *m_EventTonesLabel;
+        MLabel                          *m_FeedbackLabel;
 
 #ifdef UNIT_TEST
     friend class Ut_AlertToneAppletWidgetTests;

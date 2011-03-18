@@ -32,6 +32,8 @@
 #include "gconfstringcombo.h"
 #include "profileintcombo.h"
 #include "alerttonevolume.h"
+#include "profiledatainterface.h"
+#include "profilecontainer.h"
 
 #define DEBUG
 #define WARNING
@@ -66,9 +68,12 @@ createEmptyContainer(
 /******************************************************************************
  * AlertToneAppletWidget implementation
  */
-AlertToneAppletWidget::AlertToneAppletWidget(QList<AlertTone *>alertTones, QGraphicsWidget *parent):
-	AlertToneToplevel(parent),
+AlertToneAppletWidget::AlertToneAppletWidget (
+        QList<AlertTone *>    alertTones, 
+        QGraphicsWidget      *parent):
+	AlertToneToplevel (parent),
 	m_alertTones(alertTones),
+    m_ProfileIf (new ProfileDataInterface),
 	m_tones (0),
 	m_feedback (0),
     m_Title (0),
@@ -81,6 +86,10 @@ AlertToneAppletWidget::AlertToneAppletWidget(QList<AlertTone *>alertTones, QGrap
     createContents ();
 }
 
+AlertToneAppletWidget::~AlertToneAppletWidget ()
+{
+    delete m_ProfileIf;
+}
 
 void
 AlertToneAppletWidget::createContents()
@@ -113,7 +122,12 @@ AlertToneAppletWidget::createContents()
     policy->addItem (spacer);
 
     /*
-     * A secondary title
+     *
+     */
+    createProfileSwitches (policy, centralWidget);
+
+    /*
+     * A secondary title, it says 'Tones'
      */
     m_EventTonesLabel = addTitleLabel (
             centralWidget, policy, 
@@ -149,9 +163,37 @@ AlertToneAppletWidget::createContents()
 
 	retranslateUi();
 }
+        
+void 
+AlertToneAppletWidget::createProfileSwitches (
+        MLinearLayoutPolicy   *policy,
+        QGraphicsWidget       *parent)
+{
+    QList<ProfileDataInterface::ProfileData> profileDataList = 
+        m_ProfileIf->getProfilesData();
+
+    for (int i = 0; i < profileDataList.size(); ++i) {
+        ProfileDataInterface::ProfileData  d = profileDataList[i];
+        ProfileContainer                  *widget;
+        
+        widget = new ProfileContainer (
+                d.profileId, d.profileName, d.vibrationEnabled);
+
+        // For testability driver: set some object name...
+        widget->setObjectName (ProfileDataInterface::mapId (d.profileId));
+        widget->setIconId (m_ProfileIf->mapId2StatusIconId(d.profileId));
+
+        connect (widget, SIGNAL (toggled(bool)), 
+                widget, SLOT (vibrationChanged(bool)));
+
+        policy->addItem(widget);
+    }
+
+}
 
 MContainer *
-AlertToneAppletWidget::createFeedbackList(QGraphicsWidget *parent)
+AlertToneAppletWidget::createFeedbackList(
+        QGraphicsWidget *parent)
 {
 	MContainer *container;
 	MLinearLayoutPolicy *policy;
