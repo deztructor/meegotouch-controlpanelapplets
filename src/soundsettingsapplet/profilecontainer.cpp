@@ -39,10 +39,18 @@ ProfileContainer::ProfileContainer (
     m_Button(0),
     m_Label(0)
 {
-    QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(Qt::Horizontal, this);
+    QGraphicsLinearLayout *layout;
+    
+    /*
+     * The layout.
+     */
+    layout = new QGraphicsLinearLayout(Qt::Horizontal, this);
     layout->setContentsMargins (0., 0., 0., 0.);
     SYS_DEBUG ("Creating container for %s", SYS_STR(title)); 
 
+    /*
+     * The switch button.
+     */
     m_Button = new MButton;
     m_Button->setCheckable (true);
     m_Button->setViewType (MButton::switchType);
@@ -50,9 +58,15 @@ ProfileContainer::ProfileContainer (
     m_Button->setChecked (vibra);
     connect(m_Button, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
 
+    /*
+     * The label.
+     */
     m_Label = new MLabel(title);
     m_Label->setStyleName ("CommonSingleTitleInverted");
 
+    /*
+     * Adding these things together.
+     */
     layout->addItem(m_Label);
     layout->addItem(m_Button);
 
