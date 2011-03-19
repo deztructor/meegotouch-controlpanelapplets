@@ -46,6 +46,26 @@ using namespace MeeGo;
 #define DEBUG
 #include "../../src/debug.h"
 
+#ifdef HAVE_QMSYSTEM
+static QmUSBMode::Mode usbModes[3] =
+       { QmUSBMode::Ask,
+         QmUSBMode::MassStorage,
+         QmUSBMode::OviSuite };
+
+inline int
+usbModeIndex (QmUSBMode::Mode mode)
+{
+    int ret = 0;
+    for (int i = 0; i < 3; i++)
+        if (usbModes[i] == mode)
+        {
+            ret = i;
+            break;
+        }
+    return ret;
+}
+#endif
+
 /******************************************************************************
  * The translations for the USBApplet contains special characters (like %1) so
  * we need to stub the qtTrId() method here.
@@ -58,21 +78,21 @@ initializeCatalog ()
 {
     if (catalogInitialized)
         return;
-    
+
     catalog["qtn_usb_ask_active"] = "qtn_usb_ask_active - %1";
     catalog["qtn_usb_active_mode"] = "qtn_usb_active_mode %1";
 }
 
 QString
 qtTrId (
-        const char  *id, 
+        const char  *id,
         int          n)
 {
     QString retVal;
 
     Q_UNUSED (n);
     initializeCatalog ();
-    
+
     retVal = catalog[id];
     if (retVal.isEmpty())
         retVal = id;
@@ -88,7 +108,7 @@ qtTrId (
  */
 static QString lastPublishedNotification;
 
-bool 
+bool
 MNotification::publish()
 {
     //SYS_DEBUG ("*** body() = %s", SYS_STR(body()));
@@ -98,45 +118,45 @@ MNotification::publish()
 
 
 /******************************************************************************
- * Ut_UsbApplet implementation. 
+ * Ut_UsbApplet implementation.
  */
-void 
+void
 Ut_UsbApplet::init()
 {
 }
 
-void 
+void
 Ut_UsbApplet::cleanup()
 {
 }
 
 
 static int argc = 1;
-static char *app_name = (char*) "./Ut_UsbApplet";
+static char *app_name = (char*) "./ut_usbapplet";
 
-void 
+void
 Ut_UsbApplet::initTestCase()
 {
     m_App = new MApplication (argc, &app_name);
     m_Applet = new UsbApplet;
-    
+
     QVERIFY (!m_Applet->m_MainWidget);
     m_Applet->init ();
-    
+
     /*
      * Testing if the widget is not created yet.
      */
     QVERIFY (!m_Applet->m_MainWidget);
 }
 
-void 
+void
 Ut_UsbApplet::cleanupTestCase()
 {
     delete m_Applet;
     m_App->deleteLater ();
 }
 
-void 
+void
 Ut_UsbApplet::testTitle ()
 {
     QString title = m_Applet->title();
@@ -153,13 +173,13 @@ Ut_UsbApplet::testConstructWidget ()
 
     availableModes <<
             QmUSBMode::Connected <<
-            QmUSBMode::DataInUse <<   
+            QmUSBMode::DataInUse <<
             QmUSBMode::Disconnected <<
             QmUSBMode::MassStorage <<
-            QmUSBMode::ChargingOnly << 
+            QmUSBMode::ChargingOnly <<
             QmUSBMode::OviSuite <<
             QmUSBMode::ModeRequest <<
-            QmUSBMode::Ask << 
+            QmUSBMode::Ask <<
             QmUSBMode::Undefined;
 
     /*
@@ -168,7 +188,7 @@ Ut_UsbApplet::testConstructWidget ()
     widget = (UsbView *) m_Applet->constructWidget (0);
     QVERIFY (widget);
     QVERIFY (m_Applet->m_MainWidget == widget);
-    
+
     /*
      * Testing if the widget accepts the back. Our applets always accept back.
      */
@@ -187,7 +207,7 @@ Ut_UsbApplet::testConstructWidget ()
                 lastPublishedNotification = "";
                 widget->usbModeActivated (id);
 
-                if (id == defaultMode) {
+                if (usbModes[id] == defaultMode) {
                     // If we want to change to the current mode nothing happens.
                     QVERIFY (lastPublishedNotification.isEmpty());
                 } else if (mode == QmUSBMode::MassStorage ||
@@ -197,7 +217,7 @@ Ut_UsbApplet::testConstructWidget ()
                         case QmUSBMode::OviSuite:
                         case QmUSBMode::MassStorage:
                         case QmUSBMode::Ask:
-                            /* check only ^^ these cased for notification... */
+                            /* check only ^^ these cases for notification... */
                             break;
                         default:
                             continue;
@@ -230,16 +250,16 @@ Ut_UsbApplet::testConstructWidget ()
     #endif
 }
 
-void 
+void
 Ut_UsbApplet::testMenuItems ()
 {
     QVector<MAction*> items = m_Applet->viewMenuItems ();
-    
+
     //QVERIFY (items.size() == 1);
     SYS_DEBUG ("items.size() = %d", items.size());
 }
 
-void 
+void
 Ut_UsbApplet::testConstructbrief ()
 {
     #ifdef HAVE_QMSYSTEM
@@ -247,16 +267,16 @@ Ut_UsbApplet::testConstructbrief ()
     QList<QmUSBMode::Mode>   availableModes;
     QString   iconName;
     QString   text;
-    
+
     availableModes <<
             QmUSBMode::Connected <<
-            QmUSBMode::DataInUse <<   
+            QmUSBMode::DataInUse <<
             QmUSBMode::Disconnected <<
             QmUSBMode::MassStorage <<
-            QmUSBMode::ChargingOnly << 
+            QmUSBMode::ChargingOnly <<
             QmUSBMode::OviSuite <<
             QmUSBMode::ModeRequest <<
-            QmUSBMode::Ask << 
+            QmUSBMode::Ask <<
             QmUSBMode::Undefined;
     /*
      * Getting the brief and checking its properties.
@@ -273,7 +293,7 @@ Ut_UsbApplet::testConstructbrief ()
         foreach (QmUSBMode::Mode defaultMode, availableModes) {
             m_Applet->m_logic->setDefaultMode (defaultMode);
             m_Applet->m_logic->setMode (mode);
-            
+
 
             text = brief1->valueText ();
             //SYS_DEBUG ("*** text        = %s", SYS_STR(text));
@@ -303,7 +323,7 @@ Ut_UsbApplet::testConstructbrief ()
             }
         }
     }
-    
+
     /*
      * FIXME: These should be tested somehow.
      */
@@ -314,9 +334,5 @@ Ut_UsbApplet::testConstructbrief ()
     #endif
 }
 
-
 QTEST_APPLESS_MAIN(Ut_UsbApplet)
-
-
-
 
