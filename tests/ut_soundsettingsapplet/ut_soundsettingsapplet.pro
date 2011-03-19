@@ -20,8 +20,12 @@ CONFIG += \
     gui             \
     meegotouchcore  \
     debug           \
+    mobility        \
     link_pkgconfig  \
     duicontrolpanel
+
+MOBILITY += \
+    systeminfo
 
 PKGCONFIG += dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
 
