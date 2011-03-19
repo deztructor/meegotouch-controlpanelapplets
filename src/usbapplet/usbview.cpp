@@ -147,8 +147,7 @@ UsbView::usbModeActivated (int idx)
         m_error = 0;
     }
 
-    QmUSBMode::Mode active = //m_logic->getMode ();
-        QmUSBMode::MassStorage;
+    QmUSBMode::Mode active = m_logic->getMode ();
 
     /*
      * If we are connected and some mode active, then
