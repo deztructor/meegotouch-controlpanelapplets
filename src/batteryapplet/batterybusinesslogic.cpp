@@ -311,6 +311,17 @@ BatteryBusinessLogic::batteryRemCapacityChanged (
 }
 #endif
 
+int
+BatteryBusinessLogic::remainingChargingTime ()
+{
+    #ifdef HAVE_QMSYSTEM
+    return m_battery->getRemainingChargingTime ();
+    #else
+    // FIXME: Then we don't know?
+    return -1;
+    #endif
+}
+
 /*!
  * \param percentage The energy level percentage or -1 to ask the backend.
  *

@@ -62,7 +62,7 @@ public:
     bool isCharging ();
     Condition getCondition ();
     unsigned int getBateryLevel();
-
+    int remainingChargingTime ();
 
 public slots:
     void setPSMThresholdValue (int percentage);

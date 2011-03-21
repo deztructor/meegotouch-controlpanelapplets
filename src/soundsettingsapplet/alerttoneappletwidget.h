@@ -59,6 +59,7 @@ class AlertToneAppletWidget : public AlertToneToplevel
 	    MContainer                      *m_tones;
     	MContainer                      *m_feedback;
         MLabel                          *m_Title;
+        MLabel                          *m_VibrationLabel;
         MLabel                          *m_EventTonesLabel;
         MLabel                          *m_FeedbackLabel;
 

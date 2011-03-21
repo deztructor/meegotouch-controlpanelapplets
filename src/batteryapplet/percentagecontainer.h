@@ -21,6 +21,7 @@
 
 #include <MContainer>
 
+class QGraphicsLinearLayout;
 class MImageWidget;
 class MLabel;
 
@@ -33,10 +34,13 @@ class MLabel;
 class PercentageContainer : public MContainer
 {
 public:
-    PercentageContainer(const QString &text, MImageWidget *image,
-                  MWidget *parent = 0);
+    PercentageContainer(
+            const QString &text, 
+            MImageWidget *image,
+            MWidget *parent = 0);
 
     void updateCapacity (const int value);
+    void updateRemainingChargingTime (int ChTime);
     void setText (const QString &text);
 
 public slots:
@@ -46,8 +50,10 @@ private:
     void setLayout ();
 
 private:
-    MImageWidget  *m_Image;
-    MLabel        *m_TextLabel;
+    QGraphicsLinearLayout  *m_MainLayout;
+    MImageWidget           *m_Image;
+    MLabel                 *m_TextLabel;
+    MLabel                 *m_SubTextLabel;
 };
 
 #endif // PERCENTAGECONTAINER_H

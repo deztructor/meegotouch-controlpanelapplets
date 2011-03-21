@@ -100,6 +100,7 @@ namespace MeeGo
         void connectCharger (ChargerType chargerType);
         void modifyBatteryState (BatteryState BatteryState, int percentage);
         void setChargingState (ChargingState newState);
+        int getRemainingChargingTime ();
 
         
         QString ChargerName (ChargerType chargerType) const;

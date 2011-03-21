@@ -147,16 +147,17 @@ OfflineBrief::setToggle (
         SYS_DEBUG ("m_DevMode->setMode (Flight) success: %s", SYS_BOOL (success));
         if (success)
         {
-            if (! m_infoBanner)
-            {
-                m_infoBanner = new MBanner;
-                m_infoBanner->setStyleName ("InformationBanner");
-                m_infoBanner->setObjectName ("InfoBanner");
-            }
+            m_infoBanner = new MBanner;
+            m_infoBanner->setStyleName ("InformationBanner");
+            m_infoBanner->setObjectName ("InfoBanner");
 
             //% "Closing all connections. Switching to offline mode."
             m_infoBanner->setTitle (qtTrId ("qtn_offl_entering"));
-            m_infoBanner->appear (MApplication::activeWindow ());
+            m_infoBanner->appear (
+                MApplication::activeWindow (),
+                MSceneWindow::DestroyWhenDone);
+            // Set to NULL, as will destroy itself
+            m_infoBanner = 0;
         }
     }
 #endif

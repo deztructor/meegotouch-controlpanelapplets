@@ -27,6 +27,9 @@
 #include <MApplicationPage>
 #include <QTimer>
 
+#include <QSystemDeviceInfo>
+using namespace QtMobility;
+
 #include "alerttoneappletwidget.h"
 #include "alerttonewidget.h"
 #include "gconfstringcombo.h"
@@ -122,6 +125,20 @@ AlertToneAppletWidget::createContents()
     policy->addItem (spacer);
 
     /*
+     * Well, this is not the profile slider, that one is not implemented yet.
+     */
+    AlertToneVolume *slider;
+    slider = new AlertToneVolume (centralWidget);
+    policy->addItem (slider);
+
+    /*
+     * A subtitle that shows 'Profile vibration'
+     */
+    m_VibrationLabel = addTitleLabel (
+            centralWidget, policy, 
+            "CommonHeaderPanelInverted", 
+            "CommonGroupHeaderInverted");
+    /*
      *
      */
     createProfileSwitches (policy, centralWidget);
@@ -169,6 +186,8 @@ AlertToneAppletWidget::createProfileSwitches (
         MLinearLayoutPolicy   *policy,
         QGraphicsWidget       *parent)
 {
+    Q_UNUSED (parent);
+
     QList<ProfileDataInterface::ProfileData> profileDataList = 
         m_ProfileIf->getProfilesData();
 
@@ -194,18 +213,33 @@ MContainer *
 AlertToneAppletWidget::createFeedbackList(
         QGraphicsWidget *parent)
 {
-	MContainer *container;
-	MLinearLayoutPolicy *policy;
-	QGraphicsWidget *centralWidget;
+    MContainer *container;
+    MLinearLayoutPolicy *policy;
+    QGraphicsWidget *centralWidget;
 
-	container = createEmptyContainer(parent, &policy, &centralWidget);
+    container = createEmptyContainer(parent, &policy, &centralWidget);
 
-	ProfileIntCombo *picombo = new ProfileIntCombo(
-		"keypad.sound.level", true,
-		centralWidget);
-	picombo->setObjectName("ProfileIntCombo_keypad.sound.level");
-    picombo->setStyleName ("CommonComboBoxInverted");
-	policy->addItem(picombo);
+    ProfileIntCombo *picombo = 0;
+
+    QSystemDeviceInfo devInfo;
+    QSystemDeviceInfo::KeyboardTypeFlags keybFlags = devInfo.keyboardTypes ();
+
+    /*
+     * Show the keyboard tones only if the device have hardware keyboard
+     */
+    if ((keybFlags & QSystemDeviceInfo::FlipKeyboard) ||
+        (keybFlags & QSystemDeviceInfo::FullQwertyKeyboard) ||
+        (keybFlags & QSystemDeviceInfo::HalfQwertyKeyboard) ||
+        (keybFlags & QSystemDeviceInfo::ITUKeypad))
+    {
+        picombo = new ProfileIntCombo (
+            "keypad.sound.level", true,
+            centralWidget);
+
+        picombo->setObjectName("ProfileIntCombo_keypad.sound.level");
+        picombo->setStyleName ("CommonComboBoxInverted");
+        policy->addItem(picombo);
+    }
 
 	picombo = new ProfileIntCombo(
 		"system.sound.level", true,
@@ -243,16 +277,9 @@ AlertToneAppletWidget::createAlertTonesList(QGraphicsWidget *parent)
 	MLinearLayoutPolicy *policy;
 	QGraphicsWidget *centralWidget;
 	AlertToneWidget *alertToneWidget;
-    AlertToneVolume       *slider;
 
 	container = createEmptyContainer(parent, &policy, &centralWidget);
 
-    /*
-     * According to the UI spec and NB#189565 the slider goes into this
-     * container.
-     */
-    slider = new AlertToneVolume (centralWidget);
-    policy->addItem (slider);
 
     /*
      * And then the list...
@@ -273,6 +300,10 @@ AlertToneAppletWidget::createAlertTonesList(QGraphicsWidget *parent)
 void
 AlertToneAppletWidget::retranslateUi()
 {
+    if (m_VibrationLabel)
+        //% "Profile vibration"
+        m_VibrationLabel->setText (qtTrId("qtn_sond_missing_logical_id2"));
+
     if (m_EventTonesLabel)
         //% "Event Tones"
         m_EventTonesLabel->setText (qtTrId("qtn_sond_event_tones"));
