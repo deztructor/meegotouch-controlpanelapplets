@@ -155,6 +155,16 @@ QmBattery::setChargingState (
     emit chargingStateChanged (newState);
 }
 
+int 
+QmBattery::getRemainingChargingTime ()
+{
+    if (m_ChargingState == StateCharging)
+        // Just a random value.
+        return 305;
+
+    return -1;
+}
+
 QString
 QmBattery::ChargerName (
         ChargerType chargerType) const

@@ -25,19 +25,22 @@
 #include <MStylableWidget>
 
 #undef DEBUG
+#define WARNING
 #include "../debug.h"
 
 PercentageContainer::PercentageContainer(
-    const QString  &text,
-    MImageWidget *image,
-    MWidget      *parent) :
+        const QString  &text,
+        MImageWidget   *image,
+        MWidget        *parent) :
     MContainer (parent),
-        m_Image (image),
-        m_TextLabel (0)
+    m_MainLayout (0),
+    m_Image (image),
+    m_TextLabel (0),
+    m_SubTextLabel (0)
 {
     SYS_DEBUG ("*** text = %s", SYS_STR(text));
 
-    setStyleName ("CommonPanelInverted");
+    setStyleName ("CommonTextFrameInverted");
     setObjectName ("PercentageContainer");
 
     m_TextLabel = new MLabel (text);
@@ -55,7 +58,8 @@ PercentageContainer::setText (
     m_TextLabel->setText (text);
 }
 
-void PercentageContainer::updateCapacity(
+void 
+PercentageContainer::updateCapacity (
         const int value)
 {
     QString text;
@@ -65,18 +69,44 @@ void PercentageContainer::updateCapacity(
     m_TextLabel->setText(text);
 }
 
+void 
+PercentageContainer::updateRemainingChargingTime (
+        int    ChTime)
+{
+    SYS_DEBUG ("*** ChTime            = %d", ChTime);
+    SYS_DEBUG ("*** m_SubTextLabel    = %p", m_SubTextLabel);
+
+    if (ChTime <= 0 && m_SubTextLabel) {
+        m_SubTextLabel->deleteLater();
+        m_SubTextLabel = 0;
+        return;
+    } 
+    
+    if (ChTime > 0 && !m_SubTextLabel) {
+        m_SubTextLabel = new MLabel;
+        m_SubTextLabel->setObjectName ("SubTextLabel");
+        m_SubTextLabel->setStyleName ("CommonSubTitleInverted");
+        m_MainLayout->addItem (m_SubTextLabel);
+    }
+
+    if (ChTime > 0) {
+        int minutes = ChTime / 60;
+        m_SubTextLabel->setText (
+                qtTrId ("qtn_ener_charging_estimate", minutes).arg(minutes));
+    }
+}
+
 /*
  * This method will create all the internal widgets. 
  */
 void 
 PercentageContainer::setLayout()
 {
-    QGraphicsLinearLayout *mainLayout;
     QGraphicsLinearLayout *layout;
 
-    mainLayout = new QGraphicsLinearLayout (Qt::Vertical);
-    mainLayout->setContentsMargins (0., 0., 0., 0.);
-    mainLayout->setSpacing (0.);
+    m_MainLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    m_MainLayout->setContentsMargins (0., 0., 0., 0.);
+    m_MainLayout->setSpacing (0.);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
     layout->setContentsMargins (0., 0., 0., 0.);
@@ -88,9 +118,9 @@ PercentageContainer::setLayout()
     layout->addItem (m_TextLabel);
     layout->setAlignment (m_TextLabel, Qt::AlignLeft | Qt::AlignVCenter);
 
-    mainLayout->addItem (layout);
+    m_MainLayout->addItem (layout);
 
     // set the layout
-    centralWidget ()->setLayout (mainLayout);
+    centralWidget ()->setLayout (m_MainLayout);
 }
 

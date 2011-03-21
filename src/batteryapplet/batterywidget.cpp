@@ -38,7 +38,7 @@
 #include <MComboBox>
 #include <MHelpButton>
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -533,6 +533,8 @@ BatteryWidget::formProperBateryInfo (unsigned int pct)
         }
     } else {
             m_RemainingContainer->setText(qtTrId ("qtn_ener_charging"));
+            m_RemainingContainer->updateRemainingChargingTime (
+                    m_logic->remainingChargingTime());
     }
 }
 
@@ -585,4 +587,5 @@ void BatteryWidget::chargeComplete()
 {
     //% "Charging complete"
     m_RemainingContainer->setText(qtTrId ("qtn_ener_charcomp"));
+    m_RemainingContainer->updateRemainingChargingTime (-1);
 }
