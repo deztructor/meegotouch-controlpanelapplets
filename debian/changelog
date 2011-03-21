@@ -3,6 +3,7 @@ meegotouch-controlpanelapplets (0.20.25~1) meegotouch; urgency=low
   [Laszlo Pere]
   * Fixes: NB#188154 - Profile cannot be changed through Settings > Profiles
   * Fixes: NB#233648 - Better steps for display brightness
+  * Fixes: NB#234534 - Battery context sensitive help icon is in wrong place
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 11 Mar 2011 11:27:57 +0100
 

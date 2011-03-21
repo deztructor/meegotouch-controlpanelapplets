@@ -2,10 +2,11 @@ include(../coverage.pri)
 include(../../localconfig.pri)
 
 TEMPLATE = lib
-CONFIG += plugin \
-          gui \
-          meegotouchcore \
-          duicontrolpanel
+CONFIG +=           \
+    plugin          \
+    gui             \
+    meegotouchcore  \
+    duicontrolpanel
 
 contains(DEFINES, HAVE_QMSYSTEM) {
     CONFIG += qmsystem2

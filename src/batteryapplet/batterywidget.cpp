@@ -36,6 +36,7 @@
 #include <MHelpButton>
 #include <MBasicLayoutAnimation>
 #include <MComboBox>
+#include <MHelpButton>
 
 #define DEBUG
 #define WARNING
@@ -226,8 +227,9 @@ BatteryWidget::addHeaderContainer ()
 {
 // In Meego header should be avoided as it has a title bar
 #ifndef MEEGO    
-    MContainer            *container;
-    QGraphicsLinearLayout *layout;
+    MContainer              *container;
+    QGraphicsLinearLayout   *layout;
+    MHelpButton             *helpButton;
 
     Q_ASSERT (m_MainLayout);
     /*
@@ -250,6 +252,17 @@ BatteryWidget::addHeaderContainer ()
     m_TitleLabel->setStyleName ("CommonXLargeHeaderInverted");
     layout->addItem (m_TitleLabel);
     layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
+
+    /*
+     * A simple help button to the right of the title label. It is inverted,
+     * loads the userguide, so userguide-content have to be installed to see the
+     * content.
+     */
+    helpButton = new MHelpButton("IDUG_MEEGO_BATTERY.html");
+    helpButton->setViewType(MButton::iconType);
+    helpButton->setIconID ("icon-m-content-description-inverse");
+    layout->addItem (helpButton);
+
     /*
      * Adding the whole row to the main container.
      */

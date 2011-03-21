@@ -122,7 +122,14 @@ AlertToneAppletWidget::createContents()
     policy->addItem (spacer);
 
     /*
-     *
+     * Well, this is not the profile slider, that one is not implemented yet.
+     */
+    AlertToneVolume *slider;
+    slider = new AlertToneVolume (centralWidget);
+    policy->addItem (slider);
+
+    /*
+     * A subtitle that shows 'Profile vibration'
      */
     m_VibrationLabel = addTitleLabel (
             centralWidget, policy, 
@@ -250,16 +257,9 @@ AlertToneAppletWidget::createAlertTonesList(QGraphicsWidget *parent)
 	MLinearLayoutPolicy *policy;
 	QGraphicsWidget *centralWidget;
 	AlertToneWidget *alertToneWidget;
-    AlertToneVolume       *slider;
 
 	container = createEmptyContainer(parent, &policy, &centralWidget);
 
-    /*
-     * According to the UI spec and NB#189565 the slider goes into this
-     * container.
-     */
-    slider = new AlertToneVolume (centralWidget);
-    policy->addItem (slider);
 
     /*
      * And then the list...
@@ -282,7 +282,7 @@ AlertToneAppletWidget::retranslateUi()
 {
     if (m_VibrationLabel)
         //% "Profile vibration"
-        m_VibrationLabel->setText (qtTrId("qtn_sond_missing_logical_id1"));
+        m_VibrationLabel->setText (qtTrId("qtn_sond_missing_logical_id2"));
 
     if (m_EventTonesLabel)
         //% "Event Tones"
