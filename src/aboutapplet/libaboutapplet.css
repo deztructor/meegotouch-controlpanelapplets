@@ -5,12 +5,3 @@ AboutWidget MImageWidgetStyle#AboutAppletLogoImage {
     margin-right:    $MARGIN_XLARGE;
 }
 
-AboutWidget MLabelStyle#AboutAppletInfoLabel {
-    color:           $COLOR_INVERTED_FOREGROUND;
-    font:            $FONT_DEFAULT;
-}
-
-AboutWidget MLabelStyle#AboutAppletLicenseLabel {
-    color:           $COLOR_INVERTED_FOREGROUND;
-    font:            $FONT_SMALL;
-}

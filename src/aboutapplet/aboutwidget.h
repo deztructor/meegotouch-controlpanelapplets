@@ -26,6 +26,7 @@
 
 class MLabel;
 class MLinearLayoutPolicy;
+class ContentWidget;
 
 class AboutWidget : public DcpStylableWidget
 {
@@ -38,11 +39,7 @@ public:
     ~AboutWidget ();
 
     void createContent ();
-    QString labelText ();
     QString licenseText ();
-
-private slots:
-    void refresh ();
 
 protected:
     virtual void retranslateUi ();
@@ -50,15 +47,25 @@ protected:
 private:
     void addHeaderContainer ();
     void addLogoContainer ();
-    void addInfoLabelContainer ();
+    void addNamesContainer ();
+    void addVersionContainer ();
+    void addWiFiMACContainer ();
+    void addBtMACContainer ();
+    void addIMEIContainer ();
     void addLicenseLabelContainer ();
     void addStretcher (const QString &styleName);
 
+private slots:
+    void refresh ();
+
 private:
     QPointer<AboutBusinessLogic>    m_AboutBusinessLogic;
-    MLinearLayoutPolicy            *m_MainLayout;
     MLabel                         *m_TitleLabel;
-    MLabel                         *m_InfoLabel;
+    ContentWidget                  *m_Version;
+    ContentWidget                  *m_ProductName;
+    ContentWidget                  *m_WiFi;
+    ContentWidget                  *m_Bt;
+    ContentWidget                  *m_IMEI;
     MLabel                         *m_LicenseLabel;
     #ifdef UNIT_TEST
     friend class Ut_AboutApplet;
