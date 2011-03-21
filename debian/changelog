@@ -15,7 +15,7 @@ meegotouch-controlpanelapplets (0.20.25~1) meegotouch; urgency=low
   * Fixes: NB#218188 - Keypad tone settings available even though there's no
     support for that
 
- -- David Kedves <dkedves@blumsoft.eu>  Sat, 19 Mar 2011 14:45:33 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 21 Mar 2011 14:32:08 +0200
 
 meegotouch-controlpanelapplets (0.20.24-1) meegotouch; urgency=low
 
