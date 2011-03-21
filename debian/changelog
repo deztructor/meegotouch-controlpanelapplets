@@ -6,6 +6,7 @@ meegotouch-controlpanelapplets (0.20.25~1) meegotouch; urgency=low
   * Fixes: NB#234534 - Battery context sensitive help icon is in wrong place
   * Fixes: NB#229217 - Battery settings UI should indicate the remaining 
     charging time estimate
+  * Fixes: NB#236379 - Profile settings missing in sound settings view.
 
   [David Kedves]
   * Fixes: NB#237428 - Default USB mode displayed incorrectly in the following
