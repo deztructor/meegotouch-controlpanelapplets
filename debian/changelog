@@ -5,7 +5,15 @@ meegotouch-controlpanelapplets (0.20.25~1) meegotouch; urgency=low
   * Fixes: NB#233648 - Better steps for display brightness
   * Fixes: NB#234534 - Battery context sensitive help icon is in wrong place
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 11 Mar 2011 11:27:57 +0100
+  [David Kedves]
+  * Fixes: NB#237428 - Default USB mode displayed incorrectly in the following
+    scenario
+  * Fixes: NB#237431 - Changing the USB mode while a mode is active throws an
+    error but UI changes to the new mode
+  * Fixes: NB#218188 - Keypad tone settings available even though there's no
+    support for that
+
+ -- David Kedves <dkedves@blumsoft.eu>  Sat, 19 Mar 2011 14:45:33 +0100
 
 meegotouch-controlpanelapplets (0.20.24-1) meegotouch; urgency=low
 

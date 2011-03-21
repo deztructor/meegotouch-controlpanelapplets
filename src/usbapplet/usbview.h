@@ -23,7 +23,6 @@
 
 #ifdef HAVE_QMSYSTEM
 #  include <qmusbmode.h>
-using namespace MeeGo;
 #endif
 
 class MLabel;
@@ -54,26 +53,14 @@ protected:
     void retranslateUi ();
 
 private:
-    enum {
-       UsbModeAlwaysAsk = 0,
-       UsbModeMassStorage,
-       UsbModeOviSuite
-    };
-    void initWidget (void);
-
-    #if 0
-    MLabel *addTitleLabel (
-            MLinearLayoutPolicy    *targetPolicy,
-            const char             *panelStyleName,
-            const char             *labelStyleName);
-    #endif
+    void initWidget ();
 
     MLabel *addTitleLabel (
         QGraphicsWidget     *parent,
         MLinearLayoutPolicy *targetPolicy,
         const char          *labelStyleName);
 
-private:
+
     #ifdef HAVE_QMSYSTEM
     MeeGo::QmUSBMode    *m_logic;
     #endif
