@@ -1,13 +1,21 @@
-meegotouch-controlpanelapplets (0.20.25~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.26~1) meegotouch; urgency=low
 
-  [ David Kedves ]
+  [ Sandor Pinter ]
+  * Fixes: NB#234670 - Layout issues
+
+  [ Laszlo Pere ]
+  * Fixes: NB#236379 - Profile settings missing in sound settings view.
+
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 22 Mar 2011 09:12:40 +0200
+
+meegotouch-controlpanelapplets (0.20.25-1) meegotouch; urgency=low
+
   [Laszlo Pere]
   * Fixes: NB#188154 - Profile cannot be changed through Settings > Profiles
   * Fixes: NB#233648 - Better steps for display brightness
   * Fixes: NB#234534 - Battery context sensitive help icon is in wrong place
   * Fixes: NB#229217 - Battery settings UI should indicate the remaining 
     charging time estimate
-  * Fixes: NB#236379 - Profile settings missing in sound settings view.
 
   [David Kedves]
   * Fixes: NB#237428 - Default USB mode displayed incorrectly in the following
@@ -16,9 +24,6 @@ meegotouch-controlpanelapplets (0.20.25~1) meegotouch; urgency=low
     error but UI changes to the new mode
   * Fixes: NB#218188 - Keypad tone settings available even though there's no
     support for that
-
-  [ Sandor Pinter ]
-  * Fixes: NB#234670 - Layout issues
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 21 Mar 2011 14:32:08 +0200
 
