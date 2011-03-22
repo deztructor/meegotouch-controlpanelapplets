@@ -48,7 +48,9 @@ class WallpaperModel: public QAbstractTableModel
         WallpaperModel (
                 WallpaperBusinessLogic *logic,
                 QObject                *parent = 0);
-
+        
+        ~WallpaperModel ();
+        
     virtual int rowCount (
             const QModelIndex &parent = QModelIndex()) const;
     virtual QVariant data (

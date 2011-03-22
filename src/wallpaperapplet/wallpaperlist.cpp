@@ -102,7 +102,7 @@ WallpaperList::setDataSourceType (
 {
     Q_ASSERT (m_DataSourceType == DataSourceUnknown);
     
-    m_Model = new WallpaperModel (m_BusinessLogic);
+    m_Model = new WallpaperModel (m_BusinessLogic, this);
     setItemModel (m_Model);
     setCellCreator (m_CellCreator);
 

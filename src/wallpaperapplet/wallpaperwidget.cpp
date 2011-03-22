@@ -45,6 +45,7 @@ WallpaperWidget::WallpaperWidget (
     DcpWidget (parent),
     m_WallpaperBusinessLogic (wallpaperBusinessLogic)
 {
+    SYS_WARNING ("Creating widget");
     /*
      * Unfortunatelly the content has to be created late, otherwise the list
      * only shows one row.
@@ -58,6 +59,7 @@ WallpaperWidget::WallpaperWidget (
 
 WallpaperWidget::~WallpaperWidget ()
 {
+    SYS_WARNING ("Destroying widget");
 }
 
 void

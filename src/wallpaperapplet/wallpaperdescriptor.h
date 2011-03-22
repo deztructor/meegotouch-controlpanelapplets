@@ -213,9 +213,11 @@ public:
     void setLoading (bool loading = true);
     QImage &image (
             ImageVariant   variant = WallpaperDescriptor::Portrait);
+#if 0
     QImage scaledImage (
             QSize size,
             ImageVariant   variant = WallpaperDescriptor::Portrait);
+#endif
 
     void loadAll ();
 

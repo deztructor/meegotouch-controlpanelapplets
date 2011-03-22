@@ -30,6 +30,7 @@ M_LIBRARY
 #endif
 
 //#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(wallpaperapplet, WallpaperApplet)
@@ -37,10 +38,12 @@ Q_EXPORT_PLUGIN2(wallpaperapplet, WallpaperApplet)
 WallpaperApplet::WallpaperApplet() :
     m_WallpaperBusinessLogic (0)
 {
+    SYS_WARNING ("Creating applet...");
 }
 
 WallpaperApplet::~WallpaperApplet() 
 {
+    SYS_WARNING ("Destroying applet...");
 }
 
 void 

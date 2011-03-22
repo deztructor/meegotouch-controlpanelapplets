@@ -208,13 +208,13 @@ WallpaperEditorWidget::createContent ()
          * be more generic, and use the original only when it differs from the
          * edited, then we could move it to the WallpaperDescriptor class...
          */
-        m_bgLandscape = cdesc->scaledImage (
-                m_LandscapeTrans.expectedSize(),
-                WallpaperDescriptor::OriginalLandscape);
+        if (supportsLandscape())
+            m_bgLandscape = cdesc->image (
+                    WallpaperDescriptor::OriginalLandscape);
 
-        m_bgPortrait = cdesc->scaledImage (
-                m_PortraitTrans.expectedSize(),
-                WallpaperDescriptor::OriginalPortrait);
+        if (supportsPortrait())
+            m_bgPortrait = cdesc->image (
+                    WallpaperDescriptor::OriginalPortrait);
         /*
          * Need to copy back...
          */
@@ -245,13 +245,11 @@ not_current_wallpaper:
      * very big the handling might be slow, so we scale it down.
      */
     if (supportsLandscape())
-        m_bgLandscape = desc->scaledImage (
-                m_LandscapeTrans.expectedSize(),
+        m_bgLandscape = desc->image (
                 WallpaperDescriptor::Landscape);
 
     if (supportsPortrait())
-        m_bgPortrait = desc->scaledImage (
-               m_PortraitTrans.expectedSize(),
+        m_bgPortrait = desc->image (
                WallpaperDescriptor::Portrait);
 
 

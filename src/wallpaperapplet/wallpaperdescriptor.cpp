@@ -702,7 +702,7 @@ WallpaperDescriptor::image (
 {
     return m_Images[variant].image();
 }
-
+#if 0
 /*!
  * Will cache the pixmap, then returns the loaded QPixmap.
  */
@@ -716,6 +716,7 @@ WallpaperDescriptor::scaledImage (
     cache (variant);
     return m_Images[variant].scaledImage(size);
 }
+#endif
 
 void
 WallpaperDescriptor::setMimeType (

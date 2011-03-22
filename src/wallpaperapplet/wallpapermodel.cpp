@@ -323,6 +323,15 @@ WallpaperModel::WallpaperModel (
             this, SLOT(wallpaperChanged()));
 }
 
+WallpaperModel::~WallpaperModel ()
+{
+    SYS_WARNING ("=================================");
+    for (int n = 0; n < m_DescriptorList.size(); ++n) {
+        if (!m_DescriptorList[n]->isCurrent())
+            delete m_DescriptorList[n];
+    }
+}
+
 int 
 WallpaperModel::rowCount(
 		const QModelIndex &parent) const

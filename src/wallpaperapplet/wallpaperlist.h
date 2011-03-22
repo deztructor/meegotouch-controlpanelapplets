@@ -35,7 +35,8 @@ class WallpaperCellCreator;
 /*!
  * A list widget that shows a list of the available wallpapers.
  */
-class WallpaperList : public MList {
+class WallpaperList : public MList 
+{
     Q_OBJECT
         
 public:
