@@ -28,6 +28,7 @@
 #include <MApplication>
 
 #ifdef HAVE_QUILL_FILTER
+#  include <QuillFile>
 #  include <QuillImage>
 #  include <QuillImageFilterFactory>
    typedef QuillImage WallPaperImage;
@@ -117,7 +118,6 @@ private:
     QPixmap   m_ThumbnailPixmap;
     bool      m_HasThumbnail;
     WallPaperImage  m_Image;
-    WallPaperImage *m_ScaledImage;
 
     friend class WallpaperDescriptor;
     #ifdef UNIT_TEST

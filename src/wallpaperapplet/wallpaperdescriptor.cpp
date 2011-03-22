@@ -35,7 +35,7 @@
  * weird file names around.
  */
 //#define LOTDEBUG
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -59,25 +59,19 @@ static const int defaultThumbnailHeight = 172;
  * Image implementation.
  */
 Image::Image () :
-    QObject () ,
-    m_ScaledImage (0)
+    QObject () 
 {
     reset ();
 }
 
 Image::~Image ()
 {
-    SYS_DEBUG ("*** m_ScaledImage  = %p", m_ScaledImage);
-
-    if (m_ScaledImage)
-        delete m_ScaledImage;
 }
 
 
 Image::Image (
         const Image &orig) :
-    QObject (), 
-    m_ScaledImage (0)
+    QObject ()
 {
     m_Filename = orig.m_Filename;
     m_MimeType = orig.m_MimeType;
@@ -103,11 +97,6 @@ Image::reset ()
     m_ThumbnailPixmap = QPixmap (defaultThumbnailWidth, defaultThumbnailHeight);
     m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
     m_HasThumbnail = false;
-
-    if (m_ScaledImage) {
-        delete m_ScaledImage;
-        m_ScaledImage = 0;
-    }
 }
 
 Image &
@@ -124,7 +113,6 @@ Image::operator= (
         m_Url      = rhs.m_Url;  
         m_ThumbnailPixmap = rhs.m_ThumbnailPixmap;
         m_HasThumbnail = rhs.m_HasThumbnail;
-        m_ScaledImage = 0;
     }
 
     return *this;
@@ -277,7 +265,7 @@ Image::load (
         const QString &fileName)
 {
     bool retval;
-    #ifdef HAVE_QUILL_METADATA
+    #if 0 //ifdef HAVE_QUILL_METADATA
     QString           rFilterName = "org.maemo.rotate";
     QuillMetadata     metadata (fileName);
     QVariant      orientation = metadata.entry(QuillMetadata::Tag_Orientation);
@@ -288,13 +276,42 @@ Image::load (
     SYS_DEBUG ("side       : %d", side);
     #endif
 
-    SYS_DEBUG ("Loading '%s'", SYS_STR(fileName));
+    SYS_WARNING ("+++ First the size...");
+    QSize     mySize;
+    QSize     expectedSize;
+
+    QuillFile quillFile  (fileName);
+    mySize = quillFile.fullImageSize ();
+    SYS_WARNING ("orig size = %dx%d", mySize.width(), mySize.height());
+    if (mySize.width() > mySize.height())
+        mySize.scale (480, 854, Qt::KeepAspectRatioByExpanding);
+    else
+        mySize.scale (480, 854, Qt::KeepAspectRatioByExpanding);
+    SYS_WARNING ("my size = %dx%d", mySize.width(), mySize.height());
+#if 1
+    SYS_WARNING ("================ START ===========================");
+    QuillImageFilter *loadFilter;
+    
+    loadFilter = QuillImageFilterFactory::createImageFilter(
+            QuillImageFilter::Role_Load);
+    loadFilter->setOption(
+            QuillImageFilter::FileName,
+            QVariant(fileName));
+    m_Image = loadFilter->apply (QImage(mySize, QImage::Format_RGB16));
+    retval = true;
+    SYS_WARNING ("================ END   ===========================");
+    delete loadFilter;
+#else
+    SYS_WARNING ("Loading '%s'", SYS_STR(fileName));
     retval = m_Image.load(fileName);
+    SYS_WARNING ("Loaded '%s'", SYS_STR(fileName));
+#endif
 
     if (!retval)
         return retval;
 
-#ifdef HAVE_QUILL_METADATA
+#if 0
+//#ifdef HAVE_QUILL_METADATA
     switch (side) {
         case 1:
             // Nothing to do
@@ -349,6 +366,7 @@ Image::cache (
      * Secondary thread file loading.
      */
     if (!filename().isEmpty()) {
+        SYS_WARNING ("Loading %s", SYS_STR(filename()));
         if (!load(filename())) {
             SYS_WARNING ("Loading failed: %s", SYS_STR(filename()));
             m_Cached = false;
@@ -402,11 +420,6 @@ Image::unCache ()
 
     m_Cached = false;
     m_Image = WallPaperImage();
-
-    if (m_ScaledImage) {
-        delete m_ScaledImage;
-        m_ScaledImage = 0;
-    }
 }
 
 QImage &
@@ -420,44 +433,15 @@ QImage
 Image::scaledImage (
         QSize size)
 {
-    SYS_DEBUG ("*** requested size = %dx%d", size.width(), size.height());
-
-    /*
-     * Let's check if we have some pre-scaling available. We kept the aspect
-     * ratio, so most probably only one side is going to be equal.
-     */
-    SYS_DEBUG ("1");
-    if (m_ScaledImage &&
-            (m_ScaledImage->width() == size.width() ||
-            m_ScaledImage->height() == size.height())) {
-        SYS_DEBUG ("Pre-scale hit.");
-        return *m_ScaledImage;
+    SYS_WARNING ("*** requested size = %dx%d", size.width(), size.height());
+    SYS_WARNING ("*** actual    size = %dx%d", m_Image.width(), m_Image.height());
+    if (m_Cached &&
+            (m_Image.width() == size.width() ||
+            m_Image.height() == size.height())) {
+        SYS_DEBUG ("File scaled to this size.");
     }
 
-    cache ();
-    SYS_DEBUG ("*** have  size %dx%d", m_Image.width(), m_Image.height());
-    SYS_DEBUG ("m_Image.scaled (size, Qt::KeepAspectRatioByExpanding);");
-    return m_Image.scaled (size, Qt::KeepAspectRatioByExpanding);
-}
-
-void
-Image::preScale (
-        QSize size, 
-        bool threadSafe)
-{
-    if (threadSafe) {
-        if (!m_Cached) 
-            cache (threadSafe);
-        if (!m_Cached)
-            return;
-
-        if (m_ScaledImage)
-            delete m_ScaledImage;
-
-        SYS_DEBUG ("m_Image.scaled(size, Qt::KeepAspectRatioByExpanding)");
-        m_ScaledImage = new WallPaperImage(
-                m_Image.scaled(size, Qt::KeepAspectRatioByExpanding));
-    }
+    return m_Image;
 }
 
 bool
@@ -498,6 +482,7 @@ Image::thumbnail (
          * And if the force was set that means we have to make our own thumbnail
          * most probably the thumbler failed.
          */
+#if 0
         // FIXME: Do we still need this?
         SYS_WARNING ("No thumbnail available!");
         cache ();
@@ -511,6 +496,7 @@ Image::thumbnail (
         } else {
             SYS_WARNING ("No image after caching?");
         }
+#endif
     }
 
     return retval;
@@ -657,7 +643,8 @@ WallpaperDescriptor::cache (
 {
     m_Images[variant].cache ();
 
-    SYS_DEBUG ("=>");
+    SYS_DEBUG ("================================>");
+    sleep (5);
     for (int n = 0; n < m_Images.size(); ++n) {
         SYS_DEBUG ("*** n = %d", n);
         SYS_DEBUG ("*** thisfilename  = %s", SYS_STR(m_Images[n].filename()));
@@ -672,6 +659,9 @@ WallpaperDescriptor::cache (
             }
         }
     }
+    
+    sleep (5);
+    SYS_DEBUG ("<================================");
 }
 
 void
@@ -1111,17 +1101,11 @@ WallpaperDescriptor::loadAll ()
      * Here we try to find out what size we are about to use and we do some
      * thread safe pre-scaling.
      */
-    #if 0
-    m_Images[WallpaperDescriptor::Landscape].preScale (
-            landscapeSize, threadSafe);
-    #endif
+#if 0
     m_Images[WallpaperDescriptor::Portrait].preScale (
             portraitSize, threadSafe);
-    #if 0
-    m_Images[WallpaperDescriptor::OriginalLandscape].preScale (
-            landscapeSize, threadSafe);
-    #endif
     m_Images[WallpaperDescriptor::OriginalPortrait].preScale (
             portraitSize, threadSafe);
+#endif
 }
 

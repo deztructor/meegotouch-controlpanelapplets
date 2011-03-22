@@ -10,6 +10,7 @@ QT += dbus
 CONFIG += plugin \
           gui \
           meegotouchcore \
+          quill \
           duicontrolpanel
 
 contains(DEFINES, HAVE_CONTENT_MANAGER) {
