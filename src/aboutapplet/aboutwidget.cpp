@@ -40,14 +40,53 @@ M_REGISTER_WIDGET_NO_CREATE(AboutWidget)
 
 static const char *LicensePath = LICENSE_PATH;
 
+class ContentWidget: public MStylableWidget
+{
+  public:
+    ContentWidget(QGraphicsItem *parent = 0):
+        MStylableWidget(parent)
+    {
+        QGraphicsLinearLayout *layout = new QGraphicsLinearLayout (Qt::Vertical);
+        layout->setSpacing(0);
+        layout->setContentsMargins(0, 0, 0, 0);
+
+        m_title = new MLabel;
+        m_title->setStyleName ("CommonSubTitleTopInverted");
+
+        m_subTitle = new MLabel;
+        m_subTitle->setStyleName ("CommonTitleBottomInverted");
+
+        layout->addItem(m_title);
+        layout->addItem(m_subTitle);
+
+        setStyleName("CommonPanelInverted");
+
+        setLayout(layout);
+    };
+    void setTitle(QString const &title)
+    {
+        m_title->setText(title);
+    };
+    void setSubtitle(QString const &subTitle)
+    {
+        m_subTitle->setText(subTitle);
+    };
+  private:
+    MLabel *m_title;
+    MLabel *m_subTitle;
+};
+
 AboutWidget::AboutWidget (
         AboutBusinessLogic     *aboutBusinessLogic,
         QGraphicsWidget        *parent) :
     DcpStylableWidget (parent),
     m_AboutBusinessLogic (aboutBusinessLogic),
-    m_MainLayout (0),
     m_TitleLabel (0),
-    m_InfoLabel (0),
+    m_Version(0),
+    m_ProductName(0),
+    m_WiFi(0),
+    m_Bt(0),
+    m_IMEI(0),
     m_LicenseLabel (0)
 {
     createContent ();
@@ -66,82 +105,64 @@ AboutWidget::~AboutWidget ()
 void
 AboutWidget::createContent ()
 {
-    MLayout     *layout;
-   
     /*
      * Creating a layout that holds the rows of the internal widgets.
      */
-    layout = new MLayout (this);
-    m_MainLayout = new MLinearLayoutPolicy (layout, Qt::Vertical);
-    m_MainLayout->setContentsMargins (0., 0., 0., 0.);
-    m_MainLayout->setSpacing (0.);
+    QGraphicsLinearLayout *layout = new QGraphicsLinearLayout (Qt::Vertical);
+    layout->setContentsMargins (0., 0., 0., 0.);
+    layout->setSpacing (0.);
     setLayout (layout);
 
     // Row 1: the title
     addHeaderContainer ();
-    addStretcher ("CommonSmallSpacerInverted");
-    // Row 3: the logo
+    // Row 2: the logo
     addLogoContainer ();
-    addStretcher ("CommonSpacerInverted");
-    // Row 5: the info label
-    addInfoLabelContainer ();
-    addStretcher ("CommonGroupDividerInverted");
+    // Row 3: the product name
+    addNamesContainer ();
+    // Row 4: versions
+    addVersionContainer ();
+    // Row 5: WiFi
+    addWiFiMACContainer ();
+    // Row 6: KekFog
+    addBtMACContainer ();
+    // Row 7: IMEI
+    addIMEIContainer ();
+    addStretcher ("CommonItemDivider");
+    addStretcher ("CommonSpacer");
     // Row 7: the license label
     addLicenseLabelContainer ();
-    addStretcher ("CommonSmallSpacerInverted");
-    
-    //m_MainLayout->addStretch ();
 }
 
 void 
 AboutWidget::addHeaderContainer ()
 {
-    MContainer            *container;
-    QGraphicsLinearLayout *layout;
+    QGraphicsLinearLayout *mLayout = dynamic_cast<QGraphicsLinearLayout*>(layout());
 
-    Q_ASSERT (m_MainLayout);
-    /*
-     * Creating a lcontainer and a layout.
-     */
-    container = new MContainer (this);
-    container->setStyleName ("CommonXLargeHeaderPanelInverted");
-    container->setHeaderVisible (false);
-
-    layout = new QGraphicsLinearLayout (Qt::Horizontal);
-    container->centralWidget()->setLayout (layout);
-
+    if (!mLayout) {
+        return;
+    }
     /*
      * The label that we use as title.
      */
     //% "About product"
     m_TitleLabel = new MLabel (qtTrId("qtn_prod_about_product"));
-    m_TitleLabel->setStyleName ("CommonXLargeHeaderInverted");
-    layout->addItem (m_TitleLabel);
-    layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
-    /*
-     * Adding the whole row to the main container.
-     */
-    m_MainLayout->addItem (container);
-    m_MainLayout->setStretchFactor (container, 0);
+    m_TitleLabel->setStyleName ("CommonApplicationHeaderInverted");
+    mLayout->addItem (m_TitleLabel);
+    mLayout->setStretchFactor (m_TitleLabel, 0);
+    mLayout->setAlignment (m_TitleLabel, Qt::AlignLeft);
 }
 
 void 
 AboutWidget::addLogoContainer ()
 {
-    MContainer            *container;
-    QGraphicsLinearLayout *layout;
+    QGraphicsLinearLayout *mLayout = dynamic_cast<QGraphicsLinearLayout*>(layout());
+
+    if (!mLayout) {
+        return;
+    }
+    QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(Qt::Horizontal);
+
     MImageWidget *logo;
-
-    Q_ASSERT (m_MainLayout);
-    /*
-     * Creating a lcontainer and a layout.
-     */
-    container = new MContainer (this);
-    container->setStyleName ("CommonPanelInverted");
-    container->setHeaderVisible (false);
-
-    layout = new QGraphicsLinearLayout (Qt::Horizontal);
-    container->centralWidget()->setLayout (layout);
 
     /*
      * The logo 
@@ -149,68 +170,89 @@ AboutWidget::addLogoContainer ()
     logo = new MImageWidget;
     logo->setImage ("icon-l-about-nokia-logo");
     logo->setObjectName ("AboutAppletLogoImage");
-   
-    layout->addItem (logo);
-    layout->setAlignment (logo, Qt::AlignLeft);
-    layout->addStretch ();
 
-    /*
-     * Adding the whole row to the main container.
-     */
-    m_MainLayout->addItem (container);
-    m_MainLayout->setStretchFactor (container, 0);
+    layout->addItem (logo);
+    layout->addStretch();
+    mLayout->addItem(layout);
 }
 
-void 
-AboutWidget::addInfoLabelContainer ()
+void
+AboutWidget::addNamesContainer ()
 {
-    MContainer            *container;
-    QGraphicsLinearLayout *layout;
+    QGraphicsLinearLayout *mLayout = dynamic_cast<QGraphicsLinearLayout*> (layout());
 
-    Q_ASSERT (m_MainLayout);
-    /*
-     * Creating a lcontainer and a layout.
-     */
-    container = new MContainer (this);
-    container->setStyleName ("CommonLargePanelInverted");
-    container->setHeaderVisible (false);
+    if (!mLayout) {
+        return;
+    }
 
-    layout = new QGraphicsLinearLayout (Qt::Horizontal);
-    container->centralWidget()->setLayout (layout);
+    m_ProductName = new ContentWidget;
+    m_ProductName->setTitle(m_AboutBusinessLogic->productName());
+    mLayout->addItem(m_ProductName);
+}
 
-    /*
-     * The logo 
-     */
-    m_InfoLabel = new MLabel;
-    m_InfoLabel->setObjectName ("AboutAppletInfoLabel");
-    //m_InfoLabel->setStyleName ("CommonSubTitleInverted");
-   
-    layout->addItem (m_InfoLabel);
+void
+AboutWidget::addVersionContainer ()
+{
+    QGraphicsLinearLayout *mLayout = dynamic_cast<QGraphicsLinearLayout*> (layout());
 
-    /*
-     * Adding the whole row to the main container.
-     */
-    m_MainLayout->addItem (container);
-    m_MainLayout->setStretchFactor (container, 0);
+    if (!mLayout) {
+        return;
+    }
+
+    m_Version = new ContentWidget;
+    m_Version->setSubtitle(m_AboutBusinessLogic->osVersion());
+    mLayout->addItem(m_Version);
+}
+
+void
+AboutWidget::addWiFiMACContainer ()
+{
+    QGraphicsLinearLayout *mLayout = dynamic_cast<QGraphicsLinearLayout*> (layout());
+
+    if (!mLayout) {
+        return;
+    }
+
+    m_WiFi = new ContentWidget;
+    m_WiFi->setSubtitle(m_AboutBusinessLogic->WiFiAddress ());
+    mLayout->addItem(m_WiFi);
+}
+
+void
+AboutWidget::addBtMACContainer ()
+{
+    QGraphicsLinearLayout *mLayout = dynamic_cast<QGraphicsLinearLayout*> (layout());
+
+    if (!mLayout) {
+        return;
+    }
+
+    m_Bt = new ContentWidget;
+    m_Bt->setSubtitle(m_AboutBusinessLogic->BluetoothAddress ());
+    mLayout->addItem(m_Bt);
+}
+
+void
+AboutWidget::addIMEIContainer ()
+{
+    QGraphicsLinearLayout *mLayout = dynamic_cast<QGraphicsLinearLayout*> (layout());
+
+    if (!mLayout) {
+        return;
+    }
+    m_IMEI = new ContentWidget;
+    m_IMEI->setSubtitle(m_AboutBusinessLogic->IMEI ());
+    mLayout->addItem(m_IMEI);
 }
 
 void 
 AboutWidget::addLicenseLabelContainer ()
 {
-    MContainer            *container;
-    QGraphicsLinearLayout *layout;
+    QGraphicsLinearLayout *mLayout = dynamic_cast<QGraphicsLinearLayout*> (layout());
 
-    Q_ASSERT (m_MainLayout);
-    /*
-     * Creating a lcontainer and a layout.
-     */
-    container = new MContainer (this);
-    container->setStyleName ("CommonLargePanelInverted");
-    container->setHeaderVisible (false);
-
-    layout = new QGraphicsLinearLayout (Qt::Horizontal);
-    container->centralWidget()->setLayout (layout);
-
+    if (!mLayout) {
+        return;
+    }
     /*
      * The label
      */
@@ -218,16 +260,14 @@ AboutWidget::addLicenseLabelContainer ()
     m_LicenseLabel->setWordWrap (true);
     // this text is not translated!
     m_LicenseLabel->setText (licenseText ());
-    //m_LicenseLabel->setStyleName ("CommonSubTitleInverted"); 
+    m_LicenseLabel->setStyleName ("CommonBodyTextInverted"); 
     m_LicenseLabel->setObjectName ("AboutAppletLicenseLabel");
-
-    layout->addItem (m_LicenseLabel);
 
     /*
      * Adding the whole row to the main container.
      */
-    m_MainLayout->addItem (container);
-    m_MainLayout->setStretchFactor (container, 0);
+    mLayout->addItem (m_LicenseLabel);
+    mLayout->setStretchFactor (m_LicenseLabel, 0);
 }
 
 
@@ -235,53 +275,16 @@ void
 AboutWidget::addStretcher (
         const QString &styleName)
 {
-    MSeparator *stretcher;
+    QGraphicsLinearLayout *mLayout = dynamic_cast<QGraphicsLinearLayout*> (layout());
 
-    Q_ASSERT (m_MainLayout);
+    if (!mLayout) {
+        return;
+    }
+    MStylableWidget *stretcher;
 
-    stretcher = new MSeparator ();
+    stretcher = new MStylableWidget ();
     stretcher->setStyleName (styleName);
-    m_MainLayout->addItem (stretcher);
-}
-
-QString
-AboutWidget::labelText()
-{
-    QString retval;
-    QString tmp;
-
-    retval += "<h3>" + m_AboutBusinessLogic->productName () + "</h3>";
-    retval += "<h3>" + m_AboutBusinessLogic->osName () + "</h3>";
-    //% "Version"
-    retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_version"));
-    retval += m_AboutBusinessLogic->osVersion();
-
-    tmp = m_AboutBusinessLogic->WiFiAddress ();
-    if (tmp.isEmpty () == false)
-    {
-        //% "WLAN MAC address"
-        retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_wlan_mac_address"));
-        retval += tmp;
-    }
-
-    tmp = m_AboutBusinessLogic->BluetoothAddress ();
-    if (tmp.isEmpty () == false)
-    {
-        //% "Bluetooth address"
-        retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_bt_address"));
-        retval += tmp;
-    }
-
-    tmp = m_AboutBusinessLogic->IMEI ();
-    if (tmp.isEmpty () == false)
-    {
-        //% "IMEI"
-        retval += QString ("<h3>%1</h3>").arg (qtTrId ("qtn_prod_imei"));
-        retval += tmp;
-    }
-//    retval += "<hr />";
-
-    return retval;
+    mLayout->addItem (stretcher);
 }
 
 QString
@@ -301,11 +304,12 @@ AboutWidget::licenseText()
 
     return retval;
 }
-
 void
 AboutWidget::refresh ()
 {
-    m_InfoLabel->setText (labelText ());
+    if (m_Bt) {
+        m_Bt->setSubtitle(m_AboutBusinessLogic->BluetoothAddress ());
+    }
 }
 
 void
@@ -314,6 +318,26 @@ AboutWidget::retranslateUi ()
     //% "About product"
     if (m_TitleLabel)
         m_TitleLabel->setText (qtTrId("qtn_prod_about_product"));
-    refresh ();
+    if (m_Version) {
+        //% "Version"
+        m_Version->setTitle (qtTrId("qtn_prod_version"));
+    }
+    if (m_ProductName) {
+        m_ProductName->setSubtitle(m_AboutBusinessLogic->osName());
+    }
+
+
+    if (m_WiFi) {
+        //% "WLAN MAC address"
+        m_WiFi->setTitle (qtTrId("qtn_prod_wlan_mac_address"));
+    }
+    if (m_Bt) {
+        //% "Bluetooth address"
+        m_Bt->setTitle (qtTrId("qtn_prod_bt_address"));
+    }
+    if (m_IMEI) {
+        //% "IMEI"
+        m_IMEI->setTitle (qtTrId("qtn_prod_imei"));
+    }
 }
 
