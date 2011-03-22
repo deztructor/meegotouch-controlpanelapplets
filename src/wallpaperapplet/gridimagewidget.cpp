@@ -181,7 +181,7 @@ GridImageLayout::sizeHint (
 {
     Q_UNUSED (which);
     Q_UNUSED (constraint);
-    QSizeF retval (100.0, 100.0);
+    QSizeF retval (160.0, 160.0);
 
     if (m_Image)
         return m_Image->preferredSize ();
@@ -306,7 +306,7 @@ GridImageWidget::progressIndicator (
                 GridImageLayout::ProgressIndicator);
         // This seems to solve the issue in NB#208329. FIXME: We should at least
         // use some stored/calculated values instead of these litarals.
-        m_Layout->setGeometry (QRectF(0.0, 0.0, 172.0, 172.0));
+        m_Layout->setGeometry (QRectF(0.0, 0.0, 160.0, 160.0));
     } else {
         SYS_DEBUG ("Already have a progress indicator.");
     }
@@ -324,7 +324,7 @@ GridImageWidget::createLayout()
     }
 
     m_Layout = new GridImageLayout(this);
-    m_Layout->setContentsMargins(10.0, 10.0, 10.0, 10.0);
+    m_Layout->setContentsMargins(0.0, 0.0, 0.0, 0.0);
 
     m_ImageWidget = new MImageWidget (this);
 

@@ -644,7 +644,6 @@ WallpaperDescriptor::cache (
     m_Images[variant].cache ();
 
     SYS_DEBUG ("================================>");
-    sleep (5);
     for (int n = 0; n < m_Images.size(); ++n) {
         SYS_DEBUG ("*** n = %d", n);
         SYS_DEBUG ("*** thisfilename  = %s", SYS_STR(m_Images[n].filename()));
@@ -660,7 +659,6 @@ WallpaperDescriptor::cache (
         }
     }
     
-    sleep (5);
     SYS_DEBUG ("<================================");
 }
 

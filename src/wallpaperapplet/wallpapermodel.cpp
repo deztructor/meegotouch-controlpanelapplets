@@ -30,6 +30,7 @@
 #include <MProgressIndicator>
 
 //#define DEBUG
+#define WARNING
 #include <../debug.h>
 
 /*
@@ -153,14 +154,12 @@ void
 WallpaperCellCreator::setCellSize (
         const QSizeF &size)
 {
-    //SYS_WARNING ("setting %gx%g", size.width(), size.height());
     m_CellSize = size;
 }
 
 QSizeF 
 WallpaperCellCreator::cellSize() const
 {
-    //SYS_DEBUG ("Returning %gx%g", m_CellSize.width(), m_CellSize.height());
     return m_CellSize;
 }
 
@@ -186,17 +185,11 @@ WallpaperCellCreator::updateCell (
 
 
     if (desc->isThumbnailLoaded()) {
-        /*
-         * We can experiment with different image sizes.
-         */
-        #if 1
-        imageWidget->setPixmap (desc->thumbnailPixmap().scaled(
-                    cellSize().width(),
-                    cellSize().height()));
-        #else
-        //imageWidget->setPixmap (desc->pixmap());
-        imageWidget->setPixmap (desc->thumbnailPixmap());
-        #endif
+        QPixmap thumb = desc->thumbnailPixmap();
+        QSizeF  cSize = cellSize();
+        imageWidget->setPixmap (
+                thumb.scaled(
+                    (int)cSize.width(), (int)cSize.height()));
     } else {
         if (imageWidget->image() != imagePlaceHolderIconId) {
             /*
