@@ -19,6 +19,7 @@ target.path = /usr/lib/$$TEST_PKG_NAME
 CONFIG += \
 	plugin \
 	gui \
+    quill \
 	meegotouchcore \
 	duicontrolpanel
 
