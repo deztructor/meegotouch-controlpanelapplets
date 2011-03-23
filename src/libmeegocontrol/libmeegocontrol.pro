@@ -12,19 +12,12 @@ QT += dbus
 CONFIG +=          \
     dll            \
     gui            \
+    quill          \
     meegotouchcore \
     link_pkgconfig \
     duicontrolpanel
 
 QMAKE_LFLAGS_RPATH = -Wl
-
-contains(DEFINES, HAVE_QUILL_FILTER) {
-    CONFIG += quillimagefilter
-}
-
-contains(DEFINES, HAVE_QUILL_METADATA) {
-    CONFIG += quillmetadata
-}
 
 
 #
@@ -43,6 +36,10 @@ contains(DEFINES, HAVE_CONTENT_MANAGER) {
 
 contains(DEFINES, HAVE_QUILL_FILTER) {
     CONFIG += quillimagefilter
+}
+
+contains(DEFINES, HAVE_QUILL_METADATA) {
+    CONFIG += quillmetadata
 }
 
 ###########################################
