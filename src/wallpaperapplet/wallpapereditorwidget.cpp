@@ -104,6 +104,7 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     if (win) {
         m_Orientation = win->orientation();
         m_OrientationLocked = win->isOrientationLocked ();
+        //win->setProperty ("navigationBarOpacity", 0.75);
         connect (win, SIGNAL(orientationChanged(M::Orientation)),
                 this, SLOT(orientationChanged(M::Orientation)));
     } else {

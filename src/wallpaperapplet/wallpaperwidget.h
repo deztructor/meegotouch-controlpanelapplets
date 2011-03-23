@@ -72,6 +72,7 @@ private:
     #endif
 
     MContentItem                          *m_OviItem;
+    qreal                                  m_NavigationBarTransparency;
     #ifdef UNIT_TEST
     friend class Ut_WallpaperWidget;
     #endif

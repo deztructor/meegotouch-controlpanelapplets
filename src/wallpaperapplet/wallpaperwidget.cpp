@@ -38,14 +38,27 @@
 #include "../debug.h"
 
 static const int MaxColumns = 2;
+static const qreal navBarTransparency = 0.85;
 
+/******************************************************************************
+ *
+ */
 WallpaperWidget::WallpaperWidget (
         WallpaperBusinessLogic *wallpaperBusinessLogic, 
         QGraphicsWidget        *parent) :
     DcpWidget (parent),
-    m_WallpaperBusinessLogic (wallpaperBusinessLogic)
+    m_WallpaperBusinessLogic (wallpaperBusinessLogic),
+    m_NavigationBarTransparency (-1)
 {
+    MWindow *win = MApplication::activeWindow ();
+
     SYS_WARNING ("Creating widget");
+    if (win) {
+        m_NavigationBarTransparency = 
+            win->property("navigationBarOpacity").toReal();
+        win->setProperty ("navigationBarOpacity", navBarTransparency);
+    }
+
     /*
      * Unfortunatelly the content has to be created late, otherwise the list
      * only shows one row.
@@ -60,6 +73,14 @@ WallpaperWidget::WallpaperWidget (
 WallpaperWidget::~WallpaperWidget ()
 {
     SYS_WARNING ("Destroying widget");
+    if (m_NavigationBarTransparency >= 0) {
+        MWindow *win = MApplication::activeWindow ();
+
+        if (win) {
+            win->setProperty ("navigationBarOpacity", 
+                    m_NavigationBarTransparency);
+        }
+    }
 }
 
 void
@@ -218,7 +239,7 @@ WallpaperWidget::polishEvent ()
      * Adding the gallery action.
      */
     #ifdef HAVE_CONTENT_MANAGER
-    action = new MAction("icon-m-content-gallery", "", this);
+    action = new MAction("icon-m-toolbar-gallery-white", "", this);
     action->setLocation(MAction::ToolBarLocation);
     page->addAction(action);
     connect(action, SIGNAL(triggered()), this, SLOT(galleryActivated()));
@@ -227,7 +248,7 @@ WallpaperWidget::polishEvent ()
     /*
      * Adding the ovi action.
      */
-    action = new MAction("icon-m-common-ovi", "", this);
+    action = new MAction("icon-m-toolbar-content-ovi-music-white", "", this);
     action->setLocation(MAction::ToolBarLocation);
     page->addAction(action);
     connect(action, SIGNAL(triggered()), this, SLOT(oviActivated()));
