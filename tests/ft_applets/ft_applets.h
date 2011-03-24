@@ -46,7 +46,6 @@ private slots:
 
     void testbatteryapplet ();
     void testdisplayapplet ();
-    void testprofileapplet ();
     void testusbapplet ();
     void testresetapplet ();
     void testaboutapplet ();

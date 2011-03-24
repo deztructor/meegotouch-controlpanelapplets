@@ -171,12 +171,6 @@ Ft_Applets::testdisplayapplet ()
 }
 
 void
-Ft_Applets::testprofileapplet ()
-{
-    doAppletTest ("libprofileapplet.so", false);
-}
-
-void
 Ft_Applets::testusbapplet ()
 {
     doAppletTest ("libusbapplet.so");
