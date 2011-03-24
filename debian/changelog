@@ -1,8 +1,9 @@
 meegotouch-controlpanelapplets (0.20.27~1) meegotouch; urgency=low
 
   * Fixes: NB#238747 - Wrong icons used in settings panel Brightness slider
+  * Low Power Mode switch to display-applet
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 24 Mar 2011 16:33:03 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 24 Mar 2011 17:08:25 +0200
 
 meegotouch-controlpanelapplets (0.20.26-4) meegotouch; urgency=low
 

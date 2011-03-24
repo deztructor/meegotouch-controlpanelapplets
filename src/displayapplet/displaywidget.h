@@ -50,6 +50,7 @@ private:
     void addSecHeaderContainer ();
     void addSliderContainer ();
     void addScreenTimeoutContainer ();
+    void addLowPowerContainer ();
     void addStretcher (const QString &styleName);
     void updateScreenTimeoutCombo ();
     void retranslateUi ();
@@ -59,13 +60,15 @@ private:
     QList<int>              m_brightness_vals;
     QList<int>              m_screenlight_vals;
 
-    MLinearLayoutPolicy     *m_MainLayout;
-    MLabel                  *m_TitleLabel;
-    MLabel                  *m_SubTitleLabel;
+    MLinearLayoutPolicy    *m_MainLayout;
+    MLabel                 *m_TitleLabel;
+    MLabel                 *m_SubTitleLabel;
 
     MSlider                *m_brightnessSlider;
     MComboBox              *m_screenTimeout;
     MLabel                 *m_screenlightLabel;
+    MButton                *m_lowPowerSwitch;
+
     #ifdef UNIT_TEST
     friend class Ut_DisplayWidget;
     #endif

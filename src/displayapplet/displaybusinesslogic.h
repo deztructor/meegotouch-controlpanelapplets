@@ -51,10 +51,12 @@ public:
     int selectedBrightnessValue ();
     QList<int> screenLightsValues();
     int selectedScreenLightsValue();
+    bool getLowPowerMode ();
 
 public slots:
     void setBrightnessValue(int value);
     void setScreenLightTimeouts (int index);
+    void setLowPowerMode (bool enable);
 
 private: 
     #ifdef HAVE_QMSYSTEM
@@ -64,6 +66,7 @@ private:
     MGConfItem     *m_CurrentBrightness;
     #endif
     MGConfItem     *m_possibleDimValues;
+    MGConfItem     *m_lowPower;
     #ifdef UNIT_TEST
     friend class Ut_DisplayBusinessLogic;
     #endif
