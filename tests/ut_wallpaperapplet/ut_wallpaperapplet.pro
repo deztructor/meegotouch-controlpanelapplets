@@ -24,6 +24,7 @@ CONFIG += \
         gui \
         meegotouchcore \
         plugin \
+        quill \
         duicontrolpanel \
         link_pkgconfig
 

@@ -202,11 +202,23 @@ AlertToneAppletWidget::createProfileSwitches (
         widget->setObjectName (ProfileDataInterface::mapId (d.profileId));
 
         connect (widget, SIGNAL (toggled(bool)), 
-                widget, SLOT (vibrationChanged(bool)));
+                 this, SLOT (vibrationChanged(bool)));
 
         policy->addItem(widget);
     }
 
+}
+
+void
+AlertToneAppletWidget::vibrationChanged (
+        bool enabled)
+{
+    //NOTE: MButton->isChecked() method returns the state before the 
+    // press at this point
+    ProfileContainer *profile =
+        static_cast<ProfileContainer*> (this->sender ());
+
+    m_ProfileIf->setVibration (profile->id (), enabled);
 }
 
 MContainer *

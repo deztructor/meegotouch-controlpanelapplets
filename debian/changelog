@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.26~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.26-2) meegotouch; urgency=low
 
   [ Sandor Pinter ]
   * Fixes: NB#234670 - Layout issues
@@ -7,7 +7,13 @@ meegotouch-controlpanelapplets (0.20.26~1) meegotouch; urgency=low
   * Fixes: NB#236379 - Profile settings missing in sound settings view.
   * WallpaperApplet uses less memory now.
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 22 Mar 2011 09:12:40 +0200
+  [ David Kedves ]
+  * Fixes: NB#238794 - Battery UI is not update even when the charger is
+    disconnected.
+  * Fixes: NB#239077 - Remaining charging time remains on UI after
+    disconnecting charger
+
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 23 Mar 2011 17:47:13 +0200
 
 meegotouch-controlpanelapplets (0.20.25-1) meegotouch; urgency=low
 

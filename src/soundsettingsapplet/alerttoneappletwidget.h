@@ -32,10 +32,10 @@ class MLinearLayoutPolicy;
 
 class AlertToneAppletWidget : public AlertToneToplevel
 {
-	Q_OBJECT
+    Q_OBJECT
 
     public:
-    	AlertToneAppletWidget (
+        AlertToneAppletWidget (
                 QList<AlertTone *>  alertTones, 
                 QGraphicsWidget    *parent = 0);
         ~AlertToneAppletWidget ();
@@ -43,21 +43,24 @@ class AlertToneAppletWidget : public AlertToneToplevel
 
     protected:
         virtual void polishEvent ();
-	    virtual void createContents();
+        virtual void createContents();
+
+    private slots:
+        void vibrationChanged (bool enabled);
 
     private:
         virtual void retranslateUi();
-    	MContainer *createAlertTonesList (QGraphicsWidget *parent);
-	    MContainer *createFeedbackList (QGraphicsWidget *parent);
+        MContainer *createAlertTonesList (QGraphicsWidget *parent);
+        MContainer *createFeedbackList (QGraphicsWidget *parent);
         void createProfileSwitches (
                 MLinearLayoutPolicy   *policy,
                 QGraphicsWidget       *parent);
 
     private:
-    	QList<AlertTone *>               m_alertTones;
+        QList<AlertTone *>               m_alertTones;
         QPointer<ProfileDataInterface>   m_ProfileIf;
-	    MContainer                      *m_tones;
-    	MContainer                      *m_feedback;
+        MContainer                      *m_tones;
+        MContainer                      *m_feedback;
         MLabel                          *m_Title;
         MLabel                          *m_VibrationLabel;
         MLabel                          *m_EventTonesLabel;

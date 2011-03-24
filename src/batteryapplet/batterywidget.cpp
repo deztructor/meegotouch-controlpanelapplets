@@ -524,6 +524,11 @@ BatteryWidget::formProperBateryInfo (unsigned int pct)
     if (!m_RemainingContainer)
         return;
 
+    /*
+     * First hide the second label...
+     */
+    m_RemainingContainer->updateRemainingChargingTime (-1);
+
     if (!(m_logic->isCharging())) {
         if (!m_logic->PSMValue()) {
             m_RemainingContainer->updateCapacity (pct);
@@ -576,11 +581,10 @@ BatteryWidget::retranslateUi ()
 
 void BatteryWidget::charging(int animation_rate)
 {
+    Q_UNUSED (animation_rate);
     SYS_DEBUG("Charging rate: %d", animation_rate);
-    if (animation_rate > 0)
-    {
-        formProperBateryInfo ();
-    }
+
+    formProperBateryInfo (m_logic->getBateryLevel ());
 }
 
 void BatteryWidget::chargeComplete()
