@@ -319,7 +319,7 @@ Ut_WallpaperEditorWidget::testMouseEvents ()
     QGraphicsSceneMouseEvent *pressEvent;
     QGraphicsSceneMouseEvent *moveEvent;
     QGraphicsSceneMouseEvent *releaseEvent;
-    QPointF                   pressAt (30, 100);
+    QPointF                   pressAt (23, 100);
     QPointF                   moveToRel (12, 13);
     QPointF                   moveTo (
             pressAt.x() + moveToRel.x(),
