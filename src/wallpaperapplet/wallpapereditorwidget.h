@@ -90,7 +90,7 @@ public:
 protected:
     virtual void polishEvent ();
     virtual void retranslateUi();
-    //virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
+    virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
     //virtual void mouseReleaseEvent (QGraphicsSceneMouseEvent *event);
     //virtual void mouseMoveEvent (QGraphicsSceneMouseEvent *event);
     virtual void wheelEvent (QGraphicsSceneWheelEvent *event);

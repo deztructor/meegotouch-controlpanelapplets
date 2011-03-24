@@ -759,45 +759,13 @@ WallpaperEditorWidget::retranslateUi()
         m_CancelAction->setText (qtTrId("qtn_comm_cancel"));
 }
 
-#if 0
 void
 WallpaperEditorWidget::mousePressEvent (
         QGraphicsSceneMouseEvent *event)
 {
-    QPointF  position;
-
-    SYS_DEBUG ("Tapped");
-    /*
-     * If an ongoing pich gesture is processed we have nothing
-     * to do here.
-     */
-    if (m_PinchOngoing)
-        return;
-
-    toggleTitlebars (false);
-    /*
-     * If the user tapped outside the image we reject moving the image. This way
-     * the image can not be moved outside the visible area and the user feels
-     * that the image can be grabbed but not the black background.
-     */
-    position = event->pos();
-    if (position.x() < imageX() ||
-            position.y() < imageY() ||
-            position.x() > imageX() + imageDX() ||
-            position.y() > imageY() + imageDY()) {
-        SYS_DEBUG ("Rejected... %g, %g not in %d, %d - %d, %d",
-                position.x(), position.y(),
-                imageX(), imageY(), 
-                imageX() + imageDX(), 
-                imageY() + imageDY());
-        return;
-    }
-
-    m_MotionOngoing = true;
-    m_LastClick = event->pos();
-    m_LastClick += toggleTitlebars (false);
+    m_Physics->stop();
 }
-#endif
+
 
 #if 0
 void
