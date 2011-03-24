@@ -1,3 +1,9 @@
+meegotouch-controlpanelapplets (0.20.27~1) meegotouch; urgency=low
+
+  * [NEW VERSION]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 24 Mar 2011 13:27:58 +0200
+
 meegotouch-controlpanelapplets (0.20.26-2) meegotouch; urgency=low
 
   [ Sandor Pinter ]
@@ -13,7 +19,7 @@ meegotouch-controlpanelapplets (0.20.26-2) meegotouch; urgency=low
   * Fixes: NB#239077 - Remaining charging time remains on UI after
     disconnecting charger
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 23 Mar 2011 17:47:13 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 24 Mar 2011 13:20:24 +0200
 
 meegotouch-controlpanelapplets (0.20.25-1) meegotouch; urgency=low
 
