@@ -164,18 +164,25 @@ DisplayWidget::addSliderContainer ()
      * Creating a lcontainer and a layout.
      */
     container = new MContainer (this);
+    container->setContentsMargins (0,0,0,0);
     container->setStyleName ("CommonLargePanelInverted");
     container->setHeaderVisible (false);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    layout->setContentsMargins (0,0,0,0);
     container->centralWidget()->setLayout (layout);
 
     /*
      * The slider to set the brighness of the display.
      */
     m_brightnessSlider = new MSlider;
+    m_brightnessSlider->setContentsMargins (0,0,0,0);
     m_brightnessSlider->setStyleName ("CommonSliderInverted");
     m_brightnessSlider->setObjectName ("BrightnessSlider");
+    m_brightnessSlider->setMinLabelIconID ("icon-s-image-edit-low-brightness");
+    m_brightnessSlider->setMinLabelVisible (true);
+    m_brightnessSlider->setMaxLabelIconID ("icon-s-image-edit-high-brightness");
+    m_brightnessSlider->setMaxLabelVisible (true);
     m_brightness_vals = m_logic->brightnessValues ();
     m_brightnessSlider->setRange (0, m_brightness_vals.size () - 1);
     m_brightnessSlider->setValue (m_logic->selectedBrightnessValueIndex ());
