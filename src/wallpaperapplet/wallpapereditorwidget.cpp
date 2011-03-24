@@ -52,8 +52,10 @@ static const qreal ScaleLowerLimit = 0.15;
 #define WARNING
 #include "../debug.h"
 
-static const int ExtraMargin = 10;
+static const int ExtraMargin = 0;
 static const int TitleBarHeight = 60;
+
+static const int alwaysVisibleFromImage = 15;
 
 /*!
  * WallpaperEditorWidget constructor
@@ -103,11 +105,8 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     /*
      * Creating the MPhysics2DPanning object.
      */
-    m_Physics = new MPhysics2DPanning (0);
+    m_Physics = new MPhysics2DPanning (this);
     m_Physics->setPanDirection (Qt::Vertical | Qt::Horizontal);
-    //m_Physics->setPanDirection (Qt::Horizontal);
-    m_Physics->setPosition (QPointF(100.0, 100.0));
-    //m_Physics->setRange (QRectF(-000.0, -000.0, +100.0, +100.0));
     m_Physics->setEnabled(true);
     
     m_Physics->setPointerSpringK(0.25);
@@ -122,6 +121,23 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     connect (m_Physics, SIGNAL(panningStopped()),
             this, SLOT(panningPhysicsPanningStopped()));
 
+    /*
+     *
+     */
+    m_ScalePhysics = new MPhysics2DPanning (this);
+    m_ScalePhysics->setPanDirection (Qt::Vertical);
+    m_ScalePhysics->setEnabled(true);
+    
+    m_ScalePhysics->setPointerSpringK(0.25);
+    m_ScalePhysics->setFriction(0.6);
+    m_ScalePhysics->setSlidingFriction(0.20);
+    m_ScalePhysics->setBorderSpringK(0.02);
+    m_ScalePhysics->setBorderFriction(0.25);
+    m_ScalePhysics->setMaximumVelocity(70);
+    m_ScalePhysics->setRange (QRectF(0.0, 20.0, 0.0, 200.0));
+    m_ScalePhysics->setPosition (QPointF(0.0, 100.0));
+    connect (m_ScalePhysics, SIGNAL(positionChanged(const QPointF &)),
+            this, SLOT(scalePhysicsPositionChanged(const QPointF &)));
     /*
      *
      */
@@ -347,11 +363,27 @@ WallpaperEditorWidget::createWidgets ()
 }
 
 void 
+WallpaperEditorWidget::scalePhysicsPositionChanged(
+        const QPointF    &position)
+{
+    qreal scalefactor = position.y() / 100.0;
+
+    //SYS_WARNING ("position at %g, %g", position.x(), position.y());
+    if (scalefactor < 0.05)
+        scalefactor = 0.05;
+    //SYS_WARNING ("scalefactor %g", scalefactor);
+
+    m_Trans.setScale (scalefactor);
+    setupPanningPhysics ();
+    queueRedrawImage ();
+}
+
+void 
 WallpaperEditorWidget::panningPhysicsPositionChanged(
         const QPointF    &position)
 {
-#if 0
     SYS_WARNING ("position at %g, %g", position.x(), position.y());
+#if 0
     SYS_WARNING ("inMotion = %s", SYS_BOOL(m_Physics->inMotion()));
     SYS_WARNING ("enabled  = %s", SYS_BOOL(m_Physics->enabled()));
 #endif
@@ -697,9 +729,15 @@ void
 WallpaperEditorWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
 {
-    m_Trans.modScale (event->delta());
-    setupPanningPhysics ();
-    queueRedrawImage ();
+    SYS_WARNING (">>>>>>>>>>>>>>>>> %d", event->delta());
+    //m_Trans.modScale (event->delta());
+
+    m_Physics->stop ();
+    //setupPanningPhysics ();
+    //queueRedrawImage ();
+    m_ScalePhysics->pointerPress(QPointF());
+    m_ScalePhysics->pointerMove (QPointF(0.0,  event->delta() / 100.0));
+    m_ScalePhysics->pointerRelease();
 }
 
 #if 0
@@ -978,17 +1016,20 @@ WallpaperEditorWidget::supportsPortrait () const
 void 
 WallpaperEditorWidget::setupPanningPhysics ()
 {
+    QRectF geom = geometry ();
+    
+    SYS_WARNING ("my geometry = %gx%g", geom.width(), geom.height());
+    SYS_WARNING ("image       = %dx%d", imageDX(), imageDY());
+
     qreal  left, top;
-    qreal  right, bottom;
+    qreal  width, height;
+    
+    left   = -1.0 * (imageDX() - alwaysVisibleFromImage);
+    top    = -1.0 * (imageDY() - alwaysVisibleFromImage);
+    width  = geom.width() + imageDX() - 2 * alwaysVisibleFromImage;
+    height = geom.height() + imageDY() - 2 * alwaysVisibleFromImage - TitleBarHeight;
 
-    left = -0.90 * imageDX();
-    top  = -0.90 * imageDY();
-    right = 0.10 * imageDX();
-    bottom = 0.10 * imageDY();
-
-    m_Physics->setRange (
-            QRectF(left, top, 
-                m_Trans.expectedSize().width() - right - left,
-                m_Trans.expectedSize().height() - bottom - top));
+    SYS_WARNING ("l: %g t: %g %gx%g", left, top, width, height);
+    m_Physics->setRange (QRectF(left, top, width, height));
 }
 

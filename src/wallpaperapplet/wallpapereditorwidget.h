@@ -129,6 +129,7 @@ private slots:
     void createWidgets ();
     void panningPhysicsPositionChanged (const QPointF &position);
     void panningPhysicsPanningStopped ();
+    void scalePhysicsPositionChanged(const QPointF &position);
 
 private:
     QPointF toggleTitlebars (bool show);
@@ -169,6 +170,7 @@ private:
     bool                  m_MotionOngoing;
     bool                  m_HasPendingRedraw;
     MPhysics2DPanning    *m_Physics;
+    MPhysics2DPanning    *m_ScalePhysics;
 
     #ifdef UNIT_TEST
     friend class Ut_WallpaperEditorWidget;
