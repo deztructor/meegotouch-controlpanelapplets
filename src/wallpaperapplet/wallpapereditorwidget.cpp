@@ -48,7 +48,7 @@ M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
 static const qreal ScaleLowerLimit = 0.15;
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -73,7 +73,8 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_OrientationLocked (false),
     m_PinchOngoing (false),
     m_MotionOngoing (false),
-    m_HasPendingRedraw (false)
+    m_HasPendingRedraw (false),
+    m_Physics (0)
 {
     MWindow *win = MApplication::activeWindow ();
     
@@ -99,6 +100,31 @@ WallpaperEditorWidget::WallpaperEditorWidget (
 #endif
 
     setObjectName ("WallpaperEditorWidget");
+    /*
+     * Creating the MPhysics2DPanning object.
+     */
+    m_Physics = new MPhysics2DPanning (0);
+    m_Physics->setPanDirection (Qt::Vertical | Qt::Horizontal);
+    //m_Physics->setPanDirection (Qt::Horizontal);
+    m_Physics->setPosition (QPointF(100.0, 100.0));
+    //m_Physics->setRange (QRectF(-000.0, -000.0, +100.0, +100.0));
+    m_Physics->setEnabled(true);
+    
+    m_Physics->setPointerSpringK(0.25);
+    m_Physics->setFriction(0.6);
+    m_Physics->setSlidingFriction(0.10);
+    m_Physics->setBorderSpringK(0.02);
+    m_Physics->setBorderFriction(0.15);
+    m_Physics->setMaximumVelocity(70);
+
+    connect (m_Physics, SIGNAL(positionChanged(const QPointF &)),
+            this, SLOT(panningPhysicsPositionChanged(const QPointF &)));
+    connect (m_Physics, SIGNAL(panningStopped()),
+            this, SLOT(panningPhysicsPanningStopped()));
+
+    /*
+     *
+     */
     QTimer::singleShot (0, this, SLOT(createContent()));
 
     if (win) {
@@ -270,10 +296,16 @@ finalize:
     this->setMinimumSize (m_Trans.expectedSize());
 
     /*
+     *
+     */
+    setupPanningPhysics ();
+
+    /*
      * Enabling two finger gestures.
      */
-    setAcceptTouchEvents(true);
-    grabGesture(Qt::PinchGesture);
+    //setAcceptTouchEvents(true);
+    grabGesture (Qt::PinchGesture, Qt::GestureFlags());
+    grabGesture (Qt::PanGesture, Qt::GestureFlags());
 
     createWidgets ();
     redrawImage ();
@@ -311,6 +343,32 @@ WallpaperEditorWidget::createWidgets ()
 
     setLayout (layout);
     #endif
+
+}
+
+void 
+WallpaperEditorWidget::panningPhysicsPositionChanged(
+        const QPointF    &position)
+{
+#if 0
+    SYS_WARNING ("position at %g, %g", position.x(), position.y());
+    SYS_WARNING ("inMotion = %s", SYS_BOOL(m_Physics->inMotion()));
+    SYS_WARNING ("enabled  = %s", SYS_BOOL(m_Physics->enabled()));
+#endif
+
+    //gestureWorkaround (&position);
+    m_UserOffset = position;
+    //queueRedrawImage ();
+    redrawImage ();
+    m_Physics->setPosition (position);
+}
+
+void 
+WallpaperEditorWidget::panningPhysicsPanningStopped ()
+{
+    //SYS_WARNING ("");
+    //queueRedrawImage ();
+    redrawImage ();
 }
 
 /*!
@@ -640,9 +698,11 @@ WallpaperEditorWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
 {
     m_Trans.modScale (event->delta());
+    setupPanningPhysics ();
     queueRedrawImage ();
 }
 
+#if 0
 void 
 WallpaperEditorWidget::mouseMoveEvent (
         QGraphicsSceneMouseEvent *event)
@@ -686,7 +746,7 @@ WallpaperEditorWidget::mouseMoveEvent (
     m_UserOffset = event->pos() - m_LastClick;
     queueRedrawImage ();
 }
-
+#endif
 void
 WallpaperEditorWidget::retranslateUi()
 {
@@ -699,6 +759,7 @@ WallpaperEditorWidget::retranslateUi()
         m_CancelAction->setText (qtTrId("qtn_comm_cancel"));
 }
 
+#if 0
 void
 WallpaperEditorWidget::mousePressEvent (
         QGraphicsSceneMouseEvent *event)
@@ -736,7 +797,9 @@ WallpaperEditorWidget::mousePressEvent (
     m_LastClick = event->pos();
     m_LastClick += toggleTitlebars (false);
 }
+#endif
 
+#if 0
 void
 WallpaperEditorWidget::mouseReleaseEvent (
         QGraphicsSceneMouseEvent *event)
@@ -755,14 +818,45 @@ WallpaperEditorWidget::mouseReleaseEvent (
     m_UserOffset = QPointF();
     toggleTitlebars (true);
 }
-
+#endif
 /*******************************************************************************
  * Stuff for the two finger gestures.
  */
 void 
+WallpaperEditorWidget::panGestureEvent (
+        QGestureEvent *event, 
+        QPanGesture   *panGesture)
+{
+    //SYS_WARNING ("");
+    QTransform itemTransform(sceneTransform().inverted());
+    QPointF itemSpaceOffset = 
+        panGesture->offset() * itemTransform - 
+        QPointF(itemTransform.dx(),itemTransform.dy());
+
+    //gestureWorkaround (&point);
+
+    switch (panGesture->state()) {
+        case Qt::GestureStarted:
+            m_Physics->pointerPress(QPointF());
+        case Qt::GestureUpdated:
+            m_Physics->pointerMove(-itemSpaceOffset);
+
+        break;
+
+        case Qt::GestureFinished:
+        case Qt::GestureCanceled:
+            m_Physics->pointerRelease();
+        break;
+    }
+
+    event->accept (panGesture);
+}
+
+
+void 
 WallpaperEditorWidget::pinchGestureStarted (
-            QGestureEvent *event, 
-            QPinchGesture *gesture)
+        QGestureEvent *event, 
+        QPinchGesture *gesture)
 {
     QPointF   centerPoint;
 
@@ -841,6 +935,8 @@ WallpaperEditorWidget::pinchGestureUpdate (
         
     event->accept(gesture);
 
+    setupPanningPhysics ();
+
     /*
      * No frame drop here: the pinch gesture is much better this way...
      */
@@ -911,4 +1007,20 @@ WallpaperEditorWidget::supportsPortrait () const
     return !m_OrientationLocked || m_Orientation == M::Portrait;
 }
 
+void 
+WallpaperEditorWidget::setupPanningPhysics ()
+{
+    qreal  left, top;
+    qreal  right, bottom;
+
+    left = -0.90 * imageDX();
+    top  = -0.90 * imageDY();
+    right = 0.10 * imageDX();
+    bottom = 0.10 * imageDY();
+
+    m_Physics->setRange (
+            QRectF(left, top, 
+                m_Trans.expectedSize().width() - right - left,
+                m_Trans.expectedSize().height() - bottom - top));
+}
 

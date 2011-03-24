@@ -20,6 +20,7 @@
 #define WALLPAPEREDITORWIDGET_H
 
 #include <QPointer>
+#include <MPhysics2DPanning>
 #include "dcpwidget.h"
 
 #include "wallpaperbusinesslogic.h"
@@ -89,10 +90,14 @@ public:
 protected:
     virtual void polishEvent ();
     virtual void retranslateUi();
-    virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
-    virtual void mouseReleaseEvent (QGraphicsSceneMouseEvent *event);
-    virtual void mouseMoveEvent (QGraphicsSceneMouseEvent *event);
+    //virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
+    //virtual void mouseReleaseEvent (QGraphicsSceneMouseEvent *event);
+    //virtual void mouseMoveEvent (QGraphicsSceneMouseEvent *event);
     virtual void wheelEvent (QGraphicsSceneWheelEvent *event);
+
+    void panGestureEvent (
+            QGestureEvent *event, 
+            QPanGesture   *panGesture);
 
     virtual void pinchGestureEvent (
             QGestureEvent *event, 
@@ -122,9 +127,13 @@ private slots:
     void slotCancelActivated ();
     void createContent ();
     void createWidgets ();
+    void panningPhysicsPositionChanged (const QPointF &position);
+    void panningPhysicsPanningStopped ();
 
 private:
     QPointF toggleTitlebars (bool show);
+    void setupPanningPhysics ();
+    
     int  imageX () const;
     int  imageY () const;
     int  imageDX () const;
@@ -159,6 +168,8 @@ private:
     bool                  m_PinchOngoing;
     bool                  m_MotionOngoing;
     bool                  m_HasPendingRedraw;
+    MPhysics2DPanning    *m_Physics;
+
     #ifdef UNIT_TEST
     friend class Ut_WallpaperEditorWidget;
     #endif
