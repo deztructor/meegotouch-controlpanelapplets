@@ -905,6 +905,8 @@ WallpaperEditorWidget::pinchGestureStarted (
             (centerPoint.y() - m_Trans.y()) / m_Trans.scale());
 
     event->accept(gesture);
+
+    m_ScalePhysics->pointerPress(QPointF());
 }
 
 void 
@@ -947,6 +949,10 @@ WallpaperEditorWidget::pinchGestureUpdate (
      * No frame drop here: the pinch gesture is much better this way...
      */
     redrawImage ();
+
+    m_ScalePhysics->pointerMove(QPointF(0.0, gesture->totalScaleFactor() * 100.0));
+
+
 }
 
 void 
@@ -966,6 +972,8 @@ WallpaperEditorWidget::pinchGestureEnded (
     toggleTitlebars (true);
 
     event->accept(gesture);
+
+    m_ScalePhysics->pointerRelease ();
 }
 
 void 
