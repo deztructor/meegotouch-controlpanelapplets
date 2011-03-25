@@ -24,28 +24,31 @@
 #define WARNING
 #include "../debug.h"
 
+static const QString GConfDir ("/system/osso/dsm/display");
+
 #ifdef HAVE_QMSYSTEM
 using namespace MeeGo;
 #else
-static const QString GConfDir ("/system/osso/dsm/display");
 static const QString MaxBrightnessKey = 
     GConfDir + "/max_display_brightness_levels";
 static const QString CurrentBrightnessKey = 
     GConfDir + "/display_brightness";
 #endif
 
-static int TIMEGAP = 5; // time gap between blanking and dimming
+static const QString LowPowerKey = GConfDir + "/use_low_power_mode";
+static const QString DimTimeoutsKey (
+    "/system/osso/dsm/display/possible_display_dim_timeouts");
 
-#define POSSIBLE_DIM_TIMEOUTS \
-    "/system/osso/dsm/display/possible_display_dim_timeouts"
+static int TIMEGAP = 5; // time gap between blanking and dimming
 
 #ifdef HAVE_QMSYSTEM
 DisplayBusinessLogic::DisplayBusinessLogic (
         QObject* parent) :
     QObject (parent),
-    m_Display (new QmDisplayState())
+    m_Display (new QmDisplayState)
 {
-    m_possibleDimValues = new MGConfItem (POSSIBLE_DIM_TIMEOUTS);
+    m_possibleDimValues = new MGConfItem (DimTimeoutsKey);
+    m_lowPower = new MGConfItem (LowPowerKey);
 }
 #else
 DisplayBusinessLogic::DisplayBusinessLogic (
@@ -55,6 +58,7 @@ DisplayBusinessLogic::DisplayBusinessLogic (
     m_MaxDisplayBrightness = new MGConfItem (MaxBrightnessKey);
     m_CurrentBrightness = new MGConfItem (CurrentBrightnessKey);
     m_possibleDimValues = new MGConfItem (POSSIBLE_DIM_TIMEOUTS);
+    m_lowPower = new MGConfItem (LowPowerKey);
 }
 #endif
 
@@ -254,4 +258,17 @@ DisplayBusinessLogic::setScreenLightTimeouts (
     #endif
 }
 
+void
+DisplayBusinessLogic::setLowPowerMode (bool enable)
+{
+    SYS_DEBUG ("enable = %s", SYS_BOOL (enable));
+    QString val = enable ? "true" : "false";
+    m_lowPower->set (val);
+}
+
+bool
+DisplayBusinessLogic::getLowPowerMode ()
+{
+    return m_lowPower->value ("false").toString () == "true";
+}
 

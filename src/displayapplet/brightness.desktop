@@ -16,7 +16,6 @@ Category=MainPage
 Part=Brightness
 Order=5
 WidgetType=Slider
-# FIXME, these are just placeholders, the icons are not specified yet
-SliderLeftImage=icon-m-camera-whitebalance-sunny-screen
-SliderRightImage=icon-m-camera-whitebalance-sunny-selected
+SliderLeftImage=icon-s-image-edit-low-brightness
+SliderRightImage=icon-s-image-edit-high-brightness
 

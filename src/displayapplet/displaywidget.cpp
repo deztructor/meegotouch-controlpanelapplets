@@ -74,22 +74,23 @@ void DisplayWidget::initWidget ()
 
     // Row 1: The title label
     addHeaderContainer ();
-    addStretcher ("CommonSmallSpacerInverted");
+    addStretcher ("CommonHeaderDividerInverted");
     addSecHeaderContainer ();
     addSliderContainer ();
     addStretcher ("CommonItemDivider");
     addScreenTimeoutContainer ();
+    addStretcher ("CommonItemDivider");
+    addLowPowerContainer ();
     addStretcher ("CommonSmallSpacerInverted");
     m_MainLayout->addStretch();
 }
 
-void 
+void
 DisplayWidget::addHeaderContainer ()
 {
     MContainer            *container;
     QGraphicsLinearLayout *layout;
 
-    Q_ASSERT (m_MainLayout);
     /*
      * Creating a lcontainer and a layout.
      */
@@ -124,7 +125,6 @@ DisplayWidget::addSecHeaderContainer ()
     MContainer            *container;
     QGraphicsLinearLayout *layout;
 
-    Q_ASSERT (m_MainLayout);
     /*
      * Creating a lcontainer and a layout.
      */
@@ -159,23 +159,29 @@ DisplayWidget::addSliderContainer ()
     MContainer            *container;
     QGraphicsLinearLayout *layout;
 
-    Q_ASSERT (m_MainLayout);
     /*
      * Creating a lcontainer and a layout.
      */
     container = new MContainer (this);
+    container->setContentsMargins (0,0,0,0);
     container->setStyleName ("CommonLargePanelInverted");
     container->setHeaderVisible (false);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    layout->setContentsMargins (0,0,0,0);
     container->centralWidget()->setLayout (layout);
 
     /*
      * The slider to set the brighness of the display.
      */
     m_brightnessSlider = new MSlider;
+    m_brightnessSlider->setContentsMargins (0,0,0,0);
     m_brightnessSlider->setStyleName ("CommonSliderInverted");
     m_brightnessSlider->setObjectName ("BrightnessSlider");
+    m_brightnessSlider->setMinLabelIconID ("icon-s-image-edit-low-brightness");
+    m_brightnessSlider->setMinLabelVisible (true);
+    m_brightnessSlider->setMaxLabelIconID ("icon-s-image-edit-high-brightness");
+    m_brightnessSlider->setMaxLabelVisible (true);
     m_brightness_vals = m_logic->brightnessValues ();
     m_brightnessSlider->setRange (0, m_brightness_vals.size () - 1);
     m_brightnessSlider->setValue (m_logic->selectedBrightnessValueIndex ());
@@ -206,8 +212,6 @@ DisplayWidget::addSliderContainer ()
 void 
 DisplayWidget::addScreenTimeoutContainer ()
 {
-    Q_ASSERT (m_MainLayout);
-
     /*
      * Get the values from the business-logic
      */
@@ -232,6 +236,51 @@ DisplayWidget::addScreenTimeoutContainer ()
     m_MainLayout->addItem (m_screenTimeout);
     m_MainLayout->setStretchFactor (m_screenTimeout, 0);
 }
+
+void 
+DisplayWidget::addLowPowerContainer ()
+{
+    MContainer            *container;
+    QGraphicsLinearLayout *layout;
+
+    /*
+     * Creating a lcontainer and a layout.
+     */
+    container = new MContainer (this);
+    container->setContentsMargins (0,0,0,0);
+    container->setStyleName ("CommonLargePanelInverted");
+    container->setHeaderVisible (false);
+
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    layout->setContentsMargins (0,0,0,0);
+    container->centralWidget()->setLayout (layout);
+
+    MLabel *lowPowerLabel = new MLabel;
+    lowPowerLabel->setStyleName ("CommonSingleTitleInverted");
+    //% "Low power mode"
+    lowPowerLabel->setText (qtTrId ("qtn_disp_lowpower"));
+    layout->addItem (lowPowerLabel);
+    layout->setAlignment (lowPowerLabel, Qt::AlignVCenter);
+
+    m_lowPowerSwitch = new MButton;
+    m_lowPowerSwitch->setCheckable (true);
+    m_lowPowerSwitch->setViewType (MButton::switchType);
+    m_lowPowerSwitch->setStyleName ("CommonRightSwitchInverted");
+    m_lowPowerSwitch->setChecked (m_logic->getLowPowerMode ());
+
+    connect (m_lowPowerSwitch, SIGNAL (toggled (bool)),
+             m_logic, SLOT (setLowPowerMode (bool)));
+
+    layout->addItem (m_lowPowerSwitch);
+    layout->setAlignment (m_lowPowerSwitch, Qt::AlignVCenter | Qt::AlignRight);
+
+    /*
+     * Adding the whole row to the main container.
+     */
+    m_MainLayout->addItem (container);
+    m_MainLayout->setStretchFactor (container, 0);
+}
+
 
 void
 DisplayWidget::updateScreenTimeoutCombo ()
@@ -270,8 +319,6 @@ DisplayWidget::addStretcher (
         const QString &styleName)
 {
     MSeparator *stretcher;
-
-    Q_ASSERT (m_MainLayout);
 
     stretcher = new MSeparator ();
     stretcher->setStyleName (styleName);
