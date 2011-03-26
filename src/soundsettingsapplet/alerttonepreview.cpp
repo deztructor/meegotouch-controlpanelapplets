@@ -132,13 +132,14 @@ AlertTonePreview::getResources()
      */
     audioResource->setStreamTag ("media.role", "AlertTonePreview");
     resources->addResourceObject (audioResource);
+    resources->initAndConnect ();
 
     connect (resources,
              SIGNAL (resourcesGranted (QList<ResourcePolicy::ResourceType>)),
-             SLOT(audioResourceAcquired ()));
+             SLOT (audioResourceAcquired ()));
     connect (resources,
              SIGNAL (lostResources ()),
-             SLOT(audioResourceLost()));
+             SLOT (audioResourceLost()));
     resources->acquire ();
 }
 #endif
