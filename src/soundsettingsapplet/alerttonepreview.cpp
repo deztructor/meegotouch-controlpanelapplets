@@ -20,7 +20,7 @@
 #include "static.h"
 #include <QApplication>
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
