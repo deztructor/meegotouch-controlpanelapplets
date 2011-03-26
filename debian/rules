@@ -105,6 +105,7 @@ binary-arch: build install
 	dh_shlibdeps $(EXCLUSIONS)
 	dh_gencontrol $(EXCLUSIONS)
 	dh_md5sums $(EXCLUSIONS)
+	sed -e "s:/.*.sh::" -e "/^$$/d" -i debian/duicontrolpanel-resetapplet/DEBIAN/conffiles
 	dh_builddeb --destdir=$(DEBDIR) $(EXCLUSIONS)
 
 binary: binary-indep binary-arch

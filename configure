@@ -70,6 +70,14 @@ if [ $? -eq 0 ]; then
     if [ $? -eq 0 ]; then
         echo "DEFINES += HAVE_QUILL_METADATA" >> ${FILENAME}
     fi
+
+    #
+    # QtSparqlTrackerLive needed for wallpaper applet
+    #
+    pkg-config --exists QtSparqlTrackerLive
+    if [ $? -eq 0 ]; then
+        echo "DEFINES += HAVE_QTSPARQL" >> ${FILENAME}
+    fi
 fi
 
 #

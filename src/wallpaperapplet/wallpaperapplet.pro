@@ -26,6 +26,10 @@ contains(DEFINES, HAVE_QUILL_METADATA) {
     CONFIG += quillmetadata
 }
 
+contains(DEFINES, HAVE_QTSPARQL) {
+    CONFIG += qtsparql-tracker-live
+}
+
 LIBS += \
     -lqttracker \
     -lthumbnailer

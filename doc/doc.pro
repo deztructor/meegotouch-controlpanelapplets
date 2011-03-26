@@ -10,11 +10,11 @@ QMAKE_CLEAN += html/*
 
 ## Generate the actual documenation by first running dependencies
 doc.target        = ./html/index.html
-doc.config       += no_check_exist no_link explicit_dependencies
+doc.config       += no_link explicit_dependencies
 doc.commands      = doxygen Doxyfile
 doc.input         = $${doc.depends}
 doc.output        = $${doc.target}
-doc.depends       = FORCE
+#doc.depends       = FORCE
 
 ## Make are doc target build by default If 'make' is executed in doc folder
 PRE_TARGETDEPS += $${doc.output}

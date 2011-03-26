@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "wallpaperwidget.h"
 #include "wallpaperlist.h"
 
@@ -29,8 +28,6 @@
 #include <MAction>
 #include <QGraphicsLinearLayout>
 #include <QDBusInterface>
-#include <QDebug>
-#include <QtTracker/Tracker>
 #include <MLabel>
 
 //#define DEBUG
