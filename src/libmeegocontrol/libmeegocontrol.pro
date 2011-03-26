@@ -1,5 +1,6 @@
 include(../../localconfig.pri)
 include(../coverage.pri)
+include(../../shared.pri)
 
 TEMPLATE = lib
 VERSION = 0.1.0
@@ -19,19 +20,18 @@ CONFIG +=          \
 
 QMAKE_LFLAGS_RPATH = -Wl
 
-
 #
 # FIXME: These are needed for the soundssettingsapplet. We maybe could remove
 # some of these, but for that we need to use the LIBMEEGOCONTROL define in the
 # soundsettingsapplet source.
 #
-PKGCONFIG += dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
+PKGCONFIG += dbus-1 profile gconf-2.0 gstreamer-0.10
 
 #########################################
 # wallpaper setting extra dependencies  #
 #########################################
 contains(DEFINES, HAVE_CONTENT_MANAGER) {
-    PKGCONFIG += ContentManager
+    CONFIG += contentmanager
 }
 
 contains(DEFINES, HAVE_QUILL_FILTER) {
@@ -80,7 +80,6 @@ PUBLIC_HEADERS = \
     $$SOUNDSETTINGS_PATH/alerttonetoplevel.h       \
     $$SOUNDSETTINGS_PATH/alerttonebrowser.h        \
     $$SOUNDSETTINGS_PATH/alerttoneappletmaps.h     \
-    $$SOUNDSETTINGS_PATH/trackerconnection.h       \
     $$SOUNDSETTINGS_PATH/drilldownitem.h           \
     $$SOUNDSETTINGS_PATH/qprofilevalue.h           \
     $$SOUNDSETTINGS_PATH/qtrackedvariant.h         \
@@ -96,6 +95,7 @@ PUBLIC_HEADERS = \
 HEADERS =                                          \
     ../debug.h                                     \
     $$SOUNDSETTINGS_PATH/alerttonepreview.h        \
+    $$SOUNDSETTINGS_PATH/trackerconnection.h       \
     $$PUBLIC_HEADERS
 
 SOURCES =                                          \
