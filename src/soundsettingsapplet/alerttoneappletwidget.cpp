@@ -16,25 +16,19 @@
 ** of this file.
 **
 ****************************************************************************/
+#include "alerttoneappletwidget.h"
 
-#include <QDebug>
 #include <MLayout>
-#include <MLinearLayoutPolicy>
-#include <QGraphicsLinearLayout>
-#include <MImageWidget>
 #include <MLabel>
+#include <MLinearLayoutPolicy>
 #include <MSeparator>
 #include <MApplicationPage>
-#include <QTimer>
-
 #include <QSystemDeviceInfo>
 using namespace QtMobility;
 
-#include "alerttoneappletwidget.h"
 #include "alerttonewidget.h"
 #include "gconfstringcombo.h"
 #include "profileintcombo.h"
-#include "alerttonevolume.h"
 #include "profiledatainterface.h"
 #include "profilecontainer.h"
 
@@ -92,6 +86,7 @@ AlertToneAppletWidget::AlertToneAppletWidget (
 AlertToneAppletWidget::~AlertToneAppletWidget ()
 {
     delete m_ProfileIf;
+    m_ProfileIf = 0;
 }
 
 void
@@ -125,18 +120,11 @@ AlertToneAppletWidget::createContents()
     policy->addItem (spacer);
 
     /*
-     * Well, this is not the profile slider, that one is not implemented yet.
-     */
-    AlertToneVolume *slider;
-    slider = new AlertToneVolume (centralWidget);
-    policy->addItem (slider);
-
-    /*
      * A subtitle that shows 'Profile vibration'
      */
     m_VibrationLabel = addTitleLabel (
             centralWidget, policy, 
-            "CommonHeaderPanelInverted", 
+            "CommonGroupHeaderPanelInverted", 
             "CommonGroupHeaderInverted");
     /*
      *
@@ -144,11 +132,18 @@ AlertToneAppletWidget::createContents()
     createProfileSwitches (policy, centralWidget);
 
     /*
+     * Adding a spacer.
+     */
+    spacer = new MSeparator;
+    spacer->setStyleName ("CommonHeaderDividerInverted");
+    policy->addItem (spacer);
+
+    /*
      * A secondary title, it says 'Tones'
      */
     m_EventTonesLabel = addTitleLabel (
             centralWidget, policy, 
-            "CommonHeaderPanelInverted", 
+            "CommonGroupHeaderPanelInverted", 
             "CommonGroupHeaderInverted");
 
     /*
@@ -169,7 +164,7 @@ AlertToneAppletWidget::createContents()
      */
     m_FeedbackLabel = addTitleLabel (
             centralWidget, policy, 
-            "CommonHeaderPanelInverted", 
+            "CommonGroupHeaderPanelInverted", 
             "CommonGroupHeaderInverted");
 
     /*
@@ -314,7 +309,7 @@ AlertToneAppletWidget::retranslateUi()
 {
     if (m_VibrationLabel)
         //% "Profile vibration"
-        m_VibrationLabel->setText (qtTrId("qtn_sond_missing_logical_id2"));
+        m_VibrationLabel->setText (qtTrId("qtn_prof_vibration"));
 
     if (m_EventTonesLabel)
         //% "Event Tones"
