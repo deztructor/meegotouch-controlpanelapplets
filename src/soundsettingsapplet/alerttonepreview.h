@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #ifndef _ALERT_TONE_PREVIEW_H_
 #define _ALERT_TONE_PREVIEW_H_
 
@@ -31,27 +30,28 @@
 
 class AlertTonePreview : public QObject
 {
-	Q_OBJECT
+Q_OBJECT
 
 public:
-	AlertTonePreview(const QString &fname);
-	~AlertTonePreview();
-	QString fname() const;
+    AlertTonePreview (const QString &fname);
+    ~AlertTonePreview ();
+    QString fname () const;
 
 private:
-	GstElement *m_gstPipeline;
-	GstElement *m_gstFilesrc;
-	GstElement *m_gstVolume;
-	QProfileValue m_profileVolume;
-        QString     m_Filename;
+    GstElement     *m_gstPipeline;
+    GstElement     *m_gstFilesrc;
+    GstElement     *m_gstVolume;
+    QProfileValue   m_profileVolume;
+    QString         m_Filename;
 
-        void gstInit();
-	void rewind();
-	double profileToGstVolume();
+    void gstInit ();
+    void rewind ();
+    double profileToGstVolume ();
+    static void gstSignalHandler (GstBus *bus,
+                                  GstMessage *msg,
+                                  AlertTonePreview *atp);
 
-	static void gstSignalHandler(GstBus *bus, GstMessage *msg, AlertTonePreview *atp);
-
-    void        getResources();
+    void getResources ();
 #ifdef HAVE_LIBRESOURCEQT
     ResourcePolicy::ResourceSet *resources;
 #endif
@@ -59,7 +59,7 @@ private:
 private slots:
 	void profileVolumeChanged();
     void audioResourceAcquired();
-    void audiResourceLost();
+    void audioResourceLost();
 
 #ifdef UNIT_TEST
     friend class Ut_AlertTonePreviewTests;
