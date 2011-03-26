@@ -16,18 +16,22 @@ CONFIG +=           \
 MOBILITY +=         \
     systeminfo
 
-PKGCONFIG += dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
+PKGCONFIG += dbus-1 profile gconf-2.0 gstreamer-0.10
 
 contains(DEFINES, HAVE_LIBRESOURCEQT) {
     PKGCONFIG += libresourceqt1
 }
 
-LIBS += -lqttracker
-INCLUDEPATH +=  \
-    /usr/include/qt4/dui \
-    /usr/include/duicontrolpanel
+contains(DEFINES, HAVE_QTSPARQL) {
+    CONFIG += qtsparql-tracker-live
+}
+
+contains(DEFINES, HAVE_CONTENT_MANAGER) {
+    CONFIG += contentmanager
+}
 
 QT += dbus
+
 contains(cov, true) { 
     QMAKE_CXXFLAGS += --coverage
     QMAKE_LFLAGS += --coverage

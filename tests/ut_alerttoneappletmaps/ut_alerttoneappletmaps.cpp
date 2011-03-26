@@ -22,7 +22,6 @@
 #include <QStringList>
 #include "ut_alerttoneappletmaps.h"
 #include "alerttoneappletmaps.h"
-#include <QtTracker/Tracker>
 #include <profiled/libprofile.h>
 #include <QDebug>
 

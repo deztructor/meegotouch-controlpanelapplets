@@ -20,7 +20,6 @@
 #include <QStringList>
 #include "ut_alerttone.h"
 #include "alerttone.h"
-#include <QtTracker/Tracker>
 #include <QDebug>
 
 #define DEBUG 

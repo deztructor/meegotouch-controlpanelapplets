@@ -23,7 +23,6 @@
 #include "trackerconnection.h"
 #include "drilldownitem.h"
 
-#include <QtTracker/Tracker>
 #include <QGraphicsLinearLayout>
 #include <QDBusInterface>
 #include <MLabel>

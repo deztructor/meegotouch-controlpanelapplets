@@ -16,14 +16,14 @@
 ** of this file.
 **
 ****************************************************************************/
+#include "ut_alerttoneappletwidget.h"
+
 #include <QString>
 #include <QList>
 #include <QStringList>
 
-#include "ut_alerttoneappletwidget.h"
 #include "alerttoneappletwidget.h"
 
-#include <QtTracker/Tracker>
 #include <profiled/libprofile.h>
 #include <QDebug>
 #include <QGraphicsLayout>

@@ -19,7 +19,6 @@
 #include "alerttone.h"
 #include "trackerconnection.h"
 
-#include <QtTracker/Tracker>
 #ifdef HAVE_LIBPROFILE
 #include <profiled/libprofile.h>
 #endif

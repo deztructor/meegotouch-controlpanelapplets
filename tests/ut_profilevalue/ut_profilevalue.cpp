@@ -16,14 +16,13 @@
 ** of this file.
 **
 ****************************************************************************/
+#include "ut_profilevalue.h"
 
 #include <MApplication>
 #include <QString>
 #include <QStringList>
-#include "ut_profilevalue.h"
 #include "alerttone.h"
 #include "qtrackedvariant.h"
-#include <QtTracker/Tracker>
 #ifdef HAVE_LIBPROFILE
 #include <profiled/libprofile.h>
 #endif
