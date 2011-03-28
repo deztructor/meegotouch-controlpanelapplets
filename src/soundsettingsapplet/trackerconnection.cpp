@@ -96,11 +96,14 @@ TrackerConnection::niceNameFromFileName (
     ++nRequests;
     #endif
 
+#ifdef LOTDEBUG
     SYS_DEBUG ("*********************************");
     SYS_DEBUG ("Cache hits/requests %d/%d (%.2g%%)", 
-            nCacheHits, nRequests, 
-            100.0 * (((qreal)nCacheHits / nRequests)));
+               nCacheHits, nRequests, 
+               100.0 * (((qreal)nCacheHits / nRequests)));
     SYS_DEBUG ("*********************************");
+#endif
+
     if (!niceName.isEmpty()) {
         #ifdef DEBUG
         nCacheHits++;
@@ -188,36 +191,33 @@ TrackerConnection::processRequest (
         const QString &fileName)
 {
 #ifdef HAVE_QTSPARQL
-    const QString encodedFilename = QUrl::fromLocalFile(fileName).toEncoded();
-    const QString query = 
-        QString("select"
-                " nie:title(?u) ?u"
-                " where { ?u a nmm:MusicPiece . ?u nie:url \"") +
-        encodedFilename + 
-        "\"}";
+    static QSparqlQuery theQuery (
+        "select nie:title(?u) ?u where { ?u a "
+        "nmm:MusicPiece . ?u nie:url ?:fileUrl }");
+    theQuery.bindValue ("fileUrl", QUrl::fromLocalFile(fileName));
 
     QString              title;
     QString              trackerId;
 
-    SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
-    SYS_DEBUG ("*** encodedFilename = %s", SYS_STR(encodedFilename));
-    SYS_DEBUG ("*** query    = %s", SYS_STR(query));
+    SYS_DEBUG ("*** fileName = %s", SYS_STR (fileName));
+    SYS_DEBUG ("*** query    = %s", SYS_STR (theQuery.preparedQueryText ()));
 
-    QSparqlQuery theQuery (query);
-    QSparqlResult *result =
-        m_sparqlconn->syncExec (theQuery);
-
-    /*
-     * TODO: FIXME: maybe we should implement
-     * proper async handling here...
-     */
+    QSparqlResult *result = m_sparqlconn->syncExec (theQuery);
     result->waitForFinished ();
 
-    if (result->size() == 0)
-    {
-        SYS_WARNING ("Failed to get tracker info for %s", 
-                SYS_STR(encodedFilename));
+    if (result->hasError()) {
+        SYS_WARNING ("Could get title from url (%s): %s",
+                     SYS_STR (fileName),
+                     SYS_STR (result->lastError ().message ()));
+
         goto fallback;
+    } else if (! result->first()) {
+        SYS_WARNING ("File not found in tracker: %s",
+                     SYS_STR (fileName));
+
+        goto fallback;
+    } else {
+        qWarning () << result->value (0);
     }
 
     if (! result->stringValue (0).isEmpty ())
@@ -264,12 +264,12 @@ TrackerConnection::poorNiceName (
 {
     QString niceName;
 
-    SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
+//    SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
     niceName = fileName.split('/').last();
     niceName = niceName.left(niceName.lastIndexOf('.'));
     niceName.replace ("_", " ");
     
-    SYS_DEBUG ("*** niceName = %s", SYS_STR(niceName));
+//    SYS_DEBUG ("*** niceName = %s", SYS_STR(niceName));
     return niceName;
 }
 
