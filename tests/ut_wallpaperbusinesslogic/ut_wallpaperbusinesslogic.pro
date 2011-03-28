@@ -4,9 +4,9 @@ SRC_PREFIX = ../../src/wallpaperapplet
 STUB_PREFIX = ../stubs
 
 INCLUDEPATH = \
-        $$STUB_PREFIX \
-	$$SRC_PREFIX \
-	$$INCLUDEPATH
+    $$STUB_PREFIX \
+    $$SRC_PREFIX \
+    $$INCLUDEPATH
 
 QT += \
     testlib \
@@ -18,11 +18,15 @@ TARGET = ut_wallpaperbusinesslogic
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
-	plugin \
-	gui \
-	quill \
-	meegotouchcore \
-	duicontrolpanel
+    plugin \
+    gui \
+    quill \
+    meegotouchcore \
+    duicontrolpanel
+
+contains(DEFINES, HAVE_QTSPARQL) {
+    CONFIG += qtsparql
+}
 
 contains(DEFINES, HAVE_QUILL_FILTER) {
     CONFIG += quillimagefilter

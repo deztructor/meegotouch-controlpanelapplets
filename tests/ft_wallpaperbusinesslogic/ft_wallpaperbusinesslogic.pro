@@ -11,28 +11,30 @@ QT += \
     dbus 
 
 LIBS += \
-    -lqttracker \
     -lthumbnailer
 
 INCLUDEPATH += \
-    /usr/include/QtTracker \
     /usr/include/thumbnailer 
 
 TEMPLATE = app
 DEFINES += \
-	UNIT_TEST \
-	FUNCTIONAL_TEST
+    UNIT_TEST \
+    FUNCTIONAL_TEST
 
 TARGET = ft_wallpaperbusinesslogic
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
-	plugin \
-	gui \
+    plugin \
+    gui \
     quill \
-	meegotouchcore \
-	duicontrolpanel \
+    meegotouchcore \
+    duicontrolpanel \
     link_pkgconfig
+
+contains(DEFINES, HAVE_QTSPARQL) {
+    CONFIG += qtsparql
+}
 
 contains(DEFINES, HAVE_QUILL_FILTER) {
     CONFIG += quillimagefilter

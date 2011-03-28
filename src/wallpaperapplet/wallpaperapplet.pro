@@ -32,11 +32,9 @@ contains(DEFINES, HAVE_QTSPARQL) {
 }
 
 LIBS += \
-    -lqttracker \
     -lthumbnailer
 
 INCLUDEPATH += \
-    /usr/include/QtTracker \
     /usr/include/thumbnailer 
 
 HEADERS = \

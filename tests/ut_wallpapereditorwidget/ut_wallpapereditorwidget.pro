@@ -27,6 +27,10 @@ CONFIG += \
     plugin \
     duicontrolpanel
 
+contains(DEFINES, HAVE_QTSPARQL) {
+    CONFIG += qtsparql
+}
+
 contains(DEFINES, HAVE_QUILL_FILTER) {
     CONFIG += quillimagefilter
 }

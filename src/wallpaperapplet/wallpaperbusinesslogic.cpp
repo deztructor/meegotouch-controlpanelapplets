@@ -25,18 +25,26 @@
  * In the functional tests we use the real thing, in the unit tests we use the
  * stubbed version. 
  */
+
 #if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
-#  include "trackerstub.h"
+// TODO: stub the new sparql thingy... #  include "trackerstub.h"
 #  include "filesystemstub.h"
    typedef QDirStub WallpaperDir;
    typedef QFileStub WallpaperFile;
 #else
-#  include <Tracker>
 #  include <QDir>
 #  include <QFile>
    typedef QDir WallpaperDir;
    typedef QFile WallpaperFile;
 #endif
+
+  #ifdef HAVE_QTSPARQL
+    #include <QSparqlConnection>
+    #include <QSparqlQuery>
+    #include <QSparqlResult>
+    #include <QSparqlResultRow>
+    #include <QSparqlError>
+  #endif
 
 #include "wallpapergconf.h"
 #include "wallpaperbusinesslogic.h"
@@ -253,22 +261,6 @@ WallpaperBusinessLogic::availableWallpapers () const
 {
     QList<WallpaperDescriptor *>   list;
     WallpaperDescriptor           *desc;
-    const QString query = 
-"SELECT ?uri ?title ?mime ?height ?width WHERE { "
-" ?item nie:url ?uri." 
-
-" ?item nie:mimeType ?mime." 
-" FILTER regex(?mime, \"image\")."
-
-" ?item nfo:height ?height."
-" ?item nfo:width ?width."
-" FILTER ( ?height > \"300\" )."
-" FILTER ( ?width  > \"300\" )."
-
-" OPTIONAL { ?item nie:title ?title }."
-"}"
-;
-
     /*
      * The first is always the current image.
      */
@@ -296,35 +288,57 @@ WallpaperBusinessLogic::availableWallpapers () const
 
     list << desc;
 
+#ifdef HAVE_QTSPARQL
+    static QSparqlConnection sparqlConn("QTRACKER");
+    static QSparqlQuery query (
+"SELECT ?uri ?title ?mime ?height ?width WHERE { "
+" ?item nie:url ?uri." 
 
+" ?item nie:mimeType ?mime." 
+" FILTER regex(?mime, \"image\")."
 
-#if 1
-    QVector<QStringList> result = ::tracker()->rawSparqlQuery(query);
-    foreach (QStringList partlist, result) {
-        WallpaperDescriptor *desc;
+" ?item nfo:height ?height."
+" ?item nfo:width ?width."
+" FILTER ( ?height > \"300\" )."
+" FILTER ( ?width  > \"300\" )."
 
-        #ifdef LOTDEBUG
-        SYS_DEBUG ("*** url     = %s", SYS_STR(partlist[FieldUrl]));
+" OPTIONAL { ?item nie:title ?title }."
+"}"
+);
 
-        for (int n = 0; n < partlist.size(); ++n) {
-            SYS_DEBUG ("partlist[%d] = %s", n, SYS_STR(partlist[n]));
+    QSparqlResult *result = sparqlConn.syncExec (query);
+    result->waitForFinished ();
+
+    if (result->hasError()) {
+        SYS_WARNING ("Error: %s", SYS_STR (result->lastError ().message ()));
+    } else if (! result->first()) {
+        SYS_WARNING ("No results from tracker");
+    } else {
+        do
+        {
+            desc = new WallpaperDescriptor;
+
+            QString url = result->binding(FieldUrl).value().toString();
+            QString mime = result->binding(FieldMime).value().toString();
+            QString title = result->binding(FieldTitle).value().toString();
+
+            desc->setUrl (url, WallpaperDescriptor::Portrait);
+            desc->setMimeType (mime, WallpaperDescriptor::Portrait);
+            desc->setTitle (title, WallpaperDescriptor::Portrait);
+
+            desc->setUrl (url, WallpaperDescriptor::Landscape);
+            desc->setMimeType (mime, WallpaperDescriptor::Landscape);
+            desc->setTitle (title, WallpaperDescriptor::Landscape);
+
+#ifdef LOTDEBUG
+            SYS_DEBUG ("************ IMAGE *************\n"
+                       "URL   = '%s'\nMIME  = '%s', TITLE = '%s'",
+                       SYS_STR (url), SYS_STR (mime), SYS_STR (title));
+#endif
+
+            list << desc;
         }
-
-        SYS_DEBUG ("*** url     = %s", SYS_STR(partlist[FieldUrl]));
-
-        SYS_DEBUG ("");
-        #endif
-
-        desc = new WallpaperDescriptor;
-        desc->setUrl (partlist[FieldUrl]);
-        desc->setTitle (partlist[FieldTitle]);
-        desc->setMimeType (partlist[FieldMime]);
-
-        desc->setUrl (partlist[FieldUrl], WallpaperDescriptor::Portrait);
-        desc->setTitle (partlist[FieldTitle], WallpaperDescriptor::Portrait);
-        desc->setMimeType (partlist[FieldMime], WallpaperDescriptor::Portrait);
-
-        list << desc; 
+        while (result->next());
     }
 #endif
 
@@ -797,18 +811,47 @@ WallpaperBusinessLogic::editRequestArrived (
  * class?
  */
 static QString
-trackerIdToFilename(const QString &trackerId)
+trackerIdToFilename (
+        const QString &trackerId)
 {
-        QVector<QStringList> result = ::tracker()->rawSparqlQuery(QString("select ?u where { <" + trackerId + "> nie:url ?u }"));
+    if (trackerId.isEmpty ())
+        return "";
 
-        for (int Nix = 0 ; Nix < result.size() ; Nix++)
-                for (int Nix1 = 0 ; Nix1 < result[Nix].size() ; Nix1++) {
-                        QUrl url(result[Nix][Nix1]);
-                        if (url.isValid() && url.scheme() == "file")
-                                return url.path();
-                }
+#ifdef HAVE_QTSPARQL 
+    static QSparqlConnection sparqlConn("QTRACKER");
 
-        return QString("");
+    static QSparqlQuery theQuery ("select ?u where { ?:trackerId nie:url ?u }");
+    theQuery.bindValue ("trackerId", QUrl(trackerId));
+
+    QSparqlResult *result = sparqlConn.syncExec (theQuery);
+
+    result->waitForFinished ();
+
+    if (result->hasError()) {
+        SYS_WARNING ("Could get filename from tracker id (%s): %s",
+                     SYS_STR (trackerId),
+                     SYS_STR (result->lastError ().message ()));
+
+        return QString ("");
+    } else if (! result->first()) {
+        SYS_WARNING ("Tracker id not found: %s",
+                     SYS_STR (trackerId));
+
+        return QString ("");
+    } else {
+        QUrl url (result->value (0).toUrl ());
+
+        if (! url.isValid () || !(url.scheme () == "file"))
+        {
+            SYS_WARNING ("Tracker returned URL is not valid: %s",
+                         SYS_STR (url.toString ()));
+        }
+        else
+            return QUrl::fromPercentEncoding(url.path().toUtf8());
+    }
+#endif
+
+    return QString("");
 }
 
 void

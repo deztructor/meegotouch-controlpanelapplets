@@ -11,11 +11,9 @@ QT += \
     dbus 
 
 LIBS += \
-    -lqttracker \
     -lthumbnailer
 
 INCLUDEPATH += \
-    /usr/include/QtTracker \
     /usr/include/thumbnailer 
 
 TEMPLATE = app
@@ -33,6 +31,10 @@ CONFIG += \
 	meegotouchcore \
 	duicontrolpanel \
     link_pkgconfig
+
+contains(DEFINES, HAVE_QTSPARQL) {
+    CONFIG += qtsparql
+}
 
 contains(DEFINES, HAVE_QUILL_FILTER) {
     CONFIG += quillimagefilter

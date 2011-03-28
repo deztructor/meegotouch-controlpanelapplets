@@ -4,28 +4,32 @@ SRC_PREFIX = ../../src/wallpaperapplet
 STUB_PREFIX = ../stubs
 
 INCLUDEPATH = \
-        $$STUB_PREFIX \
-	$$SRC_PREFIX \
-	$$INCLUDEPATH
+    $$STUB_PREFIX \
+    $$SRC_PREFIX \
+    $$INCLUDEPATH
 
 QT += \
-    	testlib \
-	dbus 
+    testlib \
+    dbus 
 
 TEMPLATE = app
 
 DEFINES += \
-	UNIT_TEST 
+    UNIT_TEST 
 
 TARGET = ut_wallpaperlist
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
-	gui \
-	meegotouchcore \
+    gui \
+    meegotouchcore \
     quill \
-	plugin \
-	duicontrolpanel
+    plugin \
+    duicontrolpanel
+
+contains(DEFINES, HAVE_QTSPARQL) {
+    CONFIG += qtsparql
+}
 
 contains(DEFINES, HAVE_QUILL_FILTER) {
     CONFIG += quillimagefilter

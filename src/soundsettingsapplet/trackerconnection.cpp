@@ -26,7 +26,6 @@
 #include <QSparqlResult>
 #include <QSparqlResultRow>
 #include <QSparqlError>
-#include <QDebug>
 #endif
 #include <QTimer>
 
@@ -216,8 +215,6 @@ TrackerConnection::processRequest (
                      SYS_STR (fileName));
 
         goto fallback;
-    } else {
-        qWarning () << result->value (0);
     }
 
     if (! result->stringValue (0).isEmpty ())

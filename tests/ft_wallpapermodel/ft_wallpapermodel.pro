@@ -11,11 +11,9 @@ QT += \
     dbus 
 
 LIBS += \
-    -lqttracker \
     -lthumbnailer
 
 INCLUDEPATH += \
-    /usr/include/QtTracker \
     /usr/include/thumbnailer 
 
 TEMPLATE = app
@@ -40,6 +38,10 @@ contains(DEFINES, HAVE_QUILL_FILTER) {
 
 contains(DEFINES, HAVE_QUILL_METADATA) {
     CONFIG += quillmetadata
+}
+
+contains(DEFINES, HAVE_QTSPARQL) {
+    CONFIG += qtsparql
 }
 
 PKGCONFIG += ContentManager
