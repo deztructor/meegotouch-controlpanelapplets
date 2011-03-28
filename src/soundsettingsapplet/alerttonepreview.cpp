@@ -16,61 +16,67 @@
 ** of this file.
 **
 ****************************************************************************/
-
-#include <QDebug>
-#include "static.h"
 #include "alerttonepreview.h"
+#include "static.h"
 #include <QApplication>
 
-//#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
-static const char *GstStartCommand = 
+static const char *GstStartCommand =
     "filesrc name=alerttonepreviewfilesrc ! "
-"decodebin ! volume name=alerttonepreviewvolume ! pulsesink name=alerttonepreviewpulsesink";
+    "decodebin ! volume name=alerttonepreviewvolume ! "
+    "pulsesink name=alerttonepreviewpulsesink";
 
-AlertTonePreview::AlertTonePreview(const QString &fname):
-       m_gstPipeline(NULL),
-       m_gstFilesrc(NULL),
-       m_gstVolume(NULL),
-        m_profileVolume(QString(ALERT_TONE_VOLUME_VOLUME_KEY)),
-        m_Filename(fname)
+AlertTonePreview::AlertTonePreview (const QString &fname) :
+       QObject (0),
+       m_gstPipeline (NULL),
+       m_gstFilesrc (NULL),
+       m_gstVolume (NULL),
+       m_profileVolume (QString (ALERT_TONE_VOLUME_VOLUME_KEY)),
+       m_Filename (fname)
 {
 #ifdef HAVE_LIBRESOURCEQT
-    getResources();
-    gstInit();
-#else
-    gstInit();
+    getResources ();
+#endif
+
+    gstInit ();
+
+#ifndef HAVE_LIBRESOURCEQT
+    audioResourceAcquired ()
 #endif
 }
 
-AlertTonePreview::~AlertTonePreview()
+AlertTonePreview::~AlertTonePreview ()
 {
     SYS_DEBUG ("Stopping the playback.");
-    gst_element_set_state(m_gstPipeline, GST_STATE_NULL);
-    gst_bus_remove_signal_watch(gst_element_get_bus(m_gstPipeline));
-    gst_object_unref(m_gstPipeline);
+    gst_element_set_state (m_gstPipeline, GST_STATE_NULL);
+    gst_bus_remove_signal_watch (gst_element_get_bus (m_gstPipeline));
+    gst_object_unref (m_gstPipeline);
+    m_gstPipeline = NULL;
+
 #ifdef HAVE_LIBRESOURCEQT
     resources->release ();
 #endif
 }
 
 void
-AlertTonePreview::gstInit()
+AlertTonePreview::gstInit ()
 {
     GError *err = NULL;
-    SYS_DEBUG ("*** fname = %s", SYS_STR(m_Filename));
+    SYS_DEBUG ("*** fname = %s", SYS_STR (m_Filename));
     SYS_DEBUG ("Starting the playback.");
     GstElement *pulsesink;
     GstStructure *props;
 
     m_gstPipeline = gst_parse_launch (GstStartCommand, &err);
-    if (err) {
-            SYS_WARNING ("ERROR from gst_parse_launch: %s",
-            err->message ? err->message : "Unknown error");
-            g_error_free(err);
-    goto finalize;
+    if (err)
+    {
+        SYS_WARNING ("ERROR from gst_parse_launch: %s",
+        err->message ? err->message : "Unknown error");
+        g_error_free(err);
+        goto finalize;
     }
 
     m_gstVolume = gst_bin_get_by_name(
@@ -96,45 +102,50 @@ AlertTonePreview::gstInit()
                       NULL);
     else
         SYS_DEBUG("Cannot set media.role property!");
-    gst_structure_free(props);
+    gst_structure_free (props);
 
-    gst_bus_add_signal_watch(gst_element_get_bus(m_gstPipeline));
-    g_signal_connect(G_OBJECT(gst_element_get_bus(m_gstPipeline)),
-        "message", (GCallback)gstSignalHandler, this);
+    gst_bus_add_signal_watch (gst_element_get_bus (m_gstPipeline));
+    g_signal_connect (G_OBJECT (gst_element_get_bus (m_gstPipeline)),
+                      "message", (GCallback) gstSignalHandler, this);
 
 finalize:
-        connect(&m_profileVolume, SIGNAL(changed()),
-            this, SLOT(profileVolumeChanged()));
+    connect (&m_profileVolume, SIGNAL (changed ()),
+             SLOT (profileVolumeChanged ()));
 }
 
+#ifdef HAVE_LIBRESOURCEQT
 void
 AlertTonePreview::getResources()
 {
-#ifdef HAVE_LIBRESOURCEQT
-    resources = new ResourcePolicy::ResourceSet("player");
-    resources->setAlwaysReply();
+    resources = new ResourcePolicy::ResourceSet ("player");
+    resources->setAutoRelease ();
+    resources->setAlwaysReply ();
 
     ResourcePolicy::AudioResource *audioResource =
-            new ResourcePolicy::AudioResource("player");
+            new ResourcePolicy::AudioResource ("player");
 
-    audioResource->setProcessID(QApplication::applicationPid());
+    audioResource->setProcessID (QApplication::applicationPid ());
     /*
      * This is for the libresource to be able to identify our pulseaudio stream,
      * so this is very important that the same key-value pair should be set
      * for the pulsesink. The value should be uniqe.
      */
-    audioResource->setStreamTag("media.role", "AlertTonePreview");
-    resources->addResourceObject(audioResource);
+    audioResource->setStreamTag ("media.role", "AlertTonePreview");
+    resources->addResourceObject (audioResource);
+    resources->initAndConnect ();
 
-    connect(resources, SIGNAL(resourcesGranted(QList<ResourcePolicy::ResourceType>)),
-            this, SLOT(audioResourceAcquired()));
-    connect(resources, SIGNAL(lostResources()), this, SLOT(audiResourceLost()));
-    resources->acquire();
-#endif
+    connect (resources,
+             SIGNAL (resourcesGranted (QList<ResourcePolicy::ResourceType>)),
+             SLOT (audioResourceAcquired ()));
+    connect (resources,
+             SIGNAL (lostResources ()),
+             SLOT (audioResourceLost()));
+    resources->acquire ();
 }
+#endif
 
 void
-AlertTonePreview::audioResourceAcquired()
+AlertTonePreview::audioResourceAcquired ()
 {
     SYS_DEBUG("");
     if(m_gstPipeline)
@@ -142,61 +153,71 @@ AlertTonePreview::audioResourceAcquired()
 }
 
 void
-AlertTonePreview::audiResourceLost()
+AlertTonePreview::audioResourceLost ()
 {
     SYS_DEBUG("");
-    if(m_gstPipeline)
-        gst_element_set_state(m_gstPipeline, GST_STATE_PAUSED);
+    if (m_gstPipeline)
+    {
+        gst_element_set_state (m_gstPipeline, GST_STATE_PAUSED);
+        rewind ();
+    }
 }
 
 void
-AlertTonePreview::profileVolumeChanged()
+AlertTonePreview::profileVolumeChanged ()
 {
-	g_object_set(G_OBJECT(m_gstVolume), "volume", profileToGstVolume(), NULL);
+    g_object_set (G_OBJECT (m_gstVolume),
+                  "volume", profileToGstVolume(),
+                  NULL);
 }
 
 double
-AlertTonePreview::profileToGstVolume()
+AlertTonePreview::profileToGstVolume ()
 {
-    QList<QVariant> range = m_profileVolume.possibleValues(NULL);
-    return (((double)(m_profileVolume.value().toInt() - range[0].toInt())) / ((double)(range[1].toInt() - range[0].toInt())));
+    QList<QVariant> range = m_profileVolume.possibleValues (NULL);
+    return (((double) (m_profileVolume.value().toInt() - range[0].toInt())) /
+            ((double)(range[1].toInt() - range[0].toInt())));
 }
 
 QString
-AlertTonePreview::fname() const
+AlertTonePreview::fname () const
 {
     return m_Filename;
 }
 
 void
-AlertTonePreview::rewind()
+AlertTonePreview::rewind ()
 {
     SYS_DEBUG ("");
-	if (!gst_element_seek_simple(m_gstPipeline, GST_FORMAT_TIME, (GstSeekFlags)(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT), 0l))
-		qWarning() << "AlertTonePreview::rewind: seek failed";
+    if (!gst_element_seek_simple (
+           m_gstPipeline, GST_FORMAT_TIME,
+           (GstSeekFlags) (GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT), 0l))
+        SYS_WARNING ("seek failed");
 }
 
 void
-AlertTonePreview::gstSignalHandler(GstBus *bus, GstMessage *msg, AlertTonePreview *atp)
+AlertTonePreview::gstSignalHandler (
+    GstBus              *bus,
+    GstMessage          *msg,
+    AlertTonePreview    *atp)
 {
-	Q_UNUSED(bus)
+    Q_UNUSED (bus);
 
-	if (GST_MESSAGE_TYPE(msg) == GST_MESSAGE_ERROR) {
-		GError *err = NULL;
-		char *debug = NULL;
+    if (GST_MESSAGE_TYPE (msg) == GST_MESSAGE_ERROR)
+    {
+        GError *err = NULL;
+        char *debug = NULL;
 
-		gst_message_parse_error(msg, &err, &debug);
-		qWarning() << "AlertTonePreview::gstSignalHandler:"
-			<< "from" << GST_MESSAGE_SRC_NAME(msg)
-			<< "type" << GST_MESSAGE_TYPE_NAME(msg)
-			<< QString(err ? err->message ? err->message : "Unknown error" : "Unknown error")
-			<< "debug:"
-			<< QString(debug ? debug : "empty");
+        gst_message_parse_error (msg, &err, &debug);
+        SYS_WARNING ("\nfrom '%s'\ntype '%s'\n'error '%s'\ndebug '%s'",
+                     GST_MESSAGE_SRC_NAME (msg), GST_MESSAGE_TYPE_NAME (msg),
+                     (err && err->message) ? err->message : "Unknown error",
+                     debug ? debug : "empty");
 
-		g_error_free(err);
-		g_free(debug);
-	}
-	else
-	if (GST_MESSAGE_TYPE(msg) == GST_MESSAGE_EOS)
-		atp->rewind();
+        g_error_free(err);
+        g_free(debug);
+    }
+    else if (GST_MESSAGE_TYPE (msg) == GST_MESSAGE_EOS)
+        atp->rewind ();
 }
+
