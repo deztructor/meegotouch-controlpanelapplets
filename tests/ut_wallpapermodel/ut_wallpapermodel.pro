@@ -60,7 +60,7 @@ SOURCES += \
     ../../src/debug.cpp \
     ut_wallpapermodel.cpp \
     $$SRC_PREFIX/gridimagewidget.cpp \
-    $$SRC_PREFIX/wallpaperbusinesslogic.cpp \
+    $$STUB_PREFIX/wallpaperbusinesslogic_stub.cpp \
     $$SRC_PREFIX/wallpapercurrentdescriptor.cpp \
     $$SRC_PREFIX/wallpaperdescriptor.cpp \
     $$SRC_PREFIX/wallpaperitrans.cpp \

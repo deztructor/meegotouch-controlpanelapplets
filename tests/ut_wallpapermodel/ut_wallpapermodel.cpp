@@ -19,8 +19,8 @@
 
 #include "ut_wallpapermodel.h"
 #include "wallpapermodel.h"
-#include "wallpaperbusinesslogic.h"
 #include "wallpaperdescriptor.h"
+#include "wallpaperbusinesslogic.h"
 
 #include <MGConfItem>
 #include <MApplication>
