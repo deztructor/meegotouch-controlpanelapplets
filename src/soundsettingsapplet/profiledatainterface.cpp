@@ -23,7 +23,6 @@ namespace ProfileName {
   const QString ringing = "general";  /*!< Profile name 'ringing' */
   const QString silent = "silent";    /*!< Profile name 'silent' */
   const QString beep = "meeting";     /*!< Profile name 'beep' */
-  const QString loud = "outdoors";    /*!< Profile name 'loud' */
 }
 
 #include <QStringList>
@@ -41,8 +40,9 @@ bool ProfileDataLessThan (
         const ProfileDataInterface::ProfileData &p2)
 {
     // Use this to sort the profiles in volume level order
-    //return p1.volumeLevel < p2.volumeLevel;
-    return p1.profileId < p2.profileId;
+    // return p1.volumeLevel < p2.volumeLevel;
+    // Modified, see NB#240711
+    return p1.profileId > p2.profileId;
 }
 
 /******************************************************************************
@@ -81,9 +81,6 @@ ProfileDataInterface::mapId2StatusIconId (int id)
         case ProfileIdBeep:
             iconId = QString ("icon-m-status-menu-profile-beep");
             break;
-
-        case ProfileIdLoud:
-            iconId = QString ("icon-m-status-menu-profile-loud");
     }
 
     return iconId;
@@ -188,9 +185,6 @@ ProfileDataInterface::mapId2IconId (int id)
         case ProfileIdBeep:
             iconId = QString("icon-m-profile-beep");
             break;
-        case ProfileIdLoud:
-            iconId = QString("icon-m-profile-loud");
-            break;
     }
 
     return iconId;
@@ -218,9 +212,6 @@ ProfileDataInterface::id2Name (
     } else if (ProfileName::beep == id) {
         //% "Beep"
         localised = qtTrId ("qtn_prof_beep");
-    } else if (ProfileName::loud == id) {
-        //% "Loud"
-        localised = qtTrId ("qtn_prof_loud");
     }
 
     SYS_DEBUG ("returning '%s'", SYS_STR (localised));
@@ -239,8 +230,6 @@ ProfileDataInterface::mapId (
         intId = ProfileIdSilent;
     } else if (ProfileName::beep == id) {
         intId = ProfileIdBeep;
-    } else if (ProfileName::loud == id) {
-        intId = ProfileIdLoud;
     }
 
     return intId;
@@ -261,9 +250,6 @@ ProfileDataInterface::mapId (
             break;
         case ProfileIdBeep:
             stringId = ProfileName::beep;
-            break;
-        case ProfileIdLoud:
-            stringId = ProfileName::loud;
             break;
     }
 
