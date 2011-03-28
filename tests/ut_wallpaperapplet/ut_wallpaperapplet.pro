@@ -44,7 +44,6 @@ PKGCONFIG += ContentManager
 
 HEADERS += \
     $$STUB_PREFIX/thumbnailerstub.h \
-    $$STUB_PREFIX/trackerstub.h \
     $$STUB_PREFIX/mdesktopentry.h \
     $$STUB_PREFIX/filesystemstub.h \
     ../../src/debug.h \
@@ -65,7 +64,6 @@ HEADERS += \
 
 SOURCES += \
     $$STUB_PREFIX/thumbnailerstub.cpp \
-    $$STUB_PREFIX/trackerstub.cpp \
     $$STUB_PREFIX/mdesktopentry.cpp \
     $$STUB_PREFIX/filesystemstub.cpp \
     ../../src/debug.cpp \

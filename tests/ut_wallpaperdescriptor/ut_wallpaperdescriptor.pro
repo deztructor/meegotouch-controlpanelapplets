@@ -33,14 +33,12 @@ contains(DEFINES, HAVE_QUILL_METADATA) {
 
 HEADERS += \
     $$STUB_PREFIX/thumbnailerstub.h \
-    $$STUB_PREFIX/trackerstub.h \
     ../../src/debug.h \
     ut_wallpaperdescriptor.h \
     $$SRC_PREFIX/wallpaperdescriptor.h 
 
 SOURCES += \
     $$STUB_PREFIX/thumbnailerstub.cpp \
-    $$STUB_PREFIX/trackerstub.cpp \
     ../../src/debug.cpp \
     ut_wallpaperdescriptor.cpp \
     $$SRC_PREFIX/wallpaperdescriptor.cpp 

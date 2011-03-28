@@ -25,9 +25,7 @@
  * In the functional tests we use the real thing, in the unit tests we use the
  * stubbed version. 
  */
-
 #if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
-// TODO: stub the new sparql thingy... #  include "trackerstub.h"
 #  include "filesystemstub.h"
    typedef QDirStub WallpaperDir;
    typedef QFileStub WallpaperFile;
@@ -38,13 +36,13 @@
    typedef QFile WallpaperFile;
 #endif
 
-  #ifdef HAVE_QTSPARQL
-    #include <QSparqlConnection>
-    #include <QSparqlQuery>
-    #include <QSparqlResult>
-    #include <QSparqlResultRow>
-    #include <QSparqlError>
-  #endif
+#ifdef HAVE_QTSPARQL
+  #include <QSparqlConnection>
+  #include <QSparqlQuery>
+  #include <QSparqlResult>
+  #include <QSparqlResultRow>
+  #include <QSparqlError>
+#endif
 
 #include "wallpapergconf.h"
 #include "wallpaperbusinesslogic.h"
