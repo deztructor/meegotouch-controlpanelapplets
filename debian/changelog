@@ -3,6 +3,9 @@ meegotouch-controlpanelapplets (0.20.27~1) meegotouch; urgency=low
   * Fixes: NB#238747 - Wrong icons used in settings panel Brightness slider
   * Low Power Mode switch to display-applet
   * Fixes: NB#237609 - Ring tone preview continues after the incoming call.
+  
+  [ Laszlo Pere ]
+  * Fixes: NB#238613 - Dali:Unable to restore wall paper
 
  -- David Kedves <dkedves@blumsoft.eu>  Sat, 26 Mar 2011 12:37:01 +0200
 

@@ -70,19 +70,15 @@ target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 backup.files = wallpaper.conf
 backup.path  = /usr/share/backup-framework/applications/
 
-backupscripts.files = wallpaper-backup wallpaper-restore
-backupscripts.path  = $$(DEBIAN_DESTDIR)/usr/share/wallpaper/
-
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 
 css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libwallpaperapplet/style
 css.files = libwallpaperapplet.css
 
-INSTALLS += \
-    target \
-    desktop \
-    backupscripts \
-    backup \
+INSTALLS +=     \
+    target      \
+    desktop     \
+    backup      \
     css
 
