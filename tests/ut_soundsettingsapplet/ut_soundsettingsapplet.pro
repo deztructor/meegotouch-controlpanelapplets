@@ -8,8 +8,6 @@ QT += \
     testlib \
     dbus
 
-LIBS += -lqttracker
-
 TEMPLATE = app
 DEFINES += UNIT_TEST
 TARGET = ut_soundsettingsapplet

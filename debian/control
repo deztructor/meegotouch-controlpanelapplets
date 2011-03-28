@@ -4,12 +4,11 @@ Priority: optional
 Maintainer: David Kedves <dkedves@blumsoft.eu>
 Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.11.8),
                libmeegotouch-dev (>= 0.20.60), libqmsystem2-dev (>= 1.0),
-               libprofile-dev, system-ui-dev (>= 0.16), libqttracker-dev,
-               libthumbnailer-dev, libcontentmanager-dev,
-               doxygen, clean-device-dev (>= 0.0.3), libgstreamer0.10-dev,
-               libqtm-dev, libqtm-systeminfo-dev, libresourceqt-dev,
-               libquillimagefilter-dev, libquillmetadata-dev, libquill-dev,
-               libqtsparql-dev
+               libprofile-dev, system-ui-dev (>= 0.16), libthumbnailer-dev,
+               libcontentmanager-dev, doxygen, clean-device-dev (>= 0.0.3),
+               libgstreamer0.10-dev, libqtm-dev, libqtm-systeminfo-dev,
+               libresourceqt-dev, libquillimagefilter-dev,
+               libquillmetadata-dev, libquill-dev, libqtsparql-dev
 Standards-Version: 3.8.0
 
 Package: meegotouch-controlpanelapplets-tests
@@ -58,7 +57,7 @@ Architecture: any
 Section: libdevel
 Depends: ${shlibs:Depends}, ${misc:Depends}, libgstreamer0.10-dev,
          libmeegocontrol0 (= ${binary:Version}), libthumbnailer-dev,
-         libduicontrolpanel-dev, libcontentmanager-dev, libqttracker-dev,
+         libduicontrolpanel-dev, libcontentmanager-dev,
          libresourceqt-dev
 Description: libmeegocontrol development files
 
@@ -142,7 +141,7 @@ Description: profile-applet debug symbols
 Package: duicontrolpanel-wallpaperapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libqttracker1pre6,
+Depends: ${shlibs:Depends}, ${misc:Depends},
          tumbler, libthumbnailer0, duicontrolpanel
 Description: Desktop wallpaper changing applet.
 

@@ -25,7 +25,6 @@ Description: |
       
 PkgBR:
     - libmeegocontrolpanel-devel
-    - libqttracker-devel
     - meegotouch-systemui-devel
     - libthumbnailer-devel
     - clean-device-devel >= 0.0.3
@@ -308,7 +307,6 @@ SubPackages:
             - gstreamer-devel
             - libthumbnailer-devel
             - libmeegocontrolpanel-devel
-            - libqttracker-devel
             - libresourceqt-devel
       Description: Dev package for libmeegocontrol
       Files:

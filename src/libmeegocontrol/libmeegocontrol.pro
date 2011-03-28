@@ -60,11 +60,9 @@ DEFINES += \
     LIBMEEGOCONTROL
 
 LIBS += \
-    -lqttracker \
     -lthumbnailer
 
 INCLUDEPATH += \
-    /usr/include/QtTracker \
     /usr/include/thumbnailer \
     ../wallpaperapplet
 

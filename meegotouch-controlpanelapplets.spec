@@ -18,7 +18,6 @@ BuildRequires:  pkgconfig(meegotouch) >= 0.20.37
 BuildRequires:  pkgconfig(QtCore) >= 4.7.0
 BuildRequires:  pkgconfig(QtGui) >= 4.7.0
 BuildRequires:  libmeegocontrolpanel-devel
-BuildRequires:  libqttracker-devel
 BuildRequires:  meegotouch-systemui-devel
 BuildRequires:  libthumbnailer-devel
 BuildRequires:  clean-device-devel >= 0.0.3
@@ -197,7 +196,6 @@ Requires:   meegotouchcp-applets-l10n-eng-en
 Requires:   gstreamer-devel
 Requires:   libthumbnailer-devel
 Requires:   libmeegocontrolpanel-devel
-Requires:   libqttracker-devel
 Requires:   libresourceqt-devel
 
 %description -n libmeegocontrol-devel
