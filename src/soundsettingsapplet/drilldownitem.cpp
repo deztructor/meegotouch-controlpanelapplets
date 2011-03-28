@@ -42,8 +42,8 @@ DrillDownItem::createLayout()
 {
     QGraphicsGridLayout *layout;
     MLabel              *titleLabel;
-    MLabel              *subTitleLabel;
-    MImageWidget        *iconWidget;
+    MLabel              *subTitleLabel = 0;
+    MImageWidget        *iconWidget    = 0;
     MImageWidget        *drillIconWidget;
     
     layout = new QGraphicsGridLayout(this);
@@ -51,17 +51,15 @@ DrillDownItem::createLayout()
     layout->setSpacing(0);
 
     titleLabel =  titleLabelWidget ();
-    subTitleLabel = subtitleLabelWidget ();
-    iconWidget = imageWidget();
 
     drillIconWidget = new MImageWidget ("icon-m-common-drilldown-arrow-inverse");
     drillIconWidget->setStyleName ("CommonDrillDownIcon");
 
     titleLabel->setStyleName(m_TitleStyleName);
-    subTitleLabel->setStyleName("CommonSubTitleInverted");
 
     switch (itemStyle()) {
         case TitleWithSubtitle:
+            SYS_WARNING ("TitleWithSubtitle");
             /*
              * The title label.
              */
@@ -70,6 +68,8 @@ DrillDownItem::createLayout()
             /*
              * The sub-title label.
              */
+            subTitleLabel = subtitleLabelWidget ();
+            subTitleLabel->setStyleName("CommonSubTitleInverted");
             layout->addItem (subTitleLabel, 1, 0);
             layout->setAlignment (subTitleLabel, Qt::AlignLeft | Qt::AlignVCenter);
             /*
@@ -80,9 +80,11 @@ DrillDownItem::createLayout()
             break;
 
         case IconWithTitleAndSubtitle:
+            SYS_WARNING ("IconWithTitleAndSubtitle");
             /*
              * The left side icon.
              */
+            iconWidget = imageWidget();
             layout->addItem (iconWidget, 0, 0, 2, 1);
             layout->setAlignment (iconWidget, Qt::AlignVCenter | Qt::AlignRight);
             /*
@@ -93,6 +95,8 @@ DrillDownItem::createLayout()
             /*
              * The sub-title label.
              */
+            subTitleLabel = subtitleLabelWidget ();
+            subTitleLabel->setStyleName("CommonSubTitleInverted");
             layout->addItem (subTitleLabel, 1, 1, Qt::AlignLeft | Qt::AlignVCenter);
             /*
              * The drill down icon.
@@ -102,9 +106,11 @@ DrillDownItem::createLayout()
             break;
 
         case IconWithTitle:
+            SYS_WARNING ("IconWithTitle");
             /*
              * The left side icon.
              */
+            iconWidget = imageWidget();
             layout->addItem (iconWidget, 0, 0);
             layout->setAlignment (iconWidget, Qt::AlignVCenter | Qt::AlignRight);
             /*
