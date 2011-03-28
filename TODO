@@ -1,2 +1,3 @@
-* wallpaperapplet
- - start using QuillImage without causing API/ABI breaks...
+* wallpaper/ringtone applet
+ Start using QtSparqlLive (see NB#239887) 
+ add this to control: libqtsparql-tracker-live-dev

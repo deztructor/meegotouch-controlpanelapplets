@@ -26,6 +26,9 @@ CONFIG += \
 contains(DEFINES, HAVE_LIBRESOURCEQT) {
     PKGCONFIG += libresourceqt1
 }
+contains(DEFINES, HAVE_QTSPARQL) {
+    CONFIG += qtsparql
+}
 
 PKGCONFIG += dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
 

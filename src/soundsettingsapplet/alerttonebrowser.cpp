@@ -270,28 +270,6 @@ AlertToneBrowser::launchOviStore()
     OviStore.call ("LaunchWithKeyword", QString ("ringtones"));
 }
 
-static QString
-trackerIdToFilename(const QString &trackerId)
-{
-    const QString query = "select ?u where { <" + trackerId + "> nie:url ?u }";
-
-    QVector<QStringList> result = ::tracker()->rawSparqlQuery(query);
-
-    SYS_DEBUG ("*** query         = %s", SYS_STR(query));
-    SYS_DEBUG ("*** result.size() = %d", result.size());
-    for (int Nix = 0; Nix < result.size() ; Nix++) {
-        for (int Nix1 = 0 ; Nix1 < result[Nix].size() ; Nix1++) {
-            QUrl url(result[Nix][Nix1]);
-            SYS_DEBUG ("*** result[%d][%d] = %s",
-                    Nix, Nix1, SYS_STR(result[Nix][Nix1]));
-            if (url.isValid() && url.scheme() == "file")
-                return QUrl::fromPercentEncoding(url.path().toUtf8());
-        }
-    }
-
-    return QString("");
-}
-
 /*
  * NOTE: This method will not start the playing of the sound file any more.
  */
@@ -452,7 +430,8 @@ AlertToneBrowser::selectingMusicItem (
         const QString &item)
 {
     SYS_DEBUG("");
-    QString fname = trackerIdToFilename(item);
+    QString fname =
+        TrackerConnection::instance ()-> trackerIdToFilename (item);
 
     if (fname.isEmpty()) {
         SYS_WARNING ("TrackerID '%s' is not valid.", SYS_STR(item));

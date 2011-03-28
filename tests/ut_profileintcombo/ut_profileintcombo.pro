@@ -25,6 +25,10 @@ CONFIG += \
 
 PKGCONFIG += dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
 
+contains(DEFINES, HAVE_QTSPARQL) {
+    CONFIG += qtsparql
+}
+
 HEADERS += \
     ut_profileintcombo.h \
     $$SRC_PREFIX/../debug.h \

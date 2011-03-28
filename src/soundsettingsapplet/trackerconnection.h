@@ -22,14 +22,15 @@
 #include <QObject>
 #include <QHash>
 #include <QStringList>
-#include <QtTracker/Tracker>
+
+class QSparqlConnection;
 
 /*!
  * Singleton class to implement an asynchronous tracker connection with 
  * caching.
  *
  * Please note that it is important not to emit the dataReady() signal unless it
- * is necessary for there might be objects that process the signal slowli (e.g.
+ * is necessary for there might be objects that process the signal slowly (e.g.
  * the AlertToneDefaultsModel() that is doing a sequential search for every
  * signal. This means we only send at most one signal for every filename!
  */
@@ -43,6 +44,7 @@ public:
 
     QString niceNameFromFileName (const QString &fileName);
     QString trackerIdFromFileName (const QString &fileName);
+    QString trackerIdToFilename (const QString &trackerId);
 
 protected:
     TrackerConnection ();
@@ -63,6 +65,7 @@ private:
     QHash<QString, QString>      m_NiceNameCache;
     QHash<QString, QString>      m_TrackerIdCache;
     QStringList                  m_PendingRequests;
+    QSparqlConnection           *m_sparqlconn;
 };
 #endif
 

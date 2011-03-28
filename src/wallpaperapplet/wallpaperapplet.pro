@@ -28,7 +28,7 @@ contains(DEFINES, HAVE_QUILL_METADATA) {
 }
 
 contains(DEFINES, HAVE_QTSPARQL) {
-    CONFIG += qtsparql-tracker-live
+    CONFIG += qtsparql
 }
 
 LIBS += \

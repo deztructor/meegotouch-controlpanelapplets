@@ -49,6 +49,10 @@ contains(DEFINES, HAVE_LIBRESOURCEQT) {
     PKGCONFIG += libresourceqt1
 }
 
+contains(DEFINES, HAVE_QTSPARQL) {
+    CONFIG += qtsparql
+}
+
 #
 # This way the code wil always know that it is running outside the controlpanel
 #

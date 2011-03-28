@@ -72,11 +72,21 @@ if [ $? -eq 0 ]; then
     fi
 
     #
-    # QtSparqlTrackerLive needed for wallpaper applet
+    # QtSparql needed for ringtone/wallpaper applet
+    #
+    pkg-config --exists QtSparql
+    if [ $? -eq 0 ]; then
+        echo "DEFINES += HAVE_QTSPARQL" >> ${FILENAME}
+    fi
+
+
+    #
+    # QtSparqlTrackerLive needed for ringtone/wallpaper applet
+    # in the future
     #
     pkg-config --exists QtSparqlTrackerLive
     if [ $? -eq 0 ]; then
-        echo "DEFINES += HAVE_QTSPARQL" >> ${FILENAME}
+        echo "DEFINES += HAVE_QTSPARQL_LIVE" >> ${FILENAME}
     fi
 fi
 

@@ -24,7 +24,7 @@ contains(DEFINES, HAVE_LIBRESOURCEQT) {
 }
 
 contains(DEFINES, HAVE_QTSPARQL) {
-    CONFIG += qtsparql-tracker-live
+    CONFIG += qtsparql
 }
 
 contains(DEFINES, HAVE_CONTENT_MANAGER) {

@@ -18,9 +18,19 @@
 ****************************************************************************/
 #include "trackerconnection.h"
 
+#include <QUrl>
+
+#ifdef HAVE_QTSPARQL
+#include <QSparqlConnection>
+#include <QSparqlQuery>
+#include <QSparqlResult>
+#include <QSparqlResultRow>
+#include <QSparqlError>
+#include <QDebug>
+#endif
 #include <QTimer>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -53,10 +63,18 @@ TrackerConnection::instance ()
 
 TrackerConnection::TrackerConnection ()
 {
+#ifdef HAVE_QTSPARQL
+    m_sparqlconn = new QSparqlConnection ("QTRACKER");
+#endif
 }
 
 TrackerConnection::~TrackerConnection ()
 {
+#ifdef HAVE_QTSPARQL
+    delete m_sparqlconn;
+    m_sparqlconn = 0;
+#endif
+
     s_Instance = 0;
 }
 
@@ -125,7 +143,7 @@ TrackerConnection::niceNameFromFileName (
     niceName = poorNiceName (fileName);
 
     SYS_DEBUG ("*** returning %s", SYS_STR(niceName));
-	return niceName;
+    return niceName;
 }
 
 QString
@@ -169,6 +187,7 @@ void
 TrackerConnection::processRequest (
         const QString &fileName)
 {
+#ifdef HAVE_QTSPARQL
     const QString encodedFilename = QUrl::fromLocalFile(fileName).toEncoded();
     const QString query = 
         QString("select"
@@ -176,7 +195,7 @@ TrackerConnection::processRequest (
                 " where { ?u a nmm:MusicPiece . ?u nie:url \"") +
         encodedFilename + 
         "\"}";
-    QVector<QStringList> result;
+
     QString              title;
     QString              trackerId;
 
@@ -184,29 +203,39 @@ TrackerConnection::processRequest (
     SYS_DEBUG ("*** encodedFilename = %s", SYS_STR(encodedFilename));
     SYS_DEBUG ("*** query    = %s", SYS_STR(query));
 
-    #ifdef LOTDEBUG
+    QSparqlQuery theQuery (query);
+    QSparqlResult *result =
+        m_sparqlconn->syncExec (theQuery);
+
     /*
-     * XXX: Causes build error: deprecated
-     *
-     * ::tracker()->setConsoleVerbosity (5);
+     * TODO: FIXME: maybe we should implement
+     * proper async handling here...
      */
-    #endif
-    result = ::tracker()->rawSparqlQuery (query);
-    if (result.size() == 0) {
+    result->waitForFinished ();
+
+    if (result->size() == 0)
+    {
         SYS_WARNING ("Failed to get tracker info for %s", 
                 SYS_STR(encodedFilename));
         goto fallback;
     }
 
-    if (result[0].size() > 0) {
-        title = result[0][0];
+    if (! result->stringValue (0).isEmpty ())
+    {
+        title = result->stringValue (0);
         m_NiceNameCache[fileName] = title;
     }
 
-    if (result[0].size() > 1) {
-        trackerId = result[0][1];
+    SYS_DEBUG ("title/trackerid: '%s'/'%s'",
+               SYS_STR (result->stringValue (0)),
+               SYS_STR (result->stringValue (1)));
+
+    if (! result->stringValue (1).isEmpty ())
+    {
+        trackerId = result->stringValue (0);
         m_TrackerIdCache[fileName] = trackerId;
     }
+#endif
 
 fallback:
     /*
@@ -237,10 +266,53 @@ TrackerConnection::poorNiceName (
 
     SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
     niceName = fileName.split('/').last();
-	niceName = niceName.left(niceName.lastIndexOf('.'));
+    niceName = niceName.left(niceName.lastIndexOf('.'));
     niceName.replace ("_", " ");
     
     SYS_DEBUG ("*** niceName = %s", SYS_STR(niceName));
     return niceName;
+}
+
+QString
+TrackerConnection::trackerIdToFilename (
+        const QString &trackerId)
+{
+    if (trackerId.isEmpty ())
+        return "";
+
+#ifdef HAVE_QTSPARQL 
+    static QSparqlQuery theQuery ("select ?u where { ?:trackerId nie:url ?u }");
+    theQuery.bindValue ("trackerId", QUrl(trackerId));
+
+    QSparqlResult *result =
+        m_sparqlconn->syncExec (theQuery);
+
+    result->waitForFinished ();
+
+    if (result->hasError()) {
+        SYS_WARNING ("Could get filename from tracker id (%s): %s",
+                     SYS_STR (trackerId),
+                     SYS_STR (result->lastError ().message ()));
+
+        return QString ("");
+    } else if (! result->first()) {
+        SYS_WARNING ("Tracker id not found: %s",
+                     SYS_STR (trackerId));
+
+        return QString ("");
+    } else {
+        QUrl url (result->value (0).toUrl ());
+
+        if (! url.isValid () || !(url.scheme () == "file"))
+        {
+            SYS_WARNING ("Tracker returned URL is not valid: %s",
+                         SYS_STR (url.toString ()));
+        }
+        else
+            return QUrl::fromPercentEncoding(url.path().toUtf8());
+    }
+#endif
+
+    return QString("");
 }
 

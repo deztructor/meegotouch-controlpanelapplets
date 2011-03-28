@@ -33,6 +33,10 @@ contains(DEFINES, HAVE_LIBRESOURCEQT) {
     PKGCONFIG += libresourceqt1
 }
 
+contains(DEFINES, HAVE_QTSPARQL) {
+    CONFIG += qtsparql
+}
+
 HEADERS += \
     ut_soundsettingsapplet.h \
     $$SRC_PREFIX/../debug.h \

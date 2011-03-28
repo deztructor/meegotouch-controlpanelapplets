@@ -24,6 +24,10 @@ CONFIG += \
     mobility        \
     duicontrolpanel
 
+contains(DEFINES, HAVE_QTSPARQL) {
+    CONFIG += qtsparql
+}
+
 MOBILITY += \
     systeminfo
 
