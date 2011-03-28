@@ -6,6 +6,7 @@ meegotouch-controlpanelapplets (0.20.27~1) meegotouch; urgency=low
   
   [ Laszlo Pere ]
   * Fixes: NB#238613 - Dali:Unable to restore wall paper
+  * Fixes: NB#237055 - Wallpaper editor missing inertia when panning
 
  -- David Kedves <dkedves@blumsoft.eu>  Sat, 26 Mar 2011 12:37:01 +0200
 
