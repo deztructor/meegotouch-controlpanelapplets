@@ -382,8 +382,8 @@ void
 WallpaperEditorWidget::panningPhysicsPositionChanged(
         const QPointF    &position)
 {
-    SYS_WARNING ("position at %g, %g", position.x(), position.y());
 #if 0
+    SYS_WARNING ("position at %g, %g", position.x(), position.y());
     SYS_WARNING ("inMotion = %s", SYS_BOOL(m_Physics->inMotion()));
     SYS_WARNING ("enabled  = %s", SYS_BOOL(m_Physics->enabled()));
 #endif
@@ -951,8 +951,6 @@ WallpaperEditorWidget::pinchGestureUpdate (
     redrawImage ();
 
     m_ScalePhysics->pointerMove(QPointF(0.0, gesture->totalScaleFactor() * 100.0));
-
-
 }
 
 void 
@@ -1026,8 +1024,8 @@ WallpaperEditorWidget::setupPanningPhysics ()
 {
     QRectF geom = geometry ();
     
-    SYS_WARNING ("my geometry = %gx%g", geom.width(), geom.height());
-    SYS_WARNING ("image       = %dx%d", imageDX(), imageDY());
+    //SYS_WARNING ("my geometry = %gx%g", geom.width(), geom.height());
+    //SYS_WARNING ("image       = %dx%d", imageDX(), imageDY());
 
     qreal  left, top;
     qreal  width, height;
@@ -1037,7 +1035,7 @@ WallpaperEditorWidget::setupPanningPhysics ()
     width  = geom.width() + imageDX() - 2 * alwaysVisibleFromImage;
     height = geom.height() + imageDY() - 2 * alwaysVisibleFromImage - TitleBarHeight;
 
-    SYS_WARNING ("l: %g t: %g %gx%g", left, top, width, height);
+    //SYS_WARNING ("l: %g t: %g %gx%g", left, top, width, height);
     m_Physics->setRange (QRectF(left, top, width, height));
 }
 
