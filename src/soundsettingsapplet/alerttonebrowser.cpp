@@ -122,7 +122,7 @@ AlertToneBrowser::createContent()
 
 #ifdef HAVE_CONTENT_MANAGER
     // "Pick from My Music"
-    m_my_music = new DrillDownItem;
+    m_my_music = new RightArrowItem;
     m_my_music->setTitleStyleName ("CommonSingleTitleInverted");
     m_my_music->setLayoutPosition (M::VerticalTopPosition);
     m_my_music->imageWidget()->setImage ("icon-l-music");
@@ -133,7 +133,7 @@ AlertToneBrowser::createContent()
 #endif
 
     // "Get more from Ovi store"
-    m_ovi_store = new DrillDownItem;
+    m_ovi_store = new RightArrowItem;
     m_ovi_store->setTitleStyleName ("CommonSingleTitleInverted");
     m_ovi_store->setLayoutPosition (M::VerticalBottomPosition);
     m_ovi_store->imageWidget()->setImage("icon-m-content-ovi-store-inverse");

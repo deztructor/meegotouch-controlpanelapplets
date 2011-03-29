@@ -31,7 +31,7 @@ AlertToneWidget::AlertToneWidget (
         int                  idx, 
         AlertToneToplevel   *changer, 
         QGraphicsItem       *parent) :
-    DrillDownItem (MBasicListItem::TitleWithSubtitle, parent),
+    RightArrowItem (MBasicListItem::TitleWithSubtitle, parent),
 	m_tone(tone),
 	m_changer(changer),
 	m_idx(idx)

@@ -32,7 +32,7 @@ class MList;
 class MTextEdit;
 class MSortFilterProxyModel;
 class MBasicListItem;
-class DrillDownItem;
+class RightArrowItem;
 
 class ThemeWidget : public DcpWidget
 {
@@ -67,7 +67,7 @@ private:
 
     MTextEdit                    *m_LiveFilterEditor;
     MList                        *m_List;
-    DrillDownItem                *m_OviItem;
+    RightArrowItem                *m_OviItem;
     QPointer<ThemeDialog>         m_ThemeDialog;
     #ifdef UNIT_TEST
     friend class Ut_ThemeWidget;

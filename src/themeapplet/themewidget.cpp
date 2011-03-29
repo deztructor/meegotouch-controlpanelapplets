@@ -96,7 +96,7 @@ ThemeWidget::createWidgets ()
     /*
      * An item to activate the OVI link.
      */
-    m_OviItem = new DrillDownItem (MBasicListItem::IconWithTitle);
+    m_OviItem = new RightArrowItem (MBasicListItem::IconWithTitle);
     m_OviItem->setObjectName("OviItem");
 
     // Currently we use the default.

@@ -26,11 +26,11 @@
  * A simple list item widget that supports inverted theme and drill down icon at
  * the right hand side.
  */
-class DrillDownItem : public MBasicListItem {
+class RightArrowItem : public MBasicListItem {
 Q_OBJECT
     
     public:
-        DrillDownItem (
+        RightArrowItem (
                 MBasicListItem::ItemStyle style = IconWithTitle, 
                 QGraphicsItem             *parent = NULL);
     protected:
