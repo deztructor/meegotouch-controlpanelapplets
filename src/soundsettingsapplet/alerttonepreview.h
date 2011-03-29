@@ -24,10 +24,6 @@
 #include <QString>
 #include "qprofilevalue.h"
 
-#ifdef HAVE_LIBRESOURCEQT
-#include <policy/resource-set.h>
-#endif
-
 class AlertTonePreview : public QObject
 {
 Q_OBJECT
@@ -50,11 +46,7 @@ private:
     static void gstSignalHandler (GstBus *bus,
                                   GstMessage *msg,
                                   AlertTonePreview *atp);
-
     void getResources ();
-#ifdef HAVE_LIBRESOURCEQT
-    ResourcePolicy::ResourceSet *resources;
-#endif
 
 private slots:
 	void profileVolumeChanged();
