@@ -8,6 +8,7 @@ meegotouch-controlpanelapplets (0.20.27~1) meegotouch; urgency=low
   * Fixes: NB#238613 - Dali:Unable to restore wall paper
   * Fixes: NB#237055 - Wallpaper editor missing inertia when panning
   * Fixes: NB#240711 - Profile vibration settings are using wrong order
+  * Fixes: NB#240465 - Wallpaper applet thumbnail list uses enormous amount of memory
 
  -- David Kedves <dkedves@blumsoft.eu>  Sat, 26 Mar 2011 12:37:01 +0200
 

@@ -39,12 +39,6 @@
 #define WARNING
 #include "../debug.h"
 
-#ifdef DEBUG
-#  define THUMBNAIL_BG_COLOR "Red"
-#else
-#  define THUMBNAIL_BG_COLOR "White"
-#endif
-
 static const QString dir = "";
 
 /*
@@ -94,8 +88,7 @@ Image::reset ()
     m_Cached   = false;
     m_Url      = QUrl ();
 
-    m_ThumbnailPixmap = QPixmap (defaultThumbnailWidth, defaultThumbnailHeight);
-    m_ThumbnailPixmap.fill (QColor(THUMBNAIL_BG_COLOR));
+    m_ThumbnailPixmap = QPixmap();
     m_HasThumbnail = false;
 }
 

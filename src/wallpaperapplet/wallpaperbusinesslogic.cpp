@@ -63,7 +63,6 @@
 
 //#define LOTDEBUG
 //#define DEBUG
-#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -307,6 +306,8 @@ WallpaperBusinessLogic::availableWallpapers () const
     QSparqlResult *result = sparqlConn.syncExec (query);
     result->waitForFinished ();
 
+    SYS_DEBUG ("Starting to process sparql result");
+
     if (result->hasError()) {
         SYS_WARNING ("Error: %s", SYS_STR (result->lastError ().message ()));
     } else if (! result->first()) {
@@ -341,6 +342,7 @@ WallpaperBusinessLogic::availableWallpapers () const
 #endif
 
     SYS_DEBUG ("We have %d wallpapers.", list.size());
+    delete result;
     return list;
 }
 
