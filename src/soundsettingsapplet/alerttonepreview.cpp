@@ -25,7 +25,7 @@
 static ResourcePolicy::ResourceSet *resources;
 #endif
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -109,13 +109,13 @@ AlertTonePreview::gstInit ()
                 NULL);
     }
 
-    props = gst_structure_from_string ("props,media.name=AlertTonePreview", NULL);
+    props = gst_structure_from_string ("props,media.role=AlertTonePreview", NULL);
     if(pulsesink && props)
         g_object_set (G_OBJECT(pulsesink),
                       "stream-properties", props,
                       NULL);
     else
-        SYS_DEBUG("Cannot set media.name property!");
+        SYS_DEBUG("Cannot set media.role property!");
     gst_structure_free (props);
 
     gst_bus_add_signal_watch (gst_element_get_bus (m_gstPipeline));
@@ -151,7 +151,7 @@ AlertTonePreview::getResources()
          */
         audioResource = new ResourcePolicy::AudioResource ("player");
         audioResource->setProcessID (QApplication::applicationPid ());
-        audioResource->setStreamTag ("media.name", "AlertTonePreview");
+        audioResource->setStreamTag ("media.role", "AlertTonePreview");
 
         resources->addResourceObject (audioResource);
         resources->initAndConnect ();
