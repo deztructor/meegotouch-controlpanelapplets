@@ -87,8 +87,8 @@ WallpaperEditorWidget::WallpaperEditorWidget (
      * NOTE: It also freezes the controlpanel sometimes, so I had to completely
      * remove.
      */
-    //if (win)
-    //    win->showFullScreen();
+    if (win)
+        win->showFullScreen();
 #endif
 
 #if 0
@@ -237,65 +237,73 @@ WallpaperEditorWidget::createContent ()
         m_PortraitTrans = cdesc->iTrans (M::Portrait);
 
         /*
-         * Initialization of the image transformations for the current
-         * wallpaper. 
-         */
-        m_PortraitTrans.setExpectedSize (win->visibleSceneSize (M::Portrait));
-        m_PortraitTrans.setOrientation (M::Portrait);
-        m_LandscapeTrans.setExpectedSize (win->visibleSceneSize (M::Landscape));
-        m_LandscapeTrans.setOrientation (M::Landscape);
-
-        /*
          * FIXME: We are using the original pixmap here, but we could make this
          * be more generic, and use the original only when it differs from the
          * edited, then we could move it to the WallpaperDescriptor class...
          */
-        if (supportsLandscape())
+        if (supportsLandscape()) {
+            QSize sceneSize = win->visibleSceneSize (M::Landscape);
+
             m_bgLandscape = cdesc->image (
                     WallpaperDescriptor::OriginalLandscape);
 
-        if (supportsPortrait())
+            m_LandscapeTrans.setExpectedSize (sceneSize);
+            m_LandscapeTrans.setOrientation (M::Landscape);
+        }
+
+        if (supportsPortrait()) {
+            QSize sceneSize = win->visibleSceneSize (M::Portrait);
+
             m_bgPortrait = cdesc->image (
                     WallpaperDescriptor::OriginalPortrait);
-        /*
-         * Need to copy back...
-         */
-        m_Trans = m_Orientation == M::Portrait ? 
-            m_PortraitTrans : m_LandscapeTrans;
+
+            m_PortraitTrans.setExpectedSize (sceneSize);
+            m_PortraitTrans.setOrientation (M::Portrait);
+        }
 
         goto finalize;
     }
 
 not_current_wallpaper:
-    /*
-     * Initializing image transformations when editing an image that is not the
-     * current image.
-     */
-    m_PortraitTrans.setExpectedSize (win->visibleSceneSize (M::Portrait));
-    m_PortraitTrans.setOrientation (M::Portrait);
-    m_LandscapeTrans.setExpectedSize (win->visibleSceneSize (M::Landscape));
-    m_LandscapeTrans.setOrientation (M::Landscape);
 
+    /*
+     * Here is what we do when this is not the current image.  If the image is
+     * very big the handling might be slow, so we scale it down.
+     */
+    if (supportsLandscape()) {
+        QSize sceneSize = win->visibleSceneSize (M::Landscape);
+
+        m_bgLandscape = desc->image (
+                WallpaperDescriptor::Landscape);
+            
+        m_LandscapeTrans.setExpectedSize (sceneSize);
+        m_LandscapeTrans.setOrientation (M::Landscape);
+    }
+
+    if (supportsPortrait()) {
+        QSize sceneSize = win->visibleSceneSize (M::Portrait);
+        int   xMarg = 0;
+        int   yMarg = 0;
+
+        m_bgPortrait = desc->image (WallpaperDescriptor::Portrait);
+        m_PortraitTrans.setOrientation (M::Portrait);
+        m_PortraitTrans.setExpectedSize (sceneSize);
+
+        if (sceneSize.width() > m_bgPortrait.width())
+            xMarg = (sceneSize.width() - m_bgPortrait.width()) / 2;
+        if (sceneSize.height() > m_bgPortrait.height())
+            yMarg = (sceneSize.height() - m_bgPortrait.height()) / 2;
+        m_Physics->setPosition (QPointF(xMarg, yMarg));
+    }
+
+
+finalize:
     /*
      * Need to copy back.
      */
     m_Trans = m_Orientation == M::Portrait ? 
         m_PortraitTrans : m_LandscapeTrans;
 
-    /*
-     * Here is what we do when this is not the current image.  If the image is
-     * very big the handling might be slow, so we scale it down.
-     */
-    if (supportsLandscape())
-        m_bgLandscape = desc->image (
-                WallpaperDescriptor::Landscape);
-
-    if (supportsPortrait())
-        m_bgPortrait = desc->image (
-               WallpaperDescriptor::Portrait);
-
-
-finalize:
     SYS_DEBUG ("*** m_bgLandscape is %dx%d", 
             m_bgLandscape.width(),
             m_bgLandscape.height());
@@ -309,7 +317,8 @@ finalize:
             m_PortraitTrans.x(),
             m_PortraitTrans.y());
 
-    this->setMinimumSize (m_Trans.expectedSize());
+    this->setMinimumSize (
+            m_Trans.expectedSize());
 
     /*
      *
@@ -319,7 +328,6 @@ finalize:
     /*
      * Enabling two finger gestures.
      */
-    //setAcceptTouchEvents(true);
     grabGesture (Qt::PinchGesture, Qt::GestureFlags());
     grabGesture (Qt::PanGesture, Qt::GestureFlags());
 
@@ -382,17 +390,14 @@ void
 WallpaperEditorWidget::panningPhysicsPositionChanged(
         const QPointF    &position)
 {
-#if 0
     SYS_WARNING ("position at %g, %g", position.x(), position.y());
+#if 0
     SYS_WARNING ("inMotion = %s", SYS_BOOL(m_Physics->inMotion()));
     SYS_WARNING ("enabled  = %s", SYS_BOOL(m_Physics->enabled()));
 #endif
 
-    //gestureWorkaround (&position);
     m_UserOffset = position;
-    //queueRedrawImage ();
     redrawImage ();
-    m_Physics->setPosition (position);
 }
 
 void 
@@ -801,17 +806,19 @@ void
 WallpaperEditorWidget::mousePressEvent (
         QGraphicsSceneMouseEvent *event)
 {
+    SYS_WARNING ("->");
     m_Physics->stop();
+    //toggleTitlebars (false);
 }
 
 
-#if 0
 void
 WallpaperEditorWidget::mouseReleaseEvent (
         QGraphicsSceneMouseEvent *event)
 {
+    SYS_WARNING ("->");
     Q_UNUSED (event);
-
+#if 0
     SYS_DEBUG ("");
     if (!m_MotionOngoing) {
         toggleTitlebars (true);
@@ -823,8 +830,9 @@ WallpaperEditorWidget::mouseReleaseEvent (
     m_Trans += m_UserOffset;
     m_UserOffset = QPointF();
     toggleTitlebars (true);
-}
 #endif
+    //toggleTitlebars (true);
+}
 /*******************************************************************************
  * Stuff for the two finger gestures.
  */
@@ -1022,20 +1030,36 @@ WallpaperEditorWidget::supportsPortrait () const
 void 
 WallpaperEditorWidget::setupPanningPhysics ()
 {
-    QRectF geom = geometry ();
-    
-    //SYS_WARNING ("my geometry = %gx%g", geom.width(), geom.height());
-    //SYS_WARNING ("image       = %dx%d", imageDX(), imageDY());
+//    QSize   geom (
+//            m_Trans.expectedSize().width(), 
+//            m_Trans.expectedSize().height() - TitleBarHeight);
+    QRectF  geom = geometry ();
+    qreal   left, top;
+    qreal   width, height;
+   
+//    SYS_WARNING ("Expected size = %dx%d", 
+//            expectedSize.width(), expectedSize.height());
+    SYS_WARNING ("my geometry   = %gx%g", geom.width(), geom.height());
+    SYS_WARNING ("image         = %dx%d", imageDX(), imageDY());
 
-    qreal  left, top;
-    qreal  width, height;
+    if (geom.height() >= imageDY()) {
+        top    = 0.0;
+        height = geom.height() - imageDY();
+    } else {
+        top    = geom.height() - imageDY();
+        height = -1.0 * top;
+    }
     
-    left   = -1.0 * (imageDX() - alwaysVisibleFromImage);
-    top    = -1.0 * (imageDY() - alwaysVisibleFromImage);
-    width  = geom.width() + imageDX() - 2 * alwaysVisibleFromImage;
-    height = geom.height() + imageDY() - 2 * alwaysVisibleFromImage - TitleBarHeight;
+    if (geom.width() >= imageDX()) {
+        left    = 0.0;
+        width   = geom.width() - imageDX();
+    } else {
+        left    = geom.width() - imageDX();
+        width   = -1.0 * left;
+    }
 
-    //SYS_WARNING ("l: %g t: %g %gx%g", left, top, width, height);
+
+    SYS_WARNING ("l: %g t: %g %gx%g", left, top, width, height);
     m_Physics->setRange (QRectF(left, top, width, height));
 }
 

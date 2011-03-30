@@ -277,9 +277,9 @@ Image::load (
     mySize = quillFile.fullImageSize ();
     SYS_WARNING ("orig size = %dx%d", mySize.width(), mySize.height());
     if (mySize.width() > mySize.height())
-        mySize.scale (480, 854, Qt::KeepAspectRatioByExpanding);
+        mySize.scale (480, 854, Qt::KeepAspectRatio);
     else
-        mySize.scale (480, 854, Qt::KeepAspectRatioByExpanding);
+        mySize.scale (480, 854, Qt::KeepAspectRatio);
     SYS_WARNING ("my size = %dx%d", mySize.width(), mySize.height());
 #if 1
     SYS_WARNING ("================ START ===========================");
