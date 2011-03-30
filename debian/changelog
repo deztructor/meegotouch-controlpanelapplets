@@ -6,6 +6,10 @@ meegotouch-controlpanelapplets (0.20.28~1) meegotouch; urgency=low
   * Fixes: NB#238747 - Wrong icons used in settings panel Brightness slider
   * Low Power Mode switch to display-applet
   * Fixes: NB#237609 - Ring tone preview continues after the incoming call.
+  * Fixes: NB#239883 - [TASK] soundsettingsapplet migration to Qsparql
+  * Fixes: NB#235004 - Sound Preview for tones is not played for all the tones
+    in the list on selecting one after another
+  * Fixes: NB#239887 - [TASK] wallpaperapplet migration to Qsparql
   
   [ Laszlo Pere ]
   * Fixes: NB#238613 - Dali:Unable to restore wall paper
@@ -14,7 +18,7 @@ meegotouch-controlpanelapplets (0.20.28~1) meegotouch; urgency=low
   * Fixes: NB#240465 - Wallpaper applet thumbnail list uses enormous amount of memory
   * Fixes: NB#197462 - Missing icons for wallpaper applet
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 29 Mar 2011 13:35:49 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 30 Mar 2011 09:50:20 +0300
 
 meegotouch-controlpanelapplets (0.20.27-2) meegotouch; urgency=low
 
