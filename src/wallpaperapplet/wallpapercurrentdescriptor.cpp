@@ -25,9 +25,9 @@
 
 #include <mdesktopentry.h>
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
-#define LOTDEBUG
+//#define LOTDEBUG
 #include "../debug.h"
 
 WallpaperCurrentDescriptor *WallpaperCurrentDescriptor::sm_Instance = 0;
@@ -137,7 +137,6 @@ WallpaperCurrentDescriptor::setFromDesktopFile (
     success1 = getValue(portraitGroupKey, editedFilenameKey, value1);
     success2 = getValue(landscapeGroupKey, editedFilenameKey, value2);
     if (!success1 && !success2) {
-        SYS_WARNING ("1");
         goto finalize;
     }
 
@@ -148,8 +147,6 @@ WallpaperCurrentDescriptor::setFromDesktopFile (
      */
     if (checkFilenames) {
         if (portraitFileName != value1 && landscapeFileName != value2) {
-            SYS_WARNING ("%s != %s", SYS_STR(landscapeFileName), SYS_STR(value1));
-            SYS_WARNING ("%s != %s", SYS_STR(portraitFileName), SYS_STR(value2));
             goto finalize;
         }
     }

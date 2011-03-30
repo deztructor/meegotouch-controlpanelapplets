@@ -255,8 +255,11 @@ WallpaperEditorWidget::createContent ()
 
             m_PortraitTrans.setExpectedSize (sceneSize);
             m_PortraitTrans.setOrientation (M::Portrait);
-            m_PortraitTrans.setOffset (QPointF(0, 0));
+            // Unfortunatelly this function has to be called from here
+            // before we actually move the image to the right place
+            setupPanningPhysics ();
             m_Physics->setPosition (m_PortraitTrans.offset());
+            m_PortraitTrans.setOffset (QPointF(0, 0));
         }
 
         goto finalize;
@@ -291,6 +294,7 @@ not_current_wallpaper:
             xMarg = (sceneSize.width() - m_bgPortrait.width()) / 2;
         if (sceneSize.height() > m_bgPortrait.height())
             yMarg = (sceneSize.height() - m_bgPortrait.height()) / 2;
+
         m_Physics->setPosition (QPointF(xMarg, yMarg));
     }
 
@@ -374,8 +378,8 @@ void
 WallpaperEditorWidget::panningPhysicsPositionChanged(
         const QPointF    &position)
 {
-    SYS_WARNING ("position at %g, %g", position.x(), position.y());
 #if 0
+    SYS_WARNING ("position at %g, %g", position.x(), position.y());
     SYS_WARNING ("inMotion = %s", SYS_BOOL(m_Physics->inMotion()));
     SYS_WARNING ("enabled  = %s", SYS_BOOL(m_Physics->enabled()));
 #endif
@@ -735,51 +739,6 @@ WallpaperEditorWidget::wheelEvent (
     m_ScalePhysics->pointerRelease();
 }
 
-#if 0
-void 
-WallpaperEditorWidget::mouseMoveEvent (
-        QGraphicsSceneMouseEvent *event)
-{
-    if (m_PinchOngoing)
-        return;
-
-    #if 0 
-    QPointF testPos = event->pos();
-    QPointF mapp = mapToScene (testPos);
-    SYS_DEBUG ("*** pos    = %g, %g", testPos.x(), testPos.y());
-    SYS_DEBUG ("*** mapped = %g, %g", mapp.x(), mapp.y());
-    #endif
-    /*
-     * If the tap happened outside the image we might still start moving the
-     * image when the motion enters the image.
-     */
-    if (!m_MotionOngoing) {
-        QPointF  position;
-
-        position = event->pos();
-        if (position.x() < imageX() ||
-            position.y() < imageY() ||
-            position.x() > imageX() + imageDX() ||
-            position.y() > imageY() + imageDY()) {
-            
-            SYS_DEBUG ("Rejected... %g, %g not in %d, %d - %d, %d",
-                position.x(), position.y(),
-                imageX(), imageY(), 
-                imageX() + imageDX(), 
-                imageY() + imageDY());
-
-            return;
-        }
-
-        m_MotionOngoing = true;
-        m_LastClick = event->pos();
-        return;
-    }
-
-    m_UserOffset = event->pos() - m_LastClick;
-    queueRedrawImage ();
-}
-#endif
 void
 WallpaperEditorWidget::retranslateUi()
 {
@@ -801,28 +760,6 @@ WallpaperEditorWidget::mousePressEvent (
     //toggleTitlebars (false);
 }
 
-
-void
-WallpaperEditorWidget::mouseReleaseEvent (
-        QGraphicsSceneMouseEvent *event)
-{
-    SYS_WARNING ("->");
-    Q_UNUSED (event);
-#if 0
-    SYS_DEBUG ("");
-    if (!m_MotionOngoing) {
-        toggleTitlebars (true);
-        return;
-    }
-
-    SYS_DEBUG ("Finalizing something...");
-    m_MotionOngoing = false;    
-    m_Trans += m_UserOffset;
-    m_UserOffset = QPointF();
-    toggleTitlebars (true);
-#endif
-    //toggleTitlebars (true);
-}
 /*******************************************************************************
  * Stuff for the two finger gestures.
  */
