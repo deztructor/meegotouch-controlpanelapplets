@@ -41,6 +41,7 @@ QGraphicsLayout *
 RightArrowItem::createLayout()
 {
     QGraphicsGridLayout *layout;
+    MWidget             *spacer;
     MLabel              *titleLabel;
     MLabel              *subTitleLabel = 0;
     MImageWidget        *iconWidget    = 0;
@@ -72,10 +73,14 @@ RightArrowItem::createLayout()
             subTitleLabel->setStyleName("CommonSubTitleInverted");
             layout->addItem (subTitleLabel, 1, 0);
             layout->setAlignment (subTitleLabel, Qt::AlignLeft | Qt::AlignVCenter);
+
+            spacer = new MWidget;
+            layout->addItem (spacer, 2, 0);
+
             /*
              * The drill down icon.
              */
-            layout->addItem(drillIconWidget, 0, 1, 2, 1);
+            layout->addItem(drillIconWidget, 0, 1, 3, 1);
             layout->setAlignment (drillIconWidget, Qt::AlignVCenter | Qt::AlignRight);
             break;
 
