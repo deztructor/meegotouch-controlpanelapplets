@@ -260,6 +260,7 @@ WallpaperEditorWidget::createContent ()
             setupPanningPhysics ();
             m_Physics->setPosition (m_PortraitTrans.offset());
             m_PortraitTrans.setOffset (QPointF(0, 0));
+            m_ScalePhysics->setPosition (QPointF(0.0, 100.0 * m_PortraitTrans.scale()));
         }
 
         goto finalize;
@@ -957,20 +958,14 @@ WallpaperEditorWidget::supportsPortrait () const
 void 
 WallpaperEditorWidget::setupPanningPhysics ()
 {
+    /*
+     * The widget's geometry is disturbed by the transparent toolbar, 
+     * but the expectedsize is stable.
+     */
     QSize   geom = m_Trans.expectedSize();
-
-    //QSize   geom (
-    //        m_Trans.expectedSize().width(), 
-    //        m_Trans.expectedSize().height() - TitleBarHeight);
-    //QRectF  geom = geometry ();
-    //QRectF  geom = m_Trans.expectedSize();
     qreal   left, top;
     qreal   width, height;
    
-//    SYS_WARNING ("Expected size = %dx%d", 
-//            expectedSize.width(), expectedSize.height());
-    SYS_WARNING ("my geometry   = %dx%d", geom.width(), geom.height());
-    SYS_WARNING ("image         = %dx%d", imageDX(), imageDY());
 
     if (geom.height() >= imageDY()) {
         top    = 0.0;
@@ -988,8 +983,6 @@ WallpaperEditorWidget::setupPanningPhysics ()
         width   = -1.0 * left;
     }
 
-
-    SYS_WARNING ("l: %g t: %g %gx%g", left, top, width, height);
     m_Physics->setRange (QRectF(left, top, width, height));
 }
 
