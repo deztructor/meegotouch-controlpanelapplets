@@ -27,6 +27,7 @@
 
 #define DEBUG
 #define WARNING
+#define LOTDEBUG
 #include "../debug.h"
 
 WallpaperCurrentDescriptor *WallpaperCurrentDescriptor::sm_Instance = 0;
@@ -136,6 +137,7 @@ WallpaperCurrentDescriptor::setFromDesktopFile (
     success1 = getValue(portraitGroupKey, editedFilenameKey, value1);
     success2 = getValue(landscapeGroupKey, editedFilenameKey, value2);
     if (!success1 && !success2) {
+        SYS_WARNING ("1");
         goto finalize;
     }
 
@@ -145,9 +147,11 @@ WallpaperCurrentDescriptor::setFromDesktopFile (
      * match.
      */
     if (checkFilenames) {
-        if (landscapeFileName != value1 &&
-                portraitFileName != value2)
+        if (portraitFileName != value1 && landscapeFileName != value2) {
+            SYS_WARNING ("%s != %s", SYS_STR(landscapeFileName), SYS_STR(value1));
+            SYS_WARNING ("%s != %s", SYS_STR(portraitFileName), SYS_STR(value2));
             goto finalize;
+        }
     }
     
     setFilename (value1, WallpaperDescriptor::Portrait);
@@ -195,7 +199,11 @@ finalize:
     delete m_DesktopEntry;
     m_DesktopEntry = 0;
 
-    SYS_DEBUG ("returning %s", SYS_BOOL(retval));
+    #ifdef WARNING
+    if (!retval) {
+        SYS_WARNING ("returning %s", SYS_BOOL(retval));
+    }
+    #endif
     return retval;
 }
 
@@ -416,6 +424,7 @@ WallpaperCurrentDescriptor::getValue (
     bool   retval;
     qreal  rval1, rval2;
 
+    SYS_WARNING ("%s ->", SYS_STR(group));
     retval = getValue (group, horOffsetKey, &rval1);
     if (!retval) {
         return retval;
@@ -448,6 +457,7 @@ WallpaperCurrentDescriptor::getValue (
     QString sValue;
 
     if (!getValue(group, key, sValue)) {
+        SYS_WARNING ("%s/%s failed", SYS_STR(group), SYS_STR(key));
         *value = 0.0;
         return false;
     }

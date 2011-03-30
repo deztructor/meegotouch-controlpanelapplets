@@ -151,6 +151,12 @@ WallpaperITrans::setOffset (
     m_Offset = offset;
 }
 
+QPointF
+WallpaperITrans::offset () const
+{
+    return m_Offset;
+}
+
 /*!
  * \param scale The scale value
  *

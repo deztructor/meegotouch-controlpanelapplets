@@ -50,6 +50,8 @@ public:
     void modScale (int i);
     
     void setOffset (const QPointF &offset);
+    QPointF offset () const;
+
     void setScale (qreal scale);
     
     void setExpectedSize (const QSize &size);

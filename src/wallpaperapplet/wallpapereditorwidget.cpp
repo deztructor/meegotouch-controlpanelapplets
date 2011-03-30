@@ -226,15 +226,11 @@ WallpaperEditorWidget::createContent ()
             goto not_current_wallpaper;
         }
 
-        SYS_DEBUG ("This is the current image.");
-        SYS_DEBUG ("*** orig landscape       = %s", 
-                SYS_STR(cdesc->originalImageFile (M::Landscape)));
-        SYS_DEBUG ("*** orig portrait        = %s", 
-                SYS_STR(cdesc->originalImageFile (M::Portrait)));
-
-
         m_LandscapeTrans = cdesc->iTrans (M::Landscape);
         m_PortraitTrans = cdesc->iTrans (M::Portrait);
+        SYS_WARNING ("This is the current image.");
+        SYS_WARNING ("Portrait offset = %d, %d",
+                m_PortraitTrans.x(), m_PortraitTrans.y());
 
         /*
          * FIXME: We are using the original pixmap here, but we could make this
@@ -259,6 +255,8 @@ WallpaperEditorWidget::createContent ()
 
             m_PortraitTrans.setExpectedSize (sceneSize);
             m_PortraitTrans.setOrientation (M::Portrait);
+            m_PortraitTrans.setOffset (QPointF(0, 0));
+            m_Physics->setPosition (m_PortraitTrans.offset());
         }
 
         goto finalize;
@@ -304,21 +302,7 @@ finalize:
     m_Trans = m_Orientation == M::Portrait ? 
         m_PortraitTrans : m_LandscapeTrans;
 
-    SYS_DEBUG ("*** m_bgLandscape is %dx%d", 
-            m_bgLandscape.width(),
-            m_bgLandscape.height());
-    SYS_DEBUG ("*** landscape offset = %d, %d", 
-            m_LandscapeTrans.x(),
-            m_LandscapeTrans.y());
-    SYS_DEBUG ("*** m_bgPortrait  is %dx%d", 
-            m_bgPortrait.width(),
-            m_bgPortrait.height());
-    SYS_DEBUG ("*** portrait offset = %d, %d", 
-            m_PortraitTrans.x(),
-            m_PortraitTrans.y());
-
-    this->setMinimumSize (
-            m_Trans.expectedSize());
+    this->setMinimumSize (m_Trans.expectedSize());
 
     /*
      *
@@ -405,6 +389,8 @@ WallpaperEditorWidget::panningPhysicsPanningStopped ()
 {
     //SYS_WARNING ("");
     //queueRedrawImage ();
+    //m_Trans += m_UserOffset;
+    //m_UserOffset = QPointF();
     redrawImage ();
 }
 
@@ -472,7 +458,11 @@ WallpaperEditorWidget::slotDoneActivated ()
     WallpaperITrans   *ltrans, *ptrans;
     MWindow           *win;
 
-    SYS_DEBUG ("");
+    SYS_WARNING ("*** m_UserOffset = %g, %g", m_UserOffset.x(), m_UserOffset.y());
+    m_Trans += m_UserOffset;
+    m_UserOffset = QPointF();
+    
+
     ltrans = m_Trans.orientation() == M::Landscape ?
         &m_Trans : &m_LandscapeTrans;
     ptrans = m_Trans.orientation() == M::Portrait ?
@@ -1030,16 +1020,19 @@ WallpaperEditorWidget::supportsPortrait () const
 void 
 WallpaperEditorWidget::setupPanningPhysics ()
 {
-//    QSize   geom (
-//            m_Trans.expectedSize().width(), 
-//            m_Trans.expectedSize().height() - TitleBarHeight);
-    QRectF  geom = geometry ();
+    QSize   geom = m_Trans.expectedSize();
+
+    //QSize   geom (
+    //        m_Trans.expectedSize().width(), 
+    //        m_Trans.expectedSize().height() - TitleBarHeight);
+    //QRectF  geom = geometry ();
+    //QRectF  geom = m_Trans.expectedSize();
     qreal   left, top;
     qreal   width, height;
    
 //    SYS_WARNING ("Expected size = %dx%d", 
 //            expectedSize.width(), expectedSize.height());
-    SYS_WARNING ("my geometry   = %gx%g", geom.width(), geom.height());
+    SYS_WARNING ("my geometry   = %dx%d", geom.width(), geom.height());
     SYS_WARNING ("image         = %dx%d", imageDX(), imageDY());
 
     if (geom.height() >= imageDY()) {

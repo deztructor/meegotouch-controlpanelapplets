@@ -717,10 +717,13 @@ WallpaperBusinessLogic::makeImageFile (
      * descriptor classes.
      */
     if (desc->isCurrent()) {
+#if 0
         WallpaperCurrentDescriptor *cdesc;
         
         cdesc = qobject_cast<WallpaperCurrentDescriptor*> (desc);
         image.load (cdesc->originalImageFile (transformations->orientation()));
+#endif
+        image = desc->image (WallpaperDescriptor::OriginalPortrait);
     } else {
         image = desc->image();
     }
@@ -748,8 +751,8 @@ WallpaperBusinessLogic::makeImageFile (
     painter.drawImage (
             QRectF (transformations->x(), 
                 transformations->y(),
-                (scale * image.width ()) * ratio,
-                (scale * image.height ()) * ratio),
+                (scale * image.width ()) /** ratio*/,
+                (scale * image.height ()) /** ratio*/),
             image);
 
     SYS_DEBUG ("Saving file into %s", SYS_STR(filePath));
