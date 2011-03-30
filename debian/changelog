@@ -1,5 +1,8 @@
-meegotouch-controlpanelapplets (0.20.27~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.28~1) meegotouch; urgency=low
 
+  [ David Kedves ]
+  * Fixes: NB#235004 - Sound Preview for tones is not played for all the tones
+    in the list on selecting one after another
   * Fixes: NB#238747 - Wrong icons used in settings panel Brightness slider
   * Low Power Mode switch to display-applet
   * Fixes: NB#237609 - Ring tone preview continues after the incoming call.
@@ -11,7 +14,14 @@ meegotouch-controlpanelapplets (0.20.27~1) meegotouch; urgency=low
   * Fixes: NB#240465 - Wallpaper applet thumbnail list uses enormous amount of memory
   * Fixes: NB#197462 - Missing icons for wallpaper applet
 
- -- David Kedves <dkedves@blumsoft.eu>  Sat, 26 Mar 2011 12:37:01 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 29 Mar 2011 13:35:49 +0300
+
+meegotouch-controlpanelapplets (0.20.27-2) meegotouch; urgency=low
+
+  * Fixes: NB#240845 - Preloading libmeegocontrol.so causes crashes in
+    settings application's plugins 
+
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 29 Mar 2011 13:19:27 +0300
 
 meegotouch-controlpanelapplets (0.20.26-4) meegotouch; urgency=low
 

@@ -27,7 +27,7 @@
 #define WARNING
 #include "../debug.h"
 
-DrillDownItem::DrillDownItem (
+RightArrowItem::RightArrowItem (
         MBasicListItem::ItemStyle  style, 
         QGraphicsItem             *parent) : 
     MBasicListItem (style, parent)
@@ -35,7 +35,7 @@ DrillDownItem::DrillDownItem (
 }
 
 QGraphicsLayout *
-DrillDownItem::createLayout()
+RightArrowItem::createLayout()
 {
     QGraphicsGridLayout *layout;
     MLabel              *titleLabel;

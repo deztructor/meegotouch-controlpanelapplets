@@ -20,7 +20,12 @@
 #include "static.h"
 #include <QApplication>
 
-#undef DEBUG
+#ifdef HAVE_LIBRESOURCEQT
+#include <policy/resource-set.h>
+static ResourcePolicy::ResourceSet *resources;
+#endif
+
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -57,6 +62,15 @@ AlertTonePreview::~AlertTonePreview ()
     m_gstPipeline = NULL;
 
 #ifdef HAVE_LIBRESOURCEQT
+   disconnect (resources,
+               SIGNAL (resourcesGranted (QList<ResourcePolicy::ResourceType>)),
+               this,
+               SLOT (audioResourceAcquired ()));
+   disconnect (resources,
+               SIGNAL (lostResources ()),
+               this,
+               SLOT (audioResourceLost()));
+
     resources->release ();
 #endif
 }
@@ -117,29 +131,41 @@ finalize:
 void
 AlertTonePreview::getResources()
 {
-    resources = new ResourcePolicy::ResourceSet ("player");
-    resources->setAutoRelease ();
-    resources->setAlwaysReply ();
-
-    ResourcePolicy::AudioResource *audioResource =
-            new ResourcePolicy::AudioResource ("player");
-
-    audioResource->setProcessID (QApplication::applicationPid ());
     /*
-     * This is for the libresource to be able to identify our pulseaudio stream,
-     * so this is very important that the same key-value pair should be set
-     * for the pulsesink. The value should be uniqe.
+     * Create these objects only once during the run...
      */
-    audioResource->setStreamTag ("media.role", "AlertTonePreview");
-    resources->addResourceObject (audioResource);
-    resources->initAndConnect ();
+    if (! resources)
+    {
+        resources = new ResourcePolicy::ResourceSet ("player");
+        resources->setAutoRelease ();
+        resources->setAlwaysReply ();
+    }
+
+    static ResourcePolicy::AudioResource *audioResource;
+    if (! audioResource)
+    {
+        /*
+         * This is for the libresource to be able to identify our pulseaudio stream,
+         * so this is very important that the same key-value pair should be set
+         * for the pulsesink. The value should be uniqe.
+         */
+        audioResource = new ResourcePolicy::AudioResource ("player");
+        audioResource->setProcessID (QApplication::applicationPid ());
+        audioResource->setStreamTag ("media.role", "AlertTonePreview");
+
+        resources->addResourceObject (audioResource);
+        resources->initAndConnect ();
+    }
 
     connect (resources,
              SIGNAL (resourcesGranted (QList<ResourcePolicy::ResourceType>)),
+             this,
              SLOT (audioResourceAcquired ()));
     connect (resources,
              SIGNAL (lostResources ()),
+             this,
              SLOT (audioResourceLost()));
+
     resources->acquire ();
 }
 #endif

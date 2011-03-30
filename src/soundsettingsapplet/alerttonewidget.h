@@ -24,7 +24,7 @@
 #include "alerttone.h"
 #include "drilldownitem.h"
 
-class AlertToneWidget : public DrillDownItem 
+class AlertToneWidget : public RightArrowItem 
 {
 	Q_OBJECT
 

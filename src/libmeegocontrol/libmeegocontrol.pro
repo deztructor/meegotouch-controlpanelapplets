@@ -77,12 +77,12 @@ PUBLIC_HEADERS = \
     $$WALLPAPER_PATH/wallpapereditorwidget.h       \
     $$WALLPAPER_PATH/wallpaperinfoheader.h         \
     $$SOUNDSETTINGS_PATH/static.h                  \
+    $$SOUNDSETTINGS_PATH/drilldownitem.h           \
     $$SOUNDSETTINGS_PATH/alerttone.h               \
     $$SOUNDSETTINGS_PATH/alerttonedefaults.h       \
     $$SOUNDSETTINGS_PATH/alerttonetoplevel.h       \
     $$SOUNDSETTINGS_PATH/alerttonebrowser.h        \
     $$SOUNDSETTINGS_PATH/alerttoneappletmaps.h     \
-    $$SOUNDSETTINGS_PATH/drilldownitem.h           \
     $$SOUNDSETTINGS_PATH/qprofilevalue.h           \
     $$SOUNDSETTINGS_PATH/qtrackedvariant.h         \
     $$SOUNDSETTINGS_PATH/alerttonedefaultsmodel.h  \
@@ -110,12 +110,12 @@ SOURCES =                                          \
     $$WALLPAPER_PATH/wallpapereditorwidget.cpp     \
     $$WALLPAPER_PATH/wallpaperinfoheader.cpp       \
     $$SOUNDSETTINGS_PATH/alerttone.cpp             \
+    $$SOUNDSETTINGS_PATH/drilldownitem.cpp         \
     $$SOUNDSETTINGS_PATH/alerttonedefaults.cpp     \
     $$SOUNDSETTINGS_PATH/alerttonetoplevel.cpp     \
     $$SOUNDSETTINGS_PATH/alerttonebrowser.cpp      \
     $$SOUNDSETTINGS_PATH/alerttoneappletmaps.cpp   \
     $$SOUNDSETTINGS_PATH/trackerconnection.cpp     \
-    $$SOUNDSETTINGS_PATH/drilldownitem.cpp         \
     $$SOUNDSETTINGS_PATH/qprofilevalue.cpp         \
     $$SOUNDSETTINGS_PATH/qtrackedvariant.cpp       \
     $$SOUNDSETTINGS_PATH/alerttonedefaultsmodel.cpp \

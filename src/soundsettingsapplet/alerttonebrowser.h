@@ -27,7 +27,7 @@ class MTextEdit;
 class QGraphicsLinearLayout;
 class MCustomContentItem;
 class MAction;
-class DrillDownItem;
+class RightArrowItem;
 class AlertTonePreview;
 class AlertToneDefaults;
 class MApplicationPage;
@@ -76,8 +76,8 @@ private:
 
     AlertTone                       *m_tone;
     MLabel                          *m_TitleLabel;
-    DrillDownItem                   *m_my_music;
-    DrillDownItem                   *m_ovi_store;
+    RightArrowItem                   *m_my_music;
+    RightArrowItem                   *m_ovi_store;
 
     QGraphicsLinearLayout           *m_MainLayout;
     AlertToneDefaults               *m_defaults;
