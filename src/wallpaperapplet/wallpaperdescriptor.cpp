@@ -35,7 +35,7 @@
  * weird file names around.
  */
 //#define LOTDEBUG
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -258,33 +258,19 @@ Image::load (
         const QString &fileName)
 {
     bool retval;
-    #if 0 //ifdef HAVE_QUILL_METADATA
-    QString           rFilterName = "org.maemo.rotate";
-    QuillMetadata     metadata (fileName);
-    QVariant      orientation = metadata.entry(QuillMetadata::Tag_Orientation);
-    int               side = orientation.toInt();
-    QuillImageFilter *filter = 0;
-    SYS_DEBUG ("Loading    : %s", SYS_STR(fileName));
-    SYS_DEBUG ("Orientation: %s", SYS_STR(orientation.toString()));
-    SYS_DEBUG ("side       : %d", side);
-    #endif
-
-    SYS_WARNING ("+++ First the size...");
     QSize     mySize;
     QSize     expectedSize;
+    QuillImageFilter *loadFilter;
 
     QuillFile quillFile  (fileName);
     mySize = quillFile.fullImageSize ();
-    SYS_WARNING ("orig size = %dx%d", mySize.width(), mySize.height());
-    if (mySize.width() > mySize.height())
-        mySize.scale (480, 854, Qt::KeepAspectRatio);
-    else
-        mySize.scale (480, 854, Qt::KeepAspectRatio);
-    SYS_WARNING ("my size = %dx%d", mySize.width(), mySize.height());
+    /*
+     * FIXME: Yeah, the size. These literals should not be here... but the code
+     * changed, we are not loading the full size image any more.
+     */
+     mySize.scale (480, 854, Qt::KeepAspectRatio);
+
 #if 1
-    SYS_WARNING ("================ START ===========================");
-    QuillImageFilter *loadFilter;
-    
     loadFilter = QuillImageFilterFactory::createImageFilter(
             QuillImageFilter::Role_Load);
     loadFilter->setOption(
@@ -292,44 +278,9 @@ Image::load (
             QVariant(fileName));
     m_Image = loadFilter->apply (QImage(mySize, QImage::Format_RGB16));
     retval = true;
-    SYS_WARNING ("================ END   ===========================");
     delete loadFilter;
 #else
-    SYS_WARNING ("Loading '%s'", SYS_STR(fileName));
     retval = m_Image.load(fileName);
-    SYS_WARNING ("Loaded '%s'", SYS_STR(fileName));
-#endif
-
-    if (!retval)
-        return retval;
-
-#if 0
-//#ifdef HAVE_QUILL_METADATA
-    switch (side) {
-        case 1:
-            // Nothing to do
-            break;
-
-        case 6:
-            filter = QuillImageFilterFactory::createImageFilter (rFilterName);
-            filter->setOption (QuillImageFilter::Angle, QVariant(90));
-            break;
-
-        case 8:
-            filter = QuillImageFilterFactory::createImageFilter (rFilterName);
-            filter->setOption (QuillImageFilter::Angle, -90);
-            break;
-        
-        case 3:
-            filter = QuillImageFilterFactory::createImageFilter (rFilterName);
-            filter->setOption (QuillImageFilter::Angle, 180);
-            break;
-    }
-
-    if (filter) {
-        m_Image = filter->apply (m_Image);
-        delete filter;
-    }
 #endif
 
     return retval;

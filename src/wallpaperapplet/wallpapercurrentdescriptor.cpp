@@ -421,7 +421,6 @@ WallpaperCurrentDescriptor::getValue (
     bool   retval;
     qreal  rval1, rval2;
 
-    SYS_WARNING ("%s ->", SYS_STR(group));
     retval = getValue (group, horOffsetKey, &rval1);
     if (!retval) {
         return retval;
@@ -454,7 +453,6 @@ WallpaperCurrentDescriptor::getValue (
     QString sValue;
 
     if (!getValue(group, key, sValue)) {
-        SYS_WARNING ("%s/%s failed", SYS_STR(group), SYS_STR(key));
         *value = 0.0;
         return false;
     }

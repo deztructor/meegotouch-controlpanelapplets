@@ -228,9 +228,6 @@ WallpaperEditorWidget::createContent ()
 
         m_LandscapeTrans = cdesc->iTrans (M::Landscape);
         m_PortraitTrans = cdesc->iTrans (M::Portrait);
-        SYS_WARNING ("This is the current image.");
-        SYS_WARNING ("Portrait offset = %d, %d",
-                m_PortraitTrans.x(), m_PortraitTrans.y());
 
         /*
          * FIXME: We are using the original pixmap here, but we could make this
@@ -463,7 +460,6 @@ WallpaperEditorWidget::slotDoneActivated ()
     WallpaperITrans   *ltrans, *ptrans;
     MWindow           *win;
 
-    SYS_WARNING ("*** m_UserOffset = %g, %g", m_UserOffset.x(), m_UserOffset.y());
     m_Trans += m_UserOffset;
     m_UserOffset = QPointF();
     
@@ -729,9 +725,6 @@ void
 WallpaperEditorWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
 {
-    SYS_WARNING (">>>>>>>>>>>>>>>>> %d", event->delta());
-    //m_Trans.modScale (event->delta());
-
     m_Physics->stop ();
     //setupPanningPhysics ();
     //queueRedrawImage ();
@@ -756,7 +749,6 @@ void
 WallpaperEditorWidget::mousePressEvent (
         QGraphicsSceneMouseEvent *event)
 {
-    SYS_WARNING ("->");
     m_Physics->stop();
     //toggleTitlebars (false);
 }
@@ -769,13 +761,10 @@ WallpaperEditorWidget::panGestureEvent (
         QGestureEvent *event, 
         QPanGesture   *panGesture)
 {
-    //SYS_WARNING ("");
     QTransform itemTransform(sceneTransform().inverted());
     QPointF itemSpaceOffset = 
         panGesture->offset() * itemTransform - 
         QPointF(itemTransform.dx(),itemTransform.dy());
-
-    //gestureWorkaround (&point);
 
     switch (panGesture->state()) {
         case Qt::GestureStarted:
@@ -815,7 +804,7 @@ WallpaperEditorWidget::pinchGestureStarted (
      */
     centerPoint = gesture->centerPoint();
     gestureWorkaround (&centerPoint);
-
+#if 0
     if (centerPoint.x() < imageX() ||
             centerPoint.y() < imageY() ||
             centerPoint.x() > imageX() + imageDX() ||
@@ -827,6 +816,7 @@ WallpaperEditorWidget::pinchGestureStarted (
                 imageY() + imageDY());
         return;
     }
+#endif
 
     m_OriginalScaleFactor = m_Trans.scale();
     m_LastClick = centerPoint;
