@@ -450,6 +450,41 @@ WallpaperEditorWidget::polishEvent ()
     connect(m_CancelAction, SIGNAL(triggered()), this, SLOT(slotCancelActivated()));
 }
 
+void
+WallpaperEditorWidget::saveImage ()
+{
+    WallpaperITrans   *ltrans, *ptrans;
+    MWindow           *win;
+
+    m_Trans += m_UserOffset;
+    m_UserOffset = QPointF();
+    
+
+    ltrans = m_Trans.orientation() == M::Landscape ?
+        &m_Trans : &m_LandscapeTrans;
+    ptrans = m_Trans.orientation() == M::Portrait ?
+        &m_Trans : &m_PortraitTrans;
+
+    /*
+     * Here we save the settings.
+     */
+    m_WallpaperBusinessLogic->setBackground (ltrans, ptrans);
+
+    /*
+     *
+     */
+    m_WallpaperBusinessLogic->setEditedImage (0);
+
+}
+void
+WallpaperEditorWidget::dropImage ()
+{
+    /*
+     *
+     */
+    m_WallpaperBusinessLogic->setEditedImage (0);
+}
+
 /*!
  * This slot is called when the user activates the 'done' action and so we have
  * to store the settings.
@@ -489,11 +524,6 @@ WallpaperEditorWidget::slotDoneActivated ()
     SYS_DEBUG ("Calling changeWidget()");
     emit doneClicked ();
     changeWidget (0);
-
-    /*
-     *
-     */
-    m_WallpaperBusinessLogic->setEditedImage (0);
 }
 
 /*!

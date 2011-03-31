@@ -41,13 +41,14 @@ HEADERS = \
     ../debug.h \
     gridimagewidget.h \
     wallpaperdescriptor.h \
-    wallpapercurrentdescriptor.h \
-    wallpapermodel.h \
-    wallpaperlist.h \
-    wallpaperbusinesslogic.h \
-    wallpaperapplet.h \
-    wallpaperwidget.h \
-    wallpaperinfoheader.h \
+    wallpapercurrentdescriptor.h   \
+    wallpapermodel.h               \
+    wallpaperlist.h                \
+    wallpaperbusinesslogic.h       \
+    wallpaperapplet.h              \
+    wallpaperwidget.h              \
+    wallpaperinfoheader.h          \
+    wallpapereditorsheet.h         \
     wallpapereditorwidget.h \
     wallpaperitrans.h \
     wallpaperbrief.h 
@@ -59,11 +60,12 @@ SOURCES = \
     wallpapercurrentdescriptor.cpp \
     wallpaperlist.cpp \
     wallpapermodel.cpp \
-    wallpaperbusinesslogic.cpp \
-    wallpaperapplet.cpp \
-    wallpaperwidget.cpp \
-    wallpaperinfoheader.cpp \
-    wallpapereditorwidget.cpp \
+    wallpaperbusinesslogic.cpp     \
+    wallpaperapplet.cpp            \
+    wallpaperwidget.cpp            \
+    wallpaperinfoheader.cpp        \
+    wallpapereditorsheet.cpp       \
+    wallpapereditorwidget.cpp      \
     wallpaperitrans.cpp \
     wallpaperbrief.cpp 
 

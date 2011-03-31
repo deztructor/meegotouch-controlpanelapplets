@@ -30,6 +30,8 @@
 #include <QDBusInterface>
 #include <MLabel>
 
+#include "wallpapereditorsheet.h"
+
 //#define DEBUG
 #define WARNING
 #include "../debug.h"
@@ -189,9 +191,12 @@ WallpaperWidget::slotImageActivated (
 void 
 WallpaperWidget::slotImageActivated ()
 {
+    WallpaperEditorSheet  *sheet;
     SYS_DEBUG ("");
     
-    emit changeWidget (1);
+    sheet = new WallpaperEditorSheet (m_WallpaperBusinessLogic);
+    sheet->appear(scene(), MSceneWindow::DestroyWhenDone);
+    //emit changeWidget (1);
 }
 
 
@@ -298,10 +303,8 @@ WallpaperWidget::galleryImageSelected (
 {
     m_WallpaperBusinessLogic->addImageFromGallery (uri);
     SYS_WARNING ("m_ImageBrowser->unselectItem (%s);", SYS_STR(uri));
-    #if 0
     if (m_ImageBrowser)
         m_ImageBrowser->unselectItem (uri);
-    #endif
 }
 #endif
 

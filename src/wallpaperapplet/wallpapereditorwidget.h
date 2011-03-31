@@ -87,6 +87,9 @@ public:
             const QStyleOptionGraphicsItem  *option,
             QWidget                         *widget = 0);
 
+    void saveImage ();
+    void dropImage ();
+
 protected:
     virtual void polishEvent ();
     virtual void retranslateUi();
