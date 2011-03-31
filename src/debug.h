@@ -37,6 +37,7 @@
  */
 #ifdef PUBLIC_RELEASE
 #   undef DEBUG
+#   undef WARNING
 #endif
 
 /*
