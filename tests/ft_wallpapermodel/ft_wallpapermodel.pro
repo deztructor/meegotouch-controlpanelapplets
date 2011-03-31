@@ -59,6 +59,7 @@ HEADERS += \
     $$SRC_PREFIX/wallpapercurrentdescriptor.h \
     $$SRC_PREFIX/wallpaperinfoheader.h \
     $$SRC_PREFIX/wallpapereditorwidget.h \
+    $$SRC_PREFIX/wallpapereditorsheet.h \
     $$SRC_PREFIX/wallpaperlist.h \
     $$SRC_PREFIX/wallpapermodel.h \
     $$SRC_PREFIX/wallpaperitrans.h \
@@ -75,6 +76,7 @@ SOURCES += \
     $$SRC_PREFIX/wallpapercurrentdescriptor.cpp \
     $$SRC_PREFIX/wallpaperinfoheader.cpp \
     $$SRC_PREFIX/wallpapereditorwidget.cpp \
+    $$SRC_PREFIX/wallpapereditorsheet.cpp \
     $$SRC_PREFIX/wallpaperlist.cpp \
     $$SRC_PREFIX/wallpapermodel.cpp \
     $$SRC_PREFIX/wallpaperitrans.cpp \
