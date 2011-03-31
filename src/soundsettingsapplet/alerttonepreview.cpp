@@ -109,7 +109,9 @@ AlertTonePreview::gstInit ()
                 NULL);
     }
 
-    props = gst_structure_from_string ("props,media.role=AlertTonePreview", NULL);
+    props = gst_structure_from_string (
+                "props,media.role=media,event.id=phone-incoming-call,"
+                "module-stream-restore.id=x-meego-ringing-volume", NULL);
     if(pulsesink && props)
         g_object_set (G_OBJECT(pulsesink),
                       "stream-properties", props,
@@ -136,7 +138,7 @@ AlertTonePreview::getResources()
      */
     if (! resources)
     {
-        resources = new ResourcePolicy::ResourceSet ("player");
+        resources = new ResourcePolicy::ResourceSet ("ringtone");
         resources->setAutoRelease ();
         resources->setAlwaysReply ();
     }
@@ -149,9 +151,9 @@ AlertTonePreview::getResources()
          * so this is very important that the same key-value pair should be set
          * for the pulsesink. The value should be uniqe.
          */
-        audioResource = new ResourcePolicy::AudioResource ("player");
+        audioResource = new ResourcePolicy::AudioResource ("ringtone");
         audioResource->setProcessID (QApplication::applicationPid ());
-        audioResource->setStreamTag ("media.role", "AlertTonePreview");
+        audioResource->setStreamTag ("event.id", "phone-incoming-call");
 
         resources->addResourceObject (audioResource);
         resources->initAndConnect ();
