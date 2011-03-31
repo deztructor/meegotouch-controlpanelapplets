@@ -759,6 +759,7 @@ WallpaperEditorWidget::wheelEvent (
     //setupPanningPhysics ();
     //queueRedrawImage ();
     m_ScalePhysics->pointerPress(QPointF());
+    SYS_WARNING ("Setting scale to %g", event->delta() / 100.0);
     m_ScalePhysics->pointerMove (QPointF(0.0,  event->delta() / 100.0));
     m_ScalePhysics->pointerRelease();
 }
@@ -905,9 +906,11 @@ WallpaperEditorWidget::pinchGestureUpdate (
     /*
      * No frame drop here: the pinch gesture is much better this way...
      */
-    SYS_WARNING ("totalScaleFactor = %g", gesture->totalScaleFactor());
+    qreal scaleChange = gesture->scaleFactor() - gesture->lastScaleFactor();
+
+    SYS_WARNING ("scaleChange       = %g", scaleChange);
     m_ScalePhysics->pointerMove(
-            QPointF(0.0, gesture->totalScaleFactor() * 100.0));
+            QPointF(0.0, scaleChange * 100.0));
     
     event->accept(gesture);
 }

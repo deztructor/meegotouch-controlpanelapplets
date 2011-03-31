@@ -53,6 +53,7 @@ WallpaperEditorSheet::createHeaderWidget()
     QAction           *doneAction;
     QAction           *cancelAction;
 
+    basicHeader->setStyleName ("CommonSheetHeaderPanelInverted");
     doneAction = new QAction(qtTrId("qtn_comm_save"), basicHeader);
     cancelAction = new QAction(qtTrId("qtn_comm_cancel"), basicHeader);
     
@@ -68,6 +69,9 @@ WallpaperEditorSheet::createHeaderWidget()
 void
 WallpaperEditorSheet::doneActivated ()
 {
+    MBasicSheetHeader *header = static_cast<MBasicSheetHeader*>(headerWidget());
+
+    header->setProgressIndicatorVisible (true);
     m_EditorWidget->saveImage ();
     dismiss ();
 }
