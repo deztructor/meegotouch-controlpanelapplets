@@ -789,6 +789,7 @@ WallpaperEditorWidget::pinchGestureStarted (
         QGestureEvent *event, 
         QPinchGesture *gesture)
 {
+#if 0
     QPointF   centerPoint;
 
     Q_UNUSED (event);
@@ -804,7 +805,6 @@ WallpaperEditorWidget::pinchGestureStarted (
      */
     centerPoint = gesture->centerPoint();
     gestureWorkaround (&centerPoint);
-#if 0
     if (centerPoint.x() < imageX() ||
             centerPoint.y() < imageY() ||
             centerPoint.x() > imageX() + imageDX() ||
@@ -817,7 +817,7 @@ WallpaperEditorWidget::pinchGestureStarted (
         return;
     }
 #endif
-
+#if 0
     m_OriginalScaleFactor = m_Trans.scale();
     m_LastClick = centerPoint;
     m_PinchOngoing = true;
@@ -830,9 +830,9 @@ WallpaperEditorWidget::pinchGestureStarted (
             (centerPoint.x() - m_Trans.x()) / m_Trans.scale(),
             (centerPoint.y() - m_Trans.y()) / m_Trans.scale());
 
-    event->accept(gesture);
-
+#endif
     m_ScalePhysics->pointerPress(QPointF());
+    event->accept(gesture);
 }
 
 void 
@@ -840,6 +840,7 @@ WallpaperEditorWidget::pinchGestureUpdate (
             QGestureEvent *event, 
             QPinchGesture *gesture)
 {
+#if 0
     QPointF  centerPoint;
     qreal    newScale;
 
@@ -867,16 +868,18 @@ WallpaperEditorWidget::pinchGestureUpdate (
             centerPoint.x() - m_ImageFixpoint.x() * m_Trans.scale() - m_Trans.x(),
             centerPoint.y() - m_ImageFixpoint.y() * m_Trans.scale() - m_Trans.y());
         
-    event->accept(gesture);
+
 
     setupPanningPhysics ();
-
+#endif
     /*
      * No frame drop here: the pinch gesture is much better this way...
      */
-    redrawImage ();
-
-    m_ScalePhysics->pointerMove(QPointF(0.0, gesture->totalScaleFactor() * 100.0));
+    SYS_WARNING ("totalScaleFactor = %g", gesture->totalScaleFactor());
+    m_ScalePhysics->pointerMove(
+            QPointF(0.0, gesture->totalScaleFactor() * 100.0));
+    
+    event->accept(gesture);
 }
 
 void 
@@ -884,6 +887,7 @@ WallpaperEditorWidget::pinchGestureEnded (
             QGestureEvent *event, 
             QPinchGesture *gesture)
 {
+#if 0
     Q_UNUSED (event);
     SYS_DEBUG ("Gesture finished");
 
@@ -894,10 +898,10 @@ WallpaperEditorWidget::pinchGestureEnded (
     m_Trans += m_UserOffset;
     m_UserOffset = QPointF();
     toggleTitlebars (true);
-
-    event->accept(gesture);
+#endif
 
     m_ScalePhysics->pointerRelease ();
+    event->accept(gesture);
 }
 
 void 
