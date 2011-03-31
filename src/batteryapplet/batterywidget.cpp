@@ -47,8 +47,8 @@
 #ifdef USE_SPACERS
 #include <MSeparator>
 static const int ActivationContainerPosition = 4;
-static const int LabelContainerPosition = 8;
-static const int SliderContainerPosition = 9;
+static const int LabelContainerPosition = 7;
+static const int SliderContainerPosition = 8;
 #else
 static const int ActivationContainerPosition = 2;
 static const int LabelContainerPosition = 2;
@@ -368,15 +368,6 @@ BatteryWidget::addSliderContainer ()
     Q_ASSERT (m_MainLayout);
 
     m_SliderContainer = new SliderContainer (this);
-
-    MContainer *container = m_SliderContainer->labelContainer();
-    m_MainLayout->insertItem (LabelContainerPosition, container);
-    m_MainLayout->setStretchFactor (container, 0);
-        
-    container = m_SliderContainer->sliderContainer();
-    m_MainLayout->insertItem (SliderContainerPosition, container);
-    m_MainLayout->setStretchFactor (container, 0);
-
     showSlider (m_PSMAutoCombo->currentIndex () == PSMAutoOn);
 }
 
@@ -388,12 +379,23 @@ BatteryWidget::showSlider (
         return;
 
     if (show) {
+        MContainer *labelContainer = m_SliderContainer->labelContainer();
+        MContainer *sliderContainer = m_SliderContainer->sliderContainer();
+
         m_SliderContainer->updateSlider (m_logic->PSMThresholdValue ());
-        m_SliderContainer->labelContainer()->show();
-        m_SliderContainer->sliderContainer()->show();
+
+        m_MainLayout->insertItem (LabelContainerPosition, labelContainer);
+        m_MainLayout->setStretchFactor (labelContainer, 0);
+        m_MainLayout->insertItem (SliderContainerPosition, sliderContainer);
+        m_MainLayout->setStretchFactor (sliderContainer, 0);
+
+        labelContainer->show();
+        sliderContainer->show();
     } else {
         m_SliderContainer->labelContainer()->hide();
         m_SliderContainer->sliderContainer()->hide();
+        m_MainLayout->removeItem (m_SliderContainer->labelContainer());
+        m_MainLayout->removeItem (m_SliderContainer->sliderContainer());
     }
 }
 
