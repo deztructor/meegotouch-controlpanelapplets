@@ -862,6 +862,7 @@ WallpaperEditorWidget::pinchGestureStarted (
             (centerPoint.y() - m_Trans.y()) / m_Trans.scale());
 
 #endif
+    SYS_WARNING ("->");
     m_ScalePhysics->pointerPress(QPointF());
     event->accept(gesture);
 }
@@ -906,7 +907,7 @@ WallpaperEditorWidget::pinchGestureUpdate (
     /*
      * No frame drop here: the pinch gesture is much better this way...
      */
-    qreal scaleChange = gesture->scaleFactor() - gesture->lastScaleFactor();
+    qreal scaleChange = gesture->scaleFactor();
 
     SYS_WARNING ("scaleChange       = %g", scaleChange);
     m_ScalePhysics->pointerMove(
@@ -933,6 +934,7 @@ WallpaperEditorWidget::pinchGestureEnded (
     toggleTitlebars (true);
 #endif
 
+    SYS_WARNING ("<-");
     m_ScalePhysics->pointerRelease ();
     event->accept(gesture);
 }
