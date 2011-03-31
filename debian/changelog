@@ -22,6 +22,7 @@ meegotouch-controlpanelapplets (0.20.28~1) meegotouch; urgency=low
   * Fixes: NB#241718 - List item labels not aligned properly in 
     soundsettingsapplet
   * Fixes: NB#241743 - List item labels not aligned properly - Battery
+  * Fixes: NB#241744 - Header icon alignment
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 30 Mar 2011 09:50:20 +0300
 

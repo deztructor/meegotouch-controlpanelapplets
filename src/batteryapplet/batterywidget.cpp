@@ -262,6 +262,7 @@ BatteryWidget::addHeaderContainer ()
     helpButton->setViewType(MButton::iconType);
     helpButton->setIconID ("icon-m-content-description-inverse");
     layout->addItem (helpButton);
+    layout->setAlignment (helpButton, Qt::AlignVCenter | Qt::AlignRight);
 
     /*
      * Adding the whole row to the main container.
