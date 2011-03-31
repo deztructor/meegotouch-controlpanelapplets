@@ -399,6 +399,7 @@ BatteryWidget::showSlider (
 void 
 BatteryWidget::addBatteryConditionWidget ()
 {
+    MWidget               *spacer;
     MContainer            *container;
     QGraphicsLinearLayout *containerLayout =
         new QGraphicsLinearLayout (Qt::Vertical);
@@ -426,13 +427,17 @@ BatteryWidget::addBatteryConditionWidget ()
     keyLabel->setStyleName ("CommonSingleTitleInverted");
     keyLabel->setAlignment (Qt::AlignLeft | Qt::AlignVCenter);
     layout->addItem (keyLabel);
-    layout->setStretchFactor (keyLabel, 1);
 
     MLabel *valueLabel = new MLabel;
     valueLabel->setStyleName ("CommonSubTitleInverted");
     valueLabel->setAlignment (Qt::AlignLeft | Qt::AlignVCenter);
     layout->addItem (valueLabel);
-    layout->setStretchFactor (valueLabel, 2);
+
+    /*
+     * A spacer to push up the two labels: NB#241743 
+     */
+    spacer = new MWidget;
+    layout->addItem (spacer);
 
     switch (m_logic->getCondition ())
     {
