@@ -365,10 +365,11 @@ WallpaperEditorWidget::scalePhysicsPositionChanged(
     //SYS_WARNING ("position at %g, %g", position.x(), position.y());
     if (scalefactor < 0.05)
         scalefactor = 0.05;
-    //SYS_WARNING ("scalefactor %g", scalefactor);
 
+    SYS_WARNING ("position    %g, %g", position.x(), position.y());
+    SYS_WARNING ("scalefactor %g", scalefactor);
     m_Trans.setScale (scalefactor);
-    setupPanningPhysics ();
+    //setupPanningPhysics ();
     queueRedrawImage ();
 }
 
@@ -797,16 +798,27 @@ WallpaperEditorWidget::panGestureEvent (
         panGesture->offset() * itemTransform - 
         QPointF(itemTransform.dx(),itemTransform.dy());
 
+    if (m_PinchOngoing)
+        return;
+
     switch (panGesture->state()) {
         case Qt::GestureStarted:
+            SYS_WARNING ("GestureStarted");
             m_Physics->pointerPress(QPointF());
+
         case Qt::GestureUpdated:
+            SYS_WARNING ("GestureUpdated");
             m_Physics->pointerMove(-itemSpaceOffset);
 
         break;
 
         case Qt::GestureFinished:
+            SYS_WARNING ("GestureFinished");
+            m_Physics->pointerRelease();
+            break;
+
         case Qt::GestureCanceled:
+            SYS_WARNING ("GestureCanceled");
             m_Physics->pointerRelease();
         break;
     }
@@ -820,50 +832,12 @@ WallpaperEditorWidget::pinchGestureStarted (
         QGestureEvent *event, 
         QPinchGesture *gesture)
 {
-#if 0
-    QPointF   centerPoint;
-
-    Q_UNUSED (event);
-
-    SYS_DEBUG ("Gesture started");
-    if (m_PinchOngoing) {
-        SYS_WARNING ("But gesture is not finished yet!");
-        return;
-    }
-
-    /*
-     *
-     */
-    centerPoint = gesture->centerPoint();
-    gestureWorkaround (&centerPoint);
-    if (centerPoint.x() < imageX() ||
-            centerPoint.y() < imageY() ||
-            centerPoint.x() > imageX() + imageDX() ||
-            centerPoint.y() > imageY() + imageDY()) {
-        SYS_DEBUG ("Rejected... %g, %g not in %d, %d - %d, %d",
-                centerPoint.x(), centerPoint.y(),
-                imageX(), imageY(), 
-                imageX() + imageDX(), 
-                imageY() + imageDY());
-        return;
-    }
-#endif
-#if 0
     m_OriginalScaleFactor = m_Trans.scale();
-    m_LastClick = centerPoint;
-    m_PinchOngoing = true;
+    qreal startFrom = m_OriginalScaleFactor * 100.0;
 
-    if (!m_NoTitlebar) {
-        m_LastClick += toggleTitlebars (true);
-    }
-
-    m_ImageFixpoint = QPointF (
-            (centerPoint.x() - m_Trans.x()) / m_Trans.scale(),
-            (centerPoint.y() - m_Trans.y()) / m_Trans.scale());
-
-#endif
-    SYS_WARNING ("->");
-    m_ScalePhysics->pointerPress(QPointF());
+    SYS_WARNING ("m_ScalePhysics->pointerPress (0.0, %g)", startFrom);
+    m_ScalePhysics->pointerPress(QPointF(0.0, startFrom));
+    m_ScalePhysics->pointerMove(QPointF(0.0, startFrom));
     event->accept(gesture);
 }
 
@@ -872,46 +846,17 @@ WallpaperEditorWidget::pinchGestureUpdate (
             QGestureEvent *event, 
             QPinchGesture *gesture)
 {
-#if 0
-    QPointF  centerPoint;
-    qreal    newScale;
-
-    Q_UNUSED (event);
-
-    if (!m_PinchOngoing)
-        return;
-
-    //SYS_DEBUG ("Gesture update");
-    /*
-     *
-     */
-    centerPoint = gesture->centerPoint();
-    gestureWorkaround (&centerPoint);
-
-    /*
-     * Updating the scale, we have a lower limit for this.
-     */
-    newScale = gesture->totalScaleFactor() * m_OriginalScaleFactor;
-    if (newScale < ScaleLowerLimit)
-        newScale = ScaleLowerLimit;
-    m_Trans.setScale (newScale);
-
-    m_UserOffset = QPointF (
-            centerPoint.x() - m_ImageFixpoint.x() * m_Trans.scale() - m_Trans.x(),
-            centerPoint.y() - m_ImageFixpoint.y() * m_Trans.scale() - m_Trans.y());
-        
-
-
-    setupPanningPhysics ();
-#endif
     /*
      * No frame drop here: the pinch gesture is much better this way...
      */
-    qreal scaleChange = gesture->scaleFactor();
+    qreal scaley =
+        (gesture->totalScaleFactor() * m_OriginalScaleFactor) * 100.0;
 
-    SYS_WARNING ("scaleChange       = %g", scaleChange);
+    SYS_WARNING (
+    "m_OriginalScaleFactor = %g totalScaleFactor = %g pointerMove(0.0, %g)", 
+    m_OriginalScaleFactor, gesture->totalScaleFactor(), scaley);
     m_ScalePhysics->pointerMove(
-            QPointF(0.0, scaleChange * 100.0));
+            QPointF(0.0, scaley));
     
     event->accept(gesture);
 }
@@ -921,20 +866,7 @@ WallpaperEditorWidget::pinchGestureEnded (
             QGestureEvent *event, 
             QPinchGesture *gesture)
 {
-#if 0
-    Q_UNUSED (event);
-    SYS_DEBUG ("Gesture finished");
-
-    if (!m_PinchOngoing)
-        return;
-
-    m_PinchOngoing = false;
-    m_Trans += m_UserOffset;
-    m_UserOffset = QPointF();
-    toggleTitlebars (true);
-#endif
-
-    SYS_WARNING ("<-");
+    SYS_WARNING ("m_ScalePhysics->pointerRelease ()");
     m_ScalePhysics->pointerRelease ();
     event->accept(gesture);
 }
@@ -946,12 +878,20 @@ WallpaperEditorWidget::pinchGestureEvent (
 {
     Q_UNUSED (event);
 
-    if (gesture->state() == Qt::GestureStarted) {
-        pinchGestureStarted (event, gesture);
-    } else if (gesture->state() == Qt::GestureFinished) {
-        pinchGestureEnded (event, gesture);
-    } else {
-        pinchGestureUpdate (event, gesture);
+    switch (gesture->state()) {
+        case Qt::GestureStarted:
+            m_PinchOngoing = true;
+            pinchGestureStarted (event, gesture);
+            break;
+
+        case Qt::GestureFinished:
+        case Qt::GestureCanceled:
+            pinchGestureEnded (event, gesture);
+            m_PinchOngoing = false;
+            break;
+
+        case Qt::GestureUpdated:
+            pinchGestureUpdate (event, gesture);
     }
 }
 
