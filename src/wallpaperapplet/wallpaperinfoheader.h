@@ -21,10 +21,11 @@
 
 #include <QObject>
 #include <MStylableWidget>
+#include <meegocontrolexport.h>
 
 class MLabel;
 
-class WallpaperInfoHeader : public MStylableWidget
+class MC_EXPORT WallpaperInfoHeader : public MStylableWidget
 {
     Q_OBJECT
 

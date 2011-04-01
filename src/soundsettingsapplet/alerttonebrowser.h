@@ -19,6 +19,7 @@
 #ifndef _ALERT_TONE_BROWSER_H_
 #define _ALERT_TONE_BROWSER_H_
 
+#include <meegocontrolexport.h>
 #include "alerttonetoplevel.h"
 #include "alerttone.h"
 
@@ -39,7 +40,7 @@ class MLabel;
  * file from the OVI store. The list contains the default sound files, a list
  * that is created reading some specific directories of the file system.
  */
-class AlertToneBrowser : public AlertToneToplevel
+class MC_EXPORT AlertToneBrowser : public AlertToneToplevel
 {
 Q_OBJECT
 

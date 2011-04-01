@@ -25,8 +25,9 @@
 #include <QStandardItemModel>
 #include <QPointer>
 #include <QFileSystemWatcher>
+#include <meegocontrolexport.h>
 
-class AlertToneDefaultsModel : public QStandardItemModel
+class MC_EXPORT AlertToneDefaultsModel : public QStandardItemModel
 {
 	Q_OBJECT
 

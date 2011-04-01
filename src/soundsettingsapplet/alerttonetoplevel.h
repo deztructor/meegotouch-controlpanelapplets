@@ -22,9 +22,9 @@
 
 #include <MAction>
 #include <dcpwidget.h>
+#include <meegocontrolexport.h>
 
-class AlertToneToplevel :
-public DcpWidget
+class MC_EXPORT AlertToneToplevel : public DcpWidget
 {
 	Q_OBJECT
 

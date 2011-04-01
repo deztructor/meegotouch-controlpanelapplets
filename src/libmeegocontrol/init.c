@@ -4,7 +4,7 @@
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
-** This file is part of meegotouch-controlpanelsoundsettingsapplet.
+** This file is part of meegotouch-controlpanelapplets.
 **
 ** If you have questions regarding the use of this file, please contact
 ** Nokia at directui@nokia.com.
@@ -20,13 +20,14 @@
 #include "init.h"
 
 void
-meegocontrol_init(int *p_argc, char **p_argv[])
+meegocontrol_init (int *p_argc, char **p_argv[])
 {
     gst_init(p_argc, p_argv);
 }
 
 gboolean
-meegocontrol_init_check(int *p_argc, char **p_argv[], GError **err)
+meegocontrol_init_check (int *p_argc, char **p_argv[], GError **err)
 {
-    return gst_init_check(p_argc, p_argv, err);
+    return gst_init_check (p_argc, p_argv, err);
 }
+

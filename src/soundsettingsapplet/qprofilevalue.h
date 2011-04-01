@@ -23,6 +23,7 @@
 #include <QPointer>
 #include <QFileSystemWatcher>
 #include <QString>
+#include <meegocontrolexport.h>
 
 #include "qtrackedvariant.h"
 
@@ -31,7 +32,7 @@
  * the profile database to control audio and haptic feedback for specific events
  * (e.g. incoming call, incoming email, etc.).
  */
-class QProfileValue : public QTrackedVariant
+class MC_EXPORT QProfileValue : public QTrackedVariant
 {
    	Q_OBJECT
 

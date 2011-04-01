@@ -21,7 +21,8 @@
 
 #include <QPointer>
 #include <MPhysics2DPanning>
-#include "dcpwidget.h"
+#include <meegocontrolexport.h>
+#include <dcpwidget.h>
 
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperitrans.h"
@@ -70,7 +71,7 @@ class WallpaperInfoHeader;
  *   coordinate system is not the same as in the motion events. I added this
  *   point as a reminder to test the applet in portrait mode also.
  */
-class WallpaperEditorWidget : public DcpWidget
+class MC_EXPORT WallpaperEditorWidget : public DcpWidget
 {
     Q_OBJECT
 

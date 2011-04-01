@@ -21,7 +21,6 @@
 #define _ALERT_TONE_VOLUME_H_
 
 #include <MSlider>
-#include "static.h"
 #include "qprofilevalue.h"
 #include "alerttonepreview.h"
 

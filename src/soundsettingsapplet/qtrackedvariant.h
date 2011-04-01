@@ -23,6 +23,7 @@
 #include <QObject>
 #include <QString>
 #include <QVariant>
+#include <meegocontrolexport.h>
 
 /*!
  * A simple class that is used as a variable that have a constant name (it is
@@ -37,7 +38,7 @@
  * FIXME: This class should be pure virtual but the ut_trackedvariant unit test
  * should be modified to handle that.
  */
-class QTrackedVariant : public QObject
+class MC_EXPORT QTrackedVariant : public QObject
 {
 	Q_OBJECT
 

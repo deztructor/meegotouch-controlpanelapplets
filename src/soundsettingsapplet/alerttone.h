@@ -20,6 +20,7 @@
 #ifndef _ALERT_TONE_H_
 #define _ALERT_TONE_H_
 
+#include <meegocontrolexport.h>
 #include "qprofilevalue.h"
 
 /*!
@@ -39,7 +40,7 @@ alertTone = new AlertTone ("ringing.alert.tone");
  * Please check the documentation for the profile-data package or the profile
  * daemon files under /etc/profiled/
  */
-class AlertTone: public QProfileValue
+class MC_EXPORT AlertTone: public QProfileValue
 {
     Q_OBJECT
 

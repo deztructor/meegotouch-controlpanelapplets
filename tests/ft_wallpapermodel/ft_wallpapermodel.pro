@@ -1,6 +1,7 @@
 include(../common_top.pri)
 
 SRC_PREFIX = ../../src/wallpaperapplet
+MC_PREFIX = ../../src/libmeegocontrol
 STUB_PREFIX = ../stubs
 
 INCLUDEPATH += \ 
@@ -14,7 +15,8 @@ LIBS += \
     -lthumbnailer
 
 INCLUDEPATH += \
-    /usr/include/thumbnailer 
+    /usr/include/thumbnailer \
+    $$MC_PREFIX
 
 TEMPLATE = app
 DEFINES += \

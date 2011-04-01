@@ -35,6 +35,7 @@ LIBS += \
     -lthumbnailer
 
 INCLUDEPATH += \
+    ../libmeegocontrol \
     /usr/include/thumbnailer 
 
 HEADERS = \
