@@ -22,7 +22,7 @@
 #include <libprofile.h>
 #endif
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 

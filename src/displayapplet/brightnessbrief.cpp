@@ -19,7 +19,7 @@
 #include <DcpWidgetTypes>
 #include <MGConfItem>
 
-#define DEBUG
+#undef DEBUG
 #include "../debug.h"
 
 static const char brightnessKey[] = "/system/osso/dsm/display/display_brightness";
