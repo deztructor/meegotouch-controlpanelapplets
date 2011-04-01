@@ -191,12 +191,17 @@ WallpaperWidget::slotImageActivated (
 void 
 WallpaperWidget::slotImageActivated ()
 {
-    WallpaperEditorSheet  *sheet;
     SYS_DEBUG ("");
-    
+    /*
+     * With this define
+     */
+#if 0
+    WallpaperEditorSheet  *sheet;
     sheet = new WallpaperEditorSheet (m_WallpaperBusinessLogic);
     sheet->appear(scene(), MSceneWindow::DestroyWhenDone);
-    //emit changeWidget (1);
+#else
+    emit changeWidget (1);
+#endif
 }
 
 
