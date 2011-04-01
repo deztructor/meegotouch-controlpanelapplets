@@ -19,6 +19,7 @@
 #ifndef WALLPAPERCURRENTDESCRIPTOR_H
 #define WALLPAPERCURRENTDESCRIPTOR_H
 
+#include <meegocontrolexport.h>
 #include "wallpaperdescriptor.h"
 #include "wallpaperitrans.h"
 
@@ -31,7 +32,7 @@ class MDesktopEntry;
  *
  * This class is also a singleton; there can be only one current wallpaper.
  */
-class Q_DECL_EXPORT WallpaperCurrentDescriptor : public WallpaperDescriptor {
+class MC_EXPORT WallpaperCurrentDescriptor : public WallpaperDescriptor {
     Q_OBJECT
 
 public:

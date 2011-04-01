@@ -26,6 +26,7 @@
 #include <QUrl>
 #include <QVector>
 #include <MApplication>
+#include <meegocontrolexport.h>
 
 #ifdef HAVE_QUILL_FILTER
 #  include <QuillFile>
@@ -66,7 +67,7 @@ class QString;
  * An asbtraction used for work with image files
  * in wallpaper applet
  */
-class Q_DECL_EXPORT Image : public QObject {
+class MC_EXPORT Image : public QObject {
     Q_OBJECT
 
 public:
@@ -132,7 +133,7 @@ private:
  * attributes. The WallpaperList is using this class to visualize the wallpaper
  * images.
  */
-class Q_DECL_EXPORT WallpaperDescriptor : public QObject {
+class MC_EXPORT WallpaperDescriptor : public QObject {
     Q_OBJECT
 
 public:

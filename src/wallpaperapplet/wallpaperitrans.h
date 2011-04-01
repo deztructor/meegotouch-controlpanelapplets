@@ -23,16 +23,16 @@
 #include <QPointF>
 #include <QSize>
 #include <MApplication>
+#include <meegocontrolexport.h>
 
 class QSize;
 class QPixmap;
-
 
 /*!
  * A class to manipulate and save images for the meego control panel wallpaper 
  * applet.
  */
-class WallpaperITrans : public QObject
+class MC_EXPORT WallpaperITrans : public QObject
 {
     Q_OBJECT
 

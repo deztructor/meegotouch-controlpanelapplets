@@ -7,6 +7,7 @@ VERSION = 0.1.0
 MOC_DIR = .moc
 TARGET = meegocontrol
 OBJECTS_DIR = .objects
+DEFINES += BUILDING_LIBMEEGOCONTROL
 
 QT += dbus
 
@@ -19,6 +20,7 @@ CONFIG +=          \
     duicontrolpanel
 
 QMAKE_LFLAGS_RPATH = -Wl
+QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden -fPIC
 
 #
 # FIXME: These are needed for the soundssettingsapplet. We maybe could remove
@@ -76,8 +78,6 @@ PUBLIC_HEADERS = \
     $$WALLPAPER_PATH/wallpaperitrans.h             \
     $$WALLPAPER_PATH/wallpapereditorwidget.h       \
     $$WALLPAPER_PATH/wallpaperinfoheader.h         \
-    $$SOUNDSETTINGS_PATH/static.h                  \
-    $$SOUNDSETTINGS_PATH/drilldownitem.h           \
     $$SOUNDSETTINGS_PATH/alerttone.h               \
     $$SOUNDSETTINGS_PATH/alerttonedefaults.h       \
     $$SOUNDSETTINGS_PATH/alerttonetoplevel.h       \
@@ -92,12 +92,15 @@ PUBLIC_HEADERS = \
     WallpaperITrans                                \
     WallpaperEditorWidget                          \
     init.h                                         \
+    meegocontrolexport.h                           \
     meegocontrol.h
 
 HEADERS =                                          \
     ../debug.h                                     \
+    $$SOUNDSETTINGS_PATH/static.h                  \
     $$SOUNDSETTINGS_PATH/alerttonepreview.h        \
     $$SOUNDSETTINGS_PATH/trackerconnection.h       \
+    $$SOUNDSETTINGS_PATH/drilldownitem.h           \
     $$PUBLIC_HEADERS
 
 SOURCES =                                          \

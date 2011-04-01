@@ -24,8 +24,9 @@
 #include <QMap>
 #include <QString>
 #include <QVariant>
+#include <meegocontrolexport.h>
 
-class AlertToneAppletMaps
+class MC_EXPORT AlertToneAppletMaps
 {
 public:
 	static const AlertToneAppletMaps &instance();

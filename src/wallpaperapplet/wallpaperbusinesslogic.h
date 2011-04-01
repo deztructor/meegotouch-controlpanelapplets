@@ -21,6 +21,7 @@
 
 #include <QList>
 #include <QObject>
+#include <meegocontrolexport.h>
 
 class QString;
 class MGConfItem;
@@ -63,7 +64,7 @@ class WallpaperITrans;
  * The logic which handling the loading/saving and management
  * work for wallpaper settings applet
  */
-class WallpaperBusinessLogic : public QObject
+class MC_EXPORT WallpaperBusinessLogic : public QObject
 {
     Q_OBJECT
 

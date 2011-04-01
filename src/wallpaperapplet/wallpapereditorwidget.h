@@ -21,7 +21,8 @@
 
 #include <QPointer>
 #include <MPhysics2DPanning>
-#include "dcpwidget.h"
+#include <meegocontrolexport.h>
+#include <dcpwidget.h>
 
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperitrans.h"

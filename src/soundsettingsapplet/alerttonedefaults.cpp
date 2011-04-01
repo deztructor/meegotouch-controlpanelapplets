@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include <QDir>
 #include <QDebug>
 #include <QTimer>
@@ -29,6 +28,7 @@
 #include <MSortFilterProxyModel>
 #include <MListFilter>
 
+#include "static.h"
 #include "alerttonedefaults.h"
 #include "alerttonedefaultsmodel.h"
 

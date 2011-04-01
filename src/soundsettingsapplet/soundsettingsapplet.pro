@@ -19,6 +19,10 @@ MOBILITY +=         \
 
 PKGCONFIG += dbus-1 profile gconf-2.0 gstreamer-0.10
 
+DEFINES += MC_EXPORT=""
+INCLUDEPATH += \
+    ../libmeegocontrol
+
 contains(DEFINES, HAVE_LIBRESOURCEQT) {
     PKGCONFIG += libresourceqt1
 }

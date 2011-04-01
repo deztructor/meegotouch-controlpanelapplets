@@ -11,6 +11,7 @@ meegotouch-controlpanelapplets (0.20.28~1) meegotouch; urgency=low
     in the list on selecting one after another
   * Fixes: NB#239887 - [TASK] wallpaperapplet migration to Qsparql
   * Some changes for (233395) Ringtone preview volume gets really high
+  * Fixes: NB#241373 - libmeegocontrol0 exports internal symbols
   
   [ Laszlo Pere ]
   * Fixes: NB#238613 - Dali:Unable to restore wall paper
@@ -30,7 +31,7 @@ meegotouch-controlpanelapplets (0.20.28~1) meegotouch; urgency=low
     condition)
   * Fixes: NB#228102 - Sounds and feedback settings uses wrong styles and icons
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 31 Mar 2011 15:41:43 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 01 Apr 2011 12:12:11 +0300
 
 meegotouch-controlpanelapplets (0.20.27-2) meegotouch; urgency=low
 

@@ -16,9 +16,10 @@
 ** of this file.
 **
 ****************************************************************************/
+#include "alerttonevolume.h"
 
 #include <QDebug>
-#include "alerttonevolume.h"
+#include "static.h"
 
 //#define DEBUG 
 #define WARNING
@@ -110,3 +111,4 @@ AlertToneVolume::widgetVolumeChanged(
     setHandleLabel (QString::number(newValue));
     m_volume.set(QVariant(newValue));
 }
+
