@@ -26,7 +26,7 @@
 #include <mdesktopentry.h>
 
 //#define DEBUG
-#define WARNING
+//#define WARNING
 //#define LOTDEBUG
 #include "../debug.h"
 
@@ -196,11 +196,6 @@ finalize:
     delete m_DesktopEntry;
     m_DesktopEntry = 0;
 
-    #ifdef WARNING
-    if (!retval) {
-        SYS_WARNING ("returning %s", SYS_BOOL(retval));
-    }
-    #endif
     return retval;
 }
 
@@ -312,7 +307,7 @@ WallpaperCurrentDescriptor::iTrans (
             return m_LandscapeTrans;
     }
 
-    SYS_WARNING ("Unknown orientation: %d", orientation);
+    SYS_DEBUG ("Unknown orientation: %d", orientation);
     return m_LandscapeTrans;
 }
 

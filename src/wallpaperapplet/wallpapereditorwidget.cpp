@@ -49,7 +49,7 @@ M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 static const qreal ScaleLowerLimit = 0.15;
 
 //#define DEBUG
-#define WARNING
+//#define WARNING
 #include "../debug.h"
 
 static const int ExtraMargin = 0;
@@ -376,12 +376,6 @@ void
 WallpaperEditorWidget::panningPhysicsPositionChanged(
         const QPointF    &position)
 {
-#if 0
-    SYS_WARNING ("position at %g, %g", position.x(), position.y());
-    SYS_WARNING ("inMotion = %s", SYS_BOOL(m_Physics->inMotion()));
-    SYS_WARNING ("enabled  = %s", SYS_BOOL(m_Physics->enabled()));
-#endif
-
     m_UserOffset = position;
     redrawImage ();
 }
@@ -454,7 +448,6 @@ void
 WallpaperEditorWidget::saveImage ()
 {
     WallpaperITrans   *ltrans, *ptrans;
-    MWindow           *win;
 
     m_Trans += m_UserOffset;
     m_UserOffset = QPointF();
@@ -492,6 +485,8 @@ WallpaperEditorWidget::dropImage ()
 void
 WallpaperEditorWidget::slotDoneActivated ()
 {
+    MWindow  *win;
+
     saveImage ();
 
     /*
