@@ -362,14 +362,13 @@ WallpaperEditorWidget::scalePhysicsPositionChanged(
 {
     qreal scalefactor = position.y() / 100.0;
 
-    //SYS_WARNING ("position at %g, %g", position.x(), position.y());
     if (scalefactor < 0.05)
         scalefactor = 0.05;
 
-    SYS_WARNING ("position    %g, %g", position.x(), position.y());
-    SYS_WARNING ("scalefactor %g", scalefactor);
+    SYS_DEBUG ("position    %g, %g", position.x(), position.y());
+    SYS_DEBUG ("scalefactor %g", scalefactor);
     m_Trans.setScale (scalefactor);
-    //setupPanningPhysics ();
+    setupPanningPhysics ();
     queueRedrawImage ();
 }
 
@@ -760,7 +759,8 @@ WallpaperEditorWidget::wheelEvent (
     //setupPanningPhysics ();
     //queueRedrawImage ();
     m_ScalePhysics->pointerPress(QPointF());
-    SYS_WARNING ("Setting scale to %g", event->delta() / 100.0);
+
+    SYS_DEBUG ("Setting scale to %g", event->delta() / 100.0);
     m_ScalePhysics->pointerMove (QPointF(0.0,  event->delta() / 100.0));
     m_ScalePhysics->pointerRelease();
 }
@@ -803,22 +803,18 @@ WallpaperEditorWidget::panGestureEvent (
 
     switch (panGesture->state()) {
         case Qt::GestureStarted:
-            SYS_WARNING ("GestureStarted");
             m_Physics->pointerPress(QPointF());
 
         case Qt::GestureUpdated:
-            SYS_WARNING ("GestureUpdated");
             m_Physics->pointerMove(-itemSpaceOffset);
 
         break;
 
         case Qt::GestureFinished:
-            SYS_WARNING ("GestureFinished");
             m_Physics->pointerRelease();
             break;
 
         case Qt::GestureCanceled:
-            SYS_WARNING ("GestureCanceled");
             m_Physics->pointerRelease();
         break;
     }
@@ -835,9 +831,10 @@ WallpaperEditorWidget::pinchGestureStarted (
     m_OriginalScaleFactor = m_Trans.scale();
     qreal startFrom = m_OriginalScaleFactor * 100.0;
 
-    SYS_WARNING ("m_ScalePhysics->pointerPress (0.0, %g)", startFrom);
-    m_ScalePhysics->pointerPress(QPointF(0.0, startFrom));
-    m_ScalePhysics->pointerMove(QPointF(0.0, startFrom));
+    SYS_DEBUG ("m_ScalePhysics->pointerPress (0.0, %g)", startFrom);
+    m_ScalePhysics->pointerPress(QPointF());
+    //m_ScalePhysics->pointerPress(QPointF(0.0, startFrom));
+    //m_ScalePhysics->pointerMove(QPointF(0.0, startFrom));
     event->accept(gesture);
 }
 
@@ -850,13 +847,15 @@ WallpaperEditorWidget::pinchGestureUpdate (
      * No frame drop here: the pinch gesture is much better this way...
      */
     qreal scaley =
-        (gesture->totalScaleFactor() * m_OriginalScaleFactor) * 100.0;
+        m_OriginalScaleFactor - 
+        (gesture->totalScaleFactor() * m_OriginalScaleFactor);
 
-    SYS_WARNING (
-    "m_OriginalScaleFactor = %g totalScaleFactor = %g pointerMove(0.0, %g)", 
-    m_OriginalScaleFactor, gesture->totalScaleFactor(), scaley);
+    SYS_DEBUG ("m_OriginalScaleFactor = %g", m_OriginalScaleFactor);
+    SYS_DEBUG ("totalScaleFactor      = %g", gesture->totalScaleFactor());
+    SYS_DEBUG ("pointerMove(0.0, %g)", scaley * 100.0);
+
     m_ScalePhysics->pointerMove(
-            QPointF(0.0, scaley));
+            QPointF(0.0, scaley * 100.0));
     
     event->accept(gesture);
 }
@@ -866,7 +865,7 @@ WallpaperEditorWidget::pinchGestureEnded (
             QGestureEvent *event, 
             QPinchGesture *gesture)
 {
-    SYS_WARNING ("m_ScalePhysics->pointerRelease ()");
+    SYS_DEBUG ("m_ScalePhysics->pointerRelease ()");
     m_ScalePhysics->pointerRelease ();
     event->accept(gesture);
 }
