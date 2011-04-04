@@ -36,7 +36,7 @@
  */
 //#define LOTDEBUG
 //#define DEBUG
-#define WARNING
+//#define WARNING
 #include "../debug.h"
 
 static const QString dir = "";
@@ -310,9 +310,9 @@ Image::cache (
      * Secondary thread file loading.
      */
     if (!filename().isEmpty()) {
-        SYS_WARNING ("Loading %s", SYS_STR(filename()));
+        SYS_DEBUG ("Loading %s", SYS_STR(filename()));
         if (!load(filename())) {
-            SYS_WARNING ("Loading failed: %s", SYS_STR(filename()));
+            SYS_DEBUG ("Loading failed: %s", SYS_STR(filename()));
             m_Cached = false;
         } else {
             SYS_DEBUG ("Loaded %s size %dx%d", SYS_STR(filename()),
@@ -377,8 +377,6 @@ QImage
 Image::scaledImage (
         QSize size)
 {
-    SYS_WARNING ("*** requested size = %dx%d", size.width(), size.height());
-    SYS_WARNING ("*** actual    size = %dx%d", m_Image.width(), m_Image.height());
     if (m_Cached &&
             (m_Image.width() == size.width() ||
             m_Image.height() == size.height())) {
@@ -408,8 +406,6 @@ Image::thumbnail (
     QPixmap *pixmap;
     bool     retval = false;
 
-    //SYS_WARNING ("*** force     = %s", SYS_BOOL(force));   
-    //SYS_WARNING ("*** m_ImageID = %s", SYS_STR(m_ImageID));
     if (!m_ImageID.isEmpty()) {
         /*
          * If we have an image ID instead of a filename the thumbler will not
@@ -428,7 +424,6 @@ Image::thumbnail (
          */
 #if 0
         // FIXME: Do we still need this?
-        SYS_WARNING ("No thumbnail available!");
         cache ();
         if (m_Cached) {
             SYS_DEBUG ("m_Image.scaled (");
@@ -778,8 +773,6 @@ WallpaperDescriptor::thumbnailError (
             QString      message,
             QUrl         fileUri)
 {
-    SYS_WARNING ("*** fileUri = %s", SYS_STR(fileUri.toString()));
-
     for (int n = Landscape; n < NVariants; ++n) {
         if (m_Images[n].url() == fileUri) {
             bool success;

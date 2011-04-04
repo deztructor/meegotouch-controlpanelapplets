@@ -62,8 +62,8 @@
 #include <MApplicationWindow>
 
 //#define LOTDEBUG
-#define DEBUG
-#define WARNING
+//#define DEBUG
+//#define WARNING
 #include "../debug.h"
 
 static const QString wallpaperDir = ".wallpapers";

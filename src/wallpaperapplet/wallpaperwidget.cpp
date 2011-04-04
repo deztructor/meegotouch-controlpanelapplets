@@ -33,7 +33,7 @@
 #include "wallpapereditorsheet.h"
 
 //#define DEBUG
-#define WARNING
+//#define WARNING
 #include "../debug.h"
 
 static const int MaxColumns = 2;
@@ -51,7 +51,6 @@ WallpaperWidget::WallpaperWidget (
 {
     MWindow *win = MApplication::activeWindow ();
 
-    SYS_WARNING ("Creating widget");
     if (win) {
         m_NavigationBarTransparency = 
             win->property("navigationBarOpacity").toReal();
@@ -71,7 +70,6 @@ WallpaperWidget::WallpaperWidget (
 
 WallpaperWidget::~WallpaperWidget ()
 {
-    SYS_WARNING ("Destroying widget");
     if (m_NavigationBarTransparency >= 0) {
         MWindow *win = MApplication::activeWindow ();
 
@@ -307,7 +305,6 @@ WallpaperWidget::galleryImageSelected (
         const QString &uri)
 {
     m_WallpaperBusinessLogic->addImageFromGallery (uri);
-    SYS_WARNING ("m_ImageBrowser->unselectItem (%s);", SYS_STR(uri));
     if (m_ImageBrowser)
         m_ImageBrowser->unselectItem (uri);
 }

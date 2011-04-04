@@ -38,12 +38,12 @@ Q_EXPORT_PLUGIN2(wallpaperapplet, WallpaperApplet)
 WallpaperApplet::WallpaperApplet() :
     m_WallpaperBusinessLogic (0)
 {
-    SYS_WARNING ("Creating applet...");
+    //SYS_WARNING ("Creating applet...");
 }
 
 WallpaperApplet::~WallpaperApplet() 
 {
-    SYS_WARNING ("Destroying applet...");
+    //SYS_WARNING ("Destroying applet...");
 }
 
 void 

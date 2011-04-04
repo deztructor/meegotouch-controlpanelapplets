@@ -30,6 +30,7 @@ meegotouch-controlpanelapplets (0.20.28~1) meegotouch; urgency=low
   * Fixes: NB#240868 - Incorrect order of settings (PSM threshold vs battery 
     condition)
   * Fixes: NB#228102 - Sounds and feedback settings uses wrong styles and icons
+  * Fixes: NB#242729 - Wallpaper setting applet is spammy
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 01 Apr 2011 12:12:11 +0300
 
