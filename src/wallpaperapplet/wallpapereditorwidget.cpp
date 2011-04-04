@@ -492,22 +492,7 @@ WallpaperEditorWidget::dropImage ()
 void
 WallpaperEditorWidget::slotDoneActivated ()
 {
-    WallpaperITrans   *ltrans, *ptrans;
-    MWindow           *win;
-
-    m_Trans += m_UserOffset;
-    m_UserOffset = QPointF();
-    
-
-    ltrans = m_Trans.orientation() == M::Landscape ?
-        &m_Trans : &m_LandscapeTrans;
-    ptrans = m_Trans.orientation() == M::Portrait ?
-        &m_Trans : &m_PortraitTrans;
-
-    /*
-     * Here we save the settings.
-     */
-    m_WallpaperBusinessLogic->setBackground (ltrans, ptrans);
+    saveImage ();
 
     /*
      * Turning back from fullscreen. This could be done in the destructor, but

@@ -62,7 +62,7 @@
 #include <MApplicationWindow>
 
 //#define LOTDEBUG
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -385,10 +385,13 @@ WallpaperBusinessLogic::startEdit (
      * interface implementation... no problem though.
      */
     if (threadActive && m_EditedImage && m_EditedImage == desc) {
+
+        SYS_DEBUG ("The thread is already active for the same image.");
         return;
     }
 
     if (threadActive) {
+        SYS_DEBUG ("The thread is already active.");
         return;
     }
 
