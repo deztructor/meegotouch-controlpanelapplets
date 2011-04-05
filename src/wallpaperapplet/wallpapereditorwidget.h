@@ -169,7 +169,7 @@ private:
     
     qreal                 m_OriginalScaleFactor;
     bool                  m_PinchOngoing;
-    bool                  m_MotionOngoing;
+    bool                  m_PanOngoing;
     bool                  m_HasPendingRedraw;
     MPhysics2DPanning    *m_Physics;
     MPhysics2DPanning    *m_ScalePhysics;

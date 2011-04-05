@@ -74,7 +74,7 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_NoTitlebar (false),
     m_OrientationLocked (false),
     m_PinchOngoing (false),
-    m_MotionOngoing (false),
+    m_PanOngoing (false),
     m_HasPendingRedraw (false),
     m_Physics (0)
 {
@@ -383,10 +383,6 @@ WallpaperEditorWidget::panningPhysicsPositionChanged(
 void 
 WallpaperEditorWidget::panningPhysicsPanningStopped ()
 {
-    //SYS_WARNING ("");
-    //queueRedrawImage ();
-    //m_Trans += m_UserOffset;
-    //m_UserOffset = QPointF();
     redrawImage ();
 }
 
@@ -487,6 +483,13 @@ WallpaperEditorWidget::slotDoneActivated ()
 {
     MWindow  *win;
 
+    /*
+     * We ignore the button press while the image is moving.
+     */
+    if (m_Physics->inMotion() || m_ScalePhysics->inMotion()) {
+        return;
+    }
+
     saveImage ();
 
     /*
@@ -512,6 +515,13 @@ WallpaperEditorWidget::slotDoneActivated ()
 void
 WallpaperEditorWidget::slotCancelActivated ()
 {
+    /*
+     * We ignore the button press while the image is moving.
+     */
+    if (m_Physics->inMotion() || m_ScalePhysics->inMotion()) {
+        return;
+    }
+
     emit cancelClicked ();
     emit closePage ();
     /*
@@ -628,7 +638,6 @@ WallpaperEditorWidget::imageX () const
     retval += m_UserOffset.x();
     retval += m_Trans.x();
 
-    //SYS_DEBUG ("returning %d", retval);
     return retval;
 }
 
@@ -736,11 +745,8 @@ WallpaperEditorWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
 {
     m_Physics->stop ();
-    //setupPanningPhysics ();
-    //queueRedrawImage ();
     m_ScalePhysics->pointerPress(QPointF());
 
-    SYS_DEBUG ("Setting scale to %g", event->delta() / 100.0);
     m_ScalePhysics->pointerMove (QPointF(0.0,  event->delta() / 100.0));
     m_ScalePhysics->pointerRelease();
 }
@@ -783,19 +789,23 @@ WallpaperEditorWidget::panGestureEvent (
 
     switch (panGesture->state()) {
         case Qt::GestureStarted:
+            m_PanOngoing = true;
             m_Physics->pointerPress(QPointF());
+            m_Physics->pointerMove(-itemSpaceOffset);
+            break;
 
         case Qt::GestureUpdated:
             m_Physics->pointerMove(-itemSpaceOffset);
-
         break;
 
         case Qt::GestureFinished:
             m_Physics->pointerRelease();
+            m_PanOngoing = false;
             break;
 
         case Qt::GestureCanceled:
             m_Physics->pointerRelease();
+            m_PanOngoing = false;
         break;
     }
 
@@ -808,13 +818,17 @@ WallpaperEditorWidget::pinchGestureStarted (
         QGestureEvent *event, 
         QPinchGesture *gesture)
 {
+    if (m_PanOngoing) {
+        m_Physics->pointerRelease();
+        m_PanOngoing = false;
+        return;
+    }
+
     m_OriginalScaleFactor = m_Trans.scale();
     qreal startFrom = m_OriginalScaleFactor * 100.0;
 
     SYS_DEBUG ("m_ScalePhysics->pointerPress (0.0, %g)", startFrom);
     m_ScalePhysics->pointerPress(QPointF());
-    //m_ScalePhysics->pointerPress(QPointF(0.0, startFrom));
-    //m_ScalePhysics->pointerMove(QPointF(0.0, startFrom));
     event->accept(gesture);
 }
 
@@ -823,16 +837,17 @@ WallpaperEditorWidget::pinchGestureUpdate (
             QGestureEvent *event, 
             QPinchGesture *gesture)
 {
+    if (m_PanOngoing) {
+        m_Physics->pointerRelease();
+        m_PanOngoing = false;
+        return;
+    }
     /*
      * No frame drop here: the pinch gesture is much better this way...
      */
     qreal scaley =
         m_OriginalScaleFactor - 
         (gesture->totalScaleFactor() * m_OriginalScaleFactor);
-
-    SYS_DEBUG ("m_OriginalScaleFactor = %g", m_OriginalScaleFactor);
-    SYS_DEBUG ("totalScaleFactor      = %g", gesture->totalScaleFactor());
-    SYS_DEBUG ("pointerMove(0.0, %g)", scaley * 100.0);
 
     m_ScalePhysics->pointerMove(
             QPointF(0.0, scaley * 100.0));
@@ -845,7 +860,12 @@ WallpaperEditorWidget::pinchGestureEnded (
             QGestureEvent *event, 
             QPinchGesture *gesture)
 {
-    SYS_DEBUG ("m_ScalePhysics->pointerRelease ()");
+    if (m_PanOngoing) {
+        m_Physics->pointerRelease();
+        m_PanOngoing = false;
+        return;
+    }
+
     m_ScalePhysics->pointerRelease ();
     event->accept(gesture);
 }
