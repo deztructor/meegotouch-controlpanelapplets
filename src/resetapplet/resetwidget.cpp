@@ -25,6 +25,7 @@
 #include <MButton>
 #include <MDialog>
 #include <MMessageBox>
+#include <MSeparator>
 
 #undef DEBUG
 #include "../debug.h"
@@ -54,6 +55,7 @@ ResetWidget::createContent ()
     MLinearLayoutPolicy *policy;
     MButton             *restoreButton;
     MButton             *clearButton;
+
     /*
      *
      */
@@ -61,29 +63,30 @@ ResetWidget::createContent ()
     policy = new MLinearLayoutPolicy (layout, Qt::Vertical);
     policy->setContentsMargins (0., 0., 0., 0.);
     policy->setSpacing (0.);
-
+    
     /*
-     *
+     * The first button.
      */
     //% "Restore original settings"
     restoreButton = new MButton (qtTrId("qtn_rset_restore"));
-    restoreButton->setStyleName ("CommonTopButtonInverted");
+    restoreButton->setStyleName ("CommonSingleButtonInverted");
     restoreButton->setObjectName ("ResetAppletRFSButton");
     connect (restoreButton, SIGNAL(clicked()), 
             this, SLOT(restoreActivated()));
 
+    
     /*
      * The second button.
      */
     //% "Clear device"
     clearButton = new MButton (qtTrId("qtn_rset_clear"));
-    clearButton->setStyleName ("CommonBottomButtonInverted");
+    clearButton->setStyleName ("CommonSingleButtonInverted");
     clearButton->setObjectName ("ResetAppletCUDButton");
     connect (clearButton, SIGNAL(clicked()), 
             this, SLOT(clearActivated()));
 
     addButtonContainer (policy, restoreButton, clearButton);
-
+    policy->addStretch();
     /*
      *
      */
@@ -101,6 +104,7 @@ ResetWidget::addButtonContainer (
     MLayout             *layout;
     MLinearLayoutPolicy *landscapePolicy;
     MLinearLayoutPolicy *portraitPolicy;
+    MSeparator          *spacer;
     
     /*
      * Creating a lcontainer and a layout.
@@ -122,9 +126,15 @@ ResetWidget::addButtonContainer (
     layout->setPortraitPolicy (portraitPolicy);
 
     container->centralWidget()->setLayout (layout);
+    
+    /*
+     * One spacer
+     */
+    spacer = new MSeparator;
+    spacer->setStyleName ("CommonSpacer");
 
     /*
-     * Adding the buttons to the layouts
+     * Adding the buttons and the spacer to the layouts
      */
     landscapePolicy->addStretch ();
     landscapePolicy->addItem (button1);
@@ -133,6 +143,7 @@ ResetWidget::addButtonContainer (
 
     portraitPolicy->addItem (button1);
     portraitPolicy->setAlignment (button1, Qt::AlignHCenter);
+    portraitPolicy->addItem (spacer);
     portraitPolicy->addItem (button2);
     portraitPolicy->setAlignment (button2, Qt::AlignHCenter);
 
