@@ -2,6 +2,7 @@ meegotouch-controlpanelapplets (0.20.29~1) meegotouch; urgency=low
 
   * [Laszlo Pere]
   * Fixes: NB#243608 - ResetApplet: Spacing between buttons incorrect
+  * Fixes: NB#241744 - Header icon alignment
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 05 Apr 2011 10:55:32 +0300
 
