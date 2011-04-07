@@ -33,15 +33,15 @@
 #define WARNING
 #include <../debug.h>
 
+static QPixmap   placeholderPixmap;
 /*
  * The intentional delay between the loading of two picture files. This gives a
  * little chance for other applications.
  */
-static const int loadPictureDelay = 100;
+static const int loadPictureDelay = 0;
 
 // FIXME: This icon is not yet specified, this is a substitute.
 static const QString checkIconId = "icon-m-common-checkbox-checked";
-static const QString imagePlaceHolderIconId = "icon-m-content-not-loaded";
 
 /******************************************************************************
  * WallpaperImageLoader implementation.
@@ -191,12 +191,15 @@ WallpaperCellCreator::updateCell (
                 thumb.scaled(
                     (int)cSize.width(), (int)cSize.height()));
     } else {
-        if (imageWidget->image() != imagePlaceHolderIconId) {
-            /*
-             * Need to set the size also, otherwise the iamge gets pixelated.
-             */
-            imageWidget->setImage (imagePlaceHolderIconId, cellSize()); 
+        if (placeholderPixmap.size() != cellSize()) {
+            QSizeF  cSize = cellSize();
+
+            placeholderPixmap = QPixmap(
+                    (int)cSize.width(), (int)cSize.height());
+            placeholderPixmap.fill (QColor("black"));
         }
+
+        imageWidget->setPixmap (placeholderPixmap);
     }
 
     // The spinner.

@@ -39,6 +39,9 @@
 static const int MaxColumns = 2;
 static const qreal navBarTransparency = 0.85;
 
+#include <MWidgetCreator>
+M_REGISTER_WIDGET_NO_CREATE(WallpaperWidget)
+
 /******************************************************************************
  *
  */

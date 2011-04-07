@@ -7,6 +7,9 @@
 //#define DEBUG
 #include "../debug.h"
 
+#include <MWidgetCreator>
+M_REGISTER_WIDGET_NO_CREATE(GridImageWidget)
+
 //static const QString progressType = MProgressIndicator::barType;
 static const QString progressType = MProgressIndicator::spinnerType;
 
@@ -200,6 +203,7 @@ GridImageWidget::GridImageWidget () :
     m_TopRightImageWidget (0),
     m_ProgressIndicator (0)
 {
+    setStyleName ("GridImageWidget");
     createLayout ();
 }
 

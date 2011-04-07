@@ -2,3 +2,7 @@
     tool-bar-style-name: "MToolBarStyleInverted";
 }
 
+MWidgetController#GridImageWidget { 
+    background-color: #FF0000; 
+}
+

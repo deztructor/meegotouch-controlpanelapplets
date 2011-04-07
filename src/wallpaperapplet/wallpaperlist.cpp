@@ -39,6 +39,9 @@ static int columnsPortrait = 3;
 #include <MSortFilterProxyModel>
 #include <MListFilter>
 
+#include <MWidgetCreator>
+M_REGISTER_WIDGET_NO_CREATE(WallpaperList)
+
 WallpaperList::WallpaperList (
         WallpaperBusinessLogic *logic,
         QGraphicsItem          *parent) :
