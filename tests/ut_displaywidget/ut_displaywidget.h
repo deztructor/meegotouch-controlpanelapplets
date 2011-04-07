@@ -34,7 +34,6 @@ private slots:
     void initTestCase ();
     void cleanupTestCase ();
 
-    void testBrightnessSlider ();
     void testScreenTimeout ();
     void testTranslation ();
     

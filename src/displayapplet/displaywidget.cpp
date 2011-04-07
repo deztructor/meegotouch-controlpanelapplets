@@ -113,6 +113,7 @@ DisplayWidget::addHeaderContainer ()
      */
     //% "Display"
     m_TitleLabel = new MLabel (qtTrId("qtn_disp_display"));
+    m_TitleLabel->setObjectName ("TitleLabel");
     m_TitleLabel->setStyleName ("CommonXLargeHeaderInverted");
     layout->addItem (m_TitleLabel);
     layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
@@ -148,6 +149,7 @@ DisplayWidget::addSecHeaderContainer ()
      */
     //% "Brightness"
     m_SubTitleLabel = new MLabel (qtTrId("qtn_disp_bright"));
+    m_SubTitleLabel->setObjectName ("SubTitleLabel");
     m_SubTitleLabel->setStyleName ("CommonGroupHeaderInverted");
     layout->addItem (m_SubTitleLabel);
     layout->setAlignment (m_SubTitleLabel, Qt::AlignLeft);
@@ -161,6 +163,7 @@ DisplayWidget::addSecHeaderContainer ()
 void 
 DisplayWidget::addSliderContainer ()
 {
+#if 0
     MContainer            *container;
     QGraphicsLinearLayout *layout;
 
@@ -212,6 +215,7 @@ DisplayWidget::addSliderContainer ()
      */
     m_MainLayout->addItem (container);
     m_MainLayout->setStretchFactor (container, 0);
+#endif
 }
 
 void 
@@ -261,6 +265,7 @@ DisplayWidget::addLowPowerContainer ()
     container->centralWidget()->setLayout (layout);
 
     MLabel *lowPowerLabel = new MLabel;
+    lowPowerLabel->setObjectName ("LowPowerLabel");
     lowPowerLabel->setStyleName ("CommonSingleTitleInverted");
     //% "Low power mode"
     lowPowerLabel->setText (qtTrId ("qtn_disp_lowpower"));
@@ -353,8 +358,13 @@ DisplayWidget::retranslateUi ()
 {
     updateScreenTimeoutCombo ();
 
-    m_TitleLabel->setText (qtTrId("qtn_disp_display"));
-    m_SubTitleLabel->setText (qtTrId("qtn_disp_bright"));
-    m_screenTimeout->setTitle (qtTrId ("qtn_disp_screenoff"));
+    if (m_TitleLabel)
+        m_TitleLabel->setText (qtTrId("qtn_disp_display"));
+
+    if (m_SubTitleLabel)
+        m_SubTitleLabel->setText (qtTrId("qtn_disp_bright"));
+
+    if (m_screenTimeout)
+        m_screenTimeout->setTitle (qtTrId ("qtn_disp_screenoff"));
 }
 

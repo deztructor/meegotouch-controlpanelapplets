@@ -28,11 +28,11 @@
 
 #include <MApplication>
 #include <MGConfItem>
-#include <MSlider>
 #include <MComboBox>
 #include <MDialog>
 #include <MButton>
 #include <MLabel>
+#include <QHash>
 
 #include <QList>
 #include <QVariant>
@@ -108,31 +108,6 @@ Ut_DisplayWidget::cleanupTestCase()
 }
 
 /*!
- * This test will move the brightness slider through the possible brightness
- * values and check if the slider is updating the brightness with the
- * DisplayBusinessLogic.
- */
-void 
-Ut_DisplayWidget::testBrightnessSlider ()
-{
-    DisplayWidget *widget;
-    QList<int>     brightnessValues;
-
-    widget = new DisplayWidget;
-    QVERIFY (widget->m_logic);
-    QVERIFY (widget->m_brightnessSlider);
-    brightnessValues = widget->m_logic->brightnessValues();
-
-    for (int n = 0; n < brightnessValues.size(); ++n) {
-        widget->m_brightnessSlider->setValue (n);
-        QCOMPARE (widget->m_logic->selectedBrightnessValueIndex(), n);
-    }
-
-    delete widget;
-}
-
-
-/*!
  * This test will check that when the screen timeout widget is clicked a dialog
  * will be shown with the possible values and when a value is selected the
  * screen light value has been set for the businesslogic.
@@ -184,9 +159,14 @@ Ut_DisplayWidget::testTranslation ()
     widget = new DisplayWidget;
     widget->retranslateUi ();
 
-    QCOMPARE (widget->m_TitleLabel->text(), qtTrId ("qtn_disp_display"));
-    QCOMPARE (widget->m_SubTitleLabel->text(), qtTrId ("qtn_disp_bright"));
-    QCOMPARE (widget->m_screenTimeout->title(), qtTrId ("qtn_disp_screenoff"));
+    if (widget->m_TitleLabel)
+        QCOMPARE (widget->m_TitleLabel->text(), qtTrId ("qtn_disp_display"));
+
+    if (widget->m_SubTitleLabel)
+        QCOMPARE (widget->m_SubTitleLabel->text(), qtTrId ("qtn_disp_bright"));
+
+    if (widget->m_screenTimeout)
+        QCOMPARE (widget->m_screenTimeout->title(), qtTrId ("qtn_disp_screenoff"));
 }
 
 QTEST_APPLESS_MAIN(Ut_DisplayWidget)
