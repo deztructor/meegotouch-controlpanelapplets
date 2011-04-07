@@ -33,7 +33,6 @@
 #define WARNING
 #include <../debug.h>
 
-static QPixmap   placeholderPixmap;
 /*
  * The intentional delay between the loading of two picture files. This gives a
  * little chance for other applications.
@@ -168,6 +167,8 @@ WallpaperCellCreator::updateCell (
         const QModelIndex &index, 
         MWidget           *cell) const
 {
+    static QPixmap placeholderPixmap;
+
     GridImageWidget *imageWidget = qobject_cast<GridImageWidget *>(cell);
     QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
     WallpaperDescriptor *desc = data.value<WallpaperDescriptor *>();
