@@ -5,7 +5,7 @@
 #include <MProgressIndicator>
 
 //#define DEBUG
-#define WARNING
+//#define WARNING
 #include "../debug.h"
 
 #include <MWidgetCreator>
