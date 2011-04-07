@@ -72,16 +72,21 @@ void DisplayWidget::initWidget ()
     m_MainLayout->setSpacing (0.);
     setLayout (layout);
 
+    /*
+     * FIXME: I removed these widgets because the layout guide has been changed
+     * (what an unexpected thing). If the layout guide remains we will have to
+     * remove the methods themselves.
+     */
     // Row 1: The title label
     addHeaderContainer ();
-    addStretcher ("CommonHeaderDividerInverted");
-    addSecHeaderContainer ();
-    addSliderContainer ();
-    addStretcher ("CommonItemDivider");
+    //addStretcher ("CommonHeaderDividerInverted");
+    //addSecHeaderContainer ();
+    //addSliderContainer ();
+    //addStretcher ("CommonItemDivider");
     addScreenTimeoutContainer ();
-    addStretcher ("CommonItemDivider");
+    //addStretcher ("CommonItemDivider");
     addLowPowerContainer ();
-    addStretcher ("CommonSmallSpacerInverted");
+    //addStretcher ("CommonSmallSpacerInverted");
     m_MainLayout->addStretch();
 }
 
