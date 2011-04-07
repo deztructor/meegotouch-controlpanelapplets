@@ -5,6 +5,7 @@
 #include <MProgressIndicator>
 
 //#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 #include <MWidgetCreator>
@@ -12,6 +13,9 @@ M_REGISTER_WIDGET_NO_CREATE(GridImageWidget)
 
 //static const QString progressType = MProgressIndicator::barType;
 static const QString progressType = MProgressIndicator::spinnerType;
+static const QPen selectionPen (
+        QBrush(), 4, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin);
+
 
 GridImageLayout::GridImageLayout (
         QGraphicsLayoutItem *parent) : 
@@ -113,9 +117,9 @@ GridImageLayout::setGeometry(
 {
     qreal left, top, right, bottom;
 
-    #if 0
+    #if 1
     SYS_DEBUG ("---------------------------------------");
-    SYS_DEBUG ("*** at %g, %g (%gx%g)", r.x(), r.y(), r.width(), r.height());
+    SYS_WARNING ("*** at %g, %g (%gx%g)", r.x(), r.y(), r.width(), r.height());
     #endif
 
     QGraphicsLayout::setGeometry(r);
@@ -199,22 +203,45 @@ GridImageLayout::sizeHint (
  */
 GridImageWidget::GridImageWidget () :
     m_Layout (0),
-    m_ImageWidget (0),
     m_TopRightImageWidget (0),
-    m_ProgressIndicator (0)
+    m_ProgressIndicator (0),
+    m_Current (false)
 {
-    setStyleName ("GridImageWidget");
     createLayout ();
 }
 
-QString 
-GridImageWidget::image() const
+void 
+GridImageWidget::setCurrent (
+        bool current)
 {
-    if (!m_ImageWidget)
-        return QString("");
-
-    return m_ImageWidget->image();
+    m_Current = current;
 }
+
+void 
+GridImageWidget::paint (
+        QPainter                       *painter, 
+        const QStyleOptionGraphicsItem *option, 
+        QWidget                        *widget)
+{
+    QRectF geom = geometry ();
+
+    //MListItem::paint (painter, option, widget);
+    painter->drawPixmap (0, 0, (int) geom.width(), (int) geom.height(), m_Pixmap);
+
+    if (m_Current) {
+        QPen pen(selectionPen);
+        pen.setColor (QColor("Blue"));
+        painter->setPen(pen);
+
+        const int mod    = pen.width() % 2;
+        const int adjust = pen.width() / 2;
+        QRect rect (0, 0, 
+                (int) geom.width(), (int) geom.height());
+        const QRect selection = rect.adjusted(adjust,adjust,-(adjust+mod),-(adjust+mod));
+        painter->drawRect(selection);
+    }
+}
+
 
 QString 
 GridImageWidget::topRightImage() const
@@ -230,67 +257,12 @@ void
 GridImageWidget::setPixmap(
         const QPixmap &pixmap)
 {
-    if (!m_ImageWidget)
+    if (!m_Layout)
         createLayout ();
 
-    m_ImageWidget->setPixmap(pixmap);
+    m_Pixmap = pixmap;
 }
 
-void
-GridImageWidget::setImage(
-        const QString &id)
-{
-    if (!m_ImageWidget)
-        createLayout ();
-
-    m_ImageWidget->setImage (id);
-}
-
-void
-GridImageWidget::setImage(
-        const QString  &id,
-        const QSizeF   &size)
-{
-    if (!m_ImageWidget)
-        createLayout ();
-
-    m_ImageWidget->setImage (id, QSize(
-                (int) size.width(), 
-                (int) size.height()));
-}
-
-
-void 
-GridImageWidget::setTopRightImage (
-        const QString &id)
-{
-    /*
-     * If the ID is not empty and we have no stamp widget we create one.
-     */
-    if (!m_TopRightImageWidget && !id.isEmpty()) {
-        m_TopRightImageWidget = new MImageWidget (this);
-        m_TopRightImageWidget->setObjectName ("CommonIcon");
-        m_Layout->addItem (
-                m_TopRightImageWidget, 
-                GridImageLayout::CheckMark);
-    }
-
-    /*
-     * Set the image and show it if the ID is valid.
-     */
-    if (!id.isEmpty()) {
-        m_TopRightImageWidget->setImage (id);
-        m_TopRightImageWidget->show();
-    }
-    
-    /*
-     * The stamp can be disabled by the empty ID.
-     */
-    if (id.isEmpty() && m_TopRightImageWidget) {
-        m_TopRightImageWidget->setImage (id);
-        m_TopRightImageWidget->hide ();
-    }
-}
 
 MProgressIndicator *
 GridImageWidget::progressIndicator (
@@ -329,14 +301,6 @@ GridImageWidget::createLayout()
 
     m_Layout = new GridImageLayout(this);
     m_Layout->setContentsMargins(0.0, 0.0, 0.0, 0.0);
-
-    m_ImageWidget = new MImageWidget (this);
-
-    m_Layout->addItem (
-            m_ImageWidget,
-            GridImageLayout::Image);
-
-    m_ImageWidget->show ();
     setLayout (m_Layout);
 }
 

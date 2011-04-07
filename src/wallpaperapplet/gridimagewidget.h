@@ -52,15 +52,17 @@ class GridImageWidget : public MListItem
 
     public:
         GridImageWidget();
-        
+       
+        void setCurrent (bool current);
+
         QString image() const;
         QString topRightImage() const;
 
     public Q_SLOTS:
         void setPixmap(const QPixmap &pixmap);
-        void setImage(const QString &id);
-        void setImage(const QString &id, const QSizeF &size);
-        void setTopRightImage (const QString &id);
+        //void setImage(const QString &id);
+        //void setImage(const QString &id, const QSizeF &size);
+        //void setTopRightImage (const QString &id);
 
         MProgressIndicator *progressIndicator(bool create);
 
@@ -68,14 +70,19 @@ class GridImageWidget : public MListItem
         //void clicked();
         void longPressed();
 
-   protected:
+    protected:
         virtual void createLayout();
+        virtual void paint (
+                QPainter* painter, 
+                const QStyleOptionGraphicsItem* option, 
+                QWidget* widget = 0);
 
    private:
         GridImageLayout     *m_Layout;
-        MImageWidget        *m_ImageWidget;
         MImageWidget        *m_TopRightImageWidget;
         MProgressIndicator  *m_ProgressIndicator;
+        QPixmap              m_Pixmap;
+        bool                 m_Current;
 #if 1
     protected:
          virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);

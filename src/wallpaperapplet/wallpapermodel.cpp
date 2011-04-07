@@ -213,13 +213,9 @@ WallpaperCellCreator::updateCell (
             indicator->hide();
     }
     
-    // A checkmark indicating that this is the current wallpaper.
-    if (desc->isCurrent()) {
-        if (imageWidget->topRightImage() != checkIconId)
-            imageWidget->setTopRightImage (checkIconId);
-    } else {
-        imageWidget->setTopRightImage ("");
-    }
+    // The selection. 
+    imageWidget->setCurrent (desc->isCurrent());
+    //imageWidget->setSelected (true);
 }
 #else
 MWidget *
@@ -328,7 +324,6 @@ WallpaperModel::WallpaperModel (
 
 WallpaperModel::~WallpaperModel ()
 {
-    SYS_WARNING ("=================================");
     for (int n = 0; n < m_DescriptorList.size(); ++n) {
         if (!m_DescriptorList[n]->isCurrent())
             delete m_DescriptorList[n];
