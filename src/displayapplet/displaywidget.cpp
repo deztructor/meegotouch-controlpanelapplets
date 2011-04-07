@@ -161,6 +161,7 @@ DisplayWidget::addSecHeaderContainer ()
 void 
 DisplayWidget::addSliderContainer ()
 {
+#if 0
     MContainer            *container;
     QGraphicsLinearLayout *layout;
 
@@ -212,6 +213,7 @@ DisplayWidget::addSliderContainer ()
      */
     m_MainLayout->addItem (container);
     m_MainLayout->setStretchFactor (container, 0);
+#endif
 }
 
 void 

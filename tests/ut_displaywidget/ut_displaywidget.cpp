@@ -28,7 +28,6 @@
 
 #include <MApplication>
 #include <MGConfItem>
-#include <MSlider>
 #include <MComboBox>
 #include <MDialog>
 #include <MButton>
@@ -106,31 +105,6 @@ Ut_DisplayWidget::cleanupTestCase()
 {
     delete m_App;
 }
-
-/*!
- * This test will move the brightness slider through the possible brightness
- * values and check if the slider is updating the brightness with the
- * DisplayBusinessLogic.
- */
-void 
-Ut_DisplayWidget::testBrightnessSlider ()
-{
-    DisplayWidget *widget;
-    QList<int>     brightnessValues;
-
-    widget = new DisplayWidget;
-    QVERIFY (widget->m_logic);
-    QVERIFY (widget->m_brightnessSlider);
-    brightnessValues = widget->m_logic->brightnessValues();
-
-    for (int n = 0; n < brightnessValues.size(); ++n) {
-        widget->m_brightnessSlider->setValue (n);
-        QCOMPARE (widget->m_logic->selectedBrightnessValueIndex(), n);
-    }
-
-    delete widget;
-}
-
 
 /*!
  * This test will check that when the screen timeout widget is clicked a dialog
