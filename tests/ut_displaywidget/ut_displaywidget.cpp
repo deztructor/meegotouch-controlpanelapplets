@@ -32,6 +32,7 @@
 #include <MDialog>
 #include <MButton>
 #include <MLabel>
+#include <QHash>
 
 #include <QList>
 #include <QVariant>
@@ -158,9 +159,14 @@ Ut_DisplayWidget::testTranslation ()
     widget = new DisplayWidget;
     widget->retranslateUi ();
 
-    QCOMPARE (widget->m_TitleLabel->text(), qtTrId ("qtn_disp_display"));
-    QCOMPARE (widget->m_SubTitleLabel->text(), qtTrId ("qtn_disp_bright"));
-    QCOMPARE (widget->m_screenTimeout->title(), qtTrId ("qtn_disp_screenoff"));
+    if (widget->m_TitleLabel)
+        QCOMPARE (widget->m_TitleLabel->text(), qtTrId ("qtn_disp_display"));
+
+    if (widget->m_SubTitleLabel)
+        QCOMPARE (widget->m_SubTitleLabel->text(), qtTrId ("qtn_disp_bright"));
+
+    if (widget->m_screenTimeout)
+        QCOMPARE (widget->m_screenTimeout->title(), qtTrId ("qtn_disp_screenoff"));
 }
 
 QTEST_APPLESS_MAIN(Ut_DisplayWidget)
