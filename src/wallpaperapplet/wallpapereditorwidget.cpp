@@ -54,8 +54,9 @@ static const qreal ScaleLowerLimit = 0.15;
 
 static const int ExtraMargin = 0;
 static const int TitleBarHeight = 60;
-
 static const int alwaysVisibleFromImage = 15;
+static const qreal scaleLowerLimit = 20.0;
+static const qreal scaleUpperLimit = 400.0;
 
 /*!
  * WallpaperEditorWidget constructor
@@ -134,7 +135,8 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_ScalePhysics->setBorderSpringK(0.02);
     m_ScalePhysics->setBorderFriction(0.25);
     m_ScalePhysics->setMaximumVelocity(70);
-    m_ScalePhysics->setRange (QRectF(0.0, 20.0, 0.0, 200.0));
+    m_ScalePhysics->setRange (
+            QRectF(0.0, scaleLowerLimit, 0.0, scaleUpperLimit));
     m_ScalePhysics->setPosition (QPointF(0.0, 100.0));
     connect (m_ScalePhysics, SIGNAL(positionChanged(const QPointF &)),
             this, SLOT(scalePhysicsPositionChanged(const QPointF &)));

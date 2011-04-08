@@ -6,6 +6,7 @@ meegotouch-controlpanelapplets (0.20.30~1) meegotouch; urgency=low
   * Blue rectangle in wallpaper grid (net fully tested and ready just yet)
   * Blue rectangle is ready.
   * Fixes: NB#244533 - [TASK] Wallpaper applet grid needs to be updated
+  * Fixes: NB#244128 - Portrait images cannot be set to fullscreen wallpapers
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 08 Apr 2011 09:11:56 +0300
 
