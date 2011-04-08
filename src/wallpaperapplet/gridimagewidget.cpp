@@ -1,11 +1,17 @@
 
 #include "gridimagewidget.h"
 #include <QGraphicsSceneMouseEvent>
+
 #include <MImageWidget>
 #include <MProgressIndicator>
+#include <QPen>
+
+#include <MTheme>
+#include <MStyle>
+#include <mbuttoniconstyle.h>
 
 //#define DEBUG
-//#define WARNING
+#define WARNING
 #include "../debug.h"
 
 #include <MWidgetCreator>
@@ -21,8 +27,7 @@ GridImageLayout::GridImageLayout (
         QGraphicsLayoutItem *parent) : 
     QGraphicsLayout (parent),
     m_Image (0),
-    m_ProgressBar (0),
-    m_TopRightImageWidget (0)
+    m_ProgressBar (0)
 {
 }
  
@@ -45,8 +50,6 @@ GridImageLayout::count() const
         retval++;
     if (m_ProgressBar)
         retval++;
-    if (m_TopRightImageWidget)
-        retval++;
 
     //SYS_DEBUG ("Returning %d", retval);
     return retval;
@@ -62,8 +65,6 @@ GridImageLayout::itemAt (int idx) const
         retval = m_Image;
     else if (idx == 1)
         retval = m_ProgressBar;
-    else if (idx == 2)
-        retval = m_TopRightImageWidget;
 
     //SYS_DEBUG ("Returning %p at %d", retval, idx);
     return retval;
@@ -101,10 +102,6 @@ GridImageLayout::addItem (
             SYS_DEBUG ("Adding progress indicator");
             m_ProgressBar = layoutItem;
             break;
-
-        case CheckMark:
-            SYS_DEBUG ("Adding checkmark");
-            m_TopRightImageWidget = layoutItem;
     }
 
     addChildLayoutItem (layoutItem);
@@ -117,28 +114,12 @@ GridImageLayout::setGeometry(
 {
     qreal left, top, right, bottom;
 
-    #if 1
-    SYS_DEBUG ("---------------------------------------");
-    SYS_WARNING ("*** at %g, %g (%gx%g)", r.x(), r.y(), r.width(), r.height());
-    #endif
-
     QGraphicsLayout::setGeometry(r);
 
     getContentsMargins (&left, &top, &right, &bottom);
 
     if (m_Image)
         m_Image->setGeometry (r);
-
-    if (m_TopRightImageWidget) {
-        QSizeF iconSize = m_TopRightImageWidget->preferredSize ();
-        QRectF iconGeometry (
-                r.width() - iconSize.width() - left,
-                top,
-                iconSize.width(),
-                iconSize.height());
-        
-        m_TopRightImageWidget->setGeometry (iconGeometry);
-    }
 
     if (m_ProgressBar) {
         QSizeF progressSize;
@@ -199,15 +180,23 @@ GridImageLayout::sizeHint (
 
 
 /******************************************************************************
- *
+ * GridImageWidget implementation.
  */
 GridImageWidget::GridImageWidget () :
     m_Layout (0),
-    m_TopRightImageWidget (0),
     m_ProgressIndicator (0),
     m_Current (false)
 {
+    //setObjectName ("GridImageWidget");
+    m_HighlightStyle = static_cast<const MButtonIconStyle *>(
+            MTheme::style("MButtonIconStyle", "HighlightStyle"));
     createLayout ();
+}
+
+GridImageWidget::~GridImageWidget ()
+{
+    MTheme::releaseStyle (m_HighlightStyle);
+
 }
 
 void 
@@ -225,12 +214,24 @@ GridImageWidget::paint (
 {
     QRectF geom = geometry ();
 
+    Q_UNUSED (option);
+    Q_UNUSED (widget);
+
     //MListItem::paint (painter, option, widget);
-    painter->drawPixmap (0, 0, (int) geom.width(), (int) geom.height(), m_Pixmap);
+    painter->drawPixmap (
+            0, 0, (int) geom.width(), (int) geom.height(), m_Pixmap);
 
     if (m_Current) {
         QPen pen(selectionPen);
-        pen.setColor (QColor("Blue"));
+
+        /*
+         * FIXME: Somehow this theming does not work. This is the default color,
+         * but we should use theming here.
+         */
+        pen.setColor (
+                QColor("#4292ff")
+                //m_HighlightStyle->glowColor()
+                );
         painter->setPen(pen);
 
         const int mod    = pen.width() % 2;
@@ -240,16 +241,6 @@ GridImageWidget::paint (
         const QRect selection = rect.adjusted(adjust,adjust,-(adjust+mod),-(adjust+mod));
         painter->drawRect(selection);
     }
-}
-
-
-QString 
-GridImageWidget::topRightImage() const
-{
-    if (!m_TopRightImageWidget)
-        return QString("");
-
-    return m_TopRightImageWidget->image();
 }
 
 

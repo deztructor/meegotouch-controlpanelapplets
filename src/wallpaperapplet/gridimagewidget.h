@@ -4,11 +4,12 @@
 #include <MListItem>
 #include <QString>
 
-class MImageWidget;
-class MProgressIndicator;
-
 #include <QGraphicsLayout>
 #include <QList>
+
+class MImageWidget;
+class MProgressIndicator;
+class MButtonIconStyle;
 
 
 class GridImageLayout : public QGraphicsLayout
@@ -19,8 +20,7 @@ class GridImageLayout : public QGraphicsLayout
 
         typedef enum {
             Image,
-            ProgressIndicator,
-            CheckMark
+            ProgressIndicator
         } GridImageLayoutRole;
 
         void addItem (
@@ -43,7 +43,6 @@ class GridImageLayout : public QGraphicsLayout
         QList<QGraphicsLayoutItem*> list;
         QGraphicsLayoutItem   *m_Image;
         QGraphicsLayoutItem   *m_ProgressBar;
-        QGraphicsLayoutItem   *m_TopRightImageWidget;
 };
 
 class GridImageWidget : public MListItem
@@ -52,22 +51,17 @@ class GridImageWidget : public MListItem
 
     public:
         GridImageWidget();
+        ~GridImageWidget();
        
         void setCurrent (bool current);
 
         QString image() const;
-        QString topRightImage() const;
 
     public Q_SLOTS:
         void setPixmap(const QPixmap &pixmap);
-        //void setImage(const QString &id);
-        //void setImage(const QString &id, const QSizeF &size);
-        //void setTopRightImage (const QString &id);
-
         MProgressIndicator *progressIndicator(bool create);
 
     Q_SIGNALS:
-        //void clicked();
         void longPressed();
 
     protected:
@@ -78,16 +72,15 @@ class GridImageWidget : public MListItem
                 QWidget* widget = 0);
 
    private:
-        GridImageLayout     *m_Layout;
-        MImageWidget        *m_TopRightImageWidget;
-        MProgressIndicator  *m_ProgressIndicator;
-        QPixmap              m_Pixmap;
-        bool                 m_Current;
-#if 1
+        GridImageLayout        *m_Layout;
+        MProgressIndicator     *m_ProgressIndicator;
+        QPixmap                 m_Pixmap;
+        bool                    m_Current;
+        const MButtonIconStyle *m_HighlightStyle;
+
     protected:
          virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
          virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
          virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
-#endif
 };
 #endif
