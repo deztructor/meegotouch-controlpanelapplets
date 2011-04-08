@@ -1,22 +1,26 @@
-meegotouch-controlpanelapplets (0.20.29~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.30~1) meegotouch; urgency=low
 
-  [ David Kedves ]
-  * Fixes: NB#244525 - 'Brightness' string is not localized
-  * Fixes: NB#184751 - Able to move the wallpaper image outside
-    the screen and set the same as wallpaper.
-
-  [ Laszlo Pere ]
-  * Fixes: NB#243608 - ResetApplet: Spacing between buttons incorrect
-  * Fixes: NB#241744 - Header icon alignment
-  * Fixes: NB#243944 - Too large title font used in Display settings view
-  * Fixes: NB#243972 - Brightness adjustment should not be available under
-    Display settings
   * Removed placeholder icons from the grid view of the wallpaper applet.
   * Faster image loading in the wallpaper grid view.
   * Blue rectangle in wallpaper grid (net fully tested and ready just yet)
 
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 08 Apr 2011 09:11:56 +0300
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 07 Apr 2011 14:12:19 +0300
+meegotouch-controlpanelapplets (0.20.29-1) meegotouch; urgency=low
+
+  [ David Kedves ]
+  * Fixes: NB#244525 - 'Brightness' string is not localized
+
+  [ Laszlo Pere ]
+  * Fixes NB243608 - ResetApplet: Spacing between buttons incorrect
+  * Fixes NB241744 - Header icon alignment
+  * Fixes NB243944 - Too large title font used in Display settings view
+  * Fixes NB243972 - Brightness adjustment should not be available under
+    Display settings
+  * Fixes: NB#184751 - Able to move the wallpaper image outside
+    the screen and set the same as wallpaper.
+
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 08 Apr 2011 09:08:24 +0300
 
 meegotouch-controlpanelapplets (0.20.28-1) meegotouch; urgency=low
 
