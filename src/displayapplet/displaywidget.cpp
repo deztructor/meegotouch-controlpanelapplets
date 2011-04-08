@@ -85,7 +85,7 @@ void DisplayWidget::initWidget ()
     //addStretcher ("CommonItemDivider");
     addScreenTimeoutContainer ();
     //addStretcher ("CommonItemDivider");
-    addLowPowerContainer ();
+    //addLowPowerContainer ();
     addDoubleTapContainer ();
     //addStretcher ("CommonSmallSpacerInverted");
     m_MainLayout->addStretch();

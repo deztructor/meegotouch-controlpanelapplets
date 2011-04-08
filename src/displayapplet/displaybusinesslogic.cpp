@@ -297,3 +297,4 @@ DisplayBusinessLogic::getDoubleTapWakes ()
 {
     return m_DoubleTap->value().toInt() != 0;
 }
+
