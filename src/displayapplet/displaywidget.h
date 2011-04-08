@@ -51,6 +51,7 @@ private:
     void addSliderContainer ();
     void addScreenTimeoutContainer ();
     void addLowPowerContainer ();
+    void addDoubleTapContainer ();
     void addStretcher (const QString &styleName);
     void updateScreenTimeoutCombo ();
     void retranslateUi ();
@@ -68,6 +69,7 @@ private:
     MComboBox              *m_screenTimeout;
     MLabel                 *m_screenlightLabel;
     MButton                *m_lowPowerSwitch;
+    MButton                *m_DoubleTapSwitch;
 
     #ifdef UNIT_TEST
     friend class Ut_DisplayWidget;

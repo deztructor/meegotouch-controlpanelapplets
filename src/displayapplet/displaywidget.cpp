@@ -86,6 +86,7 @@ void DisplayWidget::initWidget ()
     addScreenTimeoutContainer ();
     //addStretcher ("CommonItemDivider");
     addLowPowerContainer ();
+    addDoubleTapContainer ();
     //addStretcher ("CommonSmallSpacerInverted");
     m_MainLayout->addStretch();
 }
@@ -291,6 +292,50 @@ DisplayWidget::addLowPowerContainer ()
     m_MainLayout->setStretchFactor (container, 0);
 }
 
+void 
+DisplayWidget::addDoubleTapContainer ()
+{
+    MContainer            *container;
+    QGraphicsLinearLayout *layout;
+
+    /*
+     * Creating a lcontainer and a layout.
+     */
+    container = new MContainer (this);
+    container->setContentsMargins (0,0,0,0);
+    container->setStyleName ("CommonLargePanelInverted");
+    container->setHeaderVisible (false);
+
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    layout->setContentsMargins (0,0,0,0);
+    container->centralWidget()->setLayout (layout);
+
+    MLabel *lowPowerLabel = new MLabel;
+    lowPowerLabel->setObjectName ("LowPowerLabel");
+    lowPowerLabel->setStyleName ("CommonSingleTitleInverted");
+    //% "Double tap wake-up"
+    lowPowerLabel->setText (qtTrId ("qtn_disp_doubletap"));
+    layout->addItem (lowPowerLabel);
+    layout->setAlignment (lowPowerLabel, Qt::AlignVCenter);
+
+    m_DoubleTapSwitch = new MButton;
+    m_DoubleTapSwitch->setCheckable (true);
+    m_DoubleTapSwitch->setViewType (MButton::switchType);
+    m_DoubleTapSwitch->setStyleName ("CommonRightSwitchInverted");
+    m_DoubleTapSwitch->setChecked (m_logic->getDoubleTapWakes());
+
+    connect (m_DoubleTapSwitch, SIGNAL (toggled (bool)),
+             m_logic, SLOT (setDoubleTapWakes(bool)));
+
+    layout->addItem (m_DoubleTapSwitch);
+    layout->setAlignment (m_DoubleTapSwitch, Qt::AlignVCenter | Qt::AlignRight);
+
+    /*
+     * Adding the whole row to the main container.
+     */
+    m_MainLayout->addItem (container);
+    m_MainLayout->setStretchFactor (container, 0);
+}
 
 void
 DisplayWidget::updateScreenTimeoutCombo ()

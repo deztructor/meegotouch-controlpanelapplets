@@ -52,11 +52,13 @@ public:
     QList<int> screenLightsValues();
     int selectedScreenLightsValue();
     bool getLowPowerMode ();
-
+    bool getDoubleTapWakes ();
+    
 public slots:
     void setBrightnessValue(int value);
     void setScreenLightTimeouts (int index);
     void setLowPowerMode (bool enable);
+    void setDoubleTapWakes (bool enable);
 
 private: 
     #ifdef HAVE_QMSYSTEM
@@ -67,6 +69,7 @@ private:
     #endif
     MGConfItem     *m_possibleDimValues;
     MGConfItem     *m_lowPower;
+    MGConfItem     *m_DoubleTap;
     #ifdef UNIT_TEST
     friend class Ut_DisplayBusinessLogic;
     #endif

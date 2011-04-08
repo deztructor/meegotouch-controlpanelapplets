@@ -37,7 +37,9 @@ static const QString CurrentBrightnessKey =
 
 static const QString LowPowerKey = GConfDir + "/use_low_power_mode";
 static const QString DimTimeoutsKey (
-    "/system/osso/dsm/display/possible_display_dim_timeouts");
+        "/system/osso/dsm/display/possible_display_dim_timeouts");
+static const QString DoubleTapKey (
+        "/system/osso/dsm/locks/tklock_double_tap_gesture");
 
 static int TIMEGAP = 5; // time gap between blanking and dimming
 
@@ -49,6 +51,7 @@ DisplayBusinessLogic::DisplayBusinessLogic (
 {
     m_possibleDimValues = new MGConfItem (DimTimeoutsKey);
     m_lowPower = new MGConfItem (LowPowerKey);
+    m_DoubleTap = new MGConfItem (DoubleTapKey);
 }
 #else
 DisplayBusinessLogic::DisplayBusinessLogic (
@@ -59,6 +62,7 @@ DisplayBusinessLogic::DisplayBusinessLogic (
     m_CurrentBrightness = new MGConfItem (CurrentBrightnessKey);
     m_possibleDimValues = new MGConfItem (POSSIBLE_DIM_TIMEOUTS);
     m_lowPower = new MGConfItem (LowPowerKey);
+    m_DoubleTap = new MGConfItem (DoubleTapKey);
 }
 #endif
 
@@ -77,6 +81,14 @@ DisplayBusinessLogic::~DisplayBusinessLogic ()
 
     delete m_possibleDimValues;
     m_possibleDimValues = 0;
+
+    if (m_lowPower)
+        delete m_lowPower;
+    if (m_DoubleTap)
+        delete m_DoubleTap;
+
+    m_lowPower  = 0;
+    m_DoubleTap = 0;
 }
 
 /*!
@@ -266,9 +278,22 @@ DisplayBusinessLogic::setLowPowerMode (bool enable)
     m_lowPower->set (val);
 }
 
+void
+DisplayBusinessLogic::setDoubleTapWakes (
+        bool enable)
+{
+    SYS_DEBUG ("enable = %s", SYS_BOOL (enable));
+    m_DoubleTap->set (enable ? 1 : 0);
+}
+
 bool
 DisplayBusinessLogic::getLowPowerMode ()
 {
     return m_lowPower->value ("false").toString () == "true";
 }
 
+bool
+DisplayBusinessLogic::getDoubleTapWakes ()
+{
+    return m_DoubleTap->value().toInt() != 0;
+}
