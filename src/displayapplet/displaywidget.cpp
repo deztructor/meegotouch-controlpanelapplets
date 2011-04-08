@@ -334,19 +334,31 @@ DisplayWidget::updateScreenTimeoutCombo ()
 
     for (int i = 0; i < m_screenlight_vals.size (); i++)
     {
+        bool minute = false;
         int value = m_screenlight_vals.at (i);
-        QString str = (value < 60) ?
-                      //% "%1 seconds"
-                      qtTrId ("qtn_comm_time_second", value) :
-                      //% "%1 minutes"
-                      qtTrId ("qtn_comm_time_minute", value / 60);
+
         if (value >= 60)
+        {
+            minute = true;
             value /= 60;
+        }
+
+        QString itemText;
+        if (minute)
+        {
+            //% "%1 minutes"
+            itemText = qtTrId ("qtn_comm_time_minute", value).arg (value);
+        }
+        else
+        {
+            //% "%1 seconds"
+            itemText = qtTrId ("qtn_comm_time_second", value).arg (value);
+        }
 
         if (fillNeeded)
-            m_screenTimeout->insertItem (i, str.arg (value));
+            m_screenTimeout->insertItem (i, itemText);
         else
-            m_screenTimeout->setItemText (i, str.arg (value));
+            m_screenTimeout->setItemText (i, itemText);
     }
 
     if (fillNeeded)

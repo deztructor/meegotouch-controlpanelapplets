@@ -21,7 +21,7 @@
 #include <MGConfItem>
 
 #undef DEBUG
-#define WARNING
+#undef WARNING
 #include "../debug.h"
 
 static const QString GConfDir ("/system/osso/dsm/display");
