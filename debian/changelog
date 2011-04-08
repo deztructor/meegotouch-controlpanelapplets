@@ -10,6 +10,8 @@ meegotouch-controlpanelapplets (0.20.30~1) meegotouch; urgency=low
   * Fixes: NB#240683 - [Meta] Option to enable/disable double tap wake-up
   * Fixes: NB#240689 - UI spec: option to enable/disable double tap wake-up
   * Fixes: NB#240691 - [TASK] UI: option to enable/disable double tap wake-up
+  * Fixes: NB#244975 - Small font is used for brightness in display applet and
+    brightness item is getting highlighted
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 08 Apr 2011 09:11:56 +0300
 
