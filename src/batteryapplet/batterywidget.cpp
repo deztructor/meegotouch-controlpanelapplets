@@ -227,29 +227,20 @@ BatteryWidget::addHeaderContainer ()
 {
 // In Meego header should be avoided as it has a title bar
 #ifndef MEEGO    
-    MContainer              *container;
     QGraphicsLinearLayout   *layout;
     MHelpButton             *helpButton;
 
     Q_ASSERT (m_MainLayout);
-    /*
-     * Creating a lcontainer and a layout.
-     */
-    container = new MContainer (this);
-    container->setStyleName ("CommonXLargeHeaderPanelInverted");
-    container->setHeaderVisible (false);
-    container->setContentsMargins (0,0,0,0);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
     layout->setContentsMargins (0,0,0,0);
-    container->centralWidget()->setLayout (layout);
 
     /*
      * The label that we use as title.
      */
     //% "Battery"
-    m_TitleLabel = new MLabel (qtTrId("qtn_ener_battery"));
-    m_TitleLabel->setStyleName ("CommonXLargeHeaderInverted");
+    m_TitleLabel = new MLabel (qtTrId ("qtn_ener_battery"));
+    m_TitleLabel->setStyleName ("CommonApplicationHeaderInverted");
     layout->addItem (m_TitleLabel);
     layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
 
@@ -262,14 +253,15 @@ BatteryWidget::addHeaderContainer ()
     helpButton->setViewType(MButton::iconType);
     helpButton->setIconID ("icon-m-content-description-inverse");
     helpButton->setStyleName ("CommonRightIcon");
+
     layout->addItem (helpButton);
     layout->setAlignment (helpButton, Qt::AlignVCenter | Qt::AlignRight);
 
     /*
      * Adding the whole row to the main container.
      */
-    m_MainLayout->addItem (container);
-    m_MainLayout->setStretchFactor (container, 0);
+    m_MainLayout->addItem (layout);
+    m_MainLayout->setStretchFactor (layout, 0);
 #endif
 }
 

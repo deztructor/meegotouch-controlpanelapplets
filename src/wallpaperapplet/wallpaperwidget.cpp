@@ -128,40 +128,28 @@ void
 WallpaperWidget::addHeaderContainer (
         MLinearLayoutPolicy *mainLayout)
 {
-    MContainer            *container;
     QGraphicsLinearLayout *layout;
 
     Q_ASSERT (mainLayout);
 
-    SYS_DEBUG ("***********************************************************");
-    /*
-     * Creating a lcontainer and a layout.
-     */
-    container = new MContainer (this);
-    container->setStyleName ("CommonXLargeHeaderPanelInverted");
-    container->setHeaderVisible (false);
-    container->setContentsMargins (0., 0., 0., 0.);
-    //container->setSpacing (0.);
-
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
     layout->setContentsMargins (0., 0., 0., 0.);
     layout->setSpacing (0.);
-    container->centralWidget()->setLayout (layout);
 
     /*
      * The label that we use as title.
      */
     //% "Wallpaper"
-    m_TitleLabel = new MLabel (qtTrId("qtn_wall_wallpaper"));
-    m_TitleLabel->setStyleName ("CommonXLargeHeaderInverted");
+    m_TitleLabel = new MLabel (qtTrId ("qtn_wall_wallpaper"));
+    m_TitleLabel->setStyleName ("CommonApplicationHeaderInverted");
     layout->addItem (m_TitleLabel);
     layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
 
     /*
      * Adding the whole row to the main container.
      */
-    mainLayout->addItem (container);
-    mainLayout->setStretchFactor (container, 0);
+    mainLayout->addItem (layout);
+    mainLayout->setStretchFactor (layout, 0);
 }
 
 void

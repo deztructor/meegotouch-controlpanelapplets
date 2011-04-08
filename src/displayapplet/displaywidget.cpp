@@ -94,35 +94,25 @@ void DisplayWidget::initWidget ()
 void
 DisplayWidget::addHeaderContainer ()
 {
-    MContainer            *container;
     QGraphicsLinearLayout *layout;
 
-    /*
-     * Creating a lcontainer and a layout.
-     */
-    container = new MContainer (this);
-    container->setStyleName ("CommonXLargeHeaderPanelInverted");
-    container->setHeaderVisible (false);
-    container->setContentsMargins (0,0,0,0);
-
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
-    container->centralWidget()->setLayout (layout);
     layout->setContentsMargins (0,0,0,0);
 
     /*
      * The label that we use as title.
      */
     //% "Display"
-    m_TitleLabel = new MLabel (qtTrId("qtn_disp_display"));
+    m_TitleLabel = new MLabel (qtTrId ("qtn_disp_display"));
     m_TitleLabel->setObjectName ("TitleLabel");
-    m_TitleLabel->setStyleName ("CommonXLargeHeaderInverted");
+    m_TitleLabel->setStyleName ("CommonApplicationHeaderInverted");
     layout->addItem (m_TitleLabel);
     layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
     /*
      * Adding the whole row to the main container.
      */
-    m_MainLayout->addItem (container);
-    m_MainLayout->setStretchFactor (container, 0);
+    m_MainLayout->addItem (layout);
+    m_MainLayout->setStretchFactor (layout, 0);
 }
 
 
