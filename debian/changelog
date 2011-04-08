@@ -1,8 +1,11 @@
 meegotouch-controlpanelapplets (0.20.30~1) meegotouch; urgency=low
 
+  [ Laszlo Pere ]
   * Removed placeholder icons from the grid view of the wallpaper applet.
   * Faster image loading in the wallpaper grid view.
   * Blue rectangle in wallpaper grid (net fully tested and ready just yet)
+  * Blue rectangle is ready.
+  * Fixes: NB#244533 - [TASK] Wallpaper applet grid needs to be updated
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 08 Apr 2011 09:11:56 +0300
 
