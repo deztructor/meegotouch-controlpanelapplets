@@ -1,16 +1,16 @@
-meegotouch-controlpanelapplets (0.20.30-1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.30-2) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Removed placeholder icons from the grid view of the wallpaper applet.
   * Faster image loading in the wallpaper grid view.
   * Blue rectangle in wallpaper grid (net fully tested and ready just yet)
   * Blue rectangle is ready.
-  * Fixes: NB#244533 - [TASK] Wallpaper applet grid needs to be updated
+  * Fixes NB244533 - Wallpaper applet grid needs to be updated
   * Fixes: NB#244128 - Portrait images cannot be set to fullscreen wallpapers
   * Fixes: NB#240683 - [Meta] Option to enable/disable double tap wake-up
   * Fixes: NB#240689 - UI spec: option to enable/disable double tap wake-up
-  * Fixes: NB#240691 - [TASK] UI: option to enable/disable double tap wake-up
-  * Fixes: NB#244975 - Small font is used for brightness in display applet and
+  * Fixes: NB#240691 - UI: option to enable/disable double tap wake-up
+  * Fixes NB244975 - Small font is used for brightness in display applet and
     brightness item is getting highlighted
 
   [ David Kedves ]
@@ -20,7 +20,7 @@ meegotouch-controlpanelapplets (0.20.30-1) meegotouch; urgency=low
     - battery-applet
   * Disable the low-power mode for now... (as requested...)
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 08 Apr 2011 17:44:10 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Sat, 09 Apr 2011 20:12:18 +0300
 
 meegotouch-controlpanelapplets (0.20.29-1) meegotouch; urgency=low
 
