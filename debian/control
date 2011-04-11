@@ -9,7 +9,7 @@ Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.11.8),
                libgstreamer0.10-dev, libqtm-dev, libqtm-systeminfo-dev,
                libresourceqt-dev, libquillimagefilter-dev,
                libquillmetadata-dev, libquill-dev, libqtsparql-dev
-Standards-Version: 3.8.0
+Standards-Version: 3.9.1
 
 Package: meegotouch-controlpanelapplets-tests
 Section: devel
@@ -129,6 +129,7 @@ Description: Profiles settings applet.
 Package: duistatusindicatormenu-profileplugin
 Section: misc
 Architecture: any
+Depends: ${misc:Depends}
 Description: dummy package until it is removed...
 
 Package: duicontrolpanel-profileapplet-dbg
