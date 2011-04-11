@@ -28,19 +28,19 @@
 
 class WarrantyWidget;
 
-class WarrantyApplet : public QObject, public DcpAppletIf
+class Q_DECL_EXPORT WarrantyApplet : public QObject, public DcpAppletIf
 {
     Q_OBJECT
-    Q_INTERFACES(DcpAppletIf)
+    Q_INTERFACES (DcpAppletIf)
 
 public:
     WarrantyApplet ();
     ~WarrantyApplet ();
 
-    virtual void init();
+    virtual void init ();
     virtual DcpStylableWidget *constructStylableWidget (int widgetId);
-    virtual QString title() const;
-    virtual QVector<MAction *> viewMenuItems();
+    virtual QString title () const;
+    virtual QVector<MAction *> viewMenuItems ();
 
 private:
     QPointer<WarrantyWidget>        m_MainWidget;
