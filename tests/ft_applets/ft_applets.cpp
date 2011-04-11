@@ -21,6 +21,8 @@
 #include <QTest>
 #include <QDir>
 #include <QTimer>
+#include <MTheme>
+#include <MWidget>
 #include <QGraphicsWidget>
 #include <dcpappletif.h>
 #include <dcpbrief.h>
@@ -49,6 +51,36 @@ QTimer::singleShot(int msec, QObject *receiver, const char *member) {
                SYS_STR (receiver->objectName ()), member);
 }
 
+/*
+ * To speed up testcases...
+ */
+const QPixmap *
+MTheme::pixmap (const QString &id, const QSize &size)
+{
+    QPixmap *ret = new QPixmap (size);
+    return ret;
+}
+
+/*
+ * Stub QGraphicsWidget::setLayout as it causes crash inside the
+ * libmeegotouch sometimes :-O
+ */
+void
+QGraphicsWidget::setLayout (QGraphicsLayout *layout)
+{
+    Q_UNUSED (layout);
+}
+
+/*
+ * MWidget::event
+ */
+bool
+MWidget::event (QEvent *event)
+{
+    Q_UNUSED (event);
+    return false;
+}
+
 static int argc = 1;
 static char *argv[] =
     {
@@ -67,8 +99,9 @@ void
 Ft_Applets::cleanupTestCase ()
 {
     delete m_window;
-//    delete m_app;
+    m_window = 0;
     m_app->deleteLater ();
+    m_app = 0;
 }
 
 void
@@ -191,7 +224,10 @@ Ft_Applets::testaboutapplet ()
 void
 Ft_Applets::testthemeapplet ()
 {
+#if 0
+    /* Not in use... */
     doAppletTest ("libthemeapplet.so");
+#endif
 }
 
 void

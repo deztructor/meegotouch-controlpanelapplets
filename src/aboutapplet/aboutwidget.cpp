@@ -40,11 +40,11 @@ M_REGISTER_WIDGET_NO_CREATE(AboutWidget)
 
 static const char *LicensePath = LICENSE_PATH;
 
-class ContentWidget: public MWidgetController
+class ContentWidget: public MStylableWidget
 {
   public:
     ContentWidget (QGraphicsItem *parent = 0):
-        MWidgetController (parent),
+        MStylableWidget (parent),
         m_title (0), m_subTitle (0)
     {
         setContentsMargins (0,0,0,0);

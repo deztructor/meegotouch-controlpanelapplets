@@ -25,7 +25,7 @@
 #include <QGraphicsLinearLayout>
 #include <MLinearLayoutPolicy>
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -60,7 +60,7 @@ RightArrowItem::createLayout()
 
     switch (itemStyle()) {
         case TitleWithSubtitle:
-            SYS_WARNING ("TitleWithSubtitle");
+            SYS_DEBUG ("TitleWithSubtitle");
             /*
              * The title label.
              */
@@ -85,7 +85,7 @@ RightArrowItem::createLayout()
             break;
 
         case IconWithTitleAndSubtitle:
-            SYS_WARNING ("IconWithTitleAndSubtitle");
+            SYS_DEBUG ("IconWithTitleAndSubtitle");
             /*
              * The left side icon.
              */
@@ -111,7 +111,7 @@ RightArrowItem::createLayout()
             break;
 
         case IconWithTitle:
-            SYS_WARNING ("IconWithTitle");
+            SYS_DEBUG ("IconWithTitle");
             /*
              * The left side icon.
              */
