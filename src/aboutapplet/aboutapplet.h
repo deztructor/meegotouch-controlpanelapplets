@@ -30,18 +30,18 @@
 
 class AboutWidget;
 
-class AboutApplet : public QObject, public DcpAppletIf
+class Q_DECL_EXPORT AboutApplet : public QObject, public DcpAppletIf
 {
     Q_OBJECT
-    Q_INTERFACES(DcpAppletIf)
+    Q_INTERFACES (DcpAppletIf)
 
 public:
     AboutApplet ();
     ~AboutApplet ();
 
-    virtual void init();
+    virtual void init ();
     virtual DcpStylableWidget *constructStylableWidget (int widgetId);
-    virtual QString title() const;
+    virtual QString title () const;
     virtual QVector<MAction *> viewMenuItems ();
 
 private:

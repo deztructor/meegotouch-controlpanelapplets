@@ -26,6 +26,7 @@ MOC_DIR = .moc
 OBJECTS_DIR = .objects
 
 QMAKE_LFLAGS_RPATH = -Wl
+QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden -fPIC
 
 HEADERS =                   \
     ../debug.h              \

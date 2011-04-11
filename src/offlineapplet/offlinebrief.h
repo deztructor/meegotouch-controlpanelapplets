@@ -34,26 +34,23 @@ class OfflineBrief: public DcpBrief
 Q_OBJECT
 
 public:
-    OfflineBrief();
-    ~OfflineBrief();
-    virtual QString titleText() const;
-    virtual QString valueText() const;
+    OfflineBrief ();
+    ~OfflineBrief ();
+    virtual QString titleText () const;
+    virtual QString valueText () const;
 
     virtual bool toggle () const;
     virtual void setToggle (bool toggle);
-    virtual int widgetTypeID() const;
-
-signals:
-    void valuesChanged ();
+    virtual int widgetTypeID () const;
 
 private:
-    QString currentText() const;
+    QString currentText () const;
 
 private slots:
     #ifdef HAVE_QMSYSTEM
-    void devModeChanged(MeeGo::QmDeviceMode::DeviceMode mode);
+    void devModeChanged (MeeGo::QmDeviceMode::DeviceMode mode);
     #endif
-    void processDialogResult();
+    void processDialogResult ();
 
 private:
     #ifdef HAVE_QMSYSTEM
