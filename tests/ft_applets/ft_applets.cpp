@@ -57,6 +57,7 @@ QTimer::singleShot(int msec, QObject *receiver, const char *member) {
 const QPixmap *
 MTheme::pixmap (const QString &id, const QSize &size)
 {
+    Q_UNUSED (id);
     QPixmap *ret = new QPixmap (size);
     return ret;
 }
@@ -224,7 +225,6 @@ Ft_Applets::testaboutapplet ()
 void
 Ft_Applets::testthemeapplet ()
 {
-    exit (0);
 #if 0
     /* Not in use... */
     doAppletTest ("libthemeapplet.so");

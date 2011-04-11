@@ -37,6 +37,9 @@ contains(DEFINES, HAVE_CONTENT_MANAGER) {
 
 QT += dbus
 
+QMAKE_LFLAGS_RPATH = -Wl
+QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden -fPIC
+
 contains(cov, true) { 
     QMAKE_CXXFLAGS += --coverage
     QMAKE_LFLAGS += --coverage
