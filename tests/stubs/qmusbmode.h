@@ -51,6 +51,9 @@ namespace MeeGo
         Mode getDefaultMode ();
         bool setMode (Mode mode);
         bool setDefaultMode (Mode mode);
+
+    signals:
+        void modeChanged (MeeGo::QmUSBMode::Mode);
         
     private:
         Mode   m_Mode;

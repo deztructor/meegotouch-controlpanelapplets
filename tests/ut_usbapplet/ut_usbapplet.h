@@ -23,6 +23,7 @@
 #include <QObject>
 
 class UsbApplet;
+class MWindow;
 class MApplication;
 
 class Ut_UsbApplet : public QObject 
@@ -38,10 +39,10 @@ private slots:
     void testTitle ();
     void testConstructWidget ();
     void testMenuItems ();
-    void testConstructbrief ();
 
 private:
     MApplication              *m_App;
+    MWindow                   *m_window;
     UsbApplet                 *m_Applet;
 };
 

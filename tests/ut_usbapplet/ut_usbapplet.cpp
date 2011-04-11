@@ -36,8 +36,9 @@ using namespace MeeGo;
 
 #include <mdesktopentry.h>
 #include <MApplication>
+#include <MWindow>
 #include <MAction>
-#include <MNotification>
+#include <MBanner>
 
 #include <QVector>
 #include <QList>
@@ -79,7 +80,6 @@ initializeCatalog ()
     if (catalogInitialized)
         return;
 
-    catalog["qtn_usb_ask_active"] = "qtn_usb_ask_active - %1";
     catalog["qtn_usb_active_mode"] = "qtn_usb_active_mode %1";
 }
 
@@ -104,16 +104,35 @@ qtTrId (
 }
 
 /******************************************************************************
- * Stubbing MNotification
+ * Stub for MBanner
  */
-static QString lastPublishedNotification;
+static QString mbannerSubtitle;
 
-bool
-MNotification::publish()
+MBanner::MBanner ()
 {
-    //SYS_DEBUG ("*** body() = %s", SYS_STR(body()));
-    lastPublishedNotification = body();
-    return true;
+}
+
+MBanner::~MBanner ()
+{
+}
+
+void
+MBanner::setTitle (const QString &text)
+{
+    mbannerSubtitle = text;
+}
+
+void
+MBanner::setIconID (const QString &id)
+{
+    Q_UNUSED (id);
+}
+
+void
+MSceneWindow::appear (MWindow *window, MSceneWindow::DeletionPolicy policy)
+{
+    Q_UNUSED (window);
+    Q_UNUSED (policy);
 }
 
 
@@ -138,6 +157,7 @@ void
 Ut_UsbApplet::initTestCase()
 {
     m_App = new MApplication (argc, &app_name);
+    m_window = new MWindow;
     m_Applet = new UsbApplet;
 
     QVERIFY (!m_Applet->m_MainWidget);
@@ -153,7 +173,11 @@ void
 Ut_UsbApplet::cleanupTestCase()
 {
     delete m_Applet;
+    m_Applet = 0;
+    delete m_window;
+    m_window = 0;
     m_App->deleteLater ();
+    m_App = 0;
 }
 
 void
@@ -185,7 +209,7 @@ Ut_UsbApplet::testConstructWidget ()
     /*
      * Testing if the applet creates a widget the first time.
      */
-    widget = (UsbView *) m_Applet->constructWidget (0);
+    widget = (UsbView *) m_Applet->constructStylableWidget (0);
     QVERIFY (widget);
     QVERIFY (m_Applet->m_MainWidget == widget);
 
@@ -204,12 +228,12 @@ Ut_UsbApplet::testConstructWidget ()
             m_Applet->m_logic->setMode (mode);
 
             for (int id = 0; id < 3; ++id) {
-                lastPublishedNotification = "";
+                mbannerSubtitle = "";
                 widget->usbModeActivated (id);
 
                 if (usbModes[id] == defaultMode) {
                     // If we want to change to the current mode nothing happens.
-                    QVERIFY (lastPublishedNotification.isEmpty());
+                    QVERIFY (mbannerSubtitle.isEmpty());
                 } else if (mode == QmUSBMode::MassStorage ||
                            mode == QmUSBMode::OviSuite)  {
 
@@ -225,13 +249,13 @@ Ut_UsbApplet::testConstructWidget ()
 
                     // If we are connected and try to change the mode we got the
                     // error message and we stay in the same mode we were in.
-                    QCOMPARE (lastPublishedNotification,
+                    QCOMPARE (mbannerSubtitle,
                               qtTrId ("qtn_usb_change_incorrect"));
                     QCOMPARE (m_Applet->m_logic->getDefaultMode(), defaultMode);
                     QCOMPARE (m_Applet->m_logic->getMode(), mode);
                 } else {
                     // Otherwise we should have reached the new mode.
-                    //QVERIFY (lastPublishedNotification.isEmpty());
+                    //QVERIFY (mbannerSubtitle.isEmpty());
                     //QCOMPARE ((int)m_Applet->m_logic->getDefaultMode(), id);
                     // FIXME: There are the QmUSBMode::ChargingOnly case might
                     // be tested here along with the signal.
@@ -257,81 +281,6 @@ Ut_UsbApplet::testMenuItems ()
 
     //QVERIFY (items.size() == 1);
     SYS_DEBUG ("items.size() = %d", items.size());
-}
-
-void
-Ut_UsbApplet::testConstructbrief ()
-{
-    #ifdef HAVE_QMSYSTEM
-    UsbBrief *brief1 = (UsbBrief *) m_Applet->constructBrief(0);
-    QList<QmUSBMode::Mode>   availableModes;
-    QString   iconName;
-    QString   text;
-
-    availableModes <<
-            QmUSBMode::Connected <<
-            QmUSBMode::DataInUse <<
-            QmUSBMode::Disconnected <<
-            QmUSBMode::MassStorage <<
-            QmUSBMode::ChargingOnly <<
-            QmUSBMode::OviSuite <<
-            QmUSBMode::ModeRequest <<
-            QmUSBMode::Ask <<
-            QmUSBMode::Undefined;
-    /*
-     * Getting the brief and checking its properties.
-     */
-    QVERIFY (brief1);
-    QVERIFY (brief1->widgetTypeID() == DcpWidgetType::Label);
-    iconName = brief1->icon ();
-    QVERIFY (iconName.isEmpty());
-
-    /*
-     * Testing all the combinations when the default mode is QmUSBMode::Ask.
-     */
-    foreach (QmUSBMode::Mode mode, availableModes) {
-        foreach (QmUSBMode::Mode defaultMode, availableModes) {
-            m_Applet->m_logic->setDefaultMode (defaultMode);
-            m_Applet->m_logic->setMode (mode);
-
-
-            text = brief1->valueText ();
-            //SYS_DEBUG ("*** text        = %s", SYS_STR(text));
-            //SYS_DEBUG ("*** mode        = %d", mode);
-            //SYS_DEBUG ("*** defaultMode = %d", defaultMode);
-
-            if (defaultMode == QmUSBMode::Ask &&
-                    mode == QmUSBMode::MassStorage)
-                QVERIFY (text == "qtn_usb_ask_active - qtn_usb_mass_storage");
-            else if (defaultMode == QmUSBMode::Ask &&
-                    mode == QmUSBMode::OviSuite)
-                QVERIFY (text == "qtn_usb_ask_active - qtn_usb_ovi_suite");
-            else if (defaultMode == QmUSBMode::Ask)
-                QVERIFY (text == "qtn_usb_always_ask");
-            else if (defaultMode == QmUSBMode::OviSuite &&
-                    mode == QmUSBMode::OviSuite)
-                QVERIFY (text == "qtn_usb_active_mode qtn_usb_ovi_suite");
-            else if (defaultMode == QmUSBMode::MassStorage &&
-                    mode == QmUSBMode::MassStorage)
-                QVERIFY (text == "qtn_usb_active_mode qtn_usb_mass_storage");
-            else if (defaultMode == QmUSBMode::OviSuite)
-                QVERIFY (text == "qtn_usb_ovi_suite");
-            else if (defaultMode == QmUSBMode::MassStorage)
-                QVERIFY (text == "qtn_usb_mass_storage");
-            else {
-                QVERIFY (text == "qtn_usb_always_ask");
-            }
-        }
-    }
-
-    /*
-     * FIXME: These should be tested somehow.
-     */
-    brief1->settingsChanged ();
-    brief1->retranslateUi ();
-
-    delete brief1;
-    #endif
 }
 
 QTEST_APPLESS_MAIN(Ut_UsbApplet)
