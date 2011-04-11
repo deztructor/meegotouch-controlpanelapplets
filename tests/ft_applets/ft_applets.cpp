@@ -224,6 +224,7 @@ Ft_Applets::testaboutapplet ()
 void
 Ft_Applets::testthemeapplet ()
 {
+    exit (0);
 #if 0
     /* Not in use... */
     doAppletTest ("libthemeapplet.so");
