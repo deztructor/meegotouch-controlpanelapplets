@@ -25,7 +25,7 @@
 #include "aboutbusinesslogic.h"
 
 class MLabel;
-class MLinearLayoutPolicy;
+class QGraphicsLinearLayout;
 class ContentWidget;
 
 class AboutWidget : public DcpStylableWidget
@@ -59,6 +59,7 @@ private slots:
     void refresh ();
 
 private:
+    QGraphicsLinearLayout          *m_layout;
     QPointer<AboutBusinessLogic>    m_AboutBusinessLogic;
     MLabel                         *m_TitleLabel;
     ContentWidget                  *m_Version;

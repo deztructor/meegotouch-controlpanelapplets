@@ -173,7 +173,7 @@ Ft_Applets::testdisplayapplet ()
 void
 Ft_Applets::testusbapplet ()
 {
-    doAppletTest ("libusbapplet.so");
+    doAppletTest ("libusbapplet.so", false, HaveStylableView);
 }
 
 void

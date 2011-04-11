@@ -19,7 +19,7 @@
 #ifndef USBVIEW_H
 #define USBVIEW_H
 
-#include <DcpWidget>
+#include <DcpStylableWidget>
 
 #ifdef HAVE_QMSYSTEM
 #  include <qmusbmode.h>
@@ -28,29 +28,23 @@
 class MLabel;
 class MButton;
 class MComboBox;
-class MNotification;
 class MLinearLayoutPolicy;
 
-class UsbView : public DcpWidget
+class UsbView : public DcpStylableWidget
 {
     Q_OBJECT
 
 public:
-    #ifdef HAVE_QMSYSTEM
+#ifdef HAVE_QMSYSTEM
     UsbView (MeeGo::QmUSBMode *logic);
-    #else
+#else
     UsbView (void *logic);
-    #endif
+#endif
     ~UsbView ();
-
-signals:
-    void settingsChanged ();
 
 private slots:
     void usbModeActivated (int idx);
-
-protected:
-    void retranslateUi ();
+    void updateInfoLabel ();
 
 private:
     void initWidget ();
@@ -59,17 +53,19 @@ private:
         QGraphicsWidget     *parent,
         MLinearLayoutPolicy *targetPolicy,
         const char          *labelStyleName);
+    QString currentText () const;
 
-
-    #ifdef HAVE_QMSYSTEM
+#ifdef HAVE_QMSYSTEM
     MeeGo::QmUSBMode    *m_logic;
-    #endif
+#endif
+    MLinearLayoutPolicy *m_policy;
     MComboBox           *m_UsbModeCombo;
-    MLabel              *m_info_label;
-    MNotification       *m_error;
-    #ifdef UNIT_TEST
+    MLabel              *m_infoLabel;
+    int                  m_infoOrder;
+
+#ifdef UNIT_TEST
     friend class Ut_UsbApplet;
-    #endif
+#endif
 };
 
 #endif

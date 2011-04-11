@@ -31,7 +31,7 @@ using namespace MeeGo;
 #include "usbview.h"
 
 class MAction;
-class DcpWidget;
+class DcpStylableWidget;
 class UsbBrief;
 
 class UsbApplet : public QObject, public DcpAppletIf 
@@ -41,7 +41,7 @@ class UsbApplet : public QObject, public DcpAppletIf
 
 public:
     virtual void        init ();
-	virtual DcpWidget  *constructWidget (int widgetId);
+	virtual DcpStylableWidget  *constructStylableWidget (int widgetId);
     virtual QString     title () const;
     virtual DcpBrief   *constructBrief (int partId);
     QVector<MAction *>  viewMenuItems ();

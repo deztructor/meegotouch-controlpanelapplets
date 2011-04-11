@@ -19,10 +19,8 @@
 #include "usbapplet.h"
 
 #include <MAction>
-#include <DcpWidget>
-#include <MLocale>
+#include <DcpStylableWidget>
 
-#include "usbbrief.h"
 #include "usbview.h"
 
 #define DEBUG
@@ -33,31 +31,27 @@ Q_EXPORT_PLUGIN2(usbapplet, UsbApplet)
 void
 UsbApplet::init (void)
 {
-    #ifdef HAVE_QMSYSTEM
-    m_logic = new QmUSBMode (this);
-    #endif
-
-    m_brief = NULL;
+    m_logic = 0;
 }
 
-DcpWidget *
-UsbApplet::constructWidget (int widgetId)
+DcpStylableWidget *
+UsbApplet::constructStylableWidget (int widgetId)
 {
     Q_UNUSED (widgetId);
 
-    if (!m_MainWidget) {
-        #ifdef HAVE_QMSYSTEM
-        m_MainWidget = new UsbView (m_logic);
-        #else
-        /*
-         * FIXME: To implement a variant that does not use QmSystem.
-         */
-        m_MainWidget = new UsbView (NULL);
-        #endif
+#ifdef HAVE_QMSYSTEM
+    if (! m_logic)
+    {
+        m_logic = new QmUSBMode (this);
+    }
+#endif
 
-        if (m_brief)
-            connect (m_MainWidget,  SIGNAL (settingsChanged ()),
-                     m_brief, SLOT (settingsChanged ()));
+    if (!m_MainWidget) {
+#ifdef HAVE_QMSYSTEM
+        m_MainWidget = new UsbView (m_logic);
+#else
+        m_MainWidget = new UsbView (0);
+#endif
     }
 
     return m_MainWidget;
@@ -83,14 +77,6 @@ UsbApplet::constructBrief (int partId)
 {
     Q_UNUSED (partId);
 
-    #ifdef HAVE_QMSYSTEM
-    m_brief = new UsbBrief (m_logic);
-    #else
-    /*
-     * FIXME: To implement a variant that does not use QmSystem.
-     */
-     m_MainWidget = new UsbView (NULL);
-    #endif
-    return m_brief;
+    return 0;
 }
 

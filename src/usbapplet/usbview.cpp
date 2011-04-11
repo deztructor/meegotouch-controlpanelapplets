@@ -20,9 +20,15 @@
 
 #include <MLabel>
 #include <MLayout>
+#include <QGraphicsLinearLayout>
 #include <MLinearLayoutPolicy>
 #include <MComboBox>
-#include <MNotification>
+#include <MBanner>
+#include <MApplication>
+#include <MImageWidget>
+#include <MWidgetController>
+
+#include <QTimer>
 
 #undef DEBUG
 #define WARNING
@@ -50,18 +56,26 @@ usbModeIndex (QmUSBMode::Mode mode)
 }
 
 UsbView::UsbView (MeeGo::QmUSBMode *logic) :
+    DcpStylableWidget (0),
     m_logic (logic),
-    m_error (0)
+    m_policy (0),
+    m_infoLabel (0)
 {
     setObjectName ("UsbView");
+
     initWidget ();
+
+    connect (m_logic, SIGNAL (modeChanged (MeeGo::QmUSBMode::Mode)),
+             SLOT (updateInfoLabel ()));
 }
 #else
 /*
  * FIXME: to implement a variant that does not use the QmSystem library.
  */
 UsbView::UsbView (void *logic) :
-    m_error (0)
+    DcpStylableWidget (0),
+    m_policy (0),
+    m_infoLabel (0)
 {
     setObjectName ("UsbView");
     initWidget ();
@@ -70,44 +84,50 @@ UsbView::UsbView (void *logic) :
 
 UsbView::~UsbView ()
 {
-    if (m_error != 0)
-    {
-        m_error->remove ();
-        delete m_error;
-        m_error = 0;
-    }
 }
 
 void
 UsbView::initWidget ()
 {
+    SYS_DEBUG ("");
     MLayout                 *mainLayout;
-    MLinearLayoutPolicy     *mainPolicy;
 
-    setObjectName ("CommonPanelInverted");
+    m_infoOrder = 0;
+    setStyleName ("CommonPanelInverted");
 
 // Creating the main layout
     mainLayout = new MLayout;
-    mainPolicy = new MLinearLayoutPolicy (mainLayout, Qt::Vertical);
+    m_policy = new MLinearLayoutPolicy (mainLayout, Qt::Vertical);
 
-    mainLayout->setContentsMargins (0. , 0. , 0. , 0.);
-    mainPolicy->setSpacing (0. );
+    mainLayout->setContentsMargins (0,0,0,0);
+    m_policy->setContentsMargins (0,0,0,0);
+    m_policy->setSpacing (0);
 
 #ifndef MEEGO
 // Create the title-bar
     MLabel *title = addTitleLabel (
-            this, mainPolicy, "CommonApplicationHeaderInverted");
+            this, m_policy, "CommonApplicationHeaderInverted");
     //% "USB"
     title->setText (qtTrId ("qtn_usb_title"));
+    m_infoOrder++;
 #endif
 
+    MWidgetController *spacer = new MWidgetController;
+    spacer->setStyleName ("CommonSpacer");
+    m_policy->addItem (spacer);
+    m_infoOrder++;
+
     m_UsbModeCombo = new MComboBox;
+    //% "Default USB device mode"
     m_UsbModeCombo->setTitle (qtTrId ("qtn_usb_default_info"));
     m_UsbModeCombo->setStyleName ("CommonComboBoxInverted");
     m_UsbModeCombo->setObjectName ("UsbModeCombo");
 
+    //% "Always ask"
     m_UsbModeCombo->insertItem (0, qtTrId ("qtn_usb_always_ask"));
+    //% "Mass storage mode"
     m_UsbModeCombo->insertItem (1, qtTrId("qtn_usb_mass_storage"));
+    //% "Ovi suite mode"
     m_UsbModeCombo->insertItem (2, qtTrId("qtn_usb_ovi_suite"));
 
 #ifdef HAVE_QMSYSTEM
@@ -117,12 +137,12 @@ UsbView::initWidget ()
     connect (m_UsbModeCombo, SIGNAL (activated (int)),
              SLOT (usbModeActivated (int)));
 
-    mainPolicy->addItem (m_UsbModeCombo);
-    mainPolicy->addStretch ();
+    m_policy->addItem (m_UsbModeCombo);
+    m_policy->addStretch ();
 
     setLayout (mainLayout);
 
-    retranslateUi ();
+    updateInfoLabel ();
 }
 
 void
@@ -136,16 +156,6 @@ UsbView::usbModeActivated (int idx)
      */
     if (m_logic->getDefaultMode() == usbModes[idx])
         return;
-
-    /*
-     * First remove the old error notification
-     */
-    if (m_error != 0)
-    {
-        m_error->remove ();
-        delete m_error;
-        m_error = 0;
-    }
 
     QmUSBMode::Mode active = m_logic->getMode ();
 
@@ -165,19 +175,13 @@ UsbView::usbModeActivated (int idx)
         SYS_DEBUG ("newidx = %d", m_UsbModeCombo->currentIndex ());
         SYS_DEBUG ("text = %s", SYS_STR (m_UsbModeCombo->currentText ()));
 
-        /*
-         * Create the error notification
-         */
-        m_error = new MNotification (
-            MNotification::DeviceErrorEvent,
-//% "You cannot change USB mode while USB is connecting.<br/>Eject USB device first, and then change setting."
-            "", qtTrId ("qtn_usb_change_incorrect"));
+        MBanner *infoBanner = new MBanner;
+        infoBanner->setIconID ("icon-m-common-usb");
+        //% "Cannot change the USB mode when it is connected"
+        infoBanner->setTitle ("qtn_usb_change_incorrect");
 
-        /*
-         * And show it
-         */
-        m_error->publish ();
-
+        infoBanner->appear (MApplication::instance ()->activeWindow (),
+                            MSceneWindow::DestroyWhenDone);
         return;
     }
 
@@ -190,19 +194,7 @@ UsbView::usbModeActivated (int idx)
      */
     if (m_logic->getMode () == QmUSBMode::ChargingOnly)
         m_logic->setMode (newmode);
-
-    emit settingsChanged ();
 #endif
-}
-
-void
-UsbView::retranslateUi ()
-{
-    //% "Default USB device mode"
-    m_UsbModeCombo->setTitle (qtTrId ("qtn_usb_default_info"));
-    m_UsbModeCombo->setItemText (0, qtTrId ("qtn_usb_always_ask"));
-    m_UsbModeCombo->setItemText (1, qtTrId ("qtn_usb_mass_storage"));
-    m_UsbModeCombo->setItemText (2, qtTrId ("qtn_usb_ovi_suite"));
 }
 
 MLabel *
@@ -219,5 +211,102 @@ UsbView::addTitleLabel (
 
     targetPolicy->addItem (label);
     return label;
+}
+
+QString
+UsbView::currentText () const
+{
+    SYS_DEBUG ("");
+#ifdef HAVE_QMSYSTEM
+    QmUSBMode::Mode active = m_logic->getMode ();
+
+    switch (active)
+    {
+        case QmUSBMode::MassStorage:
+            //% "%1 active"
+            return qtTrId ("qtn_usb_active_mode").arg (
+            //% "Mass storage mode"
+                   qtTrId ("qtn_usb_mass_storage"));
+            break;
+        case QmUSBMode::OviSuite:
+            //% "%1 active"
+            return qtTrId ("qtn_usb_active_mode").arg (
+            //% "Mass storage mode"
+                   qtTrId ("qtn_usb_ovi_suite"));
+            break;
+        case QmUSBMode::ChargingOnly:
+            //% "Current state: Charging only"
+            return qtTrId ("qtn_usb_charging");
+            break;
+        default:
+            return "";
+            break;
+    }
+#endif
+    return "";
+}
+
+void
+UsbView::updateInfoLabel ()
+{
+    if (! m_policy)
+        return;
+
+    QString infoText = currentText ();
+
+    if ((! infoText.isEmpty ()) && m_infoLabel)
+    {
+        /*
+         * Label is already there, lets update the text
+         */
+        m_infoLabel->setText (infoText);
+        return;
+    }
+
+    if (infoText.isEmpty ())
+    {
+        /*
+         * Label needs to be removed if it is there...
+         */
+        if (! m_infoLabel)
+            return;
+
+        /*
+         * Delete the infoWidget
+         */
+        delete m_policy->itemAt (m_infoOrder);
+        m_infoLabel = 0;
+        return;
+    }
+
+    SYS_DEBUG ("creating the info-widget");
+    /*
+     * Create the info label widget, and
+     * initialize its contents...
+     */
+    MWidgetController *infoWidget = new MWidgetController;
+    infoWidget->setStyleName ("CommonTextFrameInverted");
+    infoWidget->setContentsMargins (0,0,0,0);
+
+    QGraphicsLinearLayout *iwLayout =
+        new QGraphicsLinearLayout (Qt::Horizontal);
+    iwLayout->setContentsMargins (0,0,0,0);
+    iwLayout->setSpacing (0);
+
+    MImageWidget *iwIcon = new MImageWidget ("icon-m-common-usb");
+    iwIcon->setStyleName ("CommonMainIcon");
+    iwLayout->addItem (iwIcon);
+
+    m_infoLabel = new MLabel;
+    m_infoLabel->setStyleName ("CommonSingleTitleInverted");
+    m_infoLabel->setText (infoText);
+    iwLayout->addItem (m_infoLabel);
+
+    infoWidget->setLayout (iwLayout);
+
+    /*
+     * Insert it to the proper place...
+     */
+    m_policy->insertItem (m_infoOrder, infoWidget);
 }
 
