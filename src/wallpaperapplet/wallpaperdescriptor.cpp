@@ -773,6 +773,8 @@ WallpaperDescriptor::thumbnailError (
             QString      message,
             QUrl         fileUri)
 {
+    Q_UNUSED (message);
+
     for (int n = Landscape; n < NVariants; ++n) {
         if (m_Images[n].url() == fileUri) {
             bool success;

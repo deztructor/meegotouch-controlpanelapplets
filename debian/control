@@ -4,11 +4,11 @@ Priority: optional
 Maintainer: David Kedves <dkedves@blumsoft.eu>
 Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.11.8),
                libmeegotouch-dev (>= 0.20.60), libqmsystem2-dev (>= 1.0),
-               libprofile-dev, system-ui-dev (>= 0.16), libthumbnailer-dev,
-               libcontentmanager-dev, doxygen, clean-device-dev (>= 0.0.3),
-               libgstreamer0.10-dev, libqtm-dev, libqtm-systeminfo-dev,
-               libresourceqt-dev, libquillimagefilter-dev,
-               libquillmetadata-dev, libquill-dev, libqtsparql-dev
+               libprofile-dev, libthumbnailer-dev, libcontentmanager-dev,
+               doxygen, clean-device-dev (>= 0.0.3), libgstreamer0.10-dev,
+               libqtm-dev, libqtm-systeminfo-dev, libresourceqt-dev,
+               libquillimagefilter-dev, libquillmetadata-dev, libquill-dev,
+               libqtsparql-dev
 Standards-Version: 3.9.1
 
 Package: meegotouch-controlpanelapplets-tests

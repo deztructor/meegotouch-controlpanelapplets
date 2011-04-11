@@ -9,7 +9,6 @@ CATALOGNAME = meegotouchcp-applets
 SOURCEDIR = $$PWD/../src/displayapplet \
             $$PWD/../src/batteryapplet \
             $$PWD/../src/profileapplet \
-            $$PWD/../src/profileplugin \
             $$PWD/../src/usbapplet \
             $$PWD/../src/offlineapplet \
             $$PWD/../src/themeapplet \

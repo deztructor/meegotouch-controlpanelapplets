@@ -38,7 +38,6 @@ tests/ut_offlineapplet/ut_offlineapplet
 tests/ut_profileapplet/ut_profileapplet
 tests/ut_profilebackend/ut_profilebackend
 tests/ut_profiledatainterface/ut_profiledatainterface
-tests/ut_profiledialog/ut_profiledialog
 tests/ut_profileintcombo/ut_profileintcombo
 tests/ut_profilevalue/ut_profilevalue
 tests/ut_qgconfdirmanager/ut_qgconfdirmanager
