@@ -488,9 +488,11 @@ WallpaperEditorWidget::slotDoneActivated ()
     /*
      * We ignore the button press while the image is moving.
      */
-    if (m_Physics->inMotion() || m_ScalePhysics->inMotion()) {
-        return;
-    }
+    if (m_Physics->inMotion())
+        m_Physics->stop();
+
+    if (m_ScalePhysics->inMotion()) 
+        m_ScalePhysics->stop();
 
     saveImage ();
 
@@ -520,9 +522,11 @@ WallpaperEditorWidget::slotCancelActivated ()
     /*
      * We ignore the button press while the image is moving.
      */
-    if (m_Physics->inMotion() || m_ScalePhysics->inMotion()) {
-        return;
-    }
+    if (m_Physics->inMotion())
+        m_Physics->stop();
+
+    if (m_ScalePhysics->inMotion()) 
+        m_ScalePhysics->stop();
 
     emit cancelClicked ();
     emit closePage ();
