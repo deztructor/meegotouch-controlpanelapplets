@@ -25,13 +25,21 @@
 
 #include <MLabel>
 #include <MLayout>
+#include <QFile>
+#include <QTextStream>
+#include <QSettings>
+#include <QVariant>
 #include <MLinearLayoutPolicy>
 #include <QGraphicsLinearLayout>
 #include <MContainer>
 #include <MSeparator>
 
-//#define DEBUG
+#define DEBUG
+#define WARNING
 #include "../debug.h"
+
+static const QString configPath ("/usr/share/about-contents/");
+static const QString configFile (configPath + "contents.ini");
 
 #include <MWidgetCreator>
 M_REGISTER_WIDGET_NO_CREATE (WarrantyWidget);
@@ -40,8 +48,11 @@ WarrantyWidget::WarrantyWidget (
         WarrantyBusinessLogic  *warrantyBusinessLogic, 
         QGraphicsWidget        *parent) :
     DcpStylableWidget (parent),
-    m_WarrantyBusinessLogic (warrantyBusinessLogic)
+    m_WarrantyBusinessLogic (warrantyBusinessLogic),
+    m_labelExpiration (0)
 {
+    initialize ();
+
     createContent ();
 }
 
@@ -49,6 +60,39 @@ WarrantyWidget::~WarrantyWidget ()
 {
 }
 
+void
+WarrantyWidget::initialize ()
+{
+    QSettings content (configFile, QSettings::IniFormat);
+
+    m_warrantyTimer =
+        content.value ("warrantytimer", true).toBool ();
+    m_warrantyText =
+        content.value ("warrantytext", "qtn_warr_terms").toString ();
+
+    SYS_DEBUG ("show warranty timer = %s", SYS_BOOL (m_warrantyTimer));
+    SYS_DEBUG ("warranty_text = %s", SYS_STR (m_warrantyText));
+
+    if (! m_warrantyText.isEmpty ())
+    {
+        if (m_warrantyText.contains ("qtn_"))
+            m_warrantyText = qtTrId (m_warrantyText.toAscii ().constData ());
+        else
+        {
+            QFile warrantyFile (configPath + m_warrantyText);
+            if (warrantyFile.open (QIODevice::ReadOnly | QIODevice::Text))
+            {
+                QTextStream inStream (&warrantyFile);
+                m_warrantyText = inStream.readAll ();
+            }
+            else
+            {
+                SYS_WARNING ("Warranty text cannot be loaded!");
+                m_warrantyText = "";
+            }
+        }
+    }
+}
 
 void
 WarrantyWidget::createContent ()
@@ -66,11 +110,14 @@ WarrantyWidget::createContent ()
     // Add the title-bar
     addHeaderContainer (policy);
 
-    // The label that shows the expiration date
-    m_labelExpiration = new MLabel;
-    m_labelExpiration->setObjectName ("WarrantyAppletExpirationLabel");
-    m_labelExpiration->setStyleName ("CommonGroupHeaderInverted");
-    m_labelExpiration->setWordWrap (true);
+    if (m_warrantyTimer)
+    {
+        // The label that shows the expiration date
+        m_labelExpiration = new MLabel;
+        m_labelExpiration->setObjectName ("WarrantyAppletExpirationLabel");
+        m_labelExpiration->setStyleName ("CommonGroupHeaderInverted");
+        m_labelExpiration->setWordWrap (true);
+    }
 
     // The label that shows the terms of the warranty
     m_labelTerms = new MLabel;
@@ -154,30 +201,29 @@ WarrantyWidget::addLabelContainer (
 void
 WarrantyWidget::retranslateUi ()
 {
-    int expirationDays = m_WarrantyBusinessLogic->getExpirationDays ();
+    if (m_labelExpiration)
+    {
+        int expirationDays = m_WarrantyBusinessLogic->getExpirationDays ();
 
-    /*
-     * Please check NB#220856 for details. The translation is currently wrong,
-     * but this code should be like this.
-     */
-    SYS_DEBUG ("*** expirationDays = %d", expirationDays);
-    SYS_DEBUG ("*** text = '%s'", 
-            SYS_STR(qtTrId ("qtn_warr_expiration", expirationDays)));
-    SYS_DEBUG ("*** text = '%s'", 
-            SYS_STR(qtTrId ("qtn_warr_expiration")));
-    if (expirationDays > 0) {
-      //% "Product warranty will expire in <b>%Ln</b> day."
-      m_labelExpiration->setText (
-              qtTrId ("qtn_warr_expiration", expirationDays).arg(expirationDays));
-    } else if (expirationDays == 0) {
-      //% "Product warranty is expired."
-      m_labelExpiration->setText (qtTrId ("qtn_warr_expired"));
-    } else {
-      //% "Warranty timer error."
-      m_labelExpiration->setText (qtTrId ("qtn_warr_error_timer"));
+        if (expirationDays > 0) {
+          //% "Product warranty will expire in <b>%Ln</b> day."
+          m_labelExpiration->setText (
+                  qtTrId ("qtn_warr_expiration", expirationDays)
+                          .arg (expirationDays));
+        } else if (expirationDays == 0) {
+          //% "Product warranty is expired."
+          m_labelExpiration->setText (qtTrId ("qtn_warr_expired"));
+        } else {
+          //% "Warranty timer error."
+          m_labelExpiration->setText (qtTrId ("qtn_warr_error_timer"));
+        }
     }
 
+    /* This stuff is for eng.english generation */
+#if 0
     //% "(insert terms of warranty here)"
-    m_labelTerms->setText (qtTrId ("qtn_warr_terms"));
+    qtTrId ("qtn_warr_terms")
+#endif
+    m_labelTerms->setText (m_warrantyText);
 }
 

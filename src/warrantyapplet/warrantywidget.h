@@ -50,8 +50,11 @@ private:
     void addStretcher (
             MLinearLayoutPolicy *mainLayout,
             const QString       &styleName);
+    void initialize ();
 
 private:
+    QString                            m_warrantyText;
+    bool                               m_warrantyTimer;
     QPointer<WarrantyBusinessLogic>    m_WarrantyBusinessLogic;
     MLabel                            *m_TitleLabel;
     MLabel                            *m_labelExpiration;
