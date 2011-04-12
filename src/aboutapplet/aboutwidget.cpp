@@ -22,6 +22,8 @@
 #include <QGraphicsLinearLayout>
 #include <QFile>
 #include <QTextStream>
+#include <QVariant>
+#include <QSettings>
 
 #include <MImageWidget>
 #include <MLabel>
@@ -32,13 +34,20 @@
 #include <MContainer>
 #include <MLayout>
 
-#undef DEBUG
+#define DEBUG
+#define WARNING
 #include "../debug.h"
+
+#ifndef LICENSE_PATH
+/* Define an empty string if fallback license file is not defined */
+#define LICENSE_PATH ""
+#endif
+
+static const QString configPath ("/usr/share/about-contents/");
+static const QString configFile (configPath + "contents.ini");
 
 #include <MWidgetCreator>
 M_REGISTER_WIDGET_NO_CREATE(AboutWidget)
-
-static const char *LicensePath = LICENSE_PATH;
 
 class ContentWidget: public MStylableWidget
 {
@@ -101,16 +110,37 @@ AboutWidget::AboutWidget (
     m_IMEI(0),
     m_LicenseLabel (0)
 {
+    initialize ();
     createContent ();
 
     connect (m_AboutBusinessLogic, SIGNAL (refreshNeeded ()),
-            SLOT (refresh ()));
-
-    retranslateUi ();
+             SLOT (refresh ()));
 }
 
 AboutWidget::~AboutWidget ()
 {
+}
+
+void
+AboutWidget::initialize ()
+{
+    QSettings content (configFile, QSettings::IniFormat);
+
+    m_swName =
+        content.value ("swname",
+          m_AboutBusinessLogic->productName()).toString ();
+    m_prodName = content.value ("prodname", "").toString ();
+    m_certsImage = content.value ("swtypeimage", "").toString ();
+    m_licenseFile =
+        content.value ("abouttext", QString (LICENSE_PATH)).toString ();
+
+    SYS_DEBUG ("\nAbout applet configuration:\n"
+               "Product name        : %s\n"
+               "Software version    : %s\n"
+               "License file        : %s\n"
+               "Type approval img.  : %s\n",
+               SYS_STR (m_swName), SYS_STR (m_prodName),
+               SYS_STR (m_licenseFile), SYS_STR (m_certsImage));
 }
 
 
@@ -138,15 +168,21 @@ AboutWidget::createContent ()
     addBtMACContainer ();
     // Row 7: IMEI
     addIMEIContainer ();
+
+    if (! m_certsImage.isEmpty ())
+        addCertsContainer ();
+
     addStretcher ("CommonItemDivider");
     addStretcher ("CommonSpacer");
-    // Row 7: the license label
+    // Row ?: the license label
     addLicenseLabelContainer ();
 
     /*
      * And set the layout...
      */
     setLayout (m_layout);
+
+    retranslateUi ();
 }
 
 void
@@ -189,14 +225,39 @@ AboutWidget::addLogoContainer ()
 }
 
 void
+AboutWidget::addCertsContainer ()
+{
+    if (!m_layout)
+        return;
+
+    QGraphicsLinearLayout *layout =
+        new QGraphicsLinearLayout (Qt::Horizontal);
+
+    /* Load the picture ... */
+    if (m_certsImage.at (0) != '/')
+        m_certsImage = configPath + m_certsImage;
+
+    QImage img (m_certsImage);
+    SYS_DEBUG ("Image path = %s", SYS_STR (m_certsImage));
+
+    MImageWidget *certsPic = new MImageWidget (&img);
+    certsPic->setObjectName ("AboutAppletCertificates");
+
+    layout->addItem (certsPic);
+    layout->addStretch();
+    m_layout->addItem(layout);
+}
+
+void
 AboutWidget::addNamesContainer ()
 {
     if (!m_layout)
         return;
 
     m_ProductName = new ContentWidget;
-    m_ProductName->setTitle(m_AboutBusinessLogic->productName());
-    m_layout->addItem(m_ProductName);
+    m_ProductName->setTitle (m_prodName);
+    m_ProductName->setSubtitle (m_swName);
+    m_layout->addItem (m_ProductName);
 }
 
 void
@@ -206,9 +267,9 @@ AboutWidget::addVersionContainer ()
         return;
 
     m_Version = new ContentWidget;
-    m_Version->setTitle ("Nokia Nxy");
-    m_Version->setSubtitle(m_AboutBusinessLogic->osVersion());
-    m_layout->addItem(m_Version);
+    m_Version->setTitle (qtTrId ("qtn_prod_version"));
+    m_Version->setSubtitle (m_AboutBusinessLogic->osVersion ());
+    m_layout->addItem (m_Version);
 }
 
 void
@@ -282,21 +343,21 @@ AboutWidget::addStretcher (
 }
 
 QString
-AboutWidget::licenseText()
+AboutWidget::licenseText ()
 {
-    QString retval;
+    if (m_licenseFile.at (0) != '/')
+        m_licenseFile = configPath + m_licenseFile;
 
-    QFile licenseFile(LicensePath);
-    if (!licenseFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning() << "Unable to open: " << LicensePath;
-        return QString();
+    QFile licenseFile (m_licenseFile);
+    if (!licenseFile.open (QIODevice::ReadOnly | QIODevice::Text))
+    {
+        SYS_WARNING ("Unable to open %s", SYS_STR (configPath + m_licenseFile));
+        return "";
     }
 
-    QTextStream inStream(&licenseFile);
+    QTextStream inStream (&licenseFile);
 
-    retval = inStream.readAll();
-
-    return retval;
+    return inStream.readAll ();
 }
 void
 AboutWidget::refresh ()
@@ -312,23 +373,22 @@ AboutWidget::retranslateUi ()
     //% "About product"
     if (m_TitleLabel)
         m_TitleLabel->setText (qtTrId("qtn_prod_about_product"));
+
     if (m_Version) {
         //% "Version"
         m_Version->setTitle (qtTrId("qtn_prod_version"));
     }
-    if (m_ProductName) {
-        m_ProductName->setSubtitle(m_AboutBusinessLogic->osName());
-    }
-
 
     if (m_WiFi) {
         //% "WLAN MAC address"
         m_WiFi->setTitle (qtTrId("qtn_prod_wlan_mac_address"));
     }
+
     if (m_Bt) {
         //% "Bluetooth address"
         m_Bt->setTitle (qtTrId("qtn_prod_bt_address"));
     }
+
     if (m_IMEI) {
         //% "IMEI"
         m_IMEI->setTitle (qtTrId("qtn_prod_imei"));

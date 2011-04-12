@@ -45,6 +45,7 @@ protected:
     virtual void retranslateUi ();
 
 private:
+    void initialize ();
     void addHeaderContainer ();
     void addLogoContainer ();
     void addNamesContainer ();
@@ -52,6 +53,7 @@ private:
     void addWiFiMACContainer ();
     void addBtMACContainer ();
     void addIMEIContainer ();
+    void addCertsContainer ();
     void addLicenseLabelContainer ();
     void addStretcher (const QString &styleName);
 
@@ -68,6 +70,11 @@ private:
     ContentWidget                  *m_Bt;
     ContentWidget                  *m_IMEI;
     MLabel                         *m_LicenseLabel;
+
+    QString                         m_licenseFile;
+    QString                         m_swName;
+    QString                         m_prodName;
+    QString                         m_certsImage;
     #ifdef UNIT_TEST
     friend class Ut_AboutApplet;
     #endif
