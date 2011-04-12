@@ -62,14 +62,14 @@ SoundSettingsApplet::init()
     gst_argv[0] = qstrdup ("app");
     gst_argv[1] = NULL;
 
-	gst_init (&gst_argc, &gst_argv);
+    gst_init (&gst_argc, &gst_argv);
 
-	m_alertTones = AlertTone::alertTones();
+    m_alertTones = AlertTone::alertTones ();
 }
 
 /* widgetId: 0xaaaabbbb where 
    0xaaaa is the widget ID and 
-	 0xbbbb is the alert tone index */
+   0xbbbb is the alert tone index */
 DcpWidget *
 SoundSettingsApplet::constructWidget(int widgetId)
 {
@@ -90,10 +90,13 @@ SoundSettingsApplet::constructWidget(int widgetId)
 	else
 		SYS_WARNING ("Invalid widgetId = %d", widgetId);
 
-	if (newWidget) {
+	if (newWidget)
+    {
 		m_stack.push(newWidget);
-		QObject::connect(newWidget, SIGNAL(destroyed(QObject *)), this, SLOT(toplevelDestroyed(QObject *)));
+		connect (newWidget, SIGNAL (destroyed (QObject *)),
+                 SLOT (toplevelDestroyed (QObject *)));
 	}
+
 	return newWidget;
 }
 

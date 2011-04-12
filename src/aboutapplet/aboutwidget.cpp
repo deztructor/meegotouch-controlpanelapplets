@@ -206,6 +206,7 @@ AboutWidget::addVersionContainer ()
         return;
 
     m_Version = new ContentWidget;
+    m_Version->setTitle ("Nokia Nxy");
     m_Version->setSubtitle(m_AboutBusinessLogic->osVersion());
     m_layout->addItem(m_Version);
 }

@@ -39,10 +39,9 @@ AlertTone::AlertTone(
      * TrackerConnection might send a signal about the tracker answer when it is
      * available.
      */
-    connect (TrackerConnection::instance(), 
-            SIGNAL(dataReady(QString,QString,QString)),
-            this, 
-            SLOT(dataReceived(QString,QString,QString)));
+    connect (TrackerConnection::instance (),
+             SIGNAL (dataReady (QString,QString,QString)),
+             SLOT (dataReceived (QString,QString,QString)));
 }
 
 /*!
@@ -54,52 +53,52 @@ AlertTone::AlertTone(
 QList<AlertTone *>
 AlertTone::alertTones()
 {
-	QList<AlertTone *> v;
+    QList<AlertTone *> v;
 
 #ifdef HAVE_LIBPROFILE
     QList<QString> keys;
-    	char **profiles = profile_get_profiles();
-	for (int Nix = 0 ; profiles[Nix] != NULL ; Nix++)
-	    SYS_DEBUG("profiles[%d] = %s\n", Nix, SYS_STR(profiles[Nix]));
-	profile_free_profiles(profiles);
-    
-	profileval_t *vals = profile_get_values(NULL);
 
-	if (vals)
-		for (int Nix = 0 ; vals[Nix].pv_key != NULL ; Nix++) {
-			QStringList split_key = QString(vals[Nix].pv_key).split('.');
+    profileval_t *vals = profile_get_values(NULL);
+    if (vals)
+    {
+        for (int profile = 0 ; vals[profile].pv_key != NULL ; profile++)
+        {
+            QStringList split_key =
+                QString (vals[profile].pv_key).split ('.');
 
-			if (split_key.size() == 3) {
-				if (split_key[0] != "clock" && split_key[1] == "alert" && split_key[2] == "tone")
-						keys.push_back(vals[Nix].pv_key);
-					
-			}
-		}
+            if (split_key.size() == 3)
+            {
+                if (split_key[0] != "clock" &&
+                    split_key[1] == "alert" &&
+                    split_key[2] == "tone")
+                    keys.push_back (vals[profile].pv_key);
+            }
+        }
+        profile_free_values (vals);
+    }
 
-	QList<QString> list;
-	list << "ringing.alert.tone"
-		  << "voip.alert.tone"
-		  << "email.alert.tone"
-		  << "sms.alert.tone"
-		  << "im.alert.tone"
-		  << "calendar.alert.tone";
+    QList<QString> list;
+    list << "ringing.alert.tone"
+          << "voip.alert.tone"
+          << "email.alert.tone"
+          << "sms.alert.tone"
+          << "im.alert.tone"
+          << "calendar.alert.tone";
 
-	for (int Nix = 0 ; Nix < list.size() ; Nix++)
-	{
-		if  (keys.contains(list.at(Nix)))
-	    {
-			keys.removeOne(list.at(Nix));
-			v << new AlertTone(QString(list.at(Nix)) + "@general");
-	    }
-	 }	 
+    for (int Nix = 0 ; Nix < list.size() ; Nix++)
+    {
+        if  (keys.contains(list.at(Nix)))
+        {
+            keys.removeOne(list.at(Nix));
+            v << new AlertTone(QString(list.at(Nix)) + "@general");
+        }
+    }
 
-	for (int Nix = 0 ; Nix < keys.size() ; Nix++ )
-	v << new AlertTone(QString(keys.at(Nix)));
-
-	profile_free_values(vals);
+    for (int Nix = 0 ; Nix < keys.size() ; Nix++ )
+        v << new AlertTone(QString(keys.at(Nix)));
 #endif
 
-	return v;
+    return v;
 }
 
 /*!
@@ -116,8 +115,8 @@ AlertTone::alertTones()
 QString
 AlertTone::niceName()
 {
-	maybeUpdate();
-	return m_niceName;
+    maybeUpdate();
+    return m_niceName;
 }
 
 /*!
@@ -126,21 +125,21 @@ AlertTone::niceName()
 QString
 AlertTone::trackerId()
 {
-	maybeUpdate();
-	return m_trackerId;
+    maybeUpdate();
+    return m_trackerId;
 }
 
 void
 AlertTone::maybeUpdate()
 {
-	if (m_val.isNull()) {
+    if (m_val.isNull()) {
         SYS_DEBUG ("m_val is NULL...");
-		m_niceName =  "";
-		m_trackerId = "";
-		fetchFromBackend();
-	} else if (m_niceName.isEmpty()) {
+        m_niceName =  "";
+        m_trackerId = "";
+        fetchFromBackend();
+    } else if (m_niceName.isEmpty()) {
         m_niceName = TrackerConnection::instance()->niceNameFromFileName (
-            m_val.toString());
+        m_val.toString());
     }
 }
 
@@ -148,17 +147,17 @@ void
 AlertTone::realSetValue(
         const QVariant &newValue)
 {
-	if (m_val != newValue) {
-		m_niceName.clear();
-		m_trackerId.clear();
-		QProfileValue::realSetValue(newValue);
-	}
+    if (m_val != newValue) {
+        m_niceName.clear();
+        m_trackerId.clear();
+        QProfileValue::realSetValue(newValue);
+    }
 }
 
 void
 AlertTone::fetchFromBackend()
 {
-	QProfileValue::fetchFromBackend();
+    QProfileValue::fetchFromBackend();
     m_niceName = TrackerConnection::instance()->niceNameFromFileName (
             m_val.toString());
 }
@@ -166,20 +165,20 @@ AlertTone::fetchFromBackend()
 /*!
  * \returns The full path of the currently set sound file.
  */
-QString 
+QString
 AlertTone::fileName()
 {
-	QProfileValue::fetchFromBackend();
+    QProfileValue::fetchFromBackend();
 
-	if (!m_val.isNull())
-	    return m_val.toString();
+    if (!m_val.isNull())
+        return m_val.toString();
 
     return QString("");
 }
 
 void
 AlertTone::dataReceived (
-            const QString   &filename, 
+            const QString   &filename,
             const QString   &title,
             const QString   &trackerId)
 {
@@ -190,3 +189,4 @@ AlertTone::dataReceived (
         emit refreshed();
     }
 }
+

@@ -44,6 +44,8 @@ private slots:
     void initTestCase ();
     void cleanupTestCase ();
 
+    void testsoundsettingsapplet ();
+    void testthemeapplet ();
     void testbatteryapplet ();
     void testdisplayapplet ();
     void testusbapplet ();
@@ -52,8 +54,6 @@ private slots:
     void testwallpaperapplet ();
     void testwarrantyapplet ();
     void testofflineapplet ();
-    void testsoundsettingsapplet ();
-    void testthemeapplet ();
 
 private:
     void doAppletTest (const char *soName,

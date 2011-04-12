@@ -26,36 +26,35 @@ class AlertTone;
 class AlertToneToplevel;
 class MAction;
 
-class SoundSettingsApplet : public QObject, public DcpAppletIf
+class Q_DECL_EXPORT SoundSettingsApplet : public QObject, public DcpAppletIf
 {
 	Q_OBJECT
-	Q_INTERFACES(DcpAppletIf)
+	Q_INTERFACES (DcpAppletIf)
 
 public:
-	SoundSettingsApplet();
-	~SoundSettingsApplet();
+	SoundSettingsApplet ();
+	~SoundSettingsApplet ();
 
 	static const int AlertToneAppletWidget_id = 0;
 	static const int AlertToneBrowser_id = 1;
 
-	virtual void init();
-	virtual DcpWidget* constructWidget(int widgetId);
-	virtual QString title() const;
-	virtual QVector<MAction *> viewMenuItems();
-	virtual DcpBrief* constructBrief(int partId);
+	virtual void init ();
+	virtual DcpWidget* constructWidget (int widgetId);
+	virtual QString title () const;
+	virtual QVector<MAction *> viewMenuItems ();
+	virtual DcpBrief* constructBrief (int partId);
 
-#ifndef UNIT_TEST
+public slots:
+	void toplevelDestroyed (QObject *goner);
+
 private:
-#endif /* !UNIT_TEST */
-	QStack<AlertToneToplevel *>m_stack;
-	QList<AlertTone *> m_alertTones;
+	QStack<AlertToneToplevel *> m_stack;
+	QList<AlertTone *>          m_alertTones;
 
 #ifdef UNIT_TEST
-public slots:
-#else
-private slots:
-#endif /* !UNIT_TEST */
-	void toplevelDestroyed(QObject *goner);
+    friend class Ut_SoundSettingsAppletTests;
+    friend class Ut_AlertToneAppletWidgetTests;
+#endif
 };
 
 #endif /* !_SOUND_SETTINGS_APPLET_H_ */
