@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.31~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.31-2) meegotouch; urgency=low
 
   * USB-Applet: following the ui. spec changes...
   
@@ -7,10 +7,10 @@ meegotouch-controlpanelapplets (0.20.31~1) meegotouch; urgency=low
     in the wallpaper editor.
 
   [ David Kedves ]
-  * Partially fixes: NB#229563 - (AcceptID-961941) [FEA] SW type label in
+  * Fixes: NB#229563 - (AcceptID-961941) [FEA] SW type label in
     settings
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 12 Apr 2011 15:52:37 +0300
+ -- David Kedves <kedazo@gmail.com>  Tue, 12 Apr 2011 21:59:08 +0300
 
 meegotouch-controlpanelapplets (0.20.30-3) meegotouch; urgency=low
 
