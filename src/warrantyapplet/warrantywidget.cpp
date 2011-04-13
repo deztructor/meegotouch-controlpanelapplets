@@ -34,6 +34,8 @@
 #include <MContainer>
 #include <MSeparator>
 
+#include "../styles.h" 
+
 #define DEBUG
 #define WARNING
 #include "../debug.h"
@@ -107,15 +109,19 @@ WarrantyWidget::createContent ()
     policy->setContentsMargins (0., 0., 0., 0.);
     policy->setSpacing (0.);
 
-    // Add the title-bar
+    /*
+     * Add the title-bar
+     */
     addHeaderContainer (policy);
+    #ifdef APP_TITLE_USES_SPACER
+    addStretcher (policy, APP_TITLE_DIVIDER_STYLE_NAME);
+    #endif
 
-    if (m_warrantyTimer)
-    {
+    if (m_warrantyTimer) {
         // The label that shows the expiration date
         m_labelExpiration = new MLabel;
         m_labelExpiration->setObjectName ("WarrantyAppletExpirationLabel");
-        m_labelExpiration->setStyleName ("CommonGroupHeaderInverted");
+        m_labelExpiration->setStyleName ("CommonTitleInverted");
         m_labelExpiration->setWordWrap (true);
     }
 
@@ -163,7 +169,7 @@ WarrantyWidget::addHeaderContainer (
      */
     //% "Warranty"
     m_TitleLabel = new MLabel (qtTrId("qtn_warr_title"));
-    m_TitleLabel->setStyleName ("CommonApplicationHeaderInverted");
+    m_TitleLabel->setStyleName (APP_TITLE_LABEL_STYLE_NAME);
 
     /*
      * Adding the whole row to the main container.
