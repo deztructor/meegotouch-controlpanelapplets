@@ -5,6 +5,7 @@ meegotouch-controlpanelapplets (0.20.32~1) meegotouch; urgency=low
   [ Laszlo Pere ]
   * Fixes: NB#246159 - [TASK] Dashboard on controlpanel applets is red because
     wallpaper is failing unit test cases
+  * Fixed: NB243944 - Too large title font used in Display settings view
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 13 Apr 2011 09:59:18 +0300
 

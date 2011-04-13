@@ -79,7 +79,7 @@ void DisplayWidget::initWidget ()
      */
     // Row 1: The title label
     addHeaderContainer ();
-    //addStretcher ("CommonHeaderDividerInverted");
+    addStretcher ("CommonHeaderDividerInverted");
     //addSecHeaderContainer ();
     //addSliderContainer ();
     //addStretcher ("CommonItemDivider");
@@ -105,7 +105,7 @@ DisplayWidget::addHeaderContainer ()
     //% "Display"
     m_TitleLabel = new MLabel (qtTrId ("qtn_disp_display"));
     m_TitleLabel->setObjectName ("TitleLabel");
-    m_TitleLabel->setStyleName ("CommonApplicationHeaderInverted");
+    m_TitleLabel->setStyleName ("CommonHeaderInverted");
     layout->addItem (m_TitleLabel);
     layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
     /*
