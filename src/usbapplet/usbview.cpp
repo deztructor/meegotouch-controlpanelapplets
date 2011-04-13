@@ -135,7 +135,7 @@ UsbView::initWidget ()
 #endif
 
     connect (m_UsbModeCombo, SIGNAL (activated (int)),
-             SLOT (usbModeActivated (int)));
+             SLOT (usbModeActivated (int)), Qt::QueuedConnection);
 
     m_policy->addItem (m_UsbModeCombo);
     m_policy->addStretch ();
@@ -178,7 +178,7 @@ UsbView::usbModeActivated (int idx)
         MBanner *infoBanner = new MBanner;
         infoBanner->setIconID ("icon-m-common-usb");
         //% "Cannot change the USB mode when it is connected"
-        infoBanner->setTitle ("qtn_usb_change_incorrect");
+        infoBanner->setTitle (qtTrId ("qtn_usb_change_incorrect"));
 
         infoBanner->appear (MApplication::instance ()->activeWindow (),
                             MSceneWindow::DestroyWhenDone);
