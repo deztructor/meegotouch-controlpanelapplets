@@ -20,7 +20,6 @@
 #include "wallpaperapplet.h"
 #include "wallpaperwidget.h"
 #include "wallpapereditorwidget.h"
-#include "wallpaperbrief.h"
 
 #include <MAction>
 
@@ -106,7 +105,6 @@ WallpaperApplet::constructBrief (
 {
     Q_UNUSED (partId);
 
-    //return new WallpaperBrief (m_WallpaperBusinessLogic);
-    return new WallpaperBrief ();
+    return 0;
 }
 

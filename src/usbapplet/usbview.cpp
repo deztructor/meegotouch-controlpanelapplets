@@ -30,7 +30,7 @@
 
 #include <QTimer>
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -154,10 +154,13 @@ UsbView::usbModeActivated (int idx)
      * Do nothing if we just tapped on the
      * currently selected one...
      */
+    SYS_DEBUG ("check if this mode is already set...");
     if (m_logic->getDefaultMode() == usbModes[idx])
         return;
 
+    SYS_DEBUG ("mode is not set already... check the current mode...");
     QmUSBMode::Mode active = m_logic->getMode ();
+    SYS_DEBUG ("current mode known...")
 
     /*
      * If we are connected and some mode active, then
@@ -167,6 +170,7 @@ UsbView::usbModeActivated (int idx)
     if ((active == QmUSBMode::MassStorage) ||
         (active == QmUSBMode::OviSuite))
     {
+        SYS_DEBUG ("Currently USB is active, throwing a notification...");
         /*
          * Set checked on the previously active button
          */
@@ -182,18 +186,24 @@ UsbView::usbModeActivated (int idx)
 
         infoBanner->appear (MApplication::instance ()->activeWindow (),
                             MSceneWindow::DestroyWhenDone);
+        SYS_DEBUG ("notification appear called...");
         return;
     }
 
+    SYS_DEBUG ("setting the new default mode: start");
     QmUSBMode::Mode newmode = usbModes[idx];
     m_logic->setDefaultMode (newmode);
+    SYS_DEBUG ("setting the new default mode: stop");
 
     /*
      * If we are connected, and we've changed the default
      * mode lets activate the selected mode...
      */
-    if (m_logic->getMode () == QmUSBMode::ChargingOnly)
+    SYS_DEBUG ("Check if active mode is charging only...");
+    if (active == QmUSBMode::ChargingOnly)
         m_logic->setMode (newmode);
+
+    SYS_DEBUG ("end");
 #endif
 }
 

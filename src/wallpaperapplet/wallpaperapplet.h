@@ -29,7 +29,7 @@
 class WallpaperWidget;
 class WallpaperEditorWidget;
 
-class WallpaperApplet : public QObject, public DcpAppletIf
+class Q_DECL_EXPORT WallpaperApplet : public QObject, public DcpAppletIf
 {
     Q_OBJECT
     Q_INTERFACES(DcpAppletIf)

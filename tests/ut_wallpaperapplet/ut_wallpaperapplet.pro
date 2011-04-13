@@ -50,7 +50,6 @@ HEADERS += \
     ut_wallpaperapplet.h \
     $$SRC_PREFIX/gridimagewidget.h \
     $$SRC_PREFIX/wallpaperapplet.h \
-    $$SRC_PREFIX/wallpaperbrief.h \
     $$SRC_PREFIX/wallpapergconf.h \
     $$SRC_PREFIX/wallpaperbusinesslogic.h \
     $$SRC_PREFIX/wallpapercurrentdescriptor.h \
@@ -71,7 +70,6 @@ SOURCES += \
     ut_wallpaperapplet.cpp \
     $$SRC_PREFIX/gridimagewidget.cpp \
     $$SRC_PREFIX/wallpaperapplet.cpp \
-    $$SRC_PREFIX/wallpaperbrief.cpp \
     $$SRC_PREFIX/wallpaperbusinesslogic.cpp \
     $$SRC_PREFIX/wallpapercurrentdescriptor.cpp \
     $$SRC_PREFIX/wallpaperdescriptor.cpp \

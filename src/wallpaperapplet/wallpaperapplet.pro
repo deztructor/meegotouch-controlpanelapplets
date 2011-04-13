@@ -8,6 +8,9 @@ OBJECTS_DIR = .objects
 
 QT += dbus
 
+QMAKE_LFLAGS_RPATH = -Wl
+QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden -fPIC
+
 CONFIG += plugin \
           gui \
           meegotouchcore \
@@ -51,8 +54,7 @@ HEADERS = \
     wallpaperinfoheader.h          \
     wallpapereditorsheet.h         \
     wallpapereditorwidget.h \
-    wallpaperitrans.h \
-    wallpaperbrief.h 
+    wallpaperitrans.h
 
 SOURCES = \
     ../debug.cpp \
@@ -67,8 +69,7 @@ SOURCES = \
     wallpaperinfoheader.cpp        \
     wallpapereditorsheet.cpp       \
     wallpapereditorwidget.cpp      \
-    wallpaperitrans.cpp \
-    wallpaperbrief.cpp 
+    wallpaperitrans.cpp
 
 DESTDIR = lib
 target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
