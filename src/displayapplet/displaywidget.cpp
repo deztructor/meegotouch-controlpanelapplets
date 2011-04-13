@@ -19,6 +19,7 @@
 #include "displaywidget.h"
 #include "displaybusinesslogic.h"
 #include "dcpdisplay.h"
+#include "../styles.h"
 
 #undef DEBUG
 #define WARNING
@@ -79,7 +80,9 @@ void DisplayWidget::initWidget ()
      */
     // Row 1: The title label
     addHeaderContainer ();
-    addStretcher ("CommonHeaderDividerInverted");
+    #ifdef APP_TITLE_USES_SPACER
+    addStretcher (APP_TITLE_DIVIDER_STYLE_NAME);
+    #endif
     //addSecHeaderContainer ();
     //addSliderContainer ();
     //addStretcher ("CommonItemDivider");
@@ -105,7 +108,7 @@ DisplayWidget::addHeaderContainer ()
     //% "Display"
     m_TitleLabel = new MLabel (qtTrId ("qtn_disp_display"));
     m_TitleLabel->setObjectName ("TitleLabel");
-    m_TitleLabel->setStyleName ("CommonHeaderInverted");
+    m_TitleLabel->setStyleName (APP_TITLE_LABEL_STYLE_NAME);
     layout->addItem (m_TitleLabel);
     layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
     /*
