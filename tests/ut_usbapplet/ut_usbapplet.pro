@@ -32,7 +32,6 @@ HEADERS += \
     ../../src/debug.h \
     ut_usbapplet.h \
     $$SRC_PREFIX/usbapplet.h \
-    $$SRC_PREFIX/usbbrief.h \
     $$SRC_PREFIX/usbview.h
 
 SOURCES += \
@@ -40,7 +39,6 @@ SOURCES += \
     ../../src/debug.cpp \
     ut_usbapplet.cpp \
     $$SRC_PREFIX/usbapplet.cpp \
-    $$SRC_PREFIX/usbbrief.cpp \
     $$SRC_PREFIX/usbview.cpp
 
 

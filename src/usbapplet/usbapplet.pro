@@ -24,13 +24,11 @@ QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden -fPIC
 HEADERS +=  \
     ../debug.h \
     usbapplet.h \
-    usbbrief.h \
     usbview.h
 
 SOURCES += \
     ../debug.cpp \
     usbapplet.cpp \
-    usbbrief.cpp \
     usbview.cpp
 
 DESTDIR = lib

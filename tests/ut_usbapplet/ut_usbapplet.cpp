@@ -20,7 +20,6 @@
 #include "ut_usbapplet.h"
 #include "usbapplet.h"
 #include "usbview.h"
-#include "usbbrief.h"
 
 #ifdef HAVE_QMSYSTEM
 #  include "qmusbmode.h"
@@ -30,15 +29,13 @@
 using namespace MeeGo;
 #endif
 
-
 #include <dcpwidgettypes.h>
-#include <dcpbrief.h>
 
 #include <mdesktopentry.h>
 #include <MApplication>
 #include <MWindow>
 #include <MAction>
-#include <MBanner>
+#include <MInfoBanner>
 
 #include <QVector>
 #include <QList>
@@ -104,26 +101,29 @@ qtTrId (
 }
 
 /******************************************************************************
- * Stub for MBanner
+ * Stub for MInfoBanner
  */
 static QString mbannerSubtitle;
 
-MBanner::MBanner ()
+MInfoBanner::MInfoBanner (MInfoBanner::BannerType t)
 {
+    Q_UNUSED (t);
 }
 
-MBanner::~MBanner ()
+MInfoBanner::~MInfoBanner ()
 {
 }
 
 void
-MBanner::setTitle (const QString &text)
+MInfoBanner::setBodyText (const QString &text)
 {
     mbannerSubtitle = text;
+    mbannerSubtitle.replace ("<p>","");
+    mbannerSubtitle.replace ("</p>","");
 }
 
 void
-MBanner::setIconID (const QString &id)
+MInfoBanner::setIconID (const QString &id)
 {
     Q_UNUSED (id);
 }
