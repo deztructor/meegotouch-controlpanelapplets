@@ -160,7 +160,7 @@ UsbView::usbModeActivated (int idx)
 
     SYS_DEBUG ("mode is not set already... check the current mode...");
     QmUSBMode::Mode active = m_logic->getMode ();
-    SYS_DEBUG ("current mode known...")
+    SYS_DEBUG ("current mode known...");
 
     /*
      * If we are connected and some mode active, then
