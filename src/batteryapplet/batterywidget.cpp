@@ -38,6 +38,8 @@
 #include <MComboBox>
 #include <MHelpButton>
 
+#include "../styles.h"
+
 //#define DEBUG
 #define WARNING
 #include "../debug.h"
@@ -240,7 +242,7 @@ BatteryWidget::addHeaderContainer ()
      */
     //% "Battery"
     m_TitleLabel = new MLabel (qtTrId ("qtn_ener_battery"));
-    m_TitleLabel->setStyleName ("CommonApplicationHeaderInverted");
+    m_TitleLabel->setStyleName (APP_TITLE_LABEL_STYLE_NAME);
     layout->addItem (m_TitleLabel);
     layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
 
