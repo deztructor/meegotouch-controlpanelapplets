@@ -118,11 +118,15 @@ WallpaperCurrentDescriptor::setFromDesktopFile (
         const QString &portraitFileName)
 {
     bool           success1, success2;
-    QString        value1, value2;
+    QString        value1("");
+    QString        value2("");
     qreal          rval;
     bool           retval = false;
 
-    SYS_DEBUG ("*** desktopFileName = %s", SYS_STR(desktopFileName));
+    SYS_DEBUG ("*** desktopFileName   = %s", SYS_STR(desktopFileName));
+    SYS_DEBUG ("*** landscapeFileName = %s", SYS_STR(landscapeFileName));
+    SYS_DEBUG ("*** portraitFileName  = %s", SYS_STR(portraitFileName));
+    SYS_DEBUG ("*** checkFilenames    = %s", SYS_BOOL(checkFilenames));
     m_DesktopEntry = new MDesktopEntry (desktopFileName);
 
     if (!m_DesktopEntry->isValid()) {
@@ -137,6 +141,7 @@ WallpaperCurrentDescriptor::setFromDesktopFile (
     success1 = getValue(portraitGroupKey, editedFilenameKey, value1);
     success2 = getValue(landscapeGroupKey, editedFilenameKey, value2);
     if (!success1 && !success2) {
+        SYS_DEBUG ("Non of the variants are accessed, giving up.");
         goto finalize;
     }
 
@@ -146,11 +151,18 @@ WallpaperCurrentDescriptor::setFromDesktopFile (
      * match.
      */
     if (checkFilenames) {
-        if (portraitFileName != value1 && landscapeFileName != value2) {
+        if ((landscapeFileName.isEmpty() && portraitFileName != value1) ||
+            (portraitFileName.isEmpty() && landscapeFileName != value2) ||
+            (portraitFileName != value1 && landscapeFileName != value2)) {
+            SYS_DEBUG ("Non of the variants are set, giving up.");
             goto finalize;
         }
     }
     
+    SYS_DEBUG ("Accepting value1 = %s", SYS_STR(value1));
+    SYS_DEBUG ("Accepting value2 = %s", SYS_STR(value2));
+    SYS_DEBUG ("*** portraitFileName  = %s", SYS_STR(portraitFileName));
+    SYS_DEBUG ("*** landscapeFileName = %s", SYS_STR(landscapeFileName));
     setFilename (value1, WallpaperDescriptor::Portrait);
     setFilename (value2, WallpaperDescriptor::Landscape);
 
