@@ -1,8 +1,9 @@
-meegotouch-controlpanelapplets (0.20.32~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.32-1) meegotouch; urgency=low
 
   [ David Kedves ]
   * UsbApplet: logical id fix...
   * DisplayApplet: Enable 'Low power mode' switch...
+  * Fixes: NB#247649 - Enable low power mode setting.
 
   [ Laszlo Pere ]
   * Fixes: NB#246159 - [TASK] Dashboard on controlpanel applets is red because
@@ -11,7 +12,7 @@ meegotouch-controlpanelapplets (0.20.32~1) meegotouch; urgency=low
   * Fixed: NB#246680 - Warranty header style update
   * Fixed: NB#244003 - Wrong wallpaper is displayed in task list
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 15 Apr 2011 12:11:09 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 15 Apr 2011 13:49:24 +0300
 
 meegotouch-controlpanelapplets (0.20.31-2) meegotouch; urgency=low
 
