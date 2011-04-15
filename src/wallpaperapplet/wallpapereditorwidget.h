@@ -39,6 +39,9 @@ class QPointF;
 class QGestureEvent;
 class WallpaperInfoHeader;
 
+// The editing feature is dropped. Further code-cleanup is necessary.
+#define NO_EDITING
+
 /*!
  * Problem: During the one finger move the image lags behind the finger.
  * Solution: Implemented framedropping, the movement is faster now.
@@ -94,6 +97,8 @@ public:
 protected:
     virtual void polishEvent ();
     virtual void retranslateUi();
+
+#ifndef NO_EDITING
     virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
     virtual void wheelEvent (QGraphicsSceneWheelEvent *event);
 
@@ -116,6 +121,7 @@ protected:
     virtual void pinchGestureEnded (
             QGestureEvent *event, 
             QPinchGesture *gesture);
+#endif
 
 signals:
     void doneClicked ();

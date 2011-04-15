@@ -29,12 +29,14 @@
 #include <QImage>
 #include <QTimer>
 
+#ifndef NO_EDITING
 #include <QGestureEvent>
 #include <QTapAndHoldGesture>
 #include <QPanGesture>
 #include <QPinchGesture>
 #include <QTapGesture>
 #include <QSwipeGesture>
+#endif
 
 #include <MLayout>
 #include <MLinearLayoutPolicy>
@@ -313,11 +315,13 @@ finalize:
      */
     setupPanningPhysics ();
 
+#ifndef NO_EDITING
     /*
      * Enabling two finger gestures.
      */
     grabGesture (Qt::PinchGesture, Qt::GestureFlags());
     grabGesture (Qt::PanGesture, Qt::GestureFlags());
+#endif
 
     createWidgets ();
     redrawImage ();
@@ -746,6 +750,7 @@ WallpaperEditorWidget::orientationChanged (
 /******************************************************************************
  * Stuff for the normal mouse events.
  */
+#ifndef NO_EDITING
 void 
 WallpaperEditorWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
@@ -756,6 +761,7 @@ WallpaperEditorWidget::wheelEvent (
     m_ScalePhysics->pointerMove (QPointF(0.0,  event->delta() / 100.0));
     m_ScalePhysics->pointerRelease();
 }
+#endif
 
 void
 WallpaperEditorWidget::retranslateUi()
@@ -769,6 +775,7 @@ WallpaperEditorWidget::retranslateUi()
         m_CancelAction->setText (qtTrId("qtn_comm_cancel"));
 }
 
+#ifndef NO_EDITING
 void
 WallpaperEditorWidget::mousePressEvent (
         QGraphicsSceneMouseEvent *event)
@@ -776,7 +783,9 @@ WallpaperEditorWidget::mousePressEvent (
     m_Physics->stop();
     //toggleTitlebars (false);
 }
+#endif
 
+#ifndef NO_EDITING
 /*******************************************************************************
  * Stuff for the two finger gestures.
  */
@@ -916,6 +925,7 @@ WallpaperEditorWidget::gestureWorkaround (
         *point = tmp;
     }
 }
+#endif
 
 bool
 WallpaperEditorWidget::supportsLandscape () const

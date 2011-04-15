@@ -12,6 +12,8 @@ meegotouch-controlpanelapplets (0.20.32~1) meegotouch; urgency=low
   * Fixed: NB#244003 - Wrong wallpaper is displayed in task list
   * Fixed: NB#247341 - [FEA] [TASK] Remove Get from Gallery button from
     Wallpaper settings.
+  * Fixed: NB#247339 - [FEA] [TASK] Disable cropping feature from wallpaper
+    editor
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 15 Apr 2011 12:11:09 +0300
 
