@@ -232,16 +232,6 @@ WallpaperWidget::polishEvent ()
             MApplicationPageModel::Hide);
 
     /*
-     * Adding the gallery action.
-     */
-    #ifdef HAVE_CONTENT_MANAGER
-    action = new MAction("icon-m-toolbar-gallery-white", "", this);
-    action->setLocation(MAction::ToolBarLocation);
-    page->addAction(action);
-    connect(action, SIGNAL(triggered()), this, SLOT(galleryActivated()));
-    #endif
-
-    /*
      * Adding the ovi action.
      */
     action = new MAction("icon-m-toolbar-content-ovi-music-white", "", this);
@@ -249,55 +239,4 @@ WallpaperWidget::polishEvent ()
     page->addAction(action);
     connect(action, SIGNAL(triggered()), this, SLOT(oviActivated()));
 }
-
-#ifdef HAVE_CONTENT_MANAGER
-/*!
- * Slot that is activated when the user clicked on the gallery item, the widget
- * that activates the ContentManager page. We support this only when the
- * ContentManager library is available.
- */
-void 
-WallpaperWidget::galleryActivated ()
-{
-    /*
-     * Please note that the m_ImageBrowser is a QPointer object that will reset
-     * itself to NULL when the widget is destroyed. It will also initialize
-     * itself to NULL when it is created.
-     */
-    if (!m_ImageBrowser) {
-        m_ImageBrowser = new ContentItemsPage (this);
-        m_ImageBrowser->setContentTypes (
-          QStringList() <<
-            "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Image");
-
-        m_ImageBrowser->setObjectName (
-                "SelectSingleContentItemPage_imageBrowser");
-        m_ImageBrowser->setStyleName ("CommonApplicationPageInverted");
-        m_ImageBrowser->setCommonLayoutSuffix ("Inverted");
-
-        connect (m_ImageBrowser, SIGNAL (backButtonClicked ()),
-                 m_ImageBrowser, SLOT (dismiss ()));
-        connect (m_ImageBrowser, SIGNAL (itemClicked (const QString &)),
-                 SLOT (galleryImageSelected (const QString &)));
-    }
-     
-    m_ImageBrowser->appear (MSceneWindow::DestroyWhenDismissed);
-}
-#endif
-
-
-#ifdef HAVE_CONTENT_MANAGER
-/*!
- * Slot that activated when the user picks an image from the content manager
- * page. We only need this slot when the ContentManager library is activated.
- */
-void 
-WallpaperWidget::galleryImageSelected (
-        const QString &uri)
-{
-    m_WallpaperBusinessLogic->addImageFromGallery (uri);
-    if (m_ImageBrowser)
-        m_ImageBrowser->unselectItem (uri);
-}
-#endif
 

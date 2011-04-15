@@ -60,10 +60,6 @@ private slots:
 
     void testImageActivated ();
    
-    #ifdef HAVE_CONTENT_MANAGER 
-    void testGalleryImageSelected ();
-    #endif
-
 private:
     MApplication              *m_App;
     WallpaperBusinessLogic    *m_BusinessLogic;
