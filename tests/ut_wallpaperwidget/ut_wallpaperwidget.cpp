@@ -152,20 +152,6 @@ Ut_WallpaperWidget::testImageActivated ()
     }
 }
 
-#ifdef HAVE_CONTENT_MANAGER
-void
-Ut_WallpaperWidget::testGalleryImageSelected()
-{
-    m_Widget->galleryImageSelected("file:///nodir/NoSuchFile.png");
-    // The loading of the image is happening in a separate thread, we need to
-    // give a chance to be executed.
-    QTest::qWait (800);
-    //QVERIFY(m_Sink.m_WallpaperImageEditRequestedCame);
-    if (m_Sink.m_WallpaperImageEditRequestedCame) {
-        SYS_WARNING ("This test should be failed, what's wrong??");
-    }
-}
-#endif
 
 QTEST_APPLESS_MAIN(Ut_WallpaperWidget)
 

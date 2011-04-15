@@ -20,9 +20,6 @@
 #define WALLPAPERWIDGET_H
 
 #include <QPointer>
-#ifdef HAVE_CONTENT_MANAGER
-#  include <ContentItemsPage.h>
-#endif
 
 #include "dcpwidget.h"
 #include "wallpaperbusinesslogic.h"
@@ -54,11 +51,6 @@ private slots:
     virtual void createContent ();
     void oviActivated ();
     
-    #ifdef HAVE_CONTENT_MANAGER
-    void galleryActivated ();
-    void galleryImageSelected(const QString &);
-    #endif
-
 private:
     void addHeaderContainer (MLinearLayoutPolicy *mainLayout);
     void retranslateUi ();
@@ -67,9 +59,6 @@ private:
     QPointer<WallpaperBusinessLogic>       m_WallpaperBusinessLogic;
     MLabel                                *m_TitleLabel;
     WallpaperList                         *m_ImageList;
-    #ifdef HAVE_CONTENT_MANAGER
-    QPointer<ContentItemsPage>             m_ImageBrowser;
-    #endif
 
     MContentItem                          *m_OviItem;
     qreal                                  m_NavigationBarTransparency;
