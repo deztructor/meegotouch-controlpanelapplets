@@ -12,6 +12,9 @@ contains(DEFINES, HAVE_QMSYSTEM) {
     CONFIG += qmsystem2
 }
 
+QMAKE_LFLAGS_RPATH = -Wl
+QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden -fPIC
+
 QT += dbus gui
 
 MOC_DIR = .moc
@@ -21,7 +24,6 @@ HEADERS = \
     ../debug.h \
     displayapplet.h \
     displaywidget.h \
-    displaybrief.h \
     brightnessbrief.h \
     displaybusinesslogic.h
 
@@ -29,7 +31,6 @@ SOURCES = \
     ../debug.cpp \
     displayapplet.cpp \
     displaywidget.cpp \
-    displaybrief.cpp \
     brightnessbrief.cpp \
     displaybusinesslogic.cpp
 

@@ -33,7 +33,6 @@ HEADERS += \
     ut_displayapplet.h \
     $$SRC_PREFIX/dcpdisplay.h \
     $$SRC_PREFIX/displayapplet.h \
-    $$SRC_PREFIX/displaybrief.h \
     $$SRC_PREFIX/brightnessbrief.h \
     $$SRC_PREFIX/displaybusinesslogic.h \
     $$SRC_PREFIX/displaywidget.h
@@ -44,7 +43,6 @@ SOURCES += \
     ../../src/debug.cpp \
     ut_displayapplet.cpp \
     $$SRC_PREFIX/displayapplet.cpp \
-    $$SRC_PREFIX/displaybrief.cpp \
     $$SRC_PREFIX/brightnessbrief.cpp \
     $$SRC_PREFIX/displaybusinesslogic.cpp \
     $$SRC_PREFIX/displaywidget.cpp

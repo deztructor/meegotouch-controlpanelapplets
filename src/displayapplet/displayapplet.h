@@ -27,7 +27,7 @@
 class MAction;
 class DisplayWidget;
 
-class DisplayApplet : public QObject, public DcpAppletIf
+class Q_DECL_EXPORT DisplayApplet : public QObject, public DcpAppletIf
 {
     Q_OBJECT
     Q_INTERFACES(DcpAppletIf)

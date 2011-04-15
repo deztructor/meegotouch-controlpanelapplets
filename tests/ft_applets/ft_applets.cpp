@@ -195,13 +195,13 @@ Ft_Applets::doViewTest (DcpAppletIf *applet, bool stylableView)
 void
 Ft_Applets::testbatteryapplet ()
 {
-    doAppletTest ("libbatteryapplet.so");
+    doAppletTest ("libbatteryapplet.so", false);
 }
 
 void
 Ft_Applets::testdisplayapplet ()
 {
-    doAppletTest ("libdisplayapplet.so");
+    doAppletTest ("libdisplayapplet.so", false);
 }
 
 void

@@ -20,7 +20,6 @@
 #include "ut_batteryapplet.h"
 #include "batteryapplet.h"
 #include "batterywidget.h"
-#include "batterybrief.h"
 
 #include <dcpwidgettypes.h>
 #include <MApplication>
@@ -114,19 +113,6 @@ Ut_BatteryApplet::testMenuItems ()
      */
     QVERIFY (items.size() == 0);
 }
-
-void 
-Ut_BatteryApplet::testConstructbrief ()
-{
-    DcpBrief *brief1 = m_Applet->constructBrief();
-    int       widgetType;
-
-    QVERIFY (brief1);
-    widgetType = brief1->widgetTypeID ();
-    QVERIFY (widgetType == DcpWidgetType::Label);
-    delete brief1;
-}
-
 
 QTEST_APPLESS_MAIN(Ut_BatteryApplet)
 

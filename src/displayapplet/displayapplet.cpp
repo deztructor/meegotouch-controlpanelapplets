@@ -18,7 +18,6 @@
 ****************************************************************************/
 #include "displayapplet.h"
 #include "displaywidget.h"
-#include "displaybrief.h"
 #include "brightnessbrief.h"
 
 #include "dcpdisplay.h"
@@ -52,7 +51,7 @@ DcpWidget* DisplayApplet::constructWidget(int widgetId)
 DcpWidget* DisplayApplet::pageMain()
 {
     if (m_MainWidget == NULL)
-        m_MainWidget = new DisplayWidget();
+        m_MainWidget = new DisplayWidget;
 
     return m_MainWidget;
 }
@@ -72,13 +71,12 @@ QVector<MAction*> DisplayApplet::viewMenuItems()
 
 DcpBrief* DisplayApplet::constructBrief(int partId)
 {
-    DcpBrief* result;
+    DcpBrief* result = 0;
     switch (partId) {
         case BrightnessPart:
-            result = new BrightnessBrief();
+            result = new BrightnessBrief;
             break;
         default:
-            result = new DisplayBrief();
             break;
     };
     return result;

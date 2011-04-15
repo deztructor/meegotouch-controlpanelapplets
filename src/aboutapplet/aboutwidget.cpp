@@ -170,7 +170,10 @@ AboutWidget::createContent ()
     addIMEIContainer ();
 
     if (! m_certsImage.isEmpty ())
+    {
+        addStretcher ("CommonSpacer");
         addCertsContainer ();
+    }
 
     addStretcher ("CommonItemDivider");
     addStretcher ("CommonSpacer");

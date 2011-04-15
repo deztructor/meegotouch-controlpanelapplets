@@ -18,7 +18,6 @@
 ****************************************************************************/
 #include "batteryapplet.h"
 #include "batterywidget.h"
-#include "batterybrief.h"
 
 #include "dcpbattery.h"
 #include "batterywidget.h"
@@ -81,16 +80,18 @@ QString BatteryApplet::title() const
     return qtTrId ("qtn_ener_battery");
 }
 
-QVector<MAction*> BatteryApplet::viewMenuItems()
+QVector<MAction*>
+BatteryApplet::viewMenuItems ()
 {
     QVector<MAction*> vector;
 
     return vector;
 }
 
-DcpBrief* BatteryApplet::constructBrief(int partId)
+DcpBrief*
+BatteryApplet::constructBrief (int partId)
 {
     Q_UNUSED(partId);
-    return new BatteryBrief();
+    return 0;
 }
 

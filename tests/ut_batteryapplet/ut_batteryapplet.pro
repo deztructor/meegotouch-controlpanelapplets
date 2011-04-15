@@ -32,7 +32,6 @@ HEADERS += \
     ../../src/debug.h \
     ut_batteryapplet.h \
     $$SRC_PREFIX/batteryapplet.h \
-    $$SRC_PREFIX/batterybrief.h \
     $$SRC_PREFIX/batterybusinesslogic.h \
     $$SRC_PREFIX/batteryimage.h \
     $$SRC_PREFIX/batterywidget.h \
@@ -46,7 +45,6 @@ SOURCES += \
     ../../src/debug.cpp \
     ut_batteryapplet.cpp \
     $$SRC_PREFIX/batteryapplet.cpp \
-    $$SRC_PREFIX/batterybrief.cpp \
     $$SRC_PREFIX/batterybusinesslogic.cpp \
     $$SRC_PREFIX/batteryimage.cpp \
     $$SRC_PREFIX/batterywidget.cpp \

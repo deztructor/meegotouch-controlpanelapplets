@@ -20,10 +20,8 @@
 #include "ut_displayapplet.h"
 #include "displayapplet.h"
 #include "displaywidget.h"
-#include "displaybrief.h"
 
 #include <dcpwidgettypes.h>
-#include <dcpbrief.h>
 
 #include <MApplication>
 #include <MComboBox>
@@ -47,9 +45,8 @@ Ut_DisplayApplet::cleanup()
 {
 }
 
-
 static int argc = 1;
-static char *app_name = (char*) "./Ut_DisplayApplet";
+static char *app_name = (char*) "./ut_displayapplet";
 
 void 
 Ut_DisplayApplet::initTestCase()
@@ -113,18 +110,6 @@ Ut_DisplayApplet::testMenuItems ()
     
     QVERIFY (items.size() == 0);
 }
-
-void 
-Ut_DisplayApplet::testConstructbrief ()
-{
-    DisplayBrief *brief1 = (DisplayBrief *) m_Applet->constructBrief(0);
-
-    QVERIFY (brief1);
-    QVERIFY (brief1->widgetTypeID() == DcpWidgetType::Label);
-
-    delete brief1;
-}
-
 
 QTEST_APPLESS_MAIN(Ut_DisplayApplet)
 

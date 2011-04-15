@@ -24,7 +24,7 @@
 class DcpWidget;
 
 
-class OfflineApplet : public QObject, public DcpAppletIf 
+class Q_DECL_EXPORT OfflineApplet : public QObject, public DcpAppletIf 
 {
 	Q_OBJECT
 	Q_INTERFACES(DcpAppletIf)
