@@ -28,7 +28,9 @@
 #include <MImageWidget>
 #include <MWidgetController>
 
+
 #include <QTimer>
+#include <QStringList>
 
 #undef DEBUG
 #define WARNING
@@ -36,6 +38,9 @@
 
 #ifdef HAVE_QMSYSTEM
 using namespace MeeGo;
+
+#define qtTrIdShort(id) qtTrId(id).split(QChar(0x9c)).last()
+
 
 static QmUSBMode::Mode usbModes[3] =
        { QmUSBMode::Ask,
@@ -176,7 +181,7 @@ UsbView::usbModeActivated (int idx)
         infoBanner->setIconID ("icon-m-common-usb");
         //% "Cannot change the USB mode when it is connected"
         infoBanner->setBodyText (
-            QString ("<p>") + qtTrId ("qtn_usb_change_incorrect") + "</p>");
+            QString ("<p>") + qtTrIdShort ("qtn_usb_change_incorrect") + "</p>");
 
         infoBanner->appear (MApplication::instance ()->activeWindow (),
                             MSceneWindow::DestroyWhenDone);
