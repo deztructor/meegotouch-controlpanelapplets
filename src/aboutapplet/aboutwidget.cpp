@@ -34,6 +34,8 @@
 #include <MContainer>
 #include <MLayout>
 
+#include "../styles.h"
+
 #define DEBUG
 #define WARNING
 #include "../debug.h"
@@ -191,6 +193,8 @@ AboutWidget::createContent ()
 void
 AboutWidget::addHeaderContainer ()
 {
+    MSeparator *stretcher;
+
     if (!m_layout)
         return;
 
@@ -199,10 +203,16 @@ AboutWidget::addHeaderContainer ()
      */
     //% "About product"
     m_TitleLabel = new MLabel (qtTrId("qtn_prod_about_product"));
-    m_TitleLabel->setStyleName ("CommonApplicationHeaderInverted");
+    m_TitleLabel->setStyleName (APP_TITLE_LABEL_STYLE_NAME);
     m_layout->addItem (m_TitleLabel);
     m_layout->setStretchFactor (m_TitleLabel, 0);
     m_layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
+
+    #ifdef APP_TITLE_USES_SPACER
+    stretcher = new MSeparator ();
+    stretcher->setStyleName (APP_TITLE_DIVIDER_STYLE_NAME);
+    m_layout->addItem (stretcher);
+    #endif
 }
 
 void
