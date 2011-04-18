@@ -8,7 +8,10 @@ meegotouch-controlpanelapplets (0.20.33~1) meegotouch; urgency=low
   * Fixes: NB#246705 - Display header style update and divider line
   * Fixes: NB#246699 - About header style update
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 18 Apr 2011 09:03:33 +0300
+  [ David Kedves ]
+  * Fixes: NB#244580 - Missing translation for !! Brightness
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 18 Apr 2011 12:32:11 +0300
 
 meegotouch-controlpanelapplets (0.20.32-2) meegotouch; urgency=low
 
