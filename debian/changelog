@@ -7,6 +7,7 @@ meegotouch-controlpanelapplets (0.20.33~1) meegotouch; urgency=low
     editor
   * Fixes: NB#246705 - Display header style update and divider line
   * Fixes: NB#246699 - About header style update
+  * Fixes: NB#246678 - USB header style update and spacers
 
   [ David Kedves ]
   * Fixes: NB#244580 - Missing translation for !! Brightness

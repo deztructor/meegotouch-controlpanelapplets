@@ -125,7 +125,7 @@ UsbView::initWidget ()
 #endif
 
     /*
-     *
+     * A separator, a subtitle and then an other separator.
      */
     separator = new MSeparator;
     separator->setStyleName ("CommonLargeSpacer");
@@ -139,7 +139,7 @@ UsbView::initWidget ()
     m_policy->addItem (separator);
 
     /*
-     *
+     * The buttons to change the USB mode.
      */
     addButtons ();
 
