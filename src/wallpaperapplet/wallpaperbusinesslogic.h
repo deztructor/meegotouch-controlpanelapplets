@@ -69,12 +69,6 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
     Q_OBJECT
 
 public:
-    typedef enum {
-        FieldUrl  = 0,
-        FieldTitle,
-        FieldMime,
-    } QueryFields;
-
     WallpaperBusinessLogic ();
     ~WallpaperBusinessLogic ();
 
@@ -89,8 +83,6 @@ public:
         WallpaperITrans     *landscapeITrans,
         WallpaperITrans     *portraitITrans,
         WallpaperDescriptor *desc = 0);
-
-    void addImageFromGallery(QString);
 
 signals:
     void wallpaperChanged ();

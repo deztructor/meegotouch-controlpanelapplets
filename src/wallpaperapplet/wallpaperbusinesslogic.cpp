@@ -62,7 +62,7 @@
 #include <MApplicationWindow>
 
 //#define LOTDEBUG
-//#define DEBUG
+#define DEBUG
 //#define WARNING
 #include "../debug.h"
 
@@ -288,31 +288,10 @@ WallpaperBusinessLogic::availableWallpapers () const
     list << desc;
 #endif
 
-#if 0
-#ifdef HAVE_QTSPARQL
-    static QSparqlConnection sparqlConn("QTRACKER");
-    static QSparqlQuery query (
-"SELECT ?uri ?title ?mime ?height ?width WHERE { "
-" ?item nie:url ?uri." 
-
-" ?item nie:mimeType ?mime." 
-" FILTER regex(?mime, \"image\")."
-
-" ?item nfo:height ?height."
-" ?item nfo:width ?width."
-" FILTER ( ?height > \"300\" )."
-" FILTER ( ?width  > \"300\" )."
-
-" OPTIONAL { ?item nie:title ?title }."
-"}"
-);
-#endif
-#endif
-
-    QString        directoryPath = dirPath (true);
-    QDir           directory (directoryPath);
-    QFileInfoList  entryList;
-    QStringList    nameFilters;
+    QString                 directoryPath = dirPath (true);
+    WallpaperDir            directory (directoryPath);
+    QStringList             entryList;
+    QStringList             nameFilters;
 
     if (!directory.exists(directoryPath))
         goto finalize;
@@ -321,65 +300,28 @@ WallpaperBusinessLogic::availableWallpapers () const
         "*.jpg" << "*.jpeg" << "*.jpe" <<  "*.png" << "*.bmp" << "*.gif" << 
         "*.tif";
 
-    entryList = directory.entryInfoList(
+    entryList = directory.entryList(
             nameFilters,
-            QDir::Files | QDir::NoSymLinks | QDir::Readable, 
-            QDir::Name);
+            QFlags<WallpaperDir::Filter>(WallpaperDir::Files | WallpaperDir::NoSymLinks | WallpaperDir::Readable));
 
     for (int iList = 0; iList < entryList.count(); iList++) {
-        QFileInfo info = entryList[iList];
-        QString sFilePath = info.filePath();
-        QString url = QString ("file://") + sFilePath;
-
-        SYS_DEBUG ("*** sFilePath = %s", SYS_STR(sFilePath));
+        QString url = 
+            QString ("file://") +
+            directoryPath +
+            entryList[iList];
+#if 0
+        SYS_DEBUG ("*** dir       = %s", SYS_STR(directoryPath));
+        SYS_DEBUG ("*** entry     = %s", SYS_STR(entryList[iList]));
         SYS_DEBUG ("*** url       = %s", SYS_STR(url));
-        
+#endif   
         desc = new WallpaperDescriptor;
         desc->setUrl (url, WallpaperDescriptor::Portrait);
         desc->setUrl (url, WallpaperDescriptor::Landscape);
         list << desc;
     }
-#if 0
-    QSparqlResult *result = sparqlConn.syncExec (query);
-    result->waitForFinished ();
 
-    SYS_DEBUG ("Starting to process sparql result");
-
-    if (result->hasError()) {
-        SYS_WARNING ("Error: %s", SYS_STR (result->lastError ().message ()));
-    } else if (! result->first()) {
-        SYS_WARNING ("No results from tracker");
-    } else {
-        do
-        {
-            desc = new WallpaperDescriptor;
-
-            QString url = result->binding(FieldUrl).value().toString();
-            QString mime = result->binding(FieldMime).value().toString();
-            QString title = result->binding(FieldTitle).value().toString();
-
-            desc->setUrl (url, WallpaperDescriptor::Portrait);
-            desc->setMimeType (mime, WallpaperDescriptor::Portrait);
-            desc->setTitle (title, WallpaperDescriptor::Portrait);
-
-            desc->setUrl (url, WallpaperDescriptor::Landscape);
-            desc->setMimeType (mime, WallpaperDescriptor::Landscape);
-            desc->setTitle (title, WallpaperDescriptor::Landscape);
-
-#ifdef LOTDEBUG
-            SYS_DEBUG ("************ IMAGE *************\n"
-                       "URL   = '%s'\nMIME  = '%s', TITLE = '%s'",
-                       SYS_STR (url), SYS_STR (mime), SYS_STR (title));
-#endif
-
-            list << desc;
-        }
-        while (result->next());
-    }
-#endif
 finalize:
     SYS_DEBUG ("We have %d wallpapers.", list.size());
-    //delete result;
     return list;
 }
 
@@ -510,11 +452,11 @@ WallpaperBusinessLogic::dirPath (
         homeDir = "/usr/home";
 
     if (downloadDir)
-        dirPath = homeDir + QDir::separator() + 
-            wallpapersDir + QDir::separator();
+        dirPath = homeDir + WallpaperDir::separator() + 
+            wallpapersDir + WallpaperDir::separator();
     else
-        dirPath = homeDir + QDir::separator() + 
-            wallpaperDir + QDir::separator();
+        dirPath = homeDir + WallpaperDir::separator() + 
+            wallpaperDir + WallpaperDir::separator();
 
     return dirPath;
 }
@@ -861,77 +803,6 @@ WallpaperBusinessLogic::editRequestArrived (
     setEditedImage (desc, true);
 
     startEdit ();
-}
-
-/*
- * FIXME: Maybe this method should be implemented in the WallpaperDescriptor
- * class?
- */
-static QString
-trackerIdToFilename (
-        const QString &trackerId)
-{
-    if (trackerId.isEmpty ())
-        return "";
-
-#ifdef HAVE_QTSPARQL 
-    static QSparqlConnection sparqlConn("QTRACKER");
-
-    static QSparqlQuery theQuery ("select ?u where { ?:trackerId nie:url ?u }");
-    theQuery.bindValue ("trackerId", QUrl(trackerId));
-
-    QSparqlResult *result = sparqlConn.syncExec (theQuery);
-
-    result->waitForFinished ();
-
-    if (result->hasError()) {
-        SYS_WARNING ("Could get filename from tracker id (%s): %s",
-                     SYS_STR (trackerId),
-                     SYS_STR (result->lastError ().message ()));
-
-        return QString ("");
-    } else if (! result->first()) {
-        SYS_WARNING ("Tracker id not found: %s",
-                     SYS_STR (trackerId));
-
-        return QString ("");
-    } else {
-        QUrl url (result->value (0).toUrl ());
-
-        if (! url.isValid () || !(url.scheme () == "file"))
-        {
-            SYS_WARNING ("Tracker returned URL is not valid: %s",
-                         SYS_STR (url.toString ()));
-        }
-        else
-            return QUrl::fromPercentEncoding(url.path().toUtf8());
-    }
-#endif
-
-    return QString("");
-}
-
-void
-WallpaperBusinessLogic::addImageFromGallery(
-        QString uri)
-{
-    QString filename; 
-    WallpaperDescriptor *desc;
-    
-    if (m_EditedImage) {
-        SYS_DEBUG ("We have an edited image already...");
-        return;
-    }
-
-    filename = trackerIdToFilename(uri);
-    desc = new WallpaperDescriptor;
-
-    desc->setFilename (filename, WallpaperDescriptor::Landscape);
-    desc->setFilename (filename, WallpaperDescriptor::Portrait);
-    
-    setEditedImage (desc, true);
-    startEdit ();
-    //emit imageEditRequested ();
 }
 
 void

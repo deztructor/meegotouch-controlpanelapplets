@@ -60,12 +60,14 @@ public:
     bool operator== (const QString &path) const;
 
     bool exists() const;
+    static bool exists (const QString &path) { return true; };
     bool mkpath(const QString &dirPath) const;
     void setNameFilters(const QStringList &nameFilters);
+    static QChar separator () { return '/'; };
     QStringList entryList (Filters filters = NoFilter);
     QStringList entryList (
 		    const QStringList &nameFilters, 
-		    Filters filters = NoFilter);
+		    Filters            filters = NoFilter);
 
 private:
     QString       m_Path;
