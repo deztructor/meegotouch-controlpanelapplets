@@ -22,4 +22,8 @@
 #define APP_TITLE_LABEL_STYLE_NAME "CommonHeaderInverted"
 #define APP_TITLE_DIVIDER_STYLE_NAME "CommonHeaderDividerInverted"
 #define APP_TITLE_USES_SPACER 1
+
+#define SUBTITLE_LABEL_STYLE_NAME "CommonGroupHeaderInverted"
+#define SUBTITLE_PANEL_STYLE_NAME "CommonGroupHeaderPanelInverted"
+#define SUBTITLE_DIVIDER_STYLE_NAME "CommonGroupHeaderDividerInverted"
 #endif

@@ -18,6 +18,7 @@
 ****************************************************************************/
 #include "usbview.h"
 
+#include <MSeparator>
 #include <MLabel>
 #include <MLayout>
 #include <QGraphicsLinearLayout>
@@ -27,6 +28,7 @@
 #include <MInfoBanner>
 #include <MApplication>
 #include <MImageWidget>
+#include <MContainer>
 #include <MWidgetController>
 
 
@@ -35,7 +37,7 @@
 
 #include "../styles.h"
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -99,7 +101,8 @@ void
 UsbView::initWidget ()
 {
     SYS_DEBUG ("");
-    MLayout                 *mainLayout;
+    MLayout          *mainLayout;
+    MSeparator       *separator;
 
     m_infoOrder = 0;
     setStyleName ("CommonPanelInverted");
@@ -124,13 +127,21 @@ UsbView::initWidget ()
     /*
      *
      */
-    addButtons ();
+    separator = new MSeparator;
+    separator->setStyleName ("CommonLargeSpacer");
+    m_policy->addItem (separator);
 
-#if 0
-    MWidgetController *spacer = new MWidgetController;
-    spacer->setStyleName ("CommonSpacer");
-    m_policy->addItem (spacer);
-#endif
+    addSubTitle (this, m_policy, 
+            qtTrId("qtn_usb_default_info"));
+    
+    separator = new MSeparator;
+    separator->setStyleName ("CommonLargeSpacer");
+    m_policy->addItem (separator);
+
+    /*
+     *
+     */
+    addButtons ();
 
     m_policy->addStretch ();
     setLayout (mainLayout);
@@ -202,6 +213,49 @@ UsbView::addTitleLabel (
 
     targetPolicy->addItem (label);
     return label;
+}
+
+void
+UsbView::addSubTitle (
+        QGraphicsWidget     *parent,
+        MLinearLayoutPolicy *targetPolicy,
+        const QString       &subTitle)
+{
+    MContainer              *container;
+    QGraphicsLinearLayout   *layout;
+    MLabel                  *label;
+    MSeparator              *separator;
+
+    container = new MContainer (parent);
+    container->setContentsMargins (0., 0., 0., 0.);
+    container->setStyleName (SUBTITLE_PANEL_STYLE_NAME);
+    container->setHeaderVisible (false);
+    
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    layout->setContentsMargins (0., 0., 0., 0.);
+    layout->setSpacing (0.);
+    /*
+     *
+     */
+    separator = new MSeparator;
+    separator->setStyleName (SUBTITLE_DIVIDER_STYLE_NAME);
+
+    /*
+     *
+     */
+    label = new MLabel (subTitle);
+    label->setStyleName (SUBTITLE_LABEL_STYLE_NAME);
+    
+
+    layout->addItem (separator);
+    layout->setStretchFactor (separator, 2);
+
+    layout->addItem (label);
+    layout->setAlignment (label, Qt::AlignLeft);
+    layout->setStretchFactor (label, 0);
+
+    container->centralWidget()->setLayout (layout);
+    targetPolicy->addItem (container);
 }
 
 void
@@ -280,7 +334,7 @@ UsbView::currentText () const
 void
 UsbView::updateInfoLabel ()
 {
-    SYS_DEBUG ("----> ");
+    SYS_DEBUG ("");
     if (! m_policy)
         return;
 
@@ -419,7 +473,7 @@ UsbView::selectedButtonIndex () const
     return index;
 }
 
-int 
+void
 UsbView::setSelectedButtonIndex (
         int index)
 {

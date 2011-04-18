@@ -60,14 +60,20 @@ public:
         QString usbModeUIString (UsbModeType type) const;
         QString usbModeButtonStyle (UsbModeType type) const;
         int selectedButtonIndex () const;
-        int setSelectedButtonIndex (int index);
+        void setSelectedButtonIndex (int index);
+
         /*
          * Private methods that add widgets.
          */
         MLabel *addTitleLabel (
-            QGraphicsWidget     *parent,
-            MLinearLayoutPolicy *targetPolicy,
-            const char          *labelStyleName);
+                QGraphicsWidget     *parent,
+                MLinearLayoutPolicy *targetPolicy,
+                const char          *labelStyleName);
+
+        void addSubTitle (
+                QGraphicsWidget     *parent,
+                MLinearLayoutPolicy *targetPolicy,
+                const QString       &subTitle);
 
         void addSubtitle ();
         void addButtons ();
