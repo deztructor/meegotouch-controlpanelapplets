@@ -25,9 +25,10 @@
 #  include <qmusbmode.h>
 #endif
 
+#include <QList>
+
 class MLabel;
 class MButton;
-class MComboBox;
 class MLinearLayoutPolicy;
 
 class UsbView : public DcpStylableWidget
@@ -42,30 +43,48 @@ public:
 #endif
     ~UsbView ();
 
-private slots:
-    void usbModeActivated (int idx);
-    void updateInfoLabel ();
+    private slots:
+        void usbModeActivated (int idx);
+        void updateInfoLabel ();
+        void buttonToggled (bool state);
 
-private:
-    void initWidget ();
+    private:
+        typedef enum {
+            UsbModeAsk           = 0,
+            UsbModeMassStorage   = 1,
+            UsbModeOviSuite      = 2,
+            UsbModeLastMode      = 3,
+        } UsbModeType;
 
-    MLabel *addTitleLabel (
-        QGraphicsWidget     *parent,
-        MLinearLayoutPolicy *targetPolicy,
-        const char          *labelStyleName);
+        void initWidget ();
+        QString usbModeUIString (UsbModeType type) const;
+        QString usbModeButtonStyle (UsbModeType type) const;
+        int selectedButtonIndex () const;
+        int setSelectedButtonIndex (int index);
+        /*
+         * Private methods that add widgets.
+         */
+        MLabel *addTitleLabel (
+            QGraphicsWidget     *parent,
+            MLinearLayoutPolicy *targetPolicy,
+            const char          *labelStyleName);
+
+        void addSubtitle ();
+        void addButtons ();
+    
     QString currentText () const;
 
-#ifdef HAVE_QMSYSTEM
+    #ifdef HAVE_QMSYSTEM
     MeeGo::QmUSBMode    *m_logic;
-#endif
+    #endif
     MLinearLayoutPolicy *m_policy;
-    MComboBox           *m_UsbModeCombo;
     MLabel              *m_infoLabel;
     int                  m_infoOrder;
+    QList<MButton *>     m_Buttons;
 
-#ifdef UNIT_TEST
+    #ifdef UNIT_TEST
     friend class Ut_UsbApplet;
-#endif
+    #endif
 };
 
 #endif

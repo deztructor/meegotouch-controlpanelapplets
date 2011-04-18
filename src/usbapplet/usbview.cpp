@@ -22,7 +22,8 @@
 #include <MLayout>
 #include <QGraphicsLinearLayout>
 #include <MLinearLayoutPolicy>
-#include <MComboBox>
+#include <MButton>
+#include <MButtonGroup>
 #include <MInfoBanner>
 #include <MApplication>
 #include <MImageWidget>
@@ -34,7 +35,7 @@
 
 #include "../styles.h"
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -42,12 +43,13 @@
 using namespace MeeGo;
 
 #define qtTrIdShort(id) qtTrId(id).split(QChar(0x9c)).last()
+#define VALID_USB_MODE(modeType) ((modeType >= 0 && modeType <= 2))
 
-
-static QmUSBMode::Mode usbModes[3] =
-       { QmUSBMode::Ask,
-         QmUSBMode::MassStorage,
-         QmUSBMode::OviSuite };
+static QmUSBMode::Mode usbModes[3] = { 
+    QmUSBMode::Ask,
+    QmUSBMode::MassStorage,
+    QmUSBMode::OviSuite 
+};
 
 inline int
 usbModeIndex (QmUSBMode::Mode mode)
@@ -119,36 +121,19 @@ UsbView::initWidget ()
     m_infoOrder++;
 #endif
 
+    /*
+     *
+     */
+    addButtons ();
+
+#if 0
     MWidgetController *spacer = new MWidgetController;
     spacer->setStyleName ("CommonSpacer");
     m_policy->addItem (spacer);
-    m_infoOrder++;
-
-    m_UsbModeCombo = new MComboBox;
-    //% "Default USB device mode"
-    m_UsbModeCombo->setTitle (qtTrId ("qtn_usb_default_info"));
-    m_UsbModeCombo->setStyleName ("CommonComboBoxInverted");
-    m_UsbModeCombo->setObjectName ("UsbModeCombo");
-
-    //% "Always ask"
-    m_UsbModeCombo->insertItem (0, qtTrId ("qtn_usb_always_ask"));
-    //% "Mass storage mode"
-    m_UsbModeCombo->insertItem (1, qtTrId("qtn_usb_mass_storage"));
-    //% "Ovi suite mode"
-    m_UsbModeCombo->insertItem (2, qtTrId("qtn_usb_ovi_suite"));
-
-#ifdef HAVE_QMSYSTEM
-    m_UsbModeCombo->setCurrentIndex (usbModeIndex (m_logic->getDefaultMode ()));
 #endif
 
-    connect (m_UsbModeCombo, SIGNAL (activated (int)),
-             SLOT (usbModeActivated (int)), Qt::QueuedConnection);
-
-    m_policy->addItem (m_UsbModeCombo);
     m_policy->addStretch ();
-
     setLayout (mainLayout);
-
     updateInfoLabel ();
 }
 
@@ -167,9 +152,8 @@ UsbView::usbModeActivated (int idx)
     QmUSBMode::Mode active = m_logic->getMode ();
 
     /*
-     * If we are connected and some mode active, then
-     * show an error message and set the mode back
-     * to original
+     * If we are connected and some mode active, then show an error message and
+     * set the mode back to original
      */
     if ((active == QmUSBMode::MassStorage) ||
         (active == QmUSBMode::OviSuite))
@@ -177,7 +161,7 @@ UsbView::usbModeActivated (int idx)
         /*
          * Set checked on the previously active button
          */
-        m_UsbModeCombo->setCurrentIndex (usbModeIndex (m_logic->getDefaultMode ()));
+        setSelectedButtonIndex (usbModeIndex(m_logic->getDefaultMode()));
 
         MInfoBanner *infoBanner = new MInfoBanner (MInfoBanner::Information);
         infoBanner->setIconID ("icon-m-common-usb");
@@ -191,11 +175,13 @@ UsbView::usbModeActivated (int idx)
     }
 
     QmUSBMode::Mode newmode = usbModes[idx];
+
+    SYS_DEBUG ("Setting USB mode to %d", newmode);
     m_logic->setDefaultMode (newmode);
 
     /*
-     * If we are connected, and we've changed the default
-     * mode lets activate the selected mode...
+     * If we are connected, and we've changed the default mode lets activate the
+     * selected mode...
      */
     if (active == QmUSBMode::ChargingOnly)
         m_logic->setMode (newmode);
@@ -218,6 +204,40 @@ UsbView::addTitleLabel (
     return label;
 }
 
+void
+UsbView::addButtons ()
+{
+    MButtonGroup *group = new MButtonGroup();
+    int           currentModeIndex = -1;
+
+    #ifdef HAVE_QMSYSTEM
+    currentModeIndex = usbModeIndex (m_logic->getDefaultMode ());
+    #endif
+    
+    for (int n = 0; n < UsbModeLastMode; ++n) {
+        MButton *button;
+
+        SYS_DEBUG ("*** n = %d", n);
+        button = new MButton (usbModeUIString(UsbModeType(n)));
+            
+        group->addButton (button);
+        button->setStyleName (usbModeButtonStyle(UsbModeType(n)));
+        button->setViewType (MButton::groupType);
+        button->setCheckable (true);
+        m_policy->addItem (button);
+        m_policy->setAlignment (button, Qt::AlignCenter);
+
+        m_Buttons.append (button);
+
+        if (n == currentModeIndex) {
+            button->setChecked (true);
+        }
+
+        connect (button, SIGNAL (toggled(bool)),
+                    this, SLOT(buttonToggled (bool)));
+    }
+}
+
 QString
 UsbView::currentText () const
 {
@@ -225,25 +245,31 @@ UsbView::currentText () const
 #ifdef HAVE_QMSYSTEM
     QmUSBMode::Mode active = m_logic->getMode ();
 
-    switch (active)
-    {
+    switch (active) {
         case QmUSBMode::MassStorage:
+            SYS_DEBUG ("QmUSBMode::MassStorage");
             //% "%1 active"
             return qtTrId ("qtn_usb_active_mode").arg (
             //% "Mass storage mode"
                    qtTrId ("qtn_usb_mass_storage"));
             break;
+
         case QmUSBMode::OviSuite:
+            SYS_DEBUG ("QmUSBMode::OviSuite");
             //% "%1 active"
             return qtTrId ("qtn_usb_active_mode").arg (
             //% "Mass storage mode"
                    qtTrId ("qtn_usb_ovi_suite"));
             break;
+
         case QmUSBMode::ChargingOnly:
+            SYS_DEBUG ("QmUSBMode::ChargingOnly");
             //% "Current state: Charging only"
             return qtTrId ("qtn_usb_charging");
             break;
+
         default:
+            SYS_DEBUG ("UNHANDLED MODE: %d", active);
             return "";
             break;
     }
@@ -254,6 +280,7 @@ UsbView::currentText () const
 void
 UsbView::updateInfoLabel ()
 {
+    SYS_DEBUG ("----> ");
     if (! m_policy)
         return;
 
@@ -315,3 +342,92 @@ UsbView::updateInfoLabel ()
     m_policy->insertItem (m_infoOrder, infoWidget);
 }
 
+void 
+UsbView::buttonToggled (
+        bool state)
+{
+    int index;
+
+    /*
+     * For every click we got two signals: one buttons is going to be un-toggled
+     * and one is going to be toggled. To handle the event we only handle one of
+     * these.
+     */
+    if (!state)
+        return;
+    
+    index = selectedButtonIndex ();
+    if (VALID_USB_MODE(index))
+        usbModeActivated (index);
+
+    SYS_DEBUG ("*** state = %s", SYS_BOOL(state));
+}
+
+QString 
+UsbView::usbModeUIString (
+        UsbModeType type) const
+{
+    switch (type) {
+        case UsbModeAsk:
+            return qtTrId ("qtn_usb_always_ask");
+
+        case UsbModeMassStorage:
+            return qtTrId("qtn_usb_mass_storage");
+
+        case UsbModeOviSuite:
+            return qtTrId("qtn_usb_ovi_suite");
+
+        default:
+            SYS_WARNING ("Invalid USB mode: %d", type);
+    }
+
+    return QString();
+}
+
+QString 
+UsbView::usbModeButtonStyle (
+        UsbModeType type) const
+{
+    switch (type) {
+        case UsbModeAsk:
+            return "CommonTopSplitButtonInverted";
+
+        case UsbModeMassStorage:
+            return "CommonVerticalCenterSplitButtonInverted";
+
+        case UsbModeOviSuite:
+            return "CommonBottomSplitButtonInverted";
+
+        default:
+            SYS_WARNING ("Invalid USB mode: %d", type);
+    }
+
+    return QString();
+}
+
+int 
+UsbView::selectedButtonIndex () const
+{
+    int index = -1;
+
+    for (int n = 0; n < m_Buttons.size(); ++n) {
+        if (m_Buttons[n]->isChecked())
+            index = n;
+    }
+
+    SYS_DEBUG ("returning %d", index);
+    return index;
+}
+
+int 
+UsbView::setSelectedButtonIndex (
+        int index)
+{
+    for (int n = 0; n < m_Buttons.size(); ++n) {
+        if (n == index) {
+            if (!m_Buttons[n]->isChecked())
+                m_Buttons[n]->setChecked(true);
+            break;
+        }
+    }
+}
