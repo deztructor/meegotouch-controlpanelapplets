@@ -1,10 +1,11 @@
 meegotouch-controlpanelapplets (0.20.33~1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
-  * Fixed: NB#247341 - [FEA] [TASK] Remove Get from Gallery button from
+  * Fixes: NB#247341 - [FEA] [TASK] Remove Get from Gallery button from
     Wallpaper settings.
-  * Fixed: NB#247339 - [FEA] [TASK] Disable cropping feature from wallpaper
+  * Fixes: NB#247339 - [FEA] [TASK] Disable cropping feature from wallpaper
     editor
+  * Fixes: NB#246705 - Display header style update and divider line
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 18 Apr 2011 09:03:33 +0300
 
