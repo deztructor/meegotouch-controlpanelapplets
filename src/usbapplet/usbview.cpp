@@ -32,6 +32,8 @@
 #include <QTimer>
 #include <QStringList>
 
+#include "../styles.h"
+
 #undef DEBUG
 #define WARNING
 #include "../debug.h"
@@ -111,7 +113,7 @@ UsbView::initWidget ()
 #ifndef MEEGO
 // Create the title-bar
     MLabel *title = addTitleLabel (
-            this, m_policy, "CommonApplicationHeaderInverted");
+            this, m_policy, APP_TITLE_LABEL_STYLE_NAME);
     //% "USB"
     title->setText (qtTrId ("qtn_usb_title"));
     m_infoOrder++;
