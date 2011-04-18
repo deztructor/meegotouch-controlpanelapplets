@@ -11,8 +11,10 @@ meegotouch-controlpanelapplets (0.20.33~1) meegotouch; urgency=low
 
   [ David Kedves ]
   * Fixes: NB#244580 - Missing translation for !! Brightness
+  * Fixes: NB#246636 - Device doesnt bootup if restore original settings is
+    performed when USB is connected as mass storage
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 18 Apr 2011 12:32:11 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 18 Apr 2011 15:14:20 +0300
 
 meegotouch-controlpanelapplets (0.20.32-2) meegotouch; urgency=low
 
