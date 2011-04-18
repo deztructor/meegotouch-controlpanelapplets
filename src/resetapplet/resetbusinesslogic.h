@@ -43,6 +43,8 @@ public:
     ResetBusinessLogic ();
     ~ResetBusinessLogic ();
 
+    bool isUsbConnected ();
+
     /*
      * Asks user for device-lock code when it set
      */

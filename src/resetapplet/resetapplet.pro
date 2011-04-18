@@ -6,9 +6,16 @@ TEMPLATE = lib
 CONFIG += plugin \
           gui \
           meegotouchcore \
-          duicontrolpanel \
+          duicontrolpanel
+
+contains(DEFINES, HAVE_QMSYSTEM) {
+    CONFIG += qmsystem2
+}
 
 QT += dbus
+
+QMAKE_LFLAGS_RPATH = -Wl
+QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden -fPIC
 
 MOC_DIR = .moc
 OBJECTS_DIR = .objects

@@ -20,6 +20,10 @@
 #include "resetbusinesslogic.h"
 #include <QString>
 
+#ifdef HAVE_QMSYSTEM
+#include <qmusbmode.h>
+#endif
+
 #undef DEBUG
 #include "../debug.h"
 
@@ -69,10 +73,26 @@ ResetBusinessLogic::performClearData ()
 void
 ResetBusinessLogic::getAccess ()
 {
+    if (isUsbConnected ())
+        return;
+
     /*
      * XXX: Maybe this method can be useful for
      * some security challenge (as it used previously)
      */
     emit gotAccess ();
+}
+
+bool
+ResetBusinessLogic::isUsbConnected ()
+{
+    bool retVal = false;
+
+#ifdef HAVE_QMSYSTEM
+    MeeGo::QmUSBMode usbMode;
+    retVal = usbMode.getMode () == MeeGo::QmUSBMode::MassStorage;
+#endif
+
+    return retVal;
 }
 

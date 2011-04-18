@@ -1,13 +1,14 @@
 include(../common_top.pri)
+include(../../localconfig.pri)
 
 MOC_DIR = .moc
 SRC_PREFIX = ../../src/resetapplet
 STUB_PREFIX = ../stubs
 
 INCLUDEPATH = \
-        $$STUB_PREFIX \
-	$$SRC_PREFIX \
-	$$INCLUDEPATH
+    $$STUB_PREFIX \
+    $$SRC_PREFIX \
+    $$INCLUDEPATH
 
 QT += \
     testlib \
@@ -16,16 +17,20 @@ QT += \
 TEMPLATE = app
 
 DEFINES += \
-	UNIT_TEST 
+    UNIT_TEST 
 
 TARGET = ut_resetapplet
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
-	gui \
-	meegotouchcore \
-	plugin \
-	duicontrolpanel \
+    gui \
+    meegotouchcore \
+    plugin \
+    duicontrolpanel
+
+contains(DEFINES, HAVE_QMSYSTEM) {
+    CONFIG += qmsystem2
+}
 
 HEADERS += \
     $$STUB_PREFIX/mdesktopentry.h \

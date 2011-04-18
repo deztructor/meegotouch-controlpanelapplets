@@ -175,7 +175,6 @@ UsbView::usbModeActivated (int idx)
         setSelectedButtonIndex (usbModeIndex(m_logic->getDefaultMode()));
 
         MInfoBanner *infoBanner = new MInfoBanner (MInfoBanner::Information);
-        infoBanner->setIconID ("icon-m-common-usb");
         //% "Cannot change the USB mode when it is connected"
         infoBanner->setBodyText (
             QString ("<p>") + qtTrIdShort ("qtn_usb_change_incorrect") + "</p>");

@@ -16,11 +16,12 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "resetwidget.h"
 
 #include <MContainer>
 #include <MLayout>
+#include <MInfoBanner>
+#include <MApplication>
 #include <MLinearLayoutPolicy>
 #include <MButton>
 #include <MDialog>
@@ -29,6 +30,8 @@
 
 #undef DEBUG
 #include "../debug.h"
+
+#define qtTrIdShort(id) qtTrId(id).split(QChar(0x9c)).last()
 
 ResetWidget::ResetWidget (
         ResetBusinessLogic     *resetBusinessLogic, 
@@ -160,6 +163,12 @@ ResetWidget::restoreActivated ()
     MDialog   *dialog;
     int        retval;
 
+    if (m_ResetBusinessLogic->isUsbConnected ())
+    {
+        showMassStorageWarning ();
+        return;
+    }
+
     //% "Restore original settings? The device will reboot, temporarily "
     //% "disabling all functions, including emergency calls. "
     //% "User created-content will be unaffected."
@@ -197,6 +206,12 @@ ResetWidget::clearActivated ()
 {
     MDialog   *dialog;
     int        retval;
+
+    if (m_ResetBusinessLogic->isUsbConnected ())
+    {
+        showMassStorageWarning ();
+        return;
+    }
 
     //% "Clear all user data and restore original settings? "
     //% "The device will reboot, temporarily disabling all "
@@ -245,5 +260,19 @@ ResetWidget::doTheWork ()
             break;
     }
     m_currentPlan = None;
+}
+
+void
+ResetWidget::showMassStorageWarning ()
+{
+    SYS_DEBUG ("");
+    MInfoBanner *infoBanner = new MInfoBanner (MInfoBanner::Information);
+
+    //% "Device resets are not possible while USB is connected in mass storage mode."
+    infoBanner->setBodyText (
+            QString ("<p>") + qtTrIdShort ("qtn_rset_not_possible") + "</p>");
+
+    infoBanner->appear (MApplication::instance ()->activeWindow (),
+                        MSceneWindow::DestroyWhenDone);
 }
 
