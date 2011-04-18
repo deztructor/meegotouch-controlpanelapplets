@@ -252,6 +252,7 @@ GridImageWidget::setPixmap(
         createLayout ();
 
     m_Pixmap = pixmap;
+    update();
 }
 
 

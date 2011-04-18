@@ -67,6 +67,7 @@
 #include "../debug.h"
 
 static const QString wallpaperDir = ".wallpapers";
+static const QString wallpapersDir = "MyDocs/.wallpapers";
 static const QString destopFileName = "wallpaper.desktop";
 static const QString backupExtension = ".BAK";
 static const QString saveFileExtension = ".png";
@@ -263,6 +264,7 @@ WallpaperBusinessLogic::availableWallpapers () const
      */
     list << WallpaperCurrentDescriptor::instance ();
 
+#if 0
     /*
      * Adding a theme default. 
      * FIXME: This code is experimental. 
@@ -284,7 +286,9 @@ WallpaperBusinessLogic::availableWallpapers () const
     }
 
     list << desc;
+#endif
 
+#if 0
 #ifdef HAVE_QTSPARQL
     static QSparqlConnection sparqlConn("QTRACKER");
     static QSparqlQuery query (
@@ -302,7 +306,40 @@ WallpaperBusinessLogic::availableWallpapers () const
 " OPTIONAL { ?item nie:title ?title }."
 "}"
 );
+#endif
+#endif
 
+    QString        directoryPath = dirPath (true);
+    QDir           directory (directoryPath);
+    QFileInfoList  entryList;
+    QStringList    nameFilters;
+
+    if (!directory.exists(directoryPath))
+        goto finalize;
+
+    nameFilters << 
+        "*.jpg" << "*.jpeg" << "*.jpe" <<  "*.png" << "*.bmp" << "*.gif" << 
+        "*.tif";
+
+    entryList = directory.entryInfoList(
+            nameFilters,
+            QDir::Files | QDir::NoSymLinks | QDir::Readable, 
+            QDir::Name);
+
+    for (int iList = 0; iList < entryList.count(); iList++) {
+        QFileInfo info = entryList[iList];
+        QString sFilePath = info.filePath();
+        QString url = QString ("file://") + sFilePath;
+
+        SYS_DEBUG ("*** sFilePath = %s", SYS_STR(sFilePath));
+        SYS_DEBUG ("*** url       = %s", SYS_STR(url));
+        
+        desc = new WallpaperDescriptor;
+        desc->setUrl (url, WallpaperDescriptor::Portrait);
+        desc->setUrl (url, WallpaperDescriptor::Landscape);
+        list << desc;
+    }
+#if 0
     QSparqlResult *result = sparqlConn.syncExec (query);
     result->waitForFinished ();
 
@@ -340,9 +377,9 @@ WallpaperBusinessLogic::availableWallpapers () const
         while (result->next());
     }
 #endif
-
+finalize:
     SYS_DEBUG ("We have %d wallpapers.", list.size());
-    delete result;
+    //delete result;
     return list;
 }
 
@@ -455,15 +492,29 @@ WallpaperBusinessLogic::editedImage ()
  */
 
 /*!
+ * \param downloadDir If the directory where the images are downloaded should be
+ *     returned.
+ *
  * Returns the directory path that is used to store the information about the
  * edited wallpaper. This is the data storing directory for the wallpaper
  * applet.
  */
 QString
-WallpaperBusinessLogic::dirPath () const
+WallpaperBusinessLogic::dirPath (
+        bool       downloadDir) const
 {
     QString homeDir (getenv("HOME"));
-    QString dirPath = homeDir + "/" + wallpaperDir + "/";
+    QString dirPath;
+    
+    if (homeDir.isEmpty())
+        homeDir = "/usr/home";
+
+    if (downloadDir)
+        dirPath = homeDir + QDir::separator() + 
+            wallpapersDir + QDir::separator();
+    else
+        dirPath = homeDir + QDir::separator() + 
+            wallpaperDir + QDir::separator();
 
     return dirPath;
 }

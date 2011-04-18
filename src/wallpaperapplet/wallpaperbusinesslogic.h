@@ -105,7 +105,7 @@ private slots:
     void valueChanged ();
     
 private:
-    QString dirPath () const;
+    QString dirPath (bool downloadDir = false) const;
     bool ensureHasDirectory ();
     void createBackupFiles ();
     void deleteBackupFiles ();
