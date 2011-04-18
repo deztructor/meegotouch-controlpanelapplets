@@ -136,7 +136,6 @@ Ut_WallpaperDescriptor::testDefaults ()
 
     QVERIFY (m_Desc->m_Thumbnailer == NULL);
     QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_Filename.isEmpty());
-    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_Title.isEmpty());
     QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_MimeType.isEmpty());
     QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_HasThumbnail == false);
     QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_Cached == false);
@@ -246,13 +245,6 @@ Ut_WallpaperDescriptor::testThumbnailing ()
     QVERIFY (m_Desc->isThumbnailLoaded());
     QVERIFY (m_SignalSink.m_ThumbnailLoaded);
     QVERIFY (m_Desc->m_Thumbnailer == 0);
-
-    /*
-     * This is actually a different subject, but we can test the title here.
-     */
-    QVERIFY (m_Desc->title() == "NoSuchAFile");
-    m_Desc->setTitle ("The Title");
-    QVERIFY (m_Desc->title() == "The Title");
 
     dropDescriptor ();    
 }

@@ -23,15 +23,8 @@
 #include <QAbstractTableModel>
 #include <MAbstractCellCreator>
 #include "wallpaperdescriptor.h"
-
-#define USE_IMAGE_WIDGET
-
-#ifdef USE_IMAGE_WIDGET
-#  include <MImageWidget> 
-#  include <QSizeF>
-#else
-#  include <MAdvancedListItem>
-#endif
+#include <MImageWidget> 
+#include <QSizeF>
 
 class WallpaperBusinessLogic;
 class WallpaperDescriptor;
@@ -67,7 +60,6 @@ private:
     QList<WallpaperDescriptor *>  m_DescriptorList;
 };
 
-#ifdef USE_IMAGE_WIDGET
 class WallpaperCellCreator : 
     public MAbstractCellCreator<MWidgetController>
 {
@@ -86,24 +78,6 @@ class WallpaperCellCreator :
     private:
         QSizeF   m_CellSize;
 };
-#else
-class WallpaperCellCreator : 
-    public MAbstractCellCreator<MAdvancedListItem>
-{
-  public:
-      virtual MWidget *createCell (
-                const QModelIndex &index, 
-                MWidgetRecycler   &recycler) const;
-
-      virtual void updateCell (
-              const QModelIndex &index, 
-              MWidget *cell) const;
-      
-      void updateListItemMode (
-              const QModelIndex &index, 
-              MAdvancedListItem *contentItem) const;
-};
-#endif
 
 class WallpaperImageLoader : public QObject
 {

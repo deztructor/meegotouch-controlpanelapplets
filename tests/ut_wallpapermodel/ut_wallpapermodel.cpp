@@ -126,7 +126,6 @@ Ut_WallpaperModel::testData ()
     }
 }
 
-#ifdef USE_IMAGE_WIDGET
 void 
 Ut_WallpaperModel::testCellCreator ()
 {
@@ -134,58 +133,7 @@ Ut_WallpaperModel::testCellCreator ()
      * FIXME: To write the test case for the image widget case.
      */
 }
-#else
-/*!
- * This function tests the content item creator, goes through the simulated
- * (stubbed) test data and checks if the content item creator sets an
- * MContentItem properly.
- */
-void 
-Ut_WallpaperModel::testCellCreator ()
-{
-    WallpaperCellCreator *contentCreator;
-    QModelIndex                  index;
-    QVariant                     data;
-    WallpaperDescriptor         *desc;
-    MAdvancedListItem            contentItem;
-    int                          rows = m_Model->rowCount (index);
 
-    contentCreator = new WallpaperCellCreator;
-    
-    for (int n = 0; n < rows; ++n) {
-        index = m_Model->index (n, 0);
-        data = index.data(WallpaperModel::WallpaperDescriptorRole);
-        desc = data.value<WallpaperDescriptor*>();
-
-        contentCreator->updateCell (index, &contentItem);
-
-        /*
-         * The current wallpaper should have the translateed UI string and the
-         * iamge name, the other items should have only the wallpaper name.
-         */
-        if (desc->isCurrent()) {
-            QCOMPARE (contentItem.title(), "qtn_wall_current_wallpaper");
-            //QCOMPARE (contentItem.subtitle(), desc->title());
-        } else {
-            QCOMPARE (contentItem.title(), desc->title());
-            //QVERIFY (contentItem.subtitle().isEmpty());
-        }
-
-        if (n == 0) {
-            QCOMPARE (contentItem.layoutPosition (),
-                      M::VerticalTopPosition);
-        } else if (n + 1 == rows) {
-            QCOMPARE (contentItem.layoutPosition(),
-                      M::VerticalBottomPosition);
-        } else {
-            QCOMPARE (contentItem.layoutPosition (),
-                      M::VerticalCenterPosition);
-        }
-    }
-
-    delete contentCreator;
-}
-#endif
 /*
  * This function will check the thumbnailer that creates and updates the
  * tuhmbnails for the list widget. During the test we use a simulated
@@ -265,7 +213,7 @@ bool
 Ut_WallpaperModel::isWallpaperDescriptorValid (
         WallpaperDescriptor *desc)
 {
-    QString filename, basename, mimeType, title;
+    QString filename, basename, mimeType;
     bool valid = true;
 
     if (desc == 0) {
@@ -328,18 +276,6 @@ Ut_WallpaperModel::isWallpaperDescriptorValid (
     }
 
 no_file_check_necessary:
-    /*
-     * Checking the title.
-     */
-    title = desc->title();
-    if (title.isEmpty())
-        valid = false;
-
-    if (!valid) {
-        SYS_WARNING ("Invalid title: %s", SYS_STR(title));
-        return false;
-    }
-
 
     return true;
 }

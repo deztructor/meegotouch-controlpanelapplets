@@ -28,13 +28,11 @@
 
 static const int loadPicturesDelay = 200;
 
-#ifdef USE_GRID_LAYOUT
 static int columnsLandscape = 5;
 static int columnsPortrait = 3;
 #include <MOrientationChangeEvent>
 #include <MApplication>
 #include <MApplicationWindow>
-#endif
 
 #include <MSortFilterProxyModel>
 #include <MListFilter>
@@ -65,7 +63,6 @@ WallpaperList::WallpaperList (
     connect (m_BusinessLogic, SIGNAL(wallpaperChanged()), 
             this, SLOT(loadPictures()));
 
-    #ifdef USE_GRID_LAYOUT
     MApplicationWindow *window;
     int                 columns;
     qreal               width, height;
@@ -94,8 +91,6 @@ WallpaperList::WallpaperList (
     SYS_DEBUG ("*** geometry().height() = %g", geometry().height());
     SYS_DEBUG ("*** columns             = %d", columns);
     SYS_DEBUG ("*** width               = %g", width);
-    #endif
-
     #endif
 }
 
@@ -167,7 +162,6 @@ WallpaperList::loadPictures ()
 #endif
 }
 
-#ifdef USE_GRID_LAYOUT
 void 
 WallpaperList::orientationChangeEvent (
         MOrientationChangeEvent *event)
@@ -213,7 +207,6 @@ WallpaperList::orientationChangeEvent (
     m_CellCreator->setCellSize (QSizeF(width, width/*height*/));
     setColumns (columns);
 }
-#endif
 
 void
 WallpaperList::hideEvent (

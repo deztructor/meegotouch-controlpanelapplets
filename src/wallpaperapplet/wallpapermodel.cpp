@@ -21,9 +21,7 @@
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperdescriptor.h"
 
-#ifdef USE_IMAGE_WIDGET
-#  include "gridimagewidget.h"
-#endif
+#include "gridimagewidget.h"
 
 #include <QTimer>
 #include <MImageWidget>
@@ -129,7 +127,6 @@ WallpaperImageLoader::processJobQueue ()
 /******************************************************************************
  * WallpaperContentItemCreator implementation.
  */
-#ifdef USE_IMAGE_WIDGET
 MWidget *
 WallpaperCellCreator::createCell (
         const QModelIndex &index, 
@@ -173,14 +170,6 @@ WallpaperCellCreator::updateCell (
     QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
     WallpaperDescriptor *desc = data.value<WallpaperDescriptor *>();
   
-    #if 0
-    SYS_DEBUG ("model: %p row: %d title: %s",
-            index.model(), index.row(), 
-            SYS_STR(desc->title()));
-    SYS_DEBUG ("*** imageWidget = %p", imageWidget);
-    SYS_DEBUG ("*** desc        = %p", desc);
-    SYS_DEBUG ("*** row()       = %d", index.row());
-    #endif
     if (!imageWidget || !desc)
         return;
 
@@ -218,84 +207,6 @@ WallpaperCellCreator::updateCell (
     imageWidget->setCurrent (desc->isCurrent());
     //imageWidget->setSelected (true);
 }
-#else
-MWidget *
-WallpaperCellCreator::createCell (
-        const QModelIndex &index, 
-        MWidgetRecycler   &recycler) const
-{
-    MAdvancedListItem *cell;
-    
-    cell = qobject_cast <MAdvancedListItem *> (
-            recycler.take(MAdvancedListItem::staticMetaObject.className()));
-
-    if (!cell) {
-        cell = new MAdvancedListItem (
-            MAdvancedListItem::IconWithTitleProgressIndicatorAndTwoSideIcons);
-        cell->progressIndicator()->setUnknownDuration (true);
-        cell->sideTopImageWidget()->hide();
-        cell->sideBottomImageWidget()->hide();
-    }
-
-    updateCell(index, cell);
-
-    return cell;
-}
-
-void 
-WallpaperCellCreator::updateCell (
-        const QModelIndex &index, 
-        MWidget           *cell) const
-{
-    MAdvancedListItem *listItem = qobject_cast<MAdvancedListItem *>(cell);
-    QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
-    WallpaperDescriptor *desc = data.value<WallpaperDescriptor *>();
-
-    if (desc->isCurrent()) {
-        //% "Current wallpaper"
-        listItem->setTitle (qtTrId("qtn_wall_current_wallpaper"));
-        //listItem->setSubtitle (desc->title());
-    } else {
-        listItem->setTitle (desc->title());
-        //listItem->setSubtitle ("");
-    }
-
-    // The spinner.
-    if (desc->loading()) {
-        listItem->progressIndicator()->show();
-    } else {
-        listItem->progressIndicator()->hide();
-    }
-
-    // The image
-    SYS_DEBUG ("Setting pixmap for %s", SYS_STR(desc->title()));
-    if (desc->isThumbnailLoaded())
-        listItem->imageWidget()->setPixmap (desc->thumbnailPixmap());
-    else {
-        if (listItem->imageWidget()->image() != "icon-m-content-not-loaded")
-            listItem->imageWidget()->setImage("icon-m-content-not-loaded");
-    }
-
-    // The style
-    updateListItemMode (index, listItem);
-}
-
-void 
-WallpaperCellCreator::updateListItemMode (
-              const QModelIndex &index, 
-              MAdvancedListItem *listItem) const
-{
-    int row = index.row();
-    int rows = index.model()->rowCount();
-
-    if (row == 0)
-        listItem->setLayoutPosition (M::VerticalTopPosition);
-    else if (row < rows - 1)
-        listItem->setLayoutPosition (M::VerticalCenterPosition);
-    else 
-        listItem->setLayoutPosition (M::VerticalBottomPosition);
-}
-#endif
 
 /******************************************************************************
  * WallpaperModel implementation.
@@ -361,22 +272,10 @@ WallpaperModel::data (
 
     switch (role) {
         case Qt::DisplayRole:
-            #if 0
-            SYS_DEBUG ("Qt::DisplayRole");
-            SYS_DEBUG ("*** returning %d -> %s",
-                    index.row(),
-                    SYS_STR(m_DescriptorList[index.row()]->title()));
-            #endif
-            var.setValue (m_DescriptorList[index.row()]->title());
+            var.setValue (m_DescriptorList[index.row()]->filename());
             break;
 
         case WallpaperModel::WallpaperDescriptorRole:
-            #if 0
-            SYS_DEBUG ("WallpaperModel::WallpaperDescriptorRole");
-            SYS_DEBUG ("*** returning %d -> %s",
-                    index.row(),
-                    SYS_STR(m_DescriptorList[index.row()]->title()));
-            #endif
             var.setValue (m_DescriptorList[index.row()]);
             break;
 

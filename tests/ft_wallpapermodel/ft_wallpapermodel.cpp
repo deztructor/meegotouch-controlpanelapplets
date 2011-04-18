@@ -140,7 +140,7 @@ bool
 Ft_WallpaperModel::isWallpaperDescriptorValid (
         WallpaperDescriptor *desc)
 {
-    QString filename, basename, mimeType, title;
+    QString filename, basename, mimeType;
     bool valid = true;
 
     if (desc == 0) {
@@ -203,18 +203,6 @@ Ft_WallpaperModel::isWallpaperDescriptorValid (
     }
 
 no_file_check_necessary:
-    /*
-     * Checking the title.
-     */
-    title = desc->title();
-    if (title.isEmpty())
-        valid = false;
-    
-    if (!valid) {
-        SYS_WARNING ("Invalid title: %s", SYS_STR(title));
-        return false;
-    }
-
 
     return true;
 }

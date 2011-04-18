@@ -647,7 +647,6 @@ WallpaperBusinessLogic::writeFiles (
      */
     out << "[Desktop Entry]" << nl;
     out << "Type=WallpaperImage" << nl;
-    out << "Name=" << desc->title() << nl;
     out << "Version=" << QString::number(version) << nl;
     out << nl;
 

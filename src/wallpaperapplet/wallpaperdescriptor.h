@@ -90,9 +90,6 @@ public:
     void setUrl (const QString &urlString);
     QUrl url () const {return m_Url;};
 
-    void setTitle (const QString &title);
-    QString title () const;
-
     QString basename () const;
     QString extension () const;
 
@@ -113,7 +110,6 @@ private:
     QString   m_Filename;
     QString   m_MimeType;
     QString   m_ImageID;
-    QString   m_Title;
     bool      m_Cached;
     QUrl      m_Url;  
     QPixmap   m_ThumbnailPixmap;
@@ -176,13 +172,6 @@ public:
             const QString &urlString,
             ImageVariant   variant = WallpaperDescriptor::Portrait);
 
-
-    void setTitle (
-            const QString &title,
-            ImageVariant   variant = WallpaperDescriptor::Portrait);
-    QString title (
-            ImageVariant   variant = WallpaperDescriptor::Portrait) const;
-    
     QString basename (
             ImageVariant   variant = WallpaperDescriptor::Portrait) const;
     QString extension (

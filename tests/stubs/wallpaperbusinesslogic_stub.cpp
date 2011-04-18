@@ -57,7 +57,6 @@ WallpaperBusinessLogic::availableWallpapers () const
 
     desc->setUrl ("file:///NoDir/NoSuchFile.png");
     desc->setMimeType ("image/png");
-    desc->setTitle ("The image title1");
 
     testList << desc;
 
@@ -65,7 +64,6 @@ WallpaperBusinessLogic::availableWallpapers () const
 
     desc->setUrl ("file:///AnotherSimulatedDir/WithASimulatedFile.jpg");
     desc->setMimeType ("image/jpg");
-    desc->setTitle ("The image title2");
 
     testList << desc;
 
@@ -104,13 +102,6 @@ WallpaperBusinessLogic::setBackground (
     Q_UNUSED (landscapeITrans);
     Q_UNUSED (portraitITrans);
     Q_UNUSED (desc);
-}
-
-void
-WallpaperBusinessLogic::addImageFromGallery (
-    QString image)
-{
-    Q_UNUSED (image);
 }
 
 bool

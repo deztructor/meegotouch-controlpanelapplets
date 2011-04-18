@@ -71,7 +71,6 @@ Image::Image (
     m_MimeType = orig.m_MimeType;
     m_Image    = orig.m_Image;
     m_ImageID  = orig.m_ImageID;
-    m_Title    = orig.m_Title;
     m_Cached   = orig.m_Cached;
     m_Url      = orig.m_Url;  
     m_ThumbnailPixmap = orig.m_ThumbnailPixmap;
@@ -84,7 +83,6 @@ Image::reset ()
     m_Filename = "";
     m_MimeType = "";
     m_ImageID  = "";
-    m_Title    = "";
     m_Cached   = false;
     m_Url      = QUrl ();
 
@@ -101,7 +99,6 @@ Image::operator= (
         m_MimeType = rhs.m_MimeType;
         m_Image    = rhs.m_Image;
         m_ImageID  = rhs.m_ImageID;
-        m_Title    = rhs.m_Title;
         m_Cached   = rhs.m_Cached;
         m_Url      = rhs.m_Url;  
         m_ThumbnailPixmap = rhs.m_ThumbnailPixmap;
@@ -207,31 +204,6 @@ Image::setUrl (
     m_Url = newUrl;
 }
 
-void
-Image::setTitle (
-        const QString &title)
-{
-    m_Title = title;
-}
-
-QString 
-Image::title () const
-{
-    QString retval;
-
-    retval = m_Title;
-    // If we have no title set we try the imageID, if that is also empty we use
-    // the basename of the image file.
-    if (retval.isEmpty()) {
-        if (!m_ImageID.isEmpty())
-            retval = m_ImageID;
-        else 
-            retval = basename ();
-    }
-
-    //SYS_DEBUG ("Returning %s", SYS_STR(retval));
-    return retval;
-}
 
 QString
 Image::basename () const 
@@ -510,21 +482,6 @@ WallpaperDescriptor::filename (
         ImageVariant   variant) const
 {
     return m_Images[variant].filename();
-}
-
-void
-WallpaperDescriptor::setTitle (
-        const QString &title,
-        ImageVariant   variant)
-{
-    m_Images[variant].setTitle (title);
-}
-
-QString
-WallpaperDescriptor::title (
-        ImageVariant   variant) const
-{
-    return m_Images[variant].title();
 }
 
 void

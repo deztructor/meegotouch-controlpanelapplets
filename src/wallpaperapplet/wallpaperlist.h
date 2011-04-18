@@ -22,8 +22,6 @@
 #include <MList>
 #include <QModelIndex>
 
-#define USE_GRID_LAYOUT
-
 class QGraphicsItem;
 class WallpaperDescriptor;
 class WallpaperBusinessLogic;
@@ -53,9 +51,7 @@ public:
     void setDataSourceType (WallpaperList::DataSourceType sourceType);
 
 protected:
-    #ifdef USE_GRID_LAYOUT
     virtual void orientationChangeEvent (MOrientationChangeEvent *event);
-    #endif
     void hideEvent (QHideEvent *event);
     void showEvent (QShowEvent *event);
 

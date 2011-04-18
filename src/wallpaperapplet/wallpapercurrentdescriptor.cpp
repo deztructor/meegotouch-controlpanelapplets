@@ -36,7 +36,6 @@ static const QString mainGroupKey = "Desktop Entry";
 static const QString landscapeGroupKey = "DCP Landscape Wallpaper";
 static const QString portraitGroupKey = "DCP Portrait Wallpaper";
 
-static const QString nameKey = "Name";
 static const QString versionKey = "Version";
 static const QString originalFilenameKey = "OriginalFile";
 static const QString editedFilenameKey = "EditedFile";
@@ -179,13 +178,6 @@ WallpaperCurrentDescriptor::setFromDesktopFile (
         setMimeType (value1);
     }
 
-    /*
-     * The name. This actually is all right.
-     */
-    if (getValue(mainGroupKey, nameKey, value1)) {
-        setTitle (value1);
-    }
-    
     /*
      * The version number.
      */

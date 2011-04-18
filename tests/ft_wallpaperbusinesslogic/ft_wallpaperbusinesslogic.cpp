@@ -130,7 +130,7 @@ Ft_WallpaperBusinessLogic::testAvailableWallpapers ()
 
     n = 0;
     foreach (WallpaperDescriptor *desc, availableWallpapers) {
-        QString   filename, title, basename;
+        QString   filename, basename;
         QString   extension, mimetype;
         QString   suggestedp, suggestedl;
         QString   originalp, originall;
@@ -138,7 +138,6 @@ Ft_WallpaperBusinessLogic::testAvailableWallpapers ()
 
         filename = desc->filename ();
         imageID = desc->imageID ();
-        title = desc->title ();
         basename = desc->basename ();
         extension = desc->extension ();
         mimetype = desc->mimeType ();
@@ -148,7 +147,6 @@ Ft_WallpaperBusinessLogic::testAvailableWallpapers ()
         originall = desc->originalImageFile (M::Landscape);
 
         if ((filename.isEmpty() && imageID.isEmpty()) ||
-                title.isEmpty() ||
                 (basename.isEmpty() && imageID.isEmpty()) ||
                 (mimetype.isEmpty() && imageID.isEmpty()) ||
                 suggestedp.isEmpty() ||
@@ -162,7 +160,6 @@ Ft_WallpaperBusinessLogic::testAvailableWallpapers ()
             SYS_DEBUG ("*** available wallpaper #%3d ***", n);
             SYS_DEBUG ("*** filename   = %s", SYS_STR(filename));
             SYS_DEBUG ("*** imageID    = %s", SYS_STR(imageID));
-            SYS_DEBUG ("*** title      = %s", SYS_STR(title));
             SYS_DEBUG ("*** basename   = %s", SYS_STR(basename));
             SYS_DEBUG ("*** mimetype   = %s", SYS_STR(mimetype));
             SYS_DEBUG ("*** extension  = %s", SYS_STR(extension));
@@ -173,7 +170,6 @@ Ft_WallpaperBusinessLogic::testAvailableWallpapers ()
         }
 
 //        QVERIFY (!filename.isEmpty() || !imageID.isEmpty());
-//        QVERIFY (!title.isEmpty());
 //        QVERIFY (!basename.isEmpty() || !imageID.isEmpty());
 //        QVERIFY (!mimetype.isEmpty() || !imageID.isEmpty());
 //        QVERIFY (!suggestedp.isEmpty());
@@ -193,7 +189,7 @@ void
 Ft_WallpaperBusinessLogic::testCurrentWallpaper ()
 {
     WallpaperCurrentDescriptor *desc = WallpaperCurrentDescriptor::instance ();
-    QString   filename, title, basename;
+    QString   filename, basename;
     QString   extension, mimetype;
     QString   suggestedp, suggestedl;
     QString   originalp, originall;
@@ -203,7 +199,6 @@ Ft_WallpaperBusinessLogic::testCurrentWallpaper ()
 
     filename = desc->filename ();
     imageID = desc->imageID ();
-    title = desc->title ();
     basename = desc->basename ();
     extension = desc->extension ();
     mimetype = desc->mimeType ();
@@ -213,7 +208,6 @@ Ft_WallpaperBusinessLogic::testCurrentWallpaper ()
     originall = desc->originalImageFile (M::Landscape);
 
     if ((filename.isEmpty() && imageID.isEmpty()) ||
-            title.isEmpty() ||
             (basename.isEmpty() && imageID.isEmpty()) ||
             (mimetype.isEmpty() && imageID.isEmpty()) ||
             suggestedp.isEmpty() ||
@@ -227,7 +221,6 @@ Ft_WallpaperBusinessLogic::testCurrentWallpaper ()
         SYS_DEBUG ("*** Current wallpaper ***");
         SYS_DEBUG ("*** filename   = %s", SYS_STR(filename));
         SYS_DEBUG ("*** imageID    = %s", SYS_STR(imageID));
-        SYS_DEBUG ("*** title      = %s", SYS_STR(title));
         SYS_DEBUG ("*** basename   = %s", SYS_STR(basename));
         SYS_DEBUG ("*** mimetype   = %s", SYS_STR(mimetype));
         SYS_DEBUG ("*** extension  = %s", SYS_STR(extension));
@@ -238,7 +231,6 @@ Ft_WallpaperBusinessLogic::testCurrentWallpaper ()
     }
 
 //    QVERIFY (!filename.isEmpty() || !imageID.isEmpty());
-//    QVERIFY (!title.isEmpty());
 //    QVERIFY (!basename.isEmpty() || !imageID.isEmpty());
 //    QVERIFY (!mimetype.isEmpty() || !imageID.isEmpty());
 //    QVERIFY (!suggestedp.isEmpty());
