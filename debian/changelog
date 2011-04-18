@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.33~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.33-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#247341 - [FEA] [TASK] Remove Get from Gallery button from
@@ -14,7 +14,7 @@ meegotouch-controlpanelapplets (0.20.33~1) meegotouch; urgency=low
   * Fixes: NB#246636 - Device doesnt bootup if restore original settings is
     performed when USB is connected as mass storage
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 18 Apr 2011 15:14:20 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 18 Apr 2011 15:32:57 +0300
 
 meegotouch-controlpanelapplets (0.20.32-2) meegotouch; urgency=low
 
