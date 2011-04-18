@@ -272,7 +272,12 @@ WallpaperModel::data (
 
     switch (role) {
         case Qt::DisplayRole:
-            var.setValue (m_DescriptorList[index.row()]->filename());
+            /*
+             * We use the base-name when sorting the images, the full path would
+             * make the current image at the fix position because the current
+             * image in a separate directory.
+             */
+            var.setValue (m_DescriptorList[index.row()]->basename());
             break;
 
         case WallpaperModel::WallpaperDescriptorRole:
