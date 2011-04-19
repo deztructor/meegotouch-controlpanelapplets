@@ -21,7 +21,7 @@
 #include "dcpdisplay.h"
 #include "../styles.h"
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -47,11 +47,18 @@ DisplayWidget::DisplayWidget (QGraphicsWidget *parent) :
         m_SubTitleLabel (0),
         m_brightnessSlider (0),
         m_screenTimeout (0),
-        m_screenlightLabel (0)
+        m_screenlightLabel (0),
+        m_lowPowerSwitch (0),
+        m_DoubleTapSwitch (0)
 {
     setReferer (DcpDisplay::None);
     setContentsMargins (0, 0, 0, 0);
     m_logic = new DisplayBusinessLogic;
+
+    connect (m_logic, SIGNAL(lowPowerModeChanged(bool)),
+            this, SLOT(lowPowerModeChanged(bool)));
+    connect (m_logic, SIGNAL(doubleTapModeChanged(bool)),
+            this, SLOT(doubleTapModeChanged(bool)));
 
     initWidget ();
 }
@@ -418,3 +425,20 @@ DisplayWidget::retranslateUi ()
         m_screenTimeout->setTitle (qtTrId ("qtn_disp_screenoff"));
 }
 
+void 
+DisplayWidget::lowPowerModeChanged (
+        bool lpm)
+{
+    SYS_DEBUG ("*** lpm = %s", SYS_BOOL(lpm));
+    if (m_lowPowerSwitch)
+        m_lowPowerSwitch->setChecked (lpm);
+}
+
+void 
+DisplayWidget::doubleTapModeChanged (
+        bool dt)
+{
+    SYS_DEBUG ("*** dt = %s", SYS_BOOL(dt));
+    if (m_DoubleTapSwitch)
+        m_DoubleTapSwitch->setChecked (dt);
+}

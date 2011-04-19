@@ -41,9 +41,11 @@ public:
 protected:
     void initWidget();
 
-private slots:
-    void screenTimeoutChanged (int index);
-    void sliderUpdated (int val);
+    private slots:
+        void screenTimeoutChanged (int index);
+        void sliderUpdated (int val);
+        void lowPowerModeChanged (bool lpm);
+        void doubleTapModeChanged (bool dt);
 
 private:
     void addHeaderContainer ();

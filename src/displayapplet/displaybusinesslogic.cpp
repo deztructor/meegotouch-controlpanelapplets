@@ -20,7 +20,7 @@
 #include "displaybusinesslogic.h"
 #include <MGConfItem>
 
-#undef DEBUG
+#define DEBUG
 #undef WARNING
 #include "../debug.h"
 
@@ -35,6 +35,13 @@ static const QString CurrentBrightnessKey =
     GConfDir + "/display_brightness";
 #endif
 
+/*
+ * gconftool --recursive-list /system/osso/dsm/display
+ * gconftool --set /system/osso/dsm/display/use_low_power_mode --type boolean false
+ * 
+ * gconftool --recursive-list /system/osso/dsm/locks
+ * gconftool --set /system/osso/dsm/locks/tklock_double_tap_gesture --type integer 0
+ */
 static const QString LowPowerKey = GConfDir + "/use_low_power_mode";
 static const QString DimTimeoutsKey (
         "/system/osso/dsm/display/possible_display_dim_timeouts");
@@ -52,6 +59,11 @@ DisplayBusinessLogic::DisplayBusinessLogic (
     m_possibleDimValues = new MGConfItem (DimTimeoutsKey);
     m_lowPower = new MGConfItem (LowPowerKey);
     m_DoubleTap = new MGConfItem (DoubleTapKey);
+
+    connect (m_lowPower, SIGNAL(valueChanged()),
+            this, SLOT(lpmValueChanged()));
+    connect (m_DoubleTap, SIGNAL(valueChanged()),
+            this, SLOT(doubleTapValueChanged()));
 }
 #else
 DisplayBusinessLogic::DisplayBusinessLogic (
@@ -63,6 +75,11 @@ DisplayBusinessLogic::DisplayBusinessLogic (
     m_possibleDimValues = new MGConfItem (POSSIBLE_DIM_TIMEOUTS);
     m_lowPower = new MGConfItem (LowPowerKey);
     m_DoubleTap = new MGConfItem (DoubleTapKey);
+    
+    connect (m_lowPower, SIGNAL(valueChanged()),
+            this, SLOT(lpmValueChanged()));
+    connect (m_DoubleTap, SIGNAL(valueChanged()),
+            this, doubleTapValueChanged());
 }
 #endif
 
@@ -271,11 +288,11 @@ DisplayBusinessLogic::setScreenLightTimeouts (
 }
 
 void
-DisplayBusinessLogic::setLowPowerMode (bool enable)
+DisplayBusinessLogic::setLowPowerMode (
+        bool enable)
 {
     SYS_DEBUG ("enable = %s", SYS_BOOL (enable));
-    QString val = enable ? "true" : "false";
-    m_lowPower->set (val);
+    m_lowPower->set (QVariant(enable));
 }
 
 void
@@ -283,18 +300,36 @@ DisplayBusinessLogic::setDoubleTapWakes (
         bool enable)
 {
     SYS_DEBUG ("enable = %s", SYS_BOOL (enable));
-    m_DoubleTap->set (enable ? 1 : 0);
+    int ival = enable ? 1 : 0;
+
+    m_DoubleTap->set (QVariant(ival));
 }
 
 bool
 DisplayBusinessLogic::getLowPowerMode ()
 {
-    return m_lowPower->value ("false").toString () == "true";
+    return m_lowPower->value(QVariant(false)).toBool();
 }
 
 bool
 DisplayBusinessLogic::getDoubleTapWakes ()
 {
     return m_DoubleTap->value().toInt() != 0;
+}
+
+void
+DisplayBusinessLogic::lpmValueChanged ()
+{
+    bool value = m_lowPower->value().toBool();
+
+    emit lowPowerModeChanged (value);
+}
+
+void
+DisplayBusinessLogic::doubleTapValueChanged ()
+{
+    int value = m_DoubleTap->value().toInt();
+
+    emit doubleTapModeChanged (value != 0);
 }
 

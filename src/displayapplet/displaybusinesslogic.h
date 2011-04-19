@@ -59,6 +59,14 @@ public slots:
     void setScreenLightTimeouts (int index);
     void setLowPowerMode (bool enable);
     void setDoubleTapWakes (bool enable);
+    
+    private slots:
+        void lpmValueChanged ();
+        void doubleTapValueChanged ();
+    
+    signals:
+        void lowPowerModeChanged (bool lpm);
+        void doubleTapModeChanged (bool lpm);
 
 private: 
     #ifdef HAVE_QMSYSTEM

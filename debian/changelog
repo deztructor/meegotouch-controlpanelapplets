@@ -3,6 +3,8 @@ meegotouch-controlpanelapplets (0.20.34~1) meegotouch; urgency=low
   [ Laszlo Pere ]
   * Fixes: NB#247342 - [FEA] [TASK] Wallpaper applet thumbnail generation 
     should be from directory and not tracker
+  * Fixes: NB#248505 - Low power mode does not work properly when enable from
+    settings
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 18 Apr 2011 15:33:16 +0300
 
