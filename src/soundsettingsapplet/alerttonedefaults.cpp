@@ -32,8 +32,8 @@
 #include "alerttonedefaults.h"
 #include "alerttonedefaultsmodel.h"
 
-//#define DEBUG
-#define WARNING
+#define DEBUG
+//#define WARNING
 #include "../debug.h"
 
 static const char *SelectionStartTag = "<font color='blue'>";
@@ -316,7 +316,9 @@ AlertToneDefaults::selectAndScroll (
      * Once the user started a panning we don't want to scroll to the just
      * selected item, the user knows what to do.
      */
-    if (!m_PanningStarted) {
+    // Had to disable this feature because of NB#248294
+    //if (!m_PanningStarted) 
+    {
         SYS_DEBUG ("calling MList::scrollTo(%d)", idx);
         MList::scrollTo (index, MList::PositionAtCenterHint);
     }
@@ -405,8 +407,10 @@ AlertToneDefaults::userPanningStarted ()
 {
     SYS_DEBUG ("");
 
-    if (m_ShowingSpinner)
+    if (m_ShowingSpinner) {
+        SYS_DEBUG ("Setting m_PanningStarted to true");
         m_PanningStarted = true;
+    }
 }
 
 void
