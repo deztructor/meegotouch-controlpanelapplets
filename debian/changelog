@@ -10,23 +10,23 @@ meegotouch-controlpanelapplets (0.20.34~1) meegotouch; urgency=low
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 18 Apr 2011 15:33:16 +0300
 
-meegotouch-controlpanelapplets (0.20.33-1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.33-2) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#247341 - [FEA] [TASK] Remove Get from Gallery button from
     Wallpaper settings.
   * Fixes: NB#247339 - [FEA] [TASK] Disable cropping feature from wallpaper
     editor
-  * Fixes: NB#246705 - Display header style update and divider line
-  * Fixes: NB#246699 - About header style update
-  * Fixes: NB#246678 - USB header style update and spacers
+  * Fixes NB246705 - Display header style update and divider line
+  * Fixes NB246699 - About header style update
+  * Fixes NB246678 - USB header style update and spacers
 
   [ David Kedves ]
   * Fixes: NB#244580 - Missing translation for !! Brightness
   * Fixes: NB#246636 - Device doesnt bootup if restore original settings is
     performed when USB is connected as mass storage
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 18 Apr 2011 15:32:57 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 19 Apr 2011 12:21:19 +0300
 
 meegotouch-controlpanelapplets (0.20.32-2) meegotouch; urgency=low
 
