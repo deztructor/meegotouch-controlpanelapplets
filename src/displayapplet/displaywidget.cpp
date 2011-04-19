@@ -21,7 +21,7 @@
 #include "dcpdisplay.h"
 #include "../styles.h"
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 

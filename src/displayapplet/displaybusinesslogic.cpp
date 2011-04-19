@@ -20,7 +20,7 @@
 #include "displaybusinesslogic.h"
 #include <MGConfItem>
 
-#define DEBUG
+#undef DEBUG
 #undef WARNING
 #include "../debug.h"
 
