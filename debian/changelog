@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.34~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.34-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#247342 - [FEA] [TASK] Wallpaper applet thumbnail generation 
@@ -8,7 +8,7 @@ meegotouch-controlpanelapplets (0.20.34~1) meegotouch; urgency=low
   * Fixes: NB#248294 - Not scrolling to the selected ringtone in Sounds and 
     vibration
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 18 Apr 2011 15:33:16 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 20 Apr 2011 10:36:27 +0300
 
 meegotouch-controlpanelapplets (0.20.33-2) meegotouch; urgency=low
 
