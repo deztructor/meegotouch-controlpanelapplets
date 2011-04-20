@@ -128,8 +128,7 @@ AboutWidget::initialize ()
 {
     QSettings content (configFile, QSettings::IniFormat);
 
-    m_swName =
-        content.value ("swname",
+    m_swName = content.value ("swname",
           m_AboutBusinessLogic->productName()).toString ();
     m_prodName = content.value ("prodname", "").toString ();
     m_certsImage = content.value ("swtypeimage", "").toString ();
