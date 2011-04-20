@@ -142,7 +142,7 @@ AboutWidget::initialize ()
                "Product name        : %s\n"
                "Software version    : %s\n"
                "License file        : %s\n"
-               "Type approval img.  : %s\n",
+               "Type approval img.  : %s\n"
                "2D Barcode image    : %s\n",
                SYS_STR (m_swName), SYS_STR (m_prodName),
                SYS_STR (m_licenseFile), SYS_STR (m_certsImage),
