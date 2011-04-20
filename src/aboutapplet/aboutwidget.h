@@ -25,6 +25,7 @@
 #include "aboutbusinesslogic.h"
 
 class MLabel;
+class QGraphicsGridLayout;
 class QGraphicsLinearLayout;
 class ContentWidget;
 
@@ -54,6 +55,7 @@ private:
     void addBtMACContainer ();
     void addIMEIContainer ();
     void addCertsContainer ();
+    void addBarcodeContainer ();
     void addLicenseLabelContainer ();
     void addStretcher (const QString &styleName);
 
@@ -61,7 +63,7 @@ private slots:
     void refresh ();
 
 private:
-    QGraphicsLinearLayout          *m_layout;
+    QGraphicsGridLayout            *m_layout;
     QPointer<AboutBusinessLogic>    m_AboutBusinessLogic;
     MLabel                         *m_TitleLabel;
     ContentWidget                  *m_Version;
@@ -75,6 +77,10 @@ private:
     QString                         m_swName;
     QString                         m_prodName;
     QString                         m_certsImage;
+    QString                         m_barcodeImage;
+
+    int                             m_currentRow;
+    int                             m_logoRow;
     #ifdef UNIT_TEST
     friend class Ut_AboutApplet;
     #endif
