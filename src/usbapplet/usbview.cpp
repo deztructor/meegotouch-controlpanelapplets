@@ -123,14 +123,14 @@ UsbView::initWidget ()
     title->setText (qtTrId ("qtn_usb_title"));
     m_infoOrder++;
 #endif
-
+#if 0
     /*
      * A separator, a subtitle and then an other separator.
      */
     separator = new MSeparator;
     separator->setStyleName ("CommonLargeSpacer");
     m_policy->addItem (separator);
-
+#endif
     addSubTitle (this, m_policy, 
             qtTrId("qtn_usb_default_info"));
     
