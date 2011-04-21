@@ -1,8 +1,14 @@
-meegotouch-controlpanelapplets (0.20.35~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.36~1) meegotouch; urgency=low
+
+  * [NEW VERSION] 
+
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 21 Apr 2011 09:28:57 +0300
+
+meegotouch-controlpanelapplets (0.20.35-1) meegotouch; urgency=low
 
   * Fixes: NB#247840 - About product addition of barcode
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 20 Apr 2011 12:45:41 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 21 Apr 2011 09:28:33 +0300
 
 meegotouch-controlpanelapplets (0.20.34-1) meegotouch; urgency=low
 
