@@ -35,7 +35,7 @@
  * weird file names around.
  */
 //#define LOTDEBUG
-//#define DEBUG
+#define DEBUG
 //#define WARNING
 #include "../debug.h"
 
@@ -112,9 +112,11 @@ void
 Image::setFilename (
         const QString &fileName)
 {
+    SYS_DEBUG ("*** m_Filename = %s", SYS_STR(m_Filename));
+    SYS_DEBUG ("*** fileName   = %s", SYS_STR(fileName));
     if (fileName == m_Filename)
         return;
-    
+   
     reset ();
     m_Filename     = fileName;
     m_Url          = QUrl::fromLocalFile (fileName);
@@ -652,7 +654,7 @@ WallpaperDescriptor::initiateThumbnailer ()
             continue;
 
         if (m_Images[n].thumbnail()) {
-            SYS_DEBUG ("emit thumbnailLoaded()");
+            SYS_DEBUG ("Has thumbnail for %d, emit thumbnailLoaded()", n);
             emit thumbnailLoaded (this);
             emit changed (this);
 

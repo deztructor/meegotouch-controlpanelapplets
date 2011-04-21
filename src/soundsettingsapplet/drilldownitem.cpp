@@ -24,6 +24,9 @@
 #include <QGraphicsGridLayout>
 #include <QGraphicsLinearLayout>
 #include <MLinearLayoutPolicy>
+#include <MSeparator>
+
+#include "../styles.h"
 
 #undef DEBUG
 #define WARNING
@@ -148,6 +151,50 @@ RightArrowItem::setTitleStyleName (
 /******************************************************************************
  *
  */
+void
+addSubTitle (
+        QGraphicsWidget     *parent,
+        MLinearLayoutPolicy *targetPolicy,
+        const QString       &subTitle)
+{
+    MContainer              *container;
+    QGraphicsLinearLayout   *layout;
+    MLabel                  *label;
+    MSeparator              *separator;
+
+    container = new MContainer (parent);
+    container->setContentsMargins (0., 0., 0., 0.);
+    container->setStyleName (SUBTITLE_PANEL_STYLE_NAME);
+    container->setHeaderVisible (false);
+    
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    layout->setContentsMargins (0., 0., 0., 0.);
+    layout->setSpacing (0.);
+    /*
+     *
+     */
+    separator = new MSeparator;
+    separator->setStyleName (SUBTITLE_DIVIDER_STYLE_NAME);
+
+    /*
+     *
+     */
+    label = new MLabel (subTitle);
+    label->setStyleName (SUBTITLE_LABEL_STYLE_NAME);
+    
+
+    layout->addItem (separator);
+    layout->setStretchFactor (separator, 2);
+
+    layout->addItem (label);
+    layout->setAlignment (label, Qt::AlignLeft);
+    layout->setStretchFactor (label, 0);
+
+    container->centralWidget()->setLayout (layout);
+    targetPolicy->addItem (container);
+}
+
+#if 0
 MLabel *
 addTitleLabel (
         QGraphicsWidget     *parent,
@@ -176,6 +223,7 @@ addTitleLabel (
     targetPolicy->addItem (container);
     return label;
 }
+#endif
 
 MLabel *
 addTitleLabel (

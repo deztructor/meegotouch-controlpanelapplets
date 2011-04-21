@@ -32,6 +32,8 @@ using namespace QtMobility;
 #include "profiledatainterface.h"
 #include "profilecontainer.h"
 
+#include "../styles.h"
+
 #define DEBUG
 #define WARNING
 #include "../debug.h"
@@ -72,10 +74,7 @@ AlertToneAppletWidget::AlertToneAppletWidget (
 	m_alertTones(alertTones),
     m_ProfileIf (new ProfileDataInterface),
 	m_tones (0),
-	m_feedback (0),
-    m_Title (0),
-    m_EventTonesLabel (0),
-    m_FeedbackLabel (0)
+	m_feedback (0)
 {
     /*
      * This should be called later, not from the constructor.
@@ -96,6 +95,7 @@ AlertToneAppletWidget::createContents()
 	MLayout               *mainLayout;
 	MLinearLayoutPolicy   *policy;
     MSeparator            *spacer;
+    MLabel                *label;
 
 	mainLayout = new MLayout (centralWidget);
 
@@ -108,64 +108,70 @@ AlertToneAppletWidget::createContents()
     /*
      * The main title
      */
-    m_Title = addTitleLabel (
+    label = addTitleLabel (
             centralWidget, policy,
-            "CommonApplicationHeaderInverted");
+            APP_TITLE_LABEL_STYLE_NAME); 
+    label->setText(qtTrId("qtn_sond_sounds"));
 
+#if 0
     /*
      * Adding a spacer.
      */
     spacer = new MSeparator;
     spacer->setStyleName ("CommonHeaderDividerInverted");
     policy->addItem (spacer);
+#endif
 
     /*
      * A subtitle that shows 'Profile vibration'
      */
-    m_VibrationLabel = addTitleLabel (
-            centralWidget, policy, 
-            "CommonGroupHeaderPanelInverted", 
-            "CommonGroupHeaderInverted");
+    addSubTitle (
+            centralWidget, policy,
+            qtTrId("qtn_prof_vibration"));
     /*
      *
      */
     createProfileSwitches (policy, centralWidget);
-
+#if 0
     /*
      * Adding a spacer.
      */
     spacer = new MSeparator;
     spacer->setStyleName ("CommonHeaderDividerInverted");
     policy->addItem (spacer);
-
+#endif
     /*
      * A secondary title, it says 'Tones'
      */
-    m_EventTonesLabel = addTitleLabel (
+    addSubTitle (
             centralWidget, policy, 
-            "CommonGroupHeaderPanelInverted", 
-            "CommonGroupHeaderInverted");
+            qtTrId("qtn_sond_event_tones")); 
 
     /*
      * A list with the sound file setting widgets.
      */
 	m_tones = createAlertTonesList(centralWidget);
 	policy->addItem(m_tones);
-
+#if 0
     /*
      * Adding a spacer.
      */
     spacer = new MSeparator;
     spacer->setStyleName ("CommonHeaderDividerInverted");
     policy->addItem (spacer);
-    
+#endif
     /*
-     * An other secondary title.
+     * An other secondary title, that says 'Feedback'.
      */
+    addSubTitle (
+            centralWidget, policy, 
+            qtTrId("qtn_sond_feedback"));
+#if 0
     m_FeedbackLabel = addTitleLabel (
             centralWidget, policy, 
             "CommonGroupHeaderPanelInverted", 
             "CommonGroupHeaderInverted");
+#endif
 
     /*
      * The list with the feedback setting widgets.
@@ -304,25 +310,6 @@ AlertToneAppletWidget::createAlertTonesList(QGraphicsWidget *parent)
 	return container;
 }
 
-void
-AlertToneAppletWidget::retranslateUi()
-{
-    if (m_VibrationLabel)
-        //% "Profile vibration"
-        m_VibrationLabel->setText (qtTrId("qtn_prof_vibration"));
-
-    if (m_EventTonesLabel)
-        //% "Event Tones"
-        m_EventTonesLabel->setText (qtTrId("qtn_sond_event_tones"));
-
-    if (m_FeedbackLabel)
-        //% "Feedback"
-        m_FeedbackLabel->setText(qtTrId("qtn_sond_feedback"));
-
-    if (m_Title)
-        //% "Sounds"
-        m_Title->setText(qtTrId("qtn_sond_sounds"));
-}
 
 /*
  * This virtual method is called when the MApplicationPage for the widget is

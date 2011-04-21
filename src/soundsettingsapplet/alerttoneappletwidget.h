@@ -49,7 +49,6 @@ class AlertToneAppletWidget : public AlertToneToplevel
         void vibrationChanged (bool enabled);
 
     private:
-        virtual void retranslateUi();
         MContainer *createAlertTonesList (QGraphicsWidget *parent);
         MContainer *createFeedbackList (QGraphicsWidget *parent);
         void createProfileSwitches (
@@ -61,10 +60,6 @@ class AlertToneAppletWidget : public AlertToneToplevel
         QPointer<ProfileDataInterface>   m_ProfileIf;
         MContainer                      *m_tones;
         MContainer                      *m_feedback;
-        MLabel                          *m_Title;
-        MLabel                          *m_VibrationLabel;
-        MLabel                          *m_EventTonesLabel;
-        MLabel                          *m_FeedbackLabel;
 
 #ifdef UNIT_TEST
     friend class Ut_AlertToneAppletWidgetTests;

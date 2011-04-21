@@ -46,12 +46,20 @@ Q_OBJECT
         QString m_TitleStyleName;
 };
 
+void
+addSubTitle (
+        QGraphicsWidget     *parent,
+        MLinearLayoutPolicy *targetPolicy,
+        const QString       &subTitle);
+
+#if 0
 MLabel *
 addTitleLabel (
         QGraphicsWidget     *parent,
         MLinearLayoutPolicy *targetPolicy,
         const char          *panelStyleName,
         const char          *labelStyleName);
+#endif
 
 MLabel *
 addTitleLabel (

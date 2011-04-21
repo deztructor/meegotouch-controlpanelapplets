@@ -62,7 +62,7 @@
 #include <MApplicationWindow>
 
 //#define LOTDEBUG
-//#define DEBUG
+#define DEBUG
 //#define WARNING
 #include "../debug.h"
 
