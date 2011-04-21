@@ -59,11 +59,15 @@ DisplayBusinessLogic::DisplayBusinessLogic (
     m_possibleDimValues = new MGConfItem (DimTimeoutsKey);
     m_lowPower = new MGConfItem (LowPowerKey);
     m_DoubleTap = new MGConfItem (DoubleTapKey);
+    m_devicemode = new MeeGo::QmDeviceMode (this);
 
     connect (m_lowPower, SIGNAL(valueChanged()),
             this, SLOT(lpmValueChanged()));
     connect (m_DoubleTap, SIGNAL(valueChanged()),
             this, SLOT(doubleTapValueChanged()));
+    connect (m_devicemode,
+            SIGNAL (devicePSMStateChanged (MeeGo::QmDeviceMode::PSMState)),
+            this, SLOT (PSMStateChanged (MeeGo::QmDeviceMode::PSMState)));
 }
 #else
 DisplayBusinessLogic::DisplayBusinessLogic (
@@ -332,4 +336,35 @@ DisplayBusinessLogic::doubleTapValueChanged ()
 
     emit doubleTapModeChanged (value != 0);
 }
+
+#ifdef HAVE_QMSYSTEM
+/*!
+ * This slot will be called when the device power save mode is changed. The
+ * method will send the PSMValueReceived() signal.
+ */
+void
+DisplayBusinessLogic::PSMStateChanged (
+        MeeGo::QmDeviceMode::PSMState state)
+{
+    bool enabled =
+        state == MeeGo::QmDeviceMode::PSMStateOn;
+    
+    SYS_DEBUG ("Emitting PSMValueReceived (%s)", SYS_BOOL(enabled));
+    emit PSMValueReceived (enabled);
+}
+#endif
+
+bool
+DisplayBusinessLogic::PSMValue ()
+{
+    bool ret = false;
+
+#ifdef HAVE_QMSYSTEM
+    ret = (m_devicemode->getPSMState () ==
+           MeeGo::QmDeviceMode::PSMStateOn);
+#endif
+
+    return ret;
+}
+
 

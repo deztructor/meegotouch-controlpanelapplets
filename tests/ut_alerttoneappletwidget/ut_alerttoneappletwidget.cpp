@@ -99,27 +99,6 @@ Ut_AlertToneAppletWidgetTests::alerttoneappletwidgetConstructor ()
       QCOMPARE( ataw.m_alertTones.size(), 5);
 }
 
-void
-Ut_AlertToneAppletWidgetTests::alerttoneappletwidgetRetranslateUi()
-{
-    QList<AlertTone *>  atl;
-    atl.push_back (new AlertTone("sms.alert.tone") );
-
-    AlertToneAppletWidget  ataw( atl);
-    QVERIFY (ataw.m_Title);
-    QVERIFY (ataw.m_EventTonesLabel);
-    QVERIFY (ataw.m_FeedbackLabel);
-
-    QVERIFY (ataw.m_Title->styleName().endsWith(inverted));
-    QVERIFY (ataw.m_EventTonesLabel->styleName().endsWith(inverted));
-    QVERIFY (ataw.m_FeedbackLabel->styleName().endsWith(inverted));
-    QVERIFY (ataw.m_tones->styleName().endsWith(inverted));
-    QVERIFY (ataw.m_feedback->styleName().endsWith(inverted));
-
-    QCOMPARE (ataw.m_Title->text(), qtTrId("qtn_sond_sounds"));
-    QCOMPARE (ataw.m_FeedbackLabel->text(), qtTrId("qtn_sond_feedback"));
-    QCOMPARE (ataw.m_Title->text(), qtTrId("qtn_sond_sounds"));
-}
 
 void
 Ut_AlertToneAppletWidgetTests::alerttoneappletwidgetCreateContent()

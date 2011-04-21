@@ -29,6 +29,7 @@ CONFIG += \
 
 HEADERS += \
     $$STUB_PREFIX/qmdisplaystate.h \
+    $$STUB_PREFIX/qmdevicemode.h \
     ../../src/debug.h \
     ut_displayapplet.h \
     $$SRC_PREFIX/dcpdisplay.h \
@@ -40,6 +41,7 @@ HEADERS += \
 
 SOURCES += \
     $$STUB_PREFIX/qmdisplaystate.cpp \
+    $$STUB_PREFIX/qmdevicemode.cpp \
     ../../src/debug.cpp \
     ut_displayapplet.cpp \
     $$SRC_PREFIX/displayapplet.cpp \

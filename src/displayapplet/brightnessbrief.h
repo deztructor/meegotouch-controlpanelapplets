@@ -38,10 +38,13 @@ public:
     virtual QVariant value() const;
     virtual void setValue(const QVariant& value);
 
-private:
-    DisplayBusinessLogic   *m_logic;
-    MGConfItem             *m_gconfKey;
-    QList<int>              m_brightness_vals;
+    private slots:
+        void PSMValueChanged (bool enabled);
+
+    private:
+        DisplayBusinessLogic   *m_logic;
+        MGConfItem             *m_gconfKey;
+        QList<int>              m_brightness_vals;
 };
 
 

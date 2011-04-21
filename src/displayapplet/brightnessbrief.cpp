@@ -32,6 +32,8 @@ BrightnessBrief::BrightnessBrief():
     m_gconfKey = new MGConfItem (brightnessKey);
     connect (m_gconfKey, SIGNAL (valueChanged ()),
              this, SIGNAL (valuesChanged ()));
+    connect (m_logic, SIGNAL(PSMValueReceived(bool)),
+            this, SLOT(PSMValueChanged(bool)));
 }
 
 BrightnessBrief::~BrightnessBrief ()
@@ -44,6 +46,9 @@ BrightnessBrief::~BrightnessBrief ()
 
 QVariant BrightnessBrief::value() const
 {
+    if (m_logic->PSMValue())
+        return QVariant();
+
     return m_logic->selectedBrightnessValueIndex ();
 }
 
@@ -68,5 +73,12 @@ int BrightnessBrief::maxValue() const
 int BrightnessBrief::widgetTypeID() const
 {
     return DcpWidgetType::Slider;
+}
+
+void
+BrightnessBrief::PSMValueChanged (
+        bool enabled)
+{
+    emit valuesChanged();
 }
 

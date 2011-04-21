@@ -22,6 +22,8 @@
 
 #ifdef HAVE_QMSYSTEM
 #  include <qmdisplaystate.h>
+#  include <qmdevicemode.h>
+
 using namespace MeeGo;
 #endif
 
@@ -42,23 +44,27 @@ class DisplayBusinessLogic : public QObject
 {
     Q_OBJECT
 
-public:
-    DisplayBusinessLogic (QObject* parent = 0);
-    virtual ~DisplayBusinessLogic();
+    public:
+        DisplayBusinessLogic (QObject* parent = 0);
+        virtual ~DisplayBusinessLogic();
 
-    QList<int> brightnessValues();
-    int selectedBrightnessValueIndex ();
-    int selectedBrightnessValue ();
-    QList<int> screenLightsValues();
-    int selectedScreenLightsValue();
-    bool getLowPowerMode ();
-    bool getDoubleTapWakes ();
-    
-public slots:
-    void setBrightnessValue(int value);
-    void setScreenLightTimeouts (int index);
-    void setLowPowerMode (bool enable);
-    void setDoubleTapWakes (bool enable);
+        QList<int> brightnessValues();
+        int selectedBrightnessValueIndex ();
+        int selectedBrightnessValue ();
+        QList<int> screenLightsValues();
+        int selectedScreenLightsValue();
+        bool getLowPowerMode ();
+        bool getDoubleTapWakes ();
+        bool PSMValue ();
+
+    public slots:
+        void setBrightnessValue(int value);
+        void setScreenLightTimeouts (int index);
+        void setLowPowerMode (bool enable);
+        void setDoubleTapWakes (bool enable);
+        #ifdef HAVE_QMSYSTEM     
+        void PSMStateChanged (MeeGo::QmDeviceMode::PSMState state);
+        #endif
     
     private slots:
         void lpmValueChanged ();
@@ -67,17 +73,20 @@ public slots:
     signals:
         void lowPowerModeChanged (bool lpm);
         void doubleTapModeChanged (bool lpm);
+        void PSMValueReceived (bool enabled);
 
 private: 
     #ifdef HAVE_QMSYSTEM
-    QmDisplayState *m_Display;
+    QmDisplayState      *m_Display;
+    MeeGo::QmDeviceMode *m_devicemode;
     #else
-    MGConfItem     *m_MaxDisplayBrightness;
-    MGConfItem     *m_CurrentBrightness;
+    MGConfItem          *m_MaxDisplayBrightness;
+    MGConfItem          *m_CurrentBrightness;
     #endif
-    MGConfItem     *m_possibleDimValues;
-    MGConfItem     *m_lowPower;
-    MGConfItem     *m_DoubleTap;
+    MGConfItem          *m_possibleDimValues;
+    MGConfItem          *m_lowPower;
+    MGConfItem          *m_DoubleTap;
+
     #ifdef UNIT_TEST
     friend class Ut_DisplayBusinessLogic;
     #endif

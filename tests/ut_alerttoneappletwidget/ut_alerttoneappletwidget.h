@@ -20,7 +20,6 @@ private slots:
       void initTestCase();
       void cleanupTestCase();
       void alerttoneappletwidgetConstructor();
-      void alerttoneappletwidgetRetranslateUi();
       void alerttoneappletwidgetCreateContent();
 #if 0
       void alerttoneappletwidgetCreateAlertTonesList();
