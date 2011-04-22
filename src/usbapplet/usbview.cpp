@@ -315,10 +315,36 @@ UsbView::currentText () const
                    qtTrId ("qtn_usb_ovi_suite"));
             break;
 
+        case QmUSBMode::ModeRequest:
+            SYS_DEBUG ("QmUSBMode::ModeRequest");
+            // Seems that the ChargingOnly comes late (30 sec or so), and we can
+            // show the chargingonly early.
+            //% "Current state: Charging only"
+            return qtTrId ("qtn_usb_charging");
+            break;
+        
+        case QmUSBMode::Ask:
+            SYS_DEBUG ("QmUSBMode::Ask");
+            // Seems that the ChargingOnly comes late (30 sec or so), and we can
+            // show the chargingonly early.
+            //% "Current state: Charging only"
+            return qtTrId ("qtn_usb_charging");
+            break;
+
         case QmUSBMode::ChargingOnly:
             SYS_DEBUG ("QmUSBMode::ChargingOnly");
             //% "Current state: Charging only"
             return qtTrId ("qtn_usb_charging");
+            break;
+
+        case QmUSBMode::Disconnected:
+            SYS_DEBUG ("QmUSBMode::Disconnected");
+            // Nothing to do.
+            break;
+        
+        case QmUSBMode::Undefined:
+            SYS_DEBUG ("QmUSBMode::Undefined");
+            // Nothing to do.
             break;
 
         default:
@@ -348,8 +374,7 @@ UsbView::updateInfoLabel ()
         return;
     }
 
-    if (infoText.isEmpty ())
-    {
+    if (infoText.isEmpty ()) {
         /*
          * Label needs to be removed if it is there...
          */
@@ -357,17 +382,27 @@ UsbView::updateInfoLabel ()
             return;
 
         /*
-         * Delete the infoWidget
+         * Delete the separator, and the infoWidget
          */
+        delete m_policy->itemAt (m_infoOrder + 1);
         delete m_policy->itemAt (m_infoOrder);
         m_infoLabel = 0;
+
         return;
     }
 
     SYS_DEBUG ("creating the info-widget");
     /*
-     * Create the info label widget, and
-     * initialize its contents...
+     * When we shown no text we didn't need the separator, now we need one.
+     */
+    MSeparator       *separator;
+    
+    separator = new MSeparator;
+    separator->setStyleName ("CommonLargeSpacer");
+    m_policy->insertItem (m_infoOrder, separator);
+
+    /*
+     * Create the info label widget, and initialize its contents...
      */
     MWidgetController *infoWidget = new MWidgetController;
     infoWidget->setStyleName ("CommonTextFrameInverted");
@@ -390,9 +425,9 @@ UsbView::updateInfoLabel ()
     infoWidget->setLayout (iwLayout);
 
     /*
-     * Insert it to the proper place...
+     * Insert it to the proper place... after the separator.
      */
-    m_policy->insertItem (m_infoOrder, infoWidget);
+    m_policy->insertItem (m_infoOrder + 1, infoWidget);
 }
 
 void 

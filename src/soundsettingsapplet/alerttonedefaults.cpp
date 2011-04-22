@@ -32,7 +32,7 @@
 #include "alerttonedefaults.h"
 #include "alerttonedefaultsmodel.h"
 
-#define DEBUG
+#undef DEBUG
 //#define WARNING
 #include "../debug.h"
 

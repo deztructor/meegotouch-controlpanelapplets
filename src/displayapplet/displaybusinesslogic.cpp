@@ -349,6 +349,7 @@ DisplayBusinessLogic::PSMStateChanged (
     bool enabled =
         state == MeeGo::QmDeviceMode::PSMStateOn;
     
+    SYS_DEBUG ("*** state = %d", (int)state);
     SYS_DEBUG ("Emitting PSMValueReceived (%s)", SYS_BOOL(enabled));
     emit PSMValueReceived (enabled);
 }

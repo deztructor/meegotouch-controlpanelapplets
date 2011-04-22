@@ -23,7 +23,7 @@
 #include <MImageWidget>
 #include <QGraphicsGridLayout>
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 

@@ -46,8 +46,11 @@ BrightnessBrief::~BrightnessBrief ()
 
 QVariant BrightnessBrief::value() const
 {
-    if (m_logic->PSMValue())
+    SYS_DEBUG ("PSM = %s", SYS_BOOL(m_logic->PSMValue()));
+    if (m_logic->PSMValue()) {
+        SYS_DEBUG ("Returning invalid value()");
         return QVariant();
+    }
 
     return m_logic->selectedBrightnessValueIndex ();
 }
@@ -79,6 +82,7 @@ void
 BrightnessBrief::PSMValueChanged (
         bool enabled)
 {
+    SYS_DEBUG ("");
     emit valuesChanged();
 }
 

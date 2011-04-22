@@ -27,7 +27,7 @@
 #include <MBasicSheetHeader>
 #include <QAction>
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 

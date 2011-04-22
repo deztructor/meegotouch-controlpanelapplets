@@ -25,7 +25,7 @@
 static ResourcePolicy::ResourceSet *resources;
 #endif
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
