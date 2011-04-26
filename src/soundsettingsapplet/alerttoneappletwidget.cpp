@@ -94,7 +94,6 @@ AlertToneAppletWidget::createContents()
 	QGraphicsWidget       *centralWidget = this/*->centralWidget()*/;
 	MLayout               *mainLayout;
 	MLinearLayoutPolicy   *policy;
-    MSeparator            *spacer;
     MLabel                *label;
 
 	mainLayout = new MLayout (centralWidget);
@@ -114,6 +113,8 @@ AlertToneAppletWidget::createContents()
     label->setText(qtTrId("qtn_sond_sounds"));
 
 #if 0
+    MSeparator            *spacer;
+
     /*
      * Adding a spacer.
      */
