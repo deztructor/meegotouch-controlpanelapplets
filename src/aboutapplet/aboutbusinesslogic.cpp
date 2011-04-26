@@ -36,7 +36,7 @@ QTM_USE_NAMESPACE
 
 #define OS_NAME_FALLBACK "MeeGo"
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
