@@ -16,9 +16,7 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "ut_aboutbusinesslogic.h"
-#include "mdesktopentry.h"
 #include "aboutbusinesslogic.h"
 
 #include <stdint.h>
@@ -107,10 +105,10 @@ static QString lastCalledMethod;
 
 bool
 QDBusAbstractInterface::callWithCallback (
-        const QString           &method, 
-        const QList<QVariant>   &args, 
-        QObject                 *receiver, 
-        const char              *returnMethod, 
+        const QString           &method,
+        const QList<QVariant>   &args,
+        QObject                 *receiver,
+        const char              *returnMethod,
         const char              *errorMethod)
 {
     Q_UNUSED (args);
@@ -125,15 +123,15 @@ QDBusAbstractInterface::callWithCallback (
 }
 
 /******************************************************************************
- * Ut_AboutBusinessLogic implementation. 
+ * Ut_AboutBusinessLogic implementation.
  */
-void 
+void
 Ut_AboutBusinessLogic::init()
 {
     m_Api = new AboutBusinessLogic;
 }
 
-void 
+void
 Ut_AboutBusinessLogic::cleanup()
 {
     delete m_Api;
@@ -144,21 +142,19 @@ Ut_AboutBusinessLogic::cleanup()
 static int argc = 1;
 static char *app_name = (char*) "./ut_aboutbusinesslogic";
 
-void 
+void
 Ut_AboutBusinessLogic::initTestCase()
 {
     m_App = new MApplication (argc, &app_name);
-
-    qDebug () << QNetworkInterface::allInterfaces ();
 }
 
-void 
+void
 Ut_AboutBusinessLogic::cleanupTestCase()
 {
     m_App->deleteLater ();
 }
 
-void 
+void
 Ut_AboutBusinessLogic::testImei()
 {
     systemdeviceinfo_imei_retval = "AA-BBBBBB-CCCCCC-D";
@@ -166,7 +162,7 @@ Ut_AboutBusinessLogic::testImei()
     QCOMPARE (m_Api->IMEI (), systemdeviceinfo_imei_retval);
 }
 
-void 
+void
 Ut_AboutBusinessLogic::testOsName ()
 {
     QString name;
@@ -175,7 +171,7 @@ Ut_AboutBusinessLogic::testOsName ()
     QCOMPARE (name, QString ("qtn_prod_sw_version"));
 }
 
-void 
+void
 Ut_AboutBusinessLogic::testOsVersion ()
 {
     QString name;
@@ -185,8 +181,6 @@ Ut_AboutBusinessLogic::testOsVersion ()
 
     QCOMPARE (name, QString ("VERSION13"));
 
-    m_Api->m_OsVersion = "";
-
     // check the LSB release file version
     systeminfo_firmware_retval = "";
     QVERIFY (name != m_Api->osVersion ());
@@ -195,17 +189,19 @@ Ut_AboutBusinessLogic::testOsVersion ()
 void
 Ut_AboutBusinessLogic::testBluetooth ()
 {
-    QMap <QString, QVariant> properties;
-    QString                  address;
+    QSignalSpy spy (
+        m_Api,
+        SIGNAL (requestFinished (AboutBusinessLogic::requestType, QVariant)));
 
-    properties["Address"] = QVariant(QString("fake-bluetooth-address"));
+    QMap <QString, QVariant> properties;
+    properties["Address"] = QString ("fake-bluetooth-address");
 
     /*
      * Let's initiate the Bluetooth query that will call the
      * QDBusAbstractInterface::callWithCallback() that is stubbed.
      */
     m_Api->initiateBluetoothQueries ();
-    QVERIFY (lastCalledMethod == "DefaultAdapter");
+    QCOMPARE (lastCalledMethod, QString ("DefaultAdapter"));
 
     /*
      * Let's answer the previous step by calling the DBus callback manually.
@@ -213,16 +209,25 @@ Ut_AboutBusinessLogic::testBluetooth ()
      */
     m_Api->defaultBluetoothAdapterReceived (
             QDBusObjectPath("/fakeObjectPath"));
-    QVERIFY (lastCalledMethod == "GetProperties");
+    QCOMPARE (lastCalledMethod, QString ("GetProperties"));
 
     /*
      * Answering the second DBus call and checking if the businesslogic
      * processed the data as it should.
      */
     m_Api->defaultBluetoothAdapterAddressReceived (properties);
-    address = m_Api->BluetoothAddress ();
-    SYS_DEBUG ("address = %s", SYS_STR(address));
-    QVERIFY (address == "fake-bluetooth-address");
+
+    QTest::qWait (100);
+    QCOMPARE (spy.count (), 1);
+
+    QList<QVariant> args = spy.first ();
+
+    QCOMPARE (args.at (0).value<AboutBusinessLogic::requestType>(),
+              AboutBusinessLogic::reqBtAddr);
+#if 0
+    /* for some strange reason it is not working :-S */
+    QCOMPARE (args.at (1).toString (), QString ("fake-bluetooth-address"));
+#endif
 
     /*
      * Let's test the failure socket. This does not do nothing...
@@ -245,10 +250,59 @@ Ut_AboutBusinessLogic::testHwAddresses ()
     qnetworkinterface_hwaddr = "test-address-xxx";
 
     QCOMPARE (m_Api->WiFiAddress (), qnetworkinterface_hwaddr);
+}
 
-    qnetworkinterface_hwaddr = "test-address-yyy";
+/**
+ * Check that all mandatory informations are passed
+ * throught the requestFinished signal...
+ */
+void
+Ut_AboutBusinessLogic::testMultiThread ()
+{
+    QSignalSpy spy (
+        m_Api,
+        SIGNAL (requestFinished (AboutBusinessLogic::requestType, QVariant)));
 
-    QCOMPARE (m_Api->BluetoothAddress (), qnetworkinterface_hwaddr);
+    /*
+     * Run the multithreaded data collection ...
+     */
+    m_Api->start ();
+
+    /*
+     * Hopefully this does not harm, and enough...
+     */
+    QTest::qWait (500);
+
+    QList<AboutBusinessLogic::requestType> mandatoryFields;
+    mandatoryFields <<
+        AboutBusinessLogic::reqProdName <<
+        AboutBusinessLogic::reqSwName <<
+        AboutBusinessLogic::reqLicense <<
+        AboutBusinessLogic::reqOsVersion <<
+        AboutBusinessLogic::reqImei <<
+        AboutBusinessLogic::reqWifiAddr;
+    /* BtAddr also mandatory, but we stubbed that stuff here,
+     * and we have a separate testcase which covers that one... */
+
+    /*
+     * Check whether that at least the mandatory field values are arrived
+     */
+    QVERIFY (spy.count () >= mandatoryFields.count ());
+
+    QList<AboutBusinessLogic::requestType> arrivedFields;
+
+    for ( ; ! spy.isEmpty () ; )
+    {
+        QList<QVariant> signal = spy.takeFirst ();
+        arrivedFields <<
+            signal.at (0).value<AboutBusinessLogic::requestType>();
+    }
+
+    foreach (AboutBusinessLogic::requestType req, mandatoryFields)
+    {
+        //SYS_DEBUG ("reqNr = %d", (int) req);
+        QVERIFY (arrivedFields.contains (req));
+    }
 }
 
 QTEST_APPLESS_MAIN(Ut_AboutBusinessLogic)

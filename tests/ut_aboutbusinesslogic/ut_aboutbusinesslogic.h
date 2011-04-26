@@ -42,6 +42,7 @@ private slots:
     void testOsVersion ();
     void testBluetooth ();
     void testHwAddresses ();
+    void testMultiThread ();
 
 private:
     MApplication                  *m_App;

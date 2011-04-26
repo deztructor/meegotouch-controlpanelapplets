@@ -16,22 +16,20 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "aboutwidget.h"
 
 #include <QFile>
+#include <QTimer>
 #include <QTextStream>
 #include <QVariant>
 #include <QSettings>
+#include <QGraphicsGridLayout>
+#include <QGraphicsLinearLayout>
 
 #include <MImageWidget>
 #include <MLabel>
 #include <MSeparator>
-#include <QGraphicsLinearLayout>
-#include <QGraphicsGridLayout>
-#include <MSeparator>
 #include <MLinearLayoutPolicy>
-#include <MContainer>
 #include <MLayout>
 
 #include "../styles.h"
@@ -39,14 +37,6 @@
 #define DEBUG
 #define WARNING
 #include "../debug.h"
-
-#ifndef LICENSE_PATH
-/* Define an empty string if fallback license file is not defined */
-#define LICENSE_PATH ""
-#endif
-
-static const QString configPath ("/usr/share/about-contents/");
-static const QString configFile (configPath + "contents.ini");
 
 #include <MWidgetCreator>
 M_REGISTER_WIDGET_NO_CREATE(AboutWidget)
@@ -63,9 +53,9 @@ class ContentWidget: public MStylableWidget
     void setTitle(QString const &title)
     {
         init ();
-        m_title->setText(title);
+        m_title->setText (title);
     }
-    void setSubtitle(QString const &subTitle)
+    void setSubtitle (QString const &subTitle)
     {
         init ();
         m_subTitle->setText(subTitle);
@@ -86,74 +76,60 @@ class ContentWidget: public MStylableWidget
         m_subTitle = new MLabel;
         m_subTitle->setStyleName ("CommonTitleBottomInverted");
 
-        layout->addItem(m_title);
-        layout->addItem(m_subTitle);
+        layout->addItem (m_title);
+        layout->addItem (m_subTitle);
 
-        setStyleName("CommonPanelInverted");
+        setStyleName ("CommonPanelInverted");
 
-        setLayout(layout);
+        setLayout (layout);
     }
   private:
     MLabel *m_title;
     MLabel *m_subTitle;
 };
 
-AboutWidget::AboutWidget (
-        AboutBusinessLogic     *aboutBusinessLogic,
-        QGraphicsWidget        *parent) :
+AboutWidget::AboutWidget (QGraphicsWidget *parent) :
     DcpStylableWidget (parent),
     m_layout (0),
-    m_AboutBusinessLogic (aboutBusinessLogic),
+    m_AboutBusinessLogic (new AboutBusinessLogic),
     m_TitleLabel (0),
-    m_Version(0),
-    m_ProductName(0),
-    m_WiFi(0),
-    m_Bt(0),
-    m_IMEI(0),
-    m_LicenseLabel (0)
+    m_Version (0),
+    m_ProductName (0),
+    m_WiFi (0),
+    m_Bt (0),
+    m_IMEI (0),
+    m_LicenseLabel (0),
+    m_imgBarcode (0),
+    m_imgCerts (0)
 {
     setContentsMargins (0,0,0,0);
 
-    initialize ();
+    /* create the widgets ... */
     createContent ();
 
-    connect (m_AboutBusinessLogic, SIGNAL (refreshNeeded ()),
-             SLOT (refresh ()));
+    connect (m_AboutBusinessLogic,
+             SIGNAL (requestFinished (AboutBusinessLogic::requestType, QVariant)),
+             SLOT (gotInfo (AboutBusinessLogic::requestType, QVariant)));
+
+    /* start the data collection thread... */
+    m_AboutBusinessLogic->start ();
 }
 
 AboutWidget::~AboutWidget ()
 {
+    delete m_AboutBusinessLogic;
 }
 
-void
-AboutWidget::initialize ()
-{
-    QSettings content (configFile, QSettings::IniFormat);
-
-    m_swName = content.value ("swname",
-          m_AboutBusinessLogic->productName()).toString ();
-    m_prodName = content.value ("prodname", "").toString ();
-    m_certsImage = content.value ("swtypeimage", "").toString ();
-    m_barcodeImage = content.value ("barcodeimage", "").toString ();
-    m_licenseFile =
-        content.value ("abouttext", QString (LICENSE_PATH)).toString ();
-
-    SYS_DEBUG ("\nAbout applet configuration:\n"
-               "Product name        : %s\n"
-               "Software version    : %s\n"
-               "License file        : %s\n"
-               "Type approval img.  : %s\n"
-               "2D Barcode image    : %s\n",
-               SYS_STR (m_swName), SYS_STR (m_prodName),
-               SYS_STR (m_licenseFile), SYS_STR (m_certsImage),
-               SYS_STR (m_barcodeImage));
-}
-
-
+/*
+ * Must be called after initialize ()
+ * (as some fields are optional, and customization
+ *  determines what fields needs to be used...)
+ */
 void
 AboutWidget::createContent ()
 {
     m_currentRow = 0;
+    m_certsRow = 0;
     m_logoRow = 0;
 
     /*
@@ -182,12 +158,11 @@ AboutWidget::createContent ()
     // Row 3: the product name
     addNamesContainer ();
 
+#if 0
     /* COLUMN 2 */
-    if (! m_barcodeImage.isEmpty ())
-    {
-        // Row 2-3: the barcode
-        addBarcodeContainer ();
-    }
+    // Row 2-3: the barcode
+    addBarcodeContainer ();
+#endif
 
     // Row 4: versions
     addVersionContainer ();
@@ -198,10 +173,16 @@ AboutWidget::createContent ()
     // Row 7: IMEI
     addIMEIContainer ();
 
-    if (! m_certsImage.isEmpty ())
-    {
-        addCertsContainer ();
-    }
+#if 0
+    // Row 8: Certs container...
+    addCertsContainer ();
+#else
+    m_certsRow = m_currentRow;
+    /*
+     * 2 spacer, 1 separator, 1 image
+     */
+    m_currentRow += 4;
+#endif
 
     // Last Row: the license label
     addLicenseLabelContainer ();
@@ -210,8 +191,47 @@ AboutWidget::createContent ()
      * And set the layout...
      */
     setLayout (m_layout);
+}
 
-    retranslateUi ();
+void
+AboutWidget::gotInfo (
+    AboutBusinessLogic::requestType type,
+    QVariant                        value)
+{
+    switch (type)
+    {
+        case AboutBusinessLogic::reqProdName:
+            m_ProductName->setTitle (value.toString ());
+            break;
+        case AboutBusinessLogic::reqSwName:
+            m_ProductName->setSubtitle (value.toString ());
+            break;
+        case AboutBusinessLogic::reqLicense:
+            m_LicenseLabel->setText (value.toString ());
+            break;
+        case AboutBusinessLogic::reqCertsImage:
+            addCertsContainer ();
+            m_imgCerts->setImage (value.value<QImage>());
+            break;
+        case AboutBusinessLogic::reqBarcodeImage:
+            addBarcodeContainer ();
+            m_imgBarcode->setImage (value.value<QImage>());
+            break;
+        case AboutBusinessLogic::reqOsVersion:
+            m_Version->setSubtitle (value.toString ());
+            break;
+        case AboutBusinessLogic::reqImei:
+            m_IMEI->setSubtitle (value.toString ());
+            break;
+        case AboutBusinessLogic::reqWifiAddr:
+            m_WiFi->setSubtitle (value.toString ());
+            break;
+        case AboutBusinessLogic::reqBtAddr:
+            m_Bt->setSubtitle (value.toString ());
+            break;
+        default:
+            break;
+    }
 }
 
 void
@@ -271,21 +291,19 @@ AboutWidget::addCertsContainer ()
     if (!m_layout)
         return;
 
+    if (m_imgCerts)
+        return;
+
     QGraphicsLinearLayout *layout =
         new QGraphicsLinearLayout (Qt::Horizontal);
 
-    /* Load the picture ... */
-    if (m_certsImage.at (0) != '/')
-        m_certsImage = configPath + m_certsImage;
+    m_currentRow = m_certsRow;
 
-    QImage img (m_certsImage);
-    SYS_DEBUG ("Image path = %s", SYS_STR (m_certsImage));
+    m_imgCerts = new MImageWidget;
+    m_imgCerts->setObjectName ("AboutAppletCertificates");
 
-    MImageWidget *certsPic = new MImageWidget (&img);
-    certsPic->setObjectName ("AboutAppletCertificates");
-
-    layout->addItem (certsPic);
-    layout->setAlignment (certsPic, Qt::AlignRight);
+    layout->addItem (m_imgCerts);
+    layout->setAlignment (m_imgCerts, Qt::AlignRight);
 
     addStretcher ("CommonLargeSpacer");
     addStretcher ("CommonHorizontalSeparatorInverted");
@@ -299,18 +317,13 @@ AboutWidget::addBarcodeContainer ()
     if (!m_layout)
         return;
 
-    /* Load the picture ... */
-    if (m_barcodeImage.at (0) != '/')
-        m_barcodeImage = configPath + m_barcodeImage;
+    if (m_imgBarcode)
+        return;
 
-    QImage img (m_barcodeImage);
-    SYS_DEBUG ("Image path = %s",
-               SYS_STR (m_barcodeImage));
+    m_imgBarcode = new MImageWidget;
+    m_imgBarcode->setObjectName ("AboutAppletBarcodeImage");
 
-    MImageWidget *barcodePic = new MImageWidget (&img);
-    barcodePic->setObjectName ("AboutAppletBarcodeImage");
-
-    m_layout->addItem (barcodePic,
+    m_layout->addItem (m_imgBarcode,
                        m_logoRow, 1, 2, 1,
                        Qt::AlignRight);
 }
@@ -323,8 +336,6 @@ AboutWidget::addNamesContainer ()
         return;
 
     m_ProductName = new ContentWidget;
-    m_ProductName->setTitle (m_prodName);
-    m_ProductName->setSubtitle (m_swName);
     /* Only for first row : */
     m_layout->addItem (m_ProductName, m_currentRow++, 0, 1, 1);
     m_layout->setAlignment (m_ProductName, Qt::AlignLeft);
@@ -338,7 +349,6 @@ AboutWidget::addVersionContainer ()
 
     m_Version = new ContentWidget;
     m_Version->setTitle (qtTrId ("qtn_prod_version"));
-    m_Version->setSubtitle (m_AboutBusinessLogic->osVersion ());
     m_layout->addItem (m_Version, m_currentRow++, 0, 1, 2);
 }
 
@@ -349,7 +359,8 @@ AboutWidget::addWiFiMACContainer ()
         return;
 
     m_WiFi = new ContentWidget;
-    m_WiFi->setSubtitle (m_AboutBusinessLogic->WiFiAddress ());
+    //% "WLAN MAC address"
+    m_WiFi->setTitle (qtTrId ("qtn_prod_wlan_mac_address"));
     m_layout->addItem (m_WiFi, m_currentRow++, 0, 1, 2);
 }
 
@@ -360,7 +371,8 @@ AboutWidget::addBtMACContainer ()
         return;
 
     m_Bt = new ContentWidget;
-    m_Bt->setSubtitle (m_AboutBusinessLogic->BluetoothAddress ());
+    //% "Bluetooth address"
+    m_Bt->setTitle (qtTrId ("qtn_prod_bt_address"));
     m_layout->addItem (m_Bt, m_currentRow++, 0, 1, 2);
 }
 
@@ -371,7 +383,8 @@ AboutWidget::addIMEIContainer ()
         return;
 
     m_IMEI = new ContentWidget;
-    m_IMEI->setSubtitle (m_AboutBusinessLogic->IMEI ());
+    //% "IMEI"
+    m_IMEI->setTitle (qtTrId ("qtn_prod_imei"));
     m_layout->addItem (m_IMEI, m_currentRow++, 0, 1, 2);
 }
 
@@ -386,8 +399,6 @@ AboutWidget::addLicenseLabelContainer ()
      */
     m_LicenseLabel = new MLabel;
     m_LicenseLabel->setWordWrap (true);
-    // this text is not translated!
-    m_LicenseLabel->setText (licenseText ());
     m_LicenseLabel->setStyleName ("CommonBodyTextInverted");
     m_LicenseLabel->setObjectName ("AboutAppletLicenseLabel");
 
@@ -412,58 +423,5 @@ AboutWidget::addStretcher (
     stretcher = new MStylableWidget;
     stretcher->setStyleName (styleName);
     m_layout->addItem (stretcher, m_currentRow++, 0, 1, 2);
-}
-
-QString
-AboutWidget::licenseText ()
-{
-    if (m_licenseFile.at (0) != '/')
-        m_licenseFile = configPath + m_licenseFile;
-
-    QFile licenseFile (m_licenseFile);
-    if (!licenseFile.open (QIODevice::ReadOnly | QIODevice::Text))
-    {
-        SYS_WARNING ("Unable to open %s", SYS_STR (configPath + m_licenseFile));
-        return "";
-    }
-
-    QTextStream inStream (&licenseFile);
-
-    return inStream.readAll ();
-}
-void
-AboutWidget::refresh ()
-{
-    if (m_Bt) {
-        m_Bt->setSubtitle(m_AboutBusinessLogic->BluetoothAddress ());
-    }
-}
-
-void
-AboutWidget::retranslateUi ()
-{
-    //% "About product"
-    if (m_TitleLabel)
-        m_TitleLabel->setText (qtTrId("qtn_prod_about_product"));
-
-    if (m_Version) {
-        //% "Version"
-        m_Version->setTitle (qtTrId("qtn_prod_version"));
-    }
-
-    if (m_WiFi) {
-        //% "WLAN MAC address"
-        m_WiFi->setTitle (qtTrId("qtn_prod_wlan_mac_address"));
-    }
-
-    if (m_Bt) {
-        //% "Bluetooth address"
-        m_Bt->setTitle (qtTrId("qtn_prod_bt_address"));
-    }
-
-    if (m_IMEI) {
-        //% "IMEI"
-        m_IMEI->setTitle (qtTrId("qtn_prod_imei"));
-    }
 }
 

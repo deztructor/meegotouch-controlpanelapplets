@@ -17,8 +17,8 @@
 **
 ****************************************************************************/
 #include "aboutbusinesslogic.h"
-
 #include <QFile>
+#include <QTimer>
 #include <QSystemInfo>
 #include <QNetworkInterface>
 #include <QSystemDeviceInfo>
@@ -29,13 +29,14 @@ QTM_USE_NAMESPACE
 #include <QRegExp>
 #include <QString>
 #include <QStringList>
+#include <QVariant>
 #include <QtDBus>
 #include <QDBusInterface>
 #include <QDBusObjectPath>
 
 #define OS_NAME_FALLBACK "MeeGo"
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -49,26 +50,43 @@ QTM_USE_NAMESPACE
 #define DBUS_BLUEZ_GET_DEFAULT_ADAPTER_METHOD "DefaultAdapter"
 #define DBUS_BLUEZ_GET_PROPERTIES_METHOD "GetProperties"
 
-AboutBusinessLogic::AboutBusinessLogic()
+#ifndef LICENSE_PATH
+/* Define an empty string if fallback license file is not defined */
+#define LICENSE_PATH ""
+#endif
+
+static const QString configPath ("/usr/share/about-contents/");
+static const QString configFile (configPath + "contents.ini");
+
+AboutBusinessLogic::AboutBusinessLogic() : QThread (0)
 {
+    setTerminationEnabled (true);
+    qRegisterMetaType<AboutBusinessLogic::requestType>(
+        "AboutBusinessLogic::requestType");
+
+    connect (this, SIGNAL (started ()),
+             SLOT (initializeAndStart ()));
 }
 
 AboutBusinessLogic::~AboutBusinessLogic()
 {
-    SYS_WARNING ("");
     if (m_ManagerDBusIf)
         delete m_ManagerDBusIf;
     if (m_AdapterDBusIf)
         delete m_AdapterDBusIf;
 }
 
+void
+AboutBusinessLogic::run ()
+{
+    m_queue.prepend (reqStartAll);
+    setPriority (QThread::LowPriority);
+}
+
 QString
 AboutBusinessLogic::osVersion ()
 {
-    QString retval = "-";
-
-    if (!m_OsVersion.isEmpty())
-        return m_OsVersion;
+    QString retval;
 
     QSystemInfo systemInfo;
 
@@ -85,8 +103,7 @@ AboutBusinessLogic::osVersion ()
 
     if ((retval.isNull () == false) && (retval != ""))
     {
-      m_OsVersion = retval;
-      return m_OsVersion;
+        return retval;
     }
 
     /*
@@ -104,11 +121,11 @@ AboutBusinessLogic::osVersion ()
         if (pos > -1)
         {
             retval = version.cap (1);
-            m_OsVersion = retval;
+            return retval;
         }
     }
 
-    return m_OsVersion;
+    return "-";
 }
 
 QString
@@ -116,9 +133,6 @@ AboutBusinessLogic::osName ()
 {
     //% "MeeGo"
     QString retval = qtTrId ("qtn_prod_sw_version");
-
-    if (!m_OsName.isEmpty())
-        return m_OsName;
 
     /*
      * Try to get the version number from the lsb-release
@@ -135,7 +149,6 @@ AboutBusinessLogic::osName ()
             retval = distrib_name.cap (1);
     }
 
-    m_OsName = retval;
     return retval;
 }
 
@@ -146,44 +159,17 @@ AboutBusinessLogic::osName ()
 QString
 AboutBusinessLogic::WiFiAddress ()
 {
-    if (!m_WifiAddress.isEmpty())
-        return m_WifiAddress;
-
+    QString address;
     QSystemNetworkInfo netInfo;
 
-    m_WifiAddress = netInfo.interfaceForMode (
+    address = netInfo.interfaceForMode (
             QSystemNetworkInfo::WlanMode).hardwareAddress ();
 
-    if (m_WifiAddress.isNull ())
-        m_WifiAddress = netInfo.interfaceForMode (
+    if (address.isNull ())
+        address = netInfo.interfaceForMode (
             QSystemNetworkInfo::WimaxMode).hardwareAddress ();
 
-    return m_WifiAddress;
-}
-
-/*!
- * Returns the address of the default bluetooth adapter.
- */
-QString
-AboutBusinessLogic::BluetoothAddress ()
-{
-    if (m_BluetoothAddress.isNull () == false)
-        return m_BluetoothAddress;
-
-    QSystemNetworkInfo netInfo;
-    QNetworkInterface bluetooth
-        = netInfo.interfaceForMode (QSystemNetworkInfo::BluetoothMode);
-
-    /*
-     * Currently the bluetooth hardware address only available from
-     * QNetworkInterface when the interface is loaded & up
-     */
-    if (bluetooth.isValid ())
-        m_BluetoothAddress = bluetooth.hardwareAddress ();
-    else
-        initiateBluetoothQueries ();
-
-    return m_BluetoothAddress;
+    return address;
 }
 
 /*!
@@ -192,22 +178,26 @@ AboutBusinessLogic::BluetoothAddress ()
 QString
 AboutBusinessLogic::IMEI ()
 {
-    if (m_Imei.isNull () == false)
-        return m_Imei;
+    QString imei;
 
     // Get IMEI from QtMobility SystemDeviceInfo obj.
     QSystemDeviceInfo deviceInfo;
 
-    m_Imei = deviceInfo.imei ();
+    imei = deviceInfo.imei ();
 
-    return m_Imei;
+    return imei;
 }
 
 QString
 AboutBusinessLogic::productName ()
 {
-    QSystemDeviceInfo sdi;
+    /*
+     * Customization maybe overrides the qt-mobility value...
+     */
+    if (m_swName.isEmpty ())
+        return m_swName;
 
+    QSystemDeviceInfo sdi;
     return sdi.productName ();
 }
 
@@ -270,16 +260,14 @@ void
 AboutBusinessLogic::defaultBluetoothAdapterAddressReceived (
         QMap<QString, QVariant> properties)
 {
-    SYS_DEBUG("");
-    m_BluetoothAddress = properties["Address"].toString();
-    SYS_DEBUG ("address = %s", SYS_STR(m_BluetoothAddress));
+    QString btAddress;
+
+    btAddress = properties["Address"].toString ();
+
+    SYS_DEBUG ("address = %s", SYS_STR (btAddress));
     delete m_AdapterDBusIf;
 
-    /*
-     * Currently only the bluetoot address is handled asynchronously, so if we
-     * have it we have them all.
-     */
-    emit refreshNeeded ();
+    emit requestFinished (reqBtAddr, btAddress);
 }
 
 /*!
@@ -291,5 +279,136 @@ AboutBusinessLogic::DBusMessagingFailure (
         QDBusError error)
 {
     SYS_WARNING ("%s: %s", SYS_STR (error.name()), SYS_STR (error.message()));
+}
+
+QString
+AboutBusinessLogic::licenseText ()
+{
+    if (m_licenseFile.at (0) != '/')
+        m_licenseFile = configPath + m_licenseFile;
+
+    QFile licenseFile (m_licenseFile);
+    if (!licenseFile.open (QIODevice::ReadOnly | QIODevice::Text))
+    {
+        SYS_WARNING ("Unable to open %s", SYS_STR (configPath + m_licenseFile));
+        return "";
+    }
+
+    QTextStream inStream (&licenseFile);
+
+    return inStream.readAll ();
+}
+
+void
+AboutBusinessLogic::initializeAndStart ()
+{
+    /*
+     * Load the customization file...
+     */
+    QSettings content (configFile, QSettings::IniFormat);
+
+    m_swName = content.value ("swname").toString ();
+    m_prodName = content.value ("prodname").toString ();
+    m_certsImage = content.value ("swtypeimage").toString ();
+    m_barcodeImage = content.value ("barcodeimage").toString ();
+    m_licenseFile =
+        content.value ("abouttext", QString (LICENSE_PATH)).toString ();
+
+    SYS_DEBUG ("\nAbout applet configuration:\n"
+               "Product name        : %s\n"
+               "Software version    : %s\n"
+               "License file        : %s\n"
+               "Type approval img.  : %s\n"
+               "2D Barcode image    : %s\n",
+               SYS_STR (m_swName), SYS_STR (m_prodName),
+               SYS_STR (m_licenseFile), SYS_STR (m_certsImage),
+               SYS_STR (m_barcodeImage));
+
+    processNextRequest ();
+}
+
+QImage
+AboutBusinessLogic::certsImage ()
+{
+    /* Load the picture ... */
+    if (m_certsImage.at (0) != '/')
+        m_certsImage = configPath + m_certsImage;
+
+    QImage img (m_certsImage);
+    SYS_DEBUG ("Image path = %s", SYS_STR (m_certsImage));
+
+    return img;
+}
+
+QImage
+AboutBusinessLogic::barcodeImage ()
+{
+    /* Load the picture ... */
+    if (m_barcodeImage.at (0) != '/')
+        m_barcodeImage = configPath + m_barcodeImage;
+
+    QImage img (m_barcodeImage);
+    SYS_DEBUG ("Image path = %s",
+               SYS_STR (m_barcodeImage));
+    return img;
+}
+
+void
+AboutBusinessLogic::processNextRequest ()
+{
+    if (m_queue.isEmpty ())
+    {
+        return;
+    }
+
+    requestType current = m_queue.takeFirst ();
+    SYS_DEBUG ("*** current req = %d", (int) current);
+
+    switch (current)
+    {
+        case reqProdName:
+            emit requestFinished (current, productName ());
+            break;
+        case reqSwName:
+            emit requestFinished (current, osName ());
+            break;
+        case reqLicense:
+            emit requestFinished (current, licenseText ());
+            break;
+        case reqCertsImage:
+            emit requestFinished (current, certsImage ());
+            break;
+        case reqBarcodeImage:
+            emit requestFinished (current, barcodeImage ());
+            break;
+        case reqOsVersion:
+            emit requestFinished (current, osVersion ());
+            break;
+        case reqImei:
+            emit requestFinished (current, IMEI ());
+            break;
+        case reqWifiAddr:
+            emit requestFinished (current, WiFiAddress ());
+            break;
+        case reqBtAddr:
+            /* defaultBluetoothAdapterAddressReceived
+             * will emit the requestFinished ... */
+            initiateBluetoothQueries ();
+            break;
+        case reqLast:
+            /* no-op */
+            break;
+        default:
+        case reqStartAll:
+        {
+            m_queue.clear ();
+            /* Fill the queue with all requests */
+            for (int i = (int) reqProdName; i < (int) reqLast; i++)
+                m_queue.append ((requestType) i);
+        }
+        break;
+    }
+
+    QTimer::singleShot (0, this, SLOT (processNextRequest ()));
 }
 

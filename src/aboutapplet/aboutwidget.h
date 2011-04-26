@@ -26,7 +26,7 @@
 
 class MLabel;
 class QGraphicsGridLayout;
-class QGraphicsLinearLayout;
+class MImageWidget;
 class ContentWidget;
 
 class AboutWidget : public DcpStylableWidget
@@ -34,16 +34,10 @@ class AboutWidget : public DcpStylableWidget
     Q_OBJECT
 
 public:
-    AboutWidget (
-            AboutBusinessLogic     *aboutBusinessLogic,
-            QGraphicsWidget        *parent = 0);
+    AboutWidget (QGraphicsWidget *parent = 0);
     ~AboutWidget ();
 
     void createContent ();
-    QString licenseText ();
-
-protected:
-    virtual void retranslateUi ();
 
 private:
     void initialize ();
@@ -60,7 +54,8 @@ private:
     void addStretcher (const QString &styleName);
 
 private slots:
-    void refresh ();
+    void gotInfo (AboutBusinessLogic::requestType type,
+                  QVariant value);
 
 private:
     QGraphicsGridLayout            *m_layout;
@@ -72,18 +67,16 @@ private:
     ContentWidget                  *m_Bt;
     ContentWidget                  *m_IMEI;
     MLabel                         *m_LicenseLabel;
-
-    QString                         m_licenseFile;
-    QString                         m_swName;
-    QString                         m_prodName;
-    QString                         m_certsImage;
-    QString                         m_barcodeImage;
+    MImageWidget                   *m_imgBarcode;
+    MImageWidget                   *m_imgCerts;
 
     int                             m_currentRow;
+    int                             m_certsRow;
     int                             m_logoRow;
-    #ifdef UNIT_TEST
+
+#ifdef UNIT_TEST
     friend class Ut_AboutApplet;
-    #endif
+#endif
 };
 
 #endif

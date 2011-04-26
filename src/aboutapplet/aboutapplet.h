@@ -19,14 +19,11 @@
 #ifndef ABOUTAPPLET_H
 #define ABOUTAPPLET_H
 
-#include <dcpappletif.h>
-
 #include "aboutwidget.h"
-#include "aboutbusinesslogic.h"
 
+#include <dcpappletif.h>
 #include <QObject>
 #include <QPointer>
-#include <DcpAppletIf>
 
 class AboutWidget;
 
@@ -46,7 +43,6 @@ public:
 
 private:
     QPointer<AboutWidget>        m_MainWidget;
-    QPointer<AboutBusinessLogic> m_AboutBusinessLogic;
 
     #ifdef UNIT_TEST
     friend class Ut_AboutApplet;

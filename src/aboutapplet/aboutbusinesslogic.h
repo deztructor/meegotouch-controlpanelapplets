@@ -16,13 +16,15 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #ifndef ABOUTBUSINESSLOGIC_H
 #define ABOUTBUSINESSLOGIC_H
 
-#include <QPointer>
-#include <QObject>
 #include <QMap>
+#include <QList>
+#include <QPointer>
+#include <QImage>
+#include <QThread>
+#include <QVariant>
 #include <QDBusError>
 #include <QDBusInterface>
 
@@ -32,25 +34,40 @@ class QString;
 /*!
  * This class allows to get some information about system
  */
-class AboutBusinessLogic : public QObject
+class AboutBusinessLogic : public QThread
 {
     Q_OBJECT
+    Q_ENUMS (requestType);
 
 public:
     AboutBusinessLogic ();
     ~AboutBusinessLogic ();
 
-    QString osName ();
-    QString osVersion ();
-    QString productName ();
-    QString WiFiAddress ();
-    QString BluetoothAddress ();
-    QString IMEI ();
+    typedef enum {
+        reqProdName = 0,
+        reqSwName,
+        reqLicense,
+        reqCertsImage,
+        reqBarcodeImage,
+        reqOsVersion,
+        reqImei,
+        reqWifiAddr,
+        reqBtAddr,
+        reqLast,
+        reqStartAll = 100
+    } requestType;
+
+protected:
+    virtual void run ();
 
 signals:
-    void refreshNeeded ();
+    void requestFinished (AboutBusinessLogic::requestType type,
+                          QVariant value);
 
-public slots:
+private slots:
+    void initializeAndStart ();
+    void processNextRequest ();
+
     void defaultBluetoothAdapterAddressReceived (
         QMap<QString, QVariant> properties);
     void defaultBluetoothAdapterReceived (QDBusObjectPath adapter);
@@ -58,20 +75,33 @@ public slots:
 
 private:
     void initiateBluetoothQueries ();
+    QString osVersion ();
+    QString osName ();
+    QString WiFiAddress ();
+    QString IMEI ();
+    QString productName ();
+    QString licenseText ();
 
-private:
+    QImage certsImage ();
+    QImage barcodeImage ();
+
     QPointer<QDBusInterface> m_ManagerDBusIf;
     QPointer<QDBusInterface> m_AdapterDBusIf;
 
-    QString       m_BluetoothAddress;
-    QString       m_Imei;
-    QString       m_WifiAddress;
-    QString       m_OsName;
-    QString       m_OsVersion;
-    #ifdef UNIT_TEST
+    QList<requestType>  m_queue;
+
+    QString m_licenseFile;
+    QString m_swName;
+    QString m_prodName;
+    QString m_certsImage;
+    QString m_barcodeImage;
+
+#ifdef UNIT_TEST
     friend class Ut_AboutBusinessLogic;
     friend class Ut_AboutApplet;
-    #endif
+#endif
 };
+
+Q_DECLARE_METATYPE(AboutBusinessLogic::requestType);
 
 #endif

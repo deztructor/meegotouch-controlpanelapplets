@@ -18,7 +18,6 @@
 ****************************************************************************/
 #include "aboutapplet.h"
 #include "aboutwidget.h"
-
 #include <MAction>
 
 #ifndef UNIT_TEST
@@ -26,20 +25,19 @@
 M_LIBRARY
 #endif
 
-#undef DEBUG
 #include "../debug.h"
 
 Q_EXPORT_PLUGIN2(aboutapplet, AboutApplet)
 
-AboutApplet::AboutApplet() : m_AboutBusinessLogic (0)
+AboutApplet::AboutApplet()
 {
 }
 
-AboutApplet::~AboutApplet() 
+AboutApplet::~AboutApplet()
 {
 }
 
-void 
+void
 AboutApplet::init()
 {
 }
@@ -47,17 +45,14 @@ AboutApplet::init()
 DcpStylableWidget *
 AboutApplet::constructStylableWidget (int widgetId)
 {
-    if (m_AboutBusinessLogic.isNull ())
-        m_AboutBusinessLogic = new AboutBusinessLogic;
-
     SYS_DEBUG ("widgetId = %d", widgetId);
 
     switch (widgetId) {
         case 0:
-            if (m_MainWidget == 0) 
-                m_MainWidget = new AboutWidget (m_AboutBusinessLogic);
+            if (m_MainWidget.isNull ())
+                m_MainWidget = new AboutWidget;
             return m_MainWidget;
-
+            break;
         default:
             SYS_WARNING ("Unknown widgetId: %d", widgetId);
     }
