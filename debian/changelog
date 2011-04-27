@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.36~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.36-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#246673 - Sound settings headers need updated style name
@@ -10,7 +10,7 @@ meegotouch-controlpanelapplets (0.20.36~1) meegotouch; urgency=low
   * Speed up the about applet ...
     (previously it took ~2sec to open it... now much faster :-D)
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 26 Apr 2011 12:49:29 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 27 Apr 2011 08:52:45 +0300
 
 meegotouch-controlpanelapplets (0.20.35-1) meegotouch; urgency=low
 

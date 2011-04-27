@@ -263,6 +263,7 @@ DisplayWidget::addLowPowerContainer ()
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
     layout->setContentsMargins (0,0,0,0);
+    layout->setSpacing (0);
     container->centralWidget()->setLayout (layout);
 
     MLabel *lowPowerLabel = new MLabel;
@@ -308,6 +309,7 @@ DisplayWidget::addDoubleTapContainer ()
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
     layout->setContentsMargins (0,0,0,0);
+    layout->setSpacing (0);
     container->centralWidget()->setLayout (layout);
 
     MLabel *lowPowerLabel = new MLabel;
