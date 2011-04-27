@@ -111,8 +111,11 @@ AboutWidget::AboutWidget (QGraphicsWidget *parent) :
              SIGNAL (requestFinished (AboutBusinessLogic::requestType, QVariant)),
              SLOT (gotInfo (AboutBusinessLogic::requestType, QVariant)));
 
+    /* Stupid h*ck .. :-S */
+#ifndef UNIT_TEST
     /* start the data collection thread... */
     m_AboutBusinessLogic->start ();
+#endif
 }
 
 AboutWidget::~AboutWidget ()
