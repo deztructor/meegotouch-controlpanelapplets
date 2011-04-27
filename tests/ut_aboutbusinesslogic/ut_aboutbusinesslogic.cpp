@@ -114,6 +114,7 @@ QDBusAbstractInterface::callWithCallback (
     Q_UNUSED (args);
     Q_UNUSED (receiver);
     Q_UNUSED (errorMethod);
+    Q_UNUSED (returnMethod);
 
     SYS_DEBUG ("*** method       = %s", SYS_STR(method));
     SYS_DEBUG ("*** returnMethod = %s", returnMethod);

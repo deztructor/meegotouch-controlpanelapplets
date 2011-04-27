@@ -46,6 +46,8 @@
  */
 void
 QTimer::singleShot(int msec, QObject *receiver, const char *member) {
+    Q_UNUSED (receiver);
+    Q_UNUSED (member);
     Q_UNUSED (msec);
     SYS_DEBUG (" ignoring singleshot [ %s, SLOT (%s) ] ",
                SYS_STR (receiver->objectName ()), member);

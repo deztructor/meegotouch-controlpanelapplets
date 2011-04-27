@@ -82,6 +82,7 @@ void
 BrightnessBrief::PSMValueChanged (
         bool enabled)
 {
+    Q_UNUSED (enabled);
     SYS_DEBUG ("");
     emit valuesChanged();
 }

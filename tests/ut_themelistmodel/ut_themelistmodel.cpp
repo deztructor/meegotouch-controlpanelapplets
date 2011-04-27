@@ -129,11 +129,9 @@ Ut_ThemeListModel::testAvailableThemes ()
     QString      dataDisplayRole, dataSearchRole, dataCodeNameRole;
     QString      dataNameRole, dataIconNameRole, dataChangingNameRole;
     int          rows = m_Api->rowCount ();
-    int          columns = m_Api->columnCount (index);
     QVariant     data;
 
     SYS_DEBUG ("*** rows    = %d", rows);
-    SYS_DEBUG ("*** columns = %d", columns);
 
     // This much theme is stored in the stub we use.
     QVERIFY (rows == 2);

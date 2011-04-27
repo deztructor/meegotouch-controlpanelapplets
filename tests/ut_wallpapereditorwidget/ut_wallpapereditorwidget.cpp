@@ -50,6 +50,7 @@ QPixmap::load (
         const char     *format,
         Qt::ImageConversionFlags flags)
 {
+    Q_UNUSED (fileName);
     Q_UNUSED (format);
     Q_UNUSED (flags);
     SYS_WARNING ("Emulating load of %s", SYS_STR(fileName));
@@ -80,6 +81,7 @@ QImage::load (
         const QString &fileName,
         const char     *format)
 {
+    Q_UNUSED (fileName);
     Q_UNUSED (format);
     SYS_WARNING ("Emulating load of %s", SYS_STR(fileName));
     *this = QImage (QSize(864, 480), QImage::Format_RGB16);
