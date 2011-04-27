@@ -165,20 +165,20 @@ ResetWidget::restoreActivated ()
 
     if (m_ResetBusinessLogic->isUsbConnected ())
     {
+        SYS_DEBUG ("Device is in mass-storage mode.");
         showMassStorageWarning ();
         return;
     }
+    SYS_DEBUG ("Device is not in mass-storage mode.");
 
     //% "Restore original settings? The device will reboot, temporarily "
     //% "disabling all functions, including emergency calls. "
     //% "User created-content will be unaffected."
-    QString    question = QString ("<p align=\"left\">") + 
-                          qtTrId("qtn_rset_restore_query") + "</p>";
+    QString question = qtTrId ("qtn_rset_restore_query");
     // It is a bit ugly, but translations contains \n stuffs:
     question.replace ("\\n", "<br>");
     question.replace ("\n", "<br>");
 
-    SYS_DEBUG ("");
     //% "Restore original settings?"
     dialog = new MMessageBox (qtTrId ("qtn_rset_restore_query_title"),
                               question, M::YesButton | M::NoButton);
