@@ -49,21 +49,6 @@ class ContentWidget: public MStylableWidget
         m_title (0), m_subTitle (0)
     {
         setContentsMargins (0,0,0,0);
-    }
-    void setTitle(QString const &title)
-    {
-        init ();
-        m_title->setText (title);
-    }
-    void setSubtitle (QString const &subTitle)
-    {
-        init ();
-        m_subTitle->setText(subTitle);
-    }
-    void init ()
-    {
-        if (m_title || m_subTitle)
-            return;
 
         QGraphicsLinearLayout *layout =
             new QGraphicsLinearLayout (Qt::Vertical);
@@ -75,6 +60,7 @@ class ContentWidget: public MStylableWidget
 
         m_subTitle = new MLabel;
         m_subTitle->setStyleName ("CommonTitleBottomInverted");
+        m_subTitle->setText ("-");
 
         layout->addItem (m_title);
         layout->addItem (m_subTitle);
@@ -82,6 +68,14 @@ class ContentWidget: public MStylableWidget
         setStyleName ("CommonPanelInverted");
 
         setLayout (layout);
+    }
+    void setTitle(QString const &title)
+    {
+        m_title->setText (title);
+    }
+    void setSubtitle (QString const &subTitle)
+    {
+        m_subTitle->setText(subTitle);
     }
   private:
     MLabel *m_title;
@@ -161,11 +155,9 @@ AboutWidget::createContent ()
     // Row 3: the product name
     addNamesContainer ();
 
-#if 0
     /* COLUMN 2 */
     // Row 2-3: the barcode
     addBarcodeContainer ();
-#endif
 
     // Row 4: versions
     addVersionContainer ();
@@ -217,7 +209,6 @@ AboutWidget::gotInfo (
             m_imgCerts->setImage (value.value<QImage>());
             break;
         case AboutBusinessLogic::reqBarcodeImage:
-            addBarcodeContainer ();
             m_imgBarcode->setImage (value.value<QImage>());
             break;
         case AboutBusinessLogic::reqOsVersion:
