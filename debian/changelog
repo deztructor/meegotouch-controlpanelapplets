@@ -6,8 +6,9 @@ meegotouch-controlpanelapplets (0.20.37~1) meegotouch; urgency=low
 
   [ David Kedves ]
   * Fixed 250565 - Dialogs should have centered text
+  * Fixes: NB#250091 - About product view items are not presented in the order
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 27 Apr 2011 18:33:01 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 28 Apr 2011 13:40:38 +0300
 
 meegotouch-controlpanelapplets (0.20.36-2) meegotouch; urgency=low
 
