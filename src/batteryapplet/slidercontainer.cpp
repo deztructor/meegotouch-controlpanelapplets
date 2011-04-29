@@ -31,12 +31,13 @@
 
 #include <QDebug>
 
-SliderContainer::SliderContainer (MWidget *parent) :
-        QObject (parent),
-        m_LabelContainer (0),
-        m_SliderContainer (0),
-        m_PSMSlider (0),
-        m_SliderExists (false)
+SliderContainer::SliderContainer (
+        MWidget *parent) :
+    MContainer (parent),
+//        m_LabelContainer (0),
+//        m_SliderContainer (0),
+    m_PSMSlider (0),
+    m_SliderExists (false)
 {
     SYS_DEBUG ("");
     createWidgets (parent);
@@ -50,76 +51,50 @@ SliderContainer::~SliderContainer ()
 void 
 SliderContainer::createWidgets (MWidget *parent)
 {
-    QGraphicsLinearLayout *labelLayout;
-    QGraphicsLinearLayout *sliderLayout;
-    
+    QGraphicsLinearLayout   *layout;
 
     SYS_DEBUG ("");
 
     /*
      * A container for the two labels.
      */
-    m_LabelContainer = new MContainer(parent);
-    m_LabelContainer->setContentsMargins (0,0,0,0);
-    m_LabelContainer->setStyleName ("CommonPanelInverted");
-    m_LabelContainer->setHeaderVisible (false);
+    setHeaderVisible (false);
+    setContentsMargins (0,0,0,0);
+    setStyleName ("CommonPanelInverted");
 
-    labelLayout = new QGraphicsLinearLayout (Qt::Vertical);
-    labelLayout->setContentsMargins (0,0,0,0);
-    m_LabelContainer->centralWidget()->setLayout (labelLayout);
+    layout = new QGraphicsLinearLayout (Qt::Vertical);
+    layout->setContentsMargins (0,0,0,0);
+    layout->setSpacing (0);
+    centralWidget()->setLayout (layout);
 
     /*
      * "Auto activate power save" label
      */
-    m_AutoPSMLabel = new MLabel;
+    m_AutoPSMLabel = new MLabel (this);
     m_AutoPSMLabel->setStyleName ("CommonTitleInverted");
-    labelLayout->addItem (m_AutoPSMLabel);
-    labelLayout->setAlignment (m_AutoPSMLabel, Qt::AlignLeft);
+    layout->addItem (m_AutoPSMLabel);
+    layout->setAlignment (m_AutoPSMLabel, Qt::AlignLeft);
 
     /*
      * A subtitle that shows the current value of the slider.
      */
-    m_PsmValueLabel = new MLabel;
+    m_PsmValueLabel = new MLabel (parent);
     m_PsmValueLabel->setStyleName ("CommonSubTitleInverted");
-    labelLayout->addItem (m_PsmValueLabel);
-    labelLayout->setAlignment (m_PsmValueLabel, Qt::AlignLeft);
-
-    labelLayout->addItem (m_AutoPSMLabel);
-    labelLayout->addItem (m_PsmValueLabel);
-    
-    /*
-     * A container to hold the slider.
-     */
-    m_SliderContainer = new MContainer(parent);
-    m_SliderContainer->setContentsMargins (0,0,0,0);
-    m_SliderContainer->setStyleName ("CommonPanelInverted");
-    m_SliderContainer->setHeaderVisible (false);
-
-    sliderLayout = new QGraphicsLinearLayout (Qt::Horizontal);
-    sliderLayout->setContentsMargins (0,0,0,0);
-    m_SliderContainer->centralWidget()->setLayout (sliderLayout);
+    layout->addItem (m_PsmValueLabel);
+    layout->setAlignment (m_PsmValueLabel, Qt::AlignLeft);
 
     /*
      * Power save mode auto activation slider
      */
-    m_PSMSlider = new MSlider;
+    m_PSMSlider = new MSlider (parent);
     m_PSMSlider->setObjectName ("PSMSlider");
     m_PSMSlider->setStyleName ("CommonSliderInverted");
     m_PSMSlider->setOrientation (Qt::Horizontal);
     m_PSMSlider->setHandleLabelVisible (true);
     m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
+    layout->addItem (m_PSMSlider);
+    layout->setAlignment (m_PSMSlider, Qt::AlignHCenter);
     
-    /*
-     * Adding the slider to its panel. Please note that the slider size might be
-     * set in the theme, so we need to add stretchers to move the short slider
-     * into the middle of the box.
-     */
-    sliderLayout->addStretch ();
-    sliderLayout->addItem (m_PSMSlider);
-    sliderLayout->addStretch ();
-    sliderLayout->setAlignment (m_PSMSlider, Qt::AlignHCenter);
-
-
     /*
      * .. and after connect the slidervalue changed signal
      */

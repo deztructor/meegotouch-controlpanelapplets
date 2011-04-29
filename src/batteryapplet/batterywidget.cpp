@@ -40,22 +40,15 @@
 
 #include "../styles.h"
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
-#define USE_SPACERS
-
-#ifdef USE_SPACERS
 #include <MSeparator>
-static const int ActivationContainerPosition = 4;
-static const int LabelContainerPosition = 7;
-static const int SliderContainerPosition = 8;
-#else
 static const int ActivationContainerPosition = 2;
-static const int LabelContainerPosition = 2;
-static const int SliderContainerPosition = 3;
-#endif
+static const int SpacerPosition = ActivationContainerPosition + 1;
+static const int SliderContainerPosition = SpacerPosition + 1;
+static const int ConditionContainerPostion = SliderContainerPosition + 1;
 
 /******************************************************************************
  * BatteryWidget implementation.
@@ -73,18 +66,6 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
         m_UILocked (false)
 {
     SYS_DEBUG ("Starting in %p", this);
-
-    /*
-     * We currently have 5 separators
-     */
-    for (int n = 0; n < 5; ++n)
-        m_Separators[n] = 0;
-
-    m_SeparatorPlacement[0] = 1;
-    m_SeparatorPlacement[1] = 3;
-    m_SeparatorPlacement[2] = 5;
-    m_SeparatorPlacement[3] = 8;
-    m_SeparatorPlacement[4] = 10;
 
     setContentsMargins (0., 0., 0., 0.);
 
@@ -112,7 +93,8 @@ void
 BatteryWidget::initWidget ()
 {
     MLayout     *layout;
-   
+    MSeparator  *spacer;
+
     /*
      * Creating a layout that holds the rows of the internal widgets.
      */
@@ -125,50 +107,24 @@ BatteryWidget::initWidget ()
     /*
      * Adding the rows of widgets.
      */
-    #ifdef USE_SPACERS
-    // Row 0: The title label
-    addHeaderContainer ();
-    // Row 1: A spacer
-    m_Separators[0] = addSpacer (
-            "CommonSmallSpacerInverted",
-            m_SeparatorPlacement[0]);
-    // Row 2: Remaining capacity widget
-    addRemainingCapacityWidget ();
-    // Row 3: A spacer
-    m_Separators[1] = addSpacer (
-            "CommonItemDivider",
-            m_SeparatorPlacement[1]);
-    // Row 4: PSM Auto activation switch
-    addAutoActivationWidget ();
-    // Row 5: A spacer
-    m_Separators[2] = addSpacer (
-            "CommonItemDivider",
-            m_SeparatorPlacement[2]);
-    // Row 6-7: PSM Auto activation text and slider
-    // Row 8: A spacer
-    m_Separators[3] = addSpacer (
-            "CommonItemDivider",
-            m_SeparatorPlacement[3]);
-    // Row 10: another divider
-    // Row 11: Battery condition info.
-    addBatteryConditionWidget ();
-    m_Separators[4] = addSpacer (
-            "CommonSmallSpacerInverted",
-            m_SeparatorPlacement[4]);
-    addSliderContainer ();
-    #else
     // Row 1: The title label
     addHeaderContainer ();
     // Row 2: Remaining capacity widget
     addRemainingCapacityWidget ();
     // Row 3: PSM Auto activation switch
     addAutoActivationWidget ();
+    
+    spacer = addSpacer (
+            "CommonHorizontalSeparatorInverted",
+            SpacerPosition);
+
+    addSliderContainer ();
+
     // Row 4-5: PSM Auto activation text and slider
     // Row 7: Battery condition info.
     addBatteryConditionWidget ();
-    addSliderContainer ();
-    #endif
-    
+   
+
     m_MainLayout->addStretch();
 
     /*
@@ -301,6 +257,7 @@ BatteryWidget::addAutoActivationWidget ()
      */
     m_ActivationContainer = new MContainer (this);
     m_ActivationContainer->setContentsMargins (0,0,0,0);
+
     m_ActivationContainer->setStyleName ("CommonPanelInverted");
     m_ActivationContainer->setHeaderVisible (false);
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
@@ -362,7 +319,7 @@ BatteryWidget::addSliderContainer ()
 {
     Q_ASSERT (m_MainLayout);
 
-    m_SliderContainer = new SliderContainer (this);
+    m_SliderContainer = new SliderContainer ();
     showSlider (m_PSMAutoCombo->currentIndex () == PSMAutoOn);
 }
 
@@ -374,30 +331,25 @@ BatteryWidget::showSlider (
         return;
 
     if (show) {
-        MContainer *labelContainer = m_SliderContainer->labelContainer();
-        MContainer *sliderContainer = m_SliderContainer->sliderContainer();
-
         m_SliderContainer->updateSlider (m_logic->PSMThresholdValue ());
+        
+        SYS_DEBUG ("SliderContainerPosition = %d", SliderContainerPosition);
+        m_MainLayout->insertItem (SliderContainerPosition, m_SliderContainer);
+        m_MainLayout->setStretchFactor (m_SliderContainer, 0);
 
-        m_MainLayout->insertItem (LabelContainerPosition, labelContainer);
-        m_MainLayout->setStretchFactor (labelContainer, 0);
-        m_MainLayout->insertItem (SliderContainerPosition, sliderContainer);
-        m_MainLayout->setStretchFactor (sliderContainer, 0);
-
-        labelContainer->show();
-        sliderContainer->show();
+        m_SliderContainer->show();
     } else {
-        m_SliderContainer->labelContainer()->hide();
-        m_SliderContainer->sliderContainer()->hide();
-        m_MainLayout->removeItem (m_SliderContainer->labelContainer());
-        m_MainLayout->removeItem (m_SliderContainer->sliderContainer());
+        m_SliderContainer->hide();
+        m_MainLayout->removeItem (m_SliderContainer);
     }
 }
 
 void 
 BatteryWidget::addBatteryConditionWidget ()
 {
-    MWidget               *spacer;
+    return;
+    MSeparator            *spacer;
+    MWidget               *pushUpWidget;
     MContainer            *container;
     QGraphicsLinearLayout *containerLayout =
         new QGraphicsLinearLayout (Qt::Vertical);
@@ -408,9 +360,7 @@ BatteryWidget::addBatteryConditionWidget ()
      * Creating a container and a layout.
      */
     container = new MContainer (this);
-    container->setStyleName ("CommonPanelInverted");
-    // Should be like this, but it looks ugly. See NB#250345 
-    //container->setStyleName ("CommonTextFrameInverted");
+    container->setStyleName ("CommonTextFrameInverted");
     container->setHeaderVisible (false);
     container->setContentsMargins (0,0,0,0);
     container->centralWidget()->setLayout (containerLayout);
@@ -424,7 +374,7 @@ BatteryWidget::addBatteryConditionWidget ()
 
     //% "Battery condition"
     MLabel *keyLabel = new MLabel (qtTrId ("qtn_ener_battery_condition"));
-    keyLabel->setStyleName ("CommonSingleTitleInverted");
+    keyLabel->setStyleName ("CommonTitleInverted");
     keyLabel->setAlignment (Qt::AlignLeft | Qt::AlignVCenter);
     layout->addItem (keyLabel);
 
@@ -432,12 +382,6 @@ BatteryWidget::addBatteryConditionWidget ()
     valueLabel->setStyleName ("CommonSubTitleInverted");
     valueLabel->setAlignment (Qt::AlignLeft | Qt::AlignVCenter);
     layout->addItem (valueLabel);
-
-    /*
-     * A spacer to push up the two labels: NB#241743 
-     */
-    spacer = new MWidget;
-    layout->addItem (spacer);
 
     switch (m_logic->getCondition ())
     {
@@ -462,7 +406,7 @@ BatteryWidget::addBatteryConditionWidget ()
         containerLayout->addItem (poorLayout);
 
         MImageWidget *poorIcon = new MImageWidget;
-        poorIcon->setStyleName ("CommonMainIcon");
+        poorIcon->setStyleName ("CommonSubTitleIcon");
         poorIcon->setImage ("icon-m-energy-management-insufficient-power");
         poorLayout->addItem (poorIcon);
 
@@ -477,6 +421,17 @@ BatteryWidget::addBatteryConditionWidget ()
         poorLayout->addItem (poorInfo);
     }
 
+    spacer = new MSeparator;
+    spacer->setStyleName ("CommonSpacer");
+    containerLayout->addItem (spacer);
+#if 0
+    /*
+     * A spacer to push up the two labels: NB#241743 (or three...)
+     */
+    pushUpWidget = new MWidget;
+    containerLayout->addItem (pushUpWidget);
+#endif
+    
     /*
      * Adding the whole row to the main container.
      */
@@ -495,9 +450,8 @@ BatteryWidget::addSpacer (
     Q_ASSERT (m_MainLayout);
 
     spacer = new MSeparator;
-    spacer->setStyleName (styleName + QString::number(index));
+    spacer->setStyleName (styleName);
     m_MainLayout->insertItem (index, spacer);
-    m_MainLayout->setStretchFactor (spacer, 0);
 
     return spacer;
 }

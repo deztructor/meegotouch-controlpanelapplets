@@ -83,9 +83,6 @@ private:
     BatteryImage            *m_BatteryImage;
     MLabel                  *m_TitleLabel;
     bool                     m_UILocked;
-    // true means we are believed to be in power save mode
-    MSeparator              *m_Separators[5];
-    int                      m_SeparatorPlacement[5];
 };
 
 #endif // BATTERYWIDGET_H

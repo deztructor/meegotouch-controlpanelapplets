@@ -35,7 +35,7 @@ class MLinearLayoutPolicy;
  * container can be accessed through sliderContainer() and labelContainer()
  * methods.
  */
-class SliderContainer : public QObject
+class SliderContainer : public MContainer
 {
     Q_OBJECT
 
@@ -43,8 +43,8 @@ public:
     SliderContainer (MWidget *parent = 0);
     ~SliderContainer ();
     
-    MContainer *sliderContainer () const { return m_SliderContainer; };
-    MContainer *labelContainer () const { return m_LabelContainer; };
+    //MContainer *sliderContainer () const { return m_SliderContainer; };
+    //MContainer *labelContainer () const { return m_LabelContainer; };
 
 public slots:
     void initSlider (const QStringList &values);
@@ -61,8 +61,8 @@ private:
     void createWidgets (MWidget *parent);
 
 private:
-    MContainer            *m_LabelContainer;
-    MContainer            *m_SliderContainer;
+    //MContainer            *m_LabelContainer;
+    //MContainer            *m_SliderContainer;
     MSlider               *m_PSMSlider;
     MLabel                *m_AutoPSMLabel;
     MLabel                *m_PsmValueLabel;
