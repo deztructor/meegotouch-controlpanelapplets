@@ -40,7 +40,7 @@
 
 #include "../styles.h"
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -347,14 +347,24 @@ BatteryWidget::showSlider (
 void 
 BatteryWidget::addBatteryConditionWidget ()
 {
-    return;
     MSeparator            *spacer;
     MWidget               *pushUpWidget;
     MContainer            *container;
-    QGraphicsLinearLayout *containerLayout =
-        new QGraphicsLinearLayout (Qt::Vertical);
-    containerLayout->setContentsMargins (0,0,0,0);
-    containerLayout->setSpacing (0);
+    QGraphicsLinearLayout *containerLayout;
+    bool                   batteryPoor;
+    QString                batteryConditionShortDescription;
+    
+    /*
+     * Getting the information we need.
+     */
+    batteryPoor = batteryConditionInfo (batteryConditionShortDescription);
+
+    /*
+     *
+     */
+    containerLayout = new QGraphicsLinearLayout (Qt::Vertical);
+    containerLayout->setContentsMargins (0.0, 0.0, 0.0, 0.0);
+    containerLayout->setSpacing (0.0);
 
     /*
      * Creating a container and a layout.
@@ -364,52 +374,65 @@ BatteryWidget::addBatteryConditionWidget ()
     container->setHeaderVisible (false);
     container->setContentsMargins (0,0,0,0);
     container->centralWidget()->setLayout (containerLayout);
-
+#if 0
     QGraphicsLinearLayout *layout;
     layout = new QGraphicsLinearLayout (Qt::Vertical);
     layout->setContentsMargins (0,0,0,0);
     layout->setSpacing (0);
 
     containerLayout->addItem (layout);
-
+#endif
+    /*
+     * The title label of the widget.
+     */
     //% "Battery condition"
     MLabel *keyLabel = new MLabel (qtTrId ("qtn_ener_battery_condition"));
     keyLabel->setStyleName ("CommonTitleInverted");
     keyLabel->setAlignment (Qt::AlignLeft | Qt::AlignVCenter);
-    layout->addItem (keyLabel);
+    containerLayout->addItem (keyLabel);
 
-    MLabel *valueLabel = new MLabel;
-    valueLabel->setStyleName ("CommonSubTitleInverted");
-    valueLabel->setAlignment (Qt::AlignLeft | Qt::AlignVCenter);
-    layout->addItem (valueLabel);
+    /*
+     * The subtitle label.
+     */
+    if (batteryPoor) {
+        QGraphicsLinearLayout *layout;
+        layout = new QGraphicsLinearLayout (Qt::Horizontal);
+        //layout->setContentsMargins (0,0,0,0);
+        layout->setSpacing (0);
 
-    switch (m_logic->getCondition ())
-    {
-        case BatteryBusinessLogic::BGood:
-        case BatteryBusinessLogic::BUnknown:
-            //% "Good"
-            valueLabel->setText (qtTrId ("qtn_ener_condition_good"));
-            break;
-        case BatteryBusinessLogic::BPoor:
-            //% "Poor"
-            valueLabel->setText (qtTrId ("qtn_ener_condition_poor"));
-            break;
+        containerLayout->addItem (layout);
+        
+        MImageWidget *poorIcon = new MImageWidget;
+        poorIcon->setImage ("icon-m-energy-management-insufficient-power");
+        poorIcon->setStyleName ("CommonTitleIcon");
+        layout->addItem (poorIcon);
+        layout->setStretchFactor (poorIcon, 0.0);
+
+        MLabel *valueLabel = new MLabel (batteryConditionShortDescription);
+        valueLabel->setStyleName ("CommonSubTitleInverted");
+        valueLabel->setAlignment (Qt::AlignLeft | Qt::AlignVCenter);
+        layout->addItem (valueLabel);
+        layout->setStretchFactor (valueLabel, 2.0);
+    } else {
+        MLabel *valueLabel = new MLabel (batteryConditionShortDescription);
+        valueLabel->setStyleName ("CommonSubTitleInverted");
+        valueLabel->setAlignment (Qt::AlignLeft | Qt::AlignVCenter);
+        containerLayout->addItem (valueLabel);
     }
 
-    if (m_logic->getCondition () == BatteryBusinessLogic::BPoor)
-    {
+    if (batteryPoor) {
         QGraphicsLinearLayout *poorLayout =
             new QGraphicsLinearLayout (Qt::Horizontal);
         poorLayout->setContentsMargins (0,0,0,0);
         poorLayout->setSpacing (0);
 
         containerLayout->addItem (poorLayout);
-
+#if 0
         MImageWidget *poorIcon = new MImageWidget;
         poorIcon->setStyleName ("CommonSubTitleIcon");
         poorIcon->setImage ("icon-m-energy-management-insufficient-power");
         poorLayout->addItem (poorIcon);
-
+#endif
         MLabel *poorInfo = new MLabel;
         //% "The battery capacity has decreased. You can "
         //  "improve battery life by purchasing a new battery."
@@ -552,3 +575,41 @@ void BatteryWidget::chargeComplete()
     m_RemainingContainer->setText(qtTrId ("qtn_ener_charcomp"));
     m_RemainingContainer->updateRemainingChargingTime (-1);
 }
+
+/*!
+ * \param shortDescriptionText Short text returned here to describe the battery
+ *     condition.
+ * \returns true if the battery condition is poor.
+ */
+bool
+BatteryWidget::batteryConditionInfo (
+        QString &shortDescriptionText)
+{
+    bool retval = false;
+
+    #if 0
+    /*
+     * Quick method to test the layout...
+     */
+    retval = true;
+    shortDescriptionText = qtTrId ("qtn_ener_condition_poor");
+    return retval;
+    #endif
+
+    switch (m_logic->getCondition ()) {
+        case BatteryBusinessLogic::BGood:
+        case BatteryBusinessLogic::BUnknown:
+            //% "Good"
+            shortDescriptionText = qtTrId ("qtn_ener_condition_good");
+            break;
+
+        case BatteryBusinessLogic::BPoor:
+            //% "Poor"
+            shortDescriptionText = qtTrId ("qtn_ener_condition_poor");
+            retval = true;
+            break;
+    }
+
+    return retval;
+}
+

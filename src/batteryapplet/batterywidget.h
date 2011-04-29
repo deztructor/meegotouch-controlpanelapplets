@@ -72,6 +72,8 @@ private:
     void retranslateUi ();
     void showHideUi ();
     void formProperBateryInfo (unsigned int pct = 0);
+    bool batteryConditionInfo (QString &shortDescriptionText);
+
 private: 
     BatteryBusinessLogic    *m_logic;
     MLinearLayoutPolicy     *m_MainLayout;

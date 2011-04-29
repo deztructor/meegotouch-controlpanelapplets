@@ -59,8 +59,8 @@ SliderContainer::createWidgets (MWidget *parent)
      * A container for the two labels.
      */
     setHeaderVisible (false);
-    setContentsMargins (0,0,0,0);
-    setStyleName ("CommonPanelInverted");
+    setContentsMargins (0, 0, 0, 0);
+    //setStyleName ("CommonPanelInverted");
 
     layout = new QGraphicsLinearLayout (Qt::Vertical);
     layout->setContentsMargins (0,0,0,0);
@@ -92,6 +92,8 @@ SliderContainer::createWidgets (MWidget *parent)
     m_PSMSlider->setOrientation (Qt::Horizontal);
     m_PSMSlider->setHandleLabelVisible (true);
     m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
+    //m_PSMSlider->setMinLabelVisible (true);
+    //m_PSMSlider->setMaxLabelVisible (true);
     layout->addItem (m_PSMSlider);
     layout->setAlignment (m_PSMSlider, Qt::AlignHCenter);
     
