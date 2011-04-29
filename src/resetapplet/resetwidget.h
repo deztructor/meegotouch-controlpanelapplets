@@ -50,7 +50,9 @@ public:
 
 private slots:
     void restoreActivated ();
+    void restoreConfirmed ();
     void clearActivated ();
+    void clearConfirmed ();
     void showMassStorageWarning ();
     void doTheWork ();
 
