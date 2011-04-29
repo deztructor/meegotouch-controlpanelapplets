@@ -409,6 +409,8 @@ BatteryWidget::addBatteryConditionWidget ()
      */
     container = new MContainer (this);
     container->setStyleName ("CommonPanelInverted");
+    // Should be like this, but it looks ugly. See NB#250345 
+    //container->setStyleName ("CommonTextFrameInverted");
     container->setHeaderVisible (false);
     container->setContentsMargins (0,0,0,0);
     container->centralWidget()->setLayout (containerLayout);

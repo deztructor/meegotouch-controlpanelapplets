@@ -446,6 +446,16 @@ WallpaperDescriptor::WallpaperDescriptor(
 
 WallpaperDescriptor::~WallpaperDescriptor()
 {
+#if 0
+    SYS_WARNING ("m_Thumbnailer valid = %s", SYS_BOOL(m_Thumbnailer));
+    if (m_Thumbnailer != 0) {
+        SYS_WARNING ("CANCELING THUMBNAILER");
+        m_Thumbnailer->cancel (false);
+        SYS_WARNING ("DESTROYING THUMBNAILER");
+        delete m_Thumbnailer;
+        m_Thumbnailer = 0;
+    }
+#endif
 }
 
 
@@ -642,6 +652,18 @@ WallpaperDescriptor::initiateThumbnailer ()
     QList<QUrl>      urisList;
     QStringList      mimeList;
 
+    if (!qApp) {
+        SYS_WARNING ("QApplication must be created before calling this method");
+    } else {
+        bool notCurrentThread;
+
+        notCurrentThread = qApp->thread() != QThread::currentThread();
+        if (notCurrentThread) {
+            SYS_WARNING ("This is not the current thread!");
+        }
+    }
+
+
     /*
      * If the thumbnailer is already initiated we return.
      */
@@ -760,8 +782,11 @@ WallpaperDescriptor::thumbnailLoadingFinished (
 {
     Q_UNUSED (left);
 
-    if (!m_Thumbnailer.isNull() && left == 0)
+    if (!m_Thumbnailer.isNull() && left == 0) {
+        SYS_WARNING ("DESTROYING THUMBNAILER");
         delete m_Thumbnailer;
+        m_Thumbnailer = 0;
+    }
 }
 
 /*!
