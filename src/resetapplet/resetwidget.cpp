@@ -161,15 +161,12 @@ void
 ResetWidget::restoreActivated ()
 {
     MDialog   *dialog;
-    int        retval;
 
     if (m_ResetBusinessLogic->isUsbConnected ())
     {
-        SYS_DEBUG ("Device is in mass-storage mode.");
         showMassStorageWarning ();
         return;
     }
-    SYS_DEBUG ("Device is not in mass-storage mode.");
 
     //% "Restore original settings?"
     QString question = qtTrId ("qtn_rset_restore_query");
@@ -180,30 +177,24 @@ ResetWidget::restoreActivated ()
     //% "Restore original settings?"
     dialog = new MMessageBox (qtTrId ("qtn_rset_restore_query_title"),
                               question, M::YesButton | M::NoButton);
-    dialog->setTitleBarVisible (false);
-    
-    retval = dialog->exec();
-    switch (retval) {
-        case M::YesButton:
-            SYS_DEBUG ("YES");
-            m_currentPlan = ResetSettings;
-            m_ResetBusinessLogic->getAccess ();
-            break;
+    connect (dialog, SIGNAL (accepted ()), SLOT (restoreConfirmed ()));
 
-        case M::NoButton:
-            SYS_DEBUG ("NO");
-            /*
-             * We do not have to do anything.
-             */
-            break;
-    }
+    dialog->appear (MApplication::instance ()->activeWindow (),
+                    MSceneWindow::DestroyWhenDone);
+}
+
+void
+ResetWidget::restoreConfirmed ()
+{
+    SYS_DEBUG ("user choosen yes");
+    m_currentPlan = ResetSettings;
+    m_ResetBusinessLogic->getAccess ();
 }
 
 void
 ResetWidget::clearActivated ()
 {
     MDialog   *dialog;
-    int        retval;
 
     if (m_ResetBusinessLogic->isUsbConnected ())
     {
@@ -216,27 +207,21 @@ ResetWidget::clearActivated ()
     question.replace ("\\n", "<br>");
     question.replace ("\n", "<br>");
 
-    SYS_DEBUG ("");
     //% "Clear all data?"
     dialog = new MMessageBox (qtTrId ("qtn_rset_clear_query_title"),
                               question, M::YesButton | M::NoButton);
-    dialog->setTitleBarVisible (false);
-    
-    retval = dialog->exec();
-    switch (retval) {
-        case M::YesButton:
-            SYS_DEBUG ("YES");
-            m_currentPlan = ClearData;
-            m_ResetBusinessLogic->getAccess ();
-            break;
+    connect (dialog, SIGNAL (accepted ()), SLOT (clearConfirmed ()));
 
-        case M::NoButton:
-            SYS_DEBUG ("NO");
-            /*
-             * We do not have to do anything.
-             */
-            break;
-    }
+    dialog->appear (MApplication::instance ()->activeWindow (),
+                    MSceneWindow::DestroyWhenDone);
+}
+
+void
+ResetWidget::clearConfirmed ()
+{
+    SYS_DEBUG ("user choosen yes");
+    m_currentPlan = ClearData;
+    m_ResetBusinessLogic->getAccess ();
 }
 
 void

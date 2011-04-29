@@ -51,27 +51,6 @@ system (
     return commandSuccess;
 }
 
-static bool dialogAnswerYes = false;
-static bool dialogAnswerNo = false;
-static bool dialogExecuted = false;
-
-int 
-MDialog::exec (MWindow *window)
-{
-    SYS_DEBUG ("");
-
-    Q_UNUSED (window);
-
-    dialogExecuted = true;
-
-    if (dialogAnswerYes)
-        return M::YesButton;
-    if (dialogAnswerNo)
-        return M::NoButton;
-
-    return 0;
-}
-
 /******************************************************************************
  * Ut_ResetApplet implementation. 
  */
@@ -87,7 +66,7 @@ Ut_ResetApplet::cleanup()
 
 
 static int argc = 1;
-static char *app_name = (char*) "./Ut_ResetApplet";
+static char *app_name = (char*) "./ut_resetapplet";
 
 void 
 Ut_ResetApplet::initTestCase()
@@ -150,46 +129,33 @@ Ut_ResetApplet::testConstructWidget ()
     // Restore with 'no' as answer.
     lastExecutedCommand = "";
     commandSuccess = 0;
-    dialogAnswerYes = false;
-    dialogAnswerNo = true;
-    dialogExecuted = false;
     widget->restoreActivated ();
     widget->doTheWork ();
     QVERIFY (lastExecutedCommand == "");
-    QVERIFY (dialogExecuted);
     
     // Restore with 'yes' as answer.
     lastExecutedCommand = "";
     commandSuccess = 0;
-    dialogAnswerYes = true;
-    dialogAnswerNo = false;
-    dialogExecuted = false;
     widget->restoreActivated ();
+    // simulate yes
+    widget->restoreConfirmed ();
     widget->doTheWork ();
     QVERIFY (lastExecutedCommand == "/usr/sbin/clean-device.sh --rfs");
-    QVERIFY (dialogExecuted);
     
     // Clear with 'no' as answer.
     lastExecutedCommand = "";
     commandSuccess = 0;
-    dialogAnswerYes = false;
-    dialogAnswerNo = true;
-    dialogExecuted = false;
     widget->clearActivated ();
     widget->doTheWork ();
     QVERIFY (lastExecutedCommand == "");
-    QVERIFY (dialogExecuted);
     
     // Clear with 'yes' as answer.
     lastExecutedCommand = "";
     commandSuccess = 0;
-    dialogAnswerYes = true;
-    dialogAnswerNo = false;
-    dialogExecuted = false;
     widget->clearActivated ();
+    widget->clearConfirmed ();
     widget->doTheWork ();
     QVERIFY (lastExecutedCommand == "/usr/sbin/clean-device.sh --cud-reset");
-    QVERIFY (dialogExecuted);
 
     /*
      * Testing if the applet knows about the destruction of the widget.

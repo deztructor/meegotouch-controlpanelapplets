@@ -2,8 +2,10 @@ meegotouch-controlpanelapplets (0.20.38~1) meegotouch; urgency=low
 
   * Usb banner fix...
   * Clear-device dialog text aligned to center
+  * Fixes: NB#249355 - control panel crashed on trying to relaunch it when the
+    reset settings confirmation dialog is up.
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 28 Apr 2011 17:34:34 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 29 Apr 2011 12:24:43 +0300
 
 meegotouch-controlpanelapplets (0.20.37-1) meegotouch; urgency=low
 

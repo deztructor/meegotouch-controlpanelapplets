@@ -37,7 +37,7 @@
 
 #include "../styles.h"
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -300,6 +300,9 @@ UsbView::currentText () const
 #ifdef HAVE_QMSYSTEM
     QmUSBMode::Mode active = m_logic->getMode ();
 
+    /* XXX */
+    active = QmUSBMode::MassStorage;
+
     switch (active) {
         case QmUSBMode::MassStorage:
             SYS_DEBUG ("QmUSBMode::MassStorage");
@@ -418,6 +421,7 @@ UsbView::updateInfoLabel ()
     MImageWidget *iwIcon = new MImageWidget;
     iwIcon->setStyleName ("CommonMainIcon");
     iwIcon->setImage ("icon-m-common-usb");
+    SYS_DEBUG ("iwIcon->setImage (\"icon-m-common-usb\");");
     iwLayout->addItem (iwIcon);
 
     m_infoLabel = new MLabel;
