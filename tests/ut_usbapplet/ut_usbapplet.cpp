@@ -35,7 +35,7 @@ using namespace MeeGo;
 #include <MApplication>
 #include <MWindow>
 #include <MAction>
-#include <MInfoBanner>
+#include <MBanner>
 
 #include <QVector>
 #include <QList>
@@ -101,21 +101,20 @@ qtTrId (
 }
 
 /******************************************************************************
- * Stub for MInfoBanner
+ * Stub for MBanner
  */
 static QString mbannerSubtitle;
 
-MInfoBanner::MInfoBanner (MInfoBanner::BannerType t)
+MBanner::MBanner ()
 {
-    Q_UNUSED (t);
 }
 
-MInfoBanner::~MInfoBanner ()
+MBanner::~MBanner ()
 {
 }
 
 void
-MInfoBanner::setBodyText (const QString &text)
+MBanner::setTitle (const QString &text)
 {
     mbannerSubtitle = text;
     mbannerSubtitle.replace ("<p>","");
@@ -123,7 +122,7 @@ MInfoBanner::setBodyText (const QString &text)
 }
 
 void
-MInfoBanner::setIconID (const QString &id)
+MBanner::setIconID (const QString &id)
 {
     Q_UNUSED (id);
 }

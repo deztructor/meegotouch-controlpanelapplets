@@ -20,7 +20,7 @@
 
 #include <MContainer>
 #include <MLayout>
-#include <MInfoBanner>
+#include <MBanner>
 #include <MApplication>
 #include <MLinearLayoutPolicy>
 #include <MButton>
@@ -171,9 +171,7 @@ ResetWidget::restoreActivated ()
     }
     SYS_DEBUG ("Device is not in mass-storage mode.");
 
-    //% "Restore original settings? The device will reboot, temporarily "
-    //% "disabling all functions, including emergency calls. "
-    //% "User created-content will be unaffected."
+    //% "Restore original settings?"
     QString question = qtTrId ("qtn_rset_restore_query");
     // It is a bit ugly, but translations contains \n stuffs:
     question.replace ("\\n", "<br>");
@@ -213,11 +211,8 @@ ResetWidget::clearActivated ()
         return;
     }
 
-    //% "Clear all user data and restore original settings? "
-    //% "The device will reboot, temporarily disabling all "
-    //% "functions, including emergency calls."
-    QString    question = QString ("<p align=\"left\">") + 
-                          qtTrId("qtn_rset_clear_query") + "</p>";
+    //% "Clear all user data and restore original settings?"
+    QString    question = qtTrId("qtn_rset_clear_query");
     question.replace ("\\n", "<br>");
     question.replace ("\n", "<br>");
 
@@ -266,11 +261,12 @@ void
 ResetWidget::showMassStorageWarning ()
 {
     SYS_DEBUG ("");
-    MInfoBanner *infoBanner = new MInfoBanner (MInfoBanner::Information);
+    MBanner *infoBanner = new MBanner;
+    infoBanner->setStyleName ("InformationBanner");
+    infoBanner->setObjectName ("InfoBanner");
 
     //% "Device resets are not possible while USB is connected in mass storage mode."
-    infoBanner->setBodyText (
-            QString ("<p>") + qtTrIdShort ("qtn_rset_not_possible") + "</p>");
+    infoBanner->setTitle (qtTrId ("qtn_rset_not_possible"));
 
     infoBanner->appear (MApplication::instance ()->activeWindow (),
                         MSceneWindow::DestroyWhenDone);

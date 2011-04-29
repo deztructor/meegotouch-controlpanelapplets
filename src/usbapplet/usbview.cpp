@@ -25,7 +25,7 @@
 #include <MLinearLayoutPolicy>
 #include <MButton>
 #include <MButtonGroup>
-#include <MInfoBanner>
+#include <MBanner>
 #include <MApplication>
 #include <MImageWidget>
 #include <MContainer>
@@ -174,10 +174,12 @@ UsbView::usbModeActivated (int idx)
          */
         setSelectedButtonIndex (usbModeIndex(m_logic->getDefaultMode()));
 
-        MInfoBanner *infoBanner = new MInfoBanner (MInfoBanner::Information);
+        MBanner *infoBanner = new MBanner;
+        infoBanner->setStyleName ("InformationBanner");
+        infoBanner->setObjectName ("InfoBanner");
+
         //% "Cannot change the USB mode when it is connected"
-        infoBanner->setBodyText (
-            QString ("<p>") + qtTrIdShort ("qtn_usb_change_incorrect") + "</p>");
+        infoBanner->setTitle (qtTrId ("qtn_usb_change_incorrect"));
 
         infoBanner->appear (MApplication::instance ()->activeWindow (),
                             MSceneWindow::DestroyWhenDone);
@@ -413,8 +415,9 @@ UsbView::updateInfoLabel ()
     iwLayout->setContentsMargins (0,0,0,0);
     iwLayout->setSpacing (0);
 
-    MImageWidget *iwIcon = new MImageWidget ("icon-m-common-usb");
+    MImageWidget *iwIcon = new MImageWidget;
     iwIcon->setStyleName ("CommonMainIcon");
+    iwIcon->setImage ("icon-m-common-usb");
     iwLayout->addItem (iwIcon);
 
     m_infoLabel = new MLabel;
