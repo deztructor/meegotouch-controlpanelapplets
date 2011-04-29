@@ -26,7 +26,7 @@
 #include "percentagecontainer.h"
 
 //#define DEBUG
-//#define WARNING
+#define WARNING
 #include "../debug.h"
 
 #include <QDebug>
@@ -34,8 +34,6 @@
 SliderContainer::SliderContainer (
         MWidget *parent) :
     MContainer (parent),
-//        m_LabelContainer (0),
-//        m_SliderContainer (0),
     m_PSMSlider (0),
     m_SliderExists (false)
 {
@@ -70,7 +68,9 @@ SliderContainer::createWidgets (MWidget *parent)
     /*
      * "Auto activate power save" label
      */
-    m_AutoPSMLabel = new MLabel (this);
+    m_AutoPSMLabel = new MLabel (parent);
+    // This is needed to select the short translation.
+    m_AutoPSMLabel->setWordWrap (true);
     m_AutoPSMLabel->setStyleName ("CommonTitleInverted");
     layout->addItem (m_AutoPSMLabel);
     layout->setAlignment (m_AutoPSMLabel, Qt::AlignLeft);
@@ -92,8 +92,11 @@ SliderContainer::createWidgets (MWidget *parent)
     m_PSMSlider->setOrientation (Qt::Horizontal);
     m_PSMSlider->setHandleLabelVisible (true);
     m_PSMSlider->setRange (0, m_SliderValues.size () - 1);
-    //m_PSMSlider->setMinLabelVisible (true);
-    //m_PSMSlider->setMaxLabelVisible (true);
+    m_PSMSlider->setMaxLabelIconID ("icon-s-common-add-inverse");
+    m_PSMSlider->setMinLabelIconID ("icon-s-common-remove-inverse");
+    m_PSMSlider->setMinLabelVisible (true);
+    m_PSMSlider->setMaxLabelVisible (true);
+
     layout->addItem (m_PSMSlider);
     layout->setAlignment (m_PSMSlider, Qt::AlignHCenter);
     

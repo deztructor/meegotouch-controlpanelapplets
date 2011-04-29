@@ -348,7 +348,6 @@ void
 BatteryWidget::addBatteryConditionWidget ()
 {
     MSeparator            *spacer;
-    MWidget               *pushUpWidget;
     MContainer            *container;
     QGraphicsLinearLayout *containerLayout;
     bool                   batteryPoor;
@@ -369,7 +368,7 @@ BatteryWidget::addBatteryConditionWidget ()
     /*
      * Creating a container and a layout.
      */
-    container = new MContainer (this);
+    container = new MContainer ();
     container->setStyleName ("CommonTextFrameInverted");
     container->setHeaderVisible (false);
     container->setContentsMargins (0,0,0,0);
@@ -397,25 +396,25 @@ BatteryWidget::addBatteryConditionWidget ()
     if (batteryPoor) {
         QGraphicsLinearLayout *layout;
         layout = new QGraphicsLinearLayout (Qt::Horizontal);
-        //layout->setContentsMargins (0,0,0,0);
-        layout->setSpacing (0);
+        layout->setContentsMargins (0.0,0.0, 0.0, 0.0);
+        layout->setSpacing (0.0);
 
         containerLayout->addItem (layout);
         
         MImageWidget *poorIcon = new MImageWidget;
         poorIcon->setImage ("icon-m-energy-management-insufficient-power");
-        poorIcon->setStyleName ("CommonTitleIcon");
+        poorIcon->setStyleName ("CommonViewHeaderIcon");
         layout->addItem (poorIcon);
-        layout->setStretchFactor (poorIcon, 0.0);
+        //layout->setStretchFactor (poorIcon, 0.0);
 
         MLabel *valueLabel = new MLabel (batteryConditionShortDescription);
-        valueLabel->setStyleName ("CommonSubTitleInverted");
+        valueLabel->setStyleName ("CommonSubTitleWithIcon");
         valueLabel->setAlignment (Qt::AlignLeft | Qt::AlignVCenter);
         layout->addItem (valueLabel);
         layout->setStretchFactor (valueLabel, 2.0);
     } else {
         MLabel *valueLabel = new MLabel (batteryConditionShortDescription);
-        valueLabel->setStyleName ("CommonSubTitleInverted");
+        valueLabel->setStyleName ("CommonSubTitleWithIcon");
         valueLabel->setAlignment (Qt::AlignLeft | Qt::AlignVCenter);
         containerLayout->addItem (valueLabel);
     }
@@ -423,8 +422,8 @@ BatteryWidget::addBatteryConditionWidget ()
     if (batteryPoor) {
         QGraphicsLinearLayout *poorLayout =
             new QGraphicsLinearLayout (Qt::Horizontal);
-        poorLayout->setContentsMargins (0,0,0,0);
-        poorLayout->setSpacing (0);
+        poorLayout->setContentsMargins (0.0, 0.0,0.0, 0.0);
+        poorLayout->setSpacing (0.0);
 
         containerLayout->addItem (poorLayout);
 #if 0
@@ -445,15 +444,9 @@ BatteryWidget::addBatteryConditionWidget ()
     }
 
     spacer = new MSeparator;
-    spacer->setStyleName ("CommonSpacer");
+    // Using this one instead of "CommonSpacer", margins look even.
+    spacer->setStyleName ("CommonLargeSpacer");
     containerLayout->addItem (spacer);
-#if 0
-    /*
-     * A spacer to push up the two labels: NB#241743 (or three...)
-     */
-    pushUpWidget = new MWidget;
-    containerLayout->addItem (pushUpWidget);
-#endif
     
     /*
      * Adding the whole row to the main container.
