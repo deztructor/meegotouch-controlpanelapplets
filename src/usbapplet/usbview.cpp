@@ -123,21 +123,18 @@ UsbView::initWidget ()
     title->setText (qtTrId ("qtn_usb_title"));
     m_infoOrder++;
 #endif
-#if 0
+
     /*
-     * A separator, a subtitle and then an other separator.
+     * A subtitle and then a separator. The separator right below the infotext
+     * is going to be added by the infotext when it is necessary. The banner
+     * below the subtitle is always there.
      */
-    separator = new MSeparator;
-    separator->setStyleName ("CommonLargeSpacer");
-    m_policy->addItem (separator);
-#endif
     addSubTitle (this, m_policy, 
             qtTrId("qtn_usb_default_info"));
-#if 1 
+
     separator = new MSeparator;
     separator->setStyleName ("CommonLargeSpacer");
     m_policy->addItem (separator);
-#endif
 
     /*
      * The buttons to change the USB mode.
