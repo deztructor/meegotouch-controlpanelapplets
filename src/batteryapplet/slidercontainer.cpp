@@ -80,6 +80,7 @@ SliderContainer::createWidgets (MWidget *parent)
      */
     m_PsmValueLabel = new MLabel (parent);
     m_PsmValueLabel->setStyleName ("CommonSubTitleInverted");
+    m_PsmValueLabel->setObjectName ("PsmValueLabel");
     layout->addItem (m_PsmValueLabel);
     layout->setAlignment (m_PsmValueLabel, Qt::AlignLeft);
 
