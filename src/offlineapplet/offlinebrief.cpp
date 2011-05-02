@@ -124,9 +124,11 @@ OfflineBrief::setToggle (
 #ifdef HAVE_QMSYSTEM
     if (! toggle)
     {
-        //% "Exit offline mode?"
         MMessageBox* dialog =
-            new MMessageBox ("", qtTrId("qtn_offl_exiting"),
+                             //% "Exit offline mode?"
+            new MMessageBox (qtTrId ("qtn_offl_exiting_title"),
+                             //% "Connections will be restored."
+                             qtTrId ("qtn_offl_exiting"),
                              M::YesButton | M::NoButton);
         /*
          * This will set the 'Normal' mode if dialog accepted
