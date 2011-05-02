@@ -4,8 +4,10 @@ meegotouch-controlpanelapplets (0.20.38~1) meegotouch; urgency=low
   * Clear-device dialog text aligned to center
   * Fixes: NB#249355 - control panel crashed on trying to relaunch it when the
     reset settings confirmation dialog is up.
+  * Fixed 251187 - Settings: §qtn_rset_clear_query§ long translation and
+    medium translation are shown together
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 29 Apr 2011 12:24:43 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 02 May 2011 08:42:58 +0300
 
 meegotouch-controlpanelapplets (0.20.37-1) meegotouch; urgency=low
 
