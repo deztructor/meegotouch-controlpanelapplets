@@ -125,7 +125,7 @@ AlertToneBrowser::createContent()
     m_my_music = new RightArrowItem;
     m_my_music->setTitleStyleName ("CommonSingleTitleInverted");
     m_my_music->setLayoutPosition (M::VerticalTopPosition);
-    m_my_music->imageWidget()->setImage ("icon-l-music");
+    m_my_music->imageWidget()->setImage ("icon-m-content-audio-inverse");
     m_my_music->imageWidget()->setStyleName ("CommonMainIcon");
     m_my_music->setObjectName("MContentItem_pickFromMyMusic");
     m_MainLayout->addItem (m_my_music);
