@@ -320,7 +320,8 @@ AlertToneDefaults::selectAndScroll (
     //if (!m_PanningStarted) 
     {
         SYS_DEBUG ("calling MList::scrollTo(%d)", idx);
-        MList::scrollTo (index, MList::PositionAtCenterHint);
+        MList::scrollTo (
+                index, MList::PositionAtCenterHint, MList::NonAnimated);
     }
 
     m_PanningStarted = false;
