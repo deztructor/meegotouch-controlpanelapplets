@@ -8,6 +8,10 @@ meegotouch-controlpanelapplets (0.20.38~1) meegotouch; urgency=low
     medium translation are shown together
   * Fixed 231658 - Query dialogs are missing titles
   * Fixes: 245737 - [TAKS] DaDD Image ABout product text needs to be changed
+  
+  [ Laszlo Pere ]
+  * Fixes: NB#249788 - Current state not visible when device is plugged in and
+    charging.
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 02 May 2011 11:48:09 +0300
 

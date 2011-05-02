@@ -37,7 +37,7 @@
 
 #include "../styles.h"
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -133,10 +133,11 @@ UsbView::initWidget ()
 #endif
     addSubTitle (this, m_policy, 
             qtTrId("qtn_usb_default_info"));
-    
+#if 1 
     separator = new MSeparator;
     separator->setStyleName ("CommonLargeSpacer");
     m_policy->addItem (separator);
+#endif
 
     /*
      * The buttons to change the USB mode.
@@ -297,6 +298,7 @@ QString
 UsbView::currentText () const
 {
     SYS_DEBUG ("");
+
 #ifdef HAVE_QMSYSTEM
     QmUSBMode::Mode active = m_logic->getMode ();
 
@@ -397,14 +399,13 @@ UsbView::updateInfoLabel ()
     }
 
     SYS_DEBUG ("creating the info-widget");
+    
     /*
      * When we shown no text we didn't need the separator, now we need one.
      */
     MSeparator       *separator;
-    
     separator = new MSeparator;
     separator->setStyleName ("CommonLargeSpacer");
-    m_policy->insertItem (m_infoOrder, separator);
 
     /*
      * Create the info label widget, and initialize its contents...
@@ -434,7 +435,8 @@ UsbView::updateInfoLabel ()
     /*
      * Insert it to the proper place... after the separator.
      */
-    m_policy->insertItem (m_infoOrder + 1, infoWidget);
+    m_policy->insertItem (m_infoOrder, infoWidget);
+    m_policy->insertItem (m_infoOrder + 1, separator);
 }
 
 void 
