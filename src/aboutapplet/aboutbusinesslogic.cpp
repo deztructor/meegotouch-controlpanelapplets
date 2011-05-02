@@ -131,6 +131,9 @@ AboutBusinessLogic::osVersion ()
 QString
 AboutBusinessLogic::osName ()
 {
+    if (! m_prodName.isEmpty ())
+        return m_prodName;
+
     //% "MeeGo"
     QString retval = qtTrId ("qtn_prod_sw_version");
 
@@ -194,7 +197,7 @@ AboutBusinessLogic::productName ()
     /*
      * Customization maybe overrides the qt-mobility value...
      */
-    if (m_swName.isEmpty ())
+    if (! m_swName.isEmpty ())
         return m_swName;
 
     QSystemDeviceInfo sdi;
@@ -326,6 +329,14 @@ AboutBusinessLogic::initializeAndStart ()
                SYS_STR (m_licenseFile), SYS_STR (m_certsImage),
                SYS_STR (m_barcodeImage));
 
+    if ((! m_certsImage.isEmpty ()) &&
+        (m_certsImage.at (0) != '/'))
+        m_certsImage = configPath + m_certsImage;
+
+    if ((! m_barcodeImage.isEmpty ()) &&
+        (m_barcodeImage.at (0) != '/'))
+        m_barcodeImage = configPath + m_barcodeImage;
+
     processNextRequest ();
 }
 
@@ -333,9 +344,6 @@ QImage
 AboutBusinessLogic::certsImage ()
 {
     /* Load the picture ... */
-    if (m_certsImage.at (0) != '/')
-        m_certsImage = configPath + m_certsImage;
-
     QImage img (m_certsImage);
     SYS_DEBUG ("Image path = %s", SYS_STR (m_certsImage));
 
@@ -346,9 +354,6 @@ QImage
 AboutBusinessLogic::barcodeImage ()
 {
     /* Load the picture ... */
-    if (m_barcodeImage.at (0) != '/')
-        m_barcodeImage = configPath + m_barcodeImage;
-
     QImage img (m_barcodeImage);
     SYS_DEBUG ("Image path = %s",
                SYS_STR (m_barcodeImage));
@@ -378,10 +383,16 @@ AboutBusinessLogic::processNextRequest ()
             emit requestFinished (current, licenseText ());
             break;
         case reqCertsImage:
-            emit requestFinished (current, certsImage ());
+            if (QFile::exists (m_certsImage))
+            {
+                emit requestFinished (current, certsImage ());
+            }
             break;
         case reqBarcodeImage:
-            emit requestFinished (current, barcodeImage ());
+            if (QFile::exists (m_barcodeImage))
+            {
+                emit requestFinished (current, barcodeImage ());
+            }
             break;
         case reqOsVersion:
             emit requestFinished (current, osVersion ());

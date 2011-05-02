@@ -7,8 +7,9 @@ meegotouch-controlpanelapplets (0.20.38~1) meegotouch; urgency=low
   * Fixed 251187 - Settings: §qtn_rset_clear_query§ long translation and
     medium translation are shown together
   * Fixed 231658 - Query dialogs are missing titles
+  * Fixes: 245737 - [TAKS] DaDD Image ABout product text needs to be changed
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 02 May 2011 10:07:52 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 02 May 2011 11:48:09 +0300
 
 meegotouch-controlpanelapplets (0.20.37-1) meegotouch; urgency=low
 
