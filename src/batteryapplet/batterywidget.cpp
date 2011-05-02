@@ -209,7 +209,7 @@ BatteryWidget::addHeaderContainer ()
      */
     helpButton = new MHelpButton("IDUG_MEEGO_BATTERY.html");
     helpButton->setViewType(MButton::iconType);
-    helpButton->setIconID ("icon-m-content-description-inverse");
+    helpButton->setIconID ("icon-s-description-inverse");
     helpButton->setStyleName ("CommonRightIcon");
 
     layout->addItem (helpButton);
