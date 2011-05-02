@@ -131,8 +131,11 @@ AboutBusinessLogic::osVersion ()
 QString
 AboutBusinessLogic::osName ()
 {
-    if (! m_prodName.isEmpty ())
-        return m_prodName;
+    /*
+     * Customization overrides any value...
+     */
+    if (! m_swName.isEmpty ())
+        return m_swName;
 
     //% "MeeGo"
     QString retval = qtTrId ("qtn_prod_sw_version");
@@ -197,8 +200,8 @@ AboutBusinessLogic::productName ()
     /*
      * Customization maybe overrides the qt-mobility value...
      */
-    if (! m_swName.isEmpty ())
-        return m_swName;
+    if (! m_prodName.isEmpty ())
+        return m_prodName;
 
     QSystemDeviceInfo sdi;
     return sdi.productName ();
