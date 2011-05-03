@@ -446,16 +446,12 @@ WallpaperDescriptor::WallpaperDescriptor(
 
 WallpaperDescriptor::~WallpaperDescriptor()
 {
-#if 0
     SYS_WARNING ("m_Thumbnailer valid = %s", SYS_BOOL(m_Thumbnailer));
     if (m_Thumbnailer != 0) {
-        SYS_WARNING ("CANCELING THUMBNAILER");
-        m_Thumbnailer->cancel (false);
-        SYS_WARNING ("DESTROYING THUMBNAILER");
+        SYS_DEBUG ("DESTROYING THUMBNAILER");
         delete m_Thumbnailer;
         m_Thumbnailer = 0;
     }
-#endif
 }
 
 
