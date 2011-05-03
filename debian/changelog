@@ -14,6 +14,7 @@ meegotouch-controlpanelapplets (0.20.38~2) meegotouch; urgency=low
   * Fixes: NB#249788 - Current state not visible when device is plugged in and
     charging.
   * Fixed 250389 - Launcher icon used in ringtone selection
+  * Fixes: NB#251898 - Reset view has view menu.
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 03 May 2011 08:18:36 +0300
 
