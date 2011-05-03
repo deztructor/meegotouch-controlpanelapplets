@@ -82,20 +82,7 @@ ResetApplet::title() const
 QVector<MAction*>
 ResetApplet::viewMenuItems()
 {
-    MAction            *helpAction;
     QVector<MAction*>   vector;
-
-    SYS_DEBUG ("");
-    helpAction = new MAction (
-            //% "User Guide"
-            qtTrId ("qtn_comm_userguide"), 
-            pageMain (0));
-    helpAction->setLocation (MAction::ApplicationMenuLocation);
-
-    connect (helpAction, SIGNAL (triggered (bool)),
-             this, SLOT (userGuide ()));
-
-    vector.append(helpAction);
 
     return vector;
 }
