@@ -4,7 +4,7 @@ meegotouch-controlpanelapplets (0.20.39~1) meegotouch; urgency=low
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 03 May 2011 09:04:12 +0300
 
-meegotouch-controlpanelapplets (0.20.38-1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.38-2) meegotouch; urgency=low
 
   [ David Kedves ]
   * Usb banner fix...
@@ -22,7 +22,7 @@ meegotouch-controlpanelapplets (0.20.38-1) meegotouch; urgency=low
   * Fixed 250389 - Launcher icon used in ringtone selection
   * Fixed 251898 - Reset view has view menu.
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 03 May 2011 09:03:42 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 03 May 2011 09:40:37 +0300
 
 meegotouch-controlpanelapplets (0.20.37-1) meegotouch; urgency=low
 
