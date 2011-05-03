@@ -5,6 +5,8 @@ meegotouch-controlpanelapplets (0.20.39~1) meegotouch; urgency=low
     fix is still not integrated, and this change might render the NB#240855 more
     frequent, but it will solve the problem once the fix for that bug is
     released.
+  * Fixes: NB#251603 - Label for "Unlock by tapping twice" is too long and 
+    makes switch go off screen (French)
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 03 May 2011 09:04:12 +0300
 

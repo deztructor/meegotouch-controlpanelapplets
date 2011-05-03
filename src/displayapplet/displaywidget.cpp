@@ -267,6 +267,7 @@ DisplayWidget::addLowPowerContainer ()
     container->centralWidget()->setLayout (layout);
 
     MLabel *lowPowerLabel = new MLabel;
+    lowPowerLabel->setWordWrap (true);
     lowPowerLabel->setObjectName ("LowPowerLabel");
     lowPowerLabel->setStyleName ("CommonSingleTitleInverted");
     //% "Low power mode"
@@ -313,6 +314,7 @@ DisplayWidget::addDoubleTapContainer ()
     container->centralWidget()->setLayout (layout);
 
     MLabel *lowPowerLabel = new MLabel;
+    lowPowerLabel->setWordWrap (true);
     lowPowerLabel->setObjectName ("LowPowerLabel");
     lowPowerLabel->setStyleName ("CommonSingleTitleInverted");
     //% "Double tap wake-up"
