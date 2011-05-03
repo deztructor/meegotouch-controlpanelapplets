@@ -1,4 +1,14 @@
-meegotouch-controlpanelapplets (0.20.38~2) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.39~1) meegotouch; urgency=low
+
+  [ Laszlo Pere ]
+  * Properly destroying Thumbnailer objects. Please note tha the thumbler crash
+    fix is still not integrated, and this change might render the NB#240855 more
+    frequent, but it will solve the problem once the fix for that bug is
+    released.
+
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 03 May 2011 09:04:12 +0300
+
+meegotouch-controlpanelapplets (0.20.38-2) meegotouch; urgency=low
 
   [ David Kedves ]
   * Usb banner fix...
@@ -14,13 +24,9 @@ meegotouch-controlpanelapplets (0.20.38~2) meegotouch; urgency=low
   * Fixes: NB#249788 - Current state not visible when device is plugged in and
     charging.
   * Fixed 250389 - Launcher icon used in ringtone selection
-  * Fixes: NB#251898 - Reset view has view menu.
-  * Properly destroying Thumbnailer objects. Please note tha the thumbler crash
-    fix is still not integrated, and this change might render the NB#240855 more
-    frequent, but it will solve the problem once the fix for that bug is
-    released.
+  * Fixed 251898 - Reset view has view menu.
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 03 May 2011 08:18:36 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 03 May 2011 09:40:37 +0300
 
 meegotouch-controlpanelapplets (0.20.37-1) meegotouch; urgency=low
 
