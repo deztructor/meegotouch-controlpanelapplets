@@ -299,9 +299,6 @@ UsbView::currentText () const
 #ifdef HAVE_QMSYSTEM
     QmUSBMode::Mode active = m_logic->getMode ();
 
-    /* XXX */
-    active = QmUSBMode::MassStorage;
-
     switch (active) {
         case QmUSBMode::MassStorage:
             SYS_DEBUG ("QmUSBMode::MassStorage");
