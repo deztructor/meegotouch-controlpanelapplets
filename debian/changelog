@@ -1,5 +1,6 @@
-meegotouch-controlpanelapplets (0.20.38~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.38~2) meegotouch; urgency=low
 
+  [ David Kedves ]
   * Usb banner fix...
   * Clear-device dialog text aligned to center
   * Fixes: NB#249355 - control panel crashed on trying to relaunch it when the
@@ -7,14 +8,14 @@ meegotouch-controlpanelapplets (0.20.38~1) meegotouch; urgency=low
   * Fixed 251187 - Settings: §qtn_rset_clear_query§ long translation and
     medium translation are shown together
   * Fixed 231658 - Query dialogs are missing titles
-  * Fixes: 245737 - [TAKS] DaDD Image ABout product text needs to be changed
+  * Fixes: NB#245737 - [TAKS] DaDD Image ABout product text needs to be changed
   
   [ Laszlo Pere ]
   * Fixes: NB#249788 - Current state not visible when device is plugged in and
     charging.
-  * Fixes: NB#250389 - Launcher icon used in ringtone selection
+  * Fixed 250389 - Launcher icon used in ringtone selection
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 02 May 2011 11:48:09 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 03 May 2011 08:18:36 +0300
 
 meegotouch-controlpanelapplets (0.20.37-1) meegotouch; urgency=low
 
