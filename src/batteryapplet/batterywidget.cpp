@@ -228,7 +228,7 @@ BatteryWidget::addRemainingCapacityWidget ()
 {
     Q_ASSERT (m_MainLayout);
     
-    m_BatteryImage = new BatteryImage;
+    m_BatteryImage = new BatteryImage ();
     m_BatteryImage->setStyleName ("CommonMainIcon");
 
     //% "Battery level \%L1\%"

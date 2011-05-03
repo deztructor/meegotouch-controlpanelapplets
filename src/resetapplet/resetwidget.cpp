@@ -58,6 +58,8 @@ ResetWidget::createContent ()
     MLinearLayoutPolicy *policy;
     MButton             *restoreButton;
     MButton             *clearButton;
+    MSeparator            *spacer;
+
 
     /*
      *
@@ -67,6 +69,14 @@ ResetWidget::createContent ()
     policy->setContentsMargins (0., 0., 0., 0.);
     policy->setSpacing (0.);
     
+    /*
+     *
+     */
+    spacer = new MSeparator;
+    // Using this one instead of "CommonSpacer", margins look even.
+    spacer->setStyleName ("CommonLargeSpacer");
+    policy->addItem (spacer);
+
     /*
      * The first button.
      */
