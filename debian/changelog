@@ -8,7 +8,7 @@ meegotouch-controlpanelapplets (0.20.39~1) meegotouch; urgency=low
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 03 May 2011 09:04:12 +0300
 
-meegotouch-controlpanelapplets (0.20.38-2) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.38-3) meegotouch; urgency=low
 
   [ David Kedves ]
   * Usb banner fix...
@@ -23,10 +23,10 @@ meegotouch-controlpanelapplets (0.20.38-2) meegotouch; urgency=low
   [ Laszlo Pere ]
   * Fixes: NB#249788 - Current state not visible when device is plugged in and
     charging.
-  * Fixed 250389 - Launcher icon used in ringtone selection
-  * Fixed 251898 - Reset view has view menu.
+  * Fixes: NB#250389 - Launcher icon used in ringtone selection
+  * Fixes: NB#251898 - Reset view has view menu.
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 03 May 2011 09:40:37 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 03 May 2011 11:20:48 +0300
 
 meegotouch-controlpanelapplets (0.20.37-1) meegotouch; urgency=low
 
