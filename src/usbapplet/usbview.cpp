@@ -37,7 +37,7 @@
 
 #include "../styles.h"
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -191,9 +191,9 @@ UsbView::usbModeActivated (int idx)
 
     /*
      * If we are connected, and we've changed the default mode lets activate the
-     * selected mode...
+     * selected mode... it is not active if we arrived this place.
      */
-    if (active == QmUSBMode::ChargingOnly)
+    if (active != QmUSBMode::Disconnected)
         m_logic->setMode (newmode);
 #endif
 }
