@@ -19,7 +19,8 @@
 #ifndef BATTERYWIDGET_H
 #define BATTERYWIDGET_H
 
-#include "dcpwidget.h"
+#include <dcpwidget.h>
+#include <QString>
 
 class MButton;
 class MComboBox;
@@ -58,6 +59,7 @@ private slots:
     void charging(int animation_rate);
     void chargeComplete ();
     void updateUIonPowerSaveModeChange (PowerSaveOpt powerSaveopt);
+
 private:
     void addHeaderContainer ();
     void addRemainingCapacityWidget ();

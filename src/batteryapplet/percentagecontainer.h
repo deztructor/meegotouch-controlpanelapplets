@@ -41,6 +41,7 @@ public:
 
     void updateCapacity (const int value);
     void updateRemainingChargingTime (int ChTime);
+    void updateRemainingTime (int talk, int idle);
     void setText (const QString &text);
 
 public slots:
@@ -48,6 +49,7 @@ public slots:
 
 private:
     void setLayout ();
+    QString formatTime (int remTime);
 
 private:
     QGraphicsLinearLayout  *m_MainLayout;

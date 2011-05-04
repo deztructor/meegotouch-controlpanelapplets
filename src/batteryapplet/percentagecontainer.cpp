@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "percentagecontainer.h"
 
 #include <QGraphicsLinearLayout>
@@ -27,6 +26,12 @@
 #undef DEBUG
 #define WARNING
 #include "../debug.h"
+
+/* 
+ * Define this to enable the 
+ * remaining talk and idle time
+ */
+#undef ENABLE_REMAINING_TALK_IDLE_TIME
 
 PercentageContainer::PercentageContainer(
         const QString  &text,
@@ -84,6 +89,7 @@ PercentageContainer::updateRemainingChargingTime (
     
     if (ChTime > 0 && !m_SubTextLabel) {
         m_SubTextLabel = new MLabel;
+        m_SubTextLabel->setWordWrap (true);
         m_SubTextLabel->setObjectName ("SubTextLabel");
         m_SubTextLabel->setStyleName ("CommonSubTitleInverted");
         m_MainLayout->addItem (m_SubTextLabel);
@@ -122,5 +128,90 @@ PercentageContainer::setLayout()
 
     // set the layout
     centralWidget ()->setLayout (m_MainLayout);
+}
+
+void
+PercentageContainer::updateRemainingTime (
+    int     talk,
+    int     idle)
+{
+    SYS_DEBUG ("*** talk and idle     = %d, %d", talk, idle);
+    SYS_DEBUG ("*** m_SubTextLabel    = %p", m_SubTextLabel);
+
+#ifdef ENABLE_REMAINING_TALK_IDLE_TIME
+    if ((talk + idle) <= 0 && m_SubTextLabel) {
+        m_SubTextLabel->deleteLater();
+        m_SubTextLabel = 0;
+        return;
+    }
+
+    if ((talk + idle) > 0 && !m_SubTextLabel) {
+        m_SubTextLabel = new MLabel;
+        m_SubTextLabel->setWordWrap (true);
+        m_SubTextLabel->setObjectName ("SubTextLabel");
+        m_SubTextLabel->setStyleName ("CommonSubTitleInverted");
+        m_MainLayout->addItem (m_SubTextLabel);
+    }
+
+    if (talk > 0)
+    {
+        //% "Remaining talk time: %1"
+        m_SubTextLabel->setText (
+            qtTrId ("qtn_ener_remaining_talk").arg (formatTime (talk)));
+    }
+
+    if (idle > 0)
+    {
+        //% "Remaining standby time: %1"
+        m_SubTextLabel->setText (m_SubTextLabel->text () + "<br>" +
+            qtTrId ("qtn_ener_remaining_standby").arg (formatTime (idle)));
+    }
+#endif
+}
+
+QString
+PercentageContainer::formatTime (int remTime)
+{
+    QString retval;
+    SYS_DEBUG ("time = %d sec", remTime);
+    /*
+     * Only hours and minutes are shown if less than 24 hours remains.
+     * Only minutes are shown if less than one hour remains.
+     */
+    int value = remTime;
+
+    if (value > 60*60*24)
+    {
+        value /= 60*60*24;
+        //% "%1 day <%1 days>"
+        retval = qtTrId ("qtn_comm_time_day", value).arg (value);
+    }
+    else if (value > 60*60)
+    {
+        int minutes = (value / 60) % 60;
+        /* hours */
+        value /= 60*60;
+        //% "%1 hour <%1 hours>"
+        retval = qtTrId ("qtn_comm_time_hour", value).arg (value);
+        if (minutes > 0)
+        {
+            retval += " ";
+            //% "%1 minute <%1 minutes>"
+            retval += qtTrId ("qtn_comm_time_minute", value).arg (value);
+        }
+    }
+    else
+    {
+        value /= 60;
+        /* We don't want to show 0 minutes left */
+        if (value < 1)
+            value = 1;
+        //% "%1 minute <%1 minutes>"
+        retval = qtTrId ("qtn_comm_time_minute", value).arg (value);
+    }
+
+    SYS_DEBUG ("timeStr = %s", SYS_STR (retval));
+
+    return retval;
 }
 

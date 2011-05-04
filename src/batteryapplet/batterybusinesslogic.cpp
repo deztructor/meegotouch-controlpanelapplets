@@ -320,6 +320,13 @@ int
 BatteryBusinessLogic::remainingTalkTime ()
 {
     int ret = -1;
+
+    /*
+     * When device is charging we're return -1 from here...
+     */
+    if (isCharging ())
+        return ret;
+
 #ifdef HAVE_QMSYSTEM
     MeeGo::QmBattery::RemainingTimeMode mode =
         PSMValue () ? MeeGo::QmBattery::PowersaveMode
@@ -327,6 +334,7 @@ BatteryBusinessLogic::remainingTalkTime ()
 
     ret = m_battery->getRemainingTalkTime (mode);
 #endif
+
     return ret;
 }
 
@@ -334,6 +342,13 @@ int
 BatteryBusinessLogic::remainingIdleTime ()
 {
     int ret = -1;
+
+    /*
+     * When device is charging we're return -1 from here...
+     */
+    if (isCharging ())
+        return ret;
+
 #ifdef HAVE_QMSYSTEM
     MeeGo::QmBattery::RemainingTimeMode mode =
         PSMValue () ? MeeGo::QmBattery::PowersaveMode
@@ -341,6 +356,7 @@ BatteryBusinessLogic::remainingIdleTime ()
 
     ret = m_battery->getRemainingIdleTime (mode);
 #endif
+
     return ret;
 }
 
