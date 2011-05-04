@@ -22,6 +22,7 @@
 #include <MContainer>
 
 class QGraphicsLinearLayout;
+class MSeparator;
 class MImageWidget;
 class MLabel;
 
@@ -50,12 +51,14 @@ public slots:
 private:
     void setLayout ();
     QString formatTime (int remTime);
+    void toggleSubLabelVisibility (bool visible);
 
 private:
     QGraphicsLinearLayout  *m_MainLayout;
     MImageWidget           *m_Image;
     MLabel                 *m_TextLabel;
     MLabel                 *m_SubTextLabel;
+    MSeparator             *m_SubTextSeparator;
 };
 
 #endif // PERCENTAGECONTAINER_H

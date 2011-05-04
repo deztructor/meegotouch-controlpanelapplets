@@ -9,9 +9,11 @@ meegotouch-controlpanelapplets (0.20.39~1) meegotouch; urgency=low
     makes switch go off screen (French)
 
   [ David Kedves ]
-  * Fixed: 247353 - USB: Truncated text Nokia Ovi Suite mode in finnish
+  * Fixes: NB#247353 - USB: Truncated text Nokia Ovi Suite mode in finnish
+  * Fixes: NB#234219 - Remaining talk time & Remaining standby time to be
+    visible in battery settings UI
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 04 May 2011 10:20:16 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 04 May 2011 13:26:58 +0300
 
 meegotouch-controlpanelapplets (0.20.38-3) meegotouch; urgency=low
 

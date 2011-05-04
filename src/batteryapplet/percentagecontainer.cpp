@@ -21,6 +21,7 @@
 #include <QGraphicsLinearLayout>
 #include <MImageWidget>
 #include <MLabel>
+#include <MSeparator>
 #include <MStylableWidget>
 
 #undef DEBUG
@@ -31,7 +32,7 @@
  * Define this to enable the 
  * remaining talk and idle time
  */
-#undef ENABLE_REMAINING_TALK_IDLE_TIME
+#define ENABLE_REMAINING_TALK_IDLE_TIME
 
 PercentageContainer::PercentageContainer(
         const QString  &text,
@@ -81,19 +82,7 @@ PercentageContainer::updateRemainingChargingTime (
     SYS_DEBUG ("*** ChTime            = %d", ChTime);
     SYS_DEBUG ("*** m_SubTextLabel    = %p", m_SubTextLabel);
 
-    if (ChTime <= 0 && m_SubTextLabel) {
-        m_SubTextLabel->deleteLater();
-        m_SubTextLabel = 0;
-        return;
-    } 
-    
-    if (ChTime > 0 && !m_SubTextLabel) {
-        m_SubTextLabel = new MLabel;
-        m_SubTextLabel->setWordWrap (true);
-        m_SubTextLabel->setObjectName ("SubTextLabel");
-        m_SubTextLabel->setStyleName ("CommonSubTitleInverted");
-        m_MainLayout->addItem (m_SubTextLabel);
-    }
+    toggleSubLabelVisibility (ChTime > 0);
 
     if (ChTime > 0) {
         int minutes = ChTime / 60;
@@ -131,6 +120,31 @@ PercentageContainer::setLayout()
 }
 
 void
+PercentageContainer::toggleSubLabelVisibility (bool visible)
+{
+    if (!visible && m_SubTextLabel) {
+        m_SubTextLabel->deleteLater();
+        m_SubTextLabel = 0;
+        m_SubTextSeparator->deleteLater();
+        m_SubTextSeparator = 0;
+        return;
+    } 
+    
+    if (visible && !m_SubTextLabel) {
+        m_SubTextLabel = new MLabel;
+        m_SubTextLabel->setWordWrap (true);
+        m_SubTextLabel->setObjectName ("SubTextLabel");
+        m_SubTextLabel->setStyleName ("CommonSubTitleInverted");
+        m_SubTextSeparator = new MSeparator;
+        // Using this one instead of "CommonSpacer", margins look even.
+        m_SubTextSeparator->setStyleName ("CommonLargeSpacer");
+
+        m_MainLayout->addItem (m_SubTextLabel);
+        m_MainLayout->addItem (m_SubTextSeparator);
+    }
+}
+
+void
 PercentageContainer::updateRemainingTime (
     int     talk,
     int     idle)
@@ -139,19 +153,7 @@ PercentageContainer::updateRemainingTime (
     SYS_DEBUG ("*** m_SubTextLabel    = %p", m_SubTextLabel);
 
 #ifdef ENABLE_REMAINING_TALK_IDLE_TIME
-    if ((talk + idle) <= 0 && m_SubTextLabel) {
-        m_SubTextLabel->deleteLater();
-        m_SubTextLabel = 0;
-        return;
-    }
-
-    if ((talk + idle) > 0 && !m_SubTextLabel) {
-        m_SubTextLabel = new MLabel;
-        m_SubTextLabel->setWordWrap (true);
-        m_SubTextLabel->setObjectName ("SubTextLabel");
-        m_SubTextLabel->setStyleName ("CommonSubTitleInverted");
-        m_MainLayout->addItem (m_SubTextLabel);
-    }
+    toggleSubLabelVisibility ((talk > 0) || (idle > 0));
 
     if (talk > 0)
     {
