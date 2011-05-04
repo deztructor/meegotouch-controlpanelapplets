@@ -48,7 +48,8 @@ BatteryBusinessLogic::BatteryBusinessLogic (
     m_battery (0),
     m_devicemode (0),
     m_ChargingRate (-1),
-    m_Charging (false)
+    m_Charging (false),
+    m_PowerSaveMode (false)
 {
 #ifdef HAVE_QMSYSTEM
     m_battery    = new MeeGo::QmBattery (this);
@@ -97,6 +98,12 @@ BatteryBusinessLogic::requestValues ()
 
     // batteryBarValueReceived also emitted by chargingStateChanged ^^^
     // FIXME: Why?
+
+    /*
+     * Init the power-save-mode value, and connect to QmSystem2 signal
+     */
+    m_PowerSaveMode = (m_devicemode->getPSMState () ==
+                       MeeGo::QmDeviceMode::PSMStateOn);
     connect (m_devicemode,
              SIGNAL (devicePSMStateChanged (MeeGo::QmDeviceMode::PSMState)),
              this, SLOT (PSMStateChanged (MeeGo::QmDeviceMode::PSMState)));
@@ -160,14 +167,7 @@ BatteryBusinessLogic::PSMThresholdValues ()
 bool
 BatteryBusinessLogic::PSMValue ()
 {
-    bool ret = false;
-
-#ifdef HAVE_QMSYSTEM
-    ret = (m_devicemode->getPSMState () ==
-           MeeGo::QmDeviceMode::PSMStateOn);
-#endif
-
-    return ret;
+    return m_PowerSaveMode;
 }
 
 /*!
@@ -186,11 +186,16 @@ BatteryBusinessLogic::setPSMOption (PowerSaveOpt saveOption)
         ret = m_devicemode->setPSMState (MeeGo::QmDeviceMode::PSMStateOff);
     } else {
     #ifdef HAVE_QMSYSTEM
-    ret = m_devicemode->setPSMState (
-        saveOption == PSMAutoOn ?
-        MeeGo::QmDeviceMode::PSMStateOn :
-        MeeGo::QmDeviceMode::PSMStateOff);
+        ret = m_devicemode->setPSMState (
+            saveOption == PSMAutoOn ?
+            MeeGo::QmDeviceMode::PSMStateOn :
+            MeeGo::QmDeviceMode::PSMStateOff);
         PSMAutoKey.set (false);
+
+        if (ret)
+        {
+            m_PowerSaveMode = (saveOption == PSMAutoOn);
+        }
     #else
     /*
      * FIXME: To implement the setting of the power save mode without the help
@@ -287,11 +292,11 @@ void
 BatteryBusinessLogic::PSMStateChanged (
         MeeGo::QmDeviceMode::PSMState state)
 {
-    bool enabled =
-        state == MeeGo::QmDeviceMode::PSMStateOn;
+    m_PowerSaveMode =
+        (state == MeeGo::QmDeviceMode::PSMStateOn);
     
-    SYS_DEBUG ("Emitting PSMValueReceived (%s)", SYS_BOOL(enabled));
-    emit PSMValueReceived (enabled);
+    SYS_DEBUG ("Emitting PSMValueReceived (%s)", SYS_BOOL (m_PowerSaveMode));
+    emit PSMValueReceived (m_PowerSaveMode);
 }
 #endif
 
@@ -310,6 +315,34 @@ BatteryBusinessLogic::batteryRemCapacityChanged (
     emit remainingBatteryCapacityChanged(percentage);
 }
 #endif
+
+int
+BatteryBusinessLogic::remainingTalkTime ()
+{
+    int ret = -1;
+#ifdef HAVE_QMSYSTEM
+    MeeGo::QmBattery::RemainingTimeMode mode =
+        PSMValue () ? MeeGo::QmBattery::PowersaveMode
+                    : MeeGo::QmBattery::NormalMode;
+
+    ret = m_battery->getRemainingTalkTime (mode);
+#endif
+    return ret;
+}
+
+int
+BatteryBusinessLogic::remainingIdleTime ()
+{
+    int ret = -1;
+#ifdef HAVE_QMSYSTEM
+    MeeGo::QmBattery::RemainingTimeMode mode =
+        PSMValue () ? MeeGo::QmBattery::PowersaveMode
+                    : MeeGo::QmBattery::NormalMode;
+
+    ret = m_battery->getRemainingIdleTime (mode);
+#endif
+    return ret;
+}
 
 int
 BatteryBusinessLogic::remainingChargingTime ()
@@ -497,7 +530,7 @@ BatteryBusinessLogic::getCondition ()
 }
 
 unsigned int
-BatteryBusinessLogic::getBateryLevel()
+BatteryBusinessLogic::getBatteryLevel()
 {
     unsigned int  bateryLevelPct = 0;
 #ifdef HAVE_QMSYSTEM

@@ -71,7 +71,7 @@ private:
     void showSlider (bool show);
     void retranslateUi ();
     void showHideUi ();
-    void formProperBateryInfo (unsigned int pct = 0);
+    void formProperBatteryInfo (unsigned int pct = 0);
     bool batteryConditionInfo (QString &shortDescriptionText);
 
 private: 

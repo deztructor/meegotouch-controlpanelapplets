@@ -490,11 +490,11 @@ BatteryWidget::PSMAutoActivated (
 void BatteryWidget::remainingBatteryCapacityReceived(const   int pct)
 {
     SYS_DEBUG ("percentage = %d", pct);
-    formProperBateryInfo (pct);
+    formProperBatteryInfo (pct);
 }
 
 void
-BatteryWidget::formProperBateryInfo (unsigned int pct)
+BatteryWidget::formProperBatteryInfo (unsigned int pct)
 {
     if (!m_RemainingContainer)
         return;
@@ -527,7 +527,7 @@ BatteryWidget::PSMValueReceived (
 
     if (m_MainLayout && m_ActivationContainer)
     {
-        formProperBateryInfo (m_logic->getBateryLevel ());
+        formProperBatteryInfo (m_logic->getBatteryLevel ());
     }
 
     m_UILocked = false;
@@ -559,7 +559,7 @@ void BatteryWidget::charging(int animation_rate)
     Q_UNUSED (animation_rate);
     SYS_DEBUG("Charging rate: %d", animation_rate);
 
-    formProperBateryInfo (m_logic->getBateryLevel ());
+    formProperBatteryInfo (m_logic->getBatteryLevel ());
 }
 
 void BatteryWidget::chargeComplete()

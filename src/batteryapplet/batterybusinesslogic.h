@@ -46,8 +46,8 @@ public:
     typedef enum {
         PSMAutoOff=0,
         PSMAutoOn,
-        PSMAutoAutomatic}PowerSaveOpt;
-
+        PSMAutoAutomatic
+    } PowerSaveOpt;
 
     typedef enum {
         BGood,
@@ -61,8 +61,10 @@ public:
     bool PSMValue ();
     bool isCharging ();
     Condition getCondition ();
-    unsigned int getBateryLevel();
+    unsigned int getBatteryLevel();
     int remainingChargingTime ();
+    int remainingTalkTime ();
+    int remainingIdleTime ();
 
 public slots:
     void setPSMThresholdValue (int percentage);
@@ -71,7 +73,6 @@ public slots:
     void remainingCapacityRequired ();
 
 signals:
-    void remainingTimeValuesChanged (QStringList values);
     void remainingBatteryCapacityChanged (int value);
     // animation_rate is 0 when not charging...
     void batteryCharging (int animation_rate);
@@ -110,6 +111,10 @@ private:
     // If the charger is connected. Might be not really charging if the battery
     // is full.
     bool              m_Charging;
+
+    // Cache this information as frequently used,
+    // and updated by a QmSystem2 signal
+    bool              m_PowerSaveMode;
     
 #ifdef UNIT_TEST
     friend class Ut_BatteryBusinessLogic;

@@ -139,20 +139,6 @@ SignalSink::hasRemainingCapacity (
         return false;
 }
 
-//void
-//SignalSink::remainingTimeValuesChanged (
-//        QStringList values)
-//{
-//    int   n = 0;
-//    foreach (QString value, values) {
-//        SYS_DEBUG ("*** values[%d] = %s", n, SYS_STR(value));
-//        n++;
-//    }
-
-//    m_RemainingTimeValues = values;
-//    m_RemainingTimeValuesReceived = true;
-//}
- 
 void
 SignalSink::remainingCapacityChanged(
         int value)

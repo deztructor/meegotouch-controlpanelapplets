@@ -39,7 +39,6 @@ public:
     bool hasRemainingCapacity(bool charging);
     
 public slots:
-//    void remainingTimeValuesChanged (QStringList values);
     void remainingCapacityChanged(int value);
     void batteryCharging (int animationRate);
     void batteryBarValueReceived (int barValue);
