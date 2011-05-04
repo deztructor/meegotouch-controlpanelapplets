@@ -8,6 +8,7 @@ meegotouch-controlpanelapplets (0.20.39~1) meegotouch; urgency=low
     released.
   * Fixes: NB#251603 - Label for "Unlock by tapping twice" is too long and 
     makes switch go off screen (French)
+  * Changing the usb mode if we are not in disconnected.
 
   [ David Kedves ]
   * Fixes: NB#247353 - USB: Truncated text Nokia Ovi Suite mode in finnish
