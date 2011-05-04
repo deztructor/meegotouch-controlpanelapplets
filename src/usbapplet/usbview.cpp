@@ -421,6 +421,7 @@ UsbView::updateInfoLabel ()
 
     m_infoLabel = new MLabel;
     m_infoLabel->setStyleName ("CommonSingleTitleInverted");
+    m_infoLabel->setWordWrap (true);
     m_infoLabel->setText (infoText);
     iwLayout->addItem (m_infoLabel);
 
