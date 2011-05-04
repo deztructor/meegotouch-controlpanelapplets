@@ -1,6 +1,7 @@
 meegotouch-controlpanelapplets (0.20.39~1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
+  * Fixed 242379 - Battery layout adjustments needed
   * Properly destroying Thumbnailer objects. Please note tha the thumbler crash
     fix is still not integrated, and this change might render the NB#240855 more
     frequent, but it will solve the problem once the fix for that bug is
@@ -13,7 +14,7 @@ meegotouch-controlpanelapplets (0.20.39~1) meegotouch; urgency=low
   * Fixes: NB#234219 - Remaining talk time & Remaining standby time to be
     visible in battery settings UI
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 04 May 2011 13:26:58 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 04 May 2011 14:51:01 +0300
 
 meegotouch-controlpanelapplets (0.20.38-3) meegotouch; urgency=low
 
