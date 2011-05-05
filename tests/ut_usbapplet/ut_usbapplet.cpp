@@ -189,10 +189,11 @@ Ut_UsbApplet::testTitle ()
 void
 Ut_UsbApplet::testConstructWidget ()
 {
-    #ifdef HAVE_QMSYSTEM
+#ifdef HAVE_QMSYSTEM
     UsbView                 *widget;
     bool                     backAccepted;
     QList<QmUSBMode::Mode>   availableModes;
+    QStringList              availableModesStr;
 
     availableModes <<
             QmUSBMode::Connected <<
@@ -201,9 +202,20 @@ Ut_UsbApplet::testConstructWidget ()
             QmUSBMode::MassStorage <<
             QmUSBMode::ChargingOnly <<
             QmUSBMode::OviSuite <<
-            QmUSBMode::ModeRequest <<
             QmUSBMode::Ask <<
+            QmUSBMode::ModeRequest <<
             QmUSBMode::Undefined;
+
+    availableModesStr <<
+            "Connected" <<
+            "DataInUse" <<
+            "Disconnected" <<
+            "MassStorage" <<
+            "ChargingOnly" <<
+            "OviSuite" <<
+            "Ask" <<
+            "ModeRequest" <<
+            "Undefined";
 
     /*
      * Testing if the applet creates a widget the first time.
@@ -226,13 +238,28 @@ Ut_UsbApplet::testConstructWidget ()
             m_Applet->m_logic->setDefaultMode (defaultMode);
             m_Applet->m_logic->setMode (mode);
 
+#ifdef LOTDEBUG
+            SYS_DEBUG ("set default and current mode: %s, %s",
+                       SYS_STR (availableModesStr.at (
+                        availableModes.indexOf (defaultMode))),
+                       SYS_STR (availableModesStr.at (
+                        availableModes.indexOf (mode))));
+#endif
+
             for (int id = 0; id < 3; ++id) {
                 mbannerSubtitle = "";
+                m_Applet->m_logic->setMode (mode);
                 widget->usbModeActivated (id);
+
+#ifdef LOTDEBUG
+                SYS_DEBUG ("usbModeActivated: %s",
+                    SYS_STR (availableModesStr.at (
+                        availableModes.indexOf (usbModes[id]))));
+#endif
 
                 if (usbModes[id] == defaultMode) {
                     // If we want to change to the current mode nothing happens.
-                    QVERIFY (mbannerSubtitle.isEmpty());
+                    QVERIFY (mbannerSubtitle.isEmpty ());
                 } else if (mode == QmUSBMode::MassStorage ||
                            mode == QmUSBMode::OviSuite)  {
 
@@ -270,7 +297,7 @@ Ut_UsbApplet::testConstructWidget ()
      */
     delete widget;
     QVERIFY (!m_Applet->m_MainWidget);
-    #endif
+#endif
 }
 
 void
@@ -278,8 +305,7 @@ Ut_UsbApplet::testMenuItems ()
 {
     QVector<MAction*> items = m_Applet->viewMenuItems ();
 
-    //QVERIFY (items.size() == 1);
-    SYS_DEBUG ("items.size() = %d", items.size());
+    QCOMPARE (items.size (), 0);
 }
 
 QTEST_APPLESS_MAIN(Ut_UsbApplet)
