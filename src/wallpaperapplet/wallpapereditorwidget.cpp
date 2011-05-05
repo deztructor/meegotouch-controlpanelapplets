@@ -224,7 +224,7 @@ WallpaperEditorWidget::createContent ()
         WallpaperCurrentDescriptor *cdesc;
        
         cdesc = qobject_cast<WallpaperCurrentDescriptor*> (desc);
-        if (!desc) {
+        if (!cdesc) {
             SYS_WARNING ("This is the current wallpaper, but its type is"
                     "not <WallpaperCurrentDescriptor>");
             goto not_current_wallpaper;
