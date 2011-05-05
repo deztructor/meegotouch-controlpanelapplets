@@ -5,7 +5,7 @@ meegotouch-controlpanelapplets (0.20.40~1) meegotouch; urgency=low
 
  -- David Kedves <kedazo@gmail.com>  Thu, 05 May 2011 07:55:26 +0300
 
-meegotouch-controlpanelapplets (0.20.39-1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.39-2) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixed 242379 - Battery layout adjustments needed
@@ -22,7 +22,7 @@ meegotouch-controlpanelapplets (0.20.39-1) meegotouch; urgency=low
   * Fixes: NB#234219 - Remaining talk time & Remaining standby time to be
     visible in battery settings UI
 
- -- David Kedves <kedazo@gmail.com>  Thu, 05 May 2011 07:54:57 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 05 May 2011 10:38:21 +0300
 
 meegotouch-controlpanelapplets (0.20.38-3) meegotouch; urgency=low
 
