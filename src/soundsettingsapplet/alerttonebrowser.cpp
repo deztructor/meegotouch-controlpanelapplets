@@ -111,6 +111,7 @@ AlertToneBrowser::~AlertToneBrowser()
 void
 AlertToneBrowser::createContent()
 {
+    MSeparator *spacer;
 
     m_MainLayout = new QGraphicsLinearLayout (Qt::Vertical);
     m_MainLayout->setContentsMargins (0., 0., 0., 0.);
@@ -123,6 +124,12 @@ AlertToneBrowser::createContent()
     m_TitleLabel = new MLabel;
     m_TitleLabel->setStyleName (APP_TITLE_LABEL_STYLE_NAME);
     m_MainLayout->addItem (m_TitleLabel);
+
+#if  APP_TITLE_USES_SPACER
+    spacer = new MSeparator;
+    spacer->setStyleName ("CommonHorizontalSeparatorInverted");
+    m_MainLayout->addItem (spacer);
+#endif
 
 #ifdef HAVE_CONTENT_MANAGER
     // "Pick from My Music"
@@ -146,13 +153,9 @@ AlertToneBrowser::createContent()
     m_MainLayout->addItem (m_ovi_store);
     connect (m_ovi_store, SIGNAL (clicked ()), SLOT (launchOviStore ()));
 
-#if  APP_TITLE_USES_SPACER
-    MSeparator *spacer;
-
     spacer = new MSeparator;
     spacer->setStyleName ("CommonHorizontalSeparatorInverted");
     m_MainLayout->addItem (spacer);
-#endif
 
 
     /*
