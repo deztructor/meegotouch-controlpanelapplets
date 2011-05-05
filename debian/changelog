@@ -15,7 +15,7 @@ meegotouch-controlpanelapplets (0.20.39~1) meegotouch; urgency=low
   * Fixes: NB#234219 - Remaining talk time & Remaining standby time to be
     visible in battery settings UI
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 04 May 2011 14:51:01 +0300
+ -- David Kedves <kedazo@gmail.com>  Thu, 05 May 2011 07:54:24 +0300
 
 meegotouch-controlpanelapplets (0.20.38-3) meegotouch; urgency=low
 
