@@ -194,37 +194,6 @@ addSubTitle (
     targetPolicy->addItem (container);
 }
 
-#if 0
-MLabel *
-addTitleLabel (
-        QGraphicsWidget     *parent,
-        MLinearLayoutPolicy *targetPolicy,
-        const char          *panelStyleName,
-        const char          *labelStyleName)
-{
-    MContainer              *container;
-    QGraphicsLinearLayout   *layout;
-    MLabel                  *label;
-
-    label = new MLabel;
-    label->setStyleName (labelStyleName);
-
-    container = new MContainer (parent);
-    container->setContentsMargins (0., 0., 0., 0.);
-    container->setStyleName (panelStyleName);
-    container->setHeaderVisible (false);
-
-    layout = new QGraphicsLinearLayout (Qt::Horizontal);
-    layout->setContentsMargins (0., 0., 0., 0.);
-    layout->addItem (label);
-
-    container->centralWidget()->setLayout (layout);
-
-    targetPolicy->addItem (container);
-    return label;
-}
-#endif
-
 MLabel *
 addTitleLabel (
         QGraphicsWidget     *parent,

@@ -1,6 +1,7 @@
 meegotouch-controlpanelapplets (0.20.40~1) meegotouch; urgency=low
 
-  * [NEW VERSION] 
+  [ Laszlo Pere ]
+  * Fixes: NB#252225 - Ringtone header needs update
 
  -- David Kedves <kedazo@gmail.com>  Thu, 05 May 2011 07:55:26 +0300
 

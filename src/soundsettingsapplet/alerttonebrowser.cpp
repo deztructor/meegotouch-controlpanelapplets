@@ -41,6 +41,9 @@
 #include <MTextEdit>
 #include <MImageWidget>
 #include <MContentItem>
+#include <MSeparator>
+
+#include "../styles.h"
 
 //#define DEBUG
 #define WARNING
@@ -108,6 +111,7 @@ AlertToneBrowser::~AlertToneBrowser()
 void
 AlertToneBrowser::createContent()
 {
+
     m_MainLayout = new QGraphicsLinearLayout (Qt::Vertical);
     m_MainLayout->setContentsMargins (0., 0., 0., 0.);
     m_MainLayout->setSpacing (0.);
@@ -117,7 +121,7 @@ AlertToneBrowser::createContent()
      *
      */
     m_TitleLabel = new MLabel;
-    m_TitleLabel->setStyleName ("CommonApplicationHeaderInverted");
+    m_TitleLabel->setStyleName (APP_TITLE_LABEL_STYLE_NAME);
     m_MainLayout->addItem (m_TitleLabel);
 
 #ifdef HAVE_CONTENT_MANAGER
@@ -141,6 +145,15 @@ AlertToneBrowser::createContent()
     m_ovi_store->setObjectName("MContentItem_getMoreFromOviStore");
     m_MainLayout->addItem (m_ovi_store);
     connect (m_ovi_store, SIGNAL (clicked ()), SLOT (launchOviStore ()));
+
+#if  APP_TITLE_USES_SPACER
+    MSeparator *spacer;
+
+    spacer = new MSeparator;
+    spacer->setStyleName ("CommonHorizontalSeparatorInverted");
+    m_MainLayout->addItem (spacer);
+#endif
+
 
     /*
      * The list with the available sound files.
