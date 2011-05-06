@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# This sets some sample data to the gconf in this way
+# our functional testcases are not depending on the
+# real environment...
+#
+set -e
+gconftool-2 -t string -s /desktop/meego/background/portrait/picture_filename \
+    '/usr/share/meegotouch-controlpanelapplets-tests/testwallpaper.png'
+gconftool-2 -t string -s /desktop/meego/background/landscape/picture_filename \
+    '/usr/share/meegotouch-controlpanelapplets-tests/testwallpaper.png'
+exit 0
