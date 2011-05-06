@@ -161,11 +161,11 @@ UsbView::usbModeActivated (int idx)
     QmUSBMode::Mode active = m_logic->getMode ();
 
     /*
-     * If we are connected and some mode active, then show an error message and
-     * set the mode back to original
+     * Error message, shown if user tries to change the USB mode in USB 
+     * setting view (3.2) while the USB cable is connecting with the device.
      */
-    if ((active == QmUSBMode::MassStorage) ||
-        (active == QmUSBMode::OviSuite))
+    if (active != QmUSBMode::Disconnected &&
+            active != QmUSBMode::Undefined)
     {
         /*
          * Set checked on the previously active button
@@ -186,17 +186,9 @@ UsbView::usbModeActivated (int idx)
 
     QmUSBMode::Mode newmode = usbModes[idx];
 
-    SYS_DEBUG ("Setting USB default mode to %d", newmode);
+    SYS_DEBUG ("Setting USB mode/default mode to %d", newmode);
     m_logic->setDefaultMode (newmode);
-
-    /*
-     * If we are connected, and we've changed the default mode lets activate the
-     * selected mode... it is not active if we arrived this place.
-     */
-    if (active != QmUSBMode::Disconnected) {
-        SYS_DEBUG ("Setting USB mode to %d", newmode);
-        m_logic->setMode (newmode);
-    }
+    m_logic->setMode (newmode);
 #endif
 }
 

@@ -2,6 +2,8 @@ meegotouch-controlpanelapplets (0.20.40~1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#252225 - Ringtone header needs update
+  * Fixes: NB#252261 - [TASK] USB mode is not changed when the device is 
+    already connected.
 
  -- David Kedves <kedazo@gmail.com>  Thu, 05 May 2011 07:55:26 +0300
 
