@@ -1,11 +1,11 @@
-meegotouch-controlpanelapplets (0.20.40~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.40-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#252225 - Ringtone header needs update
   * Fixes: NB#252261 - [TASK] USB mode is not changed when the device is 
     already connected.
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 06 May 2011 14:58:12 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 06 May 2011 15:00:18 +0300
 
 meegotouch-controlpanelapplets (0.20.39-2) meegotouch; urgency=low
 
