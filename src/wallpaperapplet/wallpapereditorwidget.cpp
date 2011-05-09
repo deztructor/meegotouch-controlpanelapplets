@@ -28,6 +28,8 @@
 #include <QPixmap>
 #include <QImage>
 #include <QTimer>
+#include <MPannableViewport>
+#include <MPositionIndicator>
 
 #ifndef NO_EDITING
 #include <QGestureEvent>
@@ -423,6 +425,7 @@ WallpaperEditorWidget::polishEvent ()
         return;
 
     page->setPannable (false);
+    page->pannableViewport()->positionIndicator()->hide();
     /**************************************************************************
      * Hiding the home button and the escape button from the page. 
      */
