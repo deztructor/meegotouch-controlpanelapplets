@@ -1,4 +1,3 @@
-usr/share/meegotouch-controlpanelapplets-tests/tests.xml
-usr/share/meegotouch-controlpanelapplets-tests/testwallpaper.png
+usr/share/meegotouch-controlpanelapplets-tests
 usr/lib/meegotouch-controlpanelapplets-tests
 /bin/cylontest.sh
