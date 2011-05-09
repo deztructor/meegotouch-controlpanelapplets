@@ -1,6 +1,7 @@
 meegotouch-controlpanelapplets (0.20.41~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  [ Laszlo Pere ]
+  * Fixes: 251589 - USB localized settings banner breaks out of layout
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 06 May 2011 15:00:39 +0300
 

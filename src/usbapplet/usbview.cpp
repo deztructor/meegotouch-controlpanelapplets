@@ -203,6 +203,7 @@ UsbView::addTitleLabel (
 
     label = new MLabel;
     label->setStyleName (labelStyleName);
+    label->setWordWrap (true);
 
     targetPolicy->addItem (label);
     return label;
