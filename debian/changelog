@@ -1,10 +1,10 @@
-meegotouch-controlpanelapplets (0.20.41~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.41-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#251589 - USB localized settings banner breaks out of layout
   * Fixes: NB#253617 - Unneeded scroll bar visible in Wallpaper applet
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 06 May 2011 15:00:39 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 10 May 2011 11:36:46 +0300
 
 meegotouch-controlpanelapplets (0.20.40-1) meegotouch; urgency=low
 
