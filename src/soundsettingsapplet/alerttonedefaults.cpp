@@ -480,3 +480,4 @@ AlertToneDefaults::checkSpinner ()
             SYS_BOOL(m_ShowingSpinner));
     page->setProgressIndicatorVisible (m_ShowingSpinner);
 }
+

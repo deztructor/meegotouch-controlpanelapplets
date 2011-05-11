@@ -28,7 +28,7 @@
 /*
  * Define this macro to add items asynchronously.
  */
-#define USE_ASYNC_LOADING
+#undef USE_ASYNC_LOADING
 
 //#define DEBUG
 #define WARNING
