@@ -29,7 +29,7 @@
 #endif
 #include <QTimer>
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -82,15 +82,12 @@ TrackerConnection::niceNameFromFileName (
         const QString &fileName)
 {
     QString                           niceName;
-   
     /**************************************************************************
      * First we try to find the filename in the cache. If we find the nice name
      * in the cache we are returning it and will not initiate a tracker request.
      */
     niceName = m_NiceNameCache[fileName];
-    SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
-    SYS_DEBUG ("*** niceName = %s", SYS_STR(niceName));
-    
+
     #ifdef DEBUG
     ++nRequests;
     #endif
@@ -197,11 +194,17 @@ TrackerConnection::processRequest (
 
     QString              title;
     QString              trackerId;
+    QSparqlResult       *result = 0;
 
     SYS_DEBUG ("*** fileName = %s", SYS_STR (fileName));
+    if (!TRACKER_HAS_A_CHANCE (fileName))
+    {
+        // Speedup
+        goto fallback;
+    }
     SYS_DEBUG ("*** query    = %s", SYS_STR (theQuery.preparedQueryText ()));
 
-    QSparqlResult *result = m_sparqlconn->syncExec (theQuery);
+    result = m_sparqlconn->syncExec (theQuery);
     result->waitForFinished ();
 
     if (result->hasError()) {
