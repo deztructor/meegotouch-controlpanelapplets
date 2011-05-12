@@ -1,6 +1,7 @@
 meegotouch-controlpanelapplets (0.20.42~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  [ Laszlo Pere ]
+  * Fixes: NB#254971 - Preview doesn't stop in given scenario.
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 10 May 2011 11:37:15 +0300
 

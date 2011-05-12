@@ -248,10 +248,15 @@ AlertToneBrowser::accept()
 void
 AlertToneBrowser::launchMusicBrowser()
 {
+    /*
+     * Well, we should stop the playback now...
+     */
+    stopPlayingSound ();
+
 #ifdef HAVE_CONTENT_MANAGER
     SYS_DEBUG ("launching content picker...");
 
-    if (! m_MusicBrowser)
+    if (!m_MusicBrowser)
     {
         ContentItemsPage *page = new ContentItemsPage (this);
         page->enableConfirmationButton (false);
@@ -281,8 +286,13 @@ void
 AlertToneBrowser::launchOviStore()
 {
     static const char OviIf[] = "com.nokia.OviStoreClient";
-    QDBusInterface OviStore (OviIf, "/", OviIf);
 
+    /*
+     * Well, we should stop the playback now...
+     */
+    stopPlayingSound ();
+
+    QDBusInterface OviStore (OviIf, "/", OviIf);
     OviStore.call ("LaunchWithKeyword", QString ("ringtones"));
 }
 
