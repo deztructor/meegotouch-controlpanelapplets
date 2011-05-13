@@ -109,20 +109,20 @@ AlertToneDefaultsModel::addSingleItem()
 
         QDir subdir(fullPath);
 
-        if (subdir.count() > 0)
-        {
+        if (subdir.count() > 0) {
             m_dirStack.push(subdir);
             m_dirIdx.push(0);
-        }
-        else if (m_dirStack.top()[m_dirIdx.top()].right(4).toLower () == ".aac" ||
-                 m_dirStack.top()[m_dirIdx.top()].right(4).toLower () == ".mp3" ||
-                 m_dirStack.top()[m_dirIdx.top()].right(4).toLower () == ".wma" ||
-                 m_dirStack.top()[m_dirIdx.top()].right(4).toLower () == ".wav")
-        {
-            QString niceName = 
-                TrackerConnection::instance()->niceNameFromFileName (fullPath);
-            SYS_DEBUG ("calling niceNameFromFileName()");
-            addSingleItem (niceName, fullPath);
+        } else {
+            QString extension = fullPath.right(4).toLower();
+
+            if (extension == ".aac" ||
+                    extension == ".mp3" ||
+                    extension == ".wma" ||
+                    extension == ".wav") {
+                QString niceName = TrackerConnection::instance()->niceNameFromFileName (fullPath);
+                SYS_DEBUG ("calling niceNameFromFileName()");
+                addSingleItem (niceName, fullPath);
+            }
         }
     }
 

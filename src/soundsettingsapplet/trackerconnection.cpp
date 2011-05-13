@@ -82,11 +82,13 @@ TrackerConnection::niceNameFromFileName (
         const QString &fileName)
 {
     QString                           niceName;
+
     /**************************************************************************
      * First we try to find the filename in the cache. If we find the nice name
      * in the cache we are returning it and will not initiate a tracker request.
      */
-    niceName = m_NiceNameCache[fileName];
+    if (TRACKER_HAS_A_CHANCE(fileName)) 
+        niceName = m_NiceNameCache[fileName];
 
     #ifdef DEBUG
     ++nRequests;
@@ -119,7 +121,6 @@ TrackerConnection::niceNameFromFileName (
      */
     if (!TRACKER_HAS_A_CHANCE(fileName)) {
         niceName = poorNiceName (fileName);
-        m_NiceNameCache[fileName] = niceName;
         return niceName;
     }
 
@@ -262,14 +263,15 @@ QString
 TrackerConnection::poorNiceName (
         const QString &fileName)
 {
+    int     startIndex, endIndex;
     QString niceName;
 
-//    SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
-    niceName = fileName.split('/').last();
-    niceName = niceName.left(niceName.lastIndexOf('.'));
+    startIndex = fileName.lastIndexOf ('/') + 1;
+    endIndex   = fileName.lastIndexOf ('.') - startIndex;
+
+    niceName = fileName.mid (startIndex, endIndex);
     niceName.replace ("_", " ");
     
-//    SYS_DEBUG ("*** niceName = %s", SYS_STR(niceName));
     return niceName;
 }
 
