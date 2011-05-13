@@ -60,7 +60,20 @@ void
 OfflineBrief::devModeChanged (
         MeeGo::QmDeviceMode::DeviceMode mode)
 {
-    SYS_DEBUG("newmode %d", mode);
+#ifdef DEBUG
+    switch (mode)
+    {
+        case MeeGo::QmDeviceMode::Flight:
+            SYS_DEBUG ("mode = Flight mode");
+            break;
+        case MeeGo::QmDeviceMode::Normal:
+            SYS_DEBUG ("mode = Normal");
+            break;
+        default:
+            SYS_DEBUG ("mode = Error!!!");
+            break;
+    }
+#endif
     m_LastMode = mode;
     emit valuesChanged();
 }

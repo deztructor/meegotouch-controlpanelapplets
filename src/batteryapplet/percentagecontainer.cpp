@@ -199,7 +199,7 @@ PercentageContainer::formatTime (int remTime)
         {
             retval += " ";
             //% "%1 minute <%1 minutes>"
-            retval += qtTrId ("qtn_comm_time_minute", value).arg (value);
+            retval += qtTrId ("qtn_comm_time_minute", value).arg (minutes);
         }
     }
     else

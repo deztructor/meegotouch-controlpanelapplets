@@ -3,7 +3,11 @@ meegotouch-controlpanelapplets (0.20.42~1) meegotouch; urgency=low
   [ Laszlo Pere ]
   * Fixes: NB#254971 - Preview doesn't stop in given scenario.
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 10 May 2011 11:37:15 +0300
+  [ David Kedves ]
+  * Fixed: 255490 - missing a lot of valuable minutes when showing remaining
+    times
+
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 13 May 2011 10:31:10 +0300
 
 meegotouch-controlpanelapplets (0.20.41-1) meegotouch; urgency=low
 
