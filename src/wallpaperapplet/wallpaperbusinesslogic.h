@@ -21,6 +21,8 @@
 
 #include <QList>
 #include <QObject>
+#include <QPointer>
+#include <QFileSystemWatcher>
 #include <meegocontrolexport.h>
 
 class QString;
@@ -87,6 +89,7 @@ public:
 signals:
     void wallpaperChanged ();
     void imageEditRequested ();
+    void fileListChanged ();
     
 private slots:
     void editRequestArrived (
@@ -95,9 +98,17 @@ private slots:
 
     void startEditThreadEnded ();
     void valueChanged ();
-    
+    void directoryChanged (const QString &path);
+    void fileChanged (const QString &path);
+
 private:
-    QString dirPath (bool downloadDir = false) const;
+    typedef enum {
+        SaveDir,
+        DownloadDir,
+        MountDir
+    } WallpaperDirectoryID;
+
+    QString dirPath (WallpaperDirectoryID dirID = SaveDir) const;
     bool ensureHasDirectory ();
     void createBackupFiles ();
     void deleteBackupFiles ();
@@ -125,7 +136,7 @@ private:
     bool                           m_OrientationLocked;
     M::Orientation                 m_LockedOrientation;
     QFutureWatcher <void>          m_FutureWatcher;
-
+    QPointer<QFileSystemWatcher>   m_FileWatcher;
 #ifdef UNIT_TEST
     friend class Ut_WallpaperBusinessLogic;
     friend class Ft_WallpaperBusinessLogic;

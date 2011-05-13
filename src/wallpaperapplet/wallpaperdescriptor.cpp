@@ -672,7 +672,6 @@ WallpaperDescriptor::initiateThumbnailer ()
             continue;
 
         if (m_Images[n].thumbnail()) {
-            SYS_DEBUG ("Has thumbnail for %d, emit thumbnailLoaded()", n);
             emit thumbnailLoaded (this);
             emit changed (this);
 
@@ -735,7 +734,6 @@ WallpaperDescriptor::thumbnailReady (
         }
     }
 
-    //SYS_DEBUG ("emit thumbnailLoaded()");
     emit thumbnailLoaded (this);
     emit changed (this);
 }

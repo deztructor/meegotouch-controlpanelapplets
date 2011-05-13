@@ -62,12 +62,13 @@
 #include <MApplicationWindow>
 
 //#define LOTDEBUG
-#undef DEBUG
-//#define WARNING
+#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 static const QString wallpaperDir = ".wallpapers";
 static const QString wallpapersDir = "MyDocs/.wallpapers";
+static const QString mountDir = "MyDocs";
 static const QString destopFileName = "wallpaper.desktop";
 static const QString backupExtension = ".BAK";
 static const QString saveFileExtension = ".png";
@@ -190,6 +191,18 @@ WallpaperBusinessLogic::WallpaperBusinessLogic() :
         SYS_WARNING ("Connecting to DBus failed: %s", 
                 SYS_STR(lastError.message()));
     }
+
+    /*
+     *
+     */
+    QString path = dirPath (MountDir);
+    SYS_WARNING ("*** path = %s", SYS_STR(path));
+    m_FileWatcher = new QFileSystemWatcher (this);
+    m_FileWatcher->addPath (path);
+    connect (m_FileWatcher, SIGNAL(directoryChanged(const QString &)),
+            this, SLOT(directoryChanged(const QString &)));
+    connect (m_FileWatcher, SIGNAL(fileChanged(const QString &)),
+            this, SLOT(fileChanged(const QString &)));
 }
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
@@ -288,7 +301,7 @@ WallpaperBusinessLogic::availableWallpapers () const
     list << desc;
 #endif
 
-    QString                 directoryPath = dirPath (true);
+    QString                 directoryPath = dirPath (DownloadDir);
     WallpaperDir            directory (directoryPath);
     QStringList             entryList;
     QStringList             nameFilters;
@@ -429,7 +442,7 @@ WallpaperBusinessLogic::editedImage ()
     return m_EditedImage;
 }
 
-/*********************************************************************************
+/*******************************************************************************
  * Low level file handling functions.
  */
 
@@ -443,22 +456,32 @@ WallpaperBusinessLogic::editedImage ()
  */
 QString
 WallpaperBusinessLogic::dirPath (
-        bool       downloadDir) const
+        WallpaperDirectoryID   dirID) const
 {
     QString homeDir (getenv("HOME"));
-    QString dirPath;
+    QString retval;
     
     if (homeDir.isEmpty())
         homeDir = "/usr/home";
 
-    if (downloadDir)
-        dirPath = homeDir + WallpaperDir::separator() + 
-            wallpapersDir + WallpaperDir::separator();
-    else
-        dirPath = homeDir + WallpaperDir::separator() + 
-            wallpaperDir + WallpaperDir::separator();
+    switch (dirID) {
+        case SaveDir:
+            retval = homeDir + WallpaperDir::separator() + 
+                wallpaperDir + WallpaperDir::separator();
+            break;
 
-    return dirPath;
+        case DownloadDir:
+            retval = homeDir + WallpaperDir::separator() + 
+                wallpapersDir + WallpaperDir::separator();
+            break;
+
+        case MountDir:
+            retval = homeDir + WallpaperDir::separator() + 
+               mountDir + WallpaperDir::separator();
+            break;
+    }
+
+    return retval;
 }
 
 
@@ -860,4 +883,18 @@ WallpaperBusinessLogic::supportsPortrait () const
     return !m_OrientationLocked || m_LockedOrientation == M::Portrait;
 }
 
+void 
+WallpaperBusinessLogic::directoryChanged (
+        const QString &path)
+{
+    SYS_DEBUG ("*** path = %s", SYS_STR(path));
+    emit fileListChanged ();
+}
 
+void 
+WallpaperBusinessLogic::fileChanged (
+        const QString &path)
+{
+    SYS_DEBUG ("*** path = %s", SYS_STR(path));
+    emit fileListChanged ();
+}
