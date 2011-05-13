@@ -136,3 +136,15 @@ WallpaperBusinessLogic::startEditThreadEnded ()
 
 }
 
+void 
+WallpaperBusinessLogic::directoryChanged (
+        const QString &path)
+{
+    //emit fileListChanged ();
+}
+
+void 
+WallpaperBusinessLogic::fileChanged (
+        const QString &path)
+{
+}
