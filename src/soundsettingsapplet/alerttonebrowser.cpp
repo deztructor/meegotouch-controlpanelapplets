@@ -127,7 +127,7 @@ AlertToneBrowser::createContent()
 
 #if  APP_TITLE_USES_SPACER
     spacer = new MSeparator;
-    spacer->setStyleName ("CommonHorizontalSeparatorInverted");
+    spacer->setStyleName ("CommonItemDividerInverted");
     m_MainLayout->addItem (spacer);
 #endif
 
@@ -154,7 +154,7 @@ AlertToneBrowser::createContent()
     connect (m_ovi_store, SIGNAL (clicked ()), SLOT (launchOviStore ()));
 
     spacer = new MSeparator;
-    spacer->setStyleName ("CommonHorizontalSeparatorInverted");
+    spacer->setStyleName ("CommonItemDividerInverted");
     m_MainLayout->addItem (spacer);
 
 
