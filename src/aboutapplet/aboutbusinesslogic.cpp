@@ -425,6 +425,6 @@ AboutBusinessLogic::processNextRequest ()
         break;
     }
 
-    QTimer::singleShot (0, this, SLOT (processNextRequest ()));
+    QTimer::singleShot (500, this, SLOT (processNextRequest ()));
 }
 
