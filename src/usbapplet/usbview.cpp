@@ -355,42 +355,27 @@ UsbView::currentText () const
 
     switch (active) {
         case QmUSBMode::MassStorage:
-            //% "%1 active"
-            return qtTrId ("qtn_usb_active_mode").arg (
-            //% "Mass storage mode"
-                   qtTrId ("qtn_usb_mass_storage"));
+            //% "Mass storage in use"
+            return qtTrId ("qtn_usb_storage_active");
             break;
 
         case QmUSBMode::OviSuite:
-            //% "%1 active"
-            return qtTrId ("qtn_usb_active_mode").arg (
-            //% "Mass storage mode"
-                   qtTrId ("qtn_usb_ovi_suite"));
+            //% "Sync and connect in use"
+            return qtTrId ("qtn_usb_sync_active");
             break;
 
         case QmUSBMode::ModeRequest:
             // Seems that the ChargingOnly comes late (30 sec or so), and we can
             // show the chargingonly early.
-            //% "Current state: Charging only"
-            return qtTrId ("qtn_usb_charging");
-            break;
-        
         case QmUSBMode::Ask:
             // Seems that the ChargingOnly comes late (30 sec or so), and we can
             // show the chargingonly early.
-            //% "Current state: Charging only"
-            return qtTrId ("qtn_usb_charging");
-            break;
-
         case QmUSBMode::ChargingOnly:
             //% "Current state: Charging only"
             return qtTrId ("qtn_usb_charging");
             break;
 
         case QmUSBMode::Disconnected:
-            // Nothing to do.
-            break;
-        
         case QmUSBMode::Undefined:
             // Nothing to do.
             break;

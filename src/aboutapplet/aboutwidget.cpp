@@ -207,6 +207,7 @@ AboutWidget::gotInfo (
         case AboutBusinessLogic::reqCertsImage:
             addCertsContainer ();
             m_imgCerts->setImage (value.value<QImage>());
+            m_imgCerts->setVisible (true);
             break;
         case AboutBusinessLogic::reqBarcodeImage:
             m_imgBarcode->setImage (value.value<QImage>());
@@ -295,6 +296,7 @@ AboutWidget::addCertsContainer ()
 
     m_imgCerts = new MImageWidget;
     m_imgCerts->setObjectName ("AboutAppletCertificates");
+    m_imgCerts->setVisible (false);
 
     layout->addItem (m_imgCerts);
     layout->setAlignment (m_imgCerts, Qt::AlignRight);
@@ -399,6 +401,7 @@ AboutWidget::addLicenseLabelContainer ()
     m_LicenseLabel->setWordWrap (true);
     m_LicenseLabel->setStyleName ("CommonBodyTextInverted");
     m_LicenseLabel->setObjectName ("AboutAppletLicenseLabel");
+    m_LicenseLabel->setMinimumHeight (100.0);
 
     addStretcher ("CommonLargeSpacer");
     addStretcher ("CommonHorizontalSeparatorInverted");
