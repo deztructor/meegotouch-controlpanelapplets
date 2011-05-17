@@ -54,6 +54,8 @@ public:
         reqWifiAddr,
         reqBtAddr,
         reqLast,
+        /* special requests */
+        reqCertsImageNeeded,
         reqStartAll = 100
     } requestType;
 
