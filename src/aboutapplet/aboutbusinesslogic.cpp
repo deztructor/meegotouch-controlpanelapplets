@@ -292,6 +292,9 @@ AboutBusinessLogic::DBusMessagingFailure (
 QString
 AboutBusinessLogic::licenseText ()
 {
+    if (m_licenseFile.isEmpty ())
+        return "";
+
     if (m_licenseFile.at (0) != '/')
         m_licenseFile = configPath + m_licenseFile;
 
