@@ -300,6 +300,7 @@ AboutWidget::addCertsContainer ()
 
     m_imgCerts = new MImageWidget;
     m_imgCerts->setObjectName ("AboutAppletCertificates");
+    m_imgCerts->setMinimumHeight (150.0);
 
     layout->addItem (m_imgCerts);
     layout->setAlignment (m_imgCerts, Qt::AlignRight);
