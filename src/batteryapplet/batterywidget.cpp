@@ -36,7 +36,6 @@
 #include <MHelpButton>
 #include <MBasicLayoutAnimation>
 #include <MComboBox>
-#include <MHelpButton>
 
 #include "../styles.h"
 
