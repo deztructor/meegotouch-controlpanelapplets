@@ -340,6 +340,13 @@ AboutBusinessLogic::initializeAndStart ()
         (m_barcodeImage.at (0) != '/'))
         m_barcodeImage = configPath + m_barcodeImage;
 
+    /*
+     * To avoid flickering we need to construct the
+     * certificates image container as soon as possible
+     */
+    if (QFile::exists (m_certsImage))
+        emit requestFinished (reqCertsImageNeeded, QVariant ());
+
     processNextRequest ();
 }
 
