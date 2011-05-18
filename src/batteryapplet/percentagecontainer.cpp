@@ -24,7 +24,7 @@
 #include <MSeparator>
 #include <MStylableWidget>
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -191,6 +191,7 @@ PercentageContainer::formatTime (int remTime)
     else if (value > 60*60)
     {
         int minutes = (value / 60) % 60;
+
         /* hours */
         value /= 60*60;
         //% "%1 hour <%1 hours>"
@@ -199,7 +200,7 @@ PercentageContainer::formatTime (int remTime)
         {
             retval += " ";
             //% "%1 minute <%1 minutes>"
-            retval += qtTrId ("qtn_comm_time_minute", value).arg (value);
+            retval += qtTrId ("qtn_comm_time_minute", minutes).arg (minutes);
         }
     }
     else

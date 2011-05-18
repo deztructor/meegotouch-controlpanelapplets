@@ -204,9 +204,14 @@ AboutWidget::gotInfo (
         case AboutBusinessLogic::reqLicense:
             m_LicenseLabel->setText (value.toString ());
             break;
-        case AboutBusinessLogic::reqCertsImage:
+        case AboutBusinessLogic::reqCertsImageNeeded:
             addCertsContainer ();
-            m_imgCerts->setImage (value.value<QImage>());
+            break;
+        case AboutBusinessLogic::reqCertsImage:
+            if (m_imgCerts)
+            {
+                m_imgCerts->setImage (value.value<QImage>());
+            }
             break;
         case AboutBusinessLogic::reqBarcodeImage:
             m_imgBarcode->setImage (value.value<QImage>());
@@ -295,6 +300,7 @@ AboutWidget::addCertsContainer ()
 
     m_imgCerts = new MImageWidget;
     m_imgCerts->setObjectName ("AboutAppletCertificates");
+    m_imgCerts->setMinimumHeight (150.0);
 
     layout->addItem (m_imgCerts);
     layout->setAlignment (m_imgCerts, Qt::AlignRight);
@@ -330,6 +336,7 @@ AboutWidget::addNamesContainer ()
         return;
 
     m_ProductName = new ContentWidget;
+    m_ProductName->setTitle ("");
     /* Only for first row : */
     m_layout->addItem (m_ProductName, m_currentRow++, 0, 1, 1);
     m_layout->setAlignment (m_ProductName, Qt::AlignLeft);
@@ -342,6 +349,7 @@ AboutWidget::addVersionContainer ()
         return;
 
     m_Version = new ContentWidget;
+    m_Version->setTitle ("");
     m_Version->setTitle (qtTrId ("qtn_prod_version"));
     m_layout->addItem (m_Version, m_currentRow++, 0, 1, 2);
 }
@@ -353,6 +361,7 @@ AboutWidget::addWiFiMACContainer ()
         return;
 
     m_WiFi = new ContentWidget;
+    m_WiFi->setTitle ("");
     //% "WLAN MAC address"
     m_WiFi->setTitle (qtTrId ("qtn_prod_wlan_mac_address"));
     m_layout->addItem (m_WiFi, m_currentRow++, 0, 1, 2);
@@ -365,6 +374,7 @@ AboutWidget::addBtMACContainer ()
         return;
 
     m_Bt = new ContentWidget;
+    m_Bt->setTitle ("");
     //% "Bluetooth address"
     m_Bt->setTitle (qtTrId ("qtn_prod_bt_address"));
     m_layout->addItem (m_Bt, m_currentRow++, 0, 1, 2);
@@ -395,6 +405,7 @@ AboutWidget::addLicenseLabelContainer ()
     m_LicenseLabel->setWordWrap (true);
     m_LicenseLabel->setStyleName ("CommonBodyTextInverted");
     m_LicenseLabel->setObjectName ("AboutAppletLicenseLabel");
+    m_LicenseLabel->setMinimumHeight (100.0);
 
     addStretcher ("CommonLargeSpacer");
     addStretcher ("CommonHorizontalSeparatorInverted");

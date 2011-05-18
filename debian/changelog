@@ -1,9 +1,33 @@
-meegotouch-controlpanelapplets (0.20.42~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.44~1) meegotouch; urgency=low
+
+  * [NEW VERSION]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 18 May 2011 08:50:09 +0300
+
+meegotouch-controlpanelapplets (0.20.43-1) meegotouch; urgency=low
+
+  [ David Kedves [
+  * Updated USB applet texts (the info label about the current mode)
+  * Fixes: NB#255959 - Flickering occurs in About product view.
+  * Fixes: NB#255508 - [TASK] Add context specific help button to Low Power
+    Mode a.k.a. Screensaver on/off switch in display settings
+
+  [ Laszlo Pere ]
+  * Fixes: NB#256626 - Updated style for horizontal separators
+
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 18 May 2011 08:48:47 +0300
+
+meegotouch-controlpanelapplets (0.20.42-2) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#254971 - Preview doesn't stop in given scenario.
+  * Fixes: NB#255791 - [TASK] Add a new USB mode called "SDK"
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 10 May 2011 11:37:15 +0300
+  [ David Kedves ]
+  * Fixed: 255490 - missing a lot of valuable minutes when showing remaining
+    times
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 16 May 2011 17:09:11 +0300
 
 meegotouch-controlpanelapplets (0.20.41-1) meegotouch; urgency=low
 

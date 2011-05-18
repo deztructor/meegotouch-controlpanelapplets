@@ -38,6 +38,7 @@
 #include <MLinearLayoutPolicy>
 #include <QGraphicsLinearLayout>
 #include <MSeparator>
+#include <MHelpButton>
 
 DisplayWidget::DisplayWidget (QGraphicsWidget *parent) :
         DcpWidget (parent),
@@ -274,6 +275,14 @@ DisplayWidget::addLowPowerContainer ()
     lowPowerLabel->setText (qtTrId ("qtn_disp_lowpower"));
     layout->addItem (lowPowerLabel);
     layout->setAlignment (lowPowerLabel, Qt::AlignVCenter);
+
+    MHelpButton *helpButton =
+        new MHelpButton ("CTX_IDUG_MEEGO_SCREENSAVER.html");
+    helpButton->setViewType (MButton::iconType);
+    helpButton->setIconID ("icon-s-description-inverse");
+    helpButton->setStyleName ("CommonMainIcon");
+    layout->addItem (helpButton);
+    layout->setAlignment (helpButton, Qt::AlignVCenter | Qt::AlignRight);
 
     m_lowPowerSwitch = new MButton;
     m_lowPowerSwitch->setCheckable (true);

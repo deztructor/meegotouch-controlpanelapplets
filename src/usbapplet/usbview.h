@@ -53,7 +53,8 @@ public:
             UsbModeAsk           = 0,
             UsbModeMassStorage   = 1,
             UsbModeOviSuite      = 2,
-            UsbModeLastMode      = 3,
+            UsbModeSDK           = 3,
+            UsbModeLastMode      = 4,
         } UsbModeType;
 
         void initWidget ();
@@ -87,7 +88,8 @@ public:
     MLabel              *m_infoLabel;
     int                  m_infoOrder;
     QList<MButton *>     m_Buttons;
-
+    bool                 m_DeveloperMode;
+    
     #ifdef UNIT_TEST
     friend class Ut_UsbApplet;
     #endif

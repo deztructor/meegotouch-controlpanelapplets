@@ -36,11 +36,10 @@
 #include <MHelpButton>
 #include <MBasicLayoutAnimation>
 #include <MComboBox>
-#include <MHelpButton>
 
 #include "../styles.h"
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
