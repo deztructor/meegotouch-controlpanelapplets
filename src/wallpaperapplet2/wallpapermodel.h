@@ -20,6 +20,7 @@
 #define WALLPAPERMODEL_H
 
 #include <QList>
+#include <QHash>
 #include <QAbstractTableModel>
 #include <MAbstractCellCreator>
 #include "wallpaperdescriptor.h"
@@ -34,6 +35,13 @@ class WallpaperModel: public QAbstractTableModel
     Q_OBJECT
 
     public:
+        typedef enum {
+            StateDisappeared,
+            StateDiscovered,
+            StateProcessed,
+            StateProcessing,
+        } EntryState;
+
         typedef enum {
             WallpaperDescriptorRole = Qt::UserRole,
         } WallpaperModelRole;
@@ -51,17 +59,18 @@ class WallpaperModel: public QAbstractTableModel
             int role = Qt::DisplayRole) const;
     virtual int columnCount (const QModelIndex&) const;
 
-public slots:
-    void descriptorChanged (WallpaperDescriptor *desc);
-    void wallpaperChanged ();
+    public slots:
+        void descriptorChanged (WallpaperDescriptor *desc);
+        void wallpaperChanged ();
    
     private:
         void loadFromDirectory ();
 
     private:
-        WallpaperBusinessLogic       *m_BusinessLogic;
-        QList<WallpaperDescriptor *>  m_DescriptorList;
-        QString                       m_ImagesDir;
+        WallpaperBusinessLogic                 *m_BusinessLogic;
+        QStringList                             m_FilePathList;
+        QHash<QString, WallpaperDescriptor>     m_FilePathHash; 
+        QString                                 m_ImagesDir;
 };
 
 class WallpaperCellCreator : 

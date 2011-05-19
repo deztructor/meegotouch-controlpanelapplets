@@ -264,7 +264,7 @@ WallpaperModel::rowCount(
 {
     Q_UNUSED (parent);
     
-    return m_DescriptorList.size();
+    return m_FilePathList.size();
 }
 
 /*!
@@ -352,9 +352,15 @@ WallpaperModel::wallpaperChanged ()
 void 
 WallpaperModel::loadFromDirectory ()
 {
-    QStringList entryList;
-
-    entryList = Wallpaper::readDir (
+    QHash<QString, bool> entries;
+#if 0 
+    /*
+     * 
+     */
+    for (int n = 0; n < m_DescriptorHash.keys().size(); ++n)
+        if (
+#endif
+    entries = Wallpaper::readDir (
             m_ImagesDir, Wallpaper::imageNameFilter());
 }
 

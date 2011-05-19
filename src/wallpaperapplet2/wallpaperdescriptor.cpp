@@ -36,10 +36,10 @@ WallpaperDescriptor::WallpaperDescriptor(
 }
 
 WallpaperDescriptor::WallpaperDescriptor(
-        const QString  &filename,
+        const QString  &filePath,
         QObject        *parent) : 
     QObject (parent),
-    m_Priv (new WallpaperDescriptorPrivate (filename))
+    m_Priv (new WallpaperDescriptorPrivate (filePath))
 {
 }
 
@@ -62,3 +62,37 @@ WallpaperDescriptor::~WallpaperDescriptor ()
     }
 }
 
+WallpaperDescriptor &
+WallpaperDescriptor::operator= (
+         const WallpaperDescriptor &rhs)
+{
+    if (this == &rhs)
+        return *this;
+
+    if (m_Priv) {
+        if (m_Priv->unRef() == 0)
+            delete m_Priv;
+    }
+
+    m_Priv = rhs.m_Priv;
+    if (m_Priv)
+        m_Priv->ref ();
+
+    return *this;
+}
+
+/*********************************************************************************
+ * Standard set/get methods.
+ */
+void
+WallpaperDescriptor::setFilePath (
+        const QString &filePath)
+{
+    m_Priv->setFilePath (filePath);
+}
+
+QString
+WallpaperDescriptor::filePath () const
+{
+    return m_Priv->filePath ();
+}

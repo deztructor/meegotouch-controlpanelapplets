@@ -69,10 +69,19 @@ class MC_EXPORT WallpaperDescriptor : public QObject
         WallpaperDescriptor (
                 QObject        *parent = 0);
         WallpaperDescriptor (
-                const QString  &filename,
+                const QString  &filePath,
                 QObject        *parent = 0);
         WallpaperDescriptor (const WallpaperDescriptor &orig);
         ~WallpaperDescriptor ();
+
+        WallpaperDescriptor &operator= (
+                 const WallpaperDescriptor &rhs);
+
+        /*
+         * Standard set/get methods.
+         */
+        void setFilePath (const QString &filePath);
+        QString filePath () const;
 
     private:
         WallpaperDescriptorPrivate *m_Priv;

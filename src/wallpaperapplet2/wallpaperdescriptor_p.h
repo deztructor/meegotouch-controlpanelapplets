@@ -29,14 +29,20 @@ class WallpaperDescriptorPrivate
 {
     public:
         WallpaperDescriptorPrivate ();
-        WallpaperDescriptorPrivate (const QString &filename);
+        WallpaperDescriptorPrivate (const QString &filePath);
 
         void ref ();
         int unRef ();
 
+        /*
+         * Standard set/get methods.
+         */
+        void setFilePath (const QString &filePath);
+        QString filePath () const;
+
     private:
         int      m_ReferenceCounter;
-        QString  m_Filename;
+        QString  m_FilePath;
 };
 
 #endif

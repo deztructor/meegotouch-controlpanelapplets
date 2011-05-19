@@ -28,9 +28,9 @@ WallpaperDescriptorPrivate::WallpaperDescriptorPrivate () :
 }
 
 WallpaperDescriptorPrivate::WallpaperDescriptorPrivate (
-        const QString &filename) :
+        const QString &filePath) :
     m_ReferenceCounter (1),
-    m_Filename (filename)
+    m_FilePath (filePath)
 {
 }
 
@@ -45,5 +45,21 @@ int
 WallpaperDescriptorPrivate::unRef ()
 {
     return --m_ReferenceCounter;
+}
+
+/*********************************************************************************
+ * Standard set/get methods.
+ */
+void 
+WallpaperDescriptorPrivate::setFilePath (
+        const QString &filePath)
+{
+    m_FilePath = filePath;
+}
+        
+QString 
+WallpaperDescriptorPrivate::filePath () const
+{
+    return m_FilePath;
 }
 
