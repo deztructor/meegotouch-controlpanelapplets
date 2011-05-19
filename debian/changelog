@@ -1,4 +1,10 @@
-meegotouch-controlpanelapplets (0.20.43~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.44~1) meegotouch; urgency=low
+
+  * [NEW VERSION]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 18 May 2011 08:50:09 +0300
+
+meegotouch-controlpanelapplets (0.20.43-1) meegotouch; urgency=low
 
   [ David Kedves [
   * Updated USB applet texts (the info label about the current mode)
@@ -11,7 +17,7 @@ meegotouch-controlpanelapplets (0.20.43~1) meegotouch; urgency=low
   * Fixes: NB#257291 - Battery settings; icon-s-description-inverse is clipped
     in Indonesian, 'power save mode' in active state 
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 17 May 2011 14:50:44 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 18 May 2011 08:48:47 +0300
 
 meegotouch-controlpanelapplets (0.20.42-2) meegotouch; urgency=low
 
