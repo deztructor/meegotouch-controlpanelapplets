@@ -27,8 +27,12 @@
 
 namespace Wallpaper 
 {
-    const QString ImagesDir = "~/MyDocs/.wallpapers";
-    const QString DefaultThumbnailFlavor = "grid";
+    const QString CurrentPortraitKey (
+            "/desktop/meego/background/portrait/picture_filename");
+    const QString OriginalPortraitKey (
+            "/desktop/meego/background/portrait/original_filename");
+    const QString ImagesDir ("~/MyDocs/.wallpapers");
+    const QString DefaultThumbnailFlavor ("grid");
 };
 
 #endif

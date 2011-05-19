@@ -42,97 +42,6 @@
  */
 static const int loadPictureDelay = 0;
 
-// FIXME: This icon is not yet specified, this is a substitute.
-static const QString checkIconId = "icon-m-common-checkbox-checked";
-
-/******************************************************************************
- * WallpaperImageLoader implementation.
- */
-
-/*!
- * When this slot is called the loading of the thumbnails in a specific
- * interval will be initated.
- */
-void
-WallpaperImageLoader::loadPictures (
-            const QModelIndex& firstVisibleRow, 
-            const QModelIndex& lastVisibleRow)
-{
-#if 0
-    int    from = firstVisibleRow.row();
-    int    to = lastVisibleRow.row();
-
-    SYS_DEBUG ("Between %d, %d - %d, %d", 
-            firstVisibleRow.column(),
-            firstVisibleRow.row(), 
-            lastVisibleRow.column(),
-            lastVisibleRow.row());
-
-    for (int n = from; n <= to; ++n) {
-        if (! firstVisibleRow.model ())
-            break;
-        //QModelIndex index(firstVisibleRow.sibling (n, 0));
-        QModelIndex index = firstVisibleRow.model()->index(n, 0);
-        if(!index.isValid())
-            continue;
-
-        QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
-        WallpaperDescriptor *desc = data.value<WallpaperDescriptor*>();
-        
-        /*
-         * We only create jobs for those items that has no thumbnail in the
-         * memory yet.
-         */
-        if (!desc->isThumbnailLoaded()) {
-            Job job;
-            job.desc = desc;
-            job.row = index;
-
-            m_ThumbnailLoadingJobs << job;
-        }
-    }
-
-    if (m_ThumbnailLoadingJobs.count() != 0)
-        QTimer::singleShot(0, this, SLOT(processJobQueue()));
-#endif
-}
-
-/*!
- * When this slot is called all the thumbnail loading jobs will be cancelled.
- * This slot should be called when (1) the panning on the widget has been
- * initiated and when (2) the widget became hidden. In these cases the loading
- * of the thumbnails will be initiated again when (1) the panning stops or 
- * (2) when the widgets shown again.
- */
-void 
-WallpaperImageLoader::stopLoadingPictures()
-{
-    SYS_DEBUG ("");
-    m_ThumbnailLoadingJobs.clear();
-}
-
-/*!
- * Processes one thumbnailing job and then calls itself to process the next 
- * one. While processing the job this method will only initate the thumbnailing,
- * it will not wait until the actual thumbnail is ready.
- */
-void 
-WallpaperImageLoader::processJobQueue ()
-{
-#if 0
-    if (m_ThumbnailLoadingJobs.isEmpty())
-        return;
-
-    //SYS_DEBUG ("Initiating Thumbnailer");
-    Job job = m_ThumbnailLoadingJobs.takeFirst();
-    job.desc->initiateThumbnailer ();
-
-    // Continue loading and letting UI thread do something
-    if(m_ThumbnailLoadingJobs.count() > 0)
-        QTimer::singleShot(loadPictureDelay, this, SLOT(processJobQueue()));
-#endif
-}
-
 /******************************************************************************
  * WallpaperContentItemCreator implementation.
  */
@@ -228,28 +137,17 @@ WallpaperModel::WallpaperModel (
     m_BusinessLogic (logic)
 {
     m_ImagesDir = Wallpaper::constructPath (Wallpaper::ImagesDir);
-    SYS_DEBUG ("dirPath = %s", SYS_STR(m_ImagesDir));
-    loadFromDirectory ();
-#if 0
-    Q_ASSERT (logic != 0);
-    
-    /*
-     * FIXME: Maybe we should delay this?
-     */
-    m_DescriptorList = logic->availableWallpapers();
-    
-    for (int n = 0; n < m_DescriptorList.size(); ++n) {
-        connect (m_DescriptorList[n], SIGNAL (changed (WallpaperDescriptor *)),
-                this, SLOT(descriptorChanged (WallpaperDescriptor *)));
-    }
 
-    connect (logic, SIGNAL(wallpaperChanged()),
-            this, SLOT(wallpaperChanged()));
-#endif
+    loadFromDirectory ();
+    ensureSelection ();
 }
 
 WallpaperModel::~WallpaperModel ()
 {
+    if (m_Thumbnailer) {
+        SYS_WARNING ("Destroying thumbler.");
+        m_Thumbnailer->deleteLater ();
+    }
 }
 
 int 
@@ -553,4 +451,80 @@ WallpaperModel::loadThumbnails (
         m_Thumbnailer->request (
                 uris, mimeTypes, true, Wallpaper::DefaultThumbnailFlavor);
     }
+}
+
+void
+WallpaperModel::stopLoadingThumbnails ()
+{
+    foreach (QString key, m_FilePathHash.keys())
+        m_FilePathHash[key].setThumbnailPending (false);
+
+    if (m_Thumbnailer)
+        m_Thumbnailer->cancel (false);
+}
+
+/******************************************************************************
+ * Methods to handle selection and current wallpaper. 
+ */
+void 
+WallpaperModel::ensureSelection ()
+{
+    QString currentPath;
+    QString originalPath;
+
+    m_BusinessLogic->currentWallpaper (currentPath, originalPath);
+    SYS_DEBUG ("'%s', '%s'", SYS_STR(currentPath), SYS_STR(originalPath));
+
+    if (trySelect(originalPath)) {
+        SYS_DEBUG ("Selected the original file.");
+    } else if (trySelect(currentPath)) {
+        SYS_DEBUG ("Selected the current file.");
+    } else if (tryAddAndSelect(originalPath)) {
+        SYS_DEBUG ("Added and selected the original file.");
+    } else if (tryAddAndSelect(currentPath)) {
+        SYS_DEBUG ("Added and selected the current file.");
+    } else {
+        SYS_WARNING ("Failed?");
+    }
+}
+
+bool 
+WallpaperModel::trySelect (
+        const QString filePath)
+{
+    bool retval = false;
+
+    if (filePath.isEmpty())
+        goto finalize;
+
+finalize:
+    return retval;
+}
+
+bool 
+WallpaperModel::tryAddAndSelect (
+        const QString filePath)
+{
+    bool retval = false;
+
+    if (filePath.isEmpty() || m_FilePathHash.contains(filePath))
+        goto finalize;
+
+    if (Wallpaper::imageFile(filePath)) {
+        WallpaperDescriptor desc (filePath);
+        QModelIndex  parent;
+
+        SYS_WARNING ("Adding '%s'", SYS_STR(filePath));
+        beginInsertRows (parent, m_FilePathList.size(), 
+                m_FilePathList.size() + 1);
+
+        m_FilePathList << filePath;
+        m_FilePathHash[filePath] = desc;
+        endInsertRows ();
+
+        retval = true;
+    }
+        
+finalize:
+    return retval;
 }

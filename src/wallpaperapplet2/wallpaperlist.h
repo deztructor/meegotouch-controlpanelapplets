@@ -55,22 +55,22 @@ protected:
     void hideEvent (QHideEvent *event);
     void showEvent (QShowEvent *event);
 
-private slots:
-    void slotItemClicked (const QModelIndex &index);
-    void loadPictures ();
+    private slots:
+        void slotItemClicked (const QModelIndex &index);
+        void loadPictures ();
+        void stopLoadingPictures ();
     
 signals:
     void imageActivated (WallpaperDescriptor *desc);
 
-private:
-    WallpaperBusinessLogic *m_BusinessLogic;
-    WallpaperImageLoader   *m_ImageLoader;
-    WallpaperModel         *m_Model;
-    WallpaperCellCreator   *m_CellCreator;
-    DataSourceType          m_DataSourceType;
-    #ifdef UNIT_TEST
-    friend class Ut_WallpaperList;
-    #endif
+    private:
+        WallpaperBusinessLogic *m_BusinessLogic;
+        WallpaperModel         *m_Model;
+        WallpaperCellCreator   *m_CellCreator;
+        DataSourceType          m_DataSourceType;
+        #ifdef UNIT_TEST
+        friend class Ut_WallpaperList;
+        #endif
 };
 
 #endif

@@ -21,31 +21,12 @@
 **
 ****************************************************************************/
 
-/*
- * In the functional tests we use the real thing, in the unit tests we use the
- * stubbed version. 
- */
-#if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
-#  include "filesystemstub.h"
-   typedef QDirStub WallpaperDir;
-   typedef QFileStub WallpaperFile;
-#else
-#  include <QDir>
-#  include <QFile>
-   typedef QDir WallpaperDir;
-   typedef QFile WallpaperFile;
-#endif
 
-#ifdef HAVE_QTSPARQL
-  #include <QSparqlConnection>
-  #include <QSparqlQuery>
-  #include <QSparqlResult>
-  #include <QSparqlResultRow>
-  #include <QSparqlError>
-#endif
+#include "wallpaperbusinesslogic.h"
+#include "wallpaperutils.h"
+#include "wallpaperconfiguration.h"
 
 #include "wallpapergconf.h"
-#include "wallpaperbusinesslogic.h"
 #include "wallpaperdescriptor.h"
 #include "wallpaperitrans.h"
 
@@ -60,9 +41,8 @@
 #include <MApplication>
 #include <MApplicationWindow>
 
-//#define LOTDEBUG
-#undef DEBUG
-//#define WARNING
+#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 static const QString wallpaperDir = ".wallpapers";
@@ -76,6 +56,18 @@ static const QString nl = "\n";
 WallpaperBusinessLogic::WallpaperBusinessLogic() :
     m_OrientationLocked (false)
 {
+    m_PPItem = new MGConfItem (Wallpaper::CurrentPortraitKey, this);
+    m_POItem = new MGConfItem (Wallpaper::OriginalPortraitKey, this);
+
+    connect (m_PPItem, SIGNAL(valueChanged ()),
+            this, SLOT(portraitGConfChanged()));
+
+    connect (m_POItem, SIGNAL(valueChanged ()),
+            this, SLOT(portraitGConfChanged()));
+
+
+
+
 #if 0
     MApplication               *application = MApplication::instance();
     MApplicationWindow         *window = 0;
@@ -195,8 +187,6 @@ WallpaperBusinessLogic::WallpaperBusinessLogic() :
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
 {
-    delete m_LandscapeGConfItem;
-    delete m_PortraitGConfItem;
 }
 
 /*!
@@ -262,7 +252,6 @@ WallpaperBusinessLogic::availableWallpapers () const
 {
     QList<WallpaperDescriptor *>   list;
 
-finalize:
     SYS_DEBUG ("We have %d wallpapers.", list.size());
     return list;
 }
@@ -372,8 +361,6 @@ WallpaperBusinessLogic::startEditThreadEnded ()
 WallpaperDescriptor *
 WallpaperBusinessLogic::editedImage ()
 {
-    SYS_DEBUG ("*** m_EditedImage = %s", 
-            m_EditedImage ? SYS_STR(m_EditedImage->filename()) : "NULL");
     return m_EditedImage;
 }
 
@@ -393,8 +380,9 @@ QString
 WallpaperBusinessLogic::dirPath (
         bool       downloadDir) const
 {
-    QString homeDir (getenv("HOME"));
     QString dirPath;
+#if 0
+    QString homeDir (getenv("HOME"));
     
     if (homeDir.isEmpty())
         homeDir = "/usr/home";
@@ -405,7 +393,7 @@ WallpaperBusinessLogic::dirPath (
     else
         dirPath = homeDir + WallpaperDir::separator() + 
             wallpaperDir + WallpaperDir::separator();
-
+#endif
     return dirPath;
 }
 
@@ -418,6 +406,7 @@ WallpaperBusinessLogic::dirPath (
 bool
 WallpaperBusinessLogic::ensureHasDirectory ()
 {
+#if 0
     QString path = dirPath();
     WallpaperDir  dir (path);
 
@@ -430,7 +419,7 @@ WallpaperBusinessLogic::ensureHasDirectory ()
         SYS_WARNING ("Unable to create %s directory.", SYS_STR(path));
         return false;
     }
-
+#endif
     return true;
 }
 
@@ -467,6 +456,7 @@ WallpaperBusinessLogic::createBackupFiles ()
 void
 WallpaperBusinessLogic::deleteBackupFiles ()
 {
+#if 0
     QString       path = dirPath();
     WallpaperDir  dir (path);
     QStringList   nameFilters ("*.BAK");
@@ -481,6 +471,7 @@ WallpaperBusinessLogic::deleteBackupFiles ()
                     SYS_STR((path + backupFileName)));
         }
     }
+#endif
 }
 
 void
@@ -720,6 +711,7 @@ void
 WallpaperBusinessLogic::makeBackup (
         const QString &filePath)
 {
+#if 0
     QString  backupFilePath = filePath + backupExtension;
     WallpaperFile    file (filePath);
     WallpaperFile    backupFile (backupFilePath);
@@ -737,6 +729,7 @@ WallpaperBusinessLogic::makeBackup (
 
     SYS_DEBUG ("Moving %s -> %s", SYS_STR(filePath), SYS_STR(backupFilePath));
     file.rename (backupFilePath);
+#endif
 }
 
 /*
@@ -819,4 +812,21 @@ WallpaperBusinessLogic::supportsPortrait () const
     return !m_OrientationLocked || m_LockedOrientation == M::Portrait;
 }
 
+/******************************************************************************
+ * Handling the GConf database.
+ */
+bool
+WallpaperBusinessLogic::portraitGConfChanged ()
+{
+    SYS_DEBUG ("");
+    emit wallpaperChanged ();
+}
 
+void
+WallpaperBusinessLogic::currentWallpaper (
+        QString   &currentFilePath,
+        QString   &originalFilePath)
+{
+    currentFilePath  = m_PPItem->value().toString ();
+    originalFilePath = m_POItem->value().toString ();
+}

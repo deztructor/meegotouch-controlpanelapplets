@@ -41,13 +41,6 @@ class WallpaperModel: public QAbstractTableModel
 
     public:
         typedef enum {
-            StateDisappeared,
-            StateDiscovered,
-            StateProcessed,
-            StateProcessing,
-        } EntryState;
-
-        typedef enum {
             WallpaperDescriptorRole = Qt::UserRole,
         } WallpaperModelRole;
 
@@ -66,10 +59,14 @@ class WallpaperModel: public QAbstractTableModel
                 const QModelIndex &index, 
                 int role = Qt::DisplayRole) const;
         virtual int columnCount (const QModelIndex&) const;
-        
+       
+        /*
+         * Thumbnail handling.
+         */
         void loadThumbnails (
                 const QModelIndex& firstVisibleRow, 
                 const QModelIndex& lastVisibleRow);
+        void stopLoadingThumbnails ();
 
     public slots:
         void descriptorChanged (WallpaperDescriptor *desc);
@@ -89,8 +86,13 @@ class WallpaperModel: public QAbstractTableModel
                 QPixmap      pixmap, 
                 QString      flavor);
 
+    protected:
+        void ensureSelection ();
+        
     private:
         void loadFromDirectory ();
+        bool trySelect (const QString filePath);
+        bool tryAddAndSelect (const QString filePath);
 
     private:
         WallpaperBusinessLogic                 *m_BusinessLogic;
@@ -117,32 +119,6 @@ class WallpaperCellCreator :
 
     private:
         QSizeF   m_CellSize;
-};
-
-class WallpaperImageLoader : public QObject
-{
-    Q_OBJECT
-
-public:
-    struct Job {
-        WallpaperDescriptor  *desc;
-        QModelIndex           row;
-    };
-
-public slots:
-    void loadPictures (
-            const QModelIndex& firstVisibleRow, 
-            const QModelIndex& lastVisibleRow);
-
-    void processJobQueue ();
-    void stopLoadingPictures ();
-
-private:
-    QList<Job>  m_ThumbnailLoadingJobs;
-    #ifdef UNIT_TEST
-    friend class Ut_WallpaperModel;
-    friend class Ut_WallpaperList;
-    #endif
 };
 
 #endif

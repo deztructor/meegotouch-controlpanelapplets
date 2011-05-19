@@ -27,7 +27,9 @@ using namespace Wallpaper;
 #include <QChar>
 #include <QString>
 #include <QStringList>
+
 #include <QDir>
+#include <QFile>
 
 #define DEBUG
 #define WARNING
@@ -102,5 +104,21 @@ Wallpaper::readDir (
     }
     
 finalize:
+    return retval;
+}
+
+bool
+Wallpaper::imageFile (
+            const QString     &filePath)
+{
+    bool retval = true;
+
+    if (filePath.startsWith(QDir::separator())) {
+        QFile   thisFile(filePath);
+
+        if (thisFile.exists())
+            retval = true;
+    }
+
     return retval;
 }

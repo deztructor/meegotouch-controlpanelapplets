@@ -38,27 +38,6 @@ class WallpaperITrans;
 #define WALLPAPER_DBUS_INTERFACE "com.nokia.wallpaper"
 #define WALLPAPER_DBUS_EDIT_SIGNAL "edit"
 
-/*
-             Initiating the wallpaper editor screen from DBus
-
- In order to initiate the wallpaper editor from an external application two
- steps has to be performed.
-
- (1) First the controlpanel has to be started and the wallpaper applet must be
- activated through dbus. Please check the documentation of the
- libduicontrolpanel about this step.
-
- (2) Then the wallpaper applet can be contacted through DBus and the editor has
- to be initiated giving two image files as parameter. The first image file is
- the portrait, while the second is the landscape version of the wallpaper that
- should be editoed. The two images might be the same, in this case the very same
- image will be cropped differently for getting the portrait and the landscape
- variants. The following interface can be used for this step:
-
- dbus-send --session --type=signal / com.nokia.wallpaper.edit \
-    string:/usr/share/themes/base/meegotouch/images/meegotouch-wallpaper-portrait.jpg \
-    string:/usr/share/themes/base/meegotouch/images/meegotouch-wallpaper-landscape.jpg
-*/ 
 
 /*!
  * The logic which handling the loading/saving and management
@@ -68,10 +47,16 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
 {
     Q_OBJECT
 
-public:
-    WallpaperBusinessLogic ();
-    ~WallpaperBusinessLogic ();
+    public:
+        WallpaperBusinessLogic ();
+        ~WallpaperBusinessLogic ();
 
+        void currentWallpaper (
+                QString   &currentFilePath,
+                QString   &originalFilePath);
+
+
+    
     QList<WallpaperDescriptor *> availableWallpapers () const;
 
     void setEditedImage (WallpaperDescriptor *desc, bool ours = false);
@@ -84,11 +69,14 @@ public:
         WallpaperITrans     *portraitITrans,
         WallpaperDescriptor *desc = 0);
 
-signals:
-    void wallpaperChanged ();
+    signals:
+        void wallpaperChanged ();
+   
     void imageEditRequested ();
     
-private slots:
+    private slots:
+        bool portraitGConfChanged ();
+
     void editRequestArrived (
         QString   portraitFileName,
         QString   landscapeFileName);
@@ -117,9 +105,10 @@ private:
     bool supportsLandscape () const;
     bool supportsPortrait () const;
 
-private:
-    MGConfItem                    *m_LandscapeGConfItem;
-    MGConfItem                    *m_PortraitGConfItem;
+    private:
+        QPointer<MGConfItem>       m_PPItem;
+        QPointer<MGConfItem>       m_POItem;
+
     QPointer<WallpaperDescriptor>  m_EditedImage;
     bool                           m_EditedImageOurs;
     bool                           m_OrientationLocked;

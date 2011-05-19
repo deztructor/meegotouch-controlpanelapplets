@@ -45,7 +45,6 @@ WallpaperList::WallpaperList (
         QGraphicsItem          *parent) :
     MList (parent),
     m_BusinessLogic (logic),
-    m_ImageLoader (new WallpaperImageLoader),
     m_Model (0),
     m_CellCreator (new WallpaperCellCreator),
     m_DataSourceType (WallpaperList::DataSourceUnknown)
@@ -57,7 +56,7 @@ WallpaperList::WallpaperList (
      * doing the image loading so the panning will be smooth.
      */
     connect (this, SIGNAL(panningStarted()), 
-            m_ImageLoader, SLOT(stopLoadingPictures()));
+            this, SLOT(stopLoadingPictures()));
     connect (this, SIGNAL(panningStopped()), 
             this, SLOT(loadPictures()));
     connect (m_BusinessLogic, SIGNAL(wallpaperChanged()), 
@@ -145,6 +144,15 @@ WallpaperList::loadPictures ()
     m_Model->loadThumbnails (firstVisibleItem(), lastVisibleItem());
 }
 
+void
+WallpaperList::stopLoadingPictures ()
+{
+    if (!m_Model)
+        return;
+
+    m_Model->stopLoadingThumbnails ();
+}
+
 void 
 WallpaperList::orientationChangeEvent (
         MOrientationChangeEvent *event)
@@ -200,7 +208,8 @@ WallpaperList::hideEvent (
      * When we got hidden we stop all the image loading. We have to give some
      * CPU for the other page/widget.
      */
-    m_ImageLoader->stopLoadingPictures();
+    if (m_Model)
+        m_Model->stopLoadingThumbnails ();
 }
 
 void 

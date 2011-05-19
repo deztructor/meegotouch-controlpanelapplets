@@ -43,5 +43,8 @@ namespace Wallpaper
     QSet<QString> readDir (
             const QString     &directoryPath,
             const QStringList &nameFilters);
+
+    bool imageFile (
+            const QString     &filePath);
 };
 #endif
