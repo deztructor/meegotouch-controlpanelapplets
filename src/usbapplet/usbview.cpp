@@ -48,23 +48,25 @@ using namespace MeeGo;
 #define VALID_USB_MODE(modeType) \
     ((modeType == UsbModeAsk || \
       modeType == UsbModeMassStorage || \
-      modeType == UsbModeOviSuite))
+      modeType == UsbModeOviSuite || \
+      modeType == UsbModeSDK))
 
 static const QString developerModeKey ("/Meego/System/DeveloperMode");
 static const QString usbModeKey ("/MeeGo/System/UsbMode");
 static const QString developerModeName ("windows_network");
 
-static QmUSBMode::Mode usbModes[3] = { 
+static QmUSBMode::Mode usbModes[] = { 
     QmUSBMode::Ask,
     QmUSBMode::MassStorage,
-    QmUSBMode::OviSuite 
+    QmUSBMode::OviSuite,
+    QmUSBMode::SDK
 };
 
 inline int
 usbModeIndex (QmUSBMode::Mode mode)
 {
     int ret = 0;
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 4; i++)
         if (usbModes[i] == mode)
         {
             ret = i;
@@ -101,6 +103,9 @@ usbModeName (QmUSBMode::Mode mode)
         
         case QmUSBMode::Ask:
             return "QmUSBMode::Ask";
+        
+        case QmUSBMode::SDK:
+            return "QmUSBMode::SDK";
         
         case QmUSBMode::Undefined:
             return "QmUSBMode::Undefined";
@@ -315,6 +320,8 @@ UsbView::addButtons ()
 
     #ifdef HAVE_QMSYSTEM
     currentModeIndex = usbModeIndex (m_logic->getDefaultMode ());
+    SYS_DEBUG ("The default mode is %s", 
+            SYS_STR(usbModeName(m_logic->getDefaultMode ())));
     #endif
     
     for (int n = 0; n < UsbModeLastMode; ++n) {
@@ -362,6 +369,10 @@ UsbView::currentText () const
         case QmUSBMode::OviSuite:
             //% "Sync and connect in use"
             return qtTrId ("qtn_usb_sync_active");
+            break;
+
+        case QmUSBMode::SDK:
+            return "SDK";
             break;
 
         case QmUSBMode::ModeRequest:
@@ -483,13 +494,19 @@ UsbView::buttonToggled (
     index = selectedButtonIndex ();
     if (VALID_USB_MODE(index)) {
         usbModeActivated (index);
-    } else if (index == UsbModeSDK) {
+    } else {
+        SYS_WARNING ("Unhandled mode.");
+    }
+#if 0
+    // The support for this added to the QmUsbMode
+    else if (index == UsbModeSDK) {
         MGConfItem modeItem (usbModeKey);
     
         SYS_WARNING ("%s -> %s", 
                 SYS_STR(developerModeName), SYS_STR(usbModeKey));
         modeItem.set (QVariant(developerModeName));
     }
+#endif
 }
 
 QString 
