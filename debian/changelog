@@ -6,7 +6,7 @@ meegotouch-controlpanelapplets (0.20.44~1) meegotouch; urgency=low
   * QmUSBMode::SDK is now used in the USB applet.
   * Fixes: NB#255791 - [TASK] Add a new USB mode called "SDK"
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 18 May 2011 08:50:09 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 19 May 2011 17:11:24 +0300
 
 meegotouch-controlpanelapplets (0.20.43-1) meegotouch; urgency=low
 
