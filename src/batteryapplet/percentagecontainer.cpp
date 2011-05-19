@@ -51,6 +51,7 @@ PercentageContainer::PercentageContainer(
 
     m_TextLabel = new MLabel (text);
     m_TextLabel->setStyleName ("CommonSingleTitleInverted");
+    m_TextLabel->setWordWrap (true);
 
     setHeaderVisible (false);
     setLayout ();
