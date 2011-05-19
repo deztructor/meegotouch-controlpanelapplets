@@ -47,7 +47,6 @@
 #include "wallpapergconf.h"
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperdescriptor.h"
-#include "wallpapercurrentdescriptor.h"
 #include "wallpaperitrans.h"
 
 #include <QString>
@@ -77,6 +76,7 @@ static const QString nl = "\n";
 WallpaperBusinessLogic::WallpaperBusinessLogic() :
     m_OrientationLocked (false)
 {
+#if 0
     MApplication               *application = MApplication::instance();
     MApplicationWindow         *window = 0;
     WallpaperCurrentDescriptor *currentDesc;
@@ -190,6 +190,7 @@ WallpaperBusinessLogic::WallpaperBusinessLogic() :
         SYS_WARNING ("Connecting to DBus failed: %s", 
                 SYS_STR(lastError.message()));
     }
+#endif
 }
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
@@ -216,6 +217,7 @@ WallpaperBusinessLogic::setBackground (
         WallpaperITrans     *portraitITrans,
         WallpaperDescriptor *desc)
 {
+#if 0
     bool success;
 
     if (desc == 0)
@@ -246,6 +248,7 @@ WallpaperBusinessLogic::setBackground (
     currentDesc = WallpaperCurrentDescriptor::instance ();
     currentDesc->setFromDesktopFile (dirPath() + destopFileName);
     emit wallpaperChanged ();
+#endif
 }
 
 /*!
@@ -258,67 +261,6 @@ QList<WallpaperDescriptor *>
 WallpaperBusinessLogic::availableWallpapers () const
 {
     QList<WallpaperDescriptor *>   list;
-    WallpaperDescriptor           *desc;
-    /*
-     * The first is always the current image.
-     */
-    list << WallpaperCurrentDescriptor::instance ();
-#if 0
-    /*
-     * Adding a theme default. 
-     * FIXME: This code is experimental. 
-     */
-    desc = new WallpaperDescriptor;
-
-    if (supportsLandscape()) {
-        desc->setImageID ("meegotouch-wallpaper-landscape", 
-                WallpaperDescriptor::Landscape);
-        desc->setImageID ("meegotouch-wallpaper-landscape", 
-                WallpaperDescriptor::OriginalLandscape);
-    }
-    
-    if (supportsPortrait()) {
-        desc->setImageID ("meegotouch-wallpaper-portrait",
-                WallpaperDescriptor::Portrait);
-        desc->setImageID ("meegotouch-wallpaper-portrait",
-                WallpaperDescriptor::OriginalPortrait);
-    }
-
-    list << desc;
-#endif
-
-    QString                 directoryPath = dirPath (true);
-    WallpaperDir            directory (directoryPath);
-    QStringList             entryList;
-    QStringList             nameFilters;
-
-    if (!directory.exists(directoryPath))
-        goto finalize;
-
-    nameFilters << 
-        "*.jpg" << "*.jpeg" << "*.jpe" <<  "*.png" << "*.bmp" << "*.gif" << 
-        "*.tif";
-
-    entryList = directory.entryList(
-            nameFilters,
-            QFlags<WallpaperDir::Filter>(WallpaperDir::Files | WallpaperDir::NoSymLinks | WallpaperDir::Readable));
-
-    for (int iList = 0; iList < entryList.count(); iList++) {
-        QString url = 
-            QString ("file://") +
-            directoryPath +
-            entryList[iList];
-
-#if 0
-        SYS_DEBUG ("*** dir       = %s", SYS_STR(directoryPath));
-        SYS_DEBUG ("*** entry     = %s", SYS_STR(entryList[iList]));
-        SYS_DEBUG ("*** url       = %s", SYS_STR(url));
-#endif   
-        desc = new WallpaperDescriptor;
-        desc->setUrl (url, WallpaperDescriptor::Portrait);
-        desc->setUrl (url, WallpaperDescriptor::Landscape);
-        list << desc;
-    }
 
 finalize:
     SYS_DEBUG ("We have %d wallpapers.", list.size());
@@ -336,6 +278,7 @@ WallpaperBusinessLogic::setEditedImage (
         WallpaperDescriptor  *desc, 
         bool                  ours)
 {
+#if 0
     SYS_DEBUG ("*** desc = %s", 
             desc ? SYS_STR(desc->filename()) : "NULL");
 
@@ -350,12 +293,14 @@ WallpaperBusinessLogic::setEditedImage (
 
     m_EditedImage = desc;
     m_EditedImageOurs = ours;
+#endif
 }
 
 void
 WallpaperBusinessLogic::startEdit (
         WallpaperDescriptor *desc)
 {
+#if 0
     bool threadActive = m_FutureWatcher.isRunning();
 
     /*
@@ -403,6 +348,7 @@ WallpaperBusinessLogic::startEdit (
             desc, 
             &WallpaperDescriptor::loadAll);
     m_FutureWatcher.setFuture (future);
+#endif
 }
 
 void 
@@ -412,9 +358,11 @@ WallpaperBusinessLogic::startEditThreadEnded ()
     /*
      * Calling from loadall, this time from the GUI thread.
      */
+#if 0
     m_EditedImage->loadAll ();
     m_EditedImage->setLoading (false);
     emit imageEditRequested();
+#endif
 }
 
 
@@ -493,6 +441,7 @@ WallpaperBusinessLogic::ensureHasDirectory ()
 void
 WallpaperBusinessLogic::createBackupFiles ()
 {
+#if 0
     QString  path = dirPath();
     QString  desktopPath = path + destopFileName;
     QString  filename;
@@ -508,6 +457,7 @@ WallpaperBusinessLogic::createBackupFiles ()
             M::Landscape);
     if (!filename.isEmpty())
         makeBackup (filename);
+#endif
 }
 
 /*!
@@ -537,6 +487,7 @@ void
 WallpaperBusinessLogic::saveOriginal (
         WallpaperDescriptor *desc)
 {
+#if 0
     QString imageID;
     
     imageID = desc->imageID (WallpaperDescriptor::OriginalLandscape);
@@ -572,6 +523,7 @@ WallpaperBusinessLogic::saveOriginal (
         desc->setFilename (filename, WallpaperDescriptor::OriginalPortrait);
         desc->setMimeType (saveFileMimeType, WallpaperDescriptor::OriginalPortrait);
     }
+#endif
 }
 
 /*!
@@ -584,6 +536,7 @@ WallpaperBusinessLogic::writeFiles (
         WallpaperITrans     *portraitITrans,
         WallpaperDescriptor *desc)
 {
+#if 0
     Q_ASSERT (landscapeITrans);
     Q_ASSERT (portraitITrans);
     Q_ASSERT (desc);
@@ -677,7 +630,7 @@ WallpaperBusinessLogic::writeFiles (
         makeImageFile (portraitFilePath, desc, portraitITrans);
         m_PortraitGConfItem->set (portraitFilePath);
     }
-
+#endif
     return true;
 }
 
@@ -697,6 +650,7 @@ WallpaperBusinessLogic::makeImageFile (
             WallpaperDescriptor  *desc,
             WallpaperITrans      *transformations)
 {
+#if 0
     QPixmap   pixmap (transformations->expectedSize());
     QPainter  painter (&pixmap);
     qreal     scale = transformations->scale();
@@ -755,6 +709,7 @@ WallpaperBusinessLogic::makeImageFile (
     if (!success) {
         SYS_WARNING ("Saving file to %s failed", SYS_STR(filePath));
     }
+#endif
 }
 
 /*!
@@ -792,6 +747,7 @@ WallpaperBusinessLogic::editRequestArrived (
         QString   portraitFileName,
         QString   landscapeFileName)
 {
+#if 0
     WallpaperDescriptor *desc;
     SYS_DEBUG ("*** portraitFileName  = %s", SYS_STR(portraitFileName));
     SYS_DEBUG ("*** landscapeFileName = %s", SYS_STR(landscapeFileName));
@@ -802,11 +758,13 @@ WallpaperBusinessLogic::editRequestArrived (
     setEditedImage (desc, true);
 
     startEdit ();
+#endif
 }
 
 void
 WallpaperBusinessLogic::valueChanged ()
 {
+#if 0
     WallpaperCurrentDescriptor *currentDesc;
     QString                     desktopFile = dirPath() + destopFileName;
     bool                        success;
@@ -846,6 +804,7 @@ WallpaperBusinessLogic::valueChanged ()
     }
 
     emit wallpaperChanged ();
+#endif
 }
 
 bool
