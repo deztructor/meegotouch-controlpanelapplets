@@ -116,9 +116,12 @@ AlertToneDefaultsModel::addSingleItem()
             QString extension = fullPath.right(4).toLower();
 
             if (extension == ".aac" ||
-                    extension == ".mp3" ||
-                    extension == ".wma" ||
-                    extension == ".wav") {
+                extension == ".mp3" ||
+                extension == ".wma" ||
+                extension == ".wav" ||
+                extension == ".mp2" ||
+                extension == ".amr" ||
+                extension == ".mid") {
                 QString niceName = TrackerConnection::instance()->niceNameFromFileName (fullPath);
                 SYS_DEBUG ("calling niceNameFromFileName()");
                 addSingleItem (niceName, fullPath);
