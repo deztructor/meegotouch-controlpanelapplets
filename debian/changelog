@@ -1,6 +1,8 @@
 meegotouch-controlpanelapplets (0.20.44~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  [ Laszlo Pere ]
+  * Fixes: NB#257291 - Battery settings; icon-s-description-inverse is clipped
+    in Indonesian, 'power save mode' in active state 
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 18 May 2011 08:50:09 +0300
 
@@ -14,8 +16,6 @@ meegotouch-controlpanelapplets (0.20.43-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#256626 - Updated style for horizontal separators
-  * Fixes: NB#257291 - Battery settings; icon-s-description-inverse is clipped
-    in Indonesian, 'power save mode' in active state 
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 18 May 2011 08:48:47 +0300
 
