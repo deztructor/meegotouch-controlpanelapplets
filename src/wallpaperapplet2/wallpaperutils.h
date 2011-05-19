@@ -24,7 +24,7 @@
 #define WALLPAPERUTILS_H
 
 #include <QString>
-#include <QHash>
+#include <QSet>
 
 class QStringList;
 
@@ -40,7 +40,7 @@ namespace Wallpaper
 
     QStringList imageNameFilter ();
 
-    QHash<QString, bool> readDir (
+    QSet<QString> readDir (
             const QString     &directoryPath,
             const QStringList &nameFilters);
 };

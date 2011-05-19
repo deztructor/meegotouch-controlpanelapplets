@@ -19,6 +19,7 @@
 #ifndef WALLPAPERDESCRIPTOR_P_H
 #define WALLPAPERDESCRIPTOR_P_H
 
+#include <QPixmap>
 #include <QString>
 #include <QuillFile>
 #include <QuillImage>
@@ -40,9 +41,20 @@ class WallpaperDescriptorPrivate
         void setFilePath (const QString &filePath);
         QString filePath () const;
 
+        void setThumbnailPending (bool pending);
+        bool thumbnailPending () const;
+
+        void setThumbnail (const QPixmap &thumbnail);
+        void unsetThumbnail ();
+        QPixmap thumbnail () const;
+        bool hasThumbnail () const;
+
     private:
         int      m_ReferenceCounter;
         QString  m_FilePath;
+        bool     m_ThumbnailPending;
+        bool     m_HasThumbnail;
+        QPixmap  m_Thumbnail;
 };
 
 #endif

@@ -83,6 +83,17 @@ class MC_EXPORT WallpaperDescriptor : public QObject
         void setFilePath (const QString &filePath);
         QString filePath () const;
 
+        QUrl url () const;
+        QString mimeType () const;
+
+        void setThumbnailPending (bool pending = true);
+        bool thumbnailPending () const;
+
+        void setThumbnail (const QPixmap &thumbnail);
+        void unsetThumbnail ();
+        QPixmap thumbnail () const;
+        bool hasThumbnail () const;
+
     private:
         WallpaperDescriptorPrivate *m_Priv;
 };

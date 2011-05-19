@@ -19,9 +19,13 @@
 #ifndef WALLPAPERMODEL_H
 #define WALLPAPERMODEL_H
 
+#include <QPointer>
 #include <QList>
 #include <QHash>
 #include <QAbstractTableModel>
+#include <Thumbnailer>
+
+
 #include <MAbstractCellCreator>
 #include "wallpaperdescriptor.h"
 #include <MImageWidget> 
@@ -29,6 +33,7 @@
 
 class WallpaperBusinessLogic;
 class WallpaperDescriptor;
+
 
 class WallpaperModel: public QAbstractTableModel
 {
@@ -51,18 +56,39 @@ class WallpaperModel: public QAbstractTableModel
                 QObject                *parent = 0);
         
         ~WallpaperModel ();
+    
+        /*
+         * Methods for accessing data.
+         */
+        virtual int rowCount (
+                const QModelIndex &parent = QModelIndex()) const;
+        virtual QVariant data (
+                const QModelIndex &index, 
+                int role = Qt::DisplayRole) const;
+        virtual int columnCount (const QModelIndex&) const;
         
-    virtual int rowCount (
-            const QModelIndex &parent = QModelIndex()) const;
-    virtual QVariant data (
-            const QModelIndex &index, 
-            int role = Qt::DisplayRole) const;
-    virtual int columnCount (const QModelIndex&) const;
+        void loadThumbnails (
+                const QModelIndex& firstVisibleRow, 
+                const QModelIndex& lastVisibleRow);
 
     public slots:
         void descriptorChanged (WallpaperDescriptor *desc);
         void wallpaperChanged ();
-   
+        /*
+         * Slots for the thumbnailer connection.
+         */
+        void thumbnailLoadingFinished (
+                int          left);
+        void thumbnailError (
+                QString      message,
+                QUrl         fileUri);
+
+        void thumbnailReady (
+                QUrl         fileUri, 
+                QUrl         thumbnailUri, 
+                QPixmap      pixmap, 
+                QString      flavor);
+
     private:
         void loadFromDirectory ();
 
@@ -71,6 +97,7 @@ class WallpaperModel: public QAbstractTableModel
         QStringList                             m_FilePathList;
         QHash<QString, WallpaperDescriptor>     m_FilePathHash; 
         QString                                 m_ImagesDir;
+        QPointer<Thumbnailer>                   m_Thumbnailer;
 };
 
 class WallpaperCellCreator : 

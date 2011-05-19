@@ -23,14 +23,18 @@
 #include "../debug.h"
 
 WallpaperDescriptorPrivate::WallpaperDescriptorPrivate () :
-    m_ReferenceCounter (1)
+    m_ReferenceCounter (1),
+    m_ThumbnailPending (false),
+    m_HasThumbnail (false)
 {
 }
 
 WallpaperDescriptorPrivate::WallpaperDescriptorPrivate (
         const QString &filePath) :
     m_ReferenceCounter (1),
-    m_FilePath (filePath)
+    m_FilePath (filePath),
+    m_ThumbnailPending (false),
+    m_HasThumbnail (false)
 {
 }
 
@@ -61,5 +65,46 @@ QString
 WallpaperDescriptorPrivate::filePath () const
 {
     return m_FilePath;
+}
+
+void
+WallpaperDescriptorPrivate::setThumbnailPending (
+        bool pending)
+{
+    m_ThumbnailPending = pending;
+}
+
+bool
+WallpaperDescriptorPrivate::thumbnailPending () const
+{
+    return m_ThumbnailPending;
+}
+
+void 
+WallpaperDescriptorPrivate::setThumbnail (
+        const QPixmap &thumbnail)
+{
+    m_HasThumbnail = true;
+    m_ThumbnailPending = false;
+    m_Thumbnail = thumbnail;
+}
+
+void
+WallpaperDescriptorPrivate::unsetThumbnail ()
+{
+    m_HasThumbnail = false;
+    m_Thumbnail = QPixmap();
+}
+
+QPixmap
+WallpaperDescriptorPrivate::thumbnail () const
+{
+    return m_Thumbnail;
+}
+
+bool
+WallpaperDescriptorPrivate::hasThumbnail () const
+{
+    return m_HasThumbnail;
 }
 

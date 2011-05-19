@@ -22,7 +22,7 @@
 
 #include <QTimer>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -134,34 +134,15 @@ WallpaperList::loadPictures ()
 {
     SYS_DEBUG ("");
     filtering()->proxy()->sort(Qt::DisplayRole);
+
     /*
      * We used to get panningStopped() signals when we got hidden, so we will
      * not initiate loading of the images when we are not visible.
      */
-    if (m_ImageLoader == 0 || !isVisible() || !m_Model)
+    if (!isVisible() || !m_Model)
         return;
-#if 0
-    /*
-     * The lastVisibleItem() has some bugs, it does not report the last column +
-     * 1 elements to be visible. This is a workaround to refresh those items
-     * too.
-     *
-     * FIXME: It seems that this code is not needed any more, it will be fixed
-     * soon.
-     */
-    QModelIndex lastIndex;
-    int         idx;
 
-    lastIndex = lastVisibleItem();
-    idx = lastIndex.row() + 5;
-    idx = idx >= m_Model->rowCount() ? m_Model->rowCount()  - 1: idx;
-    lastIndex = m_Model->index (idx, 0);
-    SYS_WARNING ("*** idx        = %d", idx);
-    SYS_WARNING ("*** rowCount() = %d", m_Model->rowCount());
-    m_ImageLoader->loadPictures (firstVisibleItem(), lastIndex);
-#else
-    m_ImageLoader->loadPictures (firstVisibleItem(), lastVisibleItem());
-#endif
+    m_Model->loadThumbnails (firstVisibleItem(), lastVisibleItem());
 }
 
 void 

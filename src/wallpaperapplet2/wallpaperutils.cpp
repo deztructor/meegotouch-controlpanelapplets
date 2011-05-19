@@ -62,6 +62,14 @@ Wallpaper::constructPath (
     return retval;
 }
 
+bool
+Wallpaper::isInDir (
+        const QString  &directory,
+        const QString  &filePath)
+{
+    return filePath.startsWith(directory);
+}
+
 QStringList
 Wallpaper::imageNameFilter ()
 {
@@ -74,13 +82,13 @@ Wallpaper::imageNameFilter ()
 }
 
 
-QHash<QString, bool> 
+QSet<QString> 
 Wallpaper::readDir (
         const QString     &directoryPath,
         const QStringList &nameFilters)
 {
     QDir                  directory (directoryPath);
-    QHash<QString, bool>  retval;
+    QSet<QString>         retval;
     QStringList           entryList;
 
     if (!directory.exists(directoryPath))
@@ -90,7 +98,7 @@ Wallpaper::readDir (
             nameFilters, QDir::Files | QDir::NoSymLinks | QDir::Readable);
 
     for (int iList = 0; iList < entryList.count(); iList++) {
-        retval[constructPath (directoryPath, entryList[iList])] = true;
+        retval += constructPath (directoryPath, entryList[iList]);
     }
     
 finalize:

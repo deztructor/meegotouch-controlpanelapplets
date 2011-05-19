@@ -23,12 +23,14 @@
 
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperdescriptor.h"
-
 #include "gridimagewidget.h"
+
+#include <QUrl>
 
 #include <QTimer>
 #include <MImageWidget>
 #include <MProgressIndicator>
+
 
 #define DEBUG
 #define WARNING
@@ -171,24 +173,21 @@ WallpaperCellCreator::updateCell (
         const QModelIndex &index, 
         MWidget           *cell) const
 {
-#if 0
-    static QPixmap placeholderPixmap;
-
+    static QPixmap   placeholderPixmap;
     GridImageWidget *imageWidget = qobject_cast<GridImageWidget *>(cell);
-    QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
-    WallpaperDescriptor *desc = data.value<WallpaperDescriptor *>();
-  
-    if (!imageWidget || !desc)
-        return;
-
-
-    if (desc->isThumbnailLoaded()) {
-        QPixmap thumb = desc->thumbnailPixmap();
+    QVariant         data = index.data(WallpaperModel::WallpaperDescriptorRole);
+    WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
+   
+    if (desc.hasThumbnail()) {
+        QPixmap thumb = desc.thumbnail ();
         QSizeF  cSize = cellSize();
         imageWidget->setPixmap (
-                thumb.scaled(
-                    (int)cSize.width(), (int)cSize.height()));
+                thumb.scaled((int)cSize.width(), (int)cSize.height()));
     } else {
+        /*
+         * resetting the cell thumbnail pixmap. We need this because the cells
+         * are re-used.
+         */
         if (placeholderPixmap.size() != cellSize()) {
             QSizeF  cSize = cellSize();
 
@@ -200,6 +199,7 @@ WallpaperCellCreator::updateCell (
         imageWidget->setPixmap (placeholderPixmap);
     }
 
+#if 0
     // The spinner.
     if (desc->loading()) {
         imageWidget->progressIndicator(true)->show();
@@ -250,12 +250,6 @@ WallpaperModel::WallpaperModel (
 
 WallpaperModel::~WallpaperModel ()
 {
-#if 0
-    for (int n = 0; n < m_DescriptorList.size(); ++n) {
-        if (!m_DescriptorList[n]->isCurrent())
-            delete m_DescriptorList[n];
-    }
-#endif
 }
 
 int 
@@ -278,33 +272,34 @@ WallpaperModel::data (
         const QModelIndex &index, 
         int                role) const
 {
-    QVariant             var;
-#if 0
-    Q_UNUSED (role);
-    Q_UNUSED (index);
-
+    QVariant             retval;
+#if 1
     Q_ASSERT (index.row() >= 0);
-    Q_ASSERT (index.row() < m_DescriptorList.size());
+    Q_ASSERT (index.row() < m_FilePathList.size());
 
     switch (role) {
         case Qt::DisplayRole:
+            #if 0
             /*
              * We use the base-name when sorting the images, the full path would
              * make the current image at the fix position because the current
              * image in a separate directory.
              */
-            var.setValue (m_DescriptorList[index.row()]->basename());
+            retval.setValue (m_DescriptorList[index.row()]->basename());
+            #endif
+            retval.setValue (m_FilePathList[index.row()]);
             break;
 
         case WallpaperModel::WallpaperDescriptorRole:
-            var.setValue (m_DescriptorList[index.row()]);
+            retval.setValue (m_FilePathHash[m_FilePathList[index.row()]]);
             break;
 
         default:
-            var.setValue (QString("Unsupported role"));
+            SYS_WARNING ("Unsupported role");
+            retval.setValue (QString("Unsupported role"));
     }
 #endif
-    return var;
+    return retval;
 }
 
 int 
@@ -352,15 +347,210 @@ WallpaperModel::wallpaperChanged ()
 void 
 WallpaperModel::loadFromDirectory ()
 {
-    QHash<QString, bool> entries;
-#if 0 
+    QSet<QString> entries;
+    QStringList   removedFilePaths;
+    
     /*
-     * 
+     * Getting the full list of the given directory. 
      */
-    for (int n = 0; n < m_DescriptorHash.keys().size(); ++n)
-        if (
-#endif
     entries = Wallpaper::readDir (
             m_ImagesDir, Wallpaper::imageNameFilter());
+
+    /*
+     * Comparing the data we have with the file list we got.
+     */
+    foreach (QString oldPath, m_FilePathList) {
+        if (!Wallpaper::isInDir (m_ImagesDir, oldPath))
+            continue;
+
+        if (entries.contains(oldPath)) {
+            /*
+             * Here we found a file, that we already have. This one we don't
+             * need to worry about.
+             */
+            entries -= oldPath;
+        } else {
+            /*
+             * Here we have a path that we have, it was in the given directory,
+             * but it is not found any more.
+             */
+            SYS_WARNING ("Should remove: %s", SYS_STR(oldPath));
+        }
+    }
+
+    if (!entries.empty()) {
+        QModelIndex  parent;
+        /*
+         * Inserting the new items.
+         */
+        beginInsertRows (parent, m_FilePathList.size(), 
+                m_FilePathList.size() + entries.size());
+
+        foreach (QString newPath, entries) {
+            WallpaperDescriptor desc (newPath);
+
+            SYS_DEBUG ("Adding '%s'", SYS_STR(newPath));
+            m_FilePathList << newPath;
+            m_FilePathHash[newPath] = desc;
+        }
+
+        endInsertRows ();
+    }
 }
 
+/******************************************************************************
+ * Methods to handle thumbnails.
+ */
+/*!
+ * This slot is called when the thumbnail has been generated.
+ */
+void 
+WallpaperModel::thumbnailReady (
+            QUrl         fileUri, 
+            QUrl         thumbnailUri, 
+            QPixmap      pixmap, 
+            QString      flavor)
+{
+    QString             path;
+
+    path = fileUri.toString();
+    if (path.startsWith("file://"))
+        path.remove (0, 7);
+
+    //SYS_DEBUG ("*** flavor = %s", SYS_STR(flavor));
+    //SYS_DEBUG ("*** size   = %dx%d", pixmap.width(), pixmap.height());
+    //SYS_DEBUG ("*** path   = %s", SYS_STR(path));
+    if (m_FilePathHash.contains(path)) {
+        WallpaperDescriptor desc = m_FilePathHash[path];
+        int                 idx = m_FilePathList.indexOf(path);
+        QModelIndex         first;
+
+        first = index (idx, 0);
+        desc.setThumbnail (pixmap);
+        emit dataChanged (first, first);
+    } else {
+        SYS_WARNING ("Descriptor path not found: %s", SYS_STR(path));
+    }
+}
+
+/*!
+ * This slot is called when the thumbler has been detected some error. We could
+ * do something, but until we find some smart thing we can do we just print an
+ * error message.
+ */
+void
+WallpaperModel::thumbnailError (
+            QString      message,
+            QUrl         fileUri)
+{
+    SYS_WARNING ("Failed thumbnailing: %s", SYS_STR(message));
+#if 0
+    Q_UNUSED (message);
+
+    for (int n = Landscape; n < NVariants; ++n) {
+        if (m_Images[n].url() == fileUri) {
+            bool success;
+
+            success = m_Images[n].thumbnail (true);
+
+            if (success) {
+                emit thumbnailLoaded (this);
+                emit changed (this);
+            }
+        }
+    }
+#endif
+}
+
+/*!
+ * Called when the generation of the thumbnail is finished. This is the point
+ * where we can destroy the thumbler object.
+ */
+void 
+WallpaperModel::thumbnailLoadingFinished (
+            int          left)
+{
+    SYS_DEBUG ("*** left = %d", left);
+#if 0
+    Q_UNUSED (left);
+
+    if (!m_Thumbnailer.isNull() && left == 0) {
+        SYS_WARNING ("DESTROYING THUMBNAILER");
+        delete m_Thumbnailer;
+        m_Thumbnailer = 0;
+    }
+#endif
+}
+
+
+void
+WallpaperModel::loadThumbnails (
+            const QModelIndex& firstVisibleRow, 
+            const QModelIndex& lastVisibleRow)
+{
+    QList<QUrl>  uris;
+    QStringList  mimeTypes;
+
+    SYS_DEBUG ("Between %d, %d - %d, %d", 
+            firstVisibleRow.column(),
+            firstVisibleRow.row(), 
+            lastVisibleRow.column(),
+            lastVisibleRow.row());
+
+    if (!firstVisibleRow.model()) {
+        SYS_WARNING ("No model for the index.");
+        return;
+    }
+
+    /*
+     * Creating a new thumbnailer if we have to.
+     */
+    if (!m_Thumbnailer) {
+        SYS_DEBUG ("Creating new thumbnailer...");
+        m_Thumbnailer = new Thumbnailer ();
+        connect (m_Thumbnailer, SIGNAL(thumbnail(QUrl,QUrl,QPixmap,QString)),
+                this, SLOT(thumbnailReady(QUrl,QUrl,QPixmap,QString)) );
+        connect (m_Thumbnailer, SIGNAL(error(QString,QUrl)),
+                this, SLOT(thumbnailError(QString,QUrl)) );
+        connect (m_Thumbnailer, SIGNAL(finished(int)),
+                this, SLOT(thumbnailLoadingFinished(int)));
+    }
+
+    /*
+     * Collecting uris and mime types. Please note, that the index we got here
+     * is most probably the index for the proxy model, where the order of the
+     * rows is very much different. This is why we need to reference the index
+     * using the model stored in the index itself.
+     */
+    for (int n = firstVisibleRow.row(); n <= lastVisibleRow.row(); ++n) {
+        QModelIndex index = firstVisibleRow.model()->index(n, 0);
+        QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
+        WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
+        QUrl                url;
+        QString             mimeType;
+       
+        if (desc.hasThumbnail() || desc.thumbnailPending())
+            continue;
+
+        url = desc.url();
+        mimeType = desc.mimeType();
+
+        if (url.isValid() && !mimeType.isEmpty()) {
+            uris      << url;
+            mimeTypes << mimeType;
+            desc.setThumbnailPending ();
+        } else {
+            SYS_WARNING ("Unimplemented.");
+        }
+    }
+
+    /*
+     * If we have something to ask from the thumbnailer, we are sending a
+     * request.
+     */
+    if (!uris.isEmpty()) {
+        SYS_DEBUG ("Requesting %d thumbnails.", uris.length());
+        m_Thumbnailer->request (
+                uris, mimeTypes, true, Wallpaper::DefaultThumbnailFlavor);
+    }
+}
