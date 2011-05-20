@@ -107,6 +107,11 @@ WallpaperCellCreator::updateCell (
 
         imageWidget->setPixmap (placeholderPixmap);
     }
+    
+    /*
+     * The selection. 
+     */
+    imageWidget->setCurrent (desc.selected());
 
 #if 0
     // The spinner.
@@ -119,10 +124,6 @@ WallpaperCellCreator::updateCell (
         if (indicator)
             indicator->hide();
     }
-    
-    // The selection. 
-    imageWidget->setCurrent (desc->isCurrent());
-    //imageWidget->setSelected (true);
 #endif
 }
 
@@ -496,8 +497,13 @@ WallpaperModel::trySelect (
 
     if (filePath.isEmpty())
         goto finalize;
+    
+    SYS_WARNING ("UNIMPLEMENTED");
 
 finalize:
+    if (retval)
+        selectByFilepath (filePath);
+
     return retval;
 }
 
@@ -524,7 +530,49 @@ WallpaperModel::tryAddAndSelect (
 
         retval = true;
     }
-        
+     
 finalize:
+    if (retval)
+        selectByFilepath (filePath);
+
+    return retval;
+}
+
+/*!
+ * \returns true if the item with the given path is indeed found
+ *
+ * Selects the item given by its file path and deselects all the other items.
+ * Emits a signal for every changed item, so the widget will re-draw the parts
+ * that needed to be updated.
+ */
+bool
+WallpaperModel::selectByFilepath (
+        const QString &filepath)
+{
+    bool retval = false;
+
+    for (int n = 0; n < m_FilePathList.size(); ++n) {
+        QString              thisPath = m_FilePathList[n];
+        WallpaperDescriptor  desc = m_FilePathHash[thisPath];
+        bool                 selected = desc.selected();
+        bool                 changed = false;
+
+        if (selected && thisPath != filepath) {
+            desc.setSelected (false);
+            changed = true;
+        } else if (!selected && thisPath == filepath) {
+            desc.setSelected ();
+            changed = true;
+            retval = true;
+        }
+
+        if (changed) {
+            QModelIndex          first;
+
+            first = index (n, 0);
+            emit dataChanged (first, first);
+        }
+    }
+
     return retval;
 }

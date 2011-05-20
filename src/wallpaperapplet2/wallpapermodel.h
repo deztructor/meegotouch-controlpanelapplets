@@ -93,6 +93,7 @@ class WallpaperModel: public QAbstractTableModel
         void loadFromDirectory ();
         bool trySelect (const QString filePath);
         bool tryAddAndSelect (const QString filePath);
+        bool selectByFilepath (const QString &filepath);
 
     private:
         WallpaperBusinessLogic                 *m_BusinessLogic;

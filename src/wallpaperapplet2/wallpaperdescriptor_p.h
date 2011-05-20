@@ -49,9 +49,13 @@ class WallpaperDescriptorPrivate
         QPixmap thumbnail () const;
         bool hasThumbnail () const;
 
+        void setSelected (bool selected);
+        bool selected () const;
+
     private:
         int      m_ReferenceCounter;
         QString  m_FilePath;
+        bool     m_Selected;
         bool     m_ThumbnailPending;
         bool     m_HasThumbnail;
         QPixmap  m_Thumbnail;

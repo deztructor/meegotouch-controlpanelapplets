@@ -94,6 +94,9 @@ class MC_EXPORT WallpaperDescriptor : public QObject
         QPixmap thumbnail () const;
         bool hasThumbnail () const;
 
+        void setSelected (bool selected = true);
+        bool selected () const;
+
     private:
         WallpaperDescriptorPrivate *m_Priv;
 };

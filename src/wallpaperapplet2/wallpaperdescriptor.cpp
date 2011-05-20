@@ -187,4 +187,16 @@ WallpaperDescriptor::hasThumbnail () const
     return m_Priv->hasThumbnail ();
 }
 
+void
+WallpaperDescriptor::setSelected (
+        bool selected)
+{
+    m_Priv->setSelected (selected);
+}
+
+bool 
+WallpaperDescriptor::selected () const
+{
+    return m_Priv->selected ();
+}
 

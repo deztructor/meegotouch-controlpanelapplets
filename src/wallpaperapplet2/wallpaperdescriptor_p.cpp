@@ -24,6 +24,7 @@
 
 WallpaperDescriptorPrivate::WallpaperDescriptorPrivate () :
     m_ReferenceCounter (1),
+    m_Selected (false),
     m_ThumbnailPending (false),
     m_HasThumbnail (false)
 {
@@ -33,6 +34,7 @@ WallpaperDescriptorPrivate::WallpaperDescriptorPrivate (
         const QString &filePath) :
     m_ReferenceCounter (1),
     m_FilePath (filePath),
+    m_Selected (false),
     m_ThumbnailPending (false),
     m_HasThumbnail (false)
 {
@@ -51,7 +53,7 @@ WallpaperDescriptorPrivate::unRef ()
     return --m_ReferenceCounter;
 }
 
-/*********************************************************************************
+/******************************************************************************
  * Standard set/get methods.
  */
 void 
@@ -107,4 +109,18 @@ WallpaperDescriptorPrivate::hasThumbnail () const
 {
     return m_HasThumbnail;
 }
+
+void
+WallpaperDescriptorPrivate::setSelected (
+        bool selected)
+{
+    m_Selected = selected;
+}
+
+bool 
+WallpaperDescriptorPrivate::selected () const
+{
+    return m_Selected;
+}
+
 
