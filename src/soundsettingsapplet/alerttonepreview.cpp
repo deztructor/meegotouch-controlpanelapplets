@@ -82,7 +82,6 @@ AlertTonePreview::gstInit ()
     SYS_DEBUG ("*** fname = %s", SYS_STR (m_Filename));
     SYS_DEBUG ("Starting the playback.");
     GstElement *pulsesink;
-    GstStructure *props;
 
     m_gstPipeline = gst_parse_launch (GstStartCommand, &err);
     if (err)
@@ -109,17 +108,6 @@ AlertTonePreview::gstInit ()
                 NULL);
     }
 
-    props = gst_structure_from_string (
-                "props,media.role=media,event.id=phone-incoming-call,"
-                "module-stream-restore.id=x-meego-ringing-volume", NULL);
-    if(pulsesink && props)
-        g_object_set (G_OBJECT(pulsesink),
-                      "stream-properties", props,
-                      NULL);
-    else
-        SYS_DEBUG("Cannot set media.role property!");
-    gst_structure_free (props);
-
     gst_bus_add_signal_watch (gst_element_get_bus (m_gstPipeline));
     g_signal_connect (G_OBJECT (gst_element_get_bus (m_gstPipeline)),
                       "message", (GCallback) gstSignalHandler, this);
@@ -138,7 +126,7 @@ AlertTonePreview::getResources()
      */
     if (! resources)
     {
-        resources = new ResourcePolicy::ResourceSet ("ringtone");
+        resources = new ResourcePolicy::ResourceSet ("player");
         resources->setAutoRelease ();
         resources->setAlwaysReply ();
     }
@@ -151,9 +139,9 @@ AlertTonePreview::getResources()
          * so this is very important that the same key-value pair should be set
          * for the pulsesink. The value should be uniqe.
          */
-        audioResource = new ResourcePolicy::AudioResource ("ringtone");
+        audioResource = new ResourcePolicy::AudioResource ("player");
         audioResource->setProcessID (QApplication::applicationPid ());
-        audioResource->setStreamTag ("event.id", "phone-incoming-call");
+        audioResource->setStreamTag("media.name", "*");
 
         resources->addResourceObject (audioResource);
         resources->initAndConnect ();
@@ -161,12 +149,15 @@ AlertTonePreview::getResources()
 
     connect (resources,
              SIGNAL (resourcesGranted (QList<ResourcePolicy::ResourceType>)),
-             this,
              SLOT (audioResourceAcquired ()));
+
     connect (resources,
              SIGNAL (lostResources ()),
-             this,
-             SLOT (audioResourceLost()));
+             SLOT (audioResourceLost ()));
+
+    connect (resources,
+             SIGNAL (resourcesReleasedByManager ()),
+             SLOT (audioResourceLost ()));
 
     resources->acquire ();
 }
@@ -184,6 +175,10 @@ void
 AlertTonePreview::audioResourceLost ()
 {
     SYS_DEBUG("");
+#ifdef HAVE_LIBRESOURCEQT
+    resources->release ();
+#endif
+
     if (m_gstPipeline)
     {
         gst_element_set_state (m_gstPipeline, GST_STATE_PAUSED);
