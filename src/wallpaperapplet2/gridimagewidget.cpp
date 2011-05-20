@@ -191,7 +191,7 @@ GridImageWidget::GridImageWidget () :
     m_OpacityAnimation = new QPropertyAnimation(this, "opacity", this);
     m_OpacityAnimation->setStartValue(0.0);
     m_OpacityAnimation->setEndValue(1.0);
-    m_OpacityAnimation->setDuration(150); 
+    m_OpacityAnimation->setDuration(250); 
 
     //setObjectName ("GridImageWidget");
     m_HighlightStyle = static_cast<const MButtonIconStyle *>(
