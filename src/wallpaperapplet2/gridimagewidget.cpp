@@ -5,6 +5,7 @@
 #include <MImageWidget>
 #include <MProgressIndicator>
 #include <QPen>
+#include <QPropertyAnimation>
 
 #include <MTheme>
 #include <MStyle>
@@ -187,6 +188,11 @@ GridImageWidget::GridImageWidget () :
     m_ProgressIndicator (0),
     m_Current (false)
 {
+    m_OpacityAnimation = new QPropertyAnimation(this, "opacity", this);
+    m_OpacityAnimation->setStartValue(0.0);
+    m_OpacityAnimation->setEndValue(1.0);
+    m_OpacityAnimation->setDuration(150); 
+
     //setObjectName ("GridImageWidget");
     m_HighlightStyle = static_cast<const MButtonIconStyle *>(
             MTheme::style("MButtonIconStyle", "HighlightStyle"));
@@ -252,7 +258,15 @@ GridImageWidget::setPixmap(
         createLayout ();
 
     m_Pixmap = pixmap;
-    update();
+    //update();
+    //m_OpacityAnimation->stop();
+}
+
+void
+GridImageWidget::setID (
+        const QString &id)
+{
+    m_ID = id;
 }
 
 
@@ -312,4 +326,10 @@ void GridImageWidget::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     MListItem::contextMenuEvent(event);
     emit longPressed();
+}
+
+void 
+GridImageWidget::showAnimated()
+{
+    m_OpacityAnimation->start();
 }

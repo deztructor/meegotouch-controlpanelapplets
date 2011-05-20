@@ -10,7 +10,7 @@
 class MImageWidget;
 class MProgressIndicator;
 class MButtonIconStyle;
-
+class QPropertyAnimation;
 
 class GridImageLayout : public QGraphicsLayout
 {
@@ -56,6 +56,8 @@ class GridImageWidget : public MListItem
         void setCurrent (bool current);
 
         QString image() const;
+        void setID (const QString &id);
+        void showAnimated();
 
     public Q_SLOTS:
         void setPixmap(const QPixmap &pixmap);
@@ -71,16 +73,17 @@ class GridImageWidget : public MListItem
                 const QStyleOptionGraphicsItem* option, 
                 QWidget* widget = 0);
 
+        virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+        virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+        virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+
    private:
         GridImageLayout        *m_Layout;
         MProgressIndicator     *m_ProgressIndicator;
         QPixmap                 m_Pixmap;
         bool                    m_Current;
         const MButtonIconStyle *m_HighlightStyle;
-
-    protected:
-         virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
-         virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-         virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+        QString                 m_ID;
+        QPropertyAnimation     *m_OpacityAnimation;
 };
 #endif

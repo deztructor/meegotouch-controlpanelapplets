@@ -59,7 +59,17 @@ protected:
         void slotItemClicked (const QModelIndex &index);
         void loadPictures ();
         void stopLoadingPictures ();
-    
+        
+        void rowsInserted (
+                const QModelIndex &parent, 
+                int                start, 
+                int                end);
+        
+        void rowsRemoved (
+                const QModelIndex &parent, 
+                int                start, 
+                int                end);
+
 signals:
     void imageActivated (WallpaperDescriptor *desc);
 

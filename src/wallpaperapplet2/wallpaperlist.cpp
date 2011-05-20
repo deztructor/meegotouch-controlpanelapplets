@@ -26,7 +26,7 @@
 #define WARNING
 #include "../debug.h"
 
-static const int loadPicturesDelay = 200;
+static const int loadPicturesDelay = 10;
 
 static int columnsLandscape = 5;
 static int columnsPortrait = 3;
@@ -93,6 +93,33 @@ WallpaperList::WallpaperList (
     #endif
 }
 
+/*
+ * If we got new pictures we might need to get their thumbnails.
+ */
+void
+WallpaperList::rowsInserted (
+        const QModelIndex &parent, 
+        int                start, 
+        int                end)
+{
+    SYS_DEBUG ("Added from %d to %d", start, end);
+    QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
+}
+
+/*!
+ * Well, if we drop images from the top of the list then we might have images
+ * coming into the screen with no thumbnails downloaded.
+ */
+void
+WallpaperList::rowsRemoved (
+        const QModelIndex &parent, 
+        int                start, 
+        int                end)
+{
+    SYS_DEBUG ("Added from %d to %d", start, end);
+    QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
+}
+
 void
 WallpaperList::setDataSourceType (
         WallpaperList::DataSourceType sourceType)
@@ -103,7 +130,6 @@ WallpaperList::setDataSourceType (
     setItemModel (m_Model);
     setCellCreator (m_CellCreator);
 
-    QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
     m_DataSourceType = sourceType;
 
     /*
@@ -112,6 +138,16 @@ WallpaperList::setDataSourceType (
      */
     filtering()->setEnabled (true);
     filtering()->proxy()->sort(Qt::DisplayRole);
+
+    QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
+    #if 0
+    connect (m_Model, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
+            this, SLOT(dataChanged(const QModelIndex &, const QModelIndex &)));
+    #endif
+    connect (m_Model, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
+            this, SLOT(rowsInserted(const QModelIndex &, int, int)));
+    connect (m_Model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
+            this, SLOT(rowsRemoved(const QModelIndex &, int, int)));
 }
 
 
@@ -132,7 +168,7 @@ void
 WallpaperList::loadPictures ()
 {
     SYS_DEBUG ("");
-    filtering()->proxy()->sort(Qt::DisplayRole);
+    //filtering()->proxy()->sort(Qt::DisplayRole);
 
     /*
      * We used to get panningStopped() signals when we got hidden, so we will

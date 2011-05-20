@@ -24,7 +24,7 @@
 #include <QHash>
 #include <QAbstractTableModel>
 #include <Thumbnailer>
-
+#include <QFileSystemWatcher>
 
 #include <MAbstractCellCreator>
 #include "wallpaperdescriptor.h"
@@ -68,9 +68,12 @@ class WallpaperModel: public QAbstractTableModel
                 const QModelIndex& lastVisibleRow);
         void stopLoadingThumbnails ();
 
-    public slots:
-        void descriptorChanged (WallpaperDescriptor *desc);
+    private slots:
+        /*
+         * Business-logic connections.
+         */
         void wallpaperChanged ();
+
         /*
          * Slots for the thumbnailer connection.
          */
@@ -86,8 +89,14 @@ class WallpaperModel: public QAbstractTableModel
                 QPixmap      pixmap, 
                 QString      flavor);
 
+        /*
+         * Watching the file-system.
+         */
+        void directoryChanged (const QString &path);
+
     protected:
         void ensureSelection ();
+        void startWatchFiles ();
         
     private:
         void loadFromDirectory ();
@@ -101,6 +110,8 @@ class WallpaperModel: public QAbstractTableModel
         QHash<QString, WallpaperDescriptor>     m_FilePathHash; 
         QString                                 m_ImagesDir;
         QPointer<Thumbnailer>                   m_Thumbnailer;
+        QPointer<QFileSystemWatcher>            m_FileWatcher;
+
 };
 
 class WallpaperCellCreator : 

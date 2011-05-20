@@ -87,11 +87,17 @@ WallpaperCellCreator::updateCell (
     QVariant         data = index.data(WallpaperModel::WallpaperDescriptorRole);
     WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
    
+    SYS_DEBUG ("file = %s", SYS_STR(desc.filePath()));
     if (desc.hasThumbnail()) {
         QPixmap thumb = desc.thumbnail ();
         QSizeF  cSize = cellSize();
         imageWidget->setPixmap (
                 thumb.scaled((int)cSize.width(), (int)cSize.height()));
+        imageWidget->setID (desc.filePath());
+        if (desc.thumbnailPending()) {
+            desc.setThumbnailPending (false);
+        }
+            imageWidget->showAnimated();
     } else {
         /*
          * resetting the cell thumbnail pixmap. We need this because the cells
@@ -141,6 +147,10 @@ WallpaperModel::WallpaperModel (
 
     loadFromDirectory ();
     ensureSelection ();
+    startWatchFiles ();
+
+    connect (m_BusinessLogic, SIGNAL(wallpaperChanged()),
+            this, SLOT(wallpaperChanged()));
 }
 
 WallpaperModel::~WallpaperModel ()
@@ -172,7 +182,7 @@ WallpaperModel::data (
         int                role) const
 {
     QVariant             retval;
-#if 1
+
     Q_ASSERT (index.row() >= 0);
     Q_ASSERT (index.row() < m_FilePathList.size());
 
@@ -190,6 +200,10 @@ WallpaperModel::data (
             break;
 
         case WallpaperModel::WallpaperDescriptorRole:
+            if (!m_FilePathHash.contains(m_FilePathList[index.row()])) {
+                SYS_WARNING ("MISSING DESCRIPTOR AT %d: %s", index.row(),
+                        SYS_STR(m_FilePathList[index.row()]));
+            }
             retval.setValue (m_FilePathHash[m_FilePathList[index.row()]]);
             break;
 
@@ -197,7 +211,6 @@ WallpaperModel::data (
             SYS_WARNING ("Unsupported role");
             retval.setValue (QString("Unsupported role"));
     }
-#endif
     return retval;
 }
 
@@ -209,25 +222,6 @@ WallpaperModel::columnCount (
 }
 
 
-/*!
- * This slot is called when the wallpaper descriptor has been changed. 
- */
-void 
-WallpaperModel::descriptorChanged (
-        WallpaperDescriptor *desc)
-{
-#if 0
-    for (int n = 0; n < m_DescriptorList.size(); ++n) {
-        if (m_DescriptorList[n] == desc) {
-            QModelIndex first;
-            first = index (n, 0);
-            emit dataChanged (first, first);
-
-            break;
-        }
-    }
-#endif
-}
 
 /*
  * This slot is activated when the wallpaper has been changed. We emit a
@@ -236,11 +230,7 @@ WallpaperModel::descriptorChanged (
 void 
 WallpaperModel::wallpaperChanged ()
 {
-    /*
-     * The current wallpaper is always the first, we need to refresh that.
-     */
-    QModelIndex first = index (0, 0);
-    emit dataChanged (first, first);
+    SYS_WARNING ("UNIMPLEMENTED");
 }
 
 void 
@@ -248,7 +238,8 @@ WallpaperModel::loadFromDirectory ()
 {
     QSet<QString> entries;
     QStringList   removedFilePaths;
-    
+    QStringList   itemsToRemove;
+
     /*
      * Getting the full list of the given directory. 
      */
@@ -273,8 +264,18 @@ WallpaperModel::loadFromDirectory ()
              * Here we have a path that we have, it was in the given directory,
              * but it is not found any more.
              */
-            SYS_WARNING ("Should remove: %s", SYS_STR(oldPath));
+            itemsToRemove << oldPath;
         }
+    }
+    
+    foreach (QString oldPath, itemsToRemove) {
+        int idx = m_FilePathList.indexOf(oldPath);
+        QModelIndex  parent;
+
+        beginRemoveRows (parent, idx, idx);
+        m_FilePathList.removeAt (idx);
+        m_FilePathHash.remove (oldPath);
+        endRemoveRows ();
     }
 
     if (!entries.empty()) {
@@ -283,7 +284,7 @@ WallpaperModel::loadFromDirectory ()
          * Inserting the new items.
          */
         beginInsertRows (parent, m_FilePathList.size(), 
-                m_FilePathList.size() + entries.size());
+                m_FilePathList.size() + entries.size() - 1);
 
         foreach (QString newPath, entries) {
             WallpaperDescriptor desc (newPath);
@@ -326,6 +327,7 @@ WallpaperModel::thumbnailReady (
 
         first = index (idx, 0);
         desc.setThumbnail (pixmap);
+        SYS_WARNING ("-> %d", idx);
         emit dataChanged (first, first);
     } else {
         SYS_WARNING ("Descriptor path not found: %s", SYS_STR(path));
@@ -390,11 +392,13 @@ WallpaperModel::loadThumbnails (
     QList<QUrl>  uris;
     QStringList  mimeTypes;
 
+    #if 0
     SYS_DEBUG ("Between %d, %d - %d, %d", 
             firstVisibleRow.column(),
             firstVisibleRow.row(), 
             lastVisibleRow.column(),
             lastVisibleRow.row());
+    #endif
 
     if (!firstVisibleRow.model()) {
         SYS_WARNING ("No model for the index.");
@@ -439,7 +443,9 @@ WallpaperModel::loadThumbnails (
             mimeTypes << mimeType;
             desc.setThumbnailPending ();
         } else {
-            SYS_WARNING ("Unimplemented.");
+            SYS_WARNING ("Unimplemented: [%d/%d] '%s'/'%s'", n, index.row(),
+                    SYS_STR(desc.filePath()),
+                    SYS_STR(mimeType));
         }
     }
 
@@ -576,3 +582,34 @@ WallpaperModel::selectByFilepath (
 
     return retval;
 }
+
+/******************************************************************************
+ * File-system watcher implementation.
+ */
+void 	
+WallpaperModel::directoryChanged (
+        const QString  &path)
+{
+    SYS_DEBUG ("*** path = %s", SYS_STR(path));
+    if (path != m_ImagesDir) {
+        SYS_WARNING ("This is not our images directory?!");
+    }
+
+    loadFromDirectory ();
+}
+
+void
+WallpaperModel::startWatchFiles ()
+{
+
+    if (!m_FileWatcher) {
+        SYS_DEBUG ("Creating file system watcher.");
+        m_FileWatcher = new QFileSystemWatcher (this);
+        connect (m_FileWatcher, SIGNAL(directoryChanged(const QString &)),
+                this, SLOT(directoryChanged(const QString &)));
+    }
+
+    SYS_DEBUG ("Watching directory %s", SYS_STR(m_ImagesDir));
+    m_FileWatcher->addPath (m_ImagesDir);
+}
+

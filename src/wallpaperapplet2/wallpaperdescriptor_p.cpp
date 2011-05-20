@@ -87,7 +87,6 @@ WallpaperDescriptorPrivate::setThumbnail (
         const QPixmap &thumbnail)
 {
     m_HasThumbnail = true;
-    m_ThumbnailPending = false;
     m_Thumbnail = thumbnail;
 }
 
