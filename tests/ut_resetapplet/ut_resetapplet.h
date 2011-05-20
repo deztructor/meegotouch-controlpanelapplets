@@ -40,6 +40,7 @@ private slots:
     void testMenuItems ();
     void testConstructbrief ();
     void testResetBusinessLogic ();
+    void testShowMassStorageWarning ();
 private:
     MApplication              *m_App;
     ResetApplet               *m_Applet;

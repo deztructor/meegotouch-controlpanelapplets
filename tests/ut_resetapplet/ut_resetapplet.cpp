@@ -211,6 +211,27 @@ Ut_ResetApplet::testResetBusinessLogic ()
     QVERIFY (lastExecutedCommand == "/usr/sbin/clean-device.sh --cud-reset");
 }
 
+
+void
+Ut_ResetApplet::testShowMassStorageWarning ()
+{
+
+      ResetWidget *widget;
+      widget = (ResetWidget *) m_Applet->constructWidget (0);
+      widget->showMassStorageWarning ();
+	    
+	    
+           // infoBanner->setTitle (qtTrId ("qtn_rset_not_possible"));
+ 
+	        QVERIFY (widget->infoBanner->title() == "qtn_rset_not_possible");
+}
+
+
+
+
+
+
+
 QTEST_APPLESS_MAIN(Ut_ResetApplet)
 
 

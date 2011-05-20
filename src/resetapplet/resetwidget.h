@@ -20,6 +20,7 @@
 #define RESETWIDGET_H
 
 #include <QPointer>
+#include <MBanner>
 #include "dcpwidget.h"
 
 #include "resetbusinesslogic.h"
@@ -65,8 +66,10 @@ private:
 private:
     QPointer<ResetBusinessLogic>    m_ResetBusinessLogic;
     CurrentPlan                     m_currentPlan;
+    MBanner			    *infoBanner;
     #ifdef UNIT_TEST
     friend class Ut_ResetApplet;
+//    friend class Ut
     #endif
 };
 

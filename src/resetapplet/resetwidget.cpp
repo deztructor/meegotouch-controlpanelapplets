@@ -256,7 +256,7 @@ void
 ResetWidget::showMassStorageWarning ()
 {
     SYS_DEBUG ("");
-    MBanner *infoBanner = new MBanner;
+    infoBanner = new MBanner;
     infoBanner->setStyleName ("InformationBanner");
     infoBanner->setObjectName ("InfoBanner");
 
