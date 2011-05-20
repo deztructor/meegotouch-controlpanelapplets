@@ -5,6 +5,8 @@ meegotouch-controlpanelapplets (0.20.44~1) meegotouch; urgency=low
     in Indonesian, 'power save mode' in active state 
   * QmUSBMode::SDK is now used in the USB applet.
   * Fixes: NB#255791 - [TASK] Add a new USB mode called "SDK"
+  * Fixes: NB#256485 - Able to set and unset Gconf key for SDK , but not able
+    to save the mode in USB settings. 
 
  -- David Kedves <dkedves@blumsoft.eu>  Thu, 19 May 2011 17:11:24 +0300
 
