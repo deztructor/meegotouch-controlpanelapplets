@@ -3,7 +3,7 @@ meegotouch-controlpanelapplets (0.20.45~1) meegotouch; urgency=low
   * Fixes: NB#256900 - Sound settings applet should use "player"
     Resource Policy class
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 20 May 2011 13:07:37 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 23 May 2011 10:19:47 +0300
 
 meegotouch-controlpanelapplets (0.20.44-1) meegotouch; urgency=low
 
