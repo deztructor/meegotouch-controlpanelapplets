@@ -829,4 +829,7 @@ WallpaperBusinessLogic::currentWallpaper (
 {
     currentFilePath  = m_PPItem->value().toString ();
     originalFilePath = m_POItem->value().toString ();
+
+    currentFilePath  = Wallpaper::logicalIdToFilePath (currentFilePath);
+    originalFilePath = Wallpaper::logicalIdToFilePath (originalFilePath);
 }

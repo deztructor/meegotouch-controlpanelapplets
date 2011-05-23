@@ -34,6 +34,9 @@ namespace Wallpaper
             const QString &dirName,
             const QString &filename = QString());
 
+    QString logicalIdToFilePath (
+            const QString    &id);
+
     bool isInDir (
             const QString  &directory,
             const QString  &filePath);

@@ -30,8 +30,10 @@
 #include "wallpaperdescriptor.h"
 #include <MImageWidget> 
 #include <QSizeF>
+
 #ifdef HAVE_QMSYSTEM
 #  include <qmusbmode.h>
+using namespace MeeGo;
 #endif
 
 class WallpaperBusinessLogic;
@@ -96,6 +98,9 @@ class WallpaperModel: public QAbstractTableModel
          * Watching the file-system.
          */
         void directoryChanged (const QString &path);
+        #ifdef HAVE_QMSYSTEM
+        void usbModeChanged (MeeGo::QmUSBMode::Mode mode);
+        #endif
 
     protected:
         void ensureSelection ();
@@ -116,7 +121,9 @@ class WallpaperModel: public QAbstractTableModel
         QPointer<Thumbnailer>                   m_Thumbnailer;
         QPointer<QFileSystemWatcher>            m_FileWatcher;
         int                                     m_ThumbnailMagicNumber;
-
+        #ifdef HAVE_QMSYSTEM
+        MeeGo::QmUSBMode                       *m_UsbMode;
+        #endif
 };
 
 class WallpaperCellCreator : 

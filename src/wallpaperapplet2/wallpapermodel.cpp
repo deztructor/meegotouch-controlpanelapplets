@@ -31,6 +31,9 @@
 #include <MImageWidget>
 #include <MProgressIndicator>
 
+#ifdef HAVE_QMSYSTEM
+#  include <qmusbmode.h>
+#endif
 
 #define DEBUG
 #define WARNING
@@ -145,13 +148,18 @@ WallpaperModel::WallpaperModel (
     m_ThumbnailMagicNumber (1)
 {
     m_ImagesDir = Wallpaper::constructPath (Wallpaper::ImagesDir);
-
     loadFromDirectory ();
     ensureSelection ();
     startWatchFiles ();
 
     connect (m_BusinessLogic, SIGNAL(wallpaperChanged()),
             this, SLOT(wallpaperChanged()));
+    
+    #ifdef HAVE_QMSYSTEM
+    m_UsbMode = new MeeGo::QmUSBMode (this);
+    connect (m_UsbMode, SIGNAL(modeChanged (MeeGo::QmUSBMode::Mode)),
+            this, SLOT(usbModeChanged(MeeGo::QmUSBMode::Mode)));
+    #endif
 }
 
 WallpaperModel::~WallpaperModel ()
@@ -603,8 +611,59 @@ WallpaperModel::selectByFilepath (
 }
 
 /******************************************************************************
- * File-system watcher implementation.
+ * File-system watcher and USB mode methods.
  */
+#ifdef HAVE_QMSYSTEM
+#ifdef DEBUG 
+static QString 
+usbModeName (QmUSBMode::Mode mode)
+{
+    switch (mode) {
+        case QmUSBMode::Connected:
+            return "QmUSBMode::Connected";
+
+        case QmUSBMode::DataInUse:
+            return "QmUSBMode::DataInUse";
+        
+        case QmUSBMode::Disconnected:
+            return "QmUSBMode::Disconnected";
+        
+        case QmUSBMode::MassStorage:
+            return "QmUSBMode::MassStorage";
+        
+        case QmUSBMode::ChargingOnly:
+            return "QmUSBMode::ChargingOnly";
+        
+        case QmUSBMode::OviSuite:
+            return "QmUSBMode::OviSuite";
+
+        case QmUSBMode::ModeRequest:
+            return "QmUSBMode::ModeRequest";
+        
+        case QmUSBMode::Ask:
+            return "QmUSBMode::Ask";
+        
+        case QmUSBMode::SDK:
+            return "QmUSBMode::SDK";
+        
+        case QmUSBMode::Undefined:
+            return "QmUSBMode::Undefined";
+        
+        default:
+            return "QmUSBMode::UnknownMode!";
+    }
+}
+#endif
+
+void 
+WallpaperModel::usbModeChanged (
+        MeeGo::QmUSBMode::Mode mode)
+{
+    SYS_DEBUG ("Usbmode = %s", SYS_STR(usbModeName(mode)));
+    loadFromDirectory ();
+}
+#endif
+
 void 	
 WallpaperModel::directoryChanged (
         const QString  &path)

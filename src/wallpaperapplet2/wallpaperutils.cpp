@@ -21,6 +21,7 @@
 **
 ****************************************************************************/
 #include "wallpaperutils.h"
+#include "wallpaperconfiguration.h"
 using namespace Wallpaper;
 
 #include <stdlib.h>
@@ -30,6 +31,7 @@ using namespace Wallpaper;
 
 #include <QDir>
 #include <QFile>
+#include <MGConfItem>
 
 #define DEBUG
 #define WARNING
@@ -61,6 +63,23 @@ Wallpaper::constructPath (
         retval += filename;
     }
 
+    return retval;
+}
+
+QString 
+Wallpaper::logicalIdToFilePath (
+        const QString    &id)
+{
+    QString retval = id;
+
+    if (!id.isEmpty() && !id.startsWith (QDir::separator())) {
+        MGConfItem themeItem (Wallpaper::themeNameKey);
+        QString    themeName = themeItem.value().toString();
+
+        retval = Wallpaper::themeImagePath.arg(themeName).arg(id);
+    }
+
+    SYS_DEBUG ("Returning '%s'", SYS_STR(retval));
     return retval;
 }
 
