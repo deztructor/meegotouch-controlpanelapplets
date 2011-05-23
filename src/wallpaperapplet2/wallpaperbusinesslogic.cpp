@@ -242,21 +242,6 @@ WallpaperBusinessLogic::setBackground (
 }
 
 /*!
- * Returns a list wallpaper descriptors with the available wallpapers. The
- * current wallpaper is the first element of the available wallpapers.
- *
- * FIXME: This function needs some polishing.
- */
-QList<WallpaperDescriptor *>
-WallpaperBusinessLogic::availableWallpapers () const
-{
-    QList<WallpaperDescriptor *>   list;
-
-    SYS_DEBUG ("We have %d wallpapers.", list.size());
-    return list;
-}
-
-/*!
  * \param ours if true the descriptor will be destroyed when not needed any more
  *
  * While a wallpaper image is edited the WallpaperBusinessLogic holds a

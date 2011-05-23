@@ -55,10 +55,6 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
                 QString   &currentFilePath,
                 QString   &originalFilePath);
 
-
-    
-    QList<WallpaperDescriptor *> availableWallpapers () const;
-
     void setEditedImage (WallpaperDescriptor *desc, bool ours = false);
     void startEdit (WallpaperDescriptor *desc = NULL);
 

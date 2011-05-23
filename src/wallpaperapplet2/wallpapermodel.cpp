@@ -31,9 +31,6 @@
 #include <MImageWidget>
 #include <MProgressIndicator>
 
-#ifdef HAVE_QMSYSTEM
-#  include <qmusbmode.h>
-#endif
 
 #define DEBUG
 #define WARNING
@@ -482,7 +479,6 @@ WallpaperModel::loadThumbnails (
 
             m_FilePathHash[m_FilePathList[n]].unsetThumbnail();
             emitChangedSignal (n);
-            SYS_WARNING ("Should drop %d", n);
         }
     }
 }
