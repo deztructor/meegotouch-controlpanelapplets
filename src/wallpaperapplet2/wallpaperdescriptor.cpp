@@ -238,3 +238,15 @@ WallpaperDescriptor::selected () const
     return m_Priv->selected ();
 }
 
+/******************************************************************************
+ * Loading...
+ */
+QuillImage
+WallpaperDescriptor::load (
+        QSize    expectedSize)
+{
+    RETURN_VAL_IF_NULL(QuillImage());
+
+    return m_Priv->load (expectedSize);
+}
+

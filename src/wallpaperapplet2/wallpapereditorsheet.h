@@ -25,7 +25,7 @@
 
 #include <MSheet>
 class WallpaperBusinessLogic;
-class WallpaperEditorWidget;
+class WallpaperViewWidget;
 
 class WallpaperEditorSheet : public MSheet
 {
@@ -46,6 +46,6 @@ class WallpaperEditorSheet : public MSheet
         void cancelActivated ();
 
     private:
-        WallpaperEditorWidget  *m_EditorWidget;
+        WallpaperViewWidget  *m_EditorWidget;
 };
 #endif

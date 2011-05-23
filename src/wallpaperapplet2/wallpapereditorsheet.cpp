@@ -22,6 +22,7 @@
 ****************************************************************************/
 #include "wallpapereditorsheet.h"
 #include "wallpaperbusinesslogic.h"
+#include "wallpaperconfiguration.h"
 #include "wallpapereditorwidget.h"
 
 #include <MBasicSheetHeader>
@@ -42,7 +43,14 @@ void
 WallpaperEditorSheet::createCentralWidget(
         WallpaperBusinessLogic *wallpaperBusinessLogic)
 {
-    m_EditorWidget = new WallpaperEditorWidget (wallpaperBusinessLogic, this);
+    if (Wallpaper::supportEdit) {
+        m_EditorWidget = new WallpaperEditorWidget (
+                wallpaperBusinessLogic, this);
+    } else {
+        m_EditorWidget = new WallpaperViewWidget (
+                wallpaperBusinessLogic, this);
+    }
+
     setCentralWidget (m_EditorWidget);
 }
 

@@ -59,6 +59,7 @@ HEADERS =                          \
     wallpaperapplet.h              \
     wallpaperwidget.h              \
     wallpapereditorsheet.h         \
+    wallpaperviewwidget.h          \
     wallpapereditorwidget.h        \
     wallpaperitrans.h
 
@@ -75,6 +76,7 @@ SOURCES =                          \
     wallpaperapplet.cpp            \
     wallpaperwidget.cpp            \
     wallpapereditorsheet.cpp       \
+    wallpaperviewwidget.cpp        \
     wallpapereditorwidget.cpp      \
     wallpaperitrans.cpp
 

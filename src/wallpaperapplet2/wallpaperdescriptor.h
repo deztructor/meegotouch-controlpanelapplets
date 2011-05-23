@@ -27,35 +27,14 @@
 #include <QVector>
 #include <MApplication>
 #include <meegocontrolexport.h>
-
-#ifdef HAVE_QUILL_FILTER
-#  include <QuillFile>
-#  include <QuillImage>
-#  include <QuillImageFilterFactory>
-   typedef QuillImage WallPaperImage;
-#else
-#  include <QImage>
-   typedef QImage WallPaperImage;
-#endif
-
-#ifdef HAVE_QUILL_METADATA
-#  include <QuillMetadata>
-#endif
-/*
- * In the functional tests we use the real thing, in the unit tests we use the
- * stubbed version. 
- */
-#if defined(UNIT_TEST) && !defined(FUNCTIONAL_TEST)
-#  include "thumbnailerstub.h"
-#else
-#  include <Thumbnailer>
-#endif
+#include <QuillImage>
+#include <Thumbnailer>
 
 using namespace Thumbnails;
 
 class QString;
 class WallpaperDescriptorPrivate;
-
+class QSize;
 
 /*!
  * This class is used to represent a potential wallpaper image with all its
@@ -78,6 +57,7 @@ class MC_EXPORT WallpaperDescriptor : public QObject
                  const WallpaperDescriptor &rhs);
 
         bool isNull() const;
+
         /*
          * Standard set/get methods.
          */
@@ -97,6 +77,11 @@ class MC_EXPORT WallpaperDescriptor : public QObject
 
         void setSelected (bool selected = true);
         bool selected () const;
+
+        /*
+         * Loading...
+         */
+        QuillImage load (QSize expectedSize);
 
     private:
         WallpaperDescriptorPrivate *m_Priv;

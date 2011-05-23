@@ -28,6 +28,7 @@
 namespace Wallpaper 
 {
     const bool useSheetForEdit (true);
+    const bool supportEdit (false);
 
     const QString CurrentPortraitKey (
             "/desktop/meego/background/portrait/picture_filename");

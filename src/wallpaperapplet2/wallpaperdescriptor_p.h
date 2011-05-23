@@ -26,6 +26,12 @@
 #include <QuillImageFilterFactory>
 #include <QImage>
 
+#include <QuillFile>
+#include <QuillImage>
+#include <QuillImageFilterFactory>
+
+class QSize;
+
 class WallpaperDescriptorPrivate
 {
     public:
@@ -51,6 +57,11 @@ class WallpaperDescriptorPrivate
 
         void setSelected (bool selected);
         bool selected () const;
+        
+        /*
+         * Loading...
+         */
+        QuillImage load (QSize expectedSize);
 
     private:
         int      m_ReferenceCounter;

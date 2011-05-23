@@ -69,8 +69,7 @@ static const qreal scaleUpperLimit = 400.0;
 WallpaperEditorWidget::WallpaperEditorWidget (
         WallpaperBusinessLogic *wallpaperBusinessLogic, 
         QGraphicsWidget        *parent) :
-    DcpWidget (parent),
-    m_WallpaperBusinessLogic (wallpaperBusinessLogic),
+    WallpaperViewWidget (wallpaperBusinessLogic, parent),
     m_DoneAction (0),
     m_CancelAction (0),
     m_NoTitlebar (false),
@@ -80,6 +79,7 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_HasPendingRedraw (false),
     m_Physics (0)
 {
+    SYS_WARNING ("----------------------------------------------");
     MWindow *win = MApplication::activeWindow ();
     
 #ifndef LIBMEEGOCONTROL
@@ -89,8 +89,8 @@ WallpaperEditorWidget::WallpaperEditorWidget (
      * NOTE: It also freezes the controlpanel sometimes, so I had to completely
      * remove.
      */
-    if (win)
-        win->showFullScreen();
+    //if (win)
+    //    win->showFullScreen();
 #endif
 
 #if 0
@@ -141,10 +141,6 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_ScalePhysics->setPosition (QPointF(0.0, 100.0));
     connect (m_ScalePhysics, SIGNAL(positionChanged(const QPointF &)),
             this, SLOT(scalePhysicsPositionChanged(const QPointF &)));
-    /*
-     *
-     */
-    QTimer::singleShot (0, this, SLOT(createContent()));
 
     if (win) {
         m_Orientation = win->orientation();
@@ -208,6 +204,7 @@ WallpaperEditorWidget::paint (
 void
 WallpaperEditorWidget::createContent ()
 {
+    WallpaperEditorWidget::createContent ();
 }
 
 /*!
@@ -320,26 +317,8 @@ WallpaperEditorWidget::saveImage ()
     ptrans = m_Trans.orientation() == M::Portrait ?
         &m_Trans : &m_PortraitTrans;
 
-    /*
-     * Here we save the settings.
-     */
-    m_WallpaperBusinessLogic->setBackground (ltrans, ptrans);
 
-    /*
-     * Notifying the business logic about the editing ended. It is important,
-     * otherwise the businesslogic will reject the next edit start requests.
-     */
-    m_WallpaperBusinessLogic->endEdit ();
-
-}
-void
-WallpaperEditorWidget::dropImage ()
-{
-    /*
-     * Notifying the business logic about the editing ended. It is important,
-     * otherwise the businesslogic will reject the next edit start requests.
-     */
-    m_WallpaperBusinessLogic->endEdit ();
+    WallpaperViewWidget::saveImage ();
 }
 
 /*!
@@ -399,7 +378,7 @@ WallpaperEditorWidget::slotCancelActivated ()
     /*
      *
      */
-    m_WallpaperBusinessLogic->setEditedImage (0);
+    m_BusinessLogic->setEditedImage (0);
 }
 
 /*!

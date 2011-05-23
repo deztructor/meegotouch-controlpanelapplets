@@ -19,13 +19,15 @@
 #ifndef WALLPAPEREDITORWIDGET_H
 #define WALLPAPEREDITORWIDGET_H
 
+#include "wallpaperviewwidget.h"
+#include "wallpaperbusinesslogic.h"
+#include "wallpaperitrans.h"
+
 #include <QPointer>
 #include <MPhysics2DPanning>
 #include <meegocontrolexport.h>
 #include <dcpwidget.h>
 
-#include "wallpaperbusinesslogic.h"
-#include "wallpaperitrans.h"
 
 class MContainer;
 class MLinearLayoutPolicy;
@@ -73,7 +75,7 @@ class QGestureEvent;
  *   coordinate system is not the same as in the motion events. I added this
  *   point as a reminder to test the applet in portrait mode also.
  */
-class MC_EXPORT WallpaperEditorWidget : public DcpWidget
+class MC_EXPORT WallpaperEditorWidget : public WallpaperViewWidget
 {
     Q_OBJECT
 
@@ -90,8 +92,7 @@ public:
             const QStyleOptionGraphicsItem  *option,
             QWidget                         *widget = 0);
 
-    void saveImage ();
-    void dropImage ();
+    virtual void saveImage ();
 
 protected:
     virtual void polishEvent ();
@@ -132,7 +133,7 @@ private slots:
     void orientationChanged (M::Orientation orientation);
     void slotDoneActivated ();
     void slotCancelActivated ();
-    void createContent ();
+    virtual void createContent ();
     void createWidgets ();
     void panningPhysicsPositionChanged (const QPointF &position);
     void panningPhysicsPanningStopped ();
@@ -151,7 +152,6 @@ private:
     bool supportsPortrait () const;
  
 private:
-    QPointer<WallpaperBusinessLogic>  m_WallpaperBusinessLogic;
     QImage                m_bgLandscape;
     QImage                m_bgPortrait;
     MAction              *m_DoneAction;
@@ -164,7 +164,6 @@ private:
     QPointF               m_UserOffset;
     QPointF               m_ImageFixpoint;
 
-    WallpaperITrans       m_Trans;
     WallpaperITrans       m_LandscapeTrans;
     WallpaperITrans       m_PortraitTrans;
     
@@ -174,10 +173,6 @@ private:
     bool                  m_HasPendingRedraw;
     MPhysics2DPanning    *m_Physics;
     MPhysics2DPanning    *m_ScalePhysics;
-
-    #ifdef UNIT_TEST
-    friend class Ut_WallpaperEditorWidget;
-    #endif
 };
 
 #endif

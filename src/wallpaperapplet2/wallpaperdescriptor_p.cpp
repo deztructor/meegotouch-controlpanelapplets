@@ -123,4 +123,33 @@ WallpaperDescriptorPrivate::selected () const
     return m_Selected;
 }
 
+/******************************************************************************
+ * Loading...
+ */
+QuillImage
+WallpaperDescriptorPrivate::load (
+        QSize    expectedSize)
+{
+    QuillImage        retval;
+    QSize             mySize;
+    QuillImageFilter *loadFilter;
+
+    QuillFile quillFile  (filePath());
+    mySize = quillFile.fullImageSize ();
+    /*
+     * FIXME: Yeah, the size. These literals should not be here... but the code
+     * changed, we are not loading the full size image any more.
+     */
+    mySize.scale (expectedSize, Qt::KeepAspectRatio);
+
+    loadFilter = QuillImageFilterFactory::createImageFilter(
+            QuillImageFilter::Role_Load);
+    loadFilter->setOption(
+            QuillImageFilter::FileName,
+            QVariant(filePath()));
+    retval = loadFilter->apply (QImage(mySize, QImage::Format_RGB16));
+    delete loadFilter;
+
+    return retval;
+}
 
