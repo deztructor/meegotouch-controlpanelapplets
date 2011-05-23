@@ -57,6 +57,7 @@ QTM_USE_NAMESPACE
 
 static const QString configPath ("/usr/share/about-contents/");
 static const QString configFile (configPath + "contents.ini");
+static const QString certConfigFile (configPath + "typelabel.ini");
 
 AboutBusinessLogic::AboutBusinessLogic() : QThread (0)
 {
@@ -324,6 +325,15 @@ AboutBusinessLogic::initializeAndStart ()
     m_barcodeImage = content.value ("barcodeimage").toString ();
     m_licenseFile =
         content.value ("abouttext", QString (LICENSE_PATH)).toString ();
+
+    if (QFile::exists (certConfigFile))
+    {
+        /*
+         * Type certifications may come from different customization
+         */
+        QSettings certsContent (certConfigFile, QSettings::IniFormat);
+        m_certsImage = content.value ("swtypeimage").toString ();
+    }
 
     SYS_DEBUG ("\nAbout applet configuration:\n"
                "Product name        : %s\n"
