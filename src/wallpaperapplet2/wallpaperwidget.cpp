@@ -17,7 +17,6 @@
 **
 ****************************************************************************/
 #include "wallpaperwidget.h"
-#include "wallpaperlist.h"
 
 #include <MApplicationPage>
 #include <MLayout>
@@ -30,10 +29,12 @@
 #include <QDBusInterface>
 #include <MLabel>
 
+#include "wallpaperconfiguration.h"
 #include "wallpapereditorsheet.h"
+#include "wallpaperlist.h"
 
-//#define DEBUG
-//#define WARNING
+#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 static const int MaxColumns = 2;
@@ -49,7 +50,7 @@ WallpaperWidget::WallpaperWidget (
         WallpaperBusinessLogic *wallpaperBusinessLogic, 
         QGraphicsWidget        *parent) :
     DcpWidget (parent),
-    m_WallpaperBusinessLogic (wallpaperBusinessLogic),
+    m_BusinessLogic (wallpaperBusinessLogic),
     m_NavigationBarTransparency (-1)
 {
     MWindow *win = MApplication::activeWindow ();
@@ -69,6 +70,12 @@ WallpaperWidget::WallpaperWidget (
      */
     //createContent ();
     QTimer::singleShot(100, this, SLOT(createContent()));
+
+    /*
+     *
+     */
+    connect (m_BusinessLogic, SIGNAL(editWallpaper(WallpaperDescriptor)),
+            this, SLOT(slotEditWallpaper(WallpaperDescriptor)));
 }
 
 WallpaperWidget::~WallpaperWidget ()
@@ -104,12 +111,12 @@ WallpaperWidget::createContent ()
     addHeaderContainer (mainLayout);
 
     /*
-     * The list of the available images.
+     * The list widget of the available images shown in a grid view.
      */
-    m_ImageList = new WallpaperList (m_WallpaperBusinessLogic, this);
+    m_ImageList = new WallpaperList (m_BusinessLogic, this);
     m_ImageList->setObjectName("WallpaperImageList");
-    connect (m_ImageList, SIGNAL(imageActivated(WallpaperDescriptor *)),
-            this, SLOT(slotImageActivated(WallpaperDescriptor *)));
+    connect (m_ImageList, SIGNAL(imageActivated(WallpaperDescriptor)),
+            this, SLOT(slotImageActivated(WallpaperDescriptor)));
 
     m_ImageList->setDataSourceType (WallpaperList::DataSourceLocal);
 
@@ -119,9 +126,6 @@ WallpaperWidget::createContent ()
      */
     mainLayout->addItem (m_ImageList);
     mainLayout->setStretchFactor (m_ImageList, 1);
-
-    connect (m_WallpaperBusinessLogic, SIGNAL(imageEditRequested()),
-            this, SLOT(slotImageActivated()));
 }
 
 void 
@@ -167,10 +171,10 @@ WallpaperWidget::retranslateUi ()
  */
 void 
 WallpaperWidget::slotImageActivated (
-        WallpaperDescriptor *desc)
+        WallpaperDescriptor desc)
 {
-    SYS_DEBUG ("*** desc = %s", SYS_STR(desc->basename()));
-    m_WallpaperBusinessLogic->startEdit (desc);
+    SYS_DEBUG ("*** desc = %s", SYS_STR(desc.filePath()));
+    m_BusinessLogic->startEdit (desc);
 }
 
 /*
@@ -181,16 +185,21 @@ void
 WallpaperWidget::slotImageActivated ()
 {
     SYS_DEBUG ("");
-    /*
-     * With this define
-     */
-#if 0
-    WallpaperEditorSheet  *sheet;
-    sheet = new WallpaperEditorSheet (m_WallpaperBusinessLogic);
-    sheet->appear(scene(), MSceneWindow::DestroyWhenDone);
-#else
-    emit changeWidget (1);
-#endif
+}
+
+void 
+WallpaperWidget::slotEditWallpaper (
+        WallpaperDescriptor desc)
+{
+    SYS_DEBUG ("");
+
+    if (Wallpaper::useSheetForEdit) {
+        WallpaperEditorSheet  *sheet;
+        sheet = new WallpaperEditorSheet (m_BusinessLogic);
+        sheet->appear(scene(), MSceneWindow::DestroyWhenDone);
+    } else {
+        emit changeWidget (1);
+    }
 }
 
 

@@ -29,6 +29,8 @@
 #include "wallpapergconf.h"
 #include "wallpaperdescriptor.h"
 #include "wallpaperitrans.h"
+#include "wallpapereditorsheet.h"
+
 
 #include <QString>
 #include <QStringList>
@@ -272,57 +274,22 @@ WallpaperBusinessLogic::setEditedImage (
 
 void
 WallpaperBusinessLogic::startEdit (
-        WallpaperDescriptor *desc)
+        WallpaperDescriptor desc)
 {
-#if 0
-    bool threadActive = m_FutureWatcher.isRunning();
-
-    /*
-     * If the user double clicked on the same image we are currently loading in
-     * the other thread. Somehow we got this signal twice because of the DBus
-     * interface implementation... no problem though.
-     */
-    if (threadActive && m_EditedImage && m_EditedImage == desc) {
-
-        SYS_DEBUG ("The thread is already active for the same image.");
+    SYS_DEBUG ("");
+    if (!m_EditedImage.isNull()) {
+        SYS_DEBUG ("We already have an edited image, ignoring this request.");
         return;
     }
 
-    if (threadActive) {
-        SYS_DEBUG ("The thread is already active.");
-        return;
-    }
+    m_EditedImage = desc;
+    emit editWallpaper (desc);
+}
 
-    /*
-     * If we already have and image we are editing and the user clicks on an
-     * other image we remove the loading indicator progress bar from the old
-     * one. This is kind a cosmetic fix since we should abort the other thread.
-     */
-    if (desc && m_EditedImage && desc != m_EditedImage) {
-        SYS_DEBUG ("We have an edited image already.");
-        return;
-    }
-
-    /*
-     * If we got an image descriptor we start editing that, if not we start
-     * editing the editedimage set before.
-     */
-    if (desc) {
-        setEditedImage (desc);
-    } else {
-        desc = m_EditedImage;
-    }
-
-    desc->setLoading (true);
-
-    /*
-     * The loadAll() method is safe to call from outside the GUI thread.
-     */
-    QFuture<void> future = QtConcurrent::run (
-            desc, 
-            &WallpaperDescriptor::loadAll);
-    m_FutureWatcher.setFuture (future);
-#endif
+void
+WallpaperBusinessLogic::endEdit ()
+{
+    m_EditedImage = WallpaperDescriptor ();
 }
 
 void 
@@ -343,8 +310,8 @@ WallpaperBusinessLogic::startEditThreadEnded ()
 /*!
  * Returns the wallpaper that is being edited.
  */
-WallpaperDescriptor *
-WallpaperBusinessLogic::editedImage ()
+WallpaperDescriptor 
+WallpaperBusinessLogic::editedImage () const
 {
     return m_EditedImage;
 }
@@ -800,7 +767,7 @@ WallpaperBusinessLogic::supportsPortrait () const
 /******************************************************************************
  * Handling the GConf database.
  */
-bool
+void
 WallpaperBusinessLogic::portraitGConfChanged ()
 {
     SYS_DEBUG ("");

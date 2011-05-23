@@ -27,6 +27,17 @@
 #define WARNING
 #include "../debug.h"
 
+#define RETURN_VAL_IF_NULL(retval) \
+    if (isNull()) { \
+        SYS_WARNING ("WallpaperDescriptor is a null object."); \
+        return (retval); \
+    }
+
+#define RETURN_IF_NULL \
+    if (isNull()) { \
+        SYS_WARNING ("WallpaperDescriptor is a null object."); \
+        return; \
+    }
 
 /******************************************************************************
  * WallpaperDescriptor implementation: constructors and destructors.
@@ -34,7 +45,7 @@
 WallpaperDescriptor::WallpaperDescriptor(
         QObject         *parent) : 
     QObject (parent),
-    m_Priv (new WallpaperDescriptorPrivate)
+    m_Priv (0)
 {
 }
 
@@ -84,6 +95,13 @@ WallpaperDescriptor::operator= (
     return *this;
 }
 
+bool 
+WallpaperDescriptor::isNull() const
+{
+    return m_Priv == 0;
+}
+
+
 /******************************************************************************
  * Standard set/get methods.
  */
@@ -91,12 +109,16 @@ void
 WallpaperDescriptor::setFilePath (
         const QString &filePath)
 {
+    RETURN_IF_NULL;
+
     m_Priv->setFilePath (filePath);
 }
 
 QString
 WallpaperDescriptor::filePath () const
 {
+    RETURN_VAL_IF_NULL(QString());
+
     return m_Priv->filePath ();
 }
 
@@ -105,6 +127,8 @@ WallpaperDescriptor::url () const
 {
     QUrl    retval;
     QString path;
+
+    RETURN_VAL_IF_NULL(retval);
 
     path = m_Priv->filePath ();
     if (path.startsWith(QDir::separator())) {
@@ -134,6 +158,8 @@ WallpaperDescriptor::mimeType () const
     QString retval;
     QString path;
 
+    RETURN_VAL_IF_NULL(retval);
+
     path = m_Priv->filePath();
     if (path.isEmpty()) 
         goto finalize;
@@ -153,12 +179,15 @@ void
 WallpaperDescriptor::setThumbnailPending (
         bool pending)
 {
+    RETURN_IF_NULL;
     m_Priv->setThumbnailPending (pending);
 }
 
 bool
 WallpaperDescriptor::thumbnailPending () const
 {
+    RETURN_VAL_IF_NULL(false);
+
     return m_Priv->thumbnailPending ();
 }
      
@@ -166,24 +195,30 @@ void
 WallpaperDescriptor::setThumbnail (
         const QPixmap &thumbnail)
 {
+    RETURN_IF_NULL;
     m_Priv->setThumbnail (thumbnail);
 }
 
 void
 WallpaperDescriptor::unsetThumbnail ()
 {
+    RETURN_IF_NULL;
     m_Priv->unsetThumbnail ();
 }
 
 QPixmap
 WallpaperDescriptor::thumbnail () const
 {
+    RETURN_VAL_IF_NULL(QPixmap());
+
     return m_Priv->thumbnail ();
 }
 
 bool
 WallpaperDescriptor::hasThumbnail () const
 {
+    RETURN_VAL_IF_NULL(false);
+
     return m_Priv->hasThumbnail ();
 }
 
@@ -191,12 +226,15 @@ void
 WallpaperDescriptor::setSelected (
         bool selected)
 {
+    RETURN_IF_NULL;
     m_Priv->setSelected (selected);
 }
 
 bool 
 WallpaperDescriptor::selected () const
 {
+    RETURN_VAL_IF_NULL(false);
+
     return m_Priv->selected ();
 }
 

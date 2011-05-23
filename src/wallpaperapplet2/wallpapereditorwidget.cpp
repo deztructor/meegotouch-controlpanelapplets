@@ -50,8 +50,8 @@ M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
 static const qreal ScaleLowerLimit = 0.15;
 
-//#define DEBUG
-//#define WARNING
+#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 static const int ExtraMargin = 0;
@@ -326,18 +326,20 @@ WallpaperEditorWidget::saveImage ()
     m_WallpaperBusinessLogic->setBackground (ltrans, ptrans);
 
     /*
-     *
+     * Notifying the business logic about the editing ended. It is important,
+     * otherwise the businesslogic will reject the next edit start requests.
      */
-    m_WallpaperBusinessLogic->setEditedImage (0);
+    m_WallpaperBusinessLogic->endEdit ();
 
 }
 void
 WallpaperEditorWidget::dropImage ()
 {
     /*
-     *
+     * Notifying the business logic about the editing ended. It is important,
+     * otherwise the businesslogic will reject the next edit start requests.
      */
-    m_WallpaperBusinessLogic->setEditedImage (0);
+    m_WallpaperBusinessLogic->endEdit ();
 }
 
 /*!

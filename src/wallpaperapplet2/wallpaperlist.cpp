@@ -17,10 +17,18 @@
 **
 ****************************************************************************/
 #include "wallpaperbusinesslogic.h"
-#include "wallpaperlist.h"
-#include "wallpapermodel.h"
 
 #include <QTimer>
+#include <MOrientationChangeEvent>
+#include <MApplication>
+#include <MApplicationWindow>
+#include <MSortFilterProxyModel>
+#include <MListFilter>
+
+#include "wallpaperlist.h"
+#include "wallpapermodel.h"
+#include "wallpaperdescriptor.h"
+
 
 #define DEBUG
 #define WARNING
@@ -30,12 +38,6 @@ static const int loadPicturesDelay = 10;
 
 static int columnsLandscape = 5;
 static int columnsPortrait = 3;
-#include <MOrientationChangeEvent>
-#include <MApplication>
-#include <MApplicationWindow>
-
-#include <MSortFilterProxyModel>
-#include <MListFilter>
 
 #include <MWidgetCreator>
 M_REGISTER_WIDGET_NO_CREATE(WallpaperList)
@@ -159,7 +161,7 @@ WallpaperList::slotItemClicked (
     WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
 
     SYS_DEBUG ("*** filename = %s", SYS_STR(desc.filePath()));
-    //emit imageActivated(rowData);
+    emit imageActivated(desc);
 }
 
 void 

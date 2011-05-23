@@ -56,9 +56,11 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
                 QString   &originalFilePath);
 
     void setEditedImage (WallpaperDescriptor *desc, bool ours = false);
-    void startEdit (WallpaperDescriptor *desc = NULL);
+        
+        void startEdit (WallpaperDescriptor desc);
+        void endEdit ();
 
-    WallpaperDescriptor *editedImage ();
+        WallpaperDescriptor editedImage () const;
 
     void setBackground (
         WallpaperITrans     *landscapeITrans,
@@ -67,11 +69,12 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
 
     signals:
         void wallpaperChanged ();
+        void editWallpaper (WallpaperDescriptor desc);
    
     void imageEditRequested ();
     
     private slots:
-        bool portraitGConfChanged ();
+        void portraitGConfChanged ();
 
     void editRequestArrived (
         QString   portraitFileName,
@@ -104,8 +107,8 @@ private:
     private:
         QPointer<MGConfItem>       m_PPItem;
         QPointer<MGConfItem>       m_POItem;
+        WallpaperDescriptor        m_EditedImage;
 
-    QPointer<WallpaperDescriptor>  m_EditedImage;
     bool                           m_EditedImageOurs;
     bool                           m_OrientationLocked;
     M::Orientation                 m_LockedOrientation;

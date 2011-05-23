@@ -19,11 +19,12 @@
 #ifndef WALLPAPERLIST_H
 #define WALLPAPERLIST_H
 
+#include "wallpaperdescriptor.h"
+
 #include <MList>
 #include <QModelIndex>
 
 class QGraphicsItem;
-class WallpaperDescriptor;
 class WallpaperBusinessLogic;
 class WallpaperImageLoader;
 class WallpaperModel;
@@ -70,8 +71,8 @@ protected:
                 int                start, 
                 int                end);
 
-signals:
-    void imageActivated (WallpaperDescriptor *desc);
+    signals:
+        void imageActivated (WallpaperDescriptor desc);
 
     private:
         WallpaperBusinessLogic *m_BusinessLogic;

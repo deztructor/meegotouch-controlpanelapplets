@@ -77,6 +77,7 @@ class MC_EXPORT WallpaperDescriptor : public QObject
         WallpaperDescriptor &operator= (
                  const WallpaperDescriptor &rhs);
 
+        bool isNull() const;
         /*
          * Standard set/get methods.
          */

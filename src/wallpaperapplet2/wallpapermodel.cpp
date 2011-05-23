@@ -87,7 +87,6 @@ WallpaperCellCreator::updateCell (
     QVariant         data = index.data(WallpaperModel::WallpaperDescriptorRole);
     WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
    
-    SYS_DEBUG ("file = %s", SYS_STR(desc.filePath()));
     if (desc.hasThumbnail()) {
         QPixmap thumb = desc.thumbnail ();
         QSizeF  cSize = cellSize();
@@ -526,8 +525,11 @@ WallpaperModel::trySelect (
 
     if (filePath.isEmpty())
         goto finalize;
-    
-    SYS_WARNING ("UNIMPLEMENTED");
+   
+    if (!m_FilePathList.contains(filePath))
+        goto finalize;
+
+    retval = true; 
 
 finalize:
     if (retval)

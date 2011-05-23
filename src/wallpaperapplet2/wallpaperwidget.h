@@ -45,8 +45,10 @@ public:
 protected:
     virtual void polishEvent ();
 
-private slots:
-    void slotImageActivated (WallpaperDescriptor *desc);
+    private slots:
+        void slotImageActivated (WallpaperDescriptor desc);
+        void slotEditWallpaper (WallpaperDescriptor desc);
+
     void slotImageActivated ();
     virtual void createContent ();
     void oviActivated ();
@@ -56,7 +58,7 @@ private:
     void retranslateUi ();
 
 private:
-    QPointer<WallpaperBusinessLogic>       m_WallpaperBusinessLogic;
+    QPointer<WallpaperBusinessLogic>       m_BusinessLogic;
     MLabel                                *m_TitleLabel;
     WallpaperList                         *m_ImageList;
 
