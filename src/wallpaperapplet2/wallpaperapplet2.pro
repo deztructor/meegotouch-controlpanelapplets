@@ -11,11 +11,16 @@ QT += dbus
 QMAKE_LFLAGS_RPATH = -Wl
 QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden -fPIC
 
-CONFIG += plugin \
-          gui \
-          meegotouchcore \
-          quill \
-          duicontrolpanel
+CONFIG +=             \
+    plugin            \
+    gui               \
+    meegotouchcore    \
+    quill             \
+    duicontrolpanel
+
+contains(DEFINES, HAVE_QMSYSTEM) {
+    CONFIG += qmsystem2
+}
 
 contains(DEFINES, HAVE_CONTENT_MANAGER) {
     CONFIG += link_pkgconfig
@@ -53,7 +58,6 @@ HEADERS =                          \
     wallpaperbusinesslogic.h       \
     wallpaperapplet.h              \
     wallpaperwidget.h              \
-    wallpaperinfoheader.h          \
     wallpapereditorsheet.h         \
     wallpapereditorwidget.h        \
     wallpaperitrans.h
@@ -70,7 +74,6 @@ SOURCES =                          \
     wallpaperbusinesslogic.cpp     \
     wallpaperapplet.cpp            \
     wallpaperwidget.cpp            \
-    wallpaperinfoheader.cpp        \
     wallpapereditorsheet.cpp       \
     wallpapereditorwidget.cpp      \
     wallpaperitrans.cpp

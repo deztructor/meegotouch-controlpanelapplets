@@ -37,7 +37,6 @@ class QPixmap;
 class QImage;
 class QPointF;
 class QGestureEvent;
-class WallpaperInfoHeader;
 
 // The editing feature is dropped. Further code-cleanup is necessary.
 #define NO_EDITING
@@ -153,10 +152,6 @@ private:
  
 private:
     QPointer<WallpaperBusinessLogic>  m_WallpaperBusinessLogic;
-
-    // FIXME: The infoheader is not used any more, but removing this pointer
-    // would cause ABI break.
-    WallpaperInfoHeader  *m_InfoHeader;
     QImage                m_bgLandscape;
     QImage                m_bgPortrait;
     MAction              *m_DoneAction;

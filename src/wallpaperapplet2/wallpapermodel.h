@@ -30,6 +30,9 @@
 #include "wallpaperdescriptor.h"
 #include <MImageWidget> 
 #include <QSizeF>
+#ifdef HAVE_QMSYSTEM
+#  include <qmusbmode.h>
+#endif
 
 class WallpaperBusinessLogic;
 class WallpaperDescriptor;
@@ -103,6 +106,7 @@ class WallpaperModel: public QAbstractTableModel
         bool trySelect (const QString filePath);
         bool tryAddAndSelect (const QString filePath);
         bool selectByFilepath (const QString &filepath);
+        void emitChangedSignal (int idx);
 
     private:
         WallpaperBusinessLogic                 *m_BusinessLogic;
@@ -111,6 +115,7 @@ class WallpaperModel: public QAbstractTableModel
         QString                                 m_ImagesDir;
         QPointer<Thumbnailer>                   m_Thumbnailer;
         QPointer<QFileSystemWatcher>            m_FileWatcher;
+        int                                     m_ThumbnailMagicNumber;
 
 };
 

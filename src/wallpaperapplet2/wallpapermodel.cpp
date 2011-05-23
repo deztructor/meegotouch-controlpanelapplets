@@ -141,7 +141,8 @@ WallpaperModel::WallpaperModel (
         WallpaperBusinessLogic *logic,
         QObject                *parent) :
     QAbstractTableModel (parent),
-    m_BusinessLogic (logic)
+    m_BusinessLogic (logic),
+    m_ThumbnailMagicNumber (1)
 {
     m_ImagesDir = Wallpaper::constructPath (Wallpaper::ImagesDir);
 
@@ -220,8 +221,6 @@ WallpaperModel::columnCount (
 {
     return 1;
 }
-
-
 
 /*
  * This slot is activated when the wallpaper has been changed. We emit a
@@ -323,12 +322,9 @@ WallpaperModel::thumbnailReady (
     if (m_FilePathHash.contains(path)) {
         WallpaperDescriptor desc = m_FilePathHash[path];
         int                 idx = m_FilePathList.indexOf(path);
-        QModelIndex         first;
 
-        first = index (idx, 0);
         desc.setThumbnail (pixmap);
-        SYS_WARNING ("-> %d", idx);
-        emit dataChanged (first, first);
+        emitChangedSignal (idx);
     } else {
         SYS_WARNING ("Descriptor path not found: %s", SYS_STR(path));
     }
@@ -390,6 +386,7 @@ WallpaperModel::loadThumbnails (
             const QModelIndex& lastVisibleRow)
 {
     QList<QUrl>  uris;
+    QStringList  requestedFiles;
     QStringList  mimeTypes;
 
     #if 0
@@ -431,7 +428,9 @@ WallpaperModel::loadThumbnails (
         WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
         QUrl                url;
         QString             mimeType;
-       
+
+        requestedFiles << desc.filePath();
+
         if (desc.hasThumbnail() || desc.thumbnailPending())
             continue;
 
@@ -457,6 +456,26 @@ WallpaperModel::loadThumbnails (
         SYS_DEBUG ("Requesting %d thumbnails.", uris.length());
         m_Thumbnailer->request (
                 uris, mimeTypes, true, Wallpaper::DefaultThumbnailFlavor);
+    }
+
+    /*
+     * Sometimes we need to let go the thumbnails we requested before, otherwise
+     * the memory consumption grow as the user pans all around in the list. This
+     * only has effect when the model contains a huge number ot items, though.
+     */
+    m_ThumbnailMagicNumber++;
+    if (m_ThumbnailMagicNumber % 10 == 0) {
+        for (int n = 0; n < m_FilePathList.size(); ++n) {
+            if (requestedFiles.contains(m_FilePathList[n]))
+                continue;
+
+            if (!m_FilePathHash[m_FilePathList[n]].hasThumbnail())
+                continue;
+
+            m_FilePathHash[m_FilePathList[n]].unsetThumbnail();
+            emitChangedSignal (n);
+            SYS_WARNING ("Should drop %d", n);
+        }
     }
 }
 
@@ -611,5 +630,17 @@ WallpaperModel::startWatchFiles ()
 
     SYS_DEBUG ("Watching directory %s", SYS_STR(m_ImagesDir));
     m_FileWatcher->addPath (m_ImagesDir);
+}
+
+/******************************************************************************
+ * Low level private methods.
+ */
+void
+WallpaperModel::emitChangedSignal (
+        int    idx)
+{
+    QModelIndex         first;
+    first = index (idx, 0);
+    emit dataChanged (first, first);
 }
 

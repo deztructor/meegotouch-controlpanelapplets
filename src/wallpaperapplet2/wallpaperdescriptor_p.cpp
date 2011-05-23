@@ -94,6 +94,7 @@ void
 WallpaperDescriptorPrivate::unsetThumbnail ()
 {
     m_HasThumbnail = false;
+    m_ThumbnailPending = false;
     m_Thumbnail = QPixmap();
 }
 

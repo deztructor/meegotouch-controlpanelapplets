@@ -17,7 +17,6 @@
 **
 ****************************************************************************/
 #include "wallpapereditorwidget.h"
-#include "wallpaperinfoheader.h"
 
 #include <QStyle>
 #include <QGraphicsSceneMouseEvent>
@@ -72,7 +71,6 @@ WallpaperEditorWidget::WallpaperEditorWidget (
         QGraphicsWidget        *parent) :
     DcpWidget (parent),
     m_WallpaperBusinessLogic (wallpaperBusinessLogic),
-    m_InfoHeader (0),
     m_DoneAction (0),
     m_CancelAction (0),
     m_NoTitlebar (false),
@@ -221,30 +219,6 @@ WallpaperEditorWidget::createWidgets ()
     SYS_DEBUG ("");
     setContentsMargins (0, 0, 0, 0);
     setWindowFrameMargins (0.0, 0.0, 0.0, 0.0);
-    
-    #ifdef USE_INFOHEADER
-    MLayout               *layout;
-    MLinearLayoutPolicy   *policy;
-    /*
-     *
-     */
-    layout = new MLayout;
-    policy = new MLinearLayoutPolicy (layout, Qt::Vertical);
-    layout->setContentsMargins (0, 0, 0, 0);
-
-    /*
-     * The information header.
-     */
-    SYS_DEBUG ("Creating WallpaperInfoHeader");
-    m_InfoHeader = new WallpaperInfoHeader;
-    m_InfoHeader->setObjectName ("WallpaperInfoHeader");
-    policy->addItem (m_InfoHeader);
-
-    policy->addStretch ();
-
-    setLayout (layout);
-    #endif
-
 }
 
 void 
@@ -496,17 +470,11 @@ WallpaperEditorWidget::toggleTitlebars (
             currentPage->setComponentsDisplayMode (
                     MApplicationPage::NavigationBar,
                     MApplicationPageModel::Show); 
-            #ifdef USE_INFOHEADER
-            m_InfoHeader->show ();
-            #endif
         } else {
             SYS_DEBUG ("Hiding titlebar");
             currentPage->setComponentsDisplayMode (
                     MApplicationPage::NavigationBar, 
                     MApplicationPageModel::Hide);
-            #ifdef USE_INFOHEADER
-            m_InfoHeader->hide ();
-            #endif
         }
     }
 
