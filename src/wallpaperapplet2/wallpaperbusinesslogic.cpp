@@ -20,8 +20,6 @@
 **          Laszlo Pere <lpere@blumsoft.eu>
 **
 ****************************************************************************/
-
-
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperutils.h"
 #include "wallpaperconfiguration.h"
@@ -38,6 +36,7 @@
 #include <QPainter>
 #include <QDBusConnection>
 #include <QDBusError>
+#include <QFile>
 #include <MTheme>
 #include <MGConfItem>
 #include <MApplication>
@@ -66,125 +65,6 @@ WallpaperBusinessLogic::WallpaperBusinessLogic() :
 
     connect (m_POItem, SIGNAL(valueChanged ()),
             this, SLOT(portraitGConfChanged()));
-
-
-
-
-#if 0
-    MApplication               *application = MApplication::instance();
-    MApplicationWindow         *window = 0;
-    WallpaperCurrentDescriptor *currentDesc;
-    QString                     desktopFile = dirPath() + destopFileName;
-    QString                     landscapeString;
-    QString                     portraitString;
-    bool                        success;
-    
-    if (application) {
-        window = application->activeApplicationWindow ();
-    }
-
-    if (window) {
-        m_OrientationLocked = window->isOrientationLocked ();
-        if (m_OrientationLocked)
-            m_LockedOrientation = window->orientation ();
-    } else {
-        SYS_WARNING ("No window");
-    }
-
-    SYS_WARNING ("m_OrientationLocked = %s", SYS_BOOL(m_OrientationLocked));
-    SYS_WARNING ("supportsLandscape() = %s", SYS_BOOL(supportsLandscape()));
-    SYS_WARNING ("supportsPortrait()  = %s", SYS_BOOL(supportsPortrait()));
-
-    /*
-     * Getting the GConf items storing the current settings.
-     */
-    m_LandscapeGConfItem = new MGConfItem (WALLPAPER_LANDSCAPE_KEY);
-    m_PortraitGConfItem = new MGConfItem (WALLPAPER_PORTRAIT_KEY);
-    m_EditedImage = 0;
-    m_EditedImageOurs = false;
-
-    /*
-     * In case if GConf keys are set to "", we have to unset it to use the
-     * schema values
-     */
-    if (m_LandscapeGConfItem->value ().toString ().isEmpty ())
-        m_LandscapeGConfItem->unset ();
-    if (m_PortraitGConfItem->value ().toString ().isEmpty ())
-        m_PortraitGConfItem->unset ();
-
-    currentDesc = WallpaperCurrentDescriptor::instance ();
-    /*
-     * Trying to load the current wallpaper from the files saved by the theme
-     * applet. Will load only if the GConf contains our filenames.
-     */
-    if (supportsLandscape())
-        landscapeString = m_LandscapeGConfItem->value().toString();
-    if (supportsPortrait())
-        portraitString = m_PortraitGConfItem->value().toString();
-
-    SYS_DEBUG ("*** landscape = '%s'", SYS_STR(landscapeString));
-    SYS_DEBUG ("*** portrait  = '%s'", SYS_STR(portraitString));
-
-    success = currentDesc->setFromDesktopFile (
-            desktopFile,
-            true, landscapeString, portraitString);
-    
-    /*
-     * If not successfull we try to load the files from the GConf database. Will
-     * be successfull if both GConf keys reference to images with full path.
-     */
-    if (!success) {
-        SYS_DEBUG ("Loading of %s failed. Trying image files from GConf.",
-                SYS_STR(desktopFile));
-        success = currentDesc->setFromFilenames (
-                landscapeString, 
-                portraitString);
-    }
-
-    /*
-     * Trying to interpret the values as icon IDs. Please note, that this
-     * setFromIDs() method will handle the case when one of the values is an
-     * image file and the other is an icon ID. 
-     */
-    if (!success) {
-        success = currentDesc->setFromIDs (
-                landscapeString,
-                portraitString);
-    }
-
-    /*
-     * Now we failed. But it does not happen, and when it happens nothing
-     * serious, we just have no wallpaper.
-     */
-    if (!success) {
-        SYS_WARNING ("Current wallpaper was not found.");
-    }
-
-    connect (&m_FutureWatcher, SIGNAL (finished()),
-            this, SLOT (startEditThreadEnded()));
-
-    /*
-     * Connecting to the DBus database.
-     */
-    connect (m_LandscapeGConfItem, SIGNAL(valueChanged()),
-            this, SLOT(valueChanged()));
-    connect (m_PortraitGConfItem, SIGNAL(valueChanged()),
-            this, SLOT(valueChanged()));
-    
-    /*
-     * Connecting to DBus.
-     */
-    QDBusConnection bus = QDBusConnection::sessionBus ();
-    
-    success = bus.connect("", "", 
-            WALLPAPER_DBUS_INTERFACE, WALLPAPER_DBUS_EDIT_SIGNAL, 
-            this, SLOT(editRequestArrived(QString, QString)));
-    if (!success) {
-        QDBusError lastError = bus.lastError();
-        SYS_WARNING ("Connecting to DBus failed: %s", 
-                SYS_STR(lastError.message()));
-    }
-#endif
 }
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
@@ -243,34 +123,6 @@ WallpaperBusinessLogic::setBackground (
 #endif
 }
 
-/*!
- * \param ours if true the descriptor will be destroyed when not needed any more
- *
- * While a wallpaper image is edited the WallpaperBusinessLogic holds a
- * descriptor on it. This function is used to set this wallpaper descriptor.
- */
-void
-WallpaperBusinessLogic::setEditedImage (
-        WallpaperDescriptor  *desc, 
-        bool                  ours)
-{
-#if 0
-    SYS_DEBUG ("*** desc = %s", 
-            desc ? SYS_STR(desc->filename()) : "NULL");
-
-    if (m_EditedImage == desc)
-        return;
-
-    if (m_EditedImage && m_EditedImageOurs)
-        delete m_EditedImage;
-    
-    if (m_EditedImage)
-        m_EditedImage->unCache ();
-
-    m_EditedImage = desc;
-    m_EditedImageOurs = ours;
-#endif
-}
 
 void
 WallpaperBusinessLogic::startEdit (
@@ -292,20 +144,33 @@ WallpaperBusinessLogic::endEdit ()
     m_EditedImage = WallpaperDescriptor ();
 }
 
-void 
-WallpaperBusinessLogic::startEditThreadEnded ()
+void
+WallpaperBusinessLogic::setWallpaper ()
 {
-    SYS_DEBUG ("");
-    /*
-     * Calling from loadall, this time from the GUI thread.
-     */
-#if 0
-    m_EditedImage->loadAll ();
-    m_EditedImage->setLoading (false);
-    emit imageEditRequested();
-#endif
-}
+    QString  filePath = m_EditedImage.filePath();
+    QString  basename = Wallpaper::baseName (filePath);
+    QFile    origFile (filePath);
+    QString  targetPath;
 
+    targetPath = Wallpaper::constructPath (Wallpaper::ImagesSaveDir, basename);
+    SYS_DEBUG ("*** filePath   = %s", SYS_STR(filePath));
+    SYS_DEBUG ("*** basename   = %s", SYS_STR(basename));
+    SYS_DEBUG ("*** targetPath = %s", SYS_STR(targetPath));
+    if (!origFile.copy(targetPath)) {
+        QFile targetFile (targetPath);
+        if (targetFile.exists()) {
+            SYS_WARNING ("File exists.");
+            targetFile.remove ();
+        }
+    }
+    
+    if (!origFile.copy(targetPath)) {
+        SYS_WARNING ("ERROR copying file: %m");
+    }
+
+    m_POItem->set (filePath);
+    m_PPItem->set (targetPath);
+}
 
 /*!
  * Returns the wallpaper that is being edited.

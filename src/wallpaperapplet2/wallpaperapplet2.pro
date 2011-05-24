@@ -53,6 +53,7 @@ HEADERS =                          \
     gridimagewidget.h              \
     wallpaperdescriptor_p.h        \
     wallpaperdescriptor.h          \
+    wallpapercellreator.h          \
     wallpapermodel.h               \
     wallpaperlist.h                \
     wallpaperbusinesslogic.h       \
@@ -71,6 +72,7 @@ SOURCES =                          \
     wallpaperdescriptor_p.cpp      \
     wallpaperdescriptor.cpp        \
     wallpaperlist.cpp              \
+    wallpapercellcreator.cpp       \
     wallpapermodel.cpp             \
     wallpaperbusinesslogic.cpp     \
     wallpaperapplet.cpp            \

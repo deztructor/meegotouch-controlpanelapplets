@@ -126,23 +126,5 @@ class WallpaperModel: public QAbstractTableModel
         #endif
 };
 
-class WallpaperCellCreator : 
-    public MAbstractCellCreator<MWidgetController>
-{
-    public:
-        virtual MWidget *createCell (
-                const QModelIndex &index, 
-                MWidgetRecycler   &recycler) const;
-      
-        virtual void setCellSize (const QSizeF &size);
-        virtual QSizeF cellSize() const;
-
-        virtual void updateCell (
-                const QModelIndex &index, 
-                MWidget *cell) const;
-
-    private:
-        QSizeF   m_CellSize;
-};
 
 #endif

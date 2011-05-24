@@ -53,6 +53,7 @@ WallpaperViewWidget::WallpaperViewWidget (
 void
 WallpaperViewWidget::saveImage ()
 {
+    m_BusinessLogic->setWallpaper ();
     /*
      * Notifying the business logic about the editing ended. It is important,
      * otherwise the businesslogic will reject the next edit start requests.

@@ -55,10 +55,9 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
                 QString   &currentFilePath,
                 QString   &originalFilePath);
 
-    void setEditedImage (WallpaperDescriptor *desc, bool ours = false);
-        
         void startEdit (WallpaperDescriptor desc);
         void endEdit ();
+        void setWallpaper ();
 
         WallpaperDescriptor editedImage () const;
 
@@ -80,7 +79,6 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
         QString   portraitFileName,
         QString   landscapeFileName);
 
-    void startEditThreadEnded ();
     void valueChanged ();
     
 private:

@@ -16,7 +16,7 @@
 ** of this file.
 **
 ****************************************************************************/
-#include "wallpaperbusinesslogic.h"
+#include "wallpaperlist.h"
 
 #include <QTimer>
 #include <MOrientationChangeEvent>
@@ -25,9 +25,10 @@
 #include <MSortFilterProxyModel>
 #include <MListFilter>
 
-#include "wallpaperlist.h"
+#include "wallpaperbusinesslogic.h"
 #include "wallpapermodel.h"
 #include "wallpaperdescriptor.h"
+#include "wallpapercellcreator.h"
 
 
 #define DEBUG

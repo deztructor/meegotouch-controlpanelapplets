@@ -18,19 +18,18 @@
 ****************************************************************************/
 
 #include "wallpapermodel.h"
-#include "wallpaperconfiguration.h"
-#include "wallpaperutils.h"
-
-#include "wallpaperbusinesslogic.h"
-#include "wallpaperdescriptor.h"
-#include "gridimagewidget.h"
 
 #include <QUrl>
-
 #include <QTimer>
 #include <MImageWidget>
 #include <MProgressIndicator>
 
+#include "wallpapercellcreator.h"
+#include "wallpaperconfiguration.h"
+#include "wallpaperutils.h"
+#include "wallpaperbusinesslogic.h"
+#include "wallpaperdescriptor.h"
+#include "gridimagewidget.h"
 
 #define DEBUG
 #define WARNING
@@ -42,100 +41,10 @@
  */
 static const int loadPictureDelay = 0;
 
-/******************************************************************************
- * WallpaperContentItemCreator implementation.
- */
-MWidget *
-WallpaperCellCreator::createCell (
-        const QModelIndex &index, 
-        MWidgetRecycler   &recycler) const
-{
-    GridImageWidget *cell;
-
-    cell = qobject_cast <GridImageWidget *> (
-            recycler.take(GridImageWidget::staticMetaObject.className()));
-
-    if (!cell) {
-        cell = new GridImageWidget ();
-    }
-
-    updateCell(index, cell);
-
-    return cell;
-}
-
-void 
-WallpaperCellCreator::setCellSize (
-        const QSizeF &size)
-{
-    m_CellSize = size;
-}
-
-QSizeF 
-WallpaperCellCreator::cellSize() const
-{
-    return m_CellSize;
-}
-
-void 
-WallpaperCellCreator::updateCell (
-        const QModelIndex &index, 
-        MWidget           *cell) const
-{
-    static QPixmap   placeholderPixmap;
-    GridImageWidget *imageWidget = qobject_cast<GridImageWidget *>(cell);
-    QVariant         data = index.data(WallpaperModel::WallpaperDescriptorRole);
-    WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
-   
-    if (desc.hasThumbnail()) {
-        QPixmap thumb = desc.thumbnail ();
-        QSizeF  cSize = cellSize();
-        imageWidget->setPixmap (
-                thumb.scaled((int)cSize.width(), (int)cSize.height()));
-        imageWidget->setID (desc.filePath());
-        if (desc.thumbnailPending()) {
-            desc.setThumbnailPending (false);
-        }
-            imageWidget->showAnimated();
-    } else {
-        /*
-         * resetting the cell thumbnail pixmap. We need this because the cells
-         * are re-used.
-         */
-        if (placeholderPixmap.size() != cellSize()) {
-            QSizeF  cSize = cellSize();
-
-            placeholderPixmap = QPixmap(
-                    (int)cSize.width(), (int)cSize.height());
-            placeholderPixmap.fill (QColor("black"));
-        }
-
-        imageWidget->setPixmap (placeholderPixmap);
-    }
-    
-    /*
-     * The selection. 
-     */
-    imageWidget->setCurrent (desc.selected());
-
-#if 0
-    // The spinner.
-    if (desc->loading()) {
-        imageWidget->progressIndicator(true)->show();
-    } else {
-        MProgressIndicator *indicator;
-
-        indicator = imageWidget->progressIndicator(false);
-        if (indicator)
-            indicator->hide();
-    }
-#endif
-}
 
 /******************************************************************************
  * WallpaperModel implementation.
  */
-
 WallpaperModel::WallpaperModel (
         WallpaperBusinessLogic *logic,
         QObject                *parent) :

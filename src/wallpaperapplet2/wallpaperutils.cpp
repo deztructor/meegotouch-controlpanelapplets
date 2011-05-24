@@ -67,6 +67,19 @@ Wallpaper::constructPath (
 }
 
 QString 
+Wallpaper::baseName (
+        const QString &filePath)
+{
+    QString retval = filePath;
+    int     position = retval.lastIndexOf (QDir::separator());
+
+    if (position >= 0)
+        retval.remove (0, position + 1);
+
+    return retval;
+}
+
+QString 
 Wallpaper::logicalIdToFilePath (
         const QString    &id)
 {

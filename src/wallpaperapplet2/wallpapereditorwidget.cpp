@@ -356,6 +356,8 @@ WallpaperEditorWidget::slotDoneActivated ()
     SYS_DEBUG ("Calling changeWidget()");
     emit doneClicked ();
     changeWidget (0);
+
+    SYS_WARNING ("UNIMPLEMENTED");
 }
 
 /*!
@@ -375,10 +377,11 @@ WallpaperEditorWidget::slotCancelActivated ()
 
     emit cancelClicked ();
     emit closePage ();
+
     /*
      *
      */
-    m_BusinessLogic->setEditedImage (0);
+    m_BusinessLogic->endEdit ();
 }
 
 /*!

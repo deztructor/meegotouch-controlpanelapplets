@@ -42,6 +42,7 @@ namespace Wallpaper
             "/usr/share/themes/%1/meegotouch/images/backgrounds/%2.jpg");
 
     const QString ImagesDir ("~/MyDocs/.wallpapers");
+    const QString ImagesSaveDir ("~/.wallpapers");
 
     const QString DefaultThumbnailFlavor ("grid");
 };
