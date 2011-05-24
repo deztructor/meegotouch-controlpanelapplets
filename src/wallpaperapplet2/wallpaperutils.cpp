@@ -39,6 +39,7 @@ using namespace Wallpaper;
 
 
 static const QChar Tilde('~');
+static const QChar ExtSep('.');
 
 QString 
 Wallpaper::constructPath (
@@ -80,6 +81,29 @@ Wallpaper::baseName (
 }
 
 QString 
+Wallpaper::setFileExtension (
+        const QString &fileName,
+        const QString &extension)
+{
+    QString myExtension = extension;
+    QString retval = fileName;
+
+    if (!myExtension.startsWith(ExtSep))
+        myExtension.prepend(ExtSep);
+
+    if (!fileName.endsWith(myExtension)) {
+        int index = retval.lastIndexOf (ExtSep);
+
+        if (index >= 0)
+            retval.truncate (index);
+
+        retval += extension;
+    }
+
+    return retval;
+}
+
+QString 
 Wallpaper::logicalIdToFilePath (
         const QString    &id)
 {
@@ -115,7 +139,9 @@ Wallpaper::imageNameFilter ()
     return retval;
 }
 
-
+/******************************************************************************
+ * File-system manipulation methods.
+ */
 QSet<QString> 
 Wallpaper::readDir (
         const QString     &directoryPath,
@@ -150,6 +176,23 @@ Wallpaper::imageFile (
 
         if (thisFile.exists())
             retval = true;
+    }
+
+    return retval;
+}
+
+bool
+Wallpaper::ensureHasDirectory (
+        const QString &directoryPath)
+{
+    QDir dir (directoryPath);
+    bool retval;
+
+    if (dir.exists()) {
+        SYS_DEBUG ("Directory %s already exists.", SYS_STR(directoryPath));
+        retval = true;
+    } else if (!dir.mkpath(directoryPath)) {
+        SYS_WARNING ("Unable to create %s directory.", SYS_STR(directoryPath));
     }
 
     return retval;

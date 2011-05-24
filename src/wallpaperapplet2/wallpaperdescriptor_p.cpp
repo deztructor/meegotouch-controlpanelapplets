@@ -128,7 +128,8 @@ WallpaperDescriptorPrivate::selected () const
  */
 QuillImage
 WallpaperDescriptorPrivate::load (
-        QSize    expectedSize)
+        const QSize    &expectedSize,
+        QSize          &originalSize)
 {
     QuillImage        retval;
     QSize             mySize;
@@ -136,6 +137,7 @@ WallpaperDescriptorPrivate::load (
 
     QuillFile quillFile  (filePath());
     mySize = quillFile.fullImageSize ();
+    originalSize = mySize;
     /*
      * FIXME: Yeah, the size. These literals should not be here... but the code
      * changed, we are not loading the full size image any more.

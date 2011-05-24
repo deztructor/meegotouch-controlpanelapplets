@@ -57,7 +57,8 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
 
         void startEdit (WallpaperDescriptor desc);
         void endEdit ();
-        void setWallpaper ();
+        bool setWallpaper ();
+        bool setWallpaper (QPixmap &pixmap);
 
         WallpaperDescriptor editedImage () const;
 
@@ -70,34 +71,8 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
         void wallpaperChanged ();
         void editWallpaper (WallpaperDescriptor desc);
    
-    void imageEditRequested ();
-    
     private slots:
         void portraitGConfChanged ();
-
-    void editRequestArrived (
-        QString   portraitFileName,
-        QString   landscapeFileName);
-
-    void valueChanged ();
-    
-private:
-    QString dirPath (bool downloadDir = false) const;
-    bool ensureHasDirectory ();
-    void createBackupFiles ();
-    void deleteBackupFiles ();
-    void saveOriginal (
-        WallpaperDescriptor *desc);
-    bool writeFiles (
-        WallpaperITrans     *landscapeITrans,
-        WallpaperITrans     *portraitITrans,
-        WallpaperDescriptor *desc);
-
-    void makeBackup (const QString &filePath);
-    void makeImageFile (
-            const QString        &filePath,
-            WallpaperDescriptor  *desc,
-            WallpaperITrans      *transformations);
 
     bool supportsLandscape () const;
     bool supportsPortrait () const;

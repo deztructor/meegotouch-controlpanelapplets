@@ -43,6 +43,7 @@ namespace Wallpaper
 
     const QString ImagesDir ("~/MyDocs/.wallpapers");
     const QString ImagesSaveDir ("~/.wallpapers");
+    const QString OutImgExt (".png");
 
     const QString DefaultThumbnailFlavor ("grid");
 };

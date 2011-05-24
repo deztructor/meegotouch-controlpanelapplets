@@ -81,7 +81,9 @@ class MC_EXPORT WallpaperDescriptor : public QObject
         /*
          * Loading...
          */
-        QuillImage load (QSize expectedSize);
+        QuillImage load (
+                const QSize &expectedSize, 
+                QSize       &originalSize);
 
     private:
         WallpaperDescriptorPrivate *m_Priv;

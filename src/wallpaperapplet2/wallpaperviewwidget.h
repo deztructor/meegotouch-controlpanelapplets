@@ -48,6 +48,10 @@ class WallpaperViewWidget : public DcpWidget
         virtual int imageY () const;
         virtual int imageDX () const;
         virtual int imageDY () const;
+        virtual QPixmap generatePixmap (
+            const QSize    &expectedSize,
+            const QPointF  &offset,
+            qreal           scale);
 
     protected slots:
         virtual void createContent ();
@@ -57,6 +61,7 @@ class WallpaperViewWidget : public DcpWidget
         WallpaperITrans                   m_Trans;
         QColor                            m_BgColor;
         QuillImage                        m_Image;
+        QSize                             m_OriginalSize;
 };
 
 #endif

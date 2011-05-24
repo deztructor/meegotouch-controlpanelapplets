@@ -36,7 +36,11 @@ namespace Wallpaper
 
     QString baseName (
             const QString &filePath);
-    
+
+    QString setFileExtension (
+            const QString &fileName,
+            const QString &extension);
+
     QString logicalIdToFilePath (
             const QString    &id);
 
@@ -46,11 +50,17 @@ namespace Wallpaper
 
     QStringList imageNameFilter ();
 
+    /*
+     * File system manipulation methods.
+     */
     QSet<QString> readDir (
             const QString     &directoryPath,
             const QStringList &nameFilters);
 
     bool imageFile (
             const QString     &filePath);
+
+    bool ensureHasDirectory (
+        const QString &directoryPath);
 };
 #endif

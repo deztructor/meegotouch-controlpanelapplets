@@ -243,10 +243,11 @@ WallpaperDescriptor::selected () const
  */
 QuillImage
 WallpaperDescriptor::load (
-        QSize    expectedSize)
+        const QSize     &expectedSize,
+        QSize           &originalSize)
 {
     RETURN_VAL_IF_NULL(QuillImage());
 
-    return m_Priv->load (expectedSize);
+    return m_Priv->load (expectedSize, originalSize);
 }
 

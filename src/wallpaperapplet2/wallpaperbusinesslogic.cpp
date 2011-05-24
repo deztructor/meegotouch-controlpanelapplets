@@ -144,33 +144,106 @@ WallpaperBusinessLogic::endEdit ()
     m_EditedImage = WallpaperDescriptor ();
 }
 
-void
+bool
 WallpaperBusinessLogic::setWallpaper ()
 {
     QString  filePath = m_EditedImage.filePath();
     QString  basename = Wallpaper::baseName (filePath);
     QFile    origFile (filePath);
     QString  targetPath;
+    bool     success;
 
-    targetPath = Wallpaper::constructPath (Wallpaper::ImagesSaveDir, basename);
+    /*
+     *
+     */
+    targetPath = Wallpaper::constructPath (Wallpaper::ImagesSaveDir);
+    success = Wallpaper::ensureHasDirectory (targetPath);
+    if (!success)
+        goto finalize;
+
+    /*
+     *
+     */
+    targetPath = Wallpaper::constructPath (targetPath, basename);
     SYS_DEBUG ("*** filePath   = %s", SYS_STR(filePath));
     SYS_DEBUG ("*** basename   = %s", SYS_STR(basename));
     SYS_DEBUG ("*** targetPath = %s", SYS_STR(targetPath));
-    if (!origFile.copy(targetPath)) {
+
+    success = origFile.copy(targetPath);
+    if (success) {
+        goto finalize;
+    } else {
+        SYS_WARNING ("WARNING: can't copy file to %s", SYS_STR(targetPath));
         QFile targetFile (targetPath);
         if (targetFile.exists()) {
-            SYS_WARNING ("File exists.");
-            targetFile.remove ();
+            SYS_WARNING ("WARNING: File exists, trying to overwrite.");
+            success = targetFile.remove ();
+
+            if (!success) {
+                SYS_WARNING ("ERROR: removing '%s': %m", SYS_STR(targetPath));
+                goto finalize;
+            }
         }
     }
     
-    if (!origFile.copy(targetPath)) {
+    success = origFile.copy(targetPath);
+    if (!success) {
         SYS_WARNING ("ERROR copying file: %m");
     }
 
-    m_POItem->set (filePath);
-    m_PPItem->set (targetPath);
+finalize:
+    if (success) {
+        m_POItem->set (filePath);
+        m_PPItem->set (targetPath);
+    }
+
+    return success;
 }
+
+bool
+WallpaperBusinessLogic::setWallpaper (
+        QPixmap   &pixmap)
+{
+    QString  filePath = m_EditedImage.filePath();
+    QString  basename = Wallpaper::baseName (filePath);
+    QFile    targetFile;
+    QString  targetPath;
+    bool     success;
+
+    /*
+     *
+     */
+    targetPath = Wallpaper::constructPath (Wallpaper::ImagesSaveDir);
+    success = Wallpaper::ensureHasDirectory (targetPath);
+    if (!success)
+        goto finalize;
+
+    basename = Wallpaper::setFileExtension (basename, Wallpaper::OutImgExt);
+    targetPath = Wallpaper::constructPath (targetPath, basename);
+    targetFile.setFileName (targetPath);
+    if (targetFile.exists()) {
+        success = targetFile.remove ();
+        if (!success) {
+                SYS_WARNING ("ERROR: removing '%s': %m", SYS_STR(targetPath));
+                goto finalize;
+        }
+    }
+
+    success = pixmap.save (targetPath);
+    if (!success) {
+        SYS_WARNING ("ERROR: Saving file to %s failed: %m", SYS_STR(targetPath));
+    }
+
+finalize:
+    if (success) {
+        SYS_DEBUG ("Saved to '%s'", SYS_STR(targetPath));
+        m_POItem->set (filePath);
+        m_PPItem->set (targetPath);
+    }
+
+    return success;
+}
+
 
 /*!
  * Returns the wallpaper that is being edited.
@@ -184,439 +257,6 @@ WallpaperBusinessLogic::editedImage () const
 /*********************************************************************************
  * Low level file handling functions.
  */
-
-/*!
- * \param downloadDir If the directory where the images are downloaded should be
- *     returned.
- *
- * Returns the directory path that is used to store the information about the
- * edited wallpaper. This is the data storing directory for the wallpaper
- * applet.
- */
-QString
-WallpaperBusinessLogic::dirPath (
-        bool       downloadDir) const
-{
-    QString dirPath;
-#if 0
-    QString homeDir (getenv("HOME"));
-    
-    if (homeDir.isEmpty())
-        homeDir = "/usr/home";
-
-    if (downloadDir)
-        dirPath = homeDir + WallpaperDir::separator() + 
-            wallpapersDir + WallpaperDir::separator();
-    else
-        dirPath = homeDir + WallpaperDir::separator() + 
-            wallpaperDir + WallpaperDir::separator();
-#endif
-    return dirPath;
-}
-
-
-/*!
- * \returns true if the directory exists or could be created
- *
- * If the data store directory does not exists this method will create it.
- */
-bool
-WallpaperBusinessLogic::ensureHasDirectory ()
-{
-#if 0
-    QString path = dirPath();
-    WallpaperDir  dir (path);
-
-    if (dir.exists()) {
-        SYS_DEBUG ("Directory %s already exists.", SYS_STR(path));
-        return true;
-    }
-
-    if (!dir.mkpath(path)) {
-        SYS_WARNING ("Unable to create %s directory.", SYS_STR(path));
-        return false;
-    }
-#endif
-    return true;
-}
-
-/*!
- * Takes the desktop file, the saved landscape image file and the saved portrait
- * file and moves/renames them to create a backup version of each of them.
- */
-void
-WallpaperBusinessLogic::createBackupFiles ()
-{
-#if 0
-    QString  path = dirPath();
-    QString  desktopPath = path + destopFileName;
-    QString  filename;
-    
-    makeBackup (desktopPath);
-
-    filename = WallpaperCurrentDescriptor::instance()->editedFilename (
-            M::Portrait);
-    if (!filename.isEmpty())
-        makeBackup (filename);
-
-    filename = WallpaperCurrentDescriptor::instance()->editedFilename (
-            M::Landscape);
-    if (!filename.isEmpty())
-        makeBackup (filename);
-#endif
-}
-
-/*!
- * Removes all the files from the applet's data directory that has the file name
- * extension indicating that it is a backup file.
- */
-void
-WallpaperBusinessLogic::deleteBackupFiles ()
-{
-#if 0
-    QString       path = dirPath();
-    WallpaperDir  dir (path);
-    QStringList   nameFilters ("*.BAK");
-
-    dir.setNameFilters (nameFilters);
-    foreach (QString backupFileName, dir.entryList (WallpaperDir::Files)) {
-        SYS_DEBUG ("Removing backup file %s", SYS_STR(backupFileName));
-        WallpaperFile backupFile (path + backupFileName);
-
-        if (!backupFile.remove()) {
-            SYS_WARNING ("Unable to remove %s backup file.",
-                    SYS_STR((path + backupFileName)));
-        }
-    }
-#endif
-}
-
-void
-WallpaperBusinessLogic::saveOriginal (
-        WallpaperDescriptor *desc)
-{
-#if 0
-    QString imageID;
-    
-    imageID = desc->imageID (WallpaperDescriptor::OriginalLandscape);
-    if (!imageID.isEmpty()) {
-        QImage image;
-        QString filename;
-
-        image = desc->image (WallpaperDescriptor::OriginalLandscape);
-        ensureHasDirectory ();
-        filename = dirPath () +
-            MTheme::currentTheme () + "-" +
-            imageID + 
-            saveFileExtension;
-
-        image.save (filename);
-        desc->setFilename (filename, WallpaperDescriptor::OriginalLandscape);
-        desc->setMimeType (saveFileMimeType, WallpaperDescriptor::OriginalLandscape);
-    }
-
-    imageID = desc->imageID (WallpaperDescriptor::OriginalPortrait);
-    if (!imageID.isEmpty()) {
-        QImage  image;
-        QString filename;
-
-        image = desc->image (WallpaperDescriptor::OriginalPortrait);
-        ensureHasDirectory ();
-        filename = dirPath () +
-            MTheme::currentTheme () + "-" +
-            imageID + 
-            saveFileExtension;
-
-        image.save (filename);
-        desc->setFilename (filename, WallpaperDescriptor::OriginalPortrait);
-        desc->setMimeType (saveFileMimeType, WallpaperDescriptor::OriginalPortrait);
-    }
-#endif
-}
-
-/*!
- * \returns true if the files could be created and saved.
- *
- */
-bool
-WallpaperBusinessLogic::writeFiles (
-        WallpaperITrans     *landscapeITrans,
-        WallpaperITrans     *portraitITrans,
-        WallpaperDescriptor *desc)
-{
-#if 0
-    Q_ASSERT (landscapeITrans);
-    Q_ASSERT (portraitITrans);
-    Q_ASSERT (desc);
-
-    /*
-     * Some last minute checking. The expected sizes are very important when we
-     * save the images, and some people are using us as libraries.
-     *
-     * FIXME: We should not use these wired in values here.
-     */
-    if (landscapeITrans->expectedWidth() <= 0 ||
-            landscapeITrans->expectedHeight() <= 0) {
-        landscapeITrans->setExpectedSize (QSize(854, 480));
-    }
-    
-    if (portraitITrans->expectedWidth() <= 0 ||
-            portraitITrans->expectedHeight() <= 0) {
-        portraitITrans->setExpectedSize (QSize(480, 854));
-    }
-
-    /*
-     * These are pretty constants.
-     */
-    QString       path = dirPath();
-    QString       desktopPath = path + destopFileName;
-    WallpaperFile file (desktopPath);
-    SYS_DEBUG ("*** desktopPath = %s", SYS_STR(desktopPath));
-    WallpaperCurrentDescriptor *currentDesc = 
-        WallpaperCurrentDescriptor::instance();
-
-    saveOriginal (desc);
-
-    // There is of course a reason why we use the version number from the
-    // current descriptor: otherwise the re-editing of the original filename
-    // might end up with the same version number.
-    int      version = currentDesc->version () + 1;
-    QString  versionString = QString::number(version);
-    QString  portraitFilePath = path + 
-        desc->suggestedOutputFilename (M::Portrait, version);
-    QString  landscapeFilePath = path + 
-        desc->suggestedOutputFilename (M::Landscape, version);
-
-
-    /*
-     * Opening the output file.
-     */
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        SYS_DEBUG ("Opening file %s for writing failed.", SYS_STR(desktopPath));
-        return false;
-    }
-
-    /*
-     * FIXME: This is the new stuff, but in order to use it the current
-     * wallpaper descriptor has to be upgraded with from the arguments of this
-     * method.
-     */
-    QTextStream out(&file);
-
-    /*
-     * 
-     */
-    out << "[Desktop Entry]" << nl;
-    out << "Type=WallpaperImage" << nl;
-    out << "Version=" << QString::number(version) << nl;
-    out << nl;
-
-    if (supportsLandscape()) {
-        out << "[DCP Landscape Wallpaper]" << nl;
-        out << "OriginalFile=" << desc->originalImageFile(M::Landscape) << nl;
-        out << "EditedFile=" << landscapeFilePath << nl;
-        out << "MimeType=" << desc->suggestedOutputMimeType (M::Landscape) << nl;
-        out << "HorOffset=" << landscapeITrans->x() << nl;
-        out << "VertOffset=" << landscapeITrans->y() << nl;
-        out << "Scale=" << landscapeITrans->scale() << nl;
-        out << nl;
-    
-        makeImageFile (landscapeFilePath, desc, landscapeITrans);
-        m_LandscapeGConfItem->set (landscapeFilePath);
-    }
-
-    if (supportsPortrait()) {
-        out << "[DCP Portrait Wallpaper]" << nl;
-        out << "OriginalFile=" << desc->originalImageFile(M::Portrait) << nl;
-        out << "EditedFile=" << portraitFilePath << nl;
-        out << "MimeType=" << desc->suggestedOutputMimeType (M::Portrait) << nl;
-        out << "HorOffset=" << portraitITrans->x() << nl;
-        out << "VertOffset=" << portraitITrans->y() << nl;
-        out << "Scale=" << portraitITrans->scale() << nl;
-        out << nl;
-    
-        makeImageFile (portraitFilePath, desc, portraitITrans);
-        m_PortraitGConfItem->set (portraitFilePath);
-    }
-#endif
-    return true;
-}
-
-/*!
- * \param filePath The path of the file to save the image into.
- * \param desc The image that should be saved.
- * \param transformations The structure that descibes how to modify the image.
- *
- * This is a low level image manupilation method that takes a wallpaper and
- * saves it into a file with the given manupilations.
- * 
- * FIXME: Maybe this method should be moved into some other class?
- */
-void
-WallpaperBusinessLogic::makeImageFile (
-            const QString        &filePath,
-            WallpaperDescriptor  *desc,
-            WallpaperITrans      *transformations)
-{
-#if 0
-    QPixmap   pixmap (transformations->expectedSize());
-    QPainter  painter (&pixmap);
-    qreal     scale = transformations->scale();
-    QImage    image;
-    qreal     ratio, ratio1;
-    bool      success;
-
-    SYS_DEBUG ("*** expectedsize = %dx%d", 
-            transformations->expectedWidth(),
-            transformations->expectedHeight());
-    /*
-     * And this is exactly why we should move this kind of stuff into the image
-     * descriptor classes.
-     */
-    if (desc->isCurrent()) {
-#if 0
-        WallpaperCurrentDescriptor *cdesc;
-        
-        cdesc = qobject_cast<WallpaperCurrentDescriptor*> (desc);
-        image.load (cdesc->originalImageFile (transformations->orientation()));
-#endif
-        image = desc->image (WallpaperDescriptor::OriginalPortrait);
-    } else {
-        image = desc->image();
-    }
-
-    ratio = 
-        (qreal) transformations->expectedHeight () / 
-        (qreal) image.height();
-
-    ratio1 = 
-        (qreal) transformations->expectedWidth () / 
-        (qreal) image.width();
-    
-    if (ratio1 > ratio)
-        ratio = ratio1;
-
-    /*
-     * Let's fill the pixmap with black, so the area not covered by the original
-     * pixmap is initialized.
-     */
-    pixmap.fill (QColor("black"));
-    
-    /*
-     * Then we draw the scaled image with the appropriate offset.
-     */
-    painter.drawImage (
-            QRectF (transformations->x(), 
-                transformations->y(),
-                (scale * image.width ()) /** ratio*/,
-                (scale * image.height ()) /** ratio*/),
-            image);
-
-    SYS_DEBUG ("Saving file into %s", SYS_STR(filePath));
-    success = pixmap.save (filePath);
-    if (!success) {
-        SYS_WARNING ("Saving file to %s failed", SYS_STR(filePath));
-    }
-#endif
-}
-
-/*!
- * Takes a full path file name, removes its backup file if there is one, renames
- * the file to create a backup file.
- */
-void 
-WallpaperBusinessLogic::makeBackup (
-        const QString &filePath)
-{
-#if 0
-    QString  backupFilePath = filePath + backupExtension;
-    WallpaperFile    file (filePath);
-    WallpaperFile    backupFile (backupFilePath);
-
-    if (!file.exists())
-        return;
-    
-    if (backupFile.exists()) {
-        if (!backupFile.remove()) {
-            SYS_WARNING ("Unable to remove %s backup file.", 
-                    SYS_STR(backupFilePath));
-            return;
-        }
-    }
-
-    SYS_DEBUG ("Moving %s -> %s", SYS_STR(filePath), SYS_STR(backupFilePath));
-    file.rename (backupFilePath);
-#endif
-}
-
-/*
- * This slot is activated when an image edit is requested through DBus.
- */
-void 
-WallpaperBusinessLogic::editRequestArrived (
-        QString   portraitFileName,
-        QString   landscapeFileName)
-{
-#if 0
-    WallpaperDescriptor *desc;
-    SYS_DEBUG ("*** portraitFileName  = %s", SYS_STR(portraitFileName));
-    SYS_DEBUG ("*** landscapeFileName = %s", SYS_STR(landscapeFileName));
-
-    desc = new WallpaperDescriptor ();
-    desc->setFilename (landscapeFileName, WallpaperDescriptor::Landscape);
-    desc->setFilename (portraitFileName, WallpaperDescriptor::Portrait);
-    setEditedImage (desc, true);
-
-    startEdit ();
-#endif
-}
-
-void
-WallpaperBusinessLogic::valueChanged ()
-{
-#if 0
-    WallpaperCurrentDescriptor *currentDesc;
-    QString                     desktopFile = dirPath() + destopFileName;
-    bool                        success;
-
-    currentDesc = WallpaperCurrentDescriptor::instance ();
-    
-    /*
-     * Trying to load the current wallpaper from the files saved by the theme
-     * applet. Will load only if the GConf contains our filenames.
-     */
-    success = currentDesc->setFromDesktopFile (
-            desktopFile,
-            true,
-            m_LandscapeGConfItem->value().toString(),
-            m_PortraitGConfItem->value().toString());
-    /*
-     * If not successfull we try to load the files from the GConf database. Will
-     * be successfull if both GConf keys reference to images with full path.
-     */
-    if (!success) {
-        SYS_DEBUG ("Loading of %s failed. Trying image files from GConf.",
-                SYS_STR(desktopFile));
-        success = currentDesc->setFromFilenames (
-                m_LandscapeGConfItem->value().toString(),
-                m_PortraitGConfItem->value().toString());
-    }
-
-    /*
-     * Trying to interpret the values as icon IDs. Please note, that this
-     * setFromIDs() method will handle the case when one of the values is an
-     * image file and the other is an icon ID. 
-     */
-    if (!success) {
-        success = currentDesc->setFromIDs (
-                m_LandscapeGConfItem->value().toString(),
-                m_PortraitGConfItem->value().toString());
-    }
-
-    emit wallpaperChanged ();
-#endif
-}
-
 bool
 WallpaperBusinessLogic::supportsLandscape () const
 {

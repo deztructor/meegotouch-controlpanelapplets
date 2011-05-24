@@ -61,7 +61,9 @@ class WallpaperDescriptorPrivate
         /*
          * Loading...
          */
-        QuillImage load (QSize expectedSize);
+        QuillImage load (
+                const QSize &expectedSize,
+                QSize       &originalSize);
 
     private:
         int      m_ReferenceCounter;

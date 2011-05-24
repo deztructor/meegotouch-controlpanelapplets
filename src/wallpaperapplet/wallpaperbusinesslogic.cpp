@@ -701,7 +701,6 @@ WallpaperBusinessLogic::makeImageFile (
     QPainter  painter (&pixmap);
     qreal     scale = transformations->scale();
     QImage    image;
-    qreal     ratio, ratio1;
     bool      success;
 
     SYS_DEBUG ("*** expectedsize = %dx%d", 
@@ -723,17 +722,6 @@ WallpaperBusinessLogic::makeImageFile (
         image = desc->image();
     }
 
-    ratio = 
-        (qreal) transformations->expectedHeight () / 
-        (qreal) image.height();
-
-    ratio1 = 
-        (qreal) transformations->expectedWidth () / 
-        (qreal) image.width();
-    
-    if (ratio1 > ratio)
-        ratio = ratio1;
-
     /*
      * Let's fill the pixmap with black, so the area not covered by the original
      * pixmap is initialized.
@@ -746,8 +734,8 @@ WallpaperBusinessLogic::makeImageFile (
     painter.drawImage (
             QRectF (transformations->x(), 
                 transformations->y(),
-                (scale * image.width ()) /** ratio*/,
-                (scale * image.height ()) /** ratio*/),
+                (scale * image.width ()),
+                (scale * image.height ())),
             image);
 
     SYS_DEBUG ("Saving file into %s", SYS_STR(filePath));

@@ -53,7 +53,19 @@ WallpaperViewWidget::WallpaperViewWidget (
 void
 WallpaperViewWidget::saveImage ()
 {
-    m_BusinessLogic->setWallpaper ();
+    if (m_Trans.expectedSize() != m_OriginalSize) {
+        SYS_WARNING ("The original size is not %dx%d",
+                m_Trans.expectedSize().width(), 
+                m_Trans.expectedSize().height());
+        QPixmap pixmap = generatePixmap (
+                m_Trans.expectedSize(),
+                m_Trans.offset(),
+                m_Trans.scale());
+        m_BusinessLogic->setWallpaper (pixmap);
+    } else {
+        m_BusinessLogic->setWallpaper ();
+    }
+
     /*
      * Notifying the business logic about the editing ended. It is important,
      * otherwise the businesslogic will reject the next edit start requests.
@@ -94,7 +106,7 @@ WallpaperViewWidget::createContent ()
         m_Trans.setOrientation (M::Portrait);
     }
     
-    m_Image = desc.load (m_Trans.expectedSize());
+    m_Image = desc.load (m_Trans.expectedSize(), m_OriginalSize);
 
 
     if (sceneSize.width() > m_Image.width())
@@ -158,4 +170,22 @@ int
 WallpaperViewWidget::imageDY () const
 {
     return m_Trans.scale() * m_Image.height();
+}
+
+QPixmap
+WallpaperViewWidget::generatePixmap (
+        const QSize    &expectedSize,
+        const QPointF  &offset,
+        qreal           scale)
+{
+    QPixmap   retval (expectedSize);
+    QPainter  painter (&retval);
+    QRectF    area (offset.x(), offset.y(), 
+                    (scale * m_Image.width ()),
+                    (scale * m_Image.height ()));
+
+    retval.fill (m_BgColor);
+    painter.drawImage (area, m_Image);
+
+    return retval;
 }
