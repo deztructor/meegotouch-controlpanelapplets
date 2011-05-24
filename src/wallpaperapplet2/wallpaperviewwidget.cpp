@@ -39,6 +39,11 @@ WallpaperViewWidget::WallpaperViewWidget (
     m_BusinessLogic (wallpaperBusinessLogic),
     m_BgColor ("black")
 {
+    #if 0
+    MWindow *win = MApplication::activeWindow ();
+    if (win)
+        win->showFullScreen();
+    #endif
    /*
     *
     */
@@ -70,21 +75,38 @@ WallpaperViewWidget::createContent ()
 {
     MWindow             *win = MApplication::activeWindow ();
     WallpaperDescriptor  desc = m_BusinessLogic->editedImage ();
+    QSize                sceneSize;
+    int                  xMarg = 0;
+    int                  yMarg = 0;
+
     SYS_DEBUG ("");
    
     if (desc.isNull()) {
         SYS_WARNING ("No editted image, giving up.");
         return;
     }
+    
 
     if (win) {
-        QSize sceneSize = win->visibleSceneSize (M::Portrait);
+        sceneSize = win->visibleSceneSize (M::Portrait);
         m_Trans.setExpectedSize (sceneSize);
         m_Trans.setOrientation (M::Portrait);
     }
-
+    
     m_Image = desc.load (m_Trans.expectedSize());
+
+
+    if (sceneSize.width() > m_Image.width())
+        xMarg = (sceneSize.width() - m_Image.width()) / 2;
+    if (sceneSize.height() > m_Image.height())
+        yMarg = (sceneSize.height() - m_Image.height()) / 2;
+
+    m_Trans.setOffset (QPointF(xMarg, yMarg));
     this->setMinimumSize (m_Trans.expectedSize());
+    
+    SYS_DEBUG ("sceneSize = %dx%d", sceneSize.width(), sceneSize.height());
+    SYS_DEBUG ("imageSize = %dx%d", m_Image.width(), m_Image.height());
+    SYS_DEBUG ("offset    = %d, %d", xMarg, yMarg);
 }
 
 void
@@ -100,6 +122,39 @@ WallpaperViewWidget::paint (
             m_BgColor);
 
     painter->drawImage (
-                QRect (0, 0, m_Trans.expectedWidth (), m_Trans.expectedWidth ()/*imageX(), imageY(), imageDX(), imageDY()*/),
-                m_Image);
+            QRect (imageX(), imageY(), imageDX(), imageDY()),
+            m_Image);
+}
+
+int
+WallpaperViewWidget::imageX () const
+{
+    int retval = 0;
+
+    retval += m_Trans.x();
+    return retval;
+}
+
+int
+WallpaperViewWidget::imageY () const
+{
+    int retval = 0;
+
+    retval += m_Trans.y();
+
+    // FIXME: testing
+    //retval -= 110;
+    return retval;
+}
+
+int
+WallpaperViewWidget::imageDX () const
+{
+    return m_Trans.scale() * m_Image.width();
+}
+
+int
+WallpaperViewWidget::imageDY () const
+{
+    return m_Trans.scale() * m_Image.height();
 }

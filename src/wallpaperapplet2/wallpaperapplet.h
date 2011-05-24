@@ -28,6 +28,7 @@
 
 class WallpaperWidget;
 class WallpaperEditorWidget;
+class WallpaperViewWidget;
 
 class Q_DECL_EXPORT WallpaperApplet : public QObject, public DcpAppletIf
 {
@@ -59,7 +60,7 @@ public:
 
 private:
     QPointer<WallpaperWidget>        m_MainWidget;
-    QPointer<WallpaperEditorWidget>  m_EditorWidget;
+    QPointer<WallpaperViewWidget>    m_EditorWidget;
     QPointer<WallpaperBusinessLogic> m_WallpaperBusinessLogic;
     #ifdef UNIT_TEST
     friend class Ut_WallpaperApplet;

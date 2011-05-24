@@ -43,6 +43,12 @@ class WallpaperViewWidget : public DcpWidget
             const QStyleOptionGraphicsItem  *option,
             QWidget *widget = 0);
 
+    protected:
+        virtual int imageX () const;
+        virtual int imageY () const;
+        virtual int imageDX () const;
+        virtual int imageDY () const;
+
     protected slots:
         virtual void createContent ();
 

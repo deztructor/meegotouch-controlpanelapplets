@@ -233,7 +233,7 @@ WallpaperModel::columnCount (
 void 
 WallpaperModel::wallpaperChanged ()
 {
-    SYS_WARNING ("UNIMPLEMENTED");
+    ensureSelection ();
 }
 
 void 
@@ -523,6 +523,7 @@ WallpaperModel::trySelect (
 {
     bool retval = false;
 
+    SYS_DEBUG ("*** filePath = '%s'", SYS_STR(filePath));
     if (filePath.isEmpty())
         goto finalize;
    
@@ -544,6 +545,7 @@ WallpaperModel::tryAddAndSelect (
 {
     bool retval = false;
 
+    SYS_DEBUG ("*** filePath = '%s'", SYS_STR(filePath));
     if (filePath.isEmpty() || m_FilePathHash.contains(filePath))
         goto finalize;
 
@@ -552,8 +554,7 @@ WallpaperModel::tryAddAndSelect (
         QModelIndex  parent;
 
         SYS_WARNING ("Adding '%s'", SYS_STR(filePath));
-        beginInsertRows (parent, m_FilePathList.size(), 
-                m_FilePathList.size() + 1);
+        beginInsertRows (parent, m_FilePathList.size(), m_FilePathList.size());
 
         m_FilePathList << filePath;
         m_FilePathHash[filePath] = desc;
@@ -578,20 +579,21 @@ finalize:
  */
 bool
 WallpaperModel::selectByFilepath (
-        const QString &filepath)
+        const QString &filePath)
 {
     bool retval = false;
 
+    SYS_DEBUG ("*** filePath = '%s'", SYS_STR(filePath));
     for (int n = 0; n < m_FilePathList.size(); ++n) {
         QString              thisPath = m_FilePathList[n];
         WallpaperDescriptor  desc = m_FilePathHash[thisPath];
         bool                 selected = desc.selected();
         bool                 changed = false;
 
-        if (selected && thisPath != filepath) {
+        if (selected && thisPath != filePath) {
             desc.setSelected (false);
             changed = true;
-        } else if (!selected && thisPath == filepath) {
+        } else if (!selected && thisPath == filePath) {
             desc.setSelected ();
             changed = true;
             retval = true;

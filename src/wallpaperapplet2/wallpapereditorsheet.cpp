@@ -62,6 +62,7 @@ WallpaperEditorSheet::createHeaderWidget()
     QAction           *cancelAction;
 
     basicHeader->setStyleName ("CommonSheetHeaderPanelInverted");
+    //basicHeader->setProperty ("opacity", 0.2);
     doneAction = new QAction(qtTrId("qtn_comm_save"), basicHeader);
     cancelAction = new QAction(qtTrId("qtn_comm_cancel"), basicHeader);
     

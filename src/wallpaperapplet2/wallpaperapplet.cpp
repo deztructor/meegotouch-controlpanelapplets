@@ -20,6 +20,7 @@
 #include "wallpaperapplet.h"
 #include "wallpaperwidget.h"
 #include "wallpapereditorwidget.h"
+#include "wallpaperconfiguration.h"
 
 #include <MAction>
 
@@ -28,7 +29,7 @@
 M_LIBRARY
 #endif
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -65,9 +66,15 @@ WallpaperApplet::pageMain(
             return m_MainWidget;
 
         case EditorWidget:
-            if (m_EditorWidget == 0)
-                m_EditorWidget = new WallpaperEditorWidget (
-                        m_WallpaperBusinessLogic);
+            if (m_EditorWidget == 0) {
+                if (Wallpaper::supportEdit)
+                    m_EditorWidget = new WallpaperEditorWidget (
+                            m_WallpaperBusinessLogic);
+                else
+                    m_EditorWidget = new WallpaperViewWidget (
+                            m_WallpaperBusinessLogic);
+            }
+
             return m_EditorWidget;
 
         default:

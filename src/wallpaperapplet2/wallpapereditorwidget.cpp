@@ -477,12 +477,9 @@ finalize:
 int
 WallpaperEditorWidget::imageX () const
 {
-    int retval = 0;
+    int retval = WallpaperViewWidget::imageX();
 
-    retval -= ExtraMargin;
     retval += m_UserOffset.x();
-    retval += m_Trans.x();
-
     return retval;
 }
 
@@ -492,41 +489,13 @@ WallpaperEditorWidget::imageX () const
 int
 WallpaperEditorWidget::imageY () const
 {
-    int            retval = 0;
-#if 0
-    bool           portrait = (geometry().height() > geometry().width());
-    QPointF        r;
-    r = mapToScene (0.0, 0.0);
-
-    SYS_WARNING ("*** portrait = %s", SYS_BOOL(portrait));
-    SYS_WARNING ("*** origo    = %g, %g", r.x(), r.y());
-    retval -= r.y(); 
-#endif
+    int            retval = WallpaperViewWidget::imageY ();
+    
     retval += m_UserOffset.y();
-    retval += m_Trans.y();
 
-    //SYS_DEBUG ("returning %d", retval);
     return retval;
 }
 
-
-int
-WallpaperEditorWidget::imageDX () const
-{
-    bool portrait = (geometry().height() > geometry().width());
-
-    return portrait ? 
-        m_Trans * m_bgPortrait.width() : m_Trans * m_bgLandscape.width();
-}
-
-int
-WallpaperEditorWidget::imageDY () const
-{
-    bool portrait = (geometry().height() > geometry().width());
-
-    return portrait ? 
-        m_Trans * m_bgPortrait.height() : m_Trans * m_bgLandscape.height();
-}
 
 void 
 WallpaperEditorWidget::queueRedrawImage ()

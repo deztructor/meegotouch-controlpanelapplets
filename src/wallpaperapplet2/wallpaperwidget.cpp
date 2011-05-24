@@ -68,7 +68,6 @@ WallpaperWidget::WallpaperWidget (
      * the void MApplicationPage::createContent(), but I don't know how to do
      * that.
      */
-    //createContent ();
     QTimer::singleShot(100, this, SLOT(createContent()));
 
     /*
@@ -198,6 +197,7 @@ WallpaperWidget::slotEditWallpaper (
         sheet = new WallpaperEditorSheet (m_BusinessLogic);
         sheet->appear(scene(), MSceneWindow::DestroyWhenDone);
     } else {
+        SYS_DEBUG ("emit changeWidget (1);");
         emit changeWidget (1);
     }
 }

@@ -139,14 +139,14 @@ private slots:
     void panningPhysicsPanningStopped ();
     void scalePhysicsPositionChanged(const QPointF &position);
 
+    protected:
+        virtual int imageX () const;
+        virtual int imageY () const;
+
 private:
     QPointF toggleTitlebars (bool show);
     void setupPanningPhysics ();
     
-    int  imageX () const;
-    int  imageY () const;
-    int  imageDX () const;
-    int  imageDY () const;
     void gestureWorkaround (QPointF *point);
     bool supportsLandscape () const;
     bool supportsPortrait () const;
