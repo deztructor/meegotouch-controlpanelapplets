@@ -54,7 +54,6 @@ WallpaperModel::WallpaperModel (
 {
     m_ImagesDir = Wallpaper::constructPath (Wallpaper::ImagesDir);
     loadFromDirectory ();
-    ensureSelection ();
     startWatchFiles ();
 
     connect (m_BusinessLogic, SIGNAL(wallpaperChanged()),
@@ -65,6 +64,8 @@ WallpaperModel::WallpaperModel (
     connect (m_UsbMode, SIGNAL(modeChanged (MeeGo::QmUSBMode::Mode)),
             this, SLOT(usbModeChanged(MeeGo::QmUSBMode::Mode)));
     #endif
+        
+    ensureSelection ();
 }
 
 WallpaperModel::~WallpaperModel ()
@@ -225,6 +226,16 @@ WallpaperModel::thumbnailReady (
 {
     QString             path;
 
+    if (pixmap.isNull()) {
+        SYS_WARNING ("ERROR: thumbnail is null for %s",
+                SYS_STR(fileUri.toString()));
+        SYS_WARNING ("*** fileUri      = %s",
+                SYS_STR(QString(fileUri.toEncoded())));
+        SYS_WARNING ("*** thumbnailURI = %s", 
+                SYS_STR(QString(thumbnailUri.toEncoded())));
+        return;
+    }
+
     path = fileUri.toString();
     if (path.startsWith("file://"))
         path.remove (0, 7);
@@ -369,6 +380,7 @@ WallpaperModel::loadThumbnails (
         SYS_DEBUG ("Requesting %d thumbnails.", uris.length());
         m_Thumbnailer->request (
                 uris, mimeTypes, true, Wallpaper::DefaultThumbnailFlavor);
+        m_ThumbnailMagicNumber++;
     }
 
     /*
@@ -376,7 +388,6 @@ WallpaperModel::loadThumbnails (
      * the memory consumption grow as the user pans all around in the list. This
      * only has effect when the model contains a huge number ot items, though.
      */
-    m_ThumbnailMagicNumber++;
     if (m_ThumbnailMagicNumber % 10 == 0) {
         for (int n = 0; n < m_FilePathList.size(); ++n) {
             if (requestedFiles.contains(m_FilePathList[n]))
@@ -462,19 +473,23 @@ WallpaperModel::tryAddAndSelect (
         WallpaperDescriptor desc (filePath);
         QModelIndex  parent;
 
-        SYS_WARNING ("Adding '%s'", SYS_STR(filePath));
+        SYS_WARNING ("beginInsertRows (..., %d, %d)", 
+                m_FilePathList.size(),
+                m_FilePathList.size());
         beginInsertRows (parent, m_FilePathList.size(), m_FilePathList.size());
 
         m_FilePathList << filePath;
         m_FilePathHash[filePath] = desc;
+        SYS_WARNING ("endInsertRows()");
         endInsertRows ();
 
         retval = true;
     }
      
 finalize:
-    if (retval)
+    if (retval) {
         selectByFilepath (filePath);
+    }
 
     return retval;
 }
@@ -498,12 +513,13 @@ WallpaperModel::selectByFilepath (
         WallpaperDescriptor  desc = m_FilePathHash[thisPath];
         bool                 selected = desc.selected();
         bool                 changed = false;
+        bool                 thisIsSelected;
 
         if (selected && thisPath != filePath) {
-            desc.setSelected (false);
             changed = true;
+            thisIsSelected = false;
         } else if (!selected && thisPath == filePath) {
-            desc.setSelected ();
+            thisIsSelected = true;
             changed = true;
             retval = true;
         }
@@ -511,11 +527,22 @@ WallpaperModel::selectByFilepath (
         if (changed) {
             QModelIndex          first;
 
+            desc.setSelected (thisIsSelected);
             first = index (n, 0);
-            emit dataChanged (first, first);
+            SYS_DEBUG ("emit dataChanged(%d, %d)", n, n);
+            if (!thisIsSelected)
+                emit dataChanged (first, first);
         }
     }
 
+#if 1
+    if (retval) {
+        QTimer::singleShot(100, this, SLOT(emitCurrentChanged()));
+    }
+#else
+    if (retval)
+        emitCurrentChanged();
+#endif
     return retval;
 }
 
@@ -612,3 +639,34 @@ WallpaperModel::emitChangedSignal (
     emit dataChanged (first, first);
 }
 
+void
+WallpaperModel::emitCurrentChanged ()
+{
+    QModelIndex index;
+
+    SYS_WARNING ("Emitting currentChanged()");
+
+    index = currentIndex();
+    emit dataChanged (index, index);
+    emit currentChanged (index);
+}
+
+
+QModelIndex
+WallpaperModel::currentIndex () 
+{
+    QModelIndex retval;
+
+    for (int n = 0; n < m_FilePathList.size(); ++n) {
+        WallpaperDescriptor  desc = m_FilePathHash[m_FilePathList[n]];
+        bool                 selected = desc.selected();
+
+        if (!selected)
+            continue;
+
+        retval = index(n, 0);
+        break;
+    }
+
+    return retval;
+}

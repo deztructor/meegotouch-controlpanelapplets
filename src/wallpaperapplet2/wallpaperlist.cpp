@@ -122,6 +122,25 @@ WallpaperList::rowsRemoved (
     SYS_DEBUG ("Added from %d to %d", start, end);
     QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
 }
+        
+void 
+WallpaperList::currentChanged (
+        const QModelIndex &current)
+{
+    QModelIndex myIndex = filtering()->proxy()->mapFromSource (current);
+    QModelIndex first =	firstVisibleItem ();
+    QModelIndex last  = lastVisibleItem ();
+
+    SYS_DEBUG ("%d -> %d", current.row(), myIndex.row());
+#if 0
+    if (myIndex.row() >= first.row() && myIndex.row() <= last.row()) {
+        SYS_DEBUG ("We are in.");
+    } else {
+        scrollTo (myIndex, EnsureVisibleHint, Animated);
+    }
+#endif
+    scrollTo (myIndex, EnsureVisibleHint, Animated);
+}
 
 void
 WallpaperList::setDataSourceType (
@@ -151,6 +170,10 @@ WallpaperList::setDataSourceType (
             this, SLOT(rowsInserted(const QModelIndex &, int, int)));
     connect (m_Model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
             this, SLOT(rowsRemoved(const QModelIndex &, int, int)));
+    connect (m_Model, SIGNAL(currentChanged(const QModelIndex &)),
+            this, SLOT(currentChanged(const QModelIndex &)));
+
+    currentChanged (m_Model->currentIndex());
 }
 
 

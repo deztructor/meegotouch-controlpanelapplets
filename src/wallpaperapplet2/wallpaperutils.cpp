@@ -158,6 +158,7 @@ Wallpaper::readDir (
             nameFilters, QDir::Files | QDir::NoSymLinks | QDir::Readable);
 
     for (int iList = 0; iList < entryList.count(); iList++) {
+        SYS_DEBUG ("entryList[%d] = '%s'", iList, SYS_STR(entryList[iList]));
         retval += constructPath (directoryPath, entryList[iList]);
     }
     

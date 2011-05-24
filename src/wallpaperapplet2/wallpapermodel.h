@@ -73,6 +73,14 @@ class WallpaperModel: public QAbstractTableModel
                 const QModelIndex& lastVisibleRow);
         void stopLoadingThumbnails ();
 
+        /*
+         *
+         */
+        QModelIndex currentIndex () ;
+
+    signals:
+        void currentChanged (const QModelIndex &current);
+
     private slots:
         /*
          * Business-logic connections.
@@ -101,6 +109,8 @@ class WallpaperModel: public QAbstractTableModel
         #ifdef HAVE_QMSYSTEM
         void usbModeChanged (MeeGo::QmUSBMode::Mode mode);
         #endif
+
+        void emitCurrentChanged ();
 
     protected:
         void ensureSelection ();

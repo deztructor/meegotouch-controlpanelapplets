@@ -133,7 +133,8 @@ WallpaperDescriptor::url () const
     path = m_Priv->filePath ();
     if (path.startsWith(QDir::separator())) {
         path.prepend ("file://");
-        retval.setEncodedUrl (path.toAscii());
+        path.replace (" ", "%20");
+        retval.setEncodedUrl (path.toAscii(), QUrl::TolerantMode);
     }
 
     return retval;

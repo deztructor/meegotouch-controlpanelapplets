@@ -154,7 +154,7 @@ WallpaperBusinessLogic::setWallpaper ()
     bool     success;
 
     /*
-     *
+     * Checking if our output directory exists, creating if not.
      */
     targetPath = Wallpaper::constructPath (Wallpaper::ImagesSaveDir);
     success = Wallpaper::ensureHasDirectory (targetPath);
@@ -168,6 +168,11 @@ WallpaperBusinessLogic::setWallpaper ()
     SYS_DEBUG ("*** filePath   = %s", SYS_STR(filePath));
     SYS_DEBUG ("*** basename   = %s", SYS_STR(basename));
     SYS_DEBUG ("*** targetPath = %s", SYS_STR(targetPath));
+    
+    if (filePath == targetPath) {
+        success = true;
+        goto finalize;
+    }
 
     success = origFile.copy(targetPath);
     if (success) {
@@ -211,7 +216,7 @@ WallpaperBusinessLogic::setWallpaper (
     bool     success;
 
     /*
-     *
+     * Checking if our output directory exists, creating if not.
      */
     targetPath = Wallpaper::constructPath (Wallpaper::ImagesSaveDir);
     success = Wallpaper::ensureHasDirectory (targetPath);

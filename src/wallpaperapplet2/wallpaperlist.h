@@ -71,6 +71,9 @@ protected:
                 int                start, 
                 int                end);
 
+        void currentChanged (
+                const QModelIndex &current);
+
     signals:
         void imageActivated (WallpaperDescriptor desc);
 
