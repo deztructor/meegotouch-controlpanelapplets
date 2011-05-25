@@ -273,6 +273,7 @@ TrackerConnection::poorNiceName (
     niceName.replace ("_", " ");
    
     if (niceName == "No sound")
+        //% "No sound"
         niceName = qtTrId ("qtn_sond_ringtone_nosound");
 
     return niceName;
