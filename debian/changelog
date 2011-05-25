@@ -1,6 +1,7 @@
 meegotouch-controlpanelapplets (0.20.46~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+    [ Laszlo Pere ]
+  * Fixes: NB#259523 - Sound Setting, string §qtn_sond_store§ is truncated
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 23 May 2011 16:28:06 +0300
 
