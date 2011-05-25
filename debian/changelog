@@ -5,7 +5,10 @@ meegotouch-controlpanelapplets (0.20.46~1) meegotouch; urgency=low
   * Fixes: NB#256992 - [TASK] No sound should appear localized and in fixed 
     position
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 23 May 2011 16:28:06 +0300
+  [ David Kedves ]
+  * Fixes: NB#259688 - Battery links to wrong user guide topic
+
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 25 May 2011 16:01:10 +0300
 
 meegotouch-controlpanelapplets (0.20.45-1) meegotouch; urgency=low
 

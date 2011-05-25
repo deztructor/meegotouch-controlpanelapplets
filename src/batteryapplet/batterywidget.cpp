@@ -206,8 +206,8 @@ BatteryWidget::addHeaderContainer ()
      * loads the userguide, so userguide-content have to be installed to see the
      * content.
      */
-    helpButton = new MHelpButton("IDUG_MEEGO_BATTERY.html");
-    helpButton->setViewType(MButton::iconType);
+    helpButton = new MHelpButton ("CTX_IDUG_MEEGO_SAVE_MODE.html");
+    helpButton->setViewType (MButton::iconType);
     helpButton->setIconID ("icon-s-description-inverse");
     helpButton->setStyleName ("CommonRightIcon");
 
@@ -268,14 +268,6 @@ BatteryWidget::addAutoActivationWidget ()
     /*
      * A label for the PSM auto activation.
      */
-    /*
-     * A help button for the PSM auto activation.
-     */
-#ifdef HAVE_USERGUIDE
-    MHelpButton* helpButton = new MHelpButton ("IDUG_MEEGO_BATTERY.html");
-    helpButton->setViewType(MButton::iconType);
-    helpButton->setIconID ("icon-m-content-description");
-#endif    
 
     /*
      * A combo box choosing the auto PSM mode between on, off and automatic
@@ -300,9 +292,6 @@ BatteryWidget::addAutoActivationWidget ()
     /*
      * Adding the widgets to the layout.
      */
-    #ifdef HAVE_USERGUIDE
-    layout->addItem(helpButton);
-    #endif
     layout->addItem (m_PSMAutoCombo);
     layout->setAlignment(m_PSMAutoCombo, Qt::AlignRight | Qt::AlignVCenter);
 
