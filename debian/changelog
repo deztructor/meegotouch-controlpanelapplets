@@ -7,8 +7,9 @@ meegotouch-controlpanelapplets (0.20.46~1) meegotouch; urgency=low
 
   [ David Kedves ]
   * Fixes: NB#259688 - Battery links to wrong user guide topic
+  * Fixes: NB#259685 - Flight mode links to wrong user guide topic
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 25 May 2011 16:01:10 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 25 May 2011 16:47:43 +0300
 
 meegotouch-controlpanelapplets (0.20.45-1) meegotouch; urgency=low
 
