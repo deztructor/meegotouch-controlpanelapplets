@@ -2,6 +2,8 @@ meegotouch-controlpanelapplets (0.20.46~1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#259523 - Sound Setting, string §qtn_sond_store§ is truncated
+  * Fixes: NB#256992 - [TASK] No sound should appear localized and in fixed 
+    position
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 23 May 2011 16:28:06 +0300
 
