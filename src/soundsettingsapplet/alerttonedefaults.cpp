@@ -32,7 +32,7 @@
 #include "alerttonedefaults.h"
 #include "alerttonedefaultsmodel.h"
 
-#undef DEBUG
+//#define DEBUG
 //#define WARNING
 #include "../debug.h"
 
@@ -161,6 +161,7 @@ AlertToneDefaults::AlertToneDefaults (
 	setCellCreator(m_CellCreator);
 	setItemModel(m_DefaultsModel);
 
+
     /*
      * We have to give the widget a chance to process the model events,
      * otherwise the scroollTo() method will not work.
@@ -182,6 +183,7 @@ AlertToneDefaults::AlertToneDefaults (
      */
     connect (m_DefaultsModel, SIGNAL(loading()), 
             this, SLOT(checkSpinner()));
+    
 }
 
 /*!
@@ -309,9 +311,11 @@ AlertToneDefaults::selectAndScroll (
      * We need to use the proxy model here, fixes #199749 - Current selected
      * tone is getting deselected when user taps on it.
      */
-    const QModelIndex index = filtering()->proxy()->index (idx, 0);
+    const QModelIndex mIndex = m_DefaultsModel->index (idx, 0); 
+    const QModelIndex index = filtering()->proxy()->mapFromSource (mIndex);
+
     selectionModel()->select (index, QItemSelectionModel::ClearAndSelect);
-    
+    SYS_DEBUG ("*** newIndex = %d", index.row()); 
     /*
      * Once the user started a panning we don't want to scroll to the just
      * selected item, the user knows what to do.
@@ -418,6 +422,9 @@ void
 AlertToneDefaults::polishEvent ()
 {
     SYS_DEBUG ("");
+    // Here we sort the model. Seems that it is not the best place for sorting,
+    // but it at least works.
+    filtering()->proxy()->sort(Qt::DisplayRole);
     checkSpinner ();
 }
 

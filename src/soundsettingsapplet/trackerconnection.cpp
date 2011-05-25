@@ -271,7 +271,10 @@ TrackerConnection::poorNiceName (
 
     niceName = fileName.mid (startIndex, endIndex);
     niceName.replace ("_", " ");
-    
+   
+    if (niceName == "No sound")
+        niceName = "(No sound)";
+
     return niceName;
 }
 
