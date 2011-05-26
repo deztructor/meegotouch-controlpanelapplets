@@ -16,5 +16,4 @@ X-DUIApplet-Applet=libwallpaperapplet.so
 [DCP]
 Category=qtn_sett_main_wallpaper
 Order=1
-WidgetType=Image
-Text2=Not found
+WidgetType=Label

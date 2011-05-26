@@ -111,12 +111,19 @@ WallpaperBusinessLogic::WallpaperBusinessLogic() :
 
     /*
      * In case if GConf keys are set to "", we have to unset it to use the
-     * schema values
+     * schema values (this is not valid ^ anymore...)
+     *
+     * XXX: INFO: The schema provides empty string,
+     * so we have to harcode these:
      */
     if (m_LandscapeGConfItem->value ().toString ().isEmpty ())
-        m_LandscapeGConfItem->unset ();
+    {
+        m_LandscapeGConfItem->set ("meegotouch-wallpaper-landscape");
+    }
     if (m_PortraitGConfItem->value ().toString ().isEmpty ())
-        m_PortraitGConfItem->unset ();
+    {
+        m_PortraitGConfItem->set ("meegotouch-wallpaper-portrait");
+    }
 
     currentDesc = WallpaperCurrentDescriptor::instance ();
     /*

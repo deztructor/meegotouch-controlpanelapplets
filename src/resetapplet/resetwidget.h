@@ -26,6 +26,7 @@
 #include "resetbusinesslogic.h"
 
 class MLinearLayoutPolicy;
+class MHelpButton;
 class MButton;
 
 class ResetWidget : public DcpWidget
@@ -62,6 +63,7 @@ private:
             MLinearLayoutPolicy *mainLayout,
             MButton             *button1,
             MButton             *button2);
+    MHelpButton *createHelpButton (const QString &link);
 
 private:
     QPointer<ResetBusinessLogic>    m_ResetBusinessLogic;
