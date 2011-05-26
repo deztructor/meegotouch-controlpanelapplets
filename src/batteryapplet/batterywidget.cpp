@@ -293,7 +293,7 @@ BatteryWidget::addAutoActivationWidget ()
      * Adding the widgets to the layout.
      */
     layout->addItem (m_PSMAutoCombo);
-    layout->setAlignment(m_PSMAutoCombo, Qt::AlignRight | Qt::AlignVCenter);
+    layout->setAlignment(m_PSMAutoCombo, Qt::AlignLeft | Qt::AlignVCenter);
 
     /*
      * Adding the new row to the main layout.
