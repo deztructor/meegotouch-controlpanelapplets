@@ -29,6 +29,7 @@
 #include <MDialog>
 #include <MMessageBox>
 #include <MSeparator>
+#include <MStylableWidget>
 
 #undef DEBUG
 #include "../debug.h"
@@ -145,17 +146,20 @@ ResetWidget::addButtonContainer (
     button1layout->setContentsMargins (0,0,0,0);
     button1layout->setSpacing (0);
 
-    button1layout->addStretch ();
+    MStylableWidget *imgSpacer1 = new MStylableWidget;
+    imgSpacer1->setStyleName ("CommonLeftIcon");
+    button1layout->addItem (imgSpacer1);
+
     button1layout->addStretch ();
 
     button1layout->addItem (button1);
-    button1layout->setAlignment (button1, Qt::AlignVCenter | Qt::AlignRight);
+    button1layout->setAlignment (button1, Qt::AlignCenter);
+
+    button1layout->addStretch ();
 
     MHelpButton *hp1 = createHelpButton ("IDUG_MEEGO_SETT_RESTORE.html");
     button1layout->addItem (hp1);
-    button1layout->setStretchFactor (hp1, 1);
-    button1layout->setAlignment (hp1, Qt::AlignVCenter | Qt::AlignRight);
-    button1layout->addStretch ();
+    button1layout->setAlignment (hp1, Qt::AlignVCenter);
 
     layout->addItem (button1layout);
     layout->setAlignment (button1layout, Qt::AlignCenter);
@@ -170,17 +174,18 @@ ResetWidget::addButtonContainer (
     button2layout->setContentsMargins (0,0,0,0);
     button2layout->setSpacing (0);
 
-    button2layout->addStretch ();
+    MStylableWidget *imgSpacer2 = new MStylableWidget;
+    imgSpacer2->setStyleName ("CommonLeftIcon");
+    button2layout->addItem (imgSpacer2);
     button2layout->addStretch ();
 
     button2layout->addItem (button2);
-    button2layout->setAlignment (button2, Qt::AlignVCenter | Qt::AlignRight);
+    button2layout->setAlignment (button2, Qt::AlignCenter);
 
+    button2layout->addStretch ();
     MHelpButton *hp2 = createHelpButton ("IDUG_MEEGO_SETT_CLEARDEVICE.html");
     button2layout->addItem (hp2);
-    button2layout->setStretchFactor (hp2, 1);
-    button2layout->setAlignment (hp2, Qt::AlignVCenter | Qt::AlignRight);
-    button2layout->addStretch ();
+    button2layout->setAlignment (hp2, Qt::AlignVCenter);
 
     layout->addItem (button2layout);
     layout->setAlignment (button2layout, Qt::AlignCenter);
