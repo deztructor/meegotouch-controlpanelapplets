@@ -2,4 +2,16 @@
     tool-bar-style-name: "MToolBarStyleInverted";
 }
 
-
+WallpaperEditorWidgetStyle {
+    /*
+     * Theming for the kinetic moving of the wallpaper editor in the widget.
+     * Maybe these values should be linked to the values found in
+     * mpannablewidgetstyle.css
+     */
+    pointer-spring-k: 0;
+    friction: 0;
+    sliding-friction: 0.95;
+    border-spring-k: 0.06;
+    border-friction: 0.66;
+    maximum-velocity: 100.0;
+}

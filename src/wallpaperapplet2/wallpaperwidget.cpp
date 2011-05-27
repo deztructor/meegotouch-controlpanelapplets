@@ -49,7 +49,7 @@ M_REGISTER_WIDGET_NO_CREATE(WallpaperWidget)
 WallpaperWidget::WallpaperWidget (
         WallpaperBusinessLogic *wallpaperBusinessLogic, 
         QGraphicsWidget        *parent) :
-    DcpWidget (parent),
+    DcpStylableWidget (parent),
     m_BusinessLogic (wallpaperBusinessLogic),
     m_NavigationBarTransparency (-1)
 {

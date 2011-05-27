@@ -45,8 +45,8 @@ public:
     } WindowID;
 
     virtual void init();
-    virtual DcpWidget *constructWidget (int widgetId);
-    virtual DcpWidget *pageMain (int widgetId);
+    virtual DcpStylableWidget *constructStylableWidget (int widgetId);
+    virtual DcpStylableWidget *pageMain (int widgetId);
     virtual QString title() const;
     virtual QVector<MAction *> viewMenuItems();
     virtual DcpBrief* constructBrief(int partId);

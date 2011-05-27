@@ -20,6 +20,7 @@
 #define WALLPAPEREDITORWIDGET_H
 
 #include "wallpaperviewwidget.h"
+#include "wallpapereditorwidgetstyle.h"
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperitrans.h"
 
@@ -27,6 +28,7 @@
 #include <MPhysics2DPanning>
 #include <meegocontrolexport.h>
 #include <dcpwidget.h>
+#include <MStylableWidget>
 
 
 class MContainer;
@@ -39,9 +41,6 @@ class QPixmap;
 class QImage;
 class QPointF;
 class QGestureEvent;
-
-// The editing feature is dropped. Further code-cleanup is necessary.
-#define NO_EDITING
 
 /*!
  * Problem: During the one finger move the image lags behind the finger.
@@ -85,7 +84,7 @@ public:
             QGraphicsWidget        *parent = 0);
     ~WallpaperEditorWidget ();
 
-    virtual bool pagePans () const;
+
     virtual bool back ();
     virtual void paint (
             QPainter                        *painter,
@@ -95,8 +94,6 @@ public:
     virtual void saveImage ();
 
 protected:
-    virtual void polishEvent ();
-    virtual void retranslateUi();
 
 #ifndef NO_EDITING
     virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
@@ -144,9 +141,8 @@ private slots:
         virtual int imageY () const;
 
 private:
-    QPointF toggleTitlebars (bool show);
-    void setupPanningPhysics ();
-    
+    M_STYLABLE_WIDGET(WallpaperEditorWidgetStyle)
+    void setupPanningPhysics ();    
     void gestureWorkaround (QPointF *point);
     bool supportsLandscape () const;
     bool supportsPortrait () const;
@@ -154,8 +150,7 @@ private:
 private:
     QImage                m_bgLandscape;
     QImage                m_bgPortrait;
-    MAction              *m_DoneAction;
-    MAction              *m_CancelAction;
+
     bool                  m_NoTitlebar;
     bool                  m_OrientationLocked;
     M::Orientation        m_Orientation;

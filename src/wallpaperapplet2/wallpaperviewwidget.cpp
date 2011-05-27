@@ -21,6 +21,9 @@
 #include <QTimer>
 #include <MWindow>
 #include <MApplication>
+#include <MApplicationPage>
+#include <MPannableViewport>
+#include <MPositionIndicator>
 
 #define DEBUG
 #define WARNING
@@ -35,9 +38,10 @@ M_REGISTER_WIDGET_NO_CREATE(WallpaperViewWidget)
 WallpaperViewWidget::WallpaperViewWidget (
         WallpaperBusinessLogic *wallpaperBusinessLogic, 
         QGraphicsWidget        *parent) :
-    DcpWidget (parent),
+    DcpStylableWidget (parent),
     m_BusinessLogic (wallpaperBusinessLogic),
-    m_BgColor ("black")
+    m_BgColor ("black"),
+    m_PageRealized (false)
 {
     #if 0
     MWindow *win = MApplication::activeWindow ();
@@ -122,12 +126,20 @@ WallpaperViewWidget::createContent ()
     SYS_DEBUG ("offset    = %d, %d", xMarg, yMarg);
 }
 
+bool 
+WallpaperViewWidget::pagePans () const
+{
+    return false;
+}
+
 void
 WallpaperViewWidget::paint (
         QPainter                          *painter,
         const QStyleOptionGraphicsItem    *option,
         QWidget                           *widget)
 {
+    MWidget::paint (painter, option, widget);
+    
     painter->fillRect (
             0, 0, 
             m_Trans.expectedWidth (),
@@ -137,6 +149,59 @@ WallpaperViewWidget::paint (
     painter->drawImage (
             QRect (imageX(), imageY(), imageDX(), imageDY()),
             m_Image);
+}
+
+void
+WallpaperViewWidget::polishEvent ()
+{
+    SYS_DEBUG ("");
+    QGraphicsWidget  *parent;
+    MApplicationPage *page = 0;
+
+    /*
+     * Just a protection about double adding the actions.
+     */
+    if (m_PageRealized)
+        return;
+    
+    /*
+     * We need to find the MApplicationPage among our parents.
+     */
+    parent = parentWidget();
+    while (parent) {
+        page = qobject_cast <MApplicationPage *>(parent);
+        if (page)
+            break;
+        parent = parent->parentWidget();
+    }
+    m_PageRealized = true;
+
+    if (!page)
+        return;
+
+    page->setPannable (false);
+    page->pannableViewport()->positionIndicator()->hide();
+    /**************************************************************************
+     * Hiding the home button and the escape button from the page. 
+     */
+    page->setComponentsDisplayMode (
+            MApplicationPage::EscapeButton,
+            MApplicationPageModel::Hide);
+    page->setComponentsDisplayMode (
+            MApplicationPage::HomeButton,
+            MApplicationPageModel::Hide);
+
+    //% "Save"
+    m_DoneAction = new MAction(qtTrId("qtn_comm_save"), this);
+    m_DoneAction->setLocation(MAction::ToolBarLocation);
+    page->addAction(m_DoneAction);
+    connect(m_DoneAction, SIGNAL(triggered()), this, SLOT(slotDoneActivated()));
+
+    //% "Cancel"
+    m_CancelAction = new MAction(qtTrId("qtn_comm_cancel"), this);
+    m_CancelAction->setLocation(MAction::ToolBarLocation);
+    page->addAction(m_CancelAction);
+    connect(m_CancelAction, SIGNAL(triggered()), this, SLOT(slotCancelActivated()));
 }
 
 int

@@ -51,7 +51,7 @@ WallpaperApplet::init()
 {
 }
 
-DcpWidget *
+DcpStylableWidget *
 WallpaperApplet::pageMain(
         int widgetId)
 {
@@ -84,8 +84,8 @@ WallpaperApplet::pageMain(
     return 0;
 }
 
-DcpWidget *
-WallpaperApplet::constructWidget (
+DcpStylableWidget *
+WallpaperApplet::constructStylableWidget (
         int widgetId)
 {
     return pageMain (widgetId);

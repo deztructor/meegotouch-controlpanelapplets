@@ -46,6 +46,9 @@ INCLUDEPATH += \
     ../libmeegocontrol \
     /usr/include/thumbnailer 
 
+STYLE_HEADERS +=                   \
+    wallpapereditorwidgetstyle.h
+
 HEADERS =                          \
     ../debug.h                     \
     wallpaperconfiguration.h       \
@@ -61,6 +64,7 @@ HEADERS =                          \
     wallpaperwidget.h              \
     wallpapereditorsheet.h         \
     wallpaperviewwidget.h          \
+    wallpapereditorwidgetstyle.h   \
     wallpapereditorwidget.h        \
     wallpaperitrans.h
 
@@ -91,8 +95,9 @@ backup.path  = /usr/share/backup-framework/applications/
 desktop.files += *.desktop
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
 
-css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libwallpaperapplet/style
-css.files = libwallpaperapplet.css
+css.path += \
+    $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libwallpaperapplet2/style
+css.files = libwallpaperapplet2.css
 
 INSTALLS +=     \
     target      \

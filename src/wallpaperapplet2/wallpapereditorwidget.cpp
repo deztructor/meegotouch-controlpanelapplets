@@ -26,8 +26,6 @@
 #include <QPixmap>
 #include <QImage>
 #include <QTimer>
-#include <MPannableViewport>
-#include <MPositionIndicator>
 
 #ifndef NO_EDITING
 #include <QGestureEvent>
@@ -43,7 +41,6 @@
 #include <MAction>
 #include <MApplicationWindow>
 #include <MApplication>
-#include <MApplicationPage>
 
 #include "mwidgetcreator.h"
 M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
@@ -70,8 +67,6 @@ WallpaperEditorWidget::WallpaperEditorWidget (
         WallpaperBusinessLogic *wallpaperBusinessLogic, 
         QGraphicsWidget        *parent) :
     WallpaperViewWidget (wallpaperBusinessLogic, parent),
-    m_DoneAction (0),
-    m_CancelAction (0),
     m_NoTitlebar (false),
     m_OrientationLocked (false),
     m_PinchOngoing (false),
@@ -79,6 +74,9 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_HasPendingRedraw (false),
     m_Physics (0)
 {
+//    WallpaperEditorWidgetStyle *s = (WallpaperEditorWidgetStyle *)
+//        (style());
+
     SYS_WARNING ("----------------------------------------------");
     MWindow *win = MApplication::activeWindow ();
     
@@ -105,18 +103,28 @@ WallpaperEditorWidget::WallpaperEditorWidget (
 
     setObjectName ("WallpaperEditorWidget");
     /*
-     * Creating the MPhysics2DPanning object.
+     * Creating the MPhysics2DPanning object. These values are copyed from the 
+     * mpannablewidgetstyle.css CSS file.
      */
     m_Physics = new MPhysics2DPanning (this);
     m_Physics->setPanDirection (Qt::Vertical | Qt::Horizontal);
     m_Physics->setEnabled(true);
-    
-    m_Physics->setPointerSpringK(0.25);
-    m_Physics->setFriction(0.6);
-    m_Physics->setSlidingFriction(0.10);
-    m_Physics->setBorderSpringK(0.02);
-    m_Physics->setBorderFriction(0.15);
-    m_Physics->setMaximumVelocity(70);
+  
+#if 0
+    SYS_WARNING ("*** PointerSpringK  = %g", style()->pointerSpringK());
+    SYS_WARNING ("*** Friction        = %g", style()->friction());
+    SYS_WARNING ("*** SlidingFriction = %g", style()->slidingFriction());
+    SYS_WARNING ("*** BorderSpringK   = %g", style()->borderSpringK());
+    SYS_WARNING ("*** BorderFriction  = %g", style()->borderFriction());
+    SYS_WARNING ("*** maximumvelocity = %g", style()->maximumVelocity());
+#endif
+
+    m_Physics->setPointerSpringK (style()->pointerSpringK());
+    m_Physics->setFriction (style()->friction());
+    m_Physics->setSlidingFriction (style()->slidingFriction());
+    m_Physics->setBorderSpringK (style()->borderSpringK());
+    m_Physics->setBorderFriction (style()->borderFriction());
+    m_Physics->setMaximumVelocity (style()->maximumVelocity());
 
     connect (m_Physics, SIGNAL(positionChanged(const QPointF &)),
             this, SLOT(panningPhysicsPositionChanged(const QPointF &)));
@@ -152,6 +160,12 @@ WallpaperEditorWidget::WallpaperEditorWidget (
                     "Only in tests though...");
         m_Orientation = M::Landscape;
     }
+
+    /*
+     * Enabling two finger gestures.
+     */
+    grabGesture (Qt::PinchGesture, Qt::GestureFlags());
+    grabGesture (Qt::PanGesture, Qt::GestureFlags());
 }
 
 /*!
@@ -159,6 +173,7 @@ WallpaperEditorWidget::WallpaperEditorWidget (
  */
 WallpaperEditorWidget::~WallpaperEditorWidget ()
 {
+    SYS_WARNING ("");
 }
 
 /*!
@@ -171,31 +186,7 @@ WallpaperEditorWidget::paint (
         const QStyleOptionGraphicsItem    *option,
         QWidget                           *widget)
 {
-#if 0
-    bool portrait = (geometry().height() > geometry().width());
-#endif
-
-    painter->fillRect (
-            -ExtraMargin, -ExtraMargin, 
-            m_Trans.expectedWidth (),
-            m_Trans.expectedHeight (),
-            QColor ("black"));
-#if 0
-    if (portrait) {
-        painter->drawImage (
-                QRect (imageX(), imageY(), imageDX(), imageDY()),
-                m_bgPortrait);
-    } else if (!portrait) {
-        painter->drawImage (
-                QRect (imageX(), imageY(), imageDX(), imageDY()),
-                m_bgLandscape);
-    }
-#else
-        painter->drawImage (
-                QRect (imageX(), imageY(), imageDX(), imageDY()),
-                m_bgPortrait);
-#endif
-    MWidget::paint (painter, option, widget);
+    WallpaperViewWidget::paint (painter, option, widget);
 }
 
 /*!
@@ -204,7 +195,8 @@ WallpaperEditorWidget::paint (
 void
 WallpaperEditorWidget::createContent ()
 {
-    WallpaperEditorWidget::createContent ();
+    SYS_DEBUG ("");
+    WallpaperViewWidget::createContent ();
 }
 
 /*!
@@ -222,6 +214,7 @@ void
 WallpaperEditorWidget::scalePhysicsPositionChanged(
         const QPointF    &position)
 {
+    SYS_DEBUG ("");
     qreal scalefactor = position.y() / 100.0;
 
     if (scalefactor < 0.05)
@@ -252,60 +245,11 @@ WallpaperEditorWidget::panningPhysicsPanningStopped ()
  * This virtual method is executed when we already have an MApplicationPage as
  * parent. We initialize the page here.
  */
-void
-WallpaperEditorWidget::polishEvent ()
-{
-    QGraphicsWidget  *parent;
-    MApplicationPage *page = 0;
-
-    /*
-     * Just a protection about double adding the actions.
-     */
-    if (m_DoneAction)
-        return;
-    
-    /*
-     * We need to find the MApplicationPage among our parents.
-     */
-    parent = parentWidget();
-    while (parent) {
-        page = qobject_cast <MApplicationPage *>(parent);
-        if (page)
-            break;
-        parent = parent->parentWidget();
-    }
-
-    if (!page)
-        return;
-
-    page->setPannable (false);
-    page->pannableViewport()->positionIndicator()->hide();
-    /**************************************************************************
-     * Hiding the home button and the escape button from the page. 
-     */
-    page->setComponentsDisplayMode (
-            MApplicationPage::EscapeButton,
-            MApplicationPageModel::Hide);
-    page->setComponentsDisplayMode (
-            MApplicationPage::HomeButton,
-            MApplicationPageModel::Hide);
-
-    //% "Save"
-    m_DoneAction = new MAction(qtTrId("qtn_comm_save"), this);
-    m_DoneAction->setLocation(MAction::ToolBarLocation);
-    page->addAction(m_DoneAction);
-    connect(m_DoneAction, SIGNAL(triggered()), this, SLOT(slotDoneActivated()));
-
-    //% "Cancel"
-    m_CancelAction = new MAction(qtTrId("qtn_comm_cancel"), this);
-    m_CancelAction->setLocation(MAction::ToolBarLocation);
-    page->addAction(m_CancelAction);
-    connect(m_CancelAction, SIGNAL(triggered()), this, SLOT(slotCancelActivated()));
-}
 
 void
 WallpaperEditorWidget::saveImage ()
 {
+    SYS_DEBUG ("");
     WallpaperITrans   *ltrans, *ptrans;
 
     m_Trans += m_UserOffset;
@@ -328,6 +272,7 @@ WallpaperEditorWidget::saveImage ()
 void
 WallpaperEditorWidget::slotDoneActivated ()
 {
+    SYS_DEBUG ("");
     MWindow  *win;
 
     /*
@@ -366,6 +311,7 @@ WallpaperEditorWidget::slotDoneActivated ()
 void
 WallpaperEditorWidget::slotCancelActivated ()
 {
+    SYS_DEBUG ("");
     /*
      * We ignore the button press while the image is moving.
      */
@@ -390,6 +336,7 @@ WallpaperEditorWidget::slotCancelActivated ()
 bool 
 WallpaperEditorWidget::back ()
 {
+    SYS_DEBUG ("");
     MWindow *win;
 
     /*
@@ -402,77 +349,13 @@ WallpaperEditorWidget::back ()
     if (win)
         win->showNormal();
 
-    return DcpWidget::back();
-}
-
-bool 
-WallpaperEditorWidget::pagePans () const
-{
-    return false;
+    return DcpStylableWidget::back();
 }
 
 /******************************************************************************
  * Private low level functions.
  */
 
-/*!
- * \returns The offset correction value for the new state.
- * \param show If the titlebar should be shown or not.
- *
- */
-QPointF
-WallpaperEditorWidget::toggleTitlebars (
-        bool       show)
-{
-    MApplicationPage  *currentPage;
-    #if 0
-    /*
-     * This mapToScene() is sensitive to the screen rotation.
-     */
-    QPointF r;
-    r = mapToScene (0, 0);
-    SYS_WARNING ("r = %g, %g", r.x(), r.y());
-    #endif
-    /*
-     * If the requested state is the current state we don't need to hide/show
-     * anything, we just return the correction value.
-     */
-    if (show == !m_NoTitlebar)
-        goto finalize;
-
-    /*
-     * We do the showing/hiding here.
-     */
-    if (MApplication::activeApplicationWindow())
-        currentPage = MApplication::activeApplicationWindow()->currentPage();
-    else
-        currentPage = 0;
-
-    if (currentPage) {
-        if (show) {
-            SYS_DEBUG ("Showing titlebar");
-            currentPage->setComponentsDisplayMode (
-                    MApplicationPage::NavigationBar,
-                    MApplicationPageModel::Show); 
-        } else {
-            SYS_DEBUG ("Hiding titlebar");
-            currentPage->setComponentsDisplayMode (
-                    MApplicationPage::NavigationBar, 
-                    MApplicationPageModel::Hide);
-        }
-    }
-
-    m_NoTitlebar = !show;
-
-finalize:
-    /*
-     * To return the correction value.
-     */
-    if (!show)
-        return QPointF (0, TitleBarHeight);
-
-    return QPointF (0, 0);
-}
 
 /*!
  * Returns the X offset where the image should be painted inside the widget. 
@@ -483,6 +366,8 @@ WallpaperEditorWidget::imageX () const
     int retval = WallpaperViewWidget::imageX();
 
     retval += m_UserOffset.x();
+    
+    //SYS_DEBUG ("*** retval = %d", retval);
     return retval;
 }
 
@@ -492,10 +377,11 @@ WallpaperEditorWidget::imageX () const
 int
 WallpaperEditorWidget::imageY () const
 {
-    int            retval = WallpaperViewWidget::imageY ();
+    int retval = WallpaperViewWidget::imageY ();
     
     retval += m_UserOffset.y();
 
+    //SYS_DEBUG ("*** retval = %d", retval);
     return retval;
 }
 
@@ -503,6 +389,7 @@ WallpaperEditorWidget::imageY () const
 void 
 WallpaperEditorWidget::queueRedrawImage ()
 {
+    SYS_DEBUG ("");
     if (m_HasPendingRedraw) {
         //SYS_DEBUG ("Dropping...");
         return;
@@ -515,6 +402,9 @@ WallpaperEditorWidget::queueRedrawImage ()
 void 
 WallpaperEditorWidget::redrawImage ()
 {
+    m_HasPendingRedraw = false;
+    update();
+#if 0
     /*
      * We need to update the current page and not just this widget because of
      * those damn extra margins coming from somewhere.
@@ -523,12 +413,14 @@ WallpaperEditorWidget::redrawImage ()
     m_HasPendingRedraw = false;
     if (MApplication::activeApplicationWindow())
         MApplication::activeApplicationWindow()->currentPage()->update();
+#endif
 }
 
 void 
 WallpaperEditorWidget::orientationChanged (
         M::Orientation orientation)
 {
+    SYS_DEBUG ("");
     if (m_Orientation == orientation) {
         SYS_WARNING ("This is the old orientation?!");
         return;
@@ -562,6 +454,7 @@ void
 WallpaperEditorWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
 {
+    SYS_DEBUG ("");
     m_Physics->stop ();
     m_ScalePhysics->pointerPress(QPointF());
 
@@ -570,25 +463,14 @@ WallpaperEditorWidget::wheelEvent (
 }
 #endif
 
-void
-WallpaperEditorWidget::retranslateUi()
-{
-    if (m_DoneAction)
-        //% "Save"
-        m_DoneAction->setText (qtTrId("qtn_comm_save"));
-
-    if (m_CancelAction)
-        //% "Cancel"
-        m_CancelAction->setText (qtTrId("qtn_comm_cancel"));
-}
 
 #ifndef NO_EDITING
 void
 WallpaperEditorWidget::mousePressEvent (
         QGraphicsSceneMouseEvent *event)
 {
+    SYS_DEBUG ("");
     m_Physics->stop();
-    //toggleTitlebars (false);
 }
 #endif
 
@@ -640,6 +522,7 @@ WallpaperEditorWidget::pinchGestureStarted (
         QGestureEvent *event, 
         QPinchGesture *gesture)
 {
+    SYS_DEBUG ("");
     if (m_PanOngoing) {
         m_Physics->pointerRelease();
         m_PanOngoing = false;
@@ -659,6 +542,7 @@ WallpaperEditorWidget::pinchGestureUpdate (
             QGestureEvent *event, 
             QPinchGesture *gesture)
 {
+    SYS_DEBUG ("");
     if (m_PanOngoing) {
         m_Physics->pointerRelease();
         m_PanOngoing = false;
@@ -682,6 +566,7 @@ WallpaperEditorWidget::pinchGestureEnded (
             QGestureEvent *event, 
             QPinchGesture *gesture)
 {
+    SYS_DEBUG ("");
     if (m_PanOngoing) {
         m_Physics->pointerRelease();
         m_PanOngoing = false;
@@ -697,6 +582,7 @@ WallpaperEditorWidget::pinchGestureEvent (
             QGestureEvent *event, 
             QPinchGesture *gesture)
 {
+    SYS_DEBUG ("");
     Q_UNUSED (event);
 
     switch (gesture->state()) {
@@ -725,6 +611,7 @@ void
 WallpaperEditorWidget::gestureWorkaround (
         QPointF *point)
 {
+    SYS_DEBUG ("");
     bool portrait = (geometry().height() > geometry().width());
 
     if (portrait) {
@@ -737,18 +624,21 @@ WallpaperEditorWidget::gestureWorkaround (
 bool
 WallpaperEditorWidget::supportsLandscape () const
 {
+    SYS_DEBUG ("");
     return !m_OrientationLocked || m_Orientation == M::Landscape;
 }
 
 bool
 WallpaperEditorWidget::supportsPortrait () const
 {
+    SYS_DEBUG ("");
     return !m_OrientationLocked || m_Orientation == M::Portrait;
 }
 
 void 
 WallpaperEditorWidget::setupPanningPhysics ()
 {
+    SYS_DEBUG ("");
     /*
      * The widget's geometry is disturbed by the transparent toolbar, 
      * but the expectedsize is stable.

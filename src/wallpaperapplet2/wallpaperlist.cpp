@@ -132,14 +132,13 @@ WallpaperList::currentChanged (
     QModelIndex last  = lastVisibleItem ();
 
     SYS_DEBUG ("%d -> %d", current.row(), myIndex.row());
-#if 0
-    if (myIndex.row() >= first.row() && myIndex.row() <= last.row()) {
+
+    if (myIndex.row() < 10 && 
+            myIndex.row() >= first.row() && myIndex.row() <= last.row()) {
         SYS_DEBUG ("We are in.");
     } else {
         scrollTo (myIndex, EnsureVisibleHint, Animated);
     }
-#endif
-    scrollTo (myIndex, EnsureVisibleHint, Animated);
 }
 
 void

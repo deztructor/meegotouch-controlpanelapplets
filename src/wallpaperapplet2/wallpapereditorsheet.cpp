@@ -28,7 +28,7 @@
 #include <MBasicSheetHeader>
 #include <QAction>
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -43,6 +43,9 @@ void
 WallpaperEditorSheet::createCentralWidget(
         WallpaperBusinessLogic *wallpaperBusinessLogic)
 {
+    SYS_DEBUG ("**** Wallpaper::supportEdit = %s", 
+            SYS_BOOL(Wallpaper::supportEdit));
+
     if (Wallpaper::supportEdit) {
         m_EditorWidget = new WallpaperEditorWidget (
                 wallpaperBusinessLogic, this);

@@ -23,10 +23,11 @@
 #include "wallpaperdescriptor.h"
 #include "wallpaperitrans.h"
 
-#include <dcpwidget.h>
+#include <DcpStylableWidget>
 #include <QPointer>
+#include <MAction>
 
-class WallpaperViewWidget : public DcpWidget
+class WallpaperViewWidget : public DcpStylableWidget
 {
     Q_OBJECT
     
@@ -37,13 +38,15 @@ class WallpaperViewWidget : public DcpWidget
 
         virtual void saveImage ();
         virtual void dropImage ();
-            
+
+        virtual bool pagePans () const; 
         virtual void paint (
             QPainter                        *painter,
             const QStyleOptionGraphicsItem  *option,
             QWidget *widget = 0);
 
     protected:
+        virtual void polishEvent ();
         virtual int imageX () const;
         virtual int imageY () const;
         virtual int imageDX () const;
@@ -62,6 +65,11 @@ class WallpaperViewWidget : public DcpWidget
         QColor                            m_BgColor;
         QuillImage                        m_Image;
         QSize                             m_OriginalSize;
+
+    private:
+        bool                              m_PageRealized;
+        QPointer<MAction>                 m_DoneAction;
+        QPointer<MAction>                 m_CancelAction;
 };
 
 #endif

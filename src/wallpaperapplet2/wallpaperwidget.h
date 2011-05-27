@@ -19,9 +19,10 @@
 #ifndef WALLPAPERWIDGET_H
 #define WALLPAPERWIDGET_H
 
+
+#include <DcpStylableWidget>
 #include <QPointer>
 
-#include "dcpwidget.h"
 #include "wallpaperbusinesslogic.h"
 
 class MContainer;
@@ -32,7 +33,7 @@ class WallpaperList;
 class MContentItem;
 class MLinearLayoutPolicy;
 
-class WallpaperWidget : public DcpWidget
+class WallpaperWidget : public DcpStylableWidget
 {
     Q_OBJECT
 
