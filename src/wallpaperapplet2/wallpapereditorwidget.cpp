@@ -268,6 +268,11 @@ WallpaperEditorWidget::slotDoneActivated ()
 {
     SYS_DEBUG ("");
 
+    if (m_Saving) {
+        SYS_DEBUG ("Saving is being performed.");
+        return;
+    }
+
     /*
      * We ignore the button press while the image is moving.
      */
@@ -287,6 +292,12 @@ void
 WallpaperEditorWidget::slotCancelActivated ()
 {
     SYS_DEBUG ("");
+    if (m_Saving) {
+        SYS_DEBUG ("Saving is being performed.");
+        return;
+    }
+
+
     /*
      * We ignore the button press while the image is moving.
      */

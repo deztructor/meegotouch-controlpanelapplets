@@ -24,23 +24,43 @@
 #define WALLPAPERWORKERTHREAD_H
 
 #include <QThread>
+#include <QImage>
 #include <QPixmap>
 #include <QString>
 
 class WallpaperWorkerThread : public QThread
 {
     public:
-        WallpaperWorkerThread (QPixmap &pixmap, const QString &fileName);
-        void run();
-        bool success () const;
+        WallpaperWorkerThread (
+                QPixmap       &pixmap, 
+                const QString &originalFileName,
+                const QString &outputFileName);
+        
+        WallpaperWorkerThread (
+                const QString &originalFileName,
+                const QString &outputFileName);
 
+        virtual void run();
+        
+        bool success () const;
+        QString originalFileName () const;
+        QString outputFileName () const;
+        
     protected:
-        void runSavePixmap ();
+        void runSaveImage ();
+        void runCopyFile ();
         
     private:
-        QPixmap    m_Pixmap;
-        QString    m_OutputFileName;
-        bool       m_Success;
+        typedef enum {
+            TaskSaveImage,
+            TaskCopyFile,
+        } ThreadTask;
+
+        ThreadTask   m_Task;
+        QImage       m_Image;
+        QString      m_OriginalFileName;
+        QString      m_OutputFileName;
+        bool         m_Success;
 };
 
 #endif

@@ -65,13 +65,15 @@ class WallpaperViewWidget : public DcpStylableWidget
         virtual void createContent ();
         virtual void slotDoneActivated ();
         virtual void slotCancelActivated ();
-
+        virtual void wallpaperSaved ();
+        
     protected:
         QPointer<WallpaperBusinessLogic>  m_BusinessLogic;
         WallpaperITrans                   m_Trans;
         QColor                            m_BgColor;
         QuillImage                        m_Image;
         QSize                             m_OriginalSize;
+        bool                              m_Saving;
 
     private:
         //M_STYLABLE_WIDGET(WallpaperViewWidgetStyle)

@@ -17,6 +17,7 @@
 **
 ****************************************************************************/
 #include "wallpaperviewwidget.h"
+#include "wallpaperconfiguration.h"
 
 #include <QTimer>
 #include <MWindow>
@@ -40,9 +41,13 @@ WallpaperViewWidget::WallpaperViewWidget (
         QGraphicsWidget        *parent) :
     DcpStylableWidget (parent),
     m_BusinessLogic (wallpaperBusinessLogic),
+    m_Saving (false),
     m_BgColor ("black"),
     m_PageRealized (false)
 {
+    connect (m_BusinessLogic, SIGNAL(wallpaperSaved()),
+            this, SLOT(wallpaperSaved()));
+
     //m_BgColor = style()->imageBackgroundColor();
     #if 0
     MWindow *win = MApplication::activeWindow ();
@@ -66,8 +71,11 @@ WallpaperViewWidget::saveImage ()
                 m_Trans.expectedSize(),
                 m_Trans.offset(),
                 m_Trans.scale());
+
+        m_Saving = true;
         m_BusinessLogic->setWallpaper (pixmap);
     } else {
+        m_Saving = true;
         m_BusinessLogic->setWallpaper ();
     }
 
@@ -260,32 +268,25 @@ WallpaperViewWidget::generatePixmap (
 void 
 WallpaperViewWidget::slotDoneActivated ()
 {
-    MWindow  *win;
     SYS_DEBUG ("");
+
+    if (m_Saving) {
+        SYS_DEBUG ("Saving is being performed.");
+        return;
+    }
         
     saveImage ();
-
-    /*
-     * Turning back from fullscreen. This could be done in the destructor, but
-     * that ends up with a segfault in the Qt...
-     */
-    win = MApplication::activeWindow ();
-    if (win)
-        win->showNormal();
-
-    /*
-     * We are done with the editing, let's page back to the view where we have
-     * the list.
-     */
-    SYS_DEBUG ("Calling changeWidget()");
-    emit doneClicked ();
-    changeWidget (0);
 }
  
 void 
 WallpaperViewWidget::slotCancelActivated ()
 {
     SYS_DEBUG ("");
+
+    if (m_Saving) {
+        SYS_DEBUG ("Saving is being performed.");
+        return;
+    }
 
     /*
      * Amitting a signal to show the cancel is clicked. Then emitting a signal
@@ -295,6 +296,38 @@ WallpaperViewWidget::slotCancelActivated ()
      */
     emit cancelClicked ();
     emit closePage ();
-    m_BusinessLogic->endEdit ();    
+    m_BusinessLogic->endEdit ();
+}
+
+void 
+WallpaperViewWidget::wallpaperSaved ()
+{
+    SYS_DEBUG ("");
+
+    if (!m_Saving) {
+        SYS_WARNING ("We didn't request any saving.");
+        return;
+    }
+
+    /*
+     * Turning back from fullscreen. This could be done in the destructor, but
+     * that ends up with a segfault in the Qt...
+     */
+    MWindow  *win;
+    win = MApplication::activeWindow ();
+    if (win)
+        win->showNormal();
+
+    if (!Wallpaper::useSheetForEdit) {
+        /*
+         * We are done with the editing, let's page back to the view where we
+         * have the list.
+         */
+        //changeWidget (0);
+        emit closePage ();
+    }
+    
+    m_BusinessLogic->endEdit ();
+    m_Saving = false;
 }
 

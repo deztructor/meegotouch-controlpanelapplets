@@ -27,6 +27,7 @@ class MGConfItem;
 class WallpaperDescriptor;
 class QStringList;
 class WallpaperITrans;
+class WallpaperWorkerThread;
 
 #include <QPointer>
 #include <wallpaperdescriptor.h>
@@ -56,10 +57,12 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
 
     signals:
         void wallpaperChanged ();
+        void wallpaperSaved ();
         void editWallpaper (WallpaperDescriptor desc);
    
     private slots:
         void portraitGConfChanged ();
+        void workerThreadFinished ();
 
         #if 0
         bool supportsLandscape () const;
@@ -70,6 +73,7 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
         QPointer<MGConfItem>       m_PPItem;
         QPointer<MGConfItem>       m_POItem;
         WallpaperDescriptor        m_EditedImage;
+        WallpaperWorkerThread     *m_WorkerThread;
 
 #ifdef UNIT_TEST
     friend class Ut_WallpaperBusinessLogic;

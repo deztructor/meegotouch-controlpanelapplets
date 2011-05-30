@@ -28,7 +28,7 @@
 #include "wallpaperdescriptor.h"
 #include "wallpaperitrans.h"
 #include "wallpapereditorsheet.h"
-
+#include "wallpaperworkerthread.h"
 
 #include <QString>
 #include <QStringList>
@@ -114,34 +114,13 @@ WallpaperBusinessLogic::setWallpaper ()
         goto finalize;
     }
 
-    success = origFile.copy(targetPath);
-    if (success) {
-        goto finalize;
-    } else {
-        SYS_WARNING ("WARNING: can't copy file to %s", SYS_STR(targetPath));
-        QFile targetFile (targetPath);
-        if (targetFile.exists()) {
-            SYS_WARNING ("WARNING: File exists, trying to overwrite.");
-            success = targetFile.remove ();
-
-            if (!success) {
-                SYS_WARNING ("ERROR: removing '%s': %m", SYS_STR(targetPath));
-                goto finalize;
-            }
-        }
-    }
-    
-    success = origFile.copy(targetPath);
-    if (!success) {
-        SYS_WARNING ("ERROR copying file: %m");
-    }
+    m_WorkerThread = new WallpaperWorkerThread (filePath, targetPath);
+    connect ( m_WorkerThread, SIGNAL(finished()), 
+            this, SLOT(workerThreadFinished()), Qt::QueuedConnection);
+    success = true;
+    m_WorkerThread->start();
 
 finalize:
-    if (success) {
-        m_POItem->set (filePath);
-        m_PPItem->set (targetPath);
-    }
-
     return success;
 }
 
@@ -151,9 +130,13 @@ WallpaperBusinessLogic::setWallpaper (
 {
     QString  filePath = m_EditedImage.filePath();
     QString  basename = Wallpaper::baseName (filePath);
-    QFile    targetFile;
     QString  targetPath;
     bool     success;
+
+    if (m_WorkerThread) {
+        SYS_WARNING ("Worker thread is already there, giving up.");
+        return false;
+    }
 
     /*
      * Checking if our output directory exists, creating if not.
@@ -165,27 +148,14 @@ WallpaperBusinessLogic::setWallpaper (
 
     basename = Wallpaper::setFileExtension (basename, Wallpaper::OutImgExt);
     targetPath = Wallpaper::constructPath (targetPath, basename);
-    targetFile.setFileName (targetPath);
-    if (targetFile.exists()) {
-        success = targetFile.remove ();
-        if (!success) {
-                SYS_WARNING ("ERROR: removing '%s': %m", SYS_STR(targetPath));
-                goto finalize;
-        }
-    }
 
-    success = pixmap.save (targetPath);
-    if (!success) {
-        SYS_WARNING ("ERROR: Saving file to %s failed: %m", SYS_STR(targetPath));
-    }
+    m_WorkerThread = new WallpaperWorkerThread (pixmap, filePath, targetPath);
+    connect ( m_WorkerThread, SIGNAL(finished()), 
+            this, SLOT(workerThreadFinished()), Qt::QueuedConnection);
+    success = true;
+    m_WorkerThread->start();
 
 finalize:
-    if (success) {
-        SYS_DEBUG ("Saved to '%s'", SYS_STR(targetPath));
-        m_POItem->set (filePath);
-        m_PPItem->set (targetPath);
-    }
-
     return success;
 }
 
@@ -220,4 +190,27 @@ WallpaperBusinessLogic::currentWallpaper (
 
     currentFilePath  = Wallpaper::logicalIdToFilePath (currentFilePath);
     originalFilePath = Wallpaper::logicalIdToFilePath (originalFilePath);
+}
+
+void 
+WallpaperBusinessLogic::workerThreadFinished ()
+{
+    bool success = m_WorkerThread->success();
+    SYS_DEBUG ("*** success  = %s", SYS_BOOL(success));
+
+    if (success) {
+        QString origFile = m_WorkerThread->originalFileName ();
+        QString outputFile = m_WorkerThread->outputFileName ();
+        
+        SYS_DEBUG ("*** original = %s", SYS_STR(origFile));
+        SYS_DEBUG ("*** output   = %s", SYS_STR(outputFile));
+
+        m_POItem->set (origFile);
+        m_PPItem->set (outputFile);
+    }
+
+    emit wallpaperSaved ();
+
+    delete m_WorkerThread;
+    m_WorkerThread = 0;
 }
