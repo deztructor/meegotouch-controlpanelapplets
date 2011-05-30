@@ -46,16 +46,7 @@
 #define WARNING
 #include "../debug.h"
 
-static const QString wallpaperDir = ".wallpapers";
-static const QString wallpapersDir = "MyDocs/.wallpapers";
-static const QString destopFileName = "wallpaper.desktop";
-static const QString backupExtension = ".BAK";
-static const QString saveFileExtension = ".png";
-static const QString saveFileMimeType = "image/png";
-static const QString nl = "\n";
-
-WallpaperBusinessLogic::WallpaperBusinessLogic() :
-    m_OrientationLocked (false)
+WallpaperBusinessLogic::WallpaperBusinessLogic() 
 {
     m_PPItem = new MGConfItem (Wallpaper::CurrentPortraitKey, this);
     m_POItem = new MGConfItem (Wallpaper::OriginalPortraitKey, this);
@@ -71,57 +62,6 @@ WallpaperBusinessLogic::~WallpaperBusinessLogic()
 {
 }
 
-/*!
- * \param landscapeITrans Image transformations for the landscape orientation.
- * \param portraitITrans Image transformations for the portrait orientation.
- * \param desc The image descriptor that holds the image(s).
- *
- * A high level method to set the current wallpaper. This method will load the
- * image file(s), apply the image transformations to create the portrait and
- * landscape variants then will save the modified images and set them as
- * wallpaper image(s). This method will also save some metadata that makes it
- * possible to re-edit the images using the image transformations as default
- * values for the image editor widget.
- */
-void
-WallpaperBusinessLogic::setBackground (
-        WallpaperITrans     *landscapeITrans,
-        WallpaperITrans     *portraitITrans,
-        WallpaperDescriptor *desc)
-{
-#if 0
-    bool success;
-
-    if (desc == 0)
-        desc = m_EditedImage;
-
-    Q_ASSERT (landscapeITrans);
-    Q_ASSERT (portraitITrans);
-    Q_ASSERT (desc);
-
-    success = ensureHasDirectory ();
-    if (!success)
-        return;
-
-    createBackupFiles ();
-
-    success = writeFiles (landscapeITrans, portraitITrans, desc);
-    if (!success) {
-        // FIXME: Should restore backup files here.
-        return;
-    }
-   
-    deleteBackupFiles ();
-
-    /*
-     * Re-reading the current wallpaper as it is saved into the user's home.
-     */
-    WallpaperCurrentDescriptor *currentDesc;
-    currentDesc = WallpaperCurrentDescriptor::instance ();
-    currentDesc->setFromDesktopFile (dirPath() + destopFileName);
-    emit wallpaperChanged ();
-#endif
-}
 
 
 void
@@ -259,20 +199,6 @@ WallpaperBusinessLogic::editedImage () const
     return m_EditedImage;
 }
 
-/*********************************************************************************
- * Low level file handling functions.
- */
-bool
-WallpaperBusinessLogic::supportsLandscape () const
-{
-    return !m_OrientationLocked || m_LockedOrientation == M::Landscape;
-}
-
-bool
-WallpaperBusinessLogic::supportsPortrait () const
-{
-    return !m_OrientationLocked || m_LockedOrientation == M::Portrait;
-}
 
 /******************************************************************************
  * Handling the GConf database.

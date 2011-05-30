@@ -140,12 +140,12 @@ private slots:
         virtual int imageX () const;
         virtual int imageY () const;
 
-private:
-    M_STYLABLE_WIDGET(WallpaperEditorWidgetStyle)
-    void setupPanningPhysics ();    
-    void gestureWorkaround (QPointF *point);
-    bool supportsLandscape () const;
-    bool supportsPortrait () const;
+    private:
+        M_STYLABLE_WIDGET(WallpaperEditorWidgetStyle)
+        void setupPanningPhysics ();    
+        void gestureWorkaround (QPointF *point);
+        bool supportsLandscape () const;
+        bool supportsPortrait () const;
  
 private:
     QImage                m_bgLandscape;

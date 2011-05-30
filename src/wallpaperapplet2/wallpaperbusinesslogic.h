@@ -19,9 +19,8 @@
 #ifndef WALLPAPERBUSINESSLOGIC_H
 #define WALLPAPERBUSINESSLOGIC_H
 
-#include <QList>
 #include <QObject>
-#include <meegocontrolexport.h>
+//#include <meegocontrolexport.h>
 
 class QString;
 class MGConfItem;
@@ -30,14 +29,7 @@ class QStringList;
 class WallpaperITrans;
 
 #include <QPointer>
-#include <QtConcurrentRun>
-#include <QFutureWatcher>
-
 #include <wallpaperdescriptor.h>
-
-#define WALLPAPER_DBUS_INTERFACE "com.nokia.wallpaper"
-#define WALLPAPER_DBUS_EDIT_SIGNAL "edit"
-
 
 /*!
  * The logic which handling the loading/saving and management
@@ -62,11 +54,6 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
 
         WallpaperDescriptor editedImage () const;
 
-    void setBackground (
-        WallpaperITrans     *landscapeITrans,
-        WallpaperITrans     *portraitITrans,
-        WallpaperDescriptor *desc = 0);
-
     signals:
         void wallpaperChanged ();
         void editWallpaper (WallpaperDescriptor desc);
@@ -74,18 +61,15 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
     private slots:
         void portraitGConfChanged ();
 
-    bool supportsLandscape () const;
-    bool supportsPortrait () const;
+        #if 0
+        bool supportsLandscape () const;
+        bool supportsPortrait () const;
+        #endif
 
     private:
         QPointer<MGConfItem>       m_PPItem;
         QPointer<MGConfItem>       m_POItem;
         WallpaperDescriptor        m_EditedImage;
-
-    bool                           m_EditedImageOurs;
-    bool                           m_OrientationLocked;
-    M::Orientation                 m_LockedOrientation;
-    QFutureWatcher <void>          m_FutureWatcher;
 
 #ifdef UNIT_TEST
     friend class Ut_WallpaperBusinessLogic;

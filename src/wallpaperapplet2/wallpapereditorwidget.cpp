@@ -74,9 +74,6 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_HasPendingRedraw (false),
     m_Physics (0)
 {
-//    WallpaperEditorWidgetStyle *s = (WallpaperEditorWidgetStyle *)
-//        (style());
-
     SYS_WARNING ("----------------------------------------------");
     MWindow *win = MApplication::activeWindow ();
     
@@ -110,7 +107,7 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_Physics->setPanDirection (Qt::Vertical | Qt::Horizontal);
     m_Physics->setEnabled(true);
   
-#if 0
+#if 1
     SYS_WARNING ("*** PointerSpringK  = %g", style()->pointerSpringK());
     SYS_WARNING ("*** Friction        = %g", style()->friction());
     SYS_WARNING ("*** SlidingFriction = %g", style()->slidingFriction());
@@ -119,11 +116,11 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     SYS_WARNING ("*** maximumvelocity = %g", style()->maximumVelocity());
 #endif
 
-    m_Physics->setPointerSpringK (style()->pointerSpringK());
-    m_Physics->setFriction (style()->friction());
+    m_Physics->setPointerSpringK  (style()->pointerSpringK());
+    m_Physics->setFriction        (style()->friction());
     m_Physics->setSlidingFriction (style()->slidingFriction());
-    m_Physics->setBorderSpringK (style()->borderSpringK());
-    m_Physics->setBorderFriction (style()->borderFriction());
+    m_Physics->setBorderSpringK   (style()->borderSpringK());
+    m_Physics->setBorderFriction  (style()->borderFriction());
     m_Physics->setMaximumVelocity (style()->maximumVelocity());
 
     connect (m_Physics, SIGNAL(positionChanged(const QPointF &)),
@@ -138,12 +135,12 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_ScalePhysics->setPanDirection (Qt::Vertical);
     m_ScalePhysics->setEnabled(true);
     
-    m_ScalePhysics->setPointerSpringK(0.25);
-    m_ScalePhysics->setFriction(0.6);
-    m_ScalePhysics->setSlidingFriction(0.20);
-    m_ScalePhysics->setBorderSpringK(0.02);
-    m_ScalePhysics->setBorderFriction(0.25);
-    m_ScalePhysics->setMaximumVelocity(70);
+    m_ScalePhysics->setPointerSpringK  (style()->pointerSpringK());
+    m_ScalePhysics->setFriction        (style()->friction());
+    m_ScalePhysics->setSlidingFriction (style()->slidingFriction());
+    m_ScalePhysics->setBorderSpringK   (style()->borderSpringK());
+    m_ScalePhysics->setBorderFriction  (style()->borderFriction());
+    m_ScalePhysics->setMaximumVelocity (style()->maximumVelocity());
     m_ScalePhysics->setRange (
             QRectF(0.0, scaleLowerLimit, 0.0, scaleUpperLimit));
     m_ScalePhysics->setPosition (QPointF(0.0, 100.0));
@@ -214,14 +211,11 @@ void
 WallpaperEditorWidget::scalePhysicsPositionChanged(
         const QPointF    &position)
 {
-    SYS_DEBUG ("");
     qreal scalefactor = position.y() / 100.0;
 
     if (scalefactor < 0.05)
         scalefactor = 0.05;
 
-    SYS_DEBUG ("position    %g, %g", position.x(), position.y());
-    SYS_DEBUG ("scalefactor %g", scalefactor);
     m_Trans.setScale (scalefactor);
     setupPanningPhysics ();
     queueRedrawImage ();
@@ -469,7 +463,6 @@ void
 WallpaperEditorWidget::mousePressEvent (
         QGraphicsSceneMouseEvent *event)
 {
-    SYS_DEBUG ("");
     m_Physics->stop();
 }
 #endif
@@ -638,7 +631,6 @@ WallpaperEditorWidget::supportsPortrait () const
 void 
 WallpaperEditorWidget::setupPanningPhysics ()
 {
-    SYS_DEBUG ("");
     /*
      * The widget's geometry is disturbed by the transparent toolbar, 
      * but the expectedsize is stable.

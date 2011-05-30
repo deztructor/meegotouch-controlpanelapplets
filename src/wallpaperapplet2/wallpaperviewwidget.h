@@ -19,6 +19,7 @@
 #ifndef WALLPAPERVIEWWIDGET_H
 #define WALLPAPERVIEWWIDGET_H
 
+#include "wallpaperviewwidgetstyle.h"
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperdescriptor.h"
 #include "wallpaperitrans.h"
@@ -65,6 +66,9 @@ class WallpaperViewWidget : public DcpStylableWidget
         QColor                            m_BgColor;
         QuillImage                        m_Image;
         QSize                             m_OriginalSize;
+
+    private:
+        //M_STYLABLE_WIDGET(WallpaperViewWidgetStyle)
 
     private:
         bool                              m_PageRealized;

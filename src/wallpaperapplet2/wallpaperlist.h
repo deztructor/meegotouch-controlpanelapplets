@@ -23,6 +23,7 @@
 
 #include <MList>
 #include <QModelIndex>
+#include <MStylableWidget>
 
 class QGraphicsItem;
 class WallpaperBusinessLogic;

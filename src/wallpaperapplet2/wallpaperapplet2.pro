@@ -47,6 +47,7 @@ INCLUDEPATH += \
     /usr/include/thumbnailer 
 
 STYLE_HEADERS +=                   \
+    wallpaperviewwidgetstyle.h     \
     wallpapereditorwidgetstyle.h
 
 HEADERS =                          \
@@ -63,6 +64,7 @@ HEADERS =                          \
     wallpaperapplet.h              \
     wallpaperwidget.h              \
     wallpapereditorsheet.h         \
+    wallpaperviewwidgetstyle.h     \
     wallpaperviewwidget.h          \
     wallpapereditorwidgetstyle.h   \
     wallpapereditorwidget.h        \

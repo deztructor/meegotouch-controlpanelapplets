@@ -2,6 +2,11 @@
     tool-bar-style-name: "MToolBarStyleInverted";
 }
 
+WallpaperViewWidgetStyle {
+    image-background-color: Red;
+}
+
+
 WallpaperEditorWidgetStyle {
     /*
      * Theming for the kinetic moving of the wallpaper editor in the widget.
@@ -15,3 +20,4 @@ WallpaperEditorWidgetStyle {
     border-friction: 0.66;
     maximum-velocity: 100.0;
 }
+

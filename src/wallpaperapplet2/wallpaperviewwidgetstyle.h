@@ -16,27 +16,23 @@
 ** of this file.
 **
 ****************************************************************************/
-#ifndef WALLPAPEREDITORWIDGETSTYLE_H
-#define WALLPAPEREDITORWIDGETSTYLE_H
+#ifndef WALLPAPERVIEWWIDGETSTYLE_H
+#define WALLPAPERVIEWWIDGETSTYLE_H
 
-#include <wallpaperviewwidgetstyle.h>
+#include <mwidgetstyle.h>
+#include <QColor>
 
-class M_CORE_EXPORT WallpaperEditorWidgetStyle : public WallpaperViewWidgetStyle
+class M_CORE_EXPORT WallpaperViewWidgetStyle : public MWidgetStyle
 {
     Q_OBJECT
-    M_STYLE_INTERNAL(WallpaperEditorWidgetStyle)
+    M_STYLE(WallpaperViewWidgetStyle)
 
-    M_STYLE_ATTRIBUTE(qreal, pointerSpringK,    PointerSpringK)
-    M_STYLE_ATTRIBUTE(qreal, friction,          Friction)
-    M_STYLE_ATTRIBUTE(qreal, slidingFriction,   SlidingFriction)
-    M_STYLE_ATTRIBUTE(qreal, borderSpringK,     BorderSpringK)
-    M_STYLE_ATTRIBUTE(qreal, borderFriction,    BorderFriction)
-    M_STYLE_ATTRIBUTE(qreal, maximumVelocity,   MaximumVelocity)
+    M_STYLE_ATTRIBUTE(QColor, imageBackgroundColor,    ImageBackgroundColor)
 };
 
-class M_CORE_EXPORT WallpaperEditorWidgetStyleContainer : public WallpaperViewWidgetStyleContainer 
+class M_CORE_EXPORT WallpaperViewWidgetStyleContainer : public MWidgetStyleContainer
 {
-    M_STYLE_CONTAINER_INTERNAL(WallpaperEditorWidgetStyle)
+    M_STYLE_CONTAINER(WallpaperViewWidgetStyle)
 };
 
 

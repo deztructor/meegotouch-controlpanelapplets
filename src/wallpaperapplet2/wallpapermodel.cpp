@@ -226,13 +226,13 @@ WallpaperModel::thumbnailReady (
 {
     QString             path;
 
+    Q_UNUSED (flavor);
+    Q_UNUSED (fileUri);
+    Q_UNUSED (thumbnailUri);
+
     if (pixmap.isNull()) {
         SYS_WARNING ("ERROR: thumbnail is null for %s",
                 SYS_STR(fileUri.toString()));
-        SYS_WARNING ("*** fileUri      = %s",
-                SYS_STR(QString(fileUri.toEncoded())));
-        SYS_WARNING ("*** thumbnailURI = %s", 
-                SYS_STR(QString(thumbnailUri.toEncoded())));
         return;
     }
 
@@ -264,23 +264,11 @@ WallpaperModel::thumbnailError (
             QString      message,
             QUrl         fileUri)
 {
-    SYS_WARNING ("Failed thumbnailing: %s", SYS_STR(message));
-#if 0
     Q_UNUSED (message);
-
-    for (int n = Landscape; n < NVariants; ++n) {
-        if (m_Images[n].url() == fileUri) {
-            bool success;
-
-            success = m_Images[n].thumbnail (true);
-
-            if (success) {
-                emit thumbnailLoaded (this);
-                emit changed (this);
-            }
-        }
-    }
-#endif
+    Q_UNUSED (fileUri);
+    SYS_WARNING ("Failed thumbnailing: %s: %s", 
+            SYS_STR(message),
+            SYS_STR(fileUri.toString()));
 }
 
 /*!

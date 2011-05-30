@@ -43,6 +43,7 @@ WallpaperViewWidget::WallpaperViewWidget (
     m_BgColor ("black"),
     m_PageRealized (false)
 {
+    //m_BgColor = style()->imageBackgroundColor();
     #if 0
     MWindow *win = MApplication::activeWindow ();
     if (win)
