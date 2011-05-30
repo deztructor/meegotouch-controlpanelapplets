@@ -54,6 +54,7 @@ HEADERS =                          \
     ../debug.h                     \
     wallpaperconfiguration.h       \
     wallpaperutils.h               \
+    wallpaperworkerthread.h        \
     gridimagewidget.h              \
     wallpaperdescriptor_p.h        \
     wallpaperdescriptor.h          \
@@ -74,6 +75,7 @@ SOURCES =                          \
     ../debug.cpp                   \
     wallpaperconfiguration.cpp     \
     wallpaperutils.cpp             \
+    wallpaperworkerthread.cpp      \
     gridimagewidget.cpp            \
     wallpaperdescriptor_p.cpp      \
     wallpaperdescriptor.cpp        \

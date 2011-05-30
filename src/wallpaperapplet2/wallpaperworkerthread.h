@@ -20,35 +20,27 @@
 **          Laszlo Pere <lpere@blumsoft.eu>
 **
 ****************************************************************************/
-#ifndef WALLPAPER_CONFIGURATION_H
-#define WALLPAPER_CONFIGURATION_H
+#ifndef WALLPAPERWORKERTHREAD_H
+#define WALLPAPERWORKERTHREAD_H
 
+#include <QThread>
+#include <QPixmap>
 #include <QString>
 
-namespace Wallpaper 
+class WallpaperWorkerThread : public QThread
 {
-    const bool useSheetForEdit (false);
-    const bool supportEdit (false);
+    public:
+        WallpaperWorkerThread (QPixmap &pixmap, const QString &fileName);
+        void run();
+        bool success () const;
 
-    const QString CurrentPortraitKey (
-            "/desktop/meego/background/portrait/picture_filename");
-
-    const QString OriginalPortraitKey (
-            "/desktop/meego/background/portrait/original_filename");
-
-    const QString themeNameKey ("/meegotouch/theme/name");
-
-    const QString themeImagePath (
-            "/usr/share/themes/%1/meegotouch/images/backgrounds/%2.jpg");
-    
-    //const QString themeImagePath (
-    //        "/usr/share/themes/%1/meegotouch/proto/%2.jpg");
-
-    const QString ImagesDir ("~/MyDocs/.wallpapers");
-    const QString ImagesSaveDir ("~/.wallpapers");
-    const QString OutImgExt (".png");
-
-    const QString DefaultThumbnailFlavor ("grid");
+    protected:
+        void runSavePixmap ();
+        
+    private:
+        QPixmap    m_Pixmap;
+        QString    m_OutputFileName;
+        bool       m_Success;
 };
 
 #endif

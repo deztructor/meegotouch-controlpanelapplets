@@ -255,3 +255,46 @@ WallpaperViewWidget::generatePixmap (
 
     return retval;
 }
+
+    
+void 
+WallpaperViewWidget::slotDoneActivated ()
+{
+    MWindow  *win;
+    SYS_DEBUG ("");
+        
+    saveImage ();
+
+    /*
+     * Turning back from fullscreen. This could be done in the destructor, but
+     * that ends up with a segfault in the Qt...
+     */
+    win = MApplication::activeWindow ();
+    if (win)
+        win->showNormal();
+
+    /*
+     * We are done with the editing, let's page back to the view where we have
+     * the list.
+     */
+    SYS_DEBUG ("Calling changeWidget()");
+    emit doneClicked ();
+    changeWidget (0);
+}
+ 
+void 
+WallpaperViewWidget::slotCancelActivated ()
+{
+    SYS_DEBUG ("");
+
+    /*
+     * Amitting a signal to show the cancel is clicked. Then emitting a signal
+     * to close the application page (this slot is only called when the sheet is
+     * not used). Then we notify the business logic about the edit operation is
+     * finished.
+     */
+    emit cancelClicked ();
+    emit closePage ();
+    m_BusinessLogic->endEdit ();    
+}
+

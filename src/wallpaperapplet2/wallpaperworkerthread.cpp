@@ -20,35 +20,44 @@
 **          Laszlo Pere <lpere@blumsoft.eu>
 **
 ****************************************************************************/
-#ifndef WALLPAPER_CONFIGURATION_H
-#define WALLPAPER_CONFIGURATION_H
+#include "wallpaperworkerthread.h"
 
-#include <QString>
+#define DEBUG
+#define WARNING
+#include "../debug.h"
 
-namespace Wallpaper 
+WallpaperWorkerThread::WallpaperWorkerThread (
+        QPixmap       &pixmap, 
+        const QString &fileName) :
+    m_Pixmap (pixmap),
+    m_OutputFileName (fileName),
+    m_Success (false)
 {
-    const bool useSheetForEdit (false);
-    const bool supportEdit (false);
+}
 
-    const QString CurrentPortraitKey (
-            "/desktop/meego/background/portrait/picture_filename");
 
-    const QString OriginalPortraitKey (
-            "/desktop/meego/background/portrait/original_filename");
+void
+WallpaperWorkerThread::run ()
+{
+    SYS_DEBUG ("*** m_Pixmap         = %dx%d", 
+            m_Pixmap.width(), m_Pixmap.height());
+    SYS_DEBUG ("*** m_OutputFileName = %s", SYS_STR(m_OutputFileName));
 
-    const QString themeNameKey ("/meegotouch/theme/name");
+    if (!m_OutputFileName.isEmpty() && 
+            m_Pixmap.width() > 0 && m_Pixmap.height() > 0)
+        runSavePixmap ();
+}
 
-    const QString themeImagePath (
-            "/usr/share/themes/%1/meegotouch/images/backgrounds/%2.jpg");
-    
-    //const QString themeImagePath (
-    //        "/usr/share/themes/%1/meegotouch/proto/%2.jpg");
+void
+WallpaperWorkerThread::runSavePixmap ()
+{
+    m_Success = m_Pixmap.save (m_OutputFileName);
 
-    const QString ImagesDir ("~/MyDocs/.wallpapers");
-    const QString ImagesSaveDir ("~/.wallpapers");
-    const QString OutImgExt (".png");
+}
 
-    const QString DefaultThumbnailFlavor ("grid");
-};
+bool 
+WallpaperWorkerThread::success () const
+{
+    return m_Success;
+}
 
-#endif

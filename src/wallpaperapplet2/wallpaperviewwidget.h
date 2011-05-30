@@ -46,6 +46,10 @@ class WallpaperViewWidget : public DcpStylableWidget
             const QStyleOptionGraphicsItem  *option,
             QWidget *widget = 0);
 
+    signals:
+        void doneClicked ();
+        void cancelClicked ();
+
     protected:
         virtual void polishEvent ();
         virtual int imageX () const;
@@ -59,6 +63,8 @@ class WallpaperViewWidget : public DcpStylableWidget
 
     protected slots:
         virtual void createContent ();
+        virtual void slotDoneActivated ();
+        virtual void slotCancelActivated ();
 
     protected:
         QPointer<WallpaperBusinessLogic>  m_BusinessLogic;

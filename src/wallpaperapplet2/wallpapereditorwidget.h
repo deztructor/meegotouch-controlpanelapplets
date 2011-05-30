@@ -120,17 +120,17 @@ protected:
             QPinchGesture *gesture);
 #endif
 
-signals:
-    void doneClicked ();
-    void cancelClicked ();
+
     
-private slots:
+    protected slots:
+        virtual void createContent ();
+        virtual void slotDoneActivated ();
+        virtual void slotCancelActivated ();
+
+    private slots:
     void redrawImage ();
     void queueRedrawImage ();
     void orientationChanged (M::Orientation orientation);
-    void slotDoneActivated ();
-    void slotCancelActivated ();
-    virtual void createContent ();
     void createWidgets ();
     void panningPhysicsPositionChanged (const QPointF &position);
     void panningPhysicsPanningStopped ();

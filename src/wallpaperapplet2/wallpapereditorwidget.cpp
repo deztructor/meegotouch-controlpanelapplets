@@ -267,7 +267,6 @@ void
 WallpaperEditorWidget::slotDoneActivated ()
 {
     SYS_DEBUG ("");
-    MWindow  *win;
 
     /*
      * We ignore the button press while the image is moving.
@@ -278,25 +277,7 @@ WallpaperEditorWidget::slotDoneActivated ()
     if (m_ScalePhysics->inMotion()) 
         m_ScalePhysics->stop();
 
-    saveImage ();
-
-    /*
-     * Turning back from fullscreen. This could be done in the destructor, but
-     * that ends up with a segfault in the Qt...
-     */
-    win = MApplication::activeWindow ();
-    if (win)
-        win->showNormal();
-
-    /*
-     * We are done with the editing, let's page back to the view where we have
-     * the list.
-     */
-    SYS_DEBUG ("Calling changeWidget()");
-    emit doneClicked ();
-    changeWidget (0);
-
-    SYS_WARNING ("UNIMPLEMENTED");
+    WallpaperViewWidget::slotDoneActivated ();
 }
 
 /*!
@@ -315,13 +296,7 @@ WallpaperEditorWidget::slotCancelActivated ()
     if (m_ScalePhysics->inMotion()) 
         m_ScalePhysics->stop();
 
-    emit cancelClicked ();
-    emit closePage ();
-
-    /*
-     *
-     */
-    m_BusinessLogic->endEdit ();
+    WallpaperViewWidget::slotCancelActivated ();
 }
 
 /*!
@@ -443,7 +418,6 @@ WallpaperEditorWidget::orientationChanged (
 /******************************************************************************
  * Stuff for the normal mouse events.
  */
-#ifndef NO_EDITING
 void 
 WallpaperEditorWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
@@ -455,19 +429,15 @@ WallpaperEditorWidget::wheelEvent (
     m_ScalePhysics->pointerMove (QPointF(0.0,  event->delta() / 100.0));
     m_ScalePhysics->pointerRelease();
 }
-#endif
 
 
-#ifndef NO_EDITING
 void
 WallpaperEditorWidget::mousePressEvent (
         QGraphicsSceneMouseEvent *event)
 {
     m_Physics->stop();
 }
-#endif
 
-#ifndef NO_EDITING
 /*******************************************************************************
  * Stuff for the two finger gestures.
  */
@@ -612,7 +582,6 @@ WallpaperEditorWidget::gestureWorkaround (
         *point = tmp;
     }
 }
-#endif
 
 bool
 WallpaperEditorWidget::supportsLandscape () const
