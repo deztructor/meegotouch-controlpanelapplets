@@ -92,7 +92,7 @@ void
 BatteryWidget::initWidget ()
 {
     MLayout     *layout;
-    MSeparator  *spacer;
+
 
     /*
      * Creating a layout that holds the rows of the internal widgets.
@@ -113,9 +113,7 @@ BatteryWidget::initWidget ()
     // Row 3: PSM Auto activation switch
     addAutoActivationWidget ();
     
-    spacer = addSpacer (
-            "CommonHorizontalSeparatorInverted",
-            SpacerPosition);
+
 
     addSliderContainer ();
 
@@ -308,6 +306,10 @@ BatteryWidget::addSliderContainer ()
     Q_ASSERT (m_MainLayout);
 
     m_SliderContainer = new SliderContainer ();
+    spacer = addSpacer (
+            "CommonItemDividerInverted",
+            SpacerPosition);
+
     showSlider (m_PSMAutoCombo->currentIndex () == PSMAutoOn);
 }
 
@@ -325,9 +327,11 @@ BatteryWidget::showSlider (
         m_MainLayout->insertItem (SliderContainerPosition, m_SliderContainer);
         m_MainLayout->setStretchFactor (m_SliderContainer, 0);
 
+        spacer->show();
         m_SliderContainer->show();
     } else {
         m_SliderContainer->hide();
+        spacer->hide();
         m_MainLayout->removeItem (m_SliderContainer);
     }
 }
