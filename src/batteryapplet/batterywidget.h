@@ -87,6 +87,7 @@ private:
     BatteryImage            *m_BatteryImage;
     MLabel                  *m_TitleLabel;
     bool                     m_UILocked;
+    MSeparator              *spacer;
 };
 
 #endif // BATTERYWIDGET_H
