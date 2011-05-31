@@ -36,6 +36,7 @@ WallpaperEditorSheet::WallpaperEditorSheet (
         WallpaperBusinessLogic *wallpaperBusinessLogic) :
     m_Saving (false)
 {
+    setStyleName ("Inverted");
     createCentralWidget (wallpaperBusinessLogic);
     createHeaderWidget ();
         

@@ -21,6 +21,7 @@
 #include "wallpaperwidget.h"
 #include "wallpapereditorwidget.h"
 #include "wallpaperconfiguration.h"
+#include "wallpaperlistsheet.h"
 
 #include <MAction>
 
@@ -88,7 +89,25 @@ DcpStylableWidget *
 WallpaperApplet::constructStylableWidget (
         int widgetId)
 {
+    SYS_DEBUG ("");
+    //if (Wallpaper::useSheetForEdit)
+    //    return 0;
+
     return pageMain (widgetId);
+}
+
+MSheet *
+WallpaperApplet::constructSheet (
+        int widgetId)
+{
+    SYS_DEBUG ("*** widgetId = %d", widgetId);
+    if (!Wallpaper::useSheetForEdit)
+        return 0;
+
+    if (!m_WallpaperBusinessLogic)
+        m_WallpaperBusinessLogic = new WallpaperBusinessLogic;
+
+    return new WallpaperListSheet (m_WallpaperBusinessLogic);
 }
 
 QString

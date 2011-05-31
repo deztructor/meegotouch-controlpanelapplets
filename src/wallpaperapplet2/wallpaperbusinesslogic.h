@@ -63,6 +63,8 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
     signals:
         void wallpaperChanged ();
         void wallpaperSaved ();
+        void workerStarted ();
+        void workerEnded ();
         void wallpaperLoaded (QuillImage image, QSize originalSize);
         void editWallpaper (WallpaperDescriptor desc);
    

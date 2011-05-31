@@ -47,7 +47,8 @@
 #include "../debug.h"
 
 WallpaperBusinessLogic::WallpaperBusinessLogic() :
-    m_EditRequested (false)
+    m_EditRequested (false),
+    m_WorkerThread (0)
 {
     m_PPItem = new MGConfItem (Wallpaper::CurrentPortraitKey, this);
     m_POItem = new MGConfItem (Wallpaper::OriginalPortraitKey, this);
@@ -171,7 +172,8 @@ WallpaperBusinessLogic::loadImage (
         SYS_WARNING ("Worker thread is already there, giving up.");
         goto finalize;
     }
-        
+
+    emit workerStarted ();
     m_WorkerThread = new WallpaperWorkerThread (desc, sceneSize());
     connect (m_WorkerThread, SIGNAL(finished()), 
             this, SLOT(workerThreadFinishedLoad()), Qt::QueuedConnection);
@@ -272,4 +274,6 @@ WallpaperBusinessLogic::workerThreadFinishedLoad ()
 
     delete m_WorkerThread;
     m_WorkerThread = 0;
+
+    emit workerEnded ();
 }

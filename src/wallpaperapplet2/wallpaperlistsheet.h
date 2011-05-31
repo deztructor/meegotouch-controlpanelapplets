@@ -20,33 +20,29 @@
 **          Laszlo Pere <lpere@blumsoft.eu>
 **
 ****************************************************************************/
-#ifndef WALLPAPEREDITORSHEET_H
-#define WALLPAPEREDITORSHEET_H
+#ifndef WALLPAPERLISTSHEET_H
+#define WALLPAPERLISTSHEET_H
 
 #include <MSheet>
 class WallpaperBusinessLogic;
-class WallpaperViewWidget;
 
-class WallpaperEditorSheet : public MSheet
+class WallpaperListSheet : public MSheet
 {
     Q_OBJECT
 
     public:
-        WallpaperEditorSheet (
+        WallpaperListSheet (
                 WallpaperBusinessLogic *wallpaperBusinessLogic);
-
+       
+    protected slots:
+        void workerStarted ();
+        void workerEnded ();
+        
     private:
         void createHeaderWidget();
         void createCentralWidget(
                 WallpaperBusinessLogic *wallpaperBusinessLogic);
 
-    private Q_SLOTS:
-        void doneActivated ();
-        void cancelActivated ();
-        void wallpaperSaved ();
-
-    private:
-        WallpaperViewWidget  *m_EditorWidget;
-        bool                  m_Saving;
 };
+
 #endif

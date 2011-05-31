@@ -58,12 +58,13 @@ HEADERS =                          \
     gridimagewidget.h              \
     wallpaperdescriptor_p.h        \
     wallpaperdescriptor.h          \
-    wallpapercellreator.h          \
+    wallpapercellcreator.h          \
     wallpapermodel.h               \
     wallpaperlist.h                \
     wallpaperbusinesslogic.h       \
     wallpaperapplet.h              \
     wallpaperwidget.h              \
+    wallpaperlistsheet.h           \
     wallpapereditorsheet.h         \
     wallpaperviewwidgetstyle.h     \
     wallpaperviewwidget.h          \
@@ -85,6 +86,7 @@ SOURCES =                          \
     wallpaperbusinesslogic.cpp     \
     wallpaperapplet.cpp            \
     wallpaperwidget.cpp            \
+    wallpaperlistsheet.cpp         \
     wallpapereditorsheet.cpp       \
     wallpaperviewwidget.cpp        \
     wallpapereditorwidget.cpp      \

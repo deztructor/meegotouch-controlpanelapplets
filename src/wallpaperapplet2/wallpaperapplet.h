@@ -46,6 +46,7 @@ public:
 
     virtual void init();
     virtual DcpStylableWidget *constructStylableWidget (int widgetId);
+    virtual MSheet *constructSheet (int widgetId);
     virtual DcpStylableWidget *pageMain (int widgetId);
     virtual QString title() const;
     virtual QVector<MAction *> viewMenuItems();
