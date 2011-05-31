@@ -29,6 +29,7 @@
 #include <QDBusInterface>
 
 class QDBusObjectPath;
+class QProcess;
 class QString;
 
 /*!
@@ -48,13 +49,13 @@ public:
         reqSwName,
         reqLicense,
         reqCertsImage,
-        reqBarcodeImage,
         reqOsVersion,
         reqImei,
         reqWifiAddr,
         reqBtAddr,
         reqLast,
         /* special requests */
+        reqBarcodeImage,
         reqCertsImageNeeded,
         reqStartAll = 100
     } requestType;
@@ -74,6 +75,7 @@ private slots:
         QMap<QString, QVariant> properties);
     void defaultBluetoothAdapterReceived (QDBusObjectPath adapter);
     void DBusMessagingFailure (QDBusError error);
+    void barcodeReady ();
 
 private:
     void initiateBluetoothQueries ();
@@ -96,7 +98,8 @@ private:
     QString m_swName;
     QString m_prodName;
     QString m_certsImage;
-    QString m_barcodeImage;
+
+    QProcess *m_generator;
 
 #ifdef UNIT_TEST
     friend class Ut_AboutBusinessLogic;

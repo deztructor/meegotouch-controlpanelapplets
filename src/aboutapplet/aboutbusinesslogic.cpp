@@ -26,17 +26,19 @@
 
 QTM_USE_NAMESPACE
 
+#include <QDir>
 #include <QRegExp>
 #include <QString>
 #include <QStringList>
 #include <QVariant>
 #include <QtDBus>
+#include <QProcess>
 #include <QDBusInterface>
 #include <QDBusObjectPath>
 
 #define OS_NAME_FALLBACK "MeeGo"
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -55,11 +57,13 @@ QTM_USE_NAMESPACE
 #define LICENSE_PATH ""
 #endif
 
+static const QString barcodeGenerator ("/usr/bin/about-contents-barcode");
 static const QString configPath ("/usr/share/about-contents/");
 static const QString configFile (configPath + "contents.ini");
 static const QString certConfigFile (configPath + "typelabel.ini");
 
-AboutBusinessLogic::AboutBusinessLogic() : QThread (0)
+AboutBusinessLogic::AboutBusinessLogic() : QThread (0),
+    m_generator (0)
 {
     setTerminationEnabled (true);
     qRegisterMetaType<AboutBusinessLogic::requestType>(
@@ -71,6 +75,9 @@ AboutBusinessLogic::AboutBusinessLogic() : QThread (0)
 
 AboutBusinessLogic::~AboutBusinessLogic()
 {
+    delete m_generator;
+    m_generator = 0;
+
     if (m_ManagerDBusIf)
         delete m_ManagerDBusIf;
     if (m_AdapterDBusIf)
@@ -322,7 +329,6 @@ AboutBusinessLogic::initializeAndStart ()
     m_swName = content.value ("swname").toString ();
     m_prodName = content.value ("prodname").toString ();
     m_certsImage = content.value ("swtypeimage").toString ();
-    m_barcodeImage = content.value ("barcodeimage").toString ();
     m_licenseFile =
         content.value ("abouttext", QString (LICENSE_PATH)).toString ();
 
@@ -339,19 +345,13 @@ AboutBusinessLogic::initializeAndStart ()
                "Product name        : %s\n"
                "Software version    : %s\n"
                "License file        : %s\n"
-               "Type approval img.  : %s\n"
-               "2D Barcode image    : %s\n",
+               "Type approval img.  : %s\n",
                SYS_STR (m_swName), SYS_STR (m_prodName),
-               SYS_STR (m_licenseFile), SYS_STR (m_certsImage),
-               SYS_STR (m_barcodeImage));
+               SYS_STR (m_licenseFile), SYS_STR (m_certsImage));
 
     if ((! m_certsImage.isEmpty ()) &&
         (m_certsImage.at (0) != '/'))
         m_certsImage = configPath + m_certsImage;
-
-    if ((! m_barcodeImage.isEmpty ()) &&
-        (m_barcodeImage.at (0) != '/'))
-        m_barcodeImage = configPath + m_barcodeImage;
 
     /*
      * To avoid flickering we need to construct the
@@ -359,6 +359,18 @@ AboutBusinessLogic::initializeAndStart ()
      */
     if (QFile::exists (m_certsImage))
         emit requestFinished (reqCertsImageNeeded, QVariant ());
+
+    /*
+     * Lets run the barcode-generator if there is one...
+     */
+    if (QFile::exists (barcodeGenerator))
+    {
+        m_generator = new QProcess;
+        connect (m_generator, SIGNAL (finished (int, QProcess::ExitStatus)),
+                 this, SLOT (barcodeReady ()));
+        SYS_DEBUG ("Requesting barcode image");
+        m_generator->start (barcodeGenerator);
+    }
 
     processNextRequest ();
 }
@@ -376,11 +388,24 @@ AboutBusinessLogic::certsImage ()
 QImage
 AboutBusinessLogic::barcodeImage ()
 {
+    QString barcode =
+        QDir::homePath () + "/.barcode_image.png";
+
     /* Load the picture ... */
-    QImage img (m_barcodeImage);
+    QImage img (barcode);
     SYS_DEBUG ("Image path = %s",
-               SYS_STR (m_barcodeImage));
+               SYS_STR (barcode));
     return img;
+}
+
+void
+AboutBusinessLogic::barcodeReady ()
+{
+    SYS_DEBUG ("");
+    if (QFile::exists (QDir::homePath () + "/.barcode_image.png"))
+    {
+        emit requestFinished (reqBarcodeImage, barcodeImage ());
+    }
 }
 
 void
@@ -409,12 +434,6 @@ AboutBusinessLogic::processNextRequest ()
             if (QFile::exists (m_certsImage))
             {
                 emit requestFinished (current, certsImage ());
-            }
-            break;
-        case reqBarcodeImage:
-            if (QFile::exists (m_barcodeImage))
-            {
-                emit requestFinished (current, barcodeImage ());
             }
             break;
         case reqOsVersion:
