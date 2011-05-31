@@ -437,7 +437,7 @@ WallpaperEditorWidget::polishEvent ()
             MApplicationPageModel::Hide);
 
     //% "Save"
-    m_DoneAction = new MAction(qtTrId("qtn_comm_save"), this);
+    m_DoneAction = new MAction(qtTrId("qtn_comm_command_done"), this);
     m_DoneAction->setLocation(MAction::ToolBarLocation);
     page->addAction(m_DoneAction);
     connect(m_DoneAction, SIGNAL(triggered()), this, SLOT(slotDoneActivated()));
@@ -771,7 +771,7 @@ WallpaperEditorWidget::retranslateUi()
 {
     if (m_DoneAction)
         //% "Save"
-        m_DoneAction->setText (qtTrId("qtn_comm_save"));
+        m_DoneAction->setText (qtTrId("qtn_comm_command_done"));
 
     if (m_CancelAction)
         //% "Cancel"
