@@ -123,7 +123,6 @@ protected:
 
     
     protected slots:
-        virtual void createContent ();
         virtual void slotDoneActivated ();
         virtual void slotCancelActivated ();
 

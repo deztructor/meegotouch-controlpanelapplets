@@ -27,6 +27,11 @@
 #include <QImage>
 #include <QPixmap>
 #include <QString>
+#include <QSize>
+#include <QuillImage>
+#include "wallpaperdescriptor.h"
+
+class WallpaperDescriptor;
 
 class WallpaperWorkerThread : public QThread
 {
@@ -39,32 +44,38 @@ class WallpaperWorkerThread : public QThread
         WallpaperWorkerThread (
                 const QString &originalFileName,
                 const QString &outputFileName);
-#if 0
+
         WallpaperWorkerThread (
-                WallpaperDescriptor,
-                const QString &outputFileName);
-#endif
+                WallpaperDescriptor  &desc,
+                const QSize          &size);
+
         virtual void run();
         
         bool success () const;
         QString originalFileName () const;
         QString outputFileName () const;
+        QuillImage image () const;
+        QSize size () const;
         
     protected:
         void runSaveImage ();
+        void runLoadImage ();
         void runCopyFile ();
         
     private:
         typedef enum {
             TaskSaveImage,
+            TaskLoadImage,
             TaskCopyFile,
         } ThreadTask;
 
-        ThreadTask   m_Task;
-        QImage       m_Image;
-        QString      m_OriginalFileName;
-        QString      m_OutputFileName;
-        bool         m_Success;
+        ThreadTask           m_Task;
+        QuillImage           m_Image;
+        QString              m_OriginalFileName;
+        QString              m_OutputFileName;
+        WallpaperDescriptor  m_Descriptor;
+        QSize                m_Size;
+        bool                 m_Success;
 };
 
 #endif

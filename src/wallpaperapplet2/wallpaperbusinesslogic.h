@@ -30,6 +30,9 @@ class WallpaperITrans;
 class WallpaperWorkerThread;
 
 #include <QPointer>
+#include <QuillImage>
+#include <QSize>
+
 #include <wallpaperdescriptor.h>
 
 /*!
@@ -52,17 +55,21 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
         void endEdit ();
         bool setWallpaper ();
         bool setWallpaper (QPixmap &pixmap);
-
+        bool loadImage (WallpaperDescriptor &desc);
+        
         WallpaperDescriptor editedImage () const;
-
+        QSize sceneSize () const;
+        
     signals:
         void wallpaperChanged ();
         void wallpaperSaved ();
+        void wallpaperLoaded (QuillImage image, QSize originalSize);
         void editWallpaper (WallpaperDescriptor desc);
    
     private slots:
         void portraitGConfChanged ();
-        void workerThreadFinished ();
+        void workerThreadFinishedLoad ();
+        void workerThreadFinishedSave ();
 
         #if 0
         bool supportsLandscape () const;
@@ -70,6 +77,7 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
         #endif
 
     private:
+        bool                       m_EditRequested;
         QPointer<MGConfItem>       m_PPItem;
         QPointer<MGConfItem>       m_POItem;
         WallpaperDescriptor        m_EditedImage;

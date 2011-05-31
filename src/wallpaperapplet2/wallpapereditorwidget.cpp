@@ -187,16 +187,6 @@ WallpaperEditorWidget::paint (
 }
 
 /*!
- * Method for creating the editor-widget contents
- */
-void
-WallpaperEditorWidget::createContent ()
-{
-    SYS_DEBUG ("");
-    WallpaperViewWidget::createContent ();
-}
-
-/*!
  * Method for create wallpaper-editor internal widgets
  */
 void

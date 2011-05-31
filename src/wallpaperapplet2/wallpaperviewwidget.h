@@ -62,10 +62,11 @@ class WallpaperViewWidget : public DcpStylableWidget
             qreal           scale);
 
     protected slots:
-        virtual void createContent ();
+        virtual void initialize (QuillImage &image, QSize size);
         virtual void slotDoneActivated ();
         virtual void slotCancelActivated ();
         virtual void wallpaperSaved ();
+        virtual void wallpaperLoaded (QuillImage image, QSize originalSize);
         
     protected:
         QPointer<WallpaperBusinessLogic>  m_BusinessLogic;
@@ -74,6 +75,7 @@ class WallpaperViewWidget : public DcpStylableWidget
         QuillImage                        m_Image;
         QSize                             m_OriginalSize;
         bool                              m_Saving;
+        bool                              m_Initialized;
 
     private:
         //M_STYLABLE_WIDGET(WallpaperViewWidgetStyle)

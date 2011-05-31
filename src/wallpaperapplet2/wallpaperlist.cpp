@@ -105,6 +105,8 @@ WallpaperList::rowsInserted (
         int                start, 
         int                end)
 {
+    Q_UNUSED (parent);
+
     SYS_DEBUG ("Added from %d to %d", start, end);
     QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
 }
@@ -119,6 +121,8 @@ WallpaperList::rowsRemoved (
         int                start, 
         int                end)
 {
+    Q_UNUSED (parent);
+
     SYS_DEBUG ("Added from %d to %d", start, end);
     QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
 }

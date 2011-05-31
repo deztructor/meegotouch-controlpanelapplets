@@ -42,22 +42,14 @@ WallpaperViewWidget::WallpaperViewWidget (
     DcpStylableWidget (parent),
     m_BusinessLogic (wallpaperBusinessLogic),
     m_Saving (false),
+    m_Initialized (false),
     m_BgColor ("black"),
     m_PageRealized (false)
 {
     connect (m_BusinessLogic, SIGNAL(wallpaperSaved()),
             this, SLOT(wallpaperSaved()));
-
-    //m_BgColor = style()->imageBackgroundColor();
-    #if 0
-    MWindow *win = MApplication::activeWindow ();
-    if (win)
-        win->showFullScreen();
-    #endif
-   /*
-    *
-    */
-    QTimer::singleShot (0, this, SLOT(createContent()));
+    connect (m_BusinessLogic, SIGNAL(wallpaperLoaded (QuillImage, QSize)),
+            this, SLOT(wallpaperLoaded (QuillImage, QSize)));
 }
 
 void
@@ -97,31 +89,32 @@ WallpaperViewWidget::dropImage ()
 }
 
 void
-WallpaperViewWidget::createContent ()
+WallpaperViewWidget::initialize (
+        QuillImage   &image,
+        QSize         size)
 {
-    MWindow             *win = MApplication::activeWindow ();
     WallpaperDescriptor  desc = m_BusinessLogic->editedImage ();
     QSize                sceneSize;
     int                  xMarg = 0;
     int                  yMarg = 0;
 
     SYS_DEBUG ("");
-   
+    if (m_Initialized) {
+        SYS_WARNING ("Already initialized.");
+        return;
+    }
+
     if (desc.isNull()) {
         SYS_WARNING ("No editted image, giving up.");
         return;
     }
     
-
-    if (win) {
-        sceneSize = win->visibleSceneSize (M::Portrait);
-        m_Trans.setExpectedSize (sceneSize);
-        m_Trans.setOrientation (M::Portrait);
-    }
+    m_Image        = image;
+    m_OriginalSize = size;
+    sceneSize = m_BusinessLogic->sceneSize ();
+    m_Trans.setExpectedSize (sceneSize);
+    m_Trans.setOrientation (M::Portrait);
     
-    m_Image = desc.load (m_Trans.expectedSize(), m_OriginalSize);
-
-
     if (sceneSize.width() > m_Image.width())
         xMarg = (sceneSize.width() - m_Image.width()) / 2;
     if (sceneSize.height() > m_Image.height())
@@ -133,6 +126,8 @@ WallpaperViewWidget::createContent ()
     SYS_DEBUG ("sceneSize = %dx%d", sceneSize.width(), sceneSize.height());
     SYS_DEBUG ("imageSize = %dx%d", m_Image.width(), m_Image.height());
     SYS_DEBUG ("offset    = %d, %d", xMarg, yMarg);
+
+    m_Initialized = true;
 }
 
 bool 
@@ -331,3 +326,17 @@ WallpaperViewWidget::wallpaperSaved ()
     m_Saving = false;
 }
 
+
+void 
+WallpaperViewWidget::wallpaperLoaded (
+        QuillImage    image, 
+        QSize         originalSize)
+{
+    SYS_DEBUG ("");
+
+    if (!m_Initialized) {
+        initialize (image, originalSize);
+    } else {
+        SYS_WARNING ("Progressive loading not implemented.");
+    }
+}

@@ -21,7 +21,7 @@
 **
 ****************************************************************************/
 #include "wallpaperworkerthread.h"
-
+#include "wallpaperdescriptor.h"
 #include <QFile>
 
 #define DEBUG
@@ -49,6 +49,15 @@ WallpaperWorkerThread::WallpaperWorkerThread (
 {
 }
 
+WallpaperWorkerThread::WallpaperWorkerThread (
+        WallpaperDescriptor  &desc,
+        const QSize          &size) :
+    m_Task (TaskLoadImage),
+    m_Descriptor (desc),
+    m_Size (size)
+{
+}
+
 void
 WallpaperWorkerThread::run ()
 {
@@ -61,6 +70,10 @@ WallpaperWorkerThread::run ()
     switch (m_Task) {
         case TaskSaveImage:
             runSaveImage ();
+            break;
+
+        case TaskLoadImage:
+            runLoadImage ();
             break;
 
         case TaskCopyFile:
@@ -86,6 +99,17 @@ WallpaperWorkerThread::runSaveImage ()
     }
 
     m_Success = m_Image.save (m_OutputFileName);
+}
+
+void
+WallpaperWorkerThread::runLoadImage ()
+{
+    QSize originalSize;
+
+    m_Image = m_Descriptor.load (m_Size, originalSize);
+    m_Size = originalSize;
+    // FIXME: What if the loading is failed?
+    m_Success = true;
 }
 
 void
@@ -136,4 +160,16 @@ QString
 WallpaperWorkerThread::outputFileName () const
 {
     return m_OutputFileName;
+}
+
+QuillImage
+WallpaperWorkerThread::image () const
+{
+    return m_Image;
+}
+
+QSize
+WallpaperWorkerThread::size () const
+{
+    return m_Size;
 }

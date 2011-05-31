@@ -46,7 +46,8 @@
 #define WARNING
 #include "../debug.h"
 
-WallpaperBusinessLogic::WallpaperBusinessLogic() 
+WallpaperBusinessLogic::WallpaperBusinessLogic() :
+    m_EditRequested (false)
 {
     m_PPItem = new MGConfItem (Wallpaper::CurrentPortraitKey, this);
     m_POItem = new MGConfItem (Wallpaper::OriginalPortraitKey, this);
@@ -74,8 +75,9 @@ WallpaperBusinessLogic::startEdit (
         return;
     }
 
-    m_EditedImage = desc;
-    emit editWallpaper (desc);
+    m_EditedImage   = desc;
+    m_EditRequested = true;
+    loadImage (m_EditedImage);
 }
 
 void
@@ -116,7 +118,7 @@ WallpaperBusinessLogic::setWallpaper ()
 
     m_WorkerThread = new WallpaperWorkerThread (filePath, targetPath);
     connect ( m_WorkerThread, SIGNAL(finished()), 
-            this, SLOT(workerThreadFinished()), Qt::QueuedConnection);
+            this, SLOT(workerThreadFinishedSave()), Qt::QueuedConnection);
     success = true;
     m_WorkerThread->start();
 
@@ -135,7 +137,7 @@ WallpaperBusinessLogic::setWallpaper (
 
     if (m_WorkerThread) {
         SYS_WARNING ("Worker thread is already there, giving up.");
-        return false;
+        goto finalize;
     }
 
     /*
@@ -150,13 +152,51 @@ WallpaperBusinessLogic::setWallpaper (
     targetPath = Wallpaper::constructPath (targetPath, basename);
 
     m_WorkerThread = new WallpaperWorkerThread (pixmap, filePath, targetPath);
-    connect ( m_WorkerThread, SIGNAL(finished()), 
-            this, SLOT(workerThreadFinished()), Qt::QueuedConnection);
+    connect (m_WorkerThread, SIGNAL(finished()), 
+            this, SLOT(workerThreadFinishedSave()), Qt::QueuedConnection);
     success = true;
     m_WorkerThread->start();
 
 finalize:
     return success;
+}
+
+bool
+WallpaperBusinessLogic::loadImage (
+        WallpaperDescriptor &desc)
+{
+    bool       success;
+
+    if (m_WorkerThread) {
+        SYS_WARNING ("Worker thread is already there, giving up.");
+        goto finalize;
+    }
+        
+    m_WorkerThread = new WallpaperWorkerThread (desc, sceneSize());
+    connect (m_WorkerThread, SIGNAL(finished()), 
+            this, SLOT(workerThreadFinishedLoad()), Qt::QueuedConnection);
+    success = true;
+    m_WorkerThread->start();
+
+finalize:
+    return success;
+}
+
+QSize
+WallpaperBusinessLogic::sceneSize () const
+{
+    MWindow   *win;
+    QSize      retval;
+
+    win = MApplication::activeWindow ();
+    if (win) {
+        retval = win->visibleSceneSize (M::Portrait);
+    } else {
+        SYS_WARNING ("Using default size.");
+        retval = QSize (480, 854);
+    }
+
+    return retval;
 }
 
 
@@ -193,7 +233,7 @@ WallpaperBusinessLogic::currentWallpaper (
 }
 
 void 
-WallpaperBusinessLogic::workerThreadFinished ()
+WallpaperBusinessLogic::workerThreadFinishedSave ()
 {
     bool success = m_WorkerThread->success();
     SYS_DEBUG ("*** success  = %s", SYS_BOOL(success));
@@ -210,6 +250,25 @@ WallpaperBusinessLogic::workerThreadFinished ()
     }
 
     emit wallpaperSaved ();
+
+    delete m_WorkerThread;
+    m_WorkerThread = 0;
+}
+
+void 
+WallpaperBusinessLogic::workerThreadFinishedLoad ()
+{
+    bool success = m_WorkerThread->success();
+    SYS_DEBUG ("*** success  = %s", SYS_BOOL(success));
+
+    if (m_EditRequested) {
+        emit editWallpaper (m_EditedImage);
+        m_EditRequested = false;
+    }
+
+    emit wallpaperLoaded (
+            m_WorkerThread->image(),
+            m_WorkerThread->size());
 
     delete m_WorkerThread;
     m_WorkerThread = 0;
