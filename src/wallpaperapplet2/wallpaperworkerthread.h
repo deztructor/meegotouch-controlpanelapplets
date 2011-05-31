@@ -39,7 +39,11 @@ class WallpaperWorkerThread : public QThread
         WallpaperWorkerThread (
                 const QString &originalFileName,
                 const QString &outputFileName);
-
+#if 0
+        WallpaperWorkerThread (
+                WallpaperDescriptor,
+                const QString &outputFileName);
+#endif
         virtual void run();
         
         bool success () const;

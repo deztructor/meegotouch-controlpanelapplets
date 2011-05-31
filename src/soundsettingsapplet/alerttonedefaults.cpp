@@ -377,6 +377,7 @@ AlertToneDefaults::selectAndScroll (
     idx = m_DefaultsModel->findItemByFileName (fileName);
     success = selectAndScroll (idx);
 
+    SYS_WARNING ("*** idx = %d", idx);
     if (!success) {
         m_FileNameToSelect = fileName;
         m_NiceNameToSelect = niceName;
@@ -389,7 +390,8 @@ AlertToneDefaults::selectAndScroll (
              * We have to give the widget a chance to process the model events,
              * otherwise the scroollTo() method will not work.
              */
-            QTimer::singleShot(10, this, SLOT(loadingFinished()));
+            SYS_WARNING ("singleShot (loadingFinished())");
+            QTimer::singleShot(100, this, SLOT(loadingFinished()));
         } else {
             SYS_DEBUG ("Calling clear()");
             selectionModel()->clear();
