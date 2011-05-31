@@ -3,8 +3,9 @@ meegotouch-controlpanelapplets (0.20.48~1) meegotouch; urgency=low
   * Fixes: NB#260554 - Divider lines are stretched
   * Fixes: NB#261281 - Settings: Sound settings: After choosing a personal 
     ringtone the screen goes back but chosen song not highlighted.
+  * Fixes: NB#260369 - About applet needs device specific 2D barcode
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 27 May 2011 13:01:37 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 31 May 2011 11:27:28 +0200
 
 meegotouch-controlpanelapplets (0.20.47-1) meegotouch; urgency=low
 
