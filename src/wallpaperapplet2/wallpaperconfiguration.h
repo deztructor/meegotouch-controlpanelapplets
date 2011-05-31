@@ -27,7 +27,7 @@
 
 namespace Wallpaper 
 {
-    const bool useSheetForEdit (false);
+    const bool useSheetForEdit (true);
     const bool supportEdit (false);
 
     const QString CurrentPortraitKey (

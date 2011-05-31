@@ -33,10 +33,14 @@
 #include "../debug.h"
 
 WallpaperEditorSheet::WallpaperEditorSheet (
-        WallpaperBusinessLogic *wallpaperBusinessLogic)
+        WallpaperBusinessLogic *wallpaperBusinessLogic) :
+    m_Saving (false)
 {
     createCentralWidget (wallpaperBusinessLogic);
     createHeaderWidget ();
+        
+    connect (wallpaperBusinessLogic, SIGNAL(wallpaperSaved()),
+            this, SLOT(wallpaperSaved()));
 }
 
 void 
@@ -84,8 +88,11 @@ WallpaperEditorSheet::doneActivated ()
     MBasicSheetHeader *header = static_cast<MBasicSheetHeader*>(headerWidget());
 
     header->setProgressIndicatorVisible (true);
+    header->positiveAction()->setEnabled(false);
+    header->negativeAction()->setEnabled(false);
+
+    m_Saving = true;
     m_EditorWidget->saveImage ();
-    dismiss ();
 }
 
 void
@@ -95,3 +102,15 @@ WallpaperEditorSheet::cancelActivated ()
     dismiss ();
 }
 
+void
+WallpaperEditorSheet::wallpaperSaved ()
+{
+    if (!m_Saving) {
+        SYS_WARNING ("We didn't request saving!");
+        return;
+    }
+
+    m_EditorWidget->dropImage ();
+    m_Saving = false;
+    dismiss ();
+}

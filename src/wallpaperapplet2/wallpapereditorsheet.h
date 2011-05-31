@@ -44,8 +44,10 @@ class WallpaperEditorSheet : public MSheet
     private Q_SLOTS:
         void doneActivated ();
         void cancelActivated ();
+        void wallpaperSaved ();
 
     private:
         WallpaperViewWidget  *m_EditorWidget;
+        bool                  m_Saving;
 };
 #endif

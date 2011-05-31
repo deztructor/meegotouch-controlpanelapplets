@@ -56,6 +56,8 @@ WallpaperWorkerThread::run ()
             m_Image.width(), m_Image.height());
     SYS_DEBUG ("*** m_OutputFileName = %s", SYS_STR(m_OutputFileName));
 
+    //sleep (5);
+
     switch (m_Task) {
         case TaskSaveImage:
             runSaveImage ();
