@@ -6,6 +6,7 @@ meegotouch-controlpanelapplets (0.20.48~1) meegotouch; urgency=low
   * Fixes: NB#260369 - About applet needs device specific 2D barcode
   * Fixes: NB#260398 - Wallpaper; A different string than §qtn_comm_save§
     should be used
+  * Basic file-system watching is added to the wallpaperapplet 1.
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 31 May 2011 15:23:42 +0200
 

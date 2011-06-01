@@ -62,7 +62,7 @@
 #include <MApplicationWindow>
 
 //#define LOTDEBUG
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -873,15 +873,18 @@ WallpaperBusinessLogic::supportsPortrait () const
 void
 WallpaperBusinessLogic::startWatchingFiles ()
 {
+    SYS_DEBUG ("");
+
     if (m_FileWatcher)
         delete m_FileWatcher;
     /*
      *
      */
-    QString path = dirPath (MountDir);
-    SYS_WARNING ("*** path = %s", SYS_STR(path));
     m_FileWatcher = new QFileSystemWatcher (this);
+    QString path = dirPath (DownloadDir);
+    SYS_WARNING ("*** path = %s", SYS_STR(path));
     m_FileWatcher->addPath (path);
+
     connect (m_FileWatcher, SIGNAL(directoryChanged(const QString &)),
             this, SLOT(directoryChanged(const QString &)));
     connect (m_FileWatcher, SIGNAL(fileChanged(const QString &)),
