@@ -75,7 +75,9 @@ static const QString saveFileExtension = ".png";
 static const QString saveFileMimeType = "image/png";
 static const QString nl = "\n";
 
-WallpaperBusinessLogic::WallpaperBusinessLogic() :
+WallpaperBusinessLogic::WallpaperBusinessLogic(
+        QObject *parent) :
+    QObject (parent),
     m_OrientationLocked (false)
 {
     MApplication               *application = MApplication::instance();
@@ -192,17 +194,7 @@ WallpaperBusinessLogic::WallpaperBusinessLogic() :
                 SYS_STR(lastError.message()));
     }
 
-    /*
-     *
-     */
-    QString path = dirPath (MountDir);
-    SYS_WARNING ("*** path = %s", SYS_STR(path));
-    m_FileWatcher = new QFileSystemWatcher (this);
-    m_FileWatcher->addPath (path);
-    connect (m_FileWatcher, SIGNAL(directoryChanged(const QString &)),
-            this, SLOT(directoryChanged(const QString &)));
-    connect (m_FileWatcher, SIGNAL(fileChanged(const QString &)),
-            this, SLOT(fileChanged(const QString &)));
+    startWatchingFiles ();
 }
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
@@ -883,12 +875,32 @@ WallpaperBusinessLogic::supportsPortrait () const
     return !m_OrientationLocked || m_LockedOrientation == M::Portrait;
 }
 
+void
+WallpaperBusinessLogic::startWatchingFiles ()
+{
+    if (m_FileWatcher)
+        delete m_FileWatcher;
+    /*
+     *
+     */
+    QString path = dirPath (MountDir);
+    SYS_WARNING ("*** path = %s", SYS_STR(path));
+    m_FileWatcher = new QFileSystemWatcher (this);
+    m_FileWatcher->addPath (path);
+    connect (m_FileWatcher, SIGNAL(directoryChanged(const QString &)),
+            this, SLOT(directoryChanged(const QString &)));
+    connect (m_FileWatcher, SIGNAL(fileChanged(const QString &)),
+            this, SLOT(fileChanged(const QString &)));    
+}
+
 void 
 WallpaperBusinessLogic::directoryChanged (
         const QString &path)
 {
     SYS_DEBUG ("*** path = %s", SYS_STR(path));
     emit fileListChanged ();
+    
+    startWatchingFiles ();
 }
 
 void 
@@ -897,4 +909,6 @@ WallpaperBusinessLogic::fileChanged (
 {
     SYS_DEBUG ("*** path = %s", SYS_STR(path));
     emit fileListChanged ();
+    
+    startWatchingFiles ();
 }

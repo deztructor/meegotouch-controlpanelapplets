@@ -112,7 +112,6 @@ WallpaperImageLoader::stopLoadingPictures()
 void 
 WallpaperImageLoader::processJobQueue ()
 {
-    SYS_DEBUG ("*** %d jobs", m_ThumbnailLoadingJobs.size());
     if (m_ThumbnailLoadingJobs.isEmpty())
         return;
 

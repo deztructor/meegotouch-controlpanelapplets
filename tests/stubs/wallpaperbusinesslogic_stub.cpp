@@ -19,7 +19,9 @@
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperdescriptor.h"
     
-WallpaperBusinessLogic::WallpaperBusinessLogic ()
+WallpaperBusinessLogic::WallpaperBusinessLogic (
+        QObject *parent) :
+    QObject (parent)
 {
 
 }

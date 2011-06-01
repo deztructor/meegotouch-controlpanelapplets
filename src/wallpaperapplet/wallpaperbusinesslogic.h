@@ -71,7 +71,7 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
     Q_OBJECT
 
 public:
-    WallpaperBusinessLogic ();
+    WallpaperBusinessLogic (QObject *parent = 0);
     ~WallpaperBusinessLogic ();
 
     QList<WallpaperDescriptor *> availableWallpapers () const;
@@ -109,6 +109,7 @@ private:
     } WallpaperDirectoryID;
 
     QString dirPath (WallpaperDirectoryID dirID = SaveDir) const;
+    void startWatchingFiles ();
     bool ensureHasDirectory ();
     void createBackupFiles ();
     void deleteBackupFiles ();
