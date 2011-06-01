@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.48~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.48-1) meegotouch; urgency=low
 
   * Fixes: NB#261281 - Settings: Sound settings: After choosing a personal 
     ringtone the screen goes back but chosen song not highlighted.
