@@ -215,7 +215,7 @@ TrackerConnection::processRequest (
 
         goto fallback;
     } else if (! result->first()) {
-        SYS_WARNING ("File not found in tracker: %s",
+        SYS_DEBUG ("File not found in tracker: %s",
                      SYS_STR (fileName));
 
         goto fallback;

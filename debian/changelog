@@ -2,6 +2,8 @@ meegotouch-controlpanelapplets (0.20.49~1) meegotouch; urgency=low
 
   * Added a new directory to the soundsettingsapplet ring-tones dirlist for ovi
     store: "~/.ring-tones"
+  * Added file-system watch for newly create sound files. Handles
+    "~/.ring-tones".
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 01 Jun 2011 11:23:41 +0200
 

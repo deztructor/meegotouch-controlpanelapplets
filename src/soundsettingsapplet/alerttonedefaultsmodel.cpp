@@ -30,8 +30,8 @@
  */
 #undef USE_ASYNC_LOADING
 
-//#define DEBUG
-//#define WARNING
+#undef DEBUG
+#define WARNING
 #include "../debug.h"
 
 /******************************************************************************
@@ -60,8 +60,11 @@ AlertToneDefaultsModel::AlertToneDefaultsModel() : QStandardItemModel(),
      * Creatig a file system watcher.
      */
     m_FileWatcher = new QFileSystemWatcher (this);
+    m_FileWatcher->addPath (oviDirPath);
     connect (m_FileWatcher, SIGNAL(fileChanged(const QString &)),
             this, SLOT(fileChanged(const QString &)));
+    connect (m_FileWatcher, SIGNAL(directoryChanged(const QString &)),
+            this, SLOT(directoryChanged(const QString &)));
 
     /*
      * TrackerConnection might send a signal about the tracker answer.
@@ -105,7 +108,7 @@ AlertToneDefaultsModel::addSingleItem()
         return;
     } 
 
-    #if 1
+    #if 0
     SYS_DEBUG ("*** path        = %s", 
             SYS_STR(m_dirStack.top().absolutePath()));
     SYS_DEBUG ("***             = %s", 
@@ -167,6 +170,11 @@ AlertToneDefaultsModel::addSingleItem (
             bool           forced)
 {
     int      row = rowCount();
+    int      idx = findItemByFileName (fileName);
+
+    if (idx >= 0)
+        return row;
+
     /*
      *
      */
@@ -235,15 +243,6 @@ AlertToneDefaultsModel::findItemByFileName (
             break;
         }
     }
-
-    #ifdef DEBUG
-    if (retval < 0) {
-        SYS_WARNING ("File not found in the model: %s", SYS_STR(FileName));
-        for (int n = 0; n < rowCount(); ++n) {
-            SYS_WARNING ("  file[%03d] = %s", n, SYS_STR(fileName(n)));
-        }
-    }
-    #endif
 
     return retval;
 }
@@ -356,20 +355,32 @@ AlertToneDefaultsModel::fileChanged (
     /*
      * If the file still exists we don't need to do nothing.
      */
-    if (exists)
-        return;
+    if (!exists) {
+        idx = findItemByFileName (filename);
+        /*
+         * Removing the referencing row from the model.
+         */
+        if (idx >= 0)
+            removeRows (idx, 1);
+        /*
+         * We are not watching the file any more.
+         */
+        m_FileWatcher->removePath (filename);
+    }
+}
 
-    /*
-     * Removing the referencing row from the model.
-     */
-    idx = findItemByFileName (filename);
-    if (idx >= 0)
-        removeRows (idx, 1);
+void
+AlertToneDefaultsModel::directoryChanged (
+        const QString &directory)
+{
+    SYS_DEBUG ("*** directory = %s", SYS_STR(directory));
+    
+    m_dirStack.push(QDir(directory));
+    m_dirIdx.push(0);
+    m_isFinished = false;
 
-    /*
-     * We are not watching the file any more.
-     */
-    m_FileWatcher->removePath (filename);
+    while (!m_isFinished)
+        addSingleItem();
 }
 
 QString 

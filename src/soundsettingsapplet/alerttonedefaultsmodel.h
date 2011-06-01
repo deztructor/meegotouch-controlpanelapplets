@@ -66,6 +66,7 @@ Q_SIGNALS:
     
 private slots:
     void fileChanged (const QString &filename);
+    void directoryChanged (const QString &directory);
 	void addSingleItem();
     void dataReceived (
             const QString   &filename, 
