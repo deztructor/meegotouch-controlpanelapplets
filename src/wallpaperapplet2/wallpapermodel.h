@@ -30,6 +30,7 @@
 #include "wallpaperdescriptor.h"
 #include <MImageWidget> 
 #include <QSizeF>
+#include <QTimer>
 
 #ifdef HAVE_QMSYSTEM
 #  include <qmusbmode.h>
@@ -109,6 +110,8 @@ class WallpaperModel: public QAbstractTableModel
         #ifdef HAVE_QMSYSTEM
         void usbModeChanged (MeeGo::QmUSBMode::Mode mode);
         #endif
+        
+        void loadFromDirectory ();
 
         void emitCurrentChanged ();
 
@@ -117,7 +120,6 @@ class WallpaperModel: public QAbstractTableModel
         void startWatchFiles ();
         
     private:
-        void loadFromDirectory ();
         bool trySelect (const QString filePath);
         bool tryAddAndSelect (const QString filePath);
         bool selectByFilepath (const QString &filepath);
@@ -131,6 +133,8 @@ class WallpaperModel: public QAbstractTableModel
         QPointer<Thumbnailer>                   m_Thumbnailer;
         QPointer<QFileSystemWatcher>            m_FileWatcher;
         int                                     m_ThumbnailMagicNumber;
+        QHash<QString, qint64>                  m_PendingFiles;
+        QTimer                                  m_FileSystemTimer;
         #ifdef HAVE_QMSYSTEM
         MeeGo::QmUSBMode                       *m_UsbMode;
         #endif

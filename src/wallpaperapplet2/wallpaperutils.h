@@ -24,7 +24,7 @@
 #define WALLPAPERUTILS_H
 
 #include <QString>
-#include <QSet>
+#include <QHash>
 
 class QStringList;
 
@@ -53,7 +53,7 @@ namespace Wallpaper
     /*
      * File system manipulation methods.
      */
-    QSet<QString> readDir (
+    QHash<QString, qint64> readDir (
             const QString     &directoryPath,
             const QStringList &nameFilters);
 

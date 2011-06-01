@@ -40,7 +40,7 @@
  * little chance for other applications.
  */
 static const int loadPictureDelay = 0;
-
+static const int fileSystemReCheckDelay = 500;
 
 /******************************************************************************
  * WallpaperModel implementation.
@@ -53,6 +53,12 @@ WallpaperModel::WallpaperModel (
     m_ThumbnailMagicNumber (1)
 {
     m_ImagesDir = Wallpaper::constructPath (Wallpaper::ImagesDir);
+
+    m_FileSystemTimer.setInterval (fileSystemReCheckDelay);
+    m_FileSystemTimer.setSingleShot (true);
+    connect (&m_FileSystemTimer, SIGNAL(timeout()),
+            this, SLOT(loadFromDirectory()));
+
     loadFromDirectory ();
     startWatchFiles ();
 
@@ -149,9 +155,10 @@ WallpaperModel::wallpaperChanged ()
 void 
 WallpaperModel::loadFromDirectory ()
 {
-    QSet<QString> entries;
-    QStringList   removedFilePaths;
-    QStringList   itemsToRemove;
+    QHash<QString, qint64>  entries;
+    QStringList             toAdd;
+    QStringList             removedFilePaths;
+    QStringList             itemsToRemove;
 
     /*
      * Getting the full list of the given directory. 
@@ -160,7 +167,9 @@ WallpaperModel::loadFromDirectory ()
             m_ImagesDir, Wallpaper::imageNameFilter());
 
     /*
-     * Comparing the data we have with the file list we got.
+     * Comparing the data we have with the file list we got. Removing from the
+     * new list data all the files that are already stored in the model. We also
+     * maintain a list of files that are 
      */
     foreach (QString oldPath, m_FilePathList) {
         if (!Wallpaper::isInDir (m_ImagesDir, oldPath))
@@ -171,7 +180,7 @@ WallpaperModel::loadFromDirectory ()
              * Here we found a file, that we already have. This one we don't
              * need to worry about.
              */
-            entries -= oldPath;
+            entries.remove(oldPath);
         } else {
             /*
              * Here we have a path that we have, it was in the given directory,
@@ -181,6 +190,9 @@ WallpaperModel::loadFromDirectory ()
         }
     }
     
+    /*
+     * Immediately removing all the disappeared files.
+     */
     foreach (QString oldPath, itemsToRemove) {
         int idx = m_FilePathList.indexOf(oldPath);
         QModelIndex  parent;
@@ -191,15 +203,48 @@ WallpaperModel::loadFromDirectory ()
         endRemoveRows ();
     }
 
-    if (!entries.empty()) {
+    /*
+     * Let's see which files are changing. We have to postpone the changing
+     * files and create a storage of the files that are finished copying.
+     */
+    foreach (QString newPath, entries.keys()) {
+        SYS_WARNING ("%s", SYS_STR(newPath));
+        SYS_WARNING ("%lld ? %lld", m_PendingFiles[newPath], entries[newPath]);
+#if 0
+        if (!Wallpaper::isInDir (m_ImagesDir, newPath)) {
+            toAdd << newPath;
+            m_PendingFiles.remove (newPath);
+            continue;
+        }
+#endif
+
+        if (m_PendingFiles.contains(newPath) &&
+                m_PendingFiles[newPath] == entries[newPath]) {
+                /*
+                 * Finished copying, we are going to add these right now.
+                 */
+                toAdd << newPath;
+                m_PendingFiles.remove (newPath);
+        } else {
+                /*
+                 * Otherwise we remember to add these later.
+                 */
+                m_PendingFiles[newPath] = entries[newPath];
+        }
+    }
+
+    /*
+     * Adding the files that are not changing any more.
+     */
+    if (!toAdd.empty()) {
         QModelIndex  parent;
         /*
          * Inserting the new items.
          */
         beginInsertRows (parent, m_FilePathList.size(), 
-                m_FilePathList.size() + entries.size() - 1);
+                m_FilePathList.size() + toAdd.size() - 1);
 
-        foreach (QString newPath, entries) {
+        foreach (QString newPath, toAdd) {
             WallpaperDescriptor desc (newPath);
 
             SYS_DEBUG ("Adding '%s'", SYS_STR(newPath));
@@ -208,6 +253,13 @@ WallpaperModel::loadFromDirectory ()
         }
 
         endInsertRows ();
+    }
+
+    if (!m_PendingFiles.isEmpty()) {
+        SYS_WARNING ("We have %d pending files...", m_PendingFiles.size());
+        SYS_WARNING ("*** pending: %s", 
+                SYS_STR(QStringList(m_PendingFiles.keys()).join(";")));
+        m_FileSystemTimer.start ();
     }
 }
 
@@ -301,7 +353,7 @@ WallpaperModel::loadThumbnails (
     QStringList  requestedFiles;
     QStringList  mimeTypes;
 
-    #if 0
+    #if 1
     SYS_DEBUG ("Between %d, %d - %d, %d", 
             firstVisibleRow.column(),
             firstVisibleRow.row(), 
@@ -311,6 +363,8 @@ WallpaperModel::loadThumbnails (
 
     if (!firstVisibleRow.model()) {
         SYS_WARNING ("No model for the index.");
+        SYS_WARNING ("*** %p", firstVisibleRow.model());
+        SYS_WARNING ("*** %p", lastVisibleRow.model());
         return;
     }
 
@@ -461,6 +515,12 @@ WallpaperModel::tryAddAndSelect (
         WallpaperDescriptor desc (filePath);
         QModelIndex  parent;
 
+        /*
+         * If this file is pending we should remove it from the pending files.
+         */
+        if (m_PendingFiles.contains(filePath))
+            m_PendingFiles.remove (filePath);
+
         SYS_WARNING ("beginInsertRows (..., %d, %d)", 
                 m_FilePathList.size(),
                 m_FilePathList.size());
@@ -597,7 +657,9 @@ WallpaperModel::directoryChanged (
         SYS_WARNING ("This is not our images directory?!");
     }
 
-    loadFromDirectory ();
+    if (!m_FileSystemTimer.isActive())
+        m_FileSystemTimer.start ();
+    //loadFromDirectory ();
 }
 
 void

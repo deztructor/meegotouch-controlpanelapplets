@@ -31,6 +31,7 @@ using namespace Wallpaper;
 
 #include <QDir>
 #include <QFile>
+#include <QFileInfoList>
 #include <MGConfItem>
 
 #define DEBUG
@@ -142,24 +143,25 @@ Wallpaper::imageNameFilter ()
 /******************************************************************************
  * File-system manipulation methods.
  */
-QSet<QString> 
+QHash<QString, qint64> 
 Wallpaper::readDir (
         const QString     &directoryPath,
         const QStringList &nameFilters)
 {
-    QDir                  directory (directoryPath);
-    QSet<QString>         retval;
-    QStringList           entryList;
+    QDir                   directory (directoryPath);
+    QHash<QString, qint64> retval;
+    QFileInfoList          entryList;
 
     if (!directory.exists(directoryPath))
         goto finalize;
 
-    entryList = directory.entryList (
+    entryList = directory.entryInfoList (
             nameFilters, QDir::Files | QDir::NoSymLinks | QDir::Readable);
 
     for (int iList = 0; iList < entryList.count(); iList++) {
-        SYS_DEBUG ("entryList[%d] = '%s'", iList, SYS_STR(entryList[iList]));
-        retval += constructPath (directoryPath, entryList[iList]);
+        SYS_DEBUG ("entryList[%d] = '%s'", iList, 
+                SYS_STR(entryList[iList].filePath()));
+        retval[entryList[iList].filePath()] = entryList[iList].size();
     }
     
 finalize:
