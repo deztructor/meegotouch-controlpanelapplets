@@ -1,8 +1,54 @@
-meegotouch-controlpanelapplets (0.20.44~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.48~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  * Fixes: NB#260554 - Divider lines are stretched
+  * Fixes: NB#261281 - Settings: Sound settings: After choosing a personal 
+    ringtone the screen goes back but chosen song not highlighted.
+  * Fixes: NB#260369 - About applet needs device specific 2D barcode
+  * Fixes: NB#260398 - Wallpaper; A different string than §qtn_comm_save§
+    should be used
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 18 May 2011 08:50:09 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 31 May 2011 15:23:42 +0200
+
+meegotouch-controlpanelapplets (0.20.47-1) meegotouch; urgency=low
+
+  [ David Kedves ]
+  * Fixes: NB#257420 - thumbnail in wallpaper applet is blank.
+  * Fixes: NB#260111 - Add separate help buttons for Reset original
+    settings and Clear device
+
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 27 May 2011 13:01:04 +0300
+
+meegotouch-controlpanelapplets (0.20.46-1) meegotouch; urgency=low
+
+  [ Laszlo Pere ]
+  * Fixes: NB#259523 - Sound Setting, string §qtn_sond_store§ is truncated
+  * Fixes: NB#256992 - [TASK] No sound should appear localized and in fixed 
+    position
+
+  [ David Kedves ]
+  * Fixes: NB#259688 - Battery links to wrong user guide topic
+  * Fixes: NB#259685 - Flight mode links to wrong user guide topic
+
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 26 May 2011 13:14:47 +0300
+
+meegotouch-controlpanelapplets (0.20.45-1) meegotouch; urgency=low
+
+  * Fixes: NB#256900 - Sound settings applet should use "player"
+    Resource Policy class
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 23 May 2011 16:27:49 +0300
+
+meegotouch-controlpanelapplets (0.20.44-1) meegotouch; urgency=low
+
+  [ Laszlo Pere ]
+  * Fixes: NB#257291 - Battery settings; icon-s-description-inverse is clipped
+    in Indonesian, 'power save mode' in active state 
+  * QmUSBMode::SDK is now used in the USB applet.
+  * Fixes: NB#255791 - [TASK] Add a new USB mode called "SDK"
+  * Fixed: 256485 - Able to set and unset Gconf key for SDK , but not able
+    to save the mode in USB settings. 
+
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 20 May 2011 11:45:21 +0300
 
 meegotouch-controlpanelapplets (0.20.43-1) meegotouch; urgency=low
 

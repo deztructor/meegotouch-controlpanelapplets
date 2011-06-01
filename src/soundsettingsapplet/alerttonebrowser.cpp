@@ -46,7 +46,7 @@
 #include "../styles.h"
 
 //#define DEBUG
-#define WARNING
+//#define WARNING
 #include "../debug.h"
 
 static const int filterEditorPosition = 2;

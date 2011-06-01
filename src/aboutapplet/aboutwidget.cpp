@@ -236,8 +236,6 @@ AboutWidget::gotInfo (
 void
 AboutWidget::addHeaderContainer ()
 {
-    MSeparator *stretcher;
-
     if (!m_layout)
         return;
 
@@ -251,9 +249,7 @@ AboutWidget::addHeaderContainer ()
     m_layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
 
 #ifdef APP_TITLE_USES_SPACER
-    stretcher = new MSeparator;
-    stretcher->setStyleName (APP_TITLE_DIVIDER_STYLE_NAME);
-    m_layout->addItem (stretcher, m_currentRow++, 0, 1, 2);
+    addStretcher (APP_TITLE_DIVIDER_STYLE_NAME);
 #endif
 }
 
@@ -424,8 +420,8 @@ AboutWidget::addStretcher (
     if (!m_layout)
         return;
 
-    MStylableWidget *stretcher;
-    stretcher = new MStylableWidget;
+    MSeparator *stretcher;
+    stretcher = new MSeparator;
     stretcher->setStyleName (styleName);
     m_layout->addItem (stretcher, m_currentRow++, 0, 1, 2);
 }

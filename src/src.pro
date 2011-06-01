@@ -14,6 +14,7 @@ addSubDirs(testapplet)
 addSubDirs(themeapplet)
 addSubDirs(usbapplet)
 addSubDirs(wallpaperapplet)
+addSubDirs(wallpaperapplet2)
 addSubDirs(warrantyapplet)
 
 # addSubDirs(profileplugin)

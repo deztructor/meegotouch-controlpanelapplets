@@ -55,6 +55,7 @@ RightArrowItem::createLayout()
     layout->setSpacing(0);
 
     titleLabel =  titleLabelWidget ();
+    titleLabel->setWordWrap (true);
 
     drillIconWidget = new MImageWidget ("icon-m-common-drilldown-arrow-inverse");
     drillIconWidget->setStyleName ("CommonDrillDownIcon");

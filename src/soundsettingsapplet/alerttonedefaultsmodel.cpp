@@ -31,7 +31,7 @@
 #undef USE_ASYNC_LOADING
 
 //#define DEBUG
-#define WARNING
+//#define WARNING
 #include "../debug.h"
 
 AlertToneDefaultsModel::AlertToneDefaultsModel() : QStandardItemModel(),
@@ -116,9 +116,12 @@ AlertToneDefaultsModel::addSingleItem()
             QString extension = fullPath.right(4).toLower();
 
             if (extension == ".aac" ||
-                    extension == ".mp3" ||
-                    extension == ".wma" ||
-                    extension == ".wav") {
+                extension == ".mp3" ||
+                extension == ".wma" ||
+                extension == ".wav" ||
+                extension == ".mp2" ||
+                extension == ".amr" ||
+                extension == ".mid") {
                 QString niceName = TrackerConnection::instance()->niceNameFromFileName (fullPath);
                 SYS_DEBUG ("calling niceNameFromFileName()");
                 addSingleItem (niceName, fullPath);
@@ -215,12 +218,24 @@ int
 AlertToneDefaultsModel::findItemByFileName (
         const QString &FileName) const
 {
+    int retval = -1;
     for (int n = 0; n < rowCount(); ++n) {
-        if (fileName(n) == FileName)
-            return n;
+        if (fileName(n) == FileName) {
+            retval = n;
+            break;
+        }
     }
 
-    return -1;
+    #ifdef DEBUG
+    if (retval < 0) {
+        SYS_WARNING ("File not found in the model: %s", SYS_STR(FileName));
+        for (int n = 0; n < rowCount(); ++n) {
+            SYS_WARNING ("  file[%03d] = %s", n, SYS_STR(fileName(n)));
+        }
+    }
+    #endif
+
+    return retval;
 }
 
 /*!

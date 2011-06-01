@@ -114,12 +114,19 @@ WallpaperBusinessLogic::WallpaperBusinessLogic(
 
     /*
      * In case if GConf keys are set to "", we have to unset it to use the
-     * schema values
+     * schema values (this is not valid ^ anymore...)
+     *
+     * XXX: INFO: The schema provides empty string,
+     * so we have to harcode these:
      */
     if (m_LandscapeGConfItem->value ().toString ().isEmpty ())
-        m_LandscapeGConfItem->unset ();
+    {
+        m_LandscapeGConfItem->set ("meegotouch-wallpaper-landscape");
+    }
     if (m_PortraitGConfItem->value ().toString ().isEmpty ())
-        m_PortraitGConfItem->unset ();
+    {
+        m_PortraitGConfItem->set ("meegotouch-wallpaper-portrait");
+    }
 
     currentDesc = WallpaperCurrentDescriptor::instance ();
     /*
@@ -268,7 +275,6 @@ WallpaperBusinessLogic::availableWallpapers () const
      * The first is always the current image.
      */
     list << WallpaperCurrentDescriptor::instance ();
-
 #if 0
     /*
      * Adding a theme default. 
@@ -314,6 +320,7 @@ WallpaperBusinessLogic::availableWallpapers () const
             QString ("file://") +
             directoryPath +
             entryList[iList];
+
 #if 0
         SYS_DEBUG ("*** dir       = %s", SYS_STR(directoryPath));
         SYS_DEBUG ("*** entry     = %s", SYS_STR(entryList[iList]));
@@ -716,7 +723,6 @@ WallpaperBusinessLogic::makeImageFile (
     QPainter  painter (&pixmap);
     qreal     scale = transformations->scale();
     QImage    image;
-    qreal     ratio, ratio1;
     bool      success;
 
     SYS_DEBUG ("*** expectedsize = %dx%d", 
@@ -738,17 +744,6 @@ WallpaperBusinessLogic::makeImageFile (
         image = desc->image();
     }
 
-    ratio = 
-        (qreal) transformations->expectedHeight () / 
-        (qreal) image.height();
-
-    ratio1 = 
-        (qreal) transformations->expectedWidth () / 
-        (qreal) image.width();
-    
-    if (ratio1 > ratio)
-        ratio = ratio1;
-
     /*
      * Let's fill the pixmap with black, so the area not covered by the original
      * pixmap is initialized.
@@ -761,8 +756,8 @@ WallpaperBusinessLogic::makeImageFile (
     painter.drawImage (
             QRectF (transformations->x(), 
                 transformations->y(),
-                (scale * image.width ()) /** ratio*/,
-                (scale * image.height ()) /** ratio*/),
+                (scale * image.width ()),
+                (scale * image.height ())),
             image);
 
     SYS_DEBUG ("Saving file into %s", SYS_STR(filePath));

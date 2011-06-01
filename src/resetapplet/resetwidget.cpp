@@ -22,11 +22,14 @@
 #include <MLayout>
 #include <MBanner>
 #include <MApplication>
+#include <MHelpButton>
+#include <QGraphicsLinearLayout>
 #include <MLinearLayoutPolicy>
 #include <MButton>
 #include <MDialog>
 #include <MMessageBox>
 #include <MSeparator>
+#include <MStylableWidget>
 
 #undef DEBUG
 #include "../debug.h"
@@ -107,38 +110,27 @@ ResetWidget::createContent ()
     setLayout (layout);
 }
 
+MHelpButton *
+ResetWidget::createHelpButton (const QString &link)
+{
+    MHelpButton *helpButton = new MHelpButton (link);
+    helpButton->setViewType (MButton::iconType);
+    helpButton->setIconID ("icon-s-description-inverse");
+    helpButton->setStyleName ("CommonRightIcon");
+    return helpButton;
+}
+
 void
 ResetWidget::addButtonContainer (
             MLinearLayoutPolicy *mainLayout,
             MButton             *button1,
             MButton             *button2)
 {
-    MContainer          *container;
-    MLayout             *layout;
-    MLinearLayoutPolicy *landscapePolicy;
-    MLinearLayoutPolicy *portraitPolicy;
     MSeparator          *spacer;
-    
-    /*
-     * Creating a lcontainer and a layout.
-     */
-    container = new MContainer (this);
-    container->setStyleName ("CommonLargePanelInverted");
-    container->setHeaderVisible (false);
-
-    layout = new MLayout;
-    layout->setContentsMargins (0., 0., 0., 0.);
-    
-    landscapePolicy = new MLinearLayoutPolicy (layout, Qt::Horizontal);
-    landscapePolicy->setContentsMargins (0., 0., 0., 0.);
-
-    portraitPolicy = new MLinearLayoutPolicy (layout, Qt::Vertical);
-    portraitPolicy->setContentsMargins (0., 0., 0., 0.);
-
-    layout->setLandscapePolicy (landscapePolicy);
-    layout->setPortraitPolicy (portraitPolicy);
-
-    container->centralWidget()->setLayout (layout);
+    QGraphicsLinearLayout *layout =
+        new QGraphicsLinearLayout (Qt::Vertical);
+    layout->setContentsMargins (0,0,0,0);
+    layout->setSpacing (0);
     
     /*
      * One spacer
@@ -147,24 +139,62 @@ ResetWidget::addButtonContainer (
     spacer->setStyleName ("CommonSpacer");
 
     /*
-     * Adding the buttons and the spacer to the layouts
+     * Button 1 layout
      */
-    landscapePolicy->addStretch ();
-    landscapePolicy->addItem (button1);
-    landscapePolicy->addItem (button2);
-    landscapePolicy->addStretch ();
+    QGraphicsLinearLayout *button1layout =
+        new QGraphicsLinearLayout (Qt::Horizontal);
+    button1layout->setContentsMargins (0,0,0,0);
+    button1layout->setSpacing (0);
 
-    portraitPolicy->addItem (button1);
-    portraitPolicy->setAlignment (button1, Qt::AlignHCenter);
-    portraitPolicy->addItem (spacer);
-    portraitPolicy->addItem (button2);
-    portraitPolicy->setAlignment (button2, Qt::AlignHCenter);
+    MStylableWidget *imgSpacer1 = new MStylableWidget;
+    imgSpacer1->setStyleName ("CommonLeftIcon");
+    button1layout->addItem (imgSpacer1);
+
+    button1layout->addStretch ();
+
+    button1layout->addItem (button1);
+    button1layout->setAlignment (button1, Qt::AlignCenter);
+
+    button1layout->addStretch ();
+
+    MHelpButton *hp1 = createHelpButton ("IDUG_MEEGO_SETT_RESTORE.html");
+    button1layout->addItem (hp1);
+    button1layout->setAlignment (hp1, Qt::AlignVCenter);
+
+    layout->addItem (button1layout);
+    layout->setAlignment (button1layout, Qt::AlignCenter);
+
+    layout->addItem (spacer);
+
+    /*
+     * Button 2 layout
+     */
+    QGraphicsLinearLayout *button2layout =
+        new QGraphicsLinearLayout (Qt::Horizontal);
+    button2layout->setContentsMargins (0,0,0,0);
+    button2layout->setSpacing (0);
+
+    MStylableWidget *imgSpacer2 = new MStylableWidget;
+    imgSpacer2->setStyleName ("CommonLeftIcon");
+    button2layout->addItem (imgSpacer2);
+    button2layout->addStretch ();
+
+    button2layout->addItem (button2);
+    button2layout->setAlignment (button2, Qt::AlignCenter);
+
+    button2layout->addStretch ();
+    MHelpButton *hp2 = createHelpButton ("IDUG_MEEGO_SETT_CLEARDEVICE.html");
+    button2layout->addItem (hp2);
+    button2layout->setAlignment (hp2, Qt::AlignVCenter);
+
+    layout->addItem (button2layout);
+    layout->setAlignment (button2layout, Qt::AlignCenter);
 
     /*
      *
      */
-    mainLayout->addItem (container);
-    mainLayout->setStretchFactor (container, 0);
+    mainLayout->addItem (layout);
+    mainLayout->setStretchFactor (layout, 0);
 }
 
 void
@@ -256,7 +286,7 @@ void
 ResetWidget::showMassStorageWarning ()
 {
     SYS_DEBUG ("");
-    MBanner *infoBanner = new MBanner;
+    infoBanner = new MBanner;
     infoBanner->setStyleName ("InformationBanner");
     infoBanner->setObjectName ("InfoBanner");
 

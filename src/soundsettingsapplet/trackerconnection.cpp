@@ -29,7 +29,7 @@
 #endif
 #include <QTimer>
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -271,7 +271,11 @@ TrackerConnection::poorNiceName (
 
     niceName = fileName.mid (startIndex, endIndex);
     niceName.replace ("_", " ");
-    
+   
+    if (niceName == "No sound")
+        //% "No sound"
+        niceName = qtTrId ("qtn_sond_ringtone_nosound");
+
     return niceName;
 }
 

@@ -92,7 +92,7 @@ void
 BatteryWidget::initWidget ()
 {
     MLayout     *layout;
-    MSeparator  *spacer;
+
 
     /*
      * Creating a layout that holds the rows of the internal widgets.
@@ -113,9 +113,7 @@ BatteryWidget::initWidget ()
     // Row 3: PSM Auto activation switch
     addAutoActivationWidget ();
     
-    spacer = addSpacer (
-            "CommonHorizontalSeparatorInverted",
-            SpacerPosition);
+
 
     addSliderContainer ();
 
@@ -206,8 +204,8 @@ BatteryWidget::addHeaderContainer ()
      * loads the userguide, so userguide-content have to be installed to see the
      * content.
      */
-    helpButton = new MHelpButton("IDUG_MEEGO_BATTERY.html");
-    helpButton->setViewType(MButton::iconType);
+    helpButton = new MHelpButton ("CTX_IDUG_MEEGO_SAVE_MODE.html");
+    helpButton->setViewType (MButton::iconType);
     helpButton->setIconID ("icon-s-description-inverse");
     helpButton->setStyleName ("CommonRightIcon");
 
@@ -268,14 +266,6 @@ BatteryWidget::addAutoActivationWidget ()
     /*
      * A label for the PSM auto activation.
      */
-    /*
-     * A help button for the PSM auto activation.
-     */
-#ifdef HAVE_USERGUIDE
-    MHelpButton* helpButton = new MHelpButton ("IDUG_MEEGO_BATTERY.html");
-    helpButton->setViewType(MButton::iconType);
-    helpButton->setIconID ("icon-m-content-description");
-#endif    
 
     /*
      * A combo box choosing the auto PSM mode between on, off and automatic
@@ -300,11 +290,8 @@ BatteryWidget::addAutoActivationWidget ()
     /*
      * Adding the widgets to the layout.
      */
-    #ifdef HAVE_USERGUIDE
-    layout->addItem(helpButton);
-    #endif
     layout->addItem (m_PSMAutoCombo);
-    layout->setAlignment(m_PSMAutoCombo, Qt::AlignRight | Qt::AlignVCenter);
+    layout->setAlignment(m_PSMAutoCombo, Qt::AlignLeft | Qt::AlignVCenter);
 
     /*
      * Adding the new row to the main layout.
@@ -319,6 +306,10 @@ BatteryWidget::addSliderContainer ()
     Q_ASSERT (m_MainLayout);
 
     m_SliderContainer = new SliderContainer ();
+    spacer = addSpacer (
+            "CommonItemDividerInverted",
+            SpacerPosition);
+
     showSlider (m_PSMAutoCombo->currentIndex () == PSMAutoOn);
 }
 
@@ -336,9 +327,11 @@ BatteryWidget::showSlider (
         m_MainLayout->insertItem (SliderContainerPosition, m_SliderContainer);
         m_MainLayout->setStretchFactor (m_SliderContainer, 0);
 
+        spacer->show();
         m_SliderContainer->show();
     } else {
         m_SliderContainer->hide();
+        spacer->hide();
         m_MainLayout->removeItem (m_SliderContainer);
     }
 }

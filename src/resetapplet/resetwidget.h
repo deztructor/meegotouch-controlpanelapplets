@@ -20,11 +20,13 @@
 #define RESETWIDGET_H
 
 #include <QPointer>
+#include <MBanner>
 #include "dcpwidget.h"
 
 #include "resetbusinesslogic.h"
 
 class MLinearLayoutPolicy;
+class MHelpButton;
 class MButton;
 
 class ResetWidget : public DcpWidget
@@ -61,12 +63,15 @@ private:
             MLinearLayoutPolicy *mainLayout,
             MButton             *button1,
             MButton             *button2);
+    MHelpButton *createHelpButton (const QString &link);
 
 private:
     QPointer<ResetBusinessLogic>    m_ResetBusinessLogic;
     CurrentPlan                     m_currentPlan;
+    MBanner			    *infoBanner;
     #ifdef UNIT_TEST
     friend class Ut_ResetApplet;
+//    friend class Ut
     #endif
 };
 

@@ -33,18 +33,19 @@ namespace MeeGo
 	public:
 
         enum Mode {
-            Connected = 0, 
-            DataInUse,     
-            Disconnected,  
-            MassStorage,   
-            ChargingOnly,  
-            OviSuite,      
-            ModeRequest,   
-            Ask,           
-            Undefined      
+            Connected = 0,
+            DataInUse,
+            Disconnected,
+            MassStorage,
+            ChargingOnly,
+            OviSuite,
+            ModeRequest,
+            Ask,
+            Undefined,
+            SDK
         };
-        
-	    QmUSBMode (QObject *parent = 0);
+
+        QmUSBMode (QObject *parent = 0);
         ~QmUSBMode ();
 
         Mode getMode ();
@@ -54,7 +55,7 @@ namespace MeeGo
 
     signals:
         void modeChanged (MeeGo::QmUSBMode::Mode);
-        
+
     private:
         Mode   m_Mode;
         Mode   m_DefaultMode;

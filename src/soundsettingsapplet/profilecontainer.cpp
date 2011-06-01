@@ -77,6 +77,8 @@ ProfileContainer::ProfileContainer (
 
     setContentsMargins (0., 0., 0., 0.);
     setStyleName ("CommonPanelInverted");
+
+    setActive (false);
 }
 
 ProfileContainer::~ProfileContainer()
