@@ -58,6 +58,7 @@ protected:
 private slots:
     void slotItemClicked (const QModelIndex &index);
     void loadPictures ();
+    void modelChanged ();
     
 signals:
     void imageActivated (WallpaperDescriptor *desc);

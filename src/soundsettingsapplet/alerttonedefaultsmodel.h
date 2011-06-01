@@ -57,7 +57,9 @@ public:
     QString fileName (int indexRow) const;
     
     void refresh (); 
-
+    
+    static QString oviRingTonesPath ();
+    
 Q_SIGNALS:
 	void finished();
     void loading ();
@@ -70,6 +72,8 @@ private slots:
             const QString   &title,
             const QString   &trackerId);
 
+    private:
+        bool ensureHasDirectory (const QString &directoryPath);
 private:
 	QStack<QDir>                 m_dirStack;
 	QStack<unsigned int>         m_dirIdx;

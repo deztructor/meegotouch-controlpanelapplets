@@ -19,7 +19,9 @@
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperdescriptor.h"
     
-WallpaperBusinessLogic::WallpaperBusinessLogic ()
+WallpaperBusinessLogic::WallpaperBusinessLogic (
+        QObject *parent) :
+    QObject (parent)
 {
 
 }
@@ -136,3 +138,15 @@ WallpaperBusinessLogic::startEditThreadEnded ()
 
 }
 
+void 
+WallpaperBusinessLogic::directoryChanged (
+        const QString &path)
+{
+    //emit fileListChanged ();
+}
+
+void 
+WallpaperBusinessLogic::fileChanged (
+        const QString &path)
+{
+}

@@ -22,7 +22,7 @@
 
 #include <QTimer>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -113,6 +113,9 @@ WallpaperList::setDataSourceType (
      */
     filtering()->setEnabled (true);
     filtering()->proxy()->sort(Qt::DisplayRole);
+    
+    connect (m_Model, SIGNAL(modelReset()), 
+            this, SLOT(modelChanged()));
 }
 
 
@@ -160,6 +163,13 @@ WallpaperList::loadPictures ()
 #else
     m_ImageLoader->loadPictures (firstVisibleItem(), lastVisibleItem());
 #endif
+}
+
+void 
+WallpaperList::modelChanged ()
+{
+    SYS_DEBUG ("");
+    QTimer::singleShot (100, this, SLOT(loadPictures()));
 }
 
 void 

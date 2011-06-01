@@ -51,9 +51,10 @@ class WallpaperModel: public QAbstractTableModel
             int role = Qt::DisplayRole) const;
     virtual int columnCount (const QModelIndex&) const;
 
-public slots:
-    void descriptorChanged (WallpaperDescriptor *desc);
-    void wallpaperChanged ();
+    public slots:
+        void descriptorChanged (WallpaperDescriptor *desc);
+        void wallpaperChanged ();
+        void fileListChanged ();
     
 private:
     WallpaperBusinessLogic       *m_BusinessLogic;

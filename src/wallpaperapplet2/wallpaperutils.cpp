@@ -196,6 +196,8 @@ Wallpaper::ensureHasDirectory (
         retval = true;
     } else if (!dir.mkpath(directoryPath)) {
         SYS_WARNING ("Unable to create %s directory.", SYS_STR(directoryPath));
+    } else {
+        retval = true;
     }
 
     return retval;

@@ -34,16 +34,26 @@
 //#define WARNING
 #include "../debug.h"
 
+/******************************************************************************
+ * AlertToneDefaultsModel implementation.
+ */
 AlertToneDefaultsModel::AlertToneDefaultsModel() : QStandardItemModel(),
     m_isFinished(false)
 {
+    QString oviDirPath = oviRingTonesPath ();
+
     insertColumn(NiceNameColumn);
     insertColumn(FullPathColumn);
     insertColumn(ForcedColumn);
 
+    // Creating the directory so that we can connect and watch them.
+    ensureHasDirectory (oviDirPath);
+
     m_dirStack.push(QDir(DEFAULT_RINGTONE_PATH1));
     m_dirIdx.push(0);
     m_dirStack.push(QDir(DEFAULT_RINGTONE_PATH2));
+    m_dirIdx.push(0);
+    m_dirStack.push(QDir(oviDirPath));
     m_dirIdx.push(0);
 
     /*
@@ -362,3 +372,31 @@ AlertToneDefaultsModel::fileChanged (
     m_FileWatcher->removePath (filename);
 }
 
+QString 
+AlertToneDefaultsModel::oviRingTonesPath ()
+{
+    QString retval (OVI_RINGTINE_PATH);
+    QString homeDir (getenv("HOME"));
+
+    retval.replace ('~', homeDir);
+    return retval;
+}
+
+bool
+AlertToneDefaultsModel::ensureHasDirectory (
+        const QString &directoryPath)
+{
+    QDir dir (directoryPath);
+    bool retval;
+
+    if (dir.exists()) {
+        SYS_DEBUG ("Directory %s already exists.", SYS_STR(directoryPath));
+        retval = true;
+    } else if (!dir.mkpath(directoryPath)) {
+        SYS_WARNING ("Unable to create %s directory.", SYS_STR(directoryPath));
+    } else {
+        retval = true;
+    }
+
+    return retval;
+}
