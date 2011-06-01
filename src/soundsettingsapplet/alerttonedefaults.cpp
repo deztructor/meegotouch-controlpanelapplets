@@ -391,7 +391,7 @@ AlertToneDefaults::selectAndScroll (
              * otherwise the scroollTo() method will not work.
              */
             SYS_WARNING ("singleShot (loadingFinished())");
-            QTimer::singleShot(100, this, SLOT(loadingFinished()));
+            QTimer::singleShot (200, this, SLOT(loadingFinished()));
         } else {
             SYS_DEBUG ("Calling clear()");
             selectionModel()->clear();
