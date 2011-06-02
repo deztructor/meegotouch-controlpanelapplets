@@ -41,15 +41,25 @@ WallpaperViewWidget::WallpaperViewWidget (
         QGraphicsWidget        *parent) :
     DcpStylableWidget (parent),
     m_BusinessLogic (wallpaperBusinessLogic),
+    m_BgColor ("black"),
     m_Saving (false),
     m_Initialized (false),
-    m_BgColor ("black"),
     m_PageRealized (false)
 {
     connect (m_BusinessLogic, SIGNAL(wallpaperSaved()),
             this, SLOT(wallpaperSaved()));
     connect (m_BusinessLogic, SIGNAL(wallpaperLoaded (QuillImage, QSize)),
             this, SLOT(wallpaperLoaded (QuillImage, QSize)));
+}
+
+WallpaperViewWidget::~WallpaperViewWidget ()
+{
+    if (Wallpaper::useFullScreen) {
+        MWindow *win = MApplication::activeWindow ();
+
+        if (win)
+            win->showNormal ();
+    }
 }
 
 void
@@ -115,10 +125,12 @@ WallpaperViewWidget::initialize (
     m_Trans.setExpectedSize (sceneSize);
     m_Trans.setOrientation (M::Portrait);
     
-    if (sceneSize.width() > m_Image.width())
-        xMarg = (sceneSize.width() - m_Image.width()) / 2;
-    if (sceneSize.height() > m_Image.height())
-        yMarg = (sceneSize.height() - m_Image.height()) / 2;
+    /*
+     * The margins can be positive or negative, so that the image is always
+     * centered at first.
+     */
+    xMarg = (sceneSize.width() - m_Image.width()) / 2;
+    yMarg = (sceneSize.height() - m_Image.height()) / 2;
 
     m_Trans.setOffset (QPointF(xMarg, yMarg));
     this->setMinimumSize (m_Trans.expectedSize());
@@ -179,6 +191,16 @@ WallpaperViewWidget::polishEvent ()
         parent = parent->parentWidget();
     }
     m_PageRealized = true;
+
+    /*
+     * With or without the page we can turn the window fullscreen.
+     */
+    if (Wallpaper::useFullScreen) {
+        MWindow *win = MApplication::activeWindow ();
+
+        if (win)
+            win->showFullScreen();
+    }
 
     if (!page)
         return;

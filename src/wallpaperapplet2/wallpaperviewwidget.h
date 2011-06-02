@@ -36,6 +36,7 @@ class WallpaperViewWidget : public DcpStylableWidget
         WallpaperViewWidget (
                 WallpaperBusinessLogic *wallpaperBusinessLogic, 
                 QGraphicsWidget        *parent = 0);
+        ~WallpaperViewWidget ();
 
         virtual void saveImage ();
         virtual void dropImage ();

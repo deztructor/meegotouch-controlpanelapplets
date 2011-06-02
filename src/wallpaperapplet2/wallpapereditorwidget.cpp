@@ -76,27 +76,6 @@ WallpaperEditorWidget::WallpaperEditorWidget (
 {
     SYS_WARNING ("----------------------------------------------");
     MWindow *win = MApplication::activeWindow ();
-    
-#ifndef LIBMEEGOCONTROL
-    /*
-     * FIXME: With the new demo program this will not work. This must be a bug
-     * in the libMeegoTouch!
-     * NOTE: It also freezes the controlpanel sometimes, so I had to completely
-     * remove.
-     */
-    //if (win)
-    //    win->showFullScreen();
-#endif
-
-#if 0
-    /*
-     * This one unfortunately will not turn to full-screen at all.
-     */
-    if (win) {
-        Qt::WindowStates state = win->windowState();
-        win->setWindowState(state | Qt::WindowFullScreen);
-    }
-#endif
 
     setObjectName ("WallpaperEditorWidget");
     /*
@@ -107,13 +86,13 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_Physics->setPanDirection (Qt::Vertical | Qt::Horizontal);
     m_Physics->setEnabled(true);
   
-#if 1
-    SYS_WARNING ("*** PointerSpringK  = %g", style()->pointerSpringK());
-    SYS_WARNING ("*** Friction        = %g", style()->friction());
-    SYS_WARNING ("*** SlidingFriction = %g", style()->slidingFriction());
-    SYS_WARNING ("*** BorderSpringK   = %g", style()->borderSpringK());
-    SYS_WARNING ("*** BorderFriction  = %g", style()->borderFriction());
-    SYS_WARNING ("*** maximumvelocity = %g", style()->maximumVelocity());
+#if 0
+    SYS_DEBUG ("*** PointerSpringK  = %g", style()->pointerSpringK());
+    SYS_DEBUG ("*** Friction        = %g", style()->friction());
+    SYS_DEBUG ("*** SlidingFriction = %g", style()->slidingFriction());
+    SYS_DEBUG ("*** BorderSpringK   = %g", style()->borderSpringK());
+    SYS_DEBUG ("*** BorderFriction  = %g", style()->borderFriction());
+    SYS_DEBUG ("*** maximumvelocity = %g", style()->maximumVelocity());
 #endif
 
     m_Physics->setPointerSpringK  (style()->pointerSpringK());
@@ -165,6 +144,13 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     grabGesture (Qt::PanGesture, Qt::GestureFlags());
 }
 
+/*!
+ * Destructor for WallpaperEditorWidget
+ */
+WallpaperEditorWidget::~WallpaperEditorWidget ()
+{
+}
+
 void
 WallpaperEditorWidget::initialize (
         QuillImage   &image,
@@ -172,14 +158,6 @@ WallpaperEditorWidget::initialize (
 {
     WallpaperViewWidget::initialize (image, size);
     setupPanningPhysics ();
-}
-
-/*!
- * Destructor for WallpaperEditorWidget
- */
-WallpaperEditorWidget::~WallpaperEditorWidget ()
-{
-    SYS_WARNING ("");
 }
 
 /*!
@@ -471,7 +449,11 @@ WallpaperEditorWidget::panGestureEvent (
         case Qt::GestureCanceled:
             m_Physics->pointerRelease();
             m_PanOngoing = false;
-        break;
+            break;
+        
+        case Qt::NoGesture:
+            SYS_WARNING ("I dont know what to do when Qt::NoGesture");
+            break;
     }
 
     event->accept (panGesture);
@@ -560,6 +542,11 @@ WallpaperEditorWidget::pinchGestureEvent (
 
         case Qt::GestureUpdated:
             pinchGestureUpdate (event, gesture);
+            break;
+
+        case Qt::NoGesture:
+            SYS_WARNING ("I dont know what to do when Qt::NoGesture");
+            break;
     }
 }
 
@@ -609,20 +596,29 @@ WallpaperEditorWidget::setupPanningPhysics ()
 
     if (geom.height() >= imageDY()) {
         top    = 0.0;
+        top    -= m_Trans.offset().y();
         height = geom.height() - imageDY();
     } else {
-        top    = geom.height() - imageDY();
-        height = -1.0 * top;
+        top     = geom.height() - imageDY();
+        top    -= m_Trans.offset().y();
+
+        height  = -1.0 * top;
+        height -= m_Trans.offset().y();
     }
     
     if (geom.width() >= imageDX()) {
         left    = 0.0;
+        left   -= m_Trans.offset().x();
         width   = geom.width() - imageDX();
     } else {
         left    = geom.width() - imageDX();
+        left   -= m_Trans.offset().x();
+
         width   = -1.0 * left;
+        width -= m_Trans.offset().x();
     }
 
+    //SYS_DEBUG ("%g, %g (%gx%g)", left, top, width, height);
     m_Physics->setRange (QRectF(left, top, width, height));
 }
 
