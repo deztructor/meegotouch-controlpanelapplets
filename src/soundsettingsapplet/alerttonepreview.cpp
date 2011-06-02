@@ -49,7 +49,7 @@ AlertTonePreview::AlertTonePreview (const QString &fname) :
     gstInit ();
 
 #ifndef HAVE_LIBRESOURCEQT
-    audioResourceAcquired ()
+    audioResourceAcquired ();
 #endif
 }
 
