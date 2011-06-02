@@ -25,6 +25,7 @@
 using namespace Wallpaper;
 
 #include <stdlib.h>
+#include <QSize>
 #include <QChar>
 #include <QString>
 #include <QStringList>
@@ -202,3 +203,15 @@ Wallpaper::ensureHasDirectory (
 
     return retval;
 }
+
+/******************************************************************************
+ * Graphics.
+ */
+bool
+Wallpaper::smallerSize (
+        const QSize &a,
+        const QSize &b)
+{
+    return a.width() < b.width() || a.height() < b.height();
+}
+

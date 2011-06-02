@@ -25,6 +25,10 @@
 
 #include <QString>
 #include <QHash>
+#include <QSize>
+
+#define SYS_SIZE(size) \
+    SYS_STR((QString::number(size.width())+"x"+QString::number(size.height())))
 
 class QStringList;
 
@@ -61,6 +65,14 @@ namespace Wallpaper
             const QString     &filePath);
 
     bool ensureHasDirectory (
-        const QString &directoryPath);
+            const QString &directoryPath);
+
+    /*
+     * Graphics
+     */
+    bool smallerSize (
+            const QSize &a,
+            const QSize &b);
+
 };
 #endif

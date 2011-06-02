@@ -313,7 +313,7 @@ WallpaperViewWidget::wallpaperSaved ()
     if (win)
         win->showNormal();
 
-    if (!Wallpaper::useSheetForEdit) {
+    if (!Wallpaper::useSheets) {
         /*
          * We are done with the editing, let's page back to the view where we
          * have the list.

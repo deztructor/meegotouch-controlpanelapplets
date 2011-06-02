@@ -165,6 +165,15 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     grabGesture (Qt::PanGesture, Qt::GestureFlags());
 }
 
+void
+WallpaperEditorWidget::initialize (
+        QuillImage   &image,
+        QSize         size)
+{
+    WallpaperViewWidget::initialize (image, size);
+    setupPanningPhysics ();
+}
+
 /*!
  * Destructor for WallpaperEditorWidget
  */
@@ -184,17 +193,6 @@ WallpaperEditorWidget::paint (
         QWidget                           *widget)
 {
     WallpaperViewWidget::paint (painter, option, widget);
-}
-
-/*!
- * Method for create wallpaper-editor internal widgets
- */
-void
-WallpaperEditorWidget::createWidgets ()
-{
-    SYS_DEBUG ("");
-    setContentsMargins (0, 0, 0, 0);
-    setWindowFrameMargins (0.0, 0.0, 0.0, 0.0);
 }
 
 void 
@@ -359,7 +357,6 @@ WallpaperEditorWidget::imageY () const
 void 
 WallpaperEditorWidget::queueRedrawImage ()
 {
-    SYS_DEBUG ("");
     if (m_HasPendingRedraw) {
         //SYS_DEBUG ("Dropping...");
         return;

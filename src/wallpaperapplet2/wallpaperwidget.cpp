@@ -192,7 +192,7 @@ WallpaperWidget::slotEditWallpaper (
 {
     SYS_DEBUG ("");
 
-    if (Wallpaper::useSheetForEdit) {
+    if (Wallpaper::useSheets) {
         WallpaperEditorSheet  *sheet;
         sheet = new WallpaperEditorSheet (m_BusinessLogic);
         sheet->appear(scene(), MSceneWindow::DestroyWhenDone);

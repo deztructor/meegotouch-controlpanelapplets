@@ -17,7 +17,7 @@
 **
 ****************************************************************************/
 #include "wallpaperdescriptor_p.h"
-
+#include "wallpaperutils.h"
 #define DEBUG
 #define WARNING
 #include "../debug.h"
@@ -138,11 +138,14 @@ WallpaperDescriptorPrivate::load (
     QuillFile quillFile  (filePath());
     mySize = quillFile.fullImageSize ();
     originalSize = mySize;
-    /*
-     * FIXME: Yeah, the size. These literals should not be here... but the code
-     * changed, we are not loading the full size image any more.
-     */
-    mySize.scale (expectedSize, Qt::KeepAspectRatio);
+   
+    SYS_DEBUG ("*** expectedSize = %s", SYS_SIZE(expectedSize));
+    SYS_DEBUG ("*** mySize       = %s", SYS_SIZE(mySize));
+
+    if (Wallpaper::smallerSize(mySize, expectedSize))
+        mySize.scale (expectedSize, Qt::KeepAspectRatio);
+    else
+        mySize.scale (expectedSize, Qt::KeepAspectRatioByExpanding);
 
     loadFilter = QuillImageFilterFactory::createImageFilter(
             QuillImageFilter::Role_Load);
