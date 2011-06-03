@@ -103,21 +103,28 @@ WallpaperModel::data (
         int                role) const
 {
     QVariant             retval;
+    WallpaperDescriptor  desc;
 
     Q_ASSERT (index.row() >= 0);
     Q_ASSERT (index.row() < m_FilePathList.size());
 
     switch (role) {
         case Qt::DisplayRole:
-            #if 0
             /*
-             * We use the base-name when sorting the images, the full path would
-             * make the current image at the fix position because the current
-             * image in a separate directory.
+             * We use this role to sort the wallpapers in the list widget.
              */
-            retval.setValue (m_DescriptorList[index.row()]->basename());
-            #endif
-            retval.setValue (m_FilePathList[index.row()]);
+            desc = m_FilePathHash[m_FilePathList[index.row()]];
+
+            if (Wallpaper::currentWallpaperAtTop) {
+                if (desc.selected())
+                    retval.setValue (
+                            QString("0") + desc.filePath());
+                else
+                    retval.setValue (
+                            QString("1") + desc.filePath());
+            } else {
+                    retval.setValue (desc.filePath());
+            }
             break;
 
         case WallpaperModel::WallpaperDescriptorRole:

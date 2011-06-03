@@ -25,6 +25,7 @@
 #include <MSortFilterProxyModel>
 #include <MListFilter>
 
+#include "wallpaperconfiguration.h"
 #include "wallpaperbusinesslogic.h"
 #include "wallpapermodel.h"
 #include "wallpaperdescriptor.h"
@@ -131,17 +132,29 @@ void
 WallpaperList::currentChanged (
         const QModelIndex &current)
 {
-    QModelIndex myIndex = filtering()->proxy()->mapFromSource (current);
-    QModelIndex first =	firstVisibleItem ();
-    QModelIndex last  = lastVisibleItem ();
+    if (Wallpaper::currentWallpaperAtTop) {
+        QModelIndex first = filtering()->proxy()->index (0, 0);
 
-    SYS_DEBUG ("%d -> %d", current.row(), myIndex.row());
-
-    if (myIndex.row() < 10 && 
-            myIndex.row() >= first.row() && myIndex.row() <= last.row()) {
-        SYS_DEBUG ("We are in.");
+        filtering()->proxy()->sort(Qt::DisplayRole);
+        scrollTo (first, EnsureVisibleHint, Animated);
     } else {
-        scrollTo (myIndex, EnsureVisibleHint, Animated);
+        QModelIndex myIndex = filtering()->proxy()->mapFromSource (current);
+        QModelIndex first =	firstVisibleItem ();
+        QModelIndex last  = lastVisibleItem ();
+
+        SYS_DEBUG ("%d -> %d", current.row(), myIndex.row());
+
+        /*
+         * Workaround for unnecessary scrolling problem in MList. We don't want
+         * to scroll if it is not necessary, especially when the list just
+         * appeared.
+         */
+        if (myIndex.row() < 10 && 
+                myIndex.row() >= first.row() && myIndex.row() <= last.row()) {
+            SYS_DEBUG ("We are in.");
+        } else {
+            scrollTo (myIndex, EnsureVisibleHint, Animated);
+        }
     }
 }
 
