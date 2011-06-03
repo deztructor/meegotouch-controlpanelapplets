@@ -37,6 +37,9 @@
 #include <MBasicLayoutAnimation>
 #include <MComboBox>
 
+#include <MWidgetCreator>
+M_REGISTER_WIDGET_NO_CREATE (BatteryWidget);
+
 #include "../styles.h"
 
 #define DEBUG
@@ -53,7 +56,7 @@ static const int ConditionContainerPostion = SliderContainerPosition + 1;
  * BatteryWidget implementation.
  */
 BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
-        DcpWidget (parent),
+        DcpStylableWidget (parent),
         m_logic (0),
         m_MainLayout (0),
         m_RemainingContainer (0),
@@ -479,7 +482,7 @@ BatteryWidget::PSMAutoActivated (
 }
 
 
-void BatteryWidget::remainingBatteryCapacityReceived(const   int pct)
+void BatteryWidget::remainingBatteryCapacityReceived (const int pct)
 {
     SYS_DEBUG ("percentage = %d", pct);
     fromProperBatteryInfo (pct);

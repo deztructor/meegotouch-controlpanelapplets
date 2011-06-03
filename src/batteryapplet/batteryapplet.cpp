@@ -51,18 +51,11 @@ void BatteryApplet::init()
 {
 }
 
-DcpWidget *
-BatteryApplet::constructWidget (
+DcpStylableWidget *
+BatteryApplet::constructStylableWidget (
 		int widgetId)
 {
     Q_UNUSED (widgetId);
-    return pageMain();
-}
-
-DcpWidget* 
-BatteryApplet::pageMain ()
-{
-    SYS_DEBUG ("Starting on %p", this);
     /*
      * Please note that the m_MainWidget is a QPointer that will nullify itself
      * when the widget is destroyed. Then we need to create a new one when we
