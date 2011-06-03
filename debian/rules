@@ -10,8 +10,17 @@ comma :=,
 empty :=
 space := $(empty) $(empty)
 
+QMAKE_PARAMS = $(empty)
+
 # Define PUBLIC_RELEASE if changelog is not contains ~ in version number
 CXXFLAGS += `head -n 1 debian/changelog | grep '~' > /dev/null || echo -DPUBLIC_RELEASE`
+
+# Here we're enabling the wallpaperapplet2 packaging
+WALLPAPER = improved
+# and lets disable the new wallpaper applet for integration (for a while...)
+ifneq (,$(findstring DPUBLIC_RELEASE,$(CXXFLAGS))
+	WALLPAPER = old
+endif
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 	CXXFLAGS += -O0
@@ -19,9 +28,8 @@ else
 	CXXFLAGS += -O2
 endif
 
-QMAKE_PARAMS = $(empty)
 ifneq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
-	QMAKE_PARAMS = BUILD_FEATURES=nocheck
+	QMAKE_PARAMS += BUILD_FEATURES=nocheck
 endif
 
 ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))

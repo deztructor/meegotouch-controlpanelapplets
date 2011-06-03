@@ -28,12 +28,6 @@
 #define WARNING
 #include "../debug.h"
 
-/* 
- * Define this to enable the 
- * remaining talk and idle time
- */
-#define ENABLE_REMAINING_TALK_IDLE_TIME
-
 PercentageContainer::PercentageContainer(
         const QString  &text,
         MImageWidget   *image,
@@ -80,15 +74,13 @@ void
 PercentageContainer::updateRemainingChargingTime (
         int    ChTime)
 {
-    SYS_DEBUG ("*** ChTime            = %d", ChTime);
-    SYS_DEBUG ("*** m_SubTextLabel    = %p", m_SubTextLabel);
-
     toggleSubLabelVisibility (ChTime > 0);
 
     if (ChTime > 0) {
         int minutes = ChTime / 60;
         m_SubTextLabel->setText (
-                qtTrId ("qtn_ener_charging_estimate", minutes).arg(minutes));
+            qtTrId ("qtn_ener_charging_estimate",
+                    minutes).arg (minutes));
     }
 }
 
@@ -150,10 +142,6 @@ PercentageContainer::updateRemainingTime (
     int     talk,
     int     idle)
 {
-    SYS_DEBUG ("*** talk and idle     = %d, %d", talk, idle);
-    SYS_DEBUG ("*** m_SubTextLabel    = %p", m_SubTextLabel);
-
-#ifdef ENABLE_REMAINING_TALK_IDLE_TIME
     toggleSubLabelVisibility ((talk > 0) || (idle > 0));
 
     if (talk > 0)
@@ -169,7 +157,6 @@ PercentageContainer::updateRemainingTime (
         m_SubTextLabel->setText (m_SubTextLabel->text () + "<br>" +
             qtTrId ("qtn_ener_remaining_standby").arg (formatTime (idle)));
     }
-#endif
 }
 
 QString
