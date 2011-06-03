@@ -170,19 +170,6 @@ WallpaperEditorWidget::initialize (
     setupPanningPhysics ();
 }
 
-/*!
- * Paint method for WallpaperEditorWidget, used for 
- * drawing the edited image actual state
- */
-void
-WallpaperEditorWidget::paint (
-        QPainter                          *painter,
-        const QStyleOptionGraphicsItem    *option,
-        QWidget                           *widget)
-{
-    WallpaperViewWidget::paint (painter, option, widget);
-}
-
 void 
 WallpaperEditorWidget::scalePhysicsPositionChanged(
         const QPointF    &position)
@@ -464,7 +451,14 @@ WallpaperEditorWidget::wheelEvent (
     bool     ctrl = QApplication::keyboardModifiers() & Qt::ControlModifier;
     
     SYS_DEBUG ("ctrl = %s", SYS_BOOL(ctrl));
-    
+
+    /*
+     * We might auto-rotate. If we do we don't accept nothing.
+     */
+    if (m_RotateAnimation.state() == QAbstractAnimation::Running)
+        return;
+
+
     m_Physics->stop ();
     m_ScalePhysics->pointerPress(QPointF());
     
@@ -537,6 +531,12 @@ WallpaperEditorWidget::pinchGestureStarted (
         QPinchGesture *gesture)
 {
     SYS_DEBUG ("");
+    /*
+     * We might auto-rotate. If we do we don't accept nothing.
+     */
+    if (m_RotateAnimation.state() == QAbstractAnimation::Running)
+        return;
+    
     if (m_PanOngoing) {
         m_Physics->pointerRelease();
         m_PanOngoing = false;
