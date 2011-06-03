@@ -18,7 +18,7 @@ CXXFLAGS += `head -n 1 debian/changelog | grep '~' > /dev/null || echo -DPUBLIC_
 # Here we're enabling the wallpaperapplet2 packaging
 WALLPAPER = improved
 # and lets disable the new wallpaper applet for integration (for a while...)
-ifneq (,$(findstring DPUBLIC_RELEASE,$(CXXFLAGS))
+ifneq (,$(findstring DPUBLIC_RELEASE,$(CXXFLAGS)))
 	WALLPAPER = old
 endif
 
