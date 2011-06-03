@@ -15,11 +15,9 @@ QMAKE_PARAMS = $(empty)
 # Define PUBLIC_RELEASE if changelog is not contains ~ in version number
 CXXFLAGS += `head -n 1 debian/changelog | grep '~' > /dev/null || echo -DPUBLIC_RELEASE`
 
-# Here we're enabling the wallpaperapplet2 packaging
-WALLPAPER = improved
-# and lets disable the new wallpaper applet for integration (for a while...)
-ifneq (,$(findstring DPUBLIC_RELEASE,$(CXXFLAGS)))
-	WALLPAPER = old
+WALLPAPER = old
+ifneq (,$(findstring wallpaper2,$(DEB_BUILD_OPTIONS)))
+	WALLPAPER = improved
 endif
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
@@ -54,7 +52,7 @@ QMAKE_OPTIONS += COV_OPTION=off $(QMAKE_PARAMS) QMAKE_CXXFLAGS="$(CXXFLAGS)"
 
 configure: configure-stamp
 configure-stamp:
-	gen_wallpaper_install.sh $(WALLPAPER)
+	./gen_wallpaper_install.sh $(WALLPAPER)
 	dh_testdir $(EXCLUSIONS)
 	@qmake $(QMAKE_OPTIONS) > /dev/null
 	touch configure-stamp
