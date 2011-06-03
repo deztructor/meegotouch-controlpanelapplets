@@ -54,6 +54,7 @@ QMAKE_OPTIONS += COV_OPTION=off $(QMAKE_PARAMS) QMAKE_CXXFLAGS="$(CXXFLAGS)"
 
 configure: configure-stamp
 configure-stamp:
+	gen_wallpaper_install.sh $(WALLPAPER)
 	dh_testdir $(EXCLUSIONS)
 	@qmake $(QMAKE_OPTIONS) > /dev/null
 	touch configure-stamp
