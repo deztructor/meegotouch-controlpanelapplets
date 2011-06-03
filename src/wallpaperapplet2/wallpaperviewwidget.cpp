@@ -26,7 +26,7 @@
 #include <MPannableViewport>
 #include <MPositionIndicator>
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
