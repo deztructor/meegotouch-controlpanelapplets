@@ -18,7 +18,7 @@ fi
 echo '##########################################################'
 
 cat - > ${INSTALL_FILE} <<CONTENTS
-usr/share/themes/base/meegotouch/libwallpaperapplet/style/${LIBNAME}.css
+usr/share/themes/base/meegotouch/${LIBNAME}/style/${LIBNAME}.css
 usr/lib/duicontrolpanel/${DESKTOPNAME}.desktop
 usr/lib/duicontrolpanel/applets/${LIBNAME}.so
 usr/share/backup-framework/applications/wallpaper.conf
