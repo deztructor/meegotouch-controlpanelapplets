@@ -30,7 +30,8 @@
  */
 WallpaperITrans::WallpaperITrans () :
     m_Orientation (M::Landscape),
-    m_Scale (1.0)
+    m_Scale (1.0),
+    m_Rotation (0.0)
 {
 }
 
@@ -46,6 +47,7 @@ WallpaperITrans::WallpaperITrans (
 {
     m_Orientation    = orig.m_Orientation;
     m_Scale          = orig.m_Scale;
+    m_Rotation       = orig.m_Rotation;
     m_Offset         = orig.m_Offset;
     m_ExpectedSize   = orig.m_ExpectedSize;
 }
@@ -60,6 +62,7 @@ WallpaperITrans::operator= (
     if (this != &rhs) {
         m_Orientation    = rhs.m_Orientation;
         m_Scale          = rhs.m_Scale;
+        m_Rotation       = rhs.m_Rotation;
         m_Offset         = rhs.m_Offset;
         m_ExpectedSize   = rhs.m_ExpectedSize;
     }
@@ -108,6 +111,18 @@ WallpaperITrans::y () const
     return (int) m_Offset.y ();
 }
 
+/*!
+ * \param scale The scale value
+ *
+ * Method for setting the scale
+ */
+void 
+WallpaperITrans::setScale (
+        qreal scale)
+{
+    m_Scale = scale;
+}
+
 void
 WallpaperITrans::modScale (
         int  i)
@@ -125,6 +140,30 @@ WallpaperITrans::scale () const
 {
     return m_Scale;
 }
+
+void 
+WallpaperITrans::setRotation (
+        qreal rotation)
+{
+    m_Rotation = rotation;
+}
+
+void
+WallpaperITrans::modRotation (
+        int  i)
+{
+    m_Rotation = m_Rotation + (i / 1200.0);
+}
+
+/*!
+ * \returns The current scale value
+ */
+qreal
+WallpaperITrans::rotation () const
+{
+    return m_Rotation;
+}
+
 
 /*!
  * \param size The expected size
@@ -155,18 +194,6 @@ QPointF
 WallpaperITrans::offset () const
 {
     return m_Offset;
-}
-
-/*!
- * \param scale The scale value
- *
- * Method for setting the scale
- */
-void 
-WallpaperITrans::setScale (
-        qreal scale)
-{
-    m_Scale = scale;
 }
 
 /*!

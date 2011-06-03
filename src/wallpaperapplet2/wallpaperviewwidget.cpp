@@ -44,7 +44,8 @@ WallpaperViewWidget::WallpaperViewWidget (
     m_BgColor ("black"),
     m_Saving (false),
     m_Initialized (false),
-    m_PageRealized (false)
+    m_PageRealized (false),
+    m_ImageWidget (0)
 {
     connect (m_BusinessLogic, SIGNAL(wallpaperSaved()),
             this, SLOT(wallpaperSaved()));
@@ -139,6 +140,10 @@ WallpaperViewWidget::initialize (
     SYS_DEBUG ("imageSize = %dx%d", m_Image.width(), m_Image.height());
     SYS_DEBUG ("offset    = %d, %d", xMarg, yMarg);
 
+    m_ImageWidget = new MImageWidget(&m_Image, this);
+    //m_ImageWidget->setPos (m_Trans.offset());
+    redrawImage ();
+
     m_Initialized = true;
 }
 
@@ -148,6 +153,7 @@ WallpaperViewWidget::pagePans () const
     return false;
 }
 
+#if 0
 void
 WallpaperViewWidget::paint (
         QPainter                          *painter,
@@ -166,6 +172,7 @@ WallpaperViewWidget::paint (
             QRect (imageX(), imageY(), imageDX(), imageDY()),
             m_Image);
 }
+#endif
 
 void
 WallpaperViewWidget::polishEvent ()
@@ -361,4 +368,16 @@ WallpaperViewWidget::wallpaperLoaded (
     } else {
         SYS_WARNING ("Progressive loading not implemented.");
     }
+}
+
+void 
+WallpaperViewWidget::redrawImage ()
+{
+    m_ImageWidget->setPos (imageX(), imageY());
+    m_ImageWidget->setScale (m_Trans.scale());
+
+    m_ImageWidget->setTransformOriginPoint(
+            m_ImageWidget->size().width() / 2, 
+            m_ImageWidget->size().height() / 2);
+    m_ImageWidget->setRotation (m_Trans.rotation());
 }

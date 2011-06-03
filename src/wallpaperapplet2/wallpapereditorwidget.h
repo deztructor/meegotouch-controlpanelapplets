@@ -29,7 +29,7 @@
 #include <meegocontrolexport.h>
 #include <dcpwidget.h>
 #include <MStylableWidget>
-
+#include <QPropertyAnimation>
 
 class MContainer;
 class MLinearLayoutPolicy;
@@ -97,14 +97,16 @@ protected:
         virtual void initialize (QuillImage &image, QSize size);
         virtual void slotDoneActivated ();
         virtual void slotCancelActivated ();
+        virtual void redrawImage ();
 
     private slots:
-    void redrawImage ();
     void queueRedrawImage ();
     void orientationChanged (M::Orientation orientation);
     void panningPhysicsPositionChanged (const QPointF &position);
     void panningPhysicsPanningStopped ();
     void scalePhysicsPositionChanged(const QPointF &position);
+    void scalePhysicsPanningStopped ();
+        void rotateAnimationFinished ();
 
     protected:
         virtual int imageX () const;
@@ -138,6 +140,7 @@ private:
     bool                  m_HasPendingRedraw;
     MPhysics2DPanning    *m_Physics;
     MPhysics2DPanning    *m_ScalePhysics;
+        QPropertyAnimation    m_RotateAnimation;
 };
 
 #endif
