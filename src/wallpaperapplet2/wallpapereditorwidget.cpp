@@ -572,7 +572,7 @@ WallpaperEditorWidget::pinchGestureUpdate (
         (gesture->totalScaleFactor() * m_OriginalScaleFactor);
     
     m_ScalePhysics->pointerMove(
-            QPointF(scalex + rotationDelta, scaley * 100.0));
+            QPointF(scalex - rotationDelta, scaley * 100.0));
     
     event->accept(gesture);
 }

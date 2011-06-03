@@ -66,7 +66,7 @@ WallpaperViewWidget::~WallpaperViewWidget ()
 void
 WallpaperViewWidget::saveImage ()
 {
-    if (m_Trans.expectedSize() != m_OriginalSize) {
+    if (Wallpaper::supportEdit || m_Trans.expectedSize() != m_OriginalSize) {
         SYS_WARNING ("The original size is not %dx%d",
                 m_Trans.expectedSize().width(), 
                 m_Trans.expectedSize().height());
