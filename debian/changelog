@@ -1,8 +1,10 @@
 meegotouch-controlpanelapplets (0.20.50~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  [ David Kedves ]
+  * Fixes: NB#259912 - Settings; battery, string clipping
+    §qtn_ener_remaining_standby§
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 02 Jun 2011 10:03:52 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 03 Jun 2011 12:54:00 +0200
 
 meegotouch-controlpanelapplets (0.20.49-1) meegotouch; urgency=low
 

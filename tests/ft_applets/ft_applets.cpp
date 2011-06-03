@@ -197,7 +197,7 @@ Ft_Applets::doViewTest (DcpAppletIf *applet, bool stylableView)
 void
 Ft_Applets::testbatteryapplet ()
 {
-    doAppletTest ("libbatteryapplet.so", false);
+    doAppletTest ("libbatteryapplet.so", false, HaveStylableView);
 }
 
 void

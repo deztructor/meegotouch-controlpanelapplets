@@ -10,8 +10,15 @@ comma :=,
 empty :=
 space := $(empty) $(empty)
 
+QMAKE_PARAMS = $(empty)
+
 # Define PUBLIC_RELEASE if changelog is not contains ~ in version number
 CXXFLAGS += `head -n 1 debian/changelog | grep '~' > /dev/null || echo -DPUBLIC_RELEASE`
+
+WALLPAPER = old
+ifneq (,$(findstring wallpaper2,$(DEB_BUILD_OPTIONS)))
+	WALLPAPER = improved
+endif
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 	CXXFLAGS += -O0
@@ -19,9 +26,8 @@ else
 	CXXFLAGS += -O2
 endif
 
-QMAKE_PARAMS = $(empty)
 ifneq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
-	QMAKE_PARAMS = BUILD_FEATURES=nocheck
+	QMAKE_PARAMS += BUILD_FEATURES=nocheck
 endif
 
 ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
@@ -46,6 +52,7 @@ QMAKE_OPTIONS += COV_OPTION=off $(QMAKE_PARAMS) QMAKE_CXXFLAGS="$(CXXFLAGS)"
 
 configure: configure-stamp
 configure-stamp:
+	./gen_wallpaper_install.sh $(WALLPAPER)
 	dh_testdir $(EXCLUSIONS)
 	@qmake $(QMAKE_OPTIONS) > /dev/null
 	touch configure-stamp

@@ -19,7 +19,7 @@
 #ifndef BATTERYWIDGET_H
 #define BATTERYWIDGET_H
 
-#include <dcpwidget.h>
+#include <DcpStylableWidget>
 #include <QString>
 
 class MButton;
@@ -34,7 +34,7 @@ class SliderContainer;
 class PercentageContainer;
 class MSeparator;
 
-class BatteryWidget : public DcpWidget
+class BatteryWidget : public DcpStylableWidget
 {
     Q_OBJECT
 
@@ -73,7 +73,7 @@ private:
     void showSlider (bool show);
     void retranslateUi ();
     void showHideUi ();
-    void formProperBatteryInfo (unsigned int pct = 0);
+    void fromProperBatteryInfo (unsigned int pct = 0);
     bool batteryConditionInfo (QString &shortDescriptionText);
 
 private: 

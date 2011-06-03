@@ -308,7 +308,6 @@ BatteryBusinessLogic::batteryRemCapacityChanged (
 {
     Q_UNUSED (bars);
     
-    // XXX: FIXME: maybe we can drop batteryBarValue and use 'bars' parameter..
     SYS_DEBUG ("Emitting batteryBarValueReceived(%d)",
             batteryBarValue (percentage));
     emit batteryBarValueReceived (batteryBarValue (percentage));
