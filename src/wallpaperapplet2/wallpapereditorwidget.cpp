@@ -48,7 +48,7 @@ M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
 static const qreal ScaleLowerLimit = 0.15;
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -665,26 +665,34 @@ WallpaperEditorWidget::setupPanningPhysics ()
     QSize   geom = m_Trans.expectedSize();
     qreal   left, top;
     qreal   width, height;
-   
+    int     imagedx, imagedy;
 
-    if (geom.height() >= imageDY()) {
+    if (m_Trans.rotation() == 90.0 || m_Trans.rotation() == -90.0) {
+        imagedx = imageDY();
+        imagedy = imageDX();
+    } else {
+        imagedx = imageDX();
+        imagedy = imageDY();
+    }
+
+    if (geom.height() >= imagedy) {
         top    = 0.0;
         top    -= m_Trans.offset().y();
-        height = geom.height() - imageDY();
+        height = geom.height() - imagedy;
     } else {
-        top     = geom.height() - imageDY();
+        top     = geom.height() - imagedy;
         top    -= m_Trans.offset().y();
 
         height  = -1.0 * top;
         height -= m_Trans.offset().y();
     }
     
-    if (geom.width() >= imageDX()) {
+    if (geom.width() >= imagedx) {
         left    = 0.0;
         left   -= m_Trans.offset().x();
-        width   = geom.width() - imageDX();
+        width   = geom.width() - imagedx;
     } else {
-        left    = geom.width() - imageDX();
+        left    = geom.width() - imagedx;
         left   -= m_Trans.offset().x();
 
         width   = -1.0 * left;
