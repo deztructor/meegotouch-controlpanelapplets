@@ -13,6 +13,7 @@ SOURCEDIR = $$PWD/../src/displayapplet \
             $$PWD/../src/offlineapplet \
             $$PWD/../src/themeapplet \
             $$PWD/../src/wallpaperapplet \
+            $$PWD/../src/wallpaperapplet2 \
             $$PWD/../src/resetapplet \
             $$PWD/../src/warrantyapplet \ 
             $$PWD/../src/soundsettingsapplet \
