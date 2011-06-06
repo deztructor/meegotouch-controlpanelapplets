@@ -46,14 +46,18 @@ public:
 
     int x () const;
     int y () const;
+    
+    void setScale (qreal scale);
     qreal scale () const;
     void modScale (int i);
-    
+
+    void setRotation (qreal rotation);
+    void modRotation (int i);
+    qreal rotation () const;
+
     void setOffset (const QPointF &offset);
     QPointF offset () const;
 
-    void setScale (qreal scale);
-    
     void setExpectedSize (const QSize &size);
     QSize expectedSize () const;
 
@@ -66,6 +70,7 @@ public:
 private:
     M::Orientation   m_Orientation;
     qreal            m_Scale;
+    qreal            m_Rotation;
     QPointF          m_Offset;
     QSize            m_ExpectedSize;
 };

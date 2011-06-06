@@ -66,6 +66,7 @@ Wallpaper::constructPath (
         retval += filename;
     }
 
+    SYS_WARNING ("returning %s", SYS_STR(retval));
     return retval;
 }
 

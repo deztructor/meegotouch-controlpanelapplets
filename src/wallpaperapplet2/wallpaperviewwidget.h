@@ -27,6 +27,7 @@
 #include <DcpStylableWidget>
 #include <QPointer>
 #include <MAction>
+#include <MImageWidget>
 
 class WallpaperViewWidget : public DcpStylableWidget
 {
@@ -42,10 +43,12 @@ class WallpaperViewWidget : public DcpStylableWidget
         virtual void dropImage ();
 
         virtual bool pagePans () const; 
+#if 0
         virtual void paint (
             QPainter                        *painter,
             const QStyleOptionGraphicsItem  *option,
             QWidget *widget = 0);
+#endif
 
     signals:
         void doneClicked ();
@@ -68,6 +71,7 @@ class WallpaperViewWidget : public DcpStylableWidget
         virtual void slotCancelActivated ();
         virtual void wallpaperSaved ();
         virtual void wallpaperLoaded (QuillImage image, QSize originalSize);
+        virtual void redrawImage ();
         
     protected:
         QPointer<WallpaperBusinessLogic>  m_BusinessLogic;
@@ -77,6 +81,7 @@ class WallpaperViewWidget : public DcpStylableWidget
         QSize                             m_OriginalSize;
         bool                              m_Saving;
         bool                              m_Initialized;
+        MImageWidget                     *m_ImageWidget;
 
     private:
         //M_STYLABLE_WIDGET(WallpaperViewWidgetStyle)

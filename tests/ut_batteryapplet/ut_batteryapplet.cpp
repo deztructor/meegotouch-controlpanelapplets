@@ -22,6 +22,7 @@
 #include "batterywidget.h"
 
 #include <dcpwidgettypes.h>
+#include <dcpstylablewidget.h>
 #include <MApplication>
 #include <MAction>
 #include <QVector>
@@ -79,13 +80,13 @@ Ut_BatteryApplet::testTitle ()
 void
 Ut_BatteryApplet::testConstructWidget ()
 {
-    DcpWidget *widget;
+    DcpStylableWidget *widget;
     bool       backAccepted;
 
     /*
      * Testing if the applet creates a widget the first time.
      */
-    widget = m_Applet->constructWidget (0);
+    widget = m_Applet->constructStylableWidget (0);
     QVERIFY (widget);
     QVERIFY (m_Applet->m_MainWidget == widget);
     

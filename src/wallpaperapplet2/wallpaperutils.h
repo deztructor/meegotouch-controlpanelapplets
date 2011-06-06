@@ -30,6 +30,9 @@
 #define SYS_SIZE(size) \
     SYS_STR((QString::number(size.width())+"x"+QString::number(size.height())))
 
+#define SYS_POINTF(point) \
+    SYS_STR((QString::number(point.x())+", "+QString::number(point.y())))
+
 class QStringList;
 
 namespace Wallpaper 

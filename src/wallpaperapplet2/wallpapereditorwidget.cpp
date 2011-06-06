@@ -17,6 +17,7 @@
 **
 ****************************************************************************/
 #include "wallpapereditorwidget.h"
+#include "wallpaperutils.h"
 
 #include <QStyle>
 #include <QGraphicsSceneMouseEvent>
@@ -47,16 +48,19 @@ M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
 static const qreal ScaleLowerLimit = 0.15;
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
 static const int ExtraMargin = 0;
 static const int TitleBarHeight = 60;
 static const int alwaysVisibleFromImage = 15;
+
 static const qreal scaleLowerLimit = 20.0;
 static const qreal scaleUpperLimit = 400.0;
-
+static const qreal rotationMin = -0.0;
+static const qreal rotationMax = +720.0;
+static const qreal rotationDelta = 360.0;
 /*!
  * WallpaperEditorWidget constructor
  *
@@ -111,7 +115,7 @@ WallpaperEditorWidget::WallpaperEditorWidget (
      *
      */
     m_ScalePhysics = new MPhysics2DPanning (this);
-    m_ScalePhysics->setPanDirection (Qt::Vertical);
+    m_ScalePhysics->setPanDirection (Qt::Vertical | Qt::Horizontal);
     m_ScalePhysics->setEnabled(true);
     
     m_ScalePhysics->setPointerSpringK  (style()->pointerSpringK());
@@ -121,10 +125,13 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_ScalePhysics->setBorderFriction  (style()->borderFriction());
     m_ScalePhysics->setMaximumVelocity (style()->maximumVelocity());
     m_ScalePhysics->setRange (
-            QRectF(0.0, scaleLowerLimit, 0.0, scaleUpperLimit));
-    m_ScalePhysics->setPosition (QPointF(0.0, 100.0));
+            QRectF(rotationMin, scaleLowerLimit, rotationMax, scaleUpperLimit));
+    m_ScalePhysics->setPosition (QPointF(rotationDelta, 100.0));
+
     connect (m_ScalePhysics, SIGNAL(positionChanged(const QPointF &)),
             this, SLOT(scalePhysicsPositionChanged(const QPointF &)));
+    connect (m_ScalePhysics, SIGNAL(panningStopped()),
+            this, SLOT(scalePhysicsPanningStopped()));
 
     if (win) {
         m_Orientation = win->orientation();
@@ -142,6 +149,9 @@ WallpaperEditorWidget::WallpaperEditorWidget (
      */
     grabGesture (Qt::PinchGesture, Qt::GestureFlags());
     grabGesture (Qt::PanGesture, Qt::GestureFlags());
+
+    connect (&m_RotateAnimation, SIGNAL(finished()),
+            this, SLOT(rotateAnimationFinished()));
 }
 
 /*!
@@ -160,29 +170,20 @@ WallpaperEditorWidget::initialize (
     setupPanningPhysics ();
 }
 
-/*!
- * Paint method for WallpaperEditorWidget, used for 
- * drawing the edited image actual state
- */
-void
-WallpaperEditorWidget::paint (
-        QPainter                          *painter,
-        const QStyleOptionGraphicsItem    *option,
-        QWidget                           *widget)
-{
-    WallpaperViewWidget::paint (painter, option, widget);
-}
-
 void 
 WallpaperEditorWidget::scalePhysicsPositionChanged(
         const QPointF    &position)
 {
+    SYS_DEBUG ("*** position = %s", SYS_POINTF(position));
+
     qreal scalefactor = position.y() / 100.0;
 
     if (scalefactor < 0.05)
         scalefactor = 0.05;
 
     m_Trans.setScale (scalefactor);
+    m_Trans.setRotation (position.x() - rotationDelta);
+
     setupPanningPhysics ();
     queueRedrawImage ();
 }
@@ -198,7 +199,55 @@ WallpaperEditorWidget::panningPhysicsPositionChanged(
 void 
 WallpaperEditorWidget::panningPhysicsPanningStopped ()
 {
+    //SYS_DEBUG ("");
     redrawImage ();
+}
+
+void 
+WallpaperEditorWidget::scalePhysicsPanningStopped ()
+{
+    qreal rotation  = m_Trans.rotation();
+    qreal rRotation = 0.0;
+
+    for (qreal rounded = -360.0; rounded <= 360.0; rounded += 90.0) {
+        if (rotation >= rounded - 45.0 && rotation <= rounded + 45.0) {
+            rRotation = rounded;
+            break;
+        }
+    }
+
+    SYS_DEBUG ("*** rotation = %g", rotation);
+    SYS_DEBUG ("*** rRotation = %g", rRotation);
+
+    if (rotation != rRotation) {
+        m_RotateAnimation.setTargetObject (m_ImageWidget);
+        m_RotateAnimation.setPropertyName ("rotation");
+        m_RotateAnimation.setEasingCurve(QEasingCurve::InOutCubic);
+        m_RotateAnimation.setStartValue (rotation);
+        m_RotateAnimation.setEndValue (rRotation);
+        m_RotateAnimation.setDuration (500.0);
+        m_RotateAnimation.start();
+    }
+
+
+//    redrawImage ();
+}
+
+void
+WallpaperEditorWidget::rotateAnimationFinished ()
+{
+    qreal rotation = m_ImageWidget->rotation();
+
+    SYS_DEBUG ("");
+
+    if (rotation == 360.0 || rotation == -360.0) {
+        rotation = 0.0;
+        m_ImageWidget->setRotation (rotation);
+    }
+
+    m_Trans.setRotation(rotation);
+    m_ScalePhysics->setPosition (
+            QPointF(rotation + rotationDelta, m_Trans.scale() * 100.0));
 }
 
 /*!
@@ -348,7 +397,8 @@ void
 WallpaperEditorWidget::redrawImage ()
 {
     m_HasPendingRedraw = false;
-    update();
+    WallpaperViewWidget::redrawImage ();
+    //update();
 #if 0
     /*
      * We need to update the current page and not just this widget because of
@@ -398,11 +448,26 @@ void
 WallpaperEditorWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
 {
-    SYS_DEBUG ("");
+    bool     ctrl = QApplication::keyboardModifiers() & Qt::ControlModifier;
+    
+    SYS_DEBUG ("ctrl = %s", SYS_BOOL(ctrl));
+
+    /*
+     * We might auto-rotate. If we do we don't accept nothing.
+     */
+    if (m_RotateAnimation.state() == QAbstractAnimation::Running)
+        return;
+
+
     m_Physics->stop ();
     m_ScalePhysics->pointerPress(QPointF());
+    
+    if (!ctrl) {
+        m_ScalePhysics->pointerMove (QPointF(0.0,  event->delta() / 100.0));
+    } else {
+        m_ScalePhysics->pointerMove (QPointF(event->delta() / 100.0, 0.0));
+    }
 
-    m_ScalePhysics->pointerMove (QPointF(0.0,  event->delta() / 100.0));
     m_ScalePhysics->pointerRelease();
 }
 
@@ -466,6 +531,12 @@ WallpaperEditorWidget::pinchGestureStarted (
         QPinchGesture *gesture)
 {
     SYS_DEBUG ("");
+    /*
+     * We might auto-rotate. If we do we don't accept nothing.
+     */
+    if (m_RotateAnimation.state() == QAbstractAnimation::Running)
+        return;
+    
     if (m_PanOngoing) {
         m_Physics->pointerRelease();
         m_PanOngoing = false;
@@ -491,15 +562,17 @@ WallpaperEditorWidget::pinchGestureUpdate (
         m_PanOngoing = false;
         return;
     }
+    
     /*
-     * No frame drop here: the pinch gesture is much better this way...
+     * 
      */
+    qreal scalex = -1.0 * gesture->rotationAngle();
     qreal scaley =
         m_OriginalScaleFactor - 
         (gesture->totalScaleFactor() * m_OriginalScaleFactor);
-
+    
     m_ScalePhysics->pointerMove(
-            QPointF(0.0, scaley * 100.0));
+            QPointF(scalex + rotationDelta, scaley * 100.0));
     
     event->accept(gesture);
 }
@@ -592,26 +665,34 @@ WallpaperEditorWidget::setupPanningPhysics ()
     QSize   geom = m_Trans.expectedSize();
     qreal   left, top;
     qreal   width, height;
-   
+    int     imagedx, imagedy;
 
-    if (geom.height() >= imageDY()) {
+    if (m_Trans.rotation() == 90.0 || m_Trans.rotation() == -90.0) {
+        imagedx = imageDY();
+        imagedy = imageDX();
+    } else {
+        imagedx = imageDX();
+        imagedy = imageDY();
+    }
+
+    if (geom.height() >= imagedy) {
         top    = 0.0;
         top    -= m_Trans.offset().y();
-        height = geom.height() - imageDY();
+        height = geom.height() - imagedy;
     } else {
-        top     = geom.height() - imageDY();
+        top     = geom.height() - imagedy;
         top    -= m_Trans.offset().y();
 
         height  = -1.0 * top;
         height -= m_Trans.offset().y();
     }
     
-    if (geom.width() >= imageDX()) {
+    if (geom.width() >= imagedx) {
         left    = 0.0;
         left   -= m_Trans.offset().x();
-        width   = geom.width() - imageDX();
+        width   = geom.width() - imagedx;
     } else {
-        left    = geom.width() - imageDX();
+        left    = geom.width() - imagedx;
         left   -= m_Trans.offset().x();
 
         width   = -1.0 * left;
