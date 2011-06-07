@@ -48,7 +48,7 @@ M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
 static const qreal ScaleLowerLimit = 0.15;
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -167,7 +167,7 @@ WallpaperEditorWidget::initialize (
         QSize         size)
 {
     WallpaperViewWidget::initialize (image, size);
-    setupPanningPhysics ();
+    setupPanningPhysics (true);
 }
 
 void 
@@ -358,7 +358,7 @@ WallpaperEditorWidget::back ()
 int
 WallpaperEditorWidget::imageX () const
 {
-    int retval = WallpaperViewWidget::imageX();
+    int retval = 0.0; //WallpaperViewWidget::imageX();
 
     retval += m_UserOffset.x();
     
@@ -372,7 +372,7 @@ WallpaperEditorWidget::imageX () const
 int
 WallpaperEditorWidget::imageY () const
 {
-    int retval = WallpaperViewWidget::imageY ();
+    int retval = 0.0; //WallpaperViewWidget::imageY ();
     
     retval += m_UserOffset.y();
 
@@ -656,16 +656,20 @@ WallpaperEditorWidget::supportsPortrait () const
 }
 
 void 
-WallpaperEditorWidget::setupPanningPhysics ()
+WallpaperEditorWidget::setupPanningPhysics (
+        bool movePh)
 {
     /*
      * The widget's geometry is disturbed by the transparent toolbar, 
      * but the expectedsize is stable.
      */
     QSize   geom = m_Trans.expectedSize();
+    QSize   imageSize;
     qreal   left, top;
     qreal   width, height;
     int     imagedx, imagedy;
+
+    imageSize = imageVisualSize (m_Trans.scale());
 
     if (m_Trans.rotation() == 90.0 || m_Trans.rotation() == -90.0) {
         imagedx = imageDY();
@@ -674,32 +678,66 @@ WallpaperEditorWidget::setupPanningPhysics ()
         imagedx = imageDX();
         imagedy = imageDY();
     }
-
-    if (geom.height() >= imagedy) {
-        top    = 0.0;
-        top    -= m_Trans.offset().y();
-        height = geom.height() - imagedy;
-    } else {
-        top     = geom.height() - imagedy;
-        top    -= m_Trans.offset().y();
-
-        height  = -1.0 * top;
-        height -= m_Trans.offset().y();
-    }
     
-    if (geom.width() >= imagedx) {
-        left    = 0.0;
-        left   -= m_Trans.offset().x();
-        width   = geom.width() - imagedx;
-    } else {
-        left    = geom.width() - imagedx;
-        left   -= m_Trans.offset().x();
+    if (geom.height() >= imagedy) {
+        SYS_DEBUG ("-> 1");
+        top    = imageSize.height() / 2.0;
+        //top    -= m_Trans.offset().y();
 
-        width   = -1.0 * left;
-        width -= m_Trans.offset().x();
+        height = geom.height() - imageSize.height();
+    } else {
+        SYS_DEBUG ("-> 2");
+        top     = geom.height() - imageSize.height() / 2.0;
+        //top    -= m_Trans.offset().y();
+
+        height  =  imageSize.height() - geom.height();
     }
 
-    //SYS_DEBUG ("%g, %g (%gx%g)", left, top, width, height);
+    if (geom.width() >= imagedx) {
+        SYS_DEBUG ("-> 3");
+        left    = imageSize.width() / 2.0;
+        //left   -= m_Trans.offset().x();
+
+        width = geom.width() - imageSize.width();
+    } else {
+        SYS_DEBUG ("-> 4");
+        left    = geom.width() - imageSize.width() / 2.0;
+        //left   -= m_Trans.offset().x();
+
+        width   =  imageSize.width() - geom.width();
+    }
+   
+    #if 0
+    SYS_DEBUG ("*** imageSize = %s", SYS_SIZE(imageSize));
+    SYS_DEBUG ("*** offset  = %g, %g",
+            m_Trans.offset().x(), m_Trans.offset().y());
+    SYS_DEBUG ("*** imaged. = %dx%d", imagedx, imagedy);
+    SYS_DEBUG ("*** range   = %g, %g (%gx%g)", left, top, width, height);
+    #endif
+
     m_Physics->setRange (QRectF(left, top, width, height));
+   
+    /*
+     *
+     */
+    if (movePh) {
+        qreal hMargin;
+        qreal vMargin;
+
+        if (width == 0.0) {
+            hMargin = left;
+        } else {
+            hMargin = left + (width - left) / 2.0;
+        }
+
+        if (height == 0.0) {
+            vMargin = top;
+        } else {
+            vMargin = top + (height - top) / 2.0;
+        }
+
+        SYS_DEBUG ("-> %g, %g", hMargin, vMargin);
+        m_Physics->setPosition (QPointF(hMargin, vMargin));
+    }
 }
 

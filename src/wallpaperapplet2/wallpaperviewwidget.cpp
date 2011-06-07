@@ -18,6 +18,7 @@
 ****************************************************************************/
 #include "wallpaperviewwidget.h"
 #include "wallpaperconfiguration.h"
+#include "wallpaperutils.h"
 
 #include <QTimer>
 #include <MWindow>
@@ -26,7 +27,7 @@
 #include <MPannableViewport>
 #include <MPositionIndicator>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -136,13 +137,13 @@ WallpaperViewWidget::initialize (
     m_Trans.setOffset (QPointF(xMarg, yMarg));
     this->setMinimumSize (m_Trans.expectedSize());
     
-    SYS_DEBUG ("sceneSize = %dx%d", sceneSize.width(), sceneSize.height());
-    SYS_DEBUG ("imageSize = %dx%d", m_Image.width(), m_Image.height());
-    SYS_DEBUG ("offset    = %d, %d", xMarg, yMarg);
+    SYS_WARNING ("sceneSize = %dx%d", sceneSize.width(), sceneSize.height());
+    SYS_WARNING ("imageSize = %dx%d", m_Image.width(), m_Image.height());
+    SYS_WARNING ("offset    = %d, %d", xMarg, yMarg);
 
     m_ImageWidget = new MImageWidget(&m_Image, this);
     //m_ImageWidget->setPos (m_Trans.offset());
-    redrawImage ();
+    //redrawImage ();
 
     m_Initialized = true;
 }
@@ -373,11 +374,46 @@ WallpaperViewWidget::wallpaperLoaded (
 void 
 WallpaperViewWidget::redrawImage ()
 {
-    m_ImageWidget->setPos (imageX(), imageY());
-    m_ImageWidget->setScale (m_Trans.scale());
+    QSize   imageSize = imageVisualSize ();
+#if 1
+    QPointF offset (
+            imageX() - m_ImageWidget->size().width() / 2.0, 
+            imageY() - m_ImageWidget->size().height() / 2.0);
+#else
+    QPointF offset (0, 0);
+#endif
 
     m_ImageWidget->setTransformOriginPoint(
-            m_ImageWidget->size().width() / 2, 
-            m_ImageWidget->size().height() / 2);
+            m_ImageWidget->size().width() / 2.0, 
+            m_ImageWidget->size().height() / 2.0);
+
+    m_ImageWidget->setScale (m_Trans.scale());
+    
+    //SYS_DEBUG ("*** myxy   (%d, %d)", imageX(), imageY()); 
+    //SYS_DEBUG ("*** setPos (%s)", SYS_POINTF(offset)); 
+    m_ImageWidget->setPos (offset);
     m_ImageWidget->setRotation (m_Trans.rotation());
+}
+
+QSize
+WallpaperViewWidget::imageVisualSize (qreal scale)
+{
+    qreal realdx, realdy;
+    QSize  retval;
+
+    #if 0
+    SYS_DEBUG ("*** rotation    = %g", rotation());
+    SYS_DEBUG ("*** scale       = %g", scale);
+    SYS_DEBUG ("*** initialized = %s", SYS_BOOL(m_Initialized));
+    #endif
+    if (m_Trans.rotation() == 90.0 || m_Trans.rotation() == -90.0) {
+        realdx = m_Image.height(); 
+        realdy = m_Image.width(); 
+    } else {
+        realdy = m_Image.height();
+        realdx = m_Image.width();
+    }
+
+    retval = QSize (realdx * scale, realdy * scale);
+    return retval;
 }

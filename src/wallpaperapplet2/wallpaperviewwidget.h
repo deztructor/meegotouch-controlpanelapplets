@@ -64,6 +64,7 @@ class WallpaperViewWidget : public DcpStylableWidget
             const QSize    &expectedSize,
             const QPointF  &offset,
             qreal           scale);
+        QSize imageVisualSize (qreal scale = 1.0);
 
     protected slots:
         virtual void initialize (QuillImage &image, QSize size);

@@ -109,7 +109,7 @@ protected:
 
     private:
         M_STYLABLE_WIDGET(WallpaperEditorWidgetStyle)
-        void setupPanningPhysics ();    
+        void setupPanningPhysics (bool movePh = false);
         void gestureWorkaround (QPointF *point);
         bool supportsLandscape () const;
         bool supportsPortrait () const;
