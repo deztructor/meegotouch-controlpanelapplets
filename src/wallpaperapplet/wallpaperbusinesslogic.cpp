@@ -60,6 +60,7 @@
 #include <MGConfItem>
 #include <MApplication>
 #include <MApplicationWindow>
+#include <QTimer>
 
 //#define LOTDEBUG
 #define DEBUG
@@ -904,13 +905,18 @@ WallpaperBusinessLogic::startWatchingFiles ()
 }
 
 void 
+WallpaperBusinessLogic::directoryChangedDelayed ()
+{
+    emit fileListChanged ();
+    startWatchingFiles ();
+}
+
+void 
 WallpaperBusinessLogic::directoryChanged (
         const QString &path)
 {
     SYS_DEBUG ("*** path = %s", SYS_STR(path));
-    emit fileListChanged ();
-    
-    startWatchingFiles ();
+    QTimer::singleShot (500, this, SLOT(directoryChangedDelayed()));
 }
 
 void 
