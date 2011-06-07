@@ -212,7 +212,12 @@ AboutBusinessLogic::productName ()
         return m_prodName;
 
     QSystemDeviceInfo sdi;
-    return sdi.productName ();
+    /*
+     * From now model should be used
+     * (as productName will returns the internal prod.name,
+     * eg.: RX-51 for Nokia N900)
+     */
+    return sdi.model ();
 }
 
 /*!
