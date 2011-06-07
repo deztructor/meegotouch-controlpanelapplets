@@ -26,6 +26,7 @@
 #include <QString>
 #include <QHash>
 #include <QSize>
+#include <QImage>
 
 #define SYS_SIZE(size) \
     SYS_STR((QString::number(size.width())+"x"+QString::number(size.height())))
@@ -34,6 +35,7 @@
     SYS_STR((QString::number(point.x())+", "+QString::number(point.y())))
 
 class QStringList;
+class WallpaperITrans;
 
 namespace Wallpaper 
 {
@@ -76,6 +78,10 @@ namespace Wallpaper
     bool smallerSize (
             const QSize &a,
             const QSize &b);
-
+#if 0
+    QImage rotate (
+            QImage                  &image,
+            const WallpaperITrans   &trans);
+#endif
 };
 #endif

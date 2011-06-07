@@ -84,6 +84,7 @@ class WallpaperViewWidget : public DcpStylableWidget
 
     private:
         //M_STYLABLE_WIDGET(WallpaperViewWidgetStyle)
+        QImage transformedImage ();
 
     private:
         bool                              m_PageRealized;

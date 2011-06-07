@@ -273,20 +273,15 @@ QPixmap
 WallpaperViewWidget::generatePixmap (
         const WallpaperITrans  &transformations)
 {
+    QImage    transformed = transformedImage();
     QPixmap   retval (transformations.expectedSize());
-    QPointF   offset (transformations.offset());
-    qreal     scale (transformations.scale());
-    qreal     rotation (transformations.rotation());
-    QRectF    area (offset.x(), offset.y(), 
-                    (scale * m_Image.width ()),
-                    (scale * m_Image.height ()));
     QPainter  painter (&retval);
+    QPointF   offset (
+            imageX() - transformed.width() / 2, 
+            imageY() - transformed.height() / 2);
 
     retval.fill (m_BgColor);
-
-    painter.translate (1.0, 1.0);
-    painter.rotate (rotation);
-    painter.drawImage (area, m_Image);
+    painter.drawImage (offset, transformed);
 
     return retval;
 }
@@ -403,9 +398,9 @@ WallpaperViewWidget::imageVisualSize (qreal scale)
     qreal realdx, realdy;
     QSize  retval;
 
-    #if 0
-    SYS_DEBUG ("*** rotation    = %g", rotation());
-    SYS_DEBUG ("*** scale       = %g", scale);
+    #if 1
+    SYS_DEBUG ("*** rotation    = %g", m_Trans.rotation());
+    SYS_DEBUG ("*** scale       = %g", m_Trans.scale());
     SYS_DEBUG ("*** initialized = %s", SYS_BOOL(m_Initialized));
     #endif
     if (m_Trans.rotation() == 90.0 || m_Trans.rotation() == -90.0) {
@@ -417,5 +412,37 @@ WallpaperViewWidget::imageVisualSize (qreal scale)
     }
 
     retval = QSize (realdx * scale, realdy * scale);
+    return retval;
+}
+
+QImage
+WallpaperViewWidget::transformedImage ()
+{
+    QSize  visualSize (imageVisualSize(m_Trans.scale()));
+    QImage retval (visualSize, QImage::Format_RGB16);
+    QPainter  painter (&retval);
+    QRectF rect;
+
+    retval.fill (QColor("#ffffff").rgb());
+    painter.translate(
+            retval.width() / 2, 
+            retval.height() / 2); 
+    painter.rotate(m_Trans.rotation());
+   
+    if (m_Trans.rotation() == 90.0 || m_Trans.rotation() == -90.0)
+        rect = QRectF (
+                -retval.height() / 2, 
+                -retval.width() / 2, 
+                visualSize.height(),
+                visualSize.width());
+    else
+        rect = QRectF (
+                -retval.width() / 2, 
+                -retval.height() / 2, 
+                visualSize.width(),
+                visualSize.height());
+
+
+    painter.drawImage (rect, m_Image);
     return retval;
 }
