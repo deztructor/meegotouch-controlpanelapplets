@@ -501,6 +501,7 @@ BatteryBusinessLogic::recalculateChargingInfo ()
 
     if(batteryState == MeeGo::QmBattery::StateFull)
     {
+        m_Charging = false;
         emit batteryFull();
         return;
     }
