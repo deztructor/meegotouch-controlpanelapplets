@@ -20,10 +20,12 @@ fi
 
 case "$1" in
     view)
+    	echo "view"
         gconftool-2 --recursive-list /desktop/meego/background
         ;;
 
     unset)
+    	echo "Unset"
         gconftool-2 --recursive-unset /desktop/meego/background
         ;;
 

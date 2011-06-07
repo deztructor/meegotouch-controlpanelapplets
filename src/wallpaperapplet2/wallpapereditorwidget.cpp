@@ -680,13 +680,11 @@ WallpaperEditorWidget::setupPanningPhysics (
     }
     
     if (geom.height() >= imagedy) {
-        SYS_DEBUG ("-> 1");
         top    = imageSize.height() / 2.0;
         //top    -= m_Trans.offset().y();
 
         height = geom.height() - imageSize.height();
     } else {
-        SYS_DEBUG ("-> 2");
         top     = geom.height() - imageSize.height() / 2.0;
         //top    -= m_Trans.offset().y();
 
@@ -694,13 +692,11 @@ WallpaperEditorWidget::setupPanningPhysics (
     }
 
     if (geom.width() >= imagedx) {
-        SYS_DEBUG ("-> 3");
         left    = imageSize.width() / 2.0;
         //left   -= m_Trans.offset().x();
 
         width = geom.width() - imageSize.width();
     } else {
-        SYS_DEBUG ("-> 4");
         left    = geom.width() - imageSize.width() / 2.0;
         //left   -= m_Trans.offset().x();
 
