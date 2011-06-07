@@ -61,9 +61,7 @@ class WallpaperViewWidget : public DcpStylableWidget
         virtual int imageDX () const;
         virtual int imageDY () const;
         virtual QPixmap generatePixmap (
-            const QSize    &expectedSize,
-            const QPointF  &offset,
-            qreal           scale);
+                const WallpaperITrans  &transformations);
         QSize imageVisualSize (qreal scale = 1.0);
 
     protected slots:

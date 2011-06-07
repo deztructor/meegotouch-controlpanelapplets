@@ -259,18 +259,9 @@ void
 WallpaperEditorWidget::saveImage ()
 {
     SYS_DEBUG ("");
-    WallpaperITrans   *ltrans, *ptrans;
-
-    m_Trans += m_UserOffset;
-    m_UserOffset = QPointF();
+ 
+    m_Trans.setOffset (m_UserOffset);
     
-
-    ltrans = m_Trans.orientation() == M::Landscape ?
-        &m_Trans : &m_LandscapeTrans;
-    ptrans = m_Trans.orientation() == M::Portrait ?
-        &m_Trans : &m_PortraitTrans;
-
-
     WallpaperViewWidget::saveImage ();
 }
 

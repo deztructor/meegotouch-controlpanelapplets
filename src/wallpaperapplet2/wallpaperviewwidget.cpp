@@ -68,13 +68,11 @@ void
 WallpaperViewWidget::saveImage ()
 {
     if (Wallpaper::supportEdit || m_Trans.expectedSize() != m_OriginalSize) {
-        SYS_WARNING ("The original size is not %dx%d",
-                m_Trans.expectedSize().width(), 
-                m_Trans.expectedSize().height());
-        QPixmap pixmap = generatePixmap (
-                m_Trans.expectedSize(),
-                m_Trans.offset(),
-                m_Trans.scale());
+        SYS_DEBUG ("*** expectedSize = %s", SYS_SIZE(m_Trans.expectedSize()));
+        SYS_DEBUG ("*** offset       = %s", SYS_POINTF(m_Trans.offset()));
+        SYS_DEBUG ("*** scale        = %g", m_Trans.scale());
+        SYS_DEBUG ("*** rotation     = %g", m_Trans.rotation());
+        QPixmap pixmap = generatePixmap (m_Trans);
 
         m_Saving = true;
         m_BusinessLogic->setWallpaper (pixmap);
@@ -273,17 +271,21 @@ WallpaperViewWidget::imageDY () const
 
 QPixmap
 WallpaperViewWidget::generatePixmap (
-        const QSize    &expectedSize,
-        const QPointF  &offset,
-        qreal           scale)
+        const WallpaperITrans  &transformations)
 {
-    QPixmap   retval (expectedSize);
-    QPainter  painter (&retval);
+    QPixmap   retval (transformations.expectedSize());
+    QPointF   offset (transformations.offset());
+    qreal     scale (transformations.scale());
+    qreal     rotation (transformations.rotation());
     QRectF    area (offset.x(), offset.y(), 
                     (scale * m_Image.width ()),
                     (scale * m_Image.height ()));
+    QPainter  painter (&retval);
 
     retval.fill (m_BgColor);
+
+    painter.translate (1.0, 1.0);
+    painter.rotate (rotation);
     painter.drawImage (area, m_Image);
 
     return retval;
