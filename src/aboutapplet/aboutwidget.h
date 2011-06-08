@@ -56,6 +56,7 @@ private:
 private slots:
     void gotInfo (AboutBusinessLogic::requestType type,
                   QVariant value);
+    void linkActivated ();
 
 private:
     QGraphicsGridLayout            *m_layout;

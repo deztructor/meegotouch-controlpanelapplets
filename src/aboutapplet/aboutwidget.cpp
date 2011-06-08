@@ -34,7 +34,11 @@
 
 #include "../styles.h"
 
-#undef DEBUG
+#ifdef HAVE_CONTENT_ACTION
+#include <contentaction.h>
+#endif
+
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -403,6 +407,9 @@ AboutWidget::addLicenseLabelContainer ()
     m_LicenseLabel->setObjectName ("AboutAppletLicenseLabel");
     m_LicenseLabel->setMinimumHeight (100.0);
 
+    connect (m_LicenseLabel, SIGNAL (linkActivated (const QString &)),
+             this, SLOT (linkActivated ()));
+
     addStretcher ("CommonLargeSpacer");
     addStretcher ("CommonHorizontalSeparatorInverted");
     addStretcher ("CommonLargeSpacer");
@@ -411,7 +418,6 @@ AboutWidget::addLicenseLabelContainer ()
      */
     m_layout->addItem (m_LicenseLabel, m_currentRow++, 0, 1, 2);
 }
-
 
 void
 AboutWidget::addStretcher (
@@ -424,5 +430,24 @@ AboutWidget::addStretcher (
     stretcher = new MSeparator;
     stretcher->setStyleName (styleName);
     m_layout->addItem (stretcher, m_currentRow++, 0, 1, 2);
+}
+
+void
+AboutWidget::linkActivated ()
+{
+#ifdef HAVE_CONTENT_ACTION
+    SYS_DEBUG ("");
+    QString link ("mailto:sourcecode.request@nokia.com");
+    ContentAction::Action action =
+        ContentAction::Action::defaultActionForScheme (link); 
+
+    SYS_DEBUG ("action.valid = %s", SYS_BOOL (action.isValid ()));
+    SYS_DEBUG ("action.name = %s", SYS_STR (action.name ()));
+
+    action.trigger ();
+#else
+    SYS_WARNING ("Build without contentaction, don't"
+                 " know how to open the link!");
+#endif
 }
 

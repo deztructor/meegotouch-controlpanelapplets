@@ -13,6 +13,10 @@ CONFIG += plugin \
 QT += dbus
 MOBILITY += systeminfo
 
+contains(DEFINES, HAVE_CONTENT_ACTION) {
+    PKGCONFIG += contentaction-0.1
+}
+
 LICENSE_FILENAME = license.txt
 LICENSE_DIR = /usr/share/duicontrolpanel-aboutapplet
 LICENSE_PATH = $$LICENSE_DIR/$$LICENSE_FILENAME
