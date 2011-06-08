@@ -72,6 +72,12 @@ WallpaperBusinessLogic::availableWallpapers () const
     return testList;
 }
 
+void 
+WallpaperBusinessLogic::directoryChangedDelayed ()
+{
+
+}
+
 void
 WallpaperBusinessLogic::setEditedImage (
     WallpaperDescriptor *desc,
