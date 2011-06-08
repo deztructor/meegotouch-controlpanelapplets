@@ -39,7 +39,7 @@ using namespace Wallpaper;
 //#include <QImage>
 //#include <QPainter>
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include <../debug.h>
 

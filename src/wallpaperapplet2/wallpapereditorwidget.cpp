@@ -548,7 +548,7 @@ WallpaperEditorWidget::pinchGestureUpdate (
     /*
      * 
      */
-    qreal scalex = -1.0 * pinchGesture->totalRotationAngle();
+    qreal scalex = -1.0 * pinchGesture->rotationAngle();
     qreal scaley =
         m_OriginalScaleFactor - 
         (pinchGesture->totalScaleFactor() * m_OriginalScaleFactor);
@@ -585,21 +585,29 @@ WallpaperEditorWidget::pinchGestureEvent (
 
     switch (pinchGesture->state()) {
         case Qt::GestureStarted:
+            SYS_DEBUG ("Qt::GestureStarted");
             m_PinchOngoing = true;
             pinchGestureStarted (event, pinchGesture);
             break;
 
         case Qt::GestureFinished:
+            SYS_DEBUG ("Qt::GestureFinished");
+            m_PinchOngoing = false;
+            break;
+
         case Qt::GestureCanceled:
+            SYS_DEBUG ("Qt::GestureCanceled");
             pinchGestureEnded (event, pinchGesture);
             m_PinchOngoing = false;
             break;
 
         case Qt::GestureUpdated:
+            SYS_DEBUG ("Qt::GestureUpdated");
             pinchGestureUpdate (event, pinchGesture);
             break;
 
         case Qt::NoGesture:
+            SYS_DEBUG ("Qt::NoGesture");
             SYS_WARNING ("I dont know what to do when Qt::NoGesture");
             break;
     }

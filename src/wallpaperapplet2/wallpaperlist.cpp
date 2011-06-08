@@ -202,6 +202,7 @@ void
 WallpaperList::slotItemClicked (
         const QModelIndex &index)
 {
+    SYS_WARNING ("--------->");
     QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
     WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
 
@@ -222,6 +223,7 @@ WallpaperList::loadPictures ()
 {
     SYS_DEBUG ("");
     //filtering()->proxy()->sort(Qt::DisplayRole);
+    SYS_WARNING ("--------->");
 
     /*
      * We used to get panningStopped() signals when we got hidden, so we will
@@ -236,6 +238,7 @@ WallpaperList::loadPictures ()
 void
 WallpaperList::stopLoadingPictures ()
 {
+    SYS_WARNING ("--------->");
     if (!m_Model)
         return;
 
