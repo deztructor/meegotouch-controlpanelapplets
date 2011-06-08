@@ -305,6 +305,16 @@ AboutBusinessLogic::DBusMessagingFailure (
 QString
 AboutBusinessLogic::licenseText ()
 {
+    QString localizedText;
+    localizedText = qtTrId ("qtn_prod_legal").arg (
+        "<a href=\"http://link\">sourcecode.request@nokia.com</a>");
+
+    /* Wow, we have it translated, then return it... */
+    if (localizedText.length () > qstrlen ("qtn_prod_legal"))
+    {
+        return localizedText;
+    }
+
     if (m_licenseFile.isEmpty ())
         return "";
 
@@ -332,7 +342,6 @@ AboutBusinessLogic::initializeAndStart ()
     QSettings content (configFile, QSettings::IniFormat);
 
     m_swName = content.value ("swname").toString ();
-    m_prodName = content.value ("prodname").toString ();
     m_certsImage = content.value ("swtypeimage").toString ();
     m_licenseFile =
         content.value ("abouttext", QString (LICENSE_PATH)).toString ();
@@ -345,14 +354,6 @@ AboutBusinessLogic::initializeAndStart ()
         QSettings certsContent (certConfigFile, QSettings::IniFormat);
         m_certsImage = content.value ("swtypeimage").toString ();
     }
-
-    SYS_DEBUG ("\nAbout applet configuration:\n"
-               "Product name        : %s\n"
-               "Software version    : %s\n"
-               "License file        : %s\n"
-               "Type approval img.  : %s\n",
-               SYS_STR (m_swName), SYS_STR (m_prodName),
-               SYS_STR (m_licenseFile), SYS_STR (m_certsImage));
 
     if ((! m_certsImage.isEmpty ()) &&
         (m_certsImage.at (0) != '/'))
