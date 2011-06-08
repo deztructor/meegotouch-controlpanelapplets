@@ -307,7 +307,8 @@ AboutBusinessLogic::licenseText ()
 {
     QString localizedText;
     localizedText = qtTrId ("qtn_prod_legal").arg (
-        "<a href=\"http://link\">sourcecode.request@nokia.com</a>");
+        "<a href=\"mailto:sourcecode.request@nokia.com\">"
+        "sourcecode.request@nokia.com</a>");
 
     /* Wow, we have it translated, then return it... */
     if (localizedText.length () > qstrlen ("qtn_prod_legal"))
