@@ -372,13 +372,9 @@ void
 WallpaperViewWidget::redrawImage ()
 {
     QSize   imageSize = imageVisualSize ();
-#if 1
     QPointF offset (
             imageX() - m_ImageWidget->size().width() / 2.0, 
             imageY() - m_ImageWidget->size().height() / 2.0);
-#else
-    QPointF offset (0, 0);
-#endif
 
     m_ImageWidget->setTransformOriginPoint(
             m_ImageWidget->size().width() / 2.0, 
@@ -398,7 +394,7 @@ WallpaperViewWidget::imageVisualSize (qreal scale)
     qreal realdx, realdy;
     QSize  retval;
 
-    #if 1
+    #if 0
     SYS_DEBUG ("*** rotation    = %g", m_Trans.rotation());
     SYS_DEBUG ("*** scale       = %g", m_Trans.scale());
     SYS_DEBUG ("*** initialized = %s", SYS_BOOL(m_Initialized));

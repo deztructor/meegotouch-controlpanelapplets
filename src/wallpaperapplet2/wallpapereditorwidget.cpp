@@ -174,8 +174,6 @@ void
 WallpaperEditorWidget::scalePhysicsPositionChanged(
         const QPointF    &position)
 {
-    SYS_DEBUG ("*** position = %s", SYS_POINTF(position));
-
     qreal scalefactor = position.y() / 100.0;
 
     if (scalefactor < 0.05)
@@ -216,9 +214,6 @@ WallpaperEditorWidget::scalePhysicsPanningStopped ()
         }
     }
 
-    SYS_DEBUG ("*** rotation = %g", rotation);
-    SYS_DEBUG ("*** rRotation = %g", rRotation);
-
     if (rotation != rRotation) {
         m_RotateAnimation.setTargetObject (m_ImageWidget);
         m_RotateAnimation.setPropertyName ("rotation");
@@ -228,9 +223,6 @@ WallpaperEditorWidget::scalePhysicsPanningStopped ()
         m_RotateAnimation.setDuration (500.0);
         m_RotateAnimation.start();
     }
-
-
-//    redrawImage ();
 }
 
 void
@@ -441,8 +433,6 @@ WallpaperEditorWidget::wheelEvent (
 {
     bool     ctrl = QApplication::keyboardModifiers() & Qt::ControlModifier;
     
-    SYS_DEBUG ("ctrl = %s", SYS_BOOL(ctrl));
-
     /*
      * We might auto-rotate. If we do we don't accept nothing.
      */

@@ -359,6 +359,7 @@ WallpaperModel::loadThumbnails (
     QList<QUrl>  uris;
     QStringList  requestedFiles;
     QStringList  mimeTypes;
+    int          start, end;
 
     #if 1
     SYS_DEBUG ("Between %d, %d - %d, %d", 
@@ -399,26 +400,44 @@ WallpaperModel::loadThumbnails (
         QModelIndex index = firstVisibleRow.model()->index(n, 0);
         QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
         WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
-        QUrl                url;
-        QString             mimeType;
 
-        requestedFiles << desc.filePath();
+        appendThumbnailRequest (uris, requestedFiles, mimeTypes, desc);
+    }
 
-        if (desc.hasThumbnail() || desc.thumbnailPending())
-            continue;
+    /*
+     * The forward thumbnails.
+     */
+    start = lastVisibleRow.row() + 1;
+    if (start > firstVisibleRow.model()->rowCount())
+        start = firstVisibleRow.model()->rowCount();
+    end   = start + Wallpaper::nForwardThumbnails;
+    if (end > firstVisibleRow.model()->rowCount())
+        end = firstVisibleRow.model()->rowCount();
 
-        url = desc.url();
-        mimeType = desc.mimeType();
+    for (int n = start; n < end; ++n) {
+        QModelIndex index = firstVisibleRow.model()->index(n, 0);
+        QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
+        WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
 
-        if (url.isValid() && !mimeType.isEmpty()) {
-            uris      << url;
-            mimeTypes << mimeType;
-            desc.setThumbnailPending ();
-        } else {
-            SYS_WARNING ("Unimplemented: [%d/%d] '%s'/'%s'", n, index.row(),
-                    SYS_STR(desc.filePath()),
-                    SYS_STR(mimeType));
-        }
+        appendThumbnailRequest (uris, requestedFiles, mimeTypes, desc);
+    }
+    
+    /*
+     * The backward thumbnails.
+     */
+    start = firstVisibleRow.row() - Wallpaper::nBackwardThumbnails;
+    if (start < 0)
+        start = 0;
+    end   = firstVisibleRow.row();
+    if (end < 0)
+        end = 0;
+
+    for (int n = start; n < end; ++n) {
+        QModelIndex index = firstVisibleRow.model()->index(n, 0);
+        QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
+        WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
+
+        appendThumbnailRequest (uris, requestedFiles, mimeTypes, desc);
     }
 
     /*
@@ -437,7 +456,8 @@ WallpaperModel::loadThumbnails (
      * the memory consumption grow as the user pans all around in the list. This
      * only has effect when the model contains a huge number ot items, though.
      */
-    if (m_ThumbnailMagicNumber % 10 == 0) {
+    if (m_ThumbnailMagicNumber % 10 == 0 &&
+            nThumbnails() > Wallpaper::maxThumbnails) {
         for (int n = 0; n < m_FilePathList.size(); ++n) {
             if (requestedFiles.contains(m_FilePathList[n]))
                 continue;
@@ -727,3 +747,54 @@ WallpaperModel::currentIndex ()
 
     return retval;
 }
+
+int
+WallpaperModel::nThumbnails () const
+{
+    int retval = 0;
+
+    foreach (QString path, m_FilePathList) {
+        WallpaperDescriptor desc = m_FilePathHash[path];
+
+        if (desc.hasThumbnail() || desc.thumbnailPending())
+            ++retval;
+    }
+
+    SYS_WARNING ("Returning %d", retval);
+    return retval;
+}
+
+bool
+WallpaperModel::appendThumbnailRequest (
+        QList<QUrl>          &uris,
+        QStringList          &requestedFiles,
+        QStringList          &mimeTypes,
+        WallpaperDescriptor  &desc)
+{
+    QUrl                url;
+    QString             mimeType;
+    bool                retval = true;
+
+    if (!requestedFiles.contains(desc.filePath()))
+        requestedFiles << desc.filePath();
+
+    if (desc.hasThumbnail() || desc.thumbnailPending())
+        goto finalize;
+
+    url = desc.url();
+    mimeType = desc.mimeType();
+
+    if (url.isValid() && !mimeType.isEmpty()) {
+        uris      << url;
+        mimeTypes << mimeType;
+        desc.setThumbnailPending ();
+    } else {
+        SYS_WARNING ("Dropping, not found?");
+        retval = false;
+    }
+
+finalize:
+        return retval;
+}
+
+

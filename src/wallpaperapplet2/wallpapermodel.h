@@ -124,6 +124,12 @@ class WallpaperModel: public QAbstractTableModel
         bool tryAddAndSelect (const QString filePath);
         bool selectByFilepath (const QString &filepath);
         void emitChangedSignal (int idx);
+        int  nThumbnails () const;
+        bool appendThumbnailRequest (
+                QList<QUrl>          &uris,
+                QStringList          &requestedFiles,
+                QStringList          &mimeTypes,
+                WallpaperDescriptor  &desc);
 
     private:
         WallpaperBusinessLogic                 *m_BusinessLogic;
