@@ -215,8 +215,8 @@ WallpaperModel::loadFromDirectory ()
      * files and create a storage of the files that are finished copying.
      */
     foreach (QString newPath, entries.keys()) {
-        SYS_WARNING ("%s", SYS_STR(newPath));
-        SYS_WARNING ("%lld ? %lld", m_PendingFiles[newPath], entries[newPath]);
+        //SYS_WARNING ("%s", SYS_STR(newPath));
+        //SYS_WARNING ("%lld ? %lld", m_PendingFiles[newPath], entries[newPath]);
 #if 0
         if (!Wallpaper::isInDir (m_ImagesDir, newPath)) {
             toAdd << newPath;
@@ -254,7 +254,7 @@ WallpaperModel::loadFromDirectory ()
         foreach (QString newPath, toAdd) {
             WallpaperDescriptor desc (newPath);
 
-            SYS_DEBUG ("Adding '%s'", SYS_STR(newPath));
+            //SYS_DEBUG ("Adding '%s'", SYS_STR(newPath));
             m_FilePathList << newPath;
             m_FilePathHash[newPath] = desc;
         }
@@ -263,9 +263,6 @@ WallpaperModel::loadFromDirectory ()
     }
 
     if (!m_PendingFiles.isEmpty()) {
-        SYS_WARNING ("We have %d pending files...", m_PendingFiles.size());
-        SYS_WARNING ("*** pending: %s", 
-                SYS_STR(QStringList(m_PendingFiles.keys()).join(";")));
         m_FileSystemTimer.start ();
     }
 }

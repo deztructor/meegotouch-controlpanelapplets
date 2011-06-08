@@ -592,6 +592,7 @@ WallpaperEditorWidget::pinchGestureEvent (
 
         case Qt::GestureFinished:
             SYS_DEBUG ("Qt::GestureFinished");
+            pinchGestureEnded (event, pinchGesture);
             m_PinchOngoing = false;
             break;
 

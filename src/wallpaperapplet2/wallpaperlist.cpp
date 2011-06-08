@@ -51,7 +51,8 @@ WallpaperList::WallpaperList (
     m_BusinessLogic (logic),
     m_Model (0),
     m_CellCreator (new WallpaperCellCreator),
-    m_DataSourceType (WallpaperList::DataSourceUnknown)
+    m_DataSourceType (WallpaperList::DataSourceUnknown),
+    m_Panning (false)
 {
     connect (this, SIGNAL(itemClicked(const QModelIndex &)),
             this, SLOT(slotItemClicked(const QModelIndex &)));
@@ -65,9 +66,9 @@ WallpaperList::WallpaperList (
      * doing the image loading so the panning will be smooth.
      */
     connect (this, SIGNAL(panningStarted()), 
-            this, SLOT(stopLoadingPictures()));
+            this, SLOT(slotPanningStarted()));
     connect (this, SIGNAL(panningStopped()), 
-            this, SLOT(loadPictures()));
+            this, SLOT(slotPanningStopped()));
     connect (m_BusinessLogic, SIGNAL(wallpaperChanged()), 
             this, SLOT(loadPictures()));
 
@@ -202,7 +203,10 @@ void
 WallpaperList::slotItemClicked (
         const QModelIndex &index)
 {
-    SYS_WARNING ("--------->");
+    SYS_WARNING ("---------> *** m_Panning = %s", SYS_BOOL(m_Panning));
+    if (m_Panning)
+        return;
+
     QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
     WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
 
@@ -221,9 +225,7 @@ WallpaperList::slotItemLongTapped (
 void 
 WallpaperList::loadPictures ()
 {
-    SYS_DEBUG ("");
     //filtering()->proxy()->sort(Qt::DisplayRole);
-    SYS_WARNING ("--------->");
 
     /*
      * We used to get panningStopped() signals when we got hidden, so we will
@@ -238,12 +240,28 @@ WallpaperList::loadPictures ()
 void
 WallpaperList::stopLoadingPictures ()
 {
-    SYS_WARNING ("--------->");
     if (!m_Model)
         return;
 
     m_Model->stopLoadingThumbnails ();
 }
+
+void 
+WallpaperList::slotPanningStarted ()
+{
+    SYS_WARNING ("--------->");
+    m_Panning = true;
+    stopLoadingPictures ();
+}
+
+void 
+WallpaperList::slotPanningStopped ()
+{
+    SYS_WARNING ("--------->");
+    m_Panning = false;
+    loadPictures ();
+}
+
 
 void 
 WallpaperList::orientationChangeEvent (
