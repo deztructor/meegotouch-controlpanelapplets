@@ -71,19 +71,19 @@ protected:
 
     virtual void pinchGestureEvent (
             QGestureEvent *event, 
-            QPinchGesture *gesture);
+            QPinchGesture *pinchGesture);
 
     virtual void pinchGestureStarted (
             QGestureEvent *event, 
-            QPinchGesture *gesture);
+            QPinchGesture *pinchGesture);
 
     virtual void pinchGestureUpdate (
             QGestureEvent *event, 
-            QPinchGesture *gesture);
+            QPinchGesture *pinchGesture);
     
     virtual void pinchGestureEnded (
             QGestureEvent *event, 
-            QPinchGesture *gesture);
+            QPinchGesture *pinchGesture);
 #endif
 
 

@@ -59,6 +59,10 @@ protected:
 
     private slots:
         void slotItemClicked (const QModelIndex &index);
+        void slotItemLongTapped (
+                const QModelIndex  &index, 
+                const QPointF      &point);
+
         void loadPictures ();
         void stopLoadingPictures ();
         

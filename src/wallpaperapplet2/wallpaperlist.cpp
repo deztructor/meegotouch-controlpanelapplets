@@ -55,6 +55,11 @@ WallpaperList::WallpaperList (
 {
     connect (this, SIGNAL(itemClicked(const QModelIndex &)),
             this, SLOT(slotItemClicked(const QModelIndex &)));
+#if 0
+    connect (
+        this, SIGNAL(itemLongTapped(const QModelIndex &, const QPointF &)),
+        this, SLOT(slotItemLongTapped(const QModelIndex &, const QPointF &)));
+#endif
     /*
      * When the panning stops we load thumbnail images, when it starts we stop
      * doing the image loading so the panning will be smooth.
@@ -202,6 +207,14 @@ WallpaperList::slotItemClicked (
 
     SYS_DEBUG ("*** filename = %s", SYS_STR(desc.filePath()));
     emit imageActivated(desc);
+}
+
+void 
+WallpaperList::slotItemLongTapped (
+        const QModelIndex  &index, 
+        const QPointF      &point)
+{
+    SYS_DEBUG ("");
 }
 
 void 

@@ -525,6 +525,7 @@ finalize:
     if (retval)
         selectByFilepath (filePath);
 
+    SYS_DEBUG ("Returning %s", SYS_BOOL(retval));
     return retval;
 }
 
@@ -566,6 +567,7 @@ finalize:
         selectByFilepath (filePath);
     }
 
+    SYS_DEBUG ("Returning %s", SYS_BOOL(retval));
     return retval;
 }
 

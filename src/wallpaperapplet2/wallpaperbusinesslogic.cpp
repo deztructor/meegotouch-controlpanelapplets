@@ -247,6 +247,13 @@ WallpaperBusinessLogic::workerThreadFinishedSave ()
         SYS_DEBUG ("*** original = %s", SYS_STR(origFile));
         SYS_DEBUG ("*** output   = %s", SYS_STR(outputFile));
 
+        /*
+         * If we save the same value the lockscreen will not recognize the
+         * change...
+         */
+        if (m_PPItem->value().toString() == outputFile)
+            m_PPItem->set ("");
+
         m_POItem->set (origFile);
         m_PPItem->set (outputFile);
     }

@@ -135,9 +135,9 @@ WallpaperViewWidget::initialize (
     m_Trans.setOffset (QPointF(xMarg, yMarg));
     this->setMinimumSize (m_Trans.expectedSize());
     
-    SYS_WARNING ("sceneSize = %dx%d", sceneSize.width(), sceneSize.height());
-    SYS_WARNING ("imageSize = %dx%d", m_Image.width(), m_Image.height());
-    SYS_WARNING ("offset    = %d, %d", xMarg, yMarg);
+    SYS_DEBUG ("sceneSize = %dx%d", sceneSize.width(), sceneSize.height());
+    SYS_DEBUG ("imageSize = %dx%d", m_Image.width(), m_Image.height());
+    SYS_DEBUG ("offset    = %d, %d", xMarg, yMarg);
 
     m_ImageWidget = new MImageWidget(&m_Image, this);
     //m_ImageWidget->setPos (m_Trans.offset());

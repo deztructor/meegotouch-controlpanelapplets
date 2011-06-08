@@ -78,7 +78,6 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_HasPendingRedraw (false),
     m_Physics (0)
 {
-    SYS_WARNING ("----------------------------------------------");
     MWindow *win = MApplication::activeWindow ();
 
     setObjectName ("WallpaperEditorWidget");
@@ -509,7 +508,7 @@ WallpaperEditorWidget::panGestureEvent (
 void 
 WallpaperEditorWidget::pinchGestureStarted (
         QGestureEvent *event, 
-        QPinchGesture *gesture)
+        QPinchGesture *pinchGesture)
 {
     SYS_DEBUG ("");
     /*
@@ -529,13 +528,13 @@ WallpaperEditorWidget::pinchGestureStarted (
 
     SYS_DEBUG ("m_ScalePhysics->pointerPress (0.0, %g)", startFrom);
     m_ScalePhysics->pointerPress(QPointF());
-    event->accept(gesture);
+    event->accept(pinchGesture);
 }
 
 void 
 WallpaperEditorWidget::pinchGestureUpdate (
             QGestureEvent *event, 
-            QPinchGesture *gesture)
+            QPinchGesture *pinchGesture)
 {
     SYS_DEBUG ("");
     if (m_PanOngoing) {
@@ -543,19 +542,21 @@ WallpaperEditorWidget::pinchGestureUpdate (
         m_PanOngoing = false;
         return;
     }
-    
+   
+    SYS_DEBUG ("*** rotationAngle      = %g", pinchGesture->rotationAngle());
+    SYS_DEBUG ("*** totalRotationAngle = %g", pinchGesture->totalRotationAngle());
     /*
      * 
      */
-    qreal scalex = -1.0 * gesture->rotationAngle();
+    qreal scalex = -1.0 * pinchGesture->totalRotationAngle();
     qreal scaley =
         m_OriginalScaleFactor - 
-        (gesture->totalScaleFactor() * m_OriginalScaleFactor);
+        (pinchGesture->totalScaleFactor() * m_OriginalScaleFactor);
     
     m_ScalePhysics->pointerMove(
             QPointF(scalex + rotationDelta, scaley * 100.0));
     
-    event->accept(gesture);
+    event->accept(pinchGesture);
 }
 
 void 
@@ -577,25 +578,25 @@ WallpaperEditorWidget::pinchGestureEnded (
 void 
 WallpaperEditorWidget::pinchGestureEvent (
             QGestureEvent *event, 
-            QPinchGesture *gesture)
+            QPinchGesture *pinchGesture)
 {
     SYS_DEBUG ("");
     Q_UNUSED (event);
 
-    switch (gesture->state()) {
+    switch (pinchGesture->state()) {
         case Qt::GestureStarted:
             m_PinchOngoing = true;
-            pinchGestureStarted (event, gesture);
+            pinchGestureStarted (event, pinchGesture);
             break;
 
         case Qt::GestureFinished:
         case Qt::GestureCanceled:
-            pinchGestureEnded (event, gesture);
+            pinchGestureEnded (event, pinchGesture);
             m_PinchOngoing = false;
             break;
 
         case Qt::GestureUpdated:
-            pinchGestureUpdate (event, gesture);
+            pinchGestureUpdate (event, pinchGesture);
             break;
 
         case Qt::NoGesture:

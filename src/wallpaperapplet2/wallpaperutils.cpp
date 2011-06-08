@@ -178,7 +178,7 @@ bool
 Wallpaper::imageFile (
             const QString     &filePath)
 {
-    bool retval = true;
+    bool retval = false;
 
     if (filePath.startsWith(QDir::separator())) {
         QFile   thisFile(filePath);
