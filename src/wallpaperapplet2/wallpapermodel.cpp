@@ -674,6 +674,7 @@ WallpaperModel::usbModeChanged (
 {
     SYS_DEBUG ("Usbmode = %s", SYS_STR(usbModeName(mode)));
     loadFromDirectory ();
+    ensureSelection ();
 }
 #endif
 
@@ -689,6 +690,8 @@ WallpaperModel::directoryChanged (
     if (!m_FileSystemTimer.isActive())
         m_FileSystemTimer.start ();
     //loadFromDirectory ();
+
+    // FIXME: ensureSelection() ?
 }
 
 void
