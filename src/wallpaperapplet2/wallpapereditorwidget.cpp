@@ -211,6 +211,10 @@ WallpaperEditorWidget::scalePhysicsPanningStopped ()
             break;
         }
     }
+    
+    if (rRotation == 360.0 || rRotation == -360.0) {
+        rRotation = 0.0;
+    }
 
     SYS_DEBUG ("*** we are at  : %g", rotation);
     SYS_DEBUG ("*** rounded to : %g", rRotation);
