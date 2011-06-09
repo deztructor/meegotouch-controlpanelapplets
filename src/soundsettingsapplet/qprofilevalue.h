@@ -4,7 +4,7 @@
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
-** This file is part of meegotouch-controlpanelsoundsettingsapplet.
+** This file is part of meegotouch-controlpanelapplets
 **
 ** If you have questions regarding the use of this file, please contact
 ** Nokia at directui@nokia.com.
@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #ifndef _Q_PROFILE_VALUE_H_
 #define _Q_PROFILE_VALUE_H_
 
@@ -24,7 +23,6 @@
 #include <QFileSystemWatcher>
 #include <QString>
 #include <meegocontrolexport.h>
-
 #include "qtrackedvariant.h"
 
 /*!
@@ -34,26 +32,27 @@
  */
 class MC_EXPORT QProfileValue : public QTrackedVariant
 {
-   	Q_OBJECT
+Q_OBJECT
 
 public:
-    QProfileValue(const QString &key, bool setAllProfiles = false);
-    ~QProfileValue();
+    QProfileValue (const QString &key, bool setAllProfiles = false);
+    ~QProfileValue ();
 
     /*!
      * Enum for handling the different range-types
      */
-    enum RangeType {
+    enum RangeType
+    {
         Interval,
         List,
         Invalid
     };
 
-    QList<QVariant> possibleValues(RangeType *p_rangeType = NULL);
+    QList<QVariant> possibleValues (RangeType *p_rangeType = NULL);
 
 protected:
-    virtual void fetchFromBackend();
-    virtual void realSetValue(const QVariant &newValue);
+    virtual void fetchFromBackend ();
+    virtual void realSetValue (const QVariant &newValue);
     virtual bool stopWatchFiles ();
     virtual bool startWatchFile (const QString &filename);
 
@@ -68,9 +67,9 @@ private:
             const char *val, 
             const char *type, 
             QProfileValue *self);
-    void addNotify();
-    void delNotify();
-    QStringList getType(QString &theKey, QString &theProfile);
+    void addNotify ();
+    void delNotify ();
+    QStringList getType (QString &theKey, QString &theProfile);
 
 private:
     bool                         m_setAllProfiles;
@@ -82,4 +81,4 @@ private:
 #endif
 };
 
-#endif /* !_Q_PROFILE_VALUE_H_ */
+#endif
