@@ -1,3 +1,9 @@
+meegotouch-controlpanelapplets (0.20.53~1) meegotouch; urgency=low
+
+  * [NEW VERSION]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 09 Jun 2011 12:02:35 +0200
+
 meegotouch-controlpanelapplets (0.20.52-1) meegotouch; urgency=low
 
   * AboutApplet: Handle properly the hyperlink in the license text
