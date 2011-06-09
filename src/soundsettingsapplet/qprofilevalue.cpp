@@ -26,7 +26,7 @@
 
 #include "qprofilevalue.h"
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -49,7 +49,7 @@ QProfileValue::QProfileValue(
     m_setAllProfiles (setAllProfiles),
     m_MissingFile (false)
 {
-    SYS_DEBUG ("*** key = %s", SYS_STR (key));
+    SYS_WARNING ("*** key = %s", SYS_STR (key));
     addNotify ();
 }
 
@@ -245,13 +245,14 @@ QProfileValue::realSetValue (const QVariant &newValue)
          * Alert Tone should be the same for all profiles...
          * Fixes: NB#258344
          */
-        bool isAlertTone = key ().contains ("alert.tone");
+        bool isAlertTone = theKey.contains ("alert.tone");
 
         char **profiles = profile_get_profiles ();
         if (profiles)
         {
             for (int i = 0 ; profiles[i] != NULL ; i++)
             {
+                SYS_WARNING ("profile = %s", profiles[i]);
                 if (theProfile == QString (profiles[i]))
                     continue; // the current one already set...
 
@@ -264,7 +265,8 @@ QProfileValue::realSetValue (const QVariant &newValue)
                      theProfile == QString ("silent")))
                      continue;
 
-                QProfileValue (key () + "@" + QString (profiles[i]), false).set (newValue);
+                QProfileValue other (theKey + "@" + QString (profiles[i]), false);
+                other.set (newValue);
             }
             profile_free_profiles (profiles);
         }

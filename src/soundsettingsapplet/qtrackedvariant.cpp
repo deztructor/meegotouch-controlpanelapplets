@@ -64,7 +64,7 @@ void
 QTrackedVariant::set (
         const QVariant &newValue)
 {
-	realSetValue (newValue);
+    realSetValue (newValue);
 }
 
 /*!

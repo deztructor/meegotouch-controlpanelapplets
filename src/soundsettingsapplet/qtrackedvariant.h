@@ -46,7 +46,7 @@ public:
 	QTrackedVariant (const QString &key);
     ~QTrackedVariant ();
 
-	void set(const QVariant &newValue);
+	void set (const QVariant &newValue);
 	QVariant value();
 
 	QString key() const;
@@ -60,9 +60,9 @@ Q_SIGNALS:
 	void changed();
 
 protected:
-	virtual void emit_changed();
-	virtual void realSetValue(const QVariant &newValue);
-	virtual void fetchFromBackend();
+	virtual void emit_changed ();
+	virtual void realSetValue (const QVariant &newValue);
+	virtual void fetchFromBackend ();
 
     /*!
      * The tracked variant object
