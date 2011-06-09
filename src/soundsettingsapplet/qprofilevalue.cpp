@@ -43,7 +43,7 @@ int QProfileValue::nTrackedValues = 0;
  * will not be changed for the full lifetime of the object.
  */
 QProfileValue::QProfileValue(
-        const QString  &key, 
+        const QString  &key,
         bool            setAllProfiles) :
     QTrackedVariant (key),
     m_setAllProfiles (setAllProfiles),
@@ -66,10 +66,10 @@ QProfileValue::~QProfileValue ()
  */
 void
 QProfileValue::notifyValue (
-        const char      *profile, 
-        const char      *key, 
-        const char      *val, 
-        const char      *type, 
+        const char      *profile,
+        const char      *key,
+        const char      *val,
+        const char      *type,
         QProfileValue   *self)
 {
     QString compareString;
@@ -256,7 +256,7 @@ QProfileValue::realSetValue (const QVariant &newValue)
                     continue; // the current one already set...
 
                 /*
-                 * Do not set meeting and silent values if it is 
+                 * Do not set meeting and silent values if it is
                  * not about the alert tone...
                  */
                 if (isAlertTone ||
@@ -293,11 +293,11 @@ QProfileValue::fetchFromBackend ()
         bool  needReread;
 
         filename = profile_get_value (
-                theProfile.isNull() ? NULL : TO_STRING(theProfile), 
+                theProfile.isNull() ? NULL : TO_STRING(theProfile),
                 TO_STRING(theKey));
         needReread = startWatchFile (QString::fromUtf8(filename));
         SYS_DEBUG ("*** needReread = %s", SYS_BOOL(needReread));
-        
+
         if (needReread && !m_MissingFile) {
             SYS_DEBUG ("Need re-read, was not missing before: %s",
                     filename);
@@ -313,27 +313,27 @@ QProfileValue::fetchFromBackend ()
         }
 
         var = QVariant(QString::fromUtf8(filename));
-        free(filename); 
+        free(filename);
     }
     else if ("STRING" == lsType[0])
     {
         char *the_value = profile_get_value (
-                theProfile.isNull() ? NULL : TO_STRING(theProfile), 
+                theProfile.isNull() ? NULL : TO_STRING(theProfile),
                 TO_STRING(theKey));
 
         var = QVariant(QString::fromUtf8(the_value));
-        free(the_value); 
+        free(the_value);
     }
     else if ("BOOLEAN" == lsType[0])
     {
         var = QVariant((bool)profile_get_value_as_bool(
-                theProfile.isNull() ? NULL : TO_STRING(theProfile), 
+                theProfile.isNull() ? NULL : TO_STRING(theProfile),
                 TO_STRING(theKey)));
     }
     else if ("INTEGER" == lsType[0])
     {
         var = QVariant((int)profile_get_value_as_int(
-                theProfile.isNull() ? NULL : TO_STRING(theProfile), 
+                theProfile.isNull() ? NULL : TO_STRING(theProfile),
                 TO_STRING(theKey)));
     }
 
@@ -347,7 +347,7 @@ QProfileValue::fetchFromBackend ()
  */
 QStringList
 QProfileValue::getType (
-        QString &theKey, 
+        QString &theKey,
         QString &theProfile)
 {
     QStringList    lsType;
@@ -378,7 +378,7 @@ QProfileValue::getType (
     SYS_DEBUG ("*** %s = %s", SYS_STR(theKey), the_type);
 
     lsType = QString(the_type).split(' ');
-    free(the_type); 
+    free(the_type);
     the_type = NULL;
 #endif
 
@@ -405,13 +405,13 @@ QProfileValue::possibleValues(RangeType *p_rangeType)
     SYS_DEBUG ("*** p_rangeType = %p");
     SYS_DEBUG ("*** lsType[0]   = %s", SYS_STR(lsType[0]));
 
-    if (p_rangeType) 
+    if (p_rangeType)
         *p_rangeType = Invalid;
 
-    if ("SOUNDFILE" == lsType[0] || 
+    if ("SOUNDFILE" == lsType[0] ||
         "STRING"    == lsType[0]) {
 
-    if (p_rangeType) 
+    if (p_rangeType)
         *p_rangeType = List;
 
         for (int i = 1; i < lsType.size () ; i++)
@@ -461,7 +461,7 @@ QProfileValue::fileChanged (
 {
     QFile thisFile (filename);
     bool  exists = thisFile.exists (filename);
-    
+
     SYS_DEBUG ("*** key()  = '%s'", SYS_STR(key()));
     SYS_DEBUG ("*** path   = %s", SYS_STR(filename));
     SYS_DEBUG ("*** exists = %s", SYS_BOOL(exists));
@@ -502,7 +502,7 @@ QProfileValue::stopWatchFiles ()
  * every event has its own unique default file name that can be retrieved only
  * when the value set to "".
  */
-bool 
+bool
 QProfileValue::startWatchFile (
         const QString &filename)
 {
@@ -511,12 +511,12 @@ QProfileValue::startWatchFile (
 
     SYS_DEBUG ("filename = %s", SYS_STR(filename));
     SYS_DEBUG ("exists   = %s", SYS_BOOL(exists));
-   
+
     /*
      * We stop watching if we did before.
      */
     stopWatchFiles ();
-    
+
     /*
      * If the file does not exists to begin with we don't need to watch. We will
      * return true, that means the file name must be fixed.
@@ -524,7 +524,7 @@ QProfileValue::startWatchFile (
     if (!exists) {
         goto finalize;
     }
-    
+
     m_FileWatcher = new QFileSystemWatcher (this);
     m_FileWatcher->addPath (filename);
     connect (m_FileWatcher, SIGNAL (fileChanged (const QString &)),
