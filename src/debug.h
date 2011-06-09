@@ -32,6 +32,14 @@
 //#  undef DEBUG
 //#endif
 
+#if defined(__ARMEL__) && !defined(DEBUG_TO_FILE)
+//#if !defined(DEBUG_TO_FILE)
+#  define DEBUG_TO_FILE
+#  ifndef DEBUG_SUPPRESS_COLOR
+#    define DEBUG_SUPPRESS_COLOR
+#  endif
+#endif
+
 /*
  * In production releases, we have to disable all the debug messages
  */

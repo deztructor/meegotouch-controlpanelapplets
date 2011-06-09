@@ -609,20 +609,6 @@ WallpaperEditorWidget::gestureWorkaround (
     }
 }
 
-bool
-WallpaperEditorWidget::supportsLandscape () const
-{
-    SYS_DEBUG ("");
-    return !m_OrientationLocked || m_Orientation == M::Landscape;
-}
-
-bool
-WallpaperEditorWidget::supportsPortrait () const
-{
-    SYS_DEBUG ("");
-    return !m_OrientationLocked || m_Orientation == M::Portrait;
-}
-
 void 
 WallpaperEditorWidget::setupPanningPhysics (
         bool movePh)

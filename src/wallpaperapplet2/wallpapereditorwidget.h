@@ -59,34 +59,29 @@ public:
     virtual bool back ();
     virtual void saveImage ();
 
-protected:
+    protected:
+        virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
+        virtual void wheelEvent (QGraphicsSceneWheelEvent *event);
 
-#ifndef NO_EDITING
-    virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
-    virtual void wheelEvent (QGraphicsSceneWheelEvent *event);
+        void panGestureEvent (
+                QGestureEvent *event, 
+                QPanGesture   *panGesture);
 
-    void panGestureEvent (
-            QGestureEvent *event, 
-            QPanGesture   *panGesture);
+        virtual void pinchGestureEvent (
+                QGestureEvent *event, 
+                QPinchGesture *pinchGesture);
 
-    virtual void pinchGestureEvent (
-            QGestureEvent *event, 
-            QPinchGesture *pinchGesture);
+        virtual void pinchGestureStarted (
+                QGestureEvent *event, 
+                QPinchGesture *pinchGesture);
 
-    virtual void pinchGestureStarted (
-            QGestureEvent *event, 
-            QPinchGesture *pinchGesture);
-
-    virtual void pinchGestureUpdate (
-            QGestureEvent *event, 
-            QPinchGesture *pinchGesture);
+        virtual void pinchGestureUpdate (
+                QGestureEvent *event, 
+                QPinchGesture *pinchGesture);
     
-    virtual void pinchGestureEnded (
-            QGestureEvent *event, 
-            QPinchGesture *pinchGesture);
-#endif
-
-
+        virtual void pinchGestureEnded (
+                QGestureEvent *event, 
+                QPinchGesture *pinchGesture);
     
     protected slots:
         virtual void initialize (QuillImage &image, QSize size);
@@ -110,17 +105,11 @@ protected:
         M_STYLABLE_WIDGET(WallpaperEditorWidgetStyle)
         void setupPanningPhysics (bool movePh = false);
         void gestureWorkaround (QPointF *point);
-        bool supportsLandscape () const;
-        bool supportsPortrait () const;
  
     private:
-        QImage                m_bgLandscape;
-        QImage                m_bgPortrait;
-
         bool                  m_OrientationLocked;
         M::Orientation        m_Orientation;
 
-        QPointF               m_LastClick;
         QPointF               m_UserOffset;
 
         qreal                 m_OriginalScaleFactor;
