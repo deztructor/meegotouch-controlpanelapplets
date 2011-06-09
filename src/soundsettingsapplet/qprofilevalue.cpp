@@ -49,16 +49,16 @@ QProfileValue::QProfileValue(
     m_setAllProfiles (setAllProfiles),
     m_MissingFile (false)
 {
-    SYS_DEBUG ("*** key = %s", SYS_STR(key));
-    addNotify();
+    SYS_DEBUG ("*** key = %s", SYS_STR (key));
+    addNotify ();
 }
 
 /*!
  * QProfileValue destructor
  */
-QProfileValue::~QProfileValue()
+QProfileValue::~QProfileValue ()
 {
-    delNotify();
+    delNotify ();
 }
 
 /*!
@@ -76,19 +76,21 @@ QProfileValue::notifyValue (
     Q_UNUSED(val)
     Q_UNUSED(type)
 
-    if (self->key().contains('@'))
-        compareString = self->key();
-    else {
+    if (self->key ().contains('@'))
+        compareString = self->key ();
+    else
+    {
 #ifdef HAVE_LIBPROFILE
-        char *currentProfile = profile_get_profile();
-        compareString = self->key() + "@" + currentProfile;
-        free(currentProfile);
+        char *currentProfile = profile_get_profile ();
+        compareString = self->key () + "@" + currentProfile;
+        free (currentProfile);
 #endif
     }
 
-    if (compareString == (QString(key) + "@" + profile)) {
-        self->m_val.clear();
-        self->emit_changed();
+    if (compareString == (QString (key) + "@" + profile))
+    {
+        self->m_val.clear ();
+        self->emit_changed ();
     }
 }
 
@@ -100,11 +102,13 @@ QProfileValue::addNotify()
 {
 #ifdef HAVE_LIBPROFILE
     if (0 == nTrackedValues)
-        profile_tracker_init();
+        profile_tracker_init ();
     nTrackedValues++;
 
-    profile_track_add_active_cb((profile_track_value_fn_data)notifyValue, this, NULL);
-    profile_track_add_change_cb((profile_track_value_fn_data)notifyValue, this, NULL);
+    profile_track_add_active_cb (
+        (profile_track_value_fn_data) notifyValue, this, NULL);
+    profile_track_add_change_cb (
+        (profile_track_value_fn_data) notifyValue, this, NULL);
 #endif
 }
 
@@ -112,15 +116,17 @@ QProfileValue::addNotify()
  * A method for remove notifications from profiled
  */
 void
-QProfileValue::delNotify()
+QProfileValue::delNotify ()
 {
 #ifdef HAVE_LIBPROFILE
-    profile_track_remove_active_cb((profile_track_value_fn_data)notifyValue, this);
-    profile_track_remove_change_cb((profile_track_value_fn_data)notifyValue, this);
+    profile_track_remove_active_cb (
+        (profile_track_value_fn_data) notifyValue, this);
+    profile_track_remove_change_cb (
+        (profile_track_value_fn_data) notifyValue, this);
 
     nTrackedValues--;
     if (0 == nTrackedValues)
-        profile_tracker_quit();
+        profile_tracker_quit ();
 #endif
 }
 
@@ -130,26 +136,26 @@ QProfileValue::delNotify()
  * \param newValue the new value
  */
 void
-QProfileValue::realSetValue(
-        const QVariant &newValue)
+QProfileValue::realSetValue (const QVariant &newValue)
 {
     SYS_WARNING ("**************************************************");
     /*
-     * Not doing anything if the value is the same. 
+     * Not doing anything if the value is the same.
      */
     if (m_val == newValue)
         return;
 
-    m_val.clear();
+    m_val.clear ();
 
     /*
      * The empty key shows that this value is handled manually by the caller.
      * This special case is used for custom settings.
      */
-    SYS_DEBUG ("*** key() = %s", SYS_STR(key()));
-    if (key() == "custom.alert.tone") {
+    SYS_DEBUG ("*** key() = %s", SYS_STR (key ()));
+    if (key () == "custom.alert.tone")
+    {
         SYS_DEBUG ("The key is 'custom.alert.tone', not in backend.");
-        SYS_DEBUG ("*** Storing '%s'", SYS_STR(newValue.toString()));
+        SYS_DEBUG ("*** Storing '%s'", SYS_STR (newValue.toString ()));
         m_val = newValue;
         emit_changed ();
         return;
@@ -159,52 +165,78 @@ QProfileValue::realSetValue(
     QVariant convertedValue = newValue;
     QVariant::Type neededType = QVariant::Invalid;
     QString theKey, theProfile;
-        QStringList lsType = getType(theKey, theProfile);
+    QStringList lsType = getType (theKey, theProfile);
 
-    char *currentProfile = profile_get_profile();
-    if (theProfile.isNull())
-        theProfile = QString(currentProfile);
-    free(currentProfile);
+    char *currentProfile = profile_get_profile ();
+    if (theProfile.isNull ())
+        theProfile = QString (currentProfile);
+    free (currentProfile);
 
     /*
      *
      */
     stopWatchFiles ();
 
-    SYS_DEBUG ("*** lsType[0] = %s", SYS_STR(lsType[0]));
-    if ("SOUNDFILE" == lsType[0]) {
-        QString filename;
-        
-        filename = newValue.toString();
-    SYS_DEBUG ("*** filename  = %s", SYS_STR(filename));
-        if (!filename.isEmpty()) {
+    SYS_DEBUG ("*** lsType[0] = %s", SYS_STR (lsType[0]));
+    if ("SOUNDFILE" == lsType[0])
+    {
+        QString filename = newValue.toString ();
+        SYS_DEBUG ("*** filename  = %s", SYS_STR (filename));
+
+        if (!filename.isEmpty ())
+        {
             bool missing;
-            missing = startWatchFile (newValue.toString());
-            SYS_DEBUG ("*** missing = %s", SYS_BOOL(missing));
+            missing = startWatchFile (filename);
+            SYS_DEBUG ("*** missing = %s", SYS_BOOL (missing));
         }
+        neededType = QVariant::String;
 
+    }
+    else if ("STRING" == lsType[0])
+    {
         neededType = QVariant::String;
-    } else if ("STRING" == lsType[0])
-        neededType = QVariant::String;
+    }
     else if ("INTEGER" == lsType[0])
+    {
         neededType = QVariant::Int;
+    }
     else if ("BOOLEAN" == lsType[0])
+    {
         neededType = QVariant::Bool;
+    }
     else if ("DOUBLE" == lsType[0])
+    {
         neededType = QVariant::Double;
+    }
 
-    if (neededType != QVariant::Invalid && convertedValue.convert(neededType)) {
-        if (QVariant::Bool == neededType)
-            profile_set_value_as_bool(theProfile.toUtf8().constData(), theKey.toUtf8().constData(), (int)convertedValue.toBool());
-        else
-        if (QVariant::Int == neededType) {
-            profile_set_value_as_int(TO_STRING(theProfile), TO_STRING(theKey), (int)convertedValue.toInt());
-        } else
-        if (QVariant::Double == neededType)
-            profile_set_value_as_double(theProfile.toUtf8().constData(), theKey.toUtf8().constData(), (double)convertedValue.toDouble());
-        else
-        if (QVariant::String == neededType)
-            profile_set_value(theProfile.toUtf8().constData(), theKey.toUtf8().constData(), (char *)convertedValue.toString().toUtf8().constData());
+    if (neededType != QVariant::Invalid &&
+        convertedValue.convert (neededType))
+    {
+        switch (neededType)
+        {
+            case QVariant::Bool:
+                profile_set_value_as_bool (
+                    TO_STRING (theProfile), TO_STRING (theKey),
+                    (int) convertedValue.toBool ());
+                break;
+            case QVariant::Int:
+                profile_set_value_as_int (
+                    TO_STRING (theProfile), TO_STRING (theKey),
+                    (int) convertedValue.toInt ());
+                break;
+            case QVariant::Double:
+                profile_set_value_as_double (
+                    TO_STRING (theProfile), TO_STIRNG (theKey),
+                    (double) convertedValue.toDouble ());
+                break;
+            case QVariant::String:
+                profile_set_value (
+                    TO_STRING (theProfile), TO_STRING (theKey),
+                    (char *) TO_STRING (convertedValue.toString ()));
+                break;
+            default:
+                break;
+        }
     }
 
     if (m_setAllProfiles)
@@ -218,7 +250,7 @@ QProfileValue::realSetValue(
                     theProfile != QString ("meeting") &&
                     theProfile != QString ("silent"))
                     QProfileValue (key () + "@" + QString (profiles[i]), false).set (newValue);
-            profile_free_profiles(profiles);
+            profile_free_profiles (profiles);
         }
     }
 #endif
@@ -228,9 +260,8 @@ QProfileValue::realSetValue(
  * Method for fetching the backend (profiled) current values
  */
 void
-QProfileValue::fetchFromBackend()
+QProfileValue::fetchFromBackend ()
 {
-
 #ifdef HAVE_LIBPROFILE
     QString      theKey, theProfile;
     QStringList  lsType = getType(theKey, theProfile);
@@ -242,7 +273,8 @@ QProfileValue::fetchFromBackend()
     if (theKey == "custom.alert.tone")
         return;
 
-    if ("SOUNDFILE" == lsType[0]) {
+    if ("SOUNDFILE" == lsType[0])
+    {
         char *filename;
         bool  needReread;
 
@@ -268,18 +300,24 @@ QProfileValue::fetchFromBackend()
 
         var = QVariant(QString::fromUtf8(filename));
         free(filename); 
-    } else if ("STRING" == lsType[0]) {
+    }
+    else if ("STRING" == lsType[0])
+    {
         char *the_value = profile_get_value (
                 theProfile.isNull() ? NULL : TO_STRING(theProfile), 
                 TO_STRING(theKey));
 
         var = QVariant(QString::fromUtf8(the_value));
         free(the_value); 
-    } else if ("BOOLEAN" == lsType[0]) {
+    }
+    else if ("BOOLEAN" == lsType[0])
+    {
         var = QVariant((bool)profile_get_value_as_bool(
                 theProfile.isNull() ? NULL : TO_STRING(theProfile), 
                 TO_STRING(theKey)));
-    } else if ("INTEGER" == lsType[0]) {
+    }
+    else if ("INTEGER" == lsType[0])
+    {
         var = QVariant((int)profile_get_value_as_int(
                 theProfile.isNull() ? NULL : TO_STRING(theProfile), 
                 TO_STRING(theKey)));
@@ -427,7 +465,9 @@ bool
 QProfileValue::stopWatchFiles ()
 {
     SYS_DEBUG ("");
-    if (m_FileWatcher) {
+
+    if (m_FileWatcher)
+    {
         delete m_FileWatcher;
         return true;
     }
@@ -473,8 +513,8 @@ QProfileValue::startWatchFile (
     
     m_FileWatcher = new QFileSystemWatcher (this);
     m_FileWatcher->addPath (filename);
-    connect (m_FileWatcher, SIGNAL(fileChanged(const QString &)),
-            this, SLOT(fileChanged(const QString &)));
+    connect (m_FileWatcher, SIGNAL (fileChanged (const QString &)),
+             SLOT (fileChanged (const QString &)));
 
 finalize:
     SYS_DEBUG ("returning %s", SYS_BOOL(!exists));
