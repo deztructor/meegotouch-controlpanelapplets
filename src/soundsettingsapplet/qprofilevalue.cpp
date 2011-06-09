@@ -259,9 +259,11 @@ QProfileValue::realSetValue (const QVariant &newValue)
                  * Do not set meeting and silent values if it is
                  * not about the alert tone...
                  */
-                if (isAlertTone ||
-                    (theProfile != QString ("meeting") &&
-                     theProfile != QString ("silent")))
+                if ((! isAlertTone) &&
+                    (theProfile == QString ("meeting") ||
+                     theProfile == QString ("silent")))
+                     continue;
+
                 QProfileValue (key () + "@" + QString (profiles[i]), false).set (newValue);
             }
             profile_free_profiles (profiles);
