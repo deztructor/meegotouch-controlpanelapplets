@@ -96,7 +96,6 @@ protected:
 
     private slots:
     void queueRedrawImage ();
-    void orientationChanged (M::Orientation orientation);
     void panningPhysicsPositionChanged (const QPointF &position);
     void panningPhysicsPanningStopped ();
     void scalePhysicsPositionChanged(const QPointF &position);
@@ -114,27 +113,22 @@ protected:
         bool supportsLandscape () const;
         bool supportsPortrait () const;
  
-private:
-    QImage                m_bgLandscape;
-    QImage                m_bgPortrait;
+    private:
+        QImage                m_bgLandscape;
+        QImage                m_bgPortrait;
 
-    bool                  m_NoTitlebar;
-    bool                  m_OrientationLocked;
-    M::Orientation        m_Orientation;
+        bool                  m_OrientationLocked;
+        M::Orientation        m_Orientation;
 
-    QPointF               m_LastClick;
-    QPointF               m_UserOffset;
-    QPointF               m_ImageFixpoint;
+        QPointF               m_LastClick;
+        QPointF               m_UserOffset;
 
-    WallpaperITrans       m_LandscapeTrans;
-    WallpaperITrans       m_PortraitTrans;
-    
-    qreal                 m_OriginalScaleFactor;
-    bool                  m_PinchOngoing;
-    bool                  m_PanOngoing;
-    bool                  m_HasPendingRedraw;
-    MPhysics2DPanning    *m_Physics;
-    MPhysics2DPanning    *m_ScalePhysics;
+        qreal                 m_OriginalScaleFactor;
+        bool                  m_PinchOngoing;
+        bool                  m_PanOngoing;
+        bool                  m_HasPendingRedraw;
+        MPhysics2DPanning    *m_Physics;
+        MPhysics2DPanning    *m_ScalePhysics;
         QPropertyAnimation    m_RotateAnimation;
 };
 

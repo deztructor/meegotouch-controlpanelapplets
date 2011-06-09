@@ -195,7 +195,10 @@ WallpaperWidget::slotEditWallpaper (
     if (Wallpaper::useSheets) {
         WallpaperEditorSheet  *sheet;
         sheet = new WallpaperEditorSheet (m_BusinessLogic);
-        sheet->appear(scene(), MSceneWindow::DestroyWhenDone);
+        if (Wallpaper::useFullScreen)
+            sheet->appearSystemwide(MSceneWindow::DestroyWhenDone);
+        else
+            sheet->appear(scene(), MSceneWindow::DestroyWhenDone);
     } else {
         SYS_DEBUG ("emit changeWidget (1);");
         emit changeWidget (1);

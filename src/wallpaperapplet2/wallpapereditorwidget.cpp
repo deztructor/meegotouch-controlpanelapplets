@@ -71,7 +71,6 @@ WallpaperEditorWidget::WallpaperEditorWidget (
         WallpaperBusinessLogic *wallpaperBusinessLogic, 
         QGraphicsWidget        *parent) :
     WallpaperViewWidget (wallpaperBusinessLogic, parent),
-    m_NoTitlebar (false),
     m_OrientationLocked (false),
     m_PinchOngoing (false),
     m_PanOngoing (false),
@@ -213,7 +212,11 @@ WallpaperEditorWidget::scalePhysicsPanningStopped ()
         }
     }
 
+    SYS_DEBUG ("*** we are at  : %g", rotation);
+    SYS_DEBUG ("*** rounded to : %g", rRotation);
+
     if (rotation != rRotation) {
+        SYS_DEBUG ("NEED TO ANIMATE");
         m_RotateAnimation.setTargetObject (m_ImageWidget);
         m_RotateAnimation.setPropertyName ("rotation");
         m_RotateAnimation.setEasingCurve(QEasingCurve::InOutCubic);
@@ -237,6 +240,12 @@ WallpaperEditorWidget::rotateAnimationFinished ()
     }
 
     m_Trans.setRotation(rotation);
+
+    QPointF position;
+    position =  m_ScalePhysics->position ();
+    SYS_DEBUG ("m_ScalePhysics->position() = %g, %g", position.x(), position.y());
+    SYS_DEBUG ("m_ScalePhysics->setPosition(%g, %g)",
+            rotation + rotationDelta, m_Trans.scale() * 100.0);
     m_ScalePhysics->setPosition (
             QPointF(rotation + rotationDelta, m_Trans.scale() * 100.0));
 }
@@ -393,35 +402,6 @@ WallpaperEditorWidget::redrawImage ()
 #endif
 }
 
-void 
-WallpaperEditorWidget::orientationChanged (
-        M::Orientation orientation)
-{
-    SYS_DEBUG ("");
-    if (m_Orientation == orientation) {
-        SYS_WARNING ("This is the old orientation?!");
-        return;
-    }
-
-    switch (orientation) {
-        case M::Portrait:
-            SYS_DEBUG ("Turned to portrait");
-            m_LandscapeTrans = m_Trans;
-            m_Trans = m_PortraitTrans;
-            this->setMinimumSize (m_Trans.expectedSize());
-            break;
-
-        case M::Landscape:
-            SYS_DEBUG ("Turned to landscape");
-            m_PortraitTrans = m_Trans;
-            m_Trans = m_LandscapeTrans;
-            this->setMinimumSize (m_Trans.expectedSize());
-            break;
-    }
-    
-    m_Orientation = orientation;
-    redrawImage ();
-}
 
 /******************************************************************************
  * Stuff for the normal mouse events.
@@ -472,7 +452,7 @@ WallpaperEditorWidget::panGestureEvent (
         panGesture->offset() * itemTransform - 
         QPointF(itemTransform.dx(),itemTransform.dy());
 
-    if (m_PinchOngoing)
+    if (m_PinchOngoing || m_Saving)
         return;
 
     switch (panGesture->state()) {
@@ -504,77 +484,6 @@ WallpaperEditorWidget::panGestureEvent (
     event->accept (panGesture);
 }
 
-
-void 
-WallpaperEditorWidget::pinchGestureStarted (
-        QGestureEvent *event, 
-        QPinchGesture *pinchGesture)
-{
-    SYS_DEBUG ("");
-    /*
-     * We might auto-rotate. If we do we don't accept nothing.
-     */
-    if (m_RotateAnimation.state() == QAbstractAnimation::Running)
-        return;
-    
-    if (m_PanOngoing) {
-        m_Physics->pointerRelease();
-        m_PanOngoing = false;
-        return;
-    }
-
-    m_OriginalScaleFactor = m_Trans.scale();
-    qreal startFrom = m_OriginalScaleFactor * 100.0;
-
-    SYS_DEBUG ("m_ScalePhysics->pointerPress (0.0, %g)", startFrom);
-    m_ScalePhysics->pointerPress(QPointF());
-    event->accept(pinchGesture);
-}
-
-void 
-WallpaperEditorWidget::pinchGestureUpdate (
-            QGestureEvent *event, 
-            QPinchGesture *pinchGesture)
-{
-    SYS_DEBUG ("");
-    if (m_PanOngoing) {
-        m_Physics->pointerRelease();
-        m_PanOngoing = false;
-        return;
-    }
-   
-    SYS_DEBUG ("*** rotationAngle      = %g", pinchGesture->rotationAngle());
-    SYS_DEBUG ("*** totalRotationAngle = %g", pinchGesture->totalRotationAngle());
-    /*
-     * 
-     */
-    qreal scalex = -1.0 * pinchGesture->rotationAngle();
-    qreal scaley =
-        m_OriginalScaleFactor - 
-        (pinchGesture->totalScaleFactor() * m_OriginalScaleFactor);
-    
-    m_ScalePhysics->pointerMove(
-            QPointF(scalex + rotationDelta, scaley * 100.0));
-    
-    event->accept(pinchGesture);
-}
-
-void 
-WallpaperEditorWidget::pinchGestureEnded (
-            QGestureEvent *event, 
-            QPinchGesture *gesture)
-{
-    SYS_DEBUG ("");
-    if (m_PanOngoing) {
-        m_Physics->pointerRelease();
-        m_PanOngoing = false;
-        return;
-    }
-
-    m_ScalePhysics->pointerRelease ();
-    event->accept(gesture);
-}
-
 void 
 WallpaperEditorWidget::pinchGestureEvent (
             QGestureEvent *event, 
@@ -582,6 +491,16 @@ WallpaperEditorWidget::pinchGestureEvent (
 {
     SYS_DEBUG ("");
     Q_UNUSED (event);
+
+    if (m_Saving)
+        return;
+
+    if (m_PanOngoing) {
+        SYS_WARNING ("Aborting panning?");
+        m_Physics->pointerRelease();
+        m_PanOngoing = false;
+        return;
+    }
 
     switch (pinchGesture->state()) {
         case Qt::GestureStarted:
@@ -613,6 +532,64 @@ WallpaperEditorWidget::pinchGestureEvent (
             break;
     }
 }
+
+void 
+WallpaperEditorWidget::pinchGestureStarted (
+        QGestureEvent *event, 
+        QPinchGesture *pinchGesture)
+{
+    SYS_DEBUG ("");
+    /*
+     * We might auto-rotate. If we do we don't accept nothing.
+     */
+    if (m_RotateAnimation.state() == QAbstractAnimation::Running)
+        return;
+
+    m_OriginalScaleFactor = m_Trans.scale();
+    qreal startFrom = m_OriginalScaleFactor * 100.0;
+
+    SYS_DEBUG ("m_ScalePhysics->pointerPress (0.0, 0.0)", startFrom);
+    m_ScalePhysics->pointerPress(QPointF());
+    event->accept(pinchGesture);
+}
+
+void 
+WallpaperEditorWidget::pinchGestureUpdate (
+            QGestureEvent *event, 
+            QPinchGesture *pinchGesture)
+{
+    SYS_DEBUG ("");
+   
+    SYS_DEBUG ("*** rotationAngle      = %g", pinchGesture->rotationAngle());
+    SYS_DEBUG ("*** totalRotationAngle = %g", pinchGesture->totalRotationAngle());
+    /*
+     * 
+     */
+    qreal scalex = -1.0 * pinchGesture->rotationAngle();
+    qreal scaley =
+        m_OriginalScaleFactor - 
+        (pinchGesture->totalScaleFactor() * m_OriginalScaleFactor);
+    
+    SYS_DEBUG ("m_ScalePhysics->pointerMove (%g, %g)", 
+            scalex + rotationDelta, scaley * 100.0);
+    m_ScalePhysics->pointerMove(
+            QPointF(scalex + rotationDelta, scaley * 100.0));
+    
+    event->accept(pinchGesture);
+}
+
+void 
+WallpaperEditorWidget::pinchGestureEnded (
+            QGestureEvent *event, 
+            QPinchGesture *gesture)
+{
+    SYS_DEBUG ("");
+
+    SYS_DEBUG ("m_ScalePhysics->pointerRelease ()");
+    m_ScalePhysics->pointerRelease ();
+    event->accept(gesture);
+}
+
 
 /*
  * The pinch gesture event coordinate system is not the same as the motion event

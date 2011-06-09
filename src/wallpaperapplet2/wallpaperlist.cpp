@@ -249,17 +249,27 @@ WallpaperList::stopLoadingPictures ()
 void 
 WallpaperList::slotPanningStarted ()
 {
-    SYS_WARNING ("--------->");
+    SYS_WARNING ("--> m_Panning = %s", SYS_BOOL(m_Panning));
+
+    if (m_Panning)
+        return;
+
     m_Panning = true;
-    stopLoadingPictures ();
+    QTimer::singleShot (loadPicturesDelay, this, SLOT(stopLoadPictures()));
+    //stopLoadingPictures ();
 }
 
 void 
 WallpaperList::slotPanningStopped ()
 {
-    SYS_WARNING ("--------->");
+    SYS_WARNING ("--> m_Panning = %s", SYS_BOOL(m_Panning));
+
+    if (!m_Panning)
+        return;
+    
     m_Panning = false;
-    loadPictures ();
+    QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
+    //loadPictures ();
 }
 
 
