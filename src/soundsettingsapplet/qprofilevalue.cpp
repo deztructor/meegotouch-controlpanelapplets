@@ -425,7 +425,7 @@ QProfileValue::possibleValues(RangeType *p_rangeType)
     if ("BOOLEAN" == lsType[0]) {
         if (p_rangeType) (*p_rangeType) = List;
             ret.append(QVariant(false));
-                ret.append(QVariant(true));
+            ret.append(QVariant(true));
     }
     else
     if ("INTEGER" == lsType[0]) {
