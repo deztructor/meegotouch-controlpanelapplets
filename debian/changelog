@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.52~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.52-1) meegotouch; urgency=low
 
   * AboutApplet: Handle properly the hyperlink in the license text
   * AboutApplet: Use the localized license text in case if it is available
@@ -7,7 +7,7 @@ meegotouch-controlpanelapplets (0.20.52~1) meegotouch; urgency=low
   * Fixes: NB#258344 - wrong ringtone vibra patterns used in Silent and Beep
     profiles
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 09 Jun 2011 09:50:37 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 09 Jun 2011 11:44:43 +0200
 
 meegotouch-controlpanelapplets (0.20.51-3) meegotouch; urgency=low
 

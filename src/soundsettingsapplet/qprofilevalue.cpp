@@ -49,7 +49,7 @@ QProfileValue::QProfileValue(
     m_setAllProfiles (setAllProfiles),
     m_MissingFile (false)
 {
-    SYS_WARNING ("*** key = %s", SYS_STR (key));
+    SYS_DEBUG ("*** key = %s", SYS_STR (key));
     addNotify ();
 }
 
@@ -138,7 +138,6 @@ QProfileValue::delNotify ()
 void
 QProfileValue::realSetValue (const QVariant &newValue)
 {
-    SYS_WARNING ("**************************************************");
     /*
      * Not doing anything if the value is the same.
      */
@@ -252,7 +251,6 @@ QProfileValue::realSetValue (const QVariant &newValue)
         {
             for (int i = 0 ; profiles[i] != NULL ; i++)
             {
-                SYS_WARNING ("profile = %s", profiles[i]);
                 if (theProfile == QString (profiles[i]))
                     continue; // the current one already set...
 
