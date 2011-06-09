@@ -226,7 +226,7 @@ QProfileValue::realSetValue (const QVariant &newValue)
                 break;
             case QVariant::Double:
                 profile_set_value_as_double (
-                    TO_STRING (theProfile), TO_STIRNG (theKey),
+                    TO_STRING (theProfile), TO_STRING (theKey),
                     (double) convertedValue.toDouble ());
                 break;
             case QVariant::String:
@@ -241,15 +241,29 @@ QProfileValue::realSetValue (const QVariant &newValue)
 
     if (m_setAllProfiles)
     {
+        /*
+         * Alert Tone should be the same for all profiles...
+         * Fixes: NB#258344
+         */
+        bool isAlertTone = key ().contains ("alert.tone");
+
         char **profiles = profile_get_profiles ();
         if (profiles)
         {
             for (int i = 0 ; profiles[i] != NULL ; i++)
-                /* Do not set values for "silent" and "meeting" */
-                if (theProfile != QString (profiles[i]) &&
-                    theProfile != QString ("meeting") &&
-                    theProfile != QString ("silent"))
-                    QProfileValue (key () + "@" + QString (profiles[i]), false).set (newValue);
+            {
+                if (theProfile == QString (profiles[i]))
+                    continue; // the current one already set...
+
+                /*
+                 * Do not set meeting and silent values if it is 
+                 * not about the alert tone...
+                 */
+                if (isAlertTone ||
+                    (theProfile != QString ("meeting") &&
+                     theProfile != QString ("silent")))
+                QProfileValue (key () + "@" + QString (profiles[i]), false).set (newValue);
+            }
             profile_free_profiles (profiles);
         }
     }
