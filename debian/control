@@ -98,7 +98,7 @@ Description: usb-applet debug symbols
 Package: duicontrolpanel-batteryapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, applauncherd-launcher
 Description: Battery settings applet.
 
 Package: duicontrolpanel-batteryapplet-dbg
