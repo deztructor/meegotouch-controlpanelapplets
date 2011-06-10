@@ -143,8 +143,8 @@ Description: profile-applet debug symbols
 Package: duicontrolpanel-wallpaperapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends},
-         tumbler, libthumbnailer0, duicontrolpanel
+Depends: ${shlibs:Depends}, ${misc:Depends}, tumbler, libthumbnailer0,
+         duicontrolpanel, applauncherd-launcher
 Description: Desktop wallpaper changing applet.
 
 Package: duicontrolpanel-wallpaperapplet-dbg
