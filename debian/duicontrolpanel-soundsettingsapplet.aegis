@@ -1,7 +1,7 @@
 <aegis>
   <request>
     <credential name="TrackerReadAccess" />
-    <for path="/usr/lib/duicontrolpanel/applets/libwallpaperapplet.so" />
+    <for path="/usr/lib/duicontrolpanel/applets/libsoundsettingsapplet.so" />
     <for path="duicontrolpanel::/usr/bin/duicontrolpanel.launch" />
     <for path="applauncherd-launcher::/usr/bin/applauncherd.bin" />
   </request>

@@ -122,6 +122,8 @@ binary-aegisgen:
 	              .. debian/duicontrolpanel-offlineapplet.aegis=_aegis
 	aegis-deb-add -control debian/duicontrolpanel-wallpaperapplet/DEBIAN/control \
 	              .. debian/duicontrolpanel-wallpaperapplet.aegis=_aegis
+	aegis-deb-add -control debian/duicontrolpanel-soundsettingsapplet/DEBIAN/control \
+	              .. debian/duicontrolpanel-soundsettingsapplet.aegis=_aegis
 
 binary: binary-indep binary-arch binary-aegisgen
 .PHONY: build clean binary-indep binary-arch binary-aegisgen binary install configure

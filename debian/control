@@ -212,7 +212,7 @@ Package: duicontrolpanel-soundsettingsapplet
 Section: sound
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libresourceqt1,
-         meegotouchcp-applets-l10n-engineering-english
+         meegotouchcp-applets-l10n-engineering-english, applauncherd-launcher
 Description: Sound Settings Applet
 
 Package: duicontrolpanel-soundsettingsapplet-dbg
