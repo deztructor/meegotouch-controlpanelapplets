@@ -17,6 +17,7 @@ X-DUIApplet-Applet=libdisplayapplet.so
 Category=MainPage
 Part=Brightness
 Order=5
+ForceInProcessBrief=1
 WidgetType=Slider
 SliderLeftImage=icon-s-image-edit-low-brightness
 SliderRightImage=icon-s-image-edit-high-brightness
