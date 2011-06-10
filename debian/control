@@ -8,7 +8,7 @@ Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.11.8),
                doxygen, clean-device-dev (>= 0.0.3), libgstreamer0.10-dev,
                libqtm-dev, libqtm-systeminfo-dev, libresourceqt-dev,
                libquillimagefilter-dev, libquillmetadata-dev, libquill-dev,
-               libqtsparql-dev, libcontentaction-dev
+               libqtsparql-dev, libcontentaction-dev, aegis-builder
 Standards-Version: 3.9.1
 
 Package: meegotouch-controlpanelapplets-tests
@@ -156,7 +156,8 @@ Description: wallpaper-applet debug symbols
 Package: duicontrolpanel-resetapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, clean-device
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, clean-device,
+         applauncherd-launcher
 Description: Device clearing and restore settings applet.
 
 Package: duicontrolpanel-resetapplet-dbg
