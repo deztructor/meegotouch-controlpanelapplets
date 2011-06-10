@@ -118,6 +118,8 @@ binary-arch: build install
 binary-aegisgen:
 	aegis-deb-add -control debian/duicontrolpanel-resetapplet/DEBIAN/control \
 	              .. debian/duicontrolpanel-resetapplet.aegis=_aegis
+	aegis-deb-add -control debian/duicontrolpanel-offlineapplet/DEBIAN/control \
+	              .. debian/duicontrolpanel-offlineapplet.aegis=_aegis
 
 binary: binary-indep binary-arch binary-aegisgen
 .PHONY: build clean binary-indep binary-arch binary-aegisgen binary install configure

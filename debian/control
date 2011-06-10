@@ -71,7 +71,8 @@ Description: libmeegocontrol debug symbols
 Package: duicontrolpanel-offlineapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, mce,
+         applauncherd-launcher
 Description: Offline settings applet.
 
 Package: duicontrolpanel-offlineapplet-dbg
