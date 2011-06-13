@@ -8,7 +8,7 @@ Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.11.8),
                doxygen, clean-device-dev (>= 0.0.3), libgstreamer0.10-dev,
                libqtm-dev, libqtm-systeminfo-dev, libresourceqt-dev,
                libquillimagefilter-dev, libquillmetadata-dev, libquill-dev,
-               libqtsparql-dev
+               libqtsparql-dev, libcontentaction-dev, aegis-builder
 Standards-Version: 3.9.1
 
 Package: meegotouch-controlpanelapplets-tests
@@ -71,7 +71,8 @@ Description: libmeegocontrol debug symbols
 Package: duicontrolpanel-offlineapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, mce,
+         applauncherd-launcher
 Description: Offline settings applet.
 
 Package: duicontrolpanel-offlineapplet-dbg
@@ -97,7 +98,7 @@ Description: usb-applet debug symbols
 Package: duicontrolpanel-batteryapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, applauncherd-launcher
 Description: Battery settings applet.
 
 Package: duicontrolpanel-batteryapplet-dbg
@@ -142,8 +143,8 @@ Description: profile-applet debug symbols
 Package: duicontrolpanel-wallpaperapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends},
-         tumbler, libthumbnailer0, duicontrolpanel
+Depends: ${shlibs:Depends}, ${misc:Depends}, tumbler, libthumbnailer0,
+         duicontrolpanel, applauncherd-launcher
 Description: Desktop wallpaper changing applet.
 
 Package: duicontrolpanel-wallpaperapplet-dbg
@@ -156,7 +157,8 @@ Description: wallpaper-applet debug symbols
 Package: duicontrolpanel-resetapplet
 Section: misc
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, clean-device
+Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, clean-device,
+         applauncherd-launcher
 Description: Device clearing and restore settings applet.
 
 Package: duicontrolpanel-resetapplet-dbg
@@ -210,7 +212,7 @@ Package: duicontrolpanel-soundsettingsapplet
 Section: sound
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libresourceqt1,
-         meegotouchcp-applets-l10n-engineering-english
+         meegotouchcp-applets-l10n-engineering-english, applauncherd-launcher
 Description: Sound Settings Applet
 
 Package: duicontrolpanel-soundsettingsapplet-dbg

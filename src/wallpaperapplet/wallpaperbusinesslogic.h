@@ -98,6 +98,7 @@ private slots:
 
     void startEditThreadEnded ();
     void valueChanged ();
+    void directoryChangedDelayed ();
     void directoryChanged (const QString &path);
     void fileChanged (const QString &path);
 

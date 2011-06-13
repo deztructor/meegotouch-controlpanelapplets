@@ -403,13 +403,13 @@ BatteryWidget::addBatteryConditionWidget ()
         //layout->setStretchFactor (poorIcon, 0.0);
 
         MLabel *valueLabel = new MLabel (batteryConditionShortDescription);
-        valueLabel->setStyleName ("CommonSubTitleWithIcon");
+        valueLabel->setStyleName ("CommonSubTitleInverted");
         valueLabel->setAlignment (Qt::AlignLeft | Qt::AlignVCenter);
         layout->addItem (valueLabel);
         layout->setStretchFactor (valueLabel, 2.0);
     } else {
         MLabel *valueLabel = new MLabel (batteryConditionShortDescription);
-        valueLabel->setStyleName ("CommonSubTitleWithIcon");
+        valueLabel->setStyleName ("CommonSubTitleInverted");
         valueLabel->setAlignment (Qt::AlignLeft | Qt::AlignVCenter);
         containerLayout->addItem (valueLabel);
     }

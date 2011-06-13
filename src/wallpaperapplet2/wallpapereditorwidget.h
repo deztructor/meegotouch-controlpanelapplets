@@ -59,34 +59,29 @@ public:
     virtual bool back ();
     virtual void saveImage ();
 
-protected:
+    protected:
+        virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
+        virtual void wheelEvent (QGraphicsSceneWheelEvent *event);
 
-#ifndef NO_EDITING
-    virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
-    virtual void wheelEvent (QGraphicsSceneWheelEvent *event);
+        void panGestureEvent (
+                QGestureEvent *event, 
+                QPanGesture   *panGesture);
 
-    void panGestureEvent (
-            QGestureEvent *event, 
-            QPanGesture   *panGesture);
+        virtual void pinchGestureEvent (
+                QGestureEvent *event, 
+                QPinchGesture *pinchGesture);
 
-    virtual void pinchGestureEvent (
-            QGestureEvent *event, 
-            QPinchGesture *gesture);
+        virtual void pinchGestureStarted (
+                QGestureEvent *event, 
+                QPinchGesture *pinchGesture);
 
-    virtual void pinchGestureStarted (
-            QGestureEvent *event, 
-            QPinchGesture *gesture);
-
-    virtual void pinchGestureUpdate (
-            QGestureEvent *event, 
-            QPinchGesture *gesture);
+        virtual void pinchGestureUpdate (
+                QGestureEvent *event, 
+                QPinchGesture *pinchGesture);
     
-    virtual void pinchGestureEnded (
-            QGestureEvent *event, 
-            QPinchGesture *gesture);
-#endif
-
-
+        virtual void pinchGestureEnded (
+                QGestureEvent *event, 
+                QPinchGesture *pinchGesture);
     
     protected slots:
         virtual void initialize (QuillImage &image, QSize size);
@@ -96,7 +91,6 @@ protected:
 
     private slots:
     void queueRedrawImage ();
-    void orientationChanged (M::Orientation orientation);
     void panningPhysicsPositionChanged (const QPointF &position);
     void panningPhysicsPanningStopped ();
     void scalePhysicsPositionChanged(const QPointF &position);
@@ -109,32 +103,21 @@ protected:
 
     private:
         M_STYLABLE_WIDGET(WallpaperEditorWidgetStyle)
-        void setupPanningPhysics ();    
+        void setupPanningPhysics (bool movePh = false);
         void gestureWorkaround (QPointF *point);
-        bool supportsLandscape () const;
-        bool supportsPortrait () const;
  
-private:
-    QImage                m_bgLandscape;
-    QImage                m_bgPortrait;
+    private:
+        bool                  m_OrientationLocked;
+        M::Orientation        m_Orientation;
 
-    bool                  m_NoTitlebar;
-    bool                  m_OrientationLocked;
-    M::Orientation        m_Orientation;
+        QPointF               m_UserOffset;
 
-    QPointF               m_LastClick;
-    QPointF               m_UserOffset;
-    QPointF               m_ImageFixpoint;
-
-    WallpaperITrans       m_LandscapeTrans;
-    WallpaperITrans       m_PortraitTrans;
-    
-    qreal                 m_OriginalScaleFactor;
-    bool                  m_PinchOngoing;
-    bool                  m_PanOngoing;
-    bool                  m_HasPendingRedraw;
-    MPhysics2DPanning    *m_Physics;
-    MPhysics2DPanning    *m_ScalePhysics;
+        qreal                 m_OriginalScaleFactor;
+        bool                  m_PinchOngoing;
+        bool                  m_PanOngoing;
+        bool                  m_HasPendingRedraw;
+        MPhysics2DPanning    *m_Physics;
+        MPhysics2DPanning    *m_ScalePhysics;
         QPropertyAnimation    m_RotateAnimation;
 };
 

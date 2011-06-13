@@ -1,0 +1,10 @@
+<aegis>
+  <request>
+    <credential name="clean-device::CUDOrRFS" />
+    <for path="/usr/lib/duicontrolpanel/applets/libresetapplet.so" />
+    <for path="duicontrolpanel::/usr/bin/duicontrolpanel.launch" />
+    <for path="duicontrolpanel::/usr/bin/duicontrolpanel-briefsupplier" />
+    <for path="applauncherd-launcher::/usr/bin/applauncherd.bin" />
+  </request>
+</aegis>
+

@@ -32,6 +32,10 @@ namespace Wallpaper
     const bool supportEdit (true);
     const bool currentWallpaperAtTop (true);
 
+    const int maxThumbnails = 100;
+    const int nForwardThumbnails = 25;
+    const int nBackwardThumbnails = 25;
+
     const QString CurrentPortraitKey (
             "/desktop/meego/background/portrait/picture_filename");
 

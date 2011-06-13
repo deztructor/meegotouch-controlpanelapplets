@@ -30,7 +30,7 @@
 M_LIBRARY
 #endif
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 

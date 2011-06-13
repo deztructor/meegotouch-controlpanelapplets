@@ -52,15 +52,23 @@ public:
 
     void setDataSourceType (WallpaperList::DataSourceType sourceType);
 
-protected:
-    virtual void orientationChangeEvent (MOrientationChangeEvent *event);
-    void hideEvent (QHideEvent *event);
-    void showEvent (QShowEvent *event);
+    protected:
+        virtual void orientationChangeEvent (MOrientationChangeEvent *event);
+        void hideEvent (QHideEvent *event);
+        void showEvent (QShowEvent *event);
+
 
     private slots:
         void slotItemClicked (const QModelIndex &index);
+        void slotItemLongTapped (
+                const QModelIndex  &index, 
+                const QPointF      &point);
+
+        void slotPanningStarted ();
+        void slotPanningStopped ();
         void loadPictures ();
         void stopLoadingPictures ();
+
         
         void rowsInserted (
                 const QModelIndex &parent, 
@@ -83,6 +91,7 @@ protected:
         WallpaperModel         *m_Model;
         WallpaperCellCreator   *m_CellCreator;
         DataSourceType          m_DataSourceType;
+        bool                    m_Panning;
         #ifdef UNIT_TEST
         friend class Ut_WallpaperList;
         #endif

@@ -11,7 +11,7 @@ INCLUDEPATH = \
 
 QT += \
     testlib \
-    dbus 
+    dbus
 
 TEMPLATE = app
 
@@ -28,7 +28,11 @@ CONFIG += \
     mobility \
     plugin \
     duicontrolpanel \
-    link_pkgconfig \
+    link_pkgconfig
+
+contains(DEFINES, HAVE_CONTENT_ACTION) {
+    PKGCONFIG += contentaction-0.1
+}
 
 MOBILITY += systeminfo
 

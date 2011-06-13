@@ -22,6 +22,8 @@
 #include <stdarg.h>
 
 #include <QString>
+#include <QDir>
+
 #include "debug.h"
 
 /*! \mainpage libMeegoControl 
@@ -110,6 +112,26 @@ main (int argc, char** argv)
  * of the user's home and the actual settings are changed in the GConf database.
  */
 
+static FILE *debugStream = NULL;
+
+static inline void 
+openDebugFile () 
+{
+    if (!debugStream) {
+        QString fileName;
+
+        fileName = QDir::homePath() + "/controlpanel-applets.log";
+        printf("---> %s", SYS_STR(fileName));
+        debugStream = fopen (fileName.toAscii().constData(), "a");
+        if (debugStream) {
+            fprintf (debugStream, 
+                    "***********************************************\n"
+                    "*** Debug log file opened. ********************\n"
+                    "***********************************************\n");
+        }
+    }
+}
+
 /*
  * This function is used to print debug and error messages, an enhanced version
  * of the SysDebug::sysMsg(). Please use this function anly through macros (like
@@ -123,40 +145,54 @@ SysDebug::sysPrintMsg (
         const char   *formatstring,
         ...)
 {
-    va_list args;
+    FILE *stream;
+    bool  useColors;
 
+    #ifdef DEBUG_TO_FILE
+    openDebugFile ();
+    #endif
+
+    if (debugStream != NULL) {
+        stream    = debugStream;
+        useColors = false;
+    } else {
+        stream    =  stdout;
+        useColors =  true;
+    }
+
+    va_list args;
     va_start (args, formatstring);
     switch (type) {
         case QtDebugMsg:
-            fprintf (stdout, "%s%s%s: ",
+            fprintf (stream, "%s%s%s: ",
                     TERM_GREEN TERM_BOLD, function, TERM_NORMAL);
-            vfprintf (stdout, formatstring, args);
+            vfprintf (stream, formatstring, args);
             break;
 
         case QtWarningMsg:
-            fprintf (stdout, "%s%s%s: ",
+            fprintf (stream, "%s%s%s: ",
                     TERM_YELLOW, function, TERM_NORMAL);
-            vfprintf (stdout, formatstring, args);
+            vfprintf (stream, formatstring, args);
             break;
 
         case QtCriticalMsg:
-            fprintf (stdout, "%s%s%s: ",
+            fprintf (stream, "%s%s%s: ",
                     TERM_RED, function, TERM_NORMAL);
-            vfprintf (stdout, formatstring, args);
+            vfprintf (stream, formatstring, args);
             break;
 
         case QtFatalMsg:
-            fprintf (stdout, "%s%s%s: ",
+            fprintf (stream, "%s%s%s: ",
                     TERM_GREEN, function, TERM_NORMAL);
-            vfprintf (stdout, formatstring, args);
-            fprintf (stdout, "\n%s%s%s: Aborting program.",
+            vfprintf (stream, formatstring, args);
+            fprintf (stream, "\n%s%s%s: Aborting program.",
                     TERM_RED TERM_BOLD, function, TERM_NORMAL);
             putchar('\n');
-            fflush (stdout);
+            fflush (stream);
             abort();
     }
     va_end (args);
 
-    fprintf(stdout, "\n");
-    fflush (stdout);
+    fprintf(stream, "\n");
+    fflush (stream);
 }

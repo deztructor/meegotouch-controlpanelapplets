@@ -88,6 +88,14 @@ if [ $? -eq 0 ]; then
     if [ $? -eq 0 ]; then
         echo "DEFINES += HAVE_QTSPARQL_LIVE" >> ${FILENAME}
     fi
+
+    #
+    # ContentAction is needed to open URL-s (about-applet)
+    #
+    pkg-config --exists contentaction-0.1
+    if [ $? -eq 0 ]; then
+        echo "DEFINES += HAVE_CONTENT_ACTION" >> ${FILENAME}
+    fi
 fi
 
 #

@@ -18,6 +18,7 @@
 ****************************************************************************/
 #include "wallpaperviewwidget.h"
 #include "wallpaperconfiguration.h"
+#include "wallpaperutils.h"
 
 #include <QTimer>
 #include <MWindow>
@@ -26,7 +27,7 @@
 #include <MPannableViewport>
 #include <MPositionIndicator>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -67,13 +68,11 @@ void
 WallpaperViewWidget::saveImage ()
 {
     if (Wallpaper::supportEdit || m_Trans.expectedSize() != m_OriginalSize) {
-        SYS_WARNING ("The original size is not %dx%d",
-                m_Trans.expectedSize().width(), 
-                m_Trans.expectedSize().height());
-        QPixmap pixmap = generatePixmap (
-                m_Trans.expectedSize(),
-                m_Trans.offset(),
-                m_Trans.scale());
+        SYS_DEBUG ("*** expectedSize = %s", SYS_SIZE(m_Trans.expectedSize()));
+        SYS_DEBUG ("*** offset       = %s", SYS_POINTF(m_Trans.offset()));
+        SYS_DEBUG ("*** scale        = %g", m_Trans.scale());
+        SYS_DEBUG ("*** rotation     = %g", m_Trans.rotation());
+        QPixmap pixmap = generatePixmap (m_Trans);
 
         m_Saving = true;
         m_BusinessLogic->setWallpaper (pixmap);
@@ -142,7 +141,7 @@ WallpaperViewWidget::initialize (
 
     m_ImageWidget = new MImageWidget(&m_Image, this);
     //m_ImageWidget->setPos (m_Trans.offset());
-    redrawImage ();
+    //redrawImage ();
 
     m_Initialized = true;
 }
@@ -272,18 +271,17 @@ WallpaperViewWidget::imageDY () const
 
 QPixmap
 WallpaperViewWidget::generatePixmap (
-        const QSize    &expectedSize,
-        const QPointF  &offset,
-        qreal           scale)
+        const WallpaperITrans  &transformations)
 {
-    QPixmap   retval (expectedSize);
+    QImage    transformed = transformedImage();
+    QPixmap   retval (transformations.expectedSize());
     QPainter  painter (&retval);
-    QRectF    area (offset.x(), offset.y(), 
-                    (scale * m_Image.width ()),
-                    (scale * m_Image.height ()));
+    QPointF   offset (
+            imageX() - transformed.width() / 2, 
+            imageY() - transformed.height() / 2);
 
     retval.fill (m_BgColor);
-    painter.drawImage (area, m_Image);
+    painter.drawImage (offset, transformed);
 
     return retval;
 }
@@ -373,11 +371,74 @@ WallpaperViewWidget::wallpaperLoaded (
 void 
 WallpaperViewWidget::redrawImage ()
 {
-    m_ImageWidget->setPos (imageX(), imageY());
-    m_ImageWidget->setScale (m_Trans.scale());
+    QSize   imageSize = imageVisualSize ();
+    QPointF offset (
+            imageX() - m_ImageWidget->size().width() / 2.0, 
+            imageY() - m_ImageWidget->size().height() / 2.0);
 
     m_ImageWidget->setTransformOriginPoint(
-            m_ImageWidget->size().width() / 2, 
-            m_ImageWidget->size().height() / 2);
+            m_ImageWidget->size().width() / 2.0, 
+            m_ImageWidget->size().height() / 2.0);
+
+    m_ImageWidget->setScale (m_Trans.scale());
+    
+    //SYS_DEBUG ("*** myxy   (%d, %d)", imageX(), imageY()); 
+    //SYS_DEBUG ("*** setPos (%s)", SYS_POINTF(offset)); 
+    m_ImageWidget->setPos (offset);
     m_ImageWidget->setRotation (m_Trans.rotation());
+}
+
+QSize
+WallpaperViewWidget::imageVisualSize (qreal scale)
+{
+    qreal realdx, realdy;
+    QSize  retval;
+
+    #if 0
+    SYS_DEBUG ("*** rotation    = %g", m_Trans.rotation());
+    SYS_DEBUG ("*** scale       = %g", m_Trans.scale());
+    SYS_DEBUG ("*** initialized = %s", SYS_BOOL(m_Initialized));
+    #endif
+    if (m_Trans.rotation() == 90.0 || m_Trans.rotation() == -90.0) {
+        realdx = m_Image.height(); 
+        realdy = m_Image.width(); 
+    } else {
+        realdy = m_Image.height();
+        realdx = m_Image.width();
+    }
+
+    retval = QSize (realdx * scale, realdy * scale);
+    return retval;
+}
+
+QImage
+WallpaperViewWidget::transformedImage ()
+{
+    QSize  visualSize (imageVisualSize(m_Trans.scale()));
+    QImage retval (visualSize, QImage::Format_RGB16);
+    QPainter  painter (&retval);
+    QRectF rect;
+
+    retval.fill (QColor("#ffffff").rgb());
+    painter.translate(
+            retval.width() / 2, 
+            retval.height() / 2); 
+    painter.rotate(m_Trans.rotation());
+   
+    if (m_Trans.rotation() == 90.0 || m_Trans.rotation() == -90.0)
+        rect = QRectF (
+                -retval.height() / 2, 
+                -retval.width() / 2, 
+                visualSize.height(),
+                visualSize.width());
+    else
+        rect = QRectF (
+                -retval.width() / 2, 
+                -retval.height() / 2, 
+                visualSize.width(),
+                visualSize.height());
+
+
+    painter.drawImage (rect, m_Image);
+    return retval;
 }

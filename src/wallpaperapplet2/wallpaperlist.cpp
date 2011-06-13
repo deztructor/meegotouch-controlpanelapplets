@@ -51,18 +51,24 @@ WallpaperList::WallpaperList (
     m_BusinessLogic (logic),
     m_Model (0),
     m_CellCreator (new WallpaperCellCreator),
-    m_DataSourceType (WallpaperList::DataSourceUnknown)
+    m_DataSourceType (WallpaperList::DataSourceUnknown),
+    m_Panning (false)
 {
     connect (this, SIGNAL(itemClicked(const QModelIndex &)),
             this, SLOT(slotItemClicked(const QModelIndex &)));
+#if 0
+    connect (
+        this, SIGNAL(itemLongTapped(const QModelIndex &, const QPointF &)),
+        this, SLOT(slotItemLongTapped(const QModelIndex &, const QPointF &)));
+#endif
     /*
      * When the panning stops we load thumbnail images, when it starts we stop
      * doing the image loading so the panning will be smooth.
      */
     connect (this, SIGNAL(panningStarted()), 
-            this, SLOT(stopLoadingPictures()));
+            this, SLOT(slotPanningStarted()));
     connect (this, SIGNAL(panningStopped()), 
-            this, SLOT(loadPictures()));
+            this, SLOT(slotPanningStopped()));
     connect (m_BusinessLogic, SIGNAL(wallpaperChanged()), 
             this, SLOT(loadPictures()));
 
@@ -197,6 +203,10 @@ void
 WallpaperList::slotItemClicked (
         const QModelIndex &index)
 {
+    SYS_WARNING ("---------> *** m_Panning = %s", SYS_BOOL(m_Panning));
+    if (m_Panning)
+        return;
+
     QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
     WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
 
@@ -205,9 +215,16 @@ WallpaperList::slotItemClicked (
 }
 
 void 
-WallpaperList::loadPictures ()
+WallpaperList::slotItemLongTapped (
+        const QModelIndex  &index, 
+        const QPointF      &point)
 {
     SYS_DEBUG ("");
+}
+
+void 
+WallpaperList::loadPictures ()
+{
     //filtering()->proxy()->sort(Qt::DisplayRole);
 
     /*
@@ -228,6 +245,33 @@ WallpaperList::stopLoadingPictures ()
 
     m_Model->stopLoadingThumbnails ();
 }
+
+void 
+WallpaperList::slotPanningStarted ()
+{
+    SYS_WARNING ("--> m_Panning = %s", SYS_BOOL(m_Panning));
+
+    if (m_Panning)
+        return;
+
+    m_Panning = true;
+    QTimer::singleShot (loadPicturesDelay, this, SLOT(stopLoadPictures()));
+    //stopLoadingPictures ();
+}
+
+void 
+WallpaperList::slotPanningStopped ()
+{
+    SYS_WARNING ("--> m_Panning = %s", SYS_BOOL(m_Panning));
+
+    if (!m_Panning)
+        return;
+    
+    m_Panning = false;
+    QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
+    //loadPictures ();
+}
+
 
 void 
 WallpaperList::orientationChangeEvent (

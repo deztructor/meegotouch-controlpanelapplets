@@ -198,6 +198,10 @@ double
 AlertTonePreview::profileToGstVolume ()
 {
     QList<QVariant> range = m_profileVolume.possibleValues (NULL);
+
+    if (range.count () < 2)
+        return 0.0;
+
     return (((double) (m_profileVolume.value().toInt() - range[0].toInt())) /
             ((double)(range[1].toInt() - range[0].toInt())));
 }

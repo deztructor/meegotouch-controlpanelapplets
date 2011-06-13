@@ -48,7 +48,7 @@ M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
 static const qreal ScaleLowerLimit = 0.15;
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -71,14 +71,12 @@ WallpaperEditorWidget::WallpaperEditorWidget (
         WallpaperBusinessLogic *wallpaperBusinessLogic, 
         QGraphicsWidget        *parent) :
     WallpaperViewWidget (wallpaperBusinessLogic, parent),
-    m_NoTitlebar (false),
     m_OrientationLocked (false),
     m_PinchOngoing (false),
     m_PanOngoing (false),
     m_HasPendingRedraw (false),
     m_Physics (0)
 {
-    SYS_WARNING ("----------------------------------------------");
     MWindow *win = MApplication::activeWindow ();
 
     setObjectName ("WallpaperEditorWidget");
@@ -167,15 +165,13 @@ WallpaperEditorWidget::initialize (
         QSize         size)
 {
     WallpaperViewWidget::initialize (image, size);
-    setupPanningPhysics ();
+    setupPanningPhysics (true);
 }
 
 void 
 WallpaperEditorWidget::scalePhysicsPositionChanged(
         const QPointF    &position)
 {
-    SYS_DEBUG ("*** position = %s", SYS_POINTF(position));
-
     qreal scalefactor = position.y() / 100.0;
 
     if (scalefactor < 0.05)
@@ -215,11 +211,16 @@ WallpaperEditorWidget::scalePhysicsPanningStopped ()
             break;
         }
     }
+    
+    if (rRotation == 360.0 || rRotation == -360.0) {
+        rRotation = 0.0;
+    }
 
-    SYS_DEBUG ("*** rotation = %g", rotation);
-    SYS_DEBUG ("*** rRotation = %g", rRotation);
+    SYS_DEBUG ("*** we are at  : %g", rotation);
+    SYS_DEBUG ("*** rounded to : %g", rRotation);
 
     if (rotation != rRotation) {
+        SYS_DEBUG ("NEED TO ANIMATE");
         m_RotateAnimation.setTargetObject (m_ImageWidget);
         m_RotateAnimation.setPropertyName ("rotation");
         m_RotateAnimation.setEasingCurve(QEasingCurve::InOutCubic);
@@ -228,9 +229,6 @@ WallpaperEditorWidget::scalePhysicsPanningStopped ()
         m_RotateAnimation.setDuration (500.0);
         m_RotateAnimation.start();
     }
-
-
-//    redrawImage ();
 }
 
 void
@@ -246,6 +244,12 @@ WallpaperEditorWidget::rotateAnimationFinished ()
     }
 
     m_Trans.setRotation(rotation);
+
+    QPointF position;
+    position =  m_ScalePhysics->position ();
+    SYS_DEBUG ("m_ScalePhysics->position() = %g, %g", position.x(), position.y());
+    SYS_DEBUG ("m_ScalePhysics->setPosition(%g, %g)",
+            rotation + rotationDelta, m_Trans.scale() * 100.0);
     m_ScalePhysics->setPosition (
             QPointF(rotation + rotationDelta, m_Trans.scale() * 100.0));
 }
@@ -259,18 +263,9 @@ void
 WallpaperEditorWidget::saveImage ()
 {
     SYS_DEBUG ("");
-    WallpaperITrans   *ltrans, *ptrans;
-
-    m_Trans += m_UserOffset;
-    m_UserOffset = QPointF();
+ 
+    m_Trans.setOffset (m_UserOffset);
     
-
-    ltrans = m_Trans.orientation() == M::Landscape ?
-        &m_Trans : &m_LandscapeTrans;
-    ptrans = m_Trans.orientation() == M::Portrait ?
-        &m_Trans : &m_PortraitTrans;
-
-
     WallpaperViewWidget::saveImage ();
 }
 
@@ -358,7 +353,7 @@ WallpaperEditorWidget::back ()
 int
 WallpaperEditorWidget::imageX () const
 {
-    int retval = WallpaperViewWidget::imageX();
+    int retval = 0.0; //WallpaperViewWidget::imageX();
 
     retval += m_UserOffset.x();
     
@@ -372,7 +367,7 @@ WallpaperEditorWidget::imageX () const
 int
 WallpaperEditorWidget::imageY () const
 {
-    int retval = WallpaperViewWidget::imageY ();
+    int retval = 0.0; //WallpaperViewWidget::imageY ();
     
     retval += m_UserOffset.y();
 
@@ -411,35 +406,6 @@ WallpaperEditorWidget::redrawImage ()
 #endif
 }
 
-void 
-WallpaperEditorWidget::orientationChanged (
-        M::Orientation orientation)
-{
-    SYS_DEBUG ("");
-    if (m_Orientation == orientation) {
-        SYS_WARNING ("This is the old orientation?!");
-        return;
-    }
-
-    switch (orientation) {
-        case M::Portrait:
-            SYS_DEBUG ("Turned to portrait");
-            m_LandscapeTrans = m_Trans;
-            m_Trans = m_PortraitTrans;
-            this->setMinimumSize (m_Trans.expectedSize());
-            break;
-
-        case M::Landscape:
-            SYS_DEBUG ("Turned to landscape");
-            m_PortraitTrans = m_Trans;
-            m_Trans = m_LandscapeTrans;
-            this->setMinimumSize (m_Trans.expectedSize());
-            break;
-    }
-    
-    m_Orientation = orientation;
-    redrawImage ();
-}
 
 /******************************************************************************
  * Stuff for the normal mouse events.
@@ -450,8 +416,6 @@ WallpaperEditorWidget::wheelEvent (
 {
     bool     ctrl = QApplication::keyboardModifiers() & Qt::ControlModifier;
     
-    SYS_DEBUG ("ctrl = %s", SYS_BOOL(ctrl));
-
     /*
      * We might auto-rotate. If we do we don't accept nothing.
      */
@@ -492,7 +456,7 @@ WallpaperEditorWidget::panGestureEvent (
         panGesture->offset() * itemTransform - 
         QPointF(itemTransform.dx(),itemTransform.dy());
 
-    if (m_PinchOngoing)
+    if (m_PinchOngoing || m_Saving)
         return;
 
     switch (panGesture->state()) {
@@ -524,11 +488,59 @@ WallpaperEditorWidget::panGestureEvent (
     event->accept (panGesture);
 }
 
+void 
+WallpaperEditorWidget::pinchGestureEvent (
+            QGestureEvent *event, 
+            QPinchGesture *pinchGesture)
+{
+    SYS_DEBUG ("");
+    Q_UNUSED (event);
+
+    if (m_Saving)
+        return;
+
+    if (m_PanOngoing) {
+        SYS_WARNING ("Aborting panning?");
+        m_Physics->pointerRelease();
+        m_PanOngoing = false;
+        return;
+    }
+
+    switch (pinchGesture->state()) {
+        case Qt::GestureStarted:
+            SYS_DEBUG ("Qt::GestureStarted");
+            m_PinchOngoing = true;
+            pinchGestureStarted (event, pinchGesture);
+            break;
+
+        case Qt::GestureFinished:
+            SYS_DEBUG ("Qt::GestureFinished");
+            pinchGestureEnded (event, pinchGesture);
+            m_PinchOngoing = false;
+            break;
+
+        case Qt::GestureCanceled:
+            SYS_DEBUG ("Qt::GestureCanceled");
+            pinchGestureEnded (event, pinchGesture);
+            m_PinchOngoing = false;
+            break;
+
+        case Qt::GestureUpdated:
+            SYS_DEBUG ("Qt::GestureUpdated");
+            pinchGestureUpdate (event, pinchGesture);
+            break;
+
+        case Qt::NoGesture:
+            SYS_DEBUG ("Qt::NoGesture");
+            SYS_WARNING ("I dont know what to do when Qt::NoGesture");
+            break;
+    }
+}
 
 void 
 WallpaperEditorWidget::pinchGestureStarted (
         QGestureEvent *event, 
-        QPinchGesture *gesture)
+        QPinchGesture *pinchGesture)
 {
     SYS_DEBUG ("");
     /*
@@ -536,45 +548,38 @@ WallpaperEditorWidget::pinchGestureStarted (
      */
     if (m_RotateAnimation.state() == QAbstractAnimation::Running)
         return;
-    
-    if (m_PanOngoing) {
-        m_Physics->pointerRelease();
-        m_PanOngoing = false;
-        return;
-    }
 
     m_OriginalScaleFactor = m_Trans.scale();
     qreal startFrom = m_OriginalScaleFactor * 100.0;
 
-    SYS_DEBUG ("m_ScalePhysics->pointerPress (0.0, %g)", startFrom);
+    SYS_DEBUG ("m_ScalePhysics->pointerPress (0.0, 0.0)", startFrom);
     m_ScalePhysics->pointerPress(QPointF());
-    event->accept(gesture);
+    event->accept(pinchGesture);
 }
 
 void 
 WallpaperEditorWidget::pinchGestureUpdate (
             QGestureEvent *event, 
-            QPinchGesture *gesture)
+            QPinchGesture *pinchGesture)
 {
     SYS_DEBUG ("");
-    if (m_PanOngoing) {
-        m_Physics->pointerRelease();
-        m_PanOngoing = false;
-        return;
-    }
-    
+   
+    SYS_DEBUG ("*** rotationAngle      = %g", pinchGesture->rotationAngle());
+    SYS_DEBUG ("*** totalRotationAngle = %g", pinchGesture->totalRotationAngle());
     /*
      * 
      */
-    qreal scalex = -1.0 * gesture->rotationAngle();
+    qreal scalex = -1.0 * pinchGesture->rotationAngle();
     qreal scaley =
         m_OriginalScaleFactor - 
-        (gesture->totalScaleFactor() * m_OriginalScaleFactor);
+        (pinchGesture->totalScaleFactor() * m_OriginalScaleFactor);
     
+    SYS_DEBUG ("m_ScalePhysics->pointerMove (%g, %g)", 
+            scalex + rotationDelta, scaley * 100.0);
     m_ScalePhysics->pointerMove(
             QPointF(scalex + rotationDelta, scaley * 100.0));
     
-    event->accept(gesture);
+    event->accept(pinchGesture);
 }
 
 void 
@@ -583,45 +588,12 @@ WallpaperEditorWidget::pinchGestureEnded (
             QPinchGesture *gesture)
 {
     SYS_DEBUG ("");
-    if (m_PanOngoing) {
-        m_Physics->pointerRelease();
-        m_PanOngoing = false;
-        return;
-    }
 
+    SYS_DEBUG ("m_ScalePhysics->pointerRelease ()");
     m_ScalePhysics->pointerRelease ();
     event->accept(gesture);
 }
 
-void 
-WallpaperEditorWidget::pinchGestureEvent (
-            QGestureEvent *event, 
-            QPinchGesture *gesture)
-{
-    SYS_DEBUG ("");
-    Q_UNUSED (event);
-
-    switch (gesture->state()) {
-        case Qt::GestureStarted:
-            m_PinchOngoing = true;
-            pinchGestureStarted (event, gesture);
-            break;
-
-        case Qt::GestureFinished:
-        case Qt::GestureCanceled:
-            pinchGestureEnded (event, gesture);
-            m_PinchOngoing = false;
-            break;
-
-        case Qt::GestureUpdated:
-            pinchGestureUpdate (event, gesture);
-            break;
-
-        case Qt::NoGesture:
-            SYS_WARNING ("I dont know what to do when Qt::NoGesture");
-            break;
-    }
-}
 
 /*
  * The pinch gesture event coordinate system is not the same as the motion event
@@ -641,31 +613,21 @@ WallpaperEditorWidget::gestureWorkaround (
     }
 }
 
-bool
-WallpaperEditorWidget::supportsLandscape () const
-{
-    SYS_DEBUG ("");
-    return !m_OrientationLocked || m_Orientation == M::Landscape;
-}
-
-bool
-WallpaperEditorWidget::supportsPortrait () const
-{
-    SYS_DEBUG ("");
-    return !m_OrientationLocked || m_Orientation == M::Portrait;
-}
-
 void 
-WallpaperEditorWidget::setupPanningPhysics ()
+WallpaperEditorWidget::setupPanningPhysics (
+        bool movePh)
 {
     /*
      * The widget's geometry is disturbed by the transparent toolbar, 
      * but the expectedsize is stable.
      */
     QSize   geom = m_Trans.expectedSize();
+    QSize   imageSize;
     qreal   left, top;
     qreal   width, height;
     int     imagedx, imagedy;
+
+    imageSize = imageVisualSize (m_Trans.scale());
 
     if (m_Trans.rotation() == 90.0 || m_Trans.rotation() == -90.0) {
         imagedx = imageDY();
@@ -674,32 +636,62 @@ WallpaperEditorWidget::setupPanningPhysics ()
         imagedx = imageDX();
         imagedy = imageDY();
     }
-
-    if (geom.height() >= imagedy) {
-        top    = 0.0;
-        top    -= m_Trans.offset().y();
-        height = geom.height() - imagedy;
-    } else {
-        top     = geom.height() - imagedy;
-        top    -= m_Trans.offset().y();
-
-        height  = -1.0 * top;
-        height -= m_Trans.offset().y();
-    }
     
-    if (geom.width() >= imagedx) {
-        left    = 0.0;
-        left   -= m_Trans.offset().x();
-        width   = geom.width() - imagedx;
-    } else {
-        left    = geom.width() - imagedx;
-        left   -= m_Trans.offset().x();
+    if (geom.height() >= imagedy) {
+        top    = imageSize.height() / 2.0;
+        //top    -= m_Trans.offset().y();
 
-        width   = -1.0 * left;
-        width -= m_Trans.offset().x();
+        height = geom.height() - imageSize.height();
+    } else {
+        top     = geom.height() - imageSize.height() / 2.0;
+        //top    -= m_Trans.offset().y();
+
+        height  =  imageSize.height() - geom.height();
     }
 
-    //SYS_DEBUG ("%g, %g (%gx%g)", left, top, width, height);
+    if (geom.width() >= imagedx) {
+        left    = imageSize.width() / 2.0;
+        //left   -= m_Trans.offset().x();
+
+        width = geom.width() - imageSize.width();
+    } else {
+        left    = geom.width() - imageSize.width() / 2.0;
+        //left   -= m_Trans.offset().x();
+
+        width   =  imageSize.width() - geom.width();
+    }
+   
+    #if 0
+    SYS_DEBUG ("*** imageSize = %s", SYS_SIZE(imageSize));
+    SYS_DEBUG ("*** offset  = %g, %g",
+            m_Trans.offset().x(), m_Trans.offset().y());
+    SYS_DEBUG ("*** imaged. = %dx%d", imagedx, imagedy);
+    SYS_DEBUG ("*** range   = %g, %g (%gx%g)", left, top, width, height);
+    #endif
+
     m_Physics->setRange (QRectF(left, top, width, height));
+   
+    /*
+     *
+     */
+    if (movePh) {
+        qreal hMargin;
+        qreal vMargin;
+
+        if (width == 0.0) {
+            hMargin = left;
+        } else {
+            hMargin = left + (width - left) / 2.0;
+        }
+
+        if (height == 0.0) {
+            vMargin = top;
+        } else {
+            vMargin = top + (height - top) / 2.0;
+        }
+
+        SYS_DEBUG ("-> %g, %g", hMargin, vMargin);
+        m_Physics->setPosition (QPointF(hMargin, vMargin));
+    }
 }
 

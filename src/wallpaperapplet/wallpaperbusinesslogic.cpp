@@ -60,9 +60,10 @@
 #include <MGConfItem>
 #include <MApplication>
 #include <MApplicationWindow>
+#include <QTimer>
 
 //#define LOTDEBUG
-//#define WARNING
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -775,9 +776,21 @@ void
 WallpaperBusinessLogic::makeBackup (
         const QString &filePath)
 {
-    QString  backupFilePath = filePath + backupExtension;
+    QString          backupFilePath = filePath + backupExtension;
+    QString          myDir = dirPath(); 
     WallpaperFile    file (filePath);
     WallpaperFile    backupFile (backupFilePath);
+
+    SYS_DEBUG ("### %s", SYS_STR(myDir));
+    SYS_DEBUG ("%s -> %s", SYS_STR(filePath), SYS_STR(backupFilePath));
+
+    /*
+     * If this is not our file it should not be removed.
+     */
+    if (!filePath.startsWith(myDir)) {
+        SYS_DEBUG ("Not our file.");
+        return;
+    }
 
     if (!file.exists())
         return;
@@ -892,13 +905,18 @@ WallpaperBusinessLogic::startWatchingFiles ()
 }
 
 void 
+WallpaperBusinessLogic::directoryChangedDelayed ()
+{
+    emit fileListChanged ();
+    startWatchingFiles ();
+}
+
+void 
 WallpaperBusinessLogic::directoryChanged (
         const QString &path)
 {
     SYS_DEBUG ("*** path = %s", SYS_STR(path));
-    emit fileListChanged ();
-    
-    startWatchingFiles ();
+    QTimer::singleShot (500, this, SLOT(directoryChangedDelayed()));
 }
 
 void 

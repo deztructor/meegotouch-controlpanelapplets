@@ -1,10 +1,42 @@
-meegotouch-controlpanelapplets (0.20.50~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.53~1) meegotouch; urgency=low
+
+  * Add a small workaround for 258638 - Brightness scrollbar loads slowly in
+    settings application
+  * Fixed: 264465 - battery condition settings status message uses wrong
+  * Request for security tokens
+
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 10 Jun 2011 11:41:14 +0200
+
+meegotouch-controlpanelapplets (0.20.52-1) meegotouch; urgency=low
+
+  * AboutApplet: Handle properly the hyperlink in the license text
+  * AboutApplet: Use the localized license text in case if it is available
+  * Fixes: NB#204139 - About: License text still draft and we have to hardcode
+    into the applet source-code
+  * Fixes: NB#258344 - wrong ringtone vibra patterns used in Silent and Beep
+    profiles
+
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 09 Jun 2011 11:44:43 +0200
+
+meegotouch-controlpanelapplets (0.20.51-3) meegotouch; urgency=low
+
+  [ Laszlo Pere ]
+  * Fixes: NB#262623 - Wallpaper disappears from the wallpaper applet after
+    setting it active from Store client
+
+  [ David Kedves ]
+  * Fixes: NB#263279 - [TASK] QtM System Info model() and productName() return
+    values swapped
+
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 07 Jun 2011 11:38:53 +0200
+
+meegotouch-controlpanelapplets (0.20.50-1) meegotouch; urgency=low
 
   [ David Kedves ]
   * Fixes: NB#259912 - Settings; battery, string clipping
     §qtn_ener_remaining_standby§
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 03 Jun 2011 12:54:00 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 07 Jun 2011 08:13:37 +0200
 
 meegotouch-controlpanelapplets (0.20.49-1) meegotouch; urgency=low
 

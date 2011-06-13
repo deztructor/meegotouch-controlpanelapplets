@@ -22,6 +22,8 @@
 ****************************************************************************/
 #include "wallpaperutils.h"
 #include "wallpaperconfiguration.h"
+#include "wallpaperitrans.h"
+
 using namespace Wallpaper;
 
 #include <stdlib.h>
@@ -34,8 +36,10 @@ using namespace Wallpaper;
 #include <QFile>
 #include <QFileInfoList>
 #include <MGConfItem>
+//#include <QImage>
+//#include <QPainter>
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include <../debug.h>
 
@@ -174,7 +178,7 @@ bool
 Wallpaper::imageFile (
             const QString     &filePath)
 {
-    bool retval = true;
+    bool retval = false;
 
     if (filePath.startsWith(QDir::separator())) {
         QFile   thisFile(filePath);
@@ -216,3 +220,33 @@ Wallpaper::smallerSize (
     return a.width() < b.width() || a.height() < b.height();
 }
 
+#if 0
+QImage
+Wallpaper::rotate (
+        QImage                  &image,
+        const WallpaperITrans   &trans)
+{
+    QImage  retval;
+    QSize   targetSize;
+    QRectF  area;
+
+    if (trans.rotation() == 90 || trans.rotation() == -90) {
+        targetSize = QSize (
+                image.height() * trans.scale(),
+                image.width() * trans.scale());
+    } else {
+        targetSize = QSize (
+                image.height() * trans.scale(),
+                image.width() * trans.scale());
+    }
+
+    retval = QPixmap (targetSize);
+    area = QRectF (0.0, 0.0, targetSize.width(), targetSize.height());
+    QPainter  painter (&retval);
+
+    painter.rotate (trans.rotation());
+    painter.drawImage (area, m_Image);
+
+    return retval;
+}
+#endif

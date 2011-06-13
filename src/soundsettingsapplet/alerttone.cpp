@@ -51,7 +51,7 @@ AlertTone::AlertTone(
  * \return AlertTone instances...
  */
 QList<AlertTone *>
-AlertTone::alertTones()
+AlertTone::alertTones ()
 {
     QList<AlertTone *> v;
 
@@ -85,17 +85,17 @@ AlertTone::alertTones()
           << "im.alert.tone"
           << "calendar.alert.tone";
 
-    for (int Nix = 0 ; Nix < list.size() ; Nix++)
+    for (int i = 0 ; i < list.size() ; i++)
     {
-        if  (keys.contains(list.at(Nix)))
+        if  (keys.contains(list.at(i)))
         {
-            keys.removeOne(list.at(Nix));
-            v << new AlertTone(QString(list.at(Nix)) + "@general");
+            keys.removeOne(list.at(i));
+            v << new AlertTone(QString(list.at(i)) + "@general");
         }
     }
 
-    for (int Nix = 0 ; Nix < keys.size() ; Nix++ )
-        v << new AlertTone(QString(keys.at(Nix)));
+    for (int i = 0 ; i < keys.size() ; i++ )
+        v << new AlertTone(QString(keys.at(i)));
 #endif
 
     return v;
