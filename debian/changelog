@@ -2,10 +2,11 @@ meegotouch-controlpanelapplets (0.20.53~1) meegotouch; urgency=low
 
   * Add a small workaround for 258638 - Brightness scrollbar loads slowly in
     settings application
-  * Fixed: 264465 - battery condition settings status message uses wrong
+  * Fixes: NB#264465 - battery condition settings status message uses wrong
   * Request for security tokens
+  * Fixes: NB#262498 - Lankku SW product name in about product
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 10 Jun 2011 11:41:14 +0200
+ -- David Kedves <kedazo@gmail.com>  Mon, 13 Jun 2011 19:41:51 +0200
 
 meegotouch-controlpanelapplets (0.20.52-1) meegotouch; urgency=low
 

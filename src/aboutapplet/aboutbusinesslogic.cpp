@@ -212,12 +212,19 @@ AboutBusinessLogic::productName ()
         return m_prodName;
 
     QSystemDeviceInfo sdi;
+
     /*
      * From now model should be used
      * (as productName will returns the internal prod.name,
      * eg.: RX-51 for Nokia N900)
      */
-    return sdi.model ();
+    QString vendor = sdi.manufacturer ();
+    QString model = sdi.model ();
+
+    if (model.contains (vendor))
+        return model;
+
+    return vendor + " " + model;
 }
 
 /*!
@@ -311,7 +318,7 @@ AboutBusinessLogic::licenseText ()
         "sourcecode.request@nokia.com</a>");
 
     /* Wow, we have it translated, then return it... */
-    if (localizedText.length () > qstrlen ("qtn_prod_legal"))
+    if (localizedText.length () > (int) qstrlen ("qtn_prod_legal"))
     {
         return localizedText;
     }
