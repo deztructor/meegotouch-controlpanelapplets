@@ -478,10 +478,14 @@ BatteryBusinessLogic::recalculateChargingInfo ()
     SYS_DEBUG ("*** chargingRate   = %d", chargingRate);
     SYS_DEBUG ("*** m_ChargingRate = %d", m_ChargingRate);
 
+#if 0
+    /*
+     * Removed while trying to fix bug #265208.
+     */
     if (chargingRate == m_ChargingRate &&
             couldBeCharging == m_Charging) 
         return;
-
+#endif
     /*
      * If the charging rate has been changed we need to notify the ui with a
      * signal.
