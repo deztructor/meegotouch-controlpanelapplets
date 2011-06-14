@@ -172,3 +172,15 @@ DisplayBusinessLogic::PSMValue ()
 }
 
 
+
+void
+DisplayBusinessLogic::setCloseFromTop (bool enable)
+ {
+ }
+
+ bool
+DisplayBusinessLogic::getCloseFromTopValue ()
+ {
+     bool retval = false;
+ 
+ }
