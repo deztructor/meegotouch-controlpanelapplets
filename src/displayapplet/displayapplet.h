@@ -52,6 +52,7 @@ private:
 
     #ifdef UNIT_TEST
     friend class Ut_DisplayApplet;
+    friend class Ut_DisplayBrief;
     #endif
 };
 #endif // DISPLAYAPPLET_H
