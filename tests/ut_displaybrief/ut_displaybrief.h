@@ -39,7 +39,6 @@ private slots:
     void initTestCase ();
     void cleanupTestCase ();
 
-    void testConstructWidget ();
     void testConstructBrief();
     void testValue();
     void testMinValue();

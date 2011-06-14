@@ -74,22 +74,6 @@ Ut_DisplayBrief::cleanupTestCase()
 }
 
 
-void
-Ut_DisplayBrief::testConstructWidget ()
-{
-    DcpWidget *widget;
-
-    /*
-     * Testing if the applet creates a widget the first time.
-     */
-    widget = m_Applet->constructWidget (0);
-    QVERIFY (widget);
-    QVERIFY (m_Applet->m_MainWidget == widget);
-
-
-}
-
-
  void
 Ut_DisplayBrief::testConstructBrief()
 {
@@ -122,8 +106,8 @@ Ut_DisplayBrief::testMaxValue()
 Ut_DisplayBrief::testSetValue()
 {
 
-  brief1->setValue(4);
-  QVERIFY(brief1->value() == 4);
+  brief1->setValue(3);
+  QVERIFY(brief1->value() == 3);
 
 }
 
