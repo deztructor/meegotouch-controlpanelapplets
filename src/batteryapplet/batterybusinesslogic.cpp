@@ -314,7 +314,7 @@ BatteryBusinessLogic::batteryRemCapacityChanged (
 
     /* Fixes: NB#265208 */
     if (m_battery->getBatteryState () == MeeGo::QmBattery::StateFull)
-        emit batteryFull ()
+        emit batteryFull ();
     else
         emit remainingBatteryCapacityChanged (percentage);
 }
