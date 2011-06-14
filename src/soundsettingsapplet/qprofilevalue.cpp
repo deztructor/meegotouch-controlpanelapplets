@@ -26,7 +26,7 @@
 
 #include "qprofilevalue.h"
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -138,7 +138,6 @@ QProfileValue::delNotify ()
 void
 QProfileValue::realSetValue (const QVariant &newValue)
 {
-    SYS_WARNING ("**************************************************");
     /*
      * Not doing anything if the value is the same.
      */
@@ -245,7 +244,7 @@ QProfileValue::realSetValue (const QVariant &newValue)
          * Alert Tone should be the same for all profiles...
          * Fixes: NB#258344
          */
-        bool isAlertTone = key ().contains ("alert.tone");
+        bool isAlertTone = theKey.contains ("alert.tone");
 
         char **profiles = profile_get_profiles ();
         if (profiles)
@@ -264,7 +263,8 @@ QProfileValue::realSetValue (const QVariant &newValue)
                      theProfile == QString ("silent")))
                      continue;
 
-                QProfileValue (key () + "@" + QString (profiles[i]), false).set (newValue);
+                QProfileValue other (theKey + "@" + QString (profiles[i]), false);
+                other.set (newValue);
             }
             profile_free_profiles (profiles);
         }
@@ -425,7 +425,7 @@ QProfileValue::possibleValues(RangeType *p_rangeType)
     if ("BOOLEAN" == lsType[0]) {
         if (p_rangeType) (*p_rangeType) = List;
             ret.append(QVariant(false));
-                ret.append(QVariant(true));
+            ret.append(QVariant(true));
     }
     else
     if ("INTEGER" == lsType[0]) {

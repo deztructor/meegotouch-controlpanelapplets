@@ -44,9 +44,9 @@ endif
 # Don't build documentation by setting DEB_BUILD_OPTION=nodocs,...
 ifneq (,$(findstring nodoc,$(DEB_BUILD_OPTIONS)))
      EXCLUSIONS += --no-package=libmeegocontrol-doc
-else  
+else
      QMAKE_OPTIONS += CONFIG+=docs
-endif 
+endif
 
 QMAKE_OPTIONS += COV_OPTION=off $(QMAKE_PARAMS) QMAKE_CXXFLAGS="$(CXXFLAGS)"
 
@@ -115,6 +115,18 @@ binary-arch: build install
 	sed -e "s:/.*.sh::" -e "/^$$/d" -i debian/duicontrolpanel-resetapplet/DEBIAN/conffiles
 	dh_builddeb --destdir=$(DEBDIR) $(EXCLUSIONS)
 
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure
+binary-aegisgen:
+	aegis-deb-add -control debian/duicontrolpanel-resetapplet/DEBIAN/control \
+	              .. debian/duicontrolpanel-resetapplet.aegis=_aegis
+	aegis-deb-add -control debian/duicontrolpanel-offlineapplet/DEBIAN/control \
+	              .. debian/duicontrolpanel-offlineapplet.aegis=_aegis
+	aegis-deb-add -control debian/duicontrolpanel-wallpaperapplet/DEBIAN/control \
+	              .. debian/duicontrolpanel-wallpaperapplet.aegis=_aegis
+	aegis-deb-add -control debian/duicontrolpanel-soundsettingsapplet/DEBIAN/control \
+	              .. debian/duicontrolpanel-soundsettingsapplet.aegis=_aegis
+	aegis-deb-add -control debian/duicontrolpanel-batteryapplet/DEBIAN/control \
+	              .. debian/duicontrolpanel-batteryapplet.aegis=_aegis
+
+binary: binary-indep binary-arch binary-aegisgen
+.PHONY: build clean binary-indep binary-arch binary-aegisgen binary install configure
 

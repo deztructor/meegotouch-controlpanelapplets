@@ -1,11 +1,29 @@
-meegotouch-controlpanelapplets (0.20.52~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.54~1) meegotouch; urgency=low
+
+  * [NEW VERSION]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 14 Jun 2011 09:27:13 +0200
+
+meegotouch-controlpanelapplets (0.20.53-1) meegotouch; urgency=low
+
+  * Add a small workaround for 258638 - Brightness scrollbar loads slowly in
+    settings application
+  * Fixes: NB#264465 - battery condition settings status message uses wrong
+  * Request for security tokens
+  * Fixes: NB#262498 - Lankku SW product name in about product
+
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 14 Jun 2011 09:26:53 +0200
+
+meegotouch-controlpanelapplets (0.20.52-1) meegotouch; urgency=low
 
   * AboutApplet: Handle properly the hyperlink in the license text
   * AboutApplet: Use the localized license text in case if it is available
   * Fixes: NB#204139 - About: License text still draft and we have to hardcode
     into the applet source-code
+  * Fixes: NB#258344 - wrong ringtone vibra patterns used in Silent and Beep
+    profiles
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 09 Jun 2011 09:50:37 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 09 Jun 2011 11:44:43 +0200
 
 meegotouch-controlpanelapplets (0.20.51-3) meegotouch; urgency=low
 
