@@ -23,8 +23,8 @@
 #include <QVariant>
 #include <QString>
 
-#define DEBUG
-#define WARNING
+#undef DEBUG
+#undef WARNING
 #include "../debug.h"
 
 static const QString GConfDir ("/system/osso/dsm/display");
