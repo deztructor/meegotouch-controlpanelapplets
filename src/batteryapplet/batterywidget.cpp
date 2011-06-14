@@ -152,6 +152,7 @@ BatteryWidget::initWidget ()
 
     connect (m_logic, SIGNAL (updateUIonPowerSaveModeChange (PowerSaveOpt)),
              this, SLOT (updateUIonPowerSaveModeChange (PowerSaveOpt)));
+
     connect (m_logic, SIGNAL(batteryFull()),
              m_BatteryImage, SLOT(chargeComplete()));
     connect (m_logic, SIGNAL(batteryFull()),

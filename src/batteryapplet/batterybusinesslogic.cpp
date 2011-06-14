@@ -311,7 +311,12 @@ BatteryBusinessLogic::batteryRemCapacityChanged (
     SYS_DEBUG ("Emitting batteryBarValueReceived(%d)",
             batteryBarValue (percentage));
     emit batteryBarValueReceived (batteryBarValue (percentage));
-    emit remainingBatteryCapacityChanged(percentage);
+
+    /* Fixes: NB#265208 */
+    if (m_battery->getBatteryState () == MeeGo::QmBattery::StateFull)
+        emit batteryFull ()
+    else
+        emit remainingBatteryCapacityChanged (percentage);
 }
 #endif
 
@@ -478,14 +483,13 @@ BatteryBusinessLogic::recalculateChargingInfo ()
     SYS_DEBUG ("*** chargingRate   = %d", chargingRate);
     SYS_DEBUG ("*** m_ChargingRate = %d", m_ChargingRate);
 
-#if 0
     /*
      * Removed while trying to fix bug #265208.
      */
     if (chargingRate == m_ChargingRate &&
-            couldBeCharging == m_Charging) 
+        couldBeCharging == m_Charging) 
         return;
-#endif
+
     /*
      * If the charging rate has been changed we need to notify the ui with a
      * signal.
@@ -503,17 +507,20 @@ BatteryBusinessLogic::recalculateChargingInfo ()
     SYS_DEBUG ("Emitting batteryBarValueReceived(%d)", batteryBarValue (-1));
     emit batteryBarValueReceived (batteryBarValue (-1));
 
-    if(batteryState == MeeGo::QmBattery::StateFull)
+    if (batteryState == MeeGo::QmBattery::StateFull)
     {
         m_Charging = false;
-        emit batteryFull();
+        SYS_WARNING ("battery full");
+        emit batteryFull ();
         return;
     }
-
-    /*
-     * And the remaining battery capacity has to be recalculated.
-     */
-    remainingCapacityRequired();
+    else
+    {
+        /*
+         * And the remaining battery capacity has to be recalculated.
+         */
+        remainingCapacityRequired();
+    }
     #else
     /*
      * FIXME: To implement a variant that does not use QmSystem.
