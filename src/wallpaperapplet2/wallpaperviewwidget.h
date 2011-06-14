@@ -55,6 +55,7 @@ class WallpaperViewWidget : public DcpStylableWidget
         void cancelClicked ();
 
     protected:
+        virtual void applyStyle ();
         virtual void polishEvent ();
         virtual int imageX () const;
         virtual int imageY () const;
@@ -83,7 +84,7 @@ class WallpaperViewWidget : public DcpStylableWidget
         MImageWidget                     *m_ImageWidget;
 
     private:
-        //M_STYLABLE_WIDGET(WallpaperViewWidgetStyle)
+        M_STYLABLE_WIDGET(WallpaperViewWidgetStyle)
         QImage transformedImage ();
 
     private:

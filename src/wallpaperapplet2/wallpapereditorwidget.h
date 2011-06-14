@@ -60,6 +60,7 @@ public:
     virtual void saveImage ();
 
     protected:
+        virtual void applyStyle ();
         virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
         virtual void wheelEvent (QGraphicsSceneWheelEvent *event);
 

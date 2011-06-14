@@ -27,15 +27,14 @@
 #include <QPixmap>
 #include <QImage>
 #include <QTimer>
+#include <MWidgetStyle>
 
-#ifndef NO_EDITING
 #include <QGestureEvent>
 #include <QTapAndHoldGesture>
 #include <QPanGesture>
 #include <QPinchGesture>
 #include <QTapGesture>
 #include <QSwipeGesture>
-#endif
 
 #include <MLayout>
 #include <MLinearLayoutPolicy>
@@ -43,8 +42,8 @@
 #include <MApplicationWindow>
 #include <MApplication>
 
-#include "mwidgetcreator.h"
-M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
+//#include "mwidgetcreator.h"
+//M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
 static const qreal ScaleLowerLimit = 0.15;
 
@@ -73,63 +72,16 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_OrientationLocked (false),
     m_PinchOngoing (false),
     m_PanOngoing (false),
-    m_HasPendingRedraw (false)
+    m_HasPendingRedraw (false),
+    m_Physics (0),
+    m_RotateAnimation (0)
 {
     MWindow *win = MApplication::activeWindow ();
 
     setObjectName ("WallpaperEditorWidget");
     /*
-     * Creating the MPhysics2DPanning object. These values are copyed from the 
-     * mpannablewidgetstyle.css CSS file.
-     */
-    m_Physics = new MPhysics2DPanning (this);
-    m_Physics->setPanDirection (Qt::Vertical | Qt::Horizontal);
-    m_Physics->setEnabled(true);
-  
-#if 0
-    SYS_DEBUG ("*** PointerSpringK  = %g", style()->pointerSpringK());
-    SYS_DEBUG ("*** Friction        = %g", style()->friction());
-    SYS_DEBUG ("*** SlidingFriction = %g", style()->slidingFriction());
-    SYS_DEBUG ("*** BorderSpringK   = %g", style()->borderSpringK());
-    SYS_DEBUG ("*** BorderFriction  = %g", style()->borderFriction());
-    SYS_DEBUG ("*** maximumvelocity = %g", style()->maximumVelocity());
-#endif
-
-    m_Physics->setPointerSpringK  (style()->pointerSpringK());
-    m_Physics->setFriction        (style()->friction());
-    m_Physics->setSlidingFriction (style()->slidingFriction());
-    m_Physics->setBorderSpringK   (style()->borderSpringK());
-    m_Physics->setBorderFriction  (style()->borderFriction());
-    m_Physics->setMaximumVelocity (style()->maximumVelocity());
-
-    connect (m_Physics, SIGNAL(positionChanged(const QPointF &)),
-            this, SLOT(panningPhysicsPositionChanged(const QPointF &)));
-    connect (m_Physics, SIGNAL(panningStopped()),
-            this, SLOT(panningPhysicsPanningStopped()));
-
-    /*
      *
      */
-    m_ScalePhysics = new MPhysics2DPanning (this);
-    m_ScalePhysics->setPanDirection (Qt::Vertical | Qt::Horizontal);
-    m_ScalePhysics->setEnabled(true);
-    
-    m_ScalePhysics->setPointerSpringK  (style()->pointerSpringK());
-    m_ScalePhysics->setFriction        (style()->friction());
-    m_ScalePhysics->setSlidingFriction (style()->slidingFriction());
-    m_ScalePhysics->setBorderSpringK   (style()->borderSpringK());
-    m_ScalePhysics->setBorderFriction  (style()->borderFriction());
-    m_ScalePhysics->setMaximumVelocity (style()->maximumVelocity());
-    m_ScalePhysics->setRange (
-            QRectF(rotationMin, scaleLowerLimit, rotationMax, scaleUpperLimit));
-    SYS_WARNING ("m_ScalePhysics->setPosition (%g, %g)", 0.0, 100.0);
-    m_ScalePhysics->setPosition (QPointF(0.0, 100.0));
-
-    connect (m_ScalePhysics, SIGNAL(positionChanged(const QPointF &)),
-            this, SLOT(scalePhysicsPositionChanged(const QPointF &)));
-    connect (m_ScalePhysics, SIGNAL(panningStopped()),
-            this, SLOT(scalePhysicsPanningStopped()));
-
     if (win) {
         m_Orientation = win->orientation();
         m_OrientationLocked = win->isOrientationLocked ();
@@ -156,6 +108,68 @@ WallpaperEditorWidget::WallpaperEditorWidget (
  */
 WallpaperEditorWidget::~WallpaperEditorWidget ()
 {
+}
+
+void 
+WallpaperEditorWidget::applyStyle()
+{
+    if (m_Physics) {
+        SYS_WARNING ("applyStyle already called.");
+        return;
+    }
+
+    WallpaperViewWidget::applyStyle();
+
+    /*
+     * Creating the MPhysics2DPanning object. These values are copyed from the 
+     * mpannablewidgetstyle.css CSS file.
+     */
+    m_Physics = new MPhysics2DPanning (this);
+    m_Physics->setPanDirection (Qt::Vertical | Qt::Horizontal);
+    m_Physics->setEnabled(true);
+  
+#if 0
+    SYS_WARNING ("------------------------------------------------");
+    SYS_DEBUG ("*** PointerSpringK  = %g", style()->pointerSpringK());
+    SYS_DEBUG ("*** Friction        = %g", style()->friction());
+    SYS_DEBUG ("*** SlidingFriction = %g", style()->slidingFriction());
+    SYS_DEBUG ("*** BorderSpringK   = %g", style()->borderSpringK());
+    SYS_DEBUG ("*** BorderFriction  = %g", style()->borderFriction());
+    SYS_DEBUG ("*** maximumvelocity = %g", style()->maximumVelocity());
+#endif
+
+    m_Physics->setPointerSpringK  (style()->pointerSpringK());
+    m_Physics->setFriction        (style()->friction());
+    m_Physics->setSlidingFriction (style()->slidingFriction());
+    m_Physics->setBorderSpringK   (style()->borderSpringK());
+    m_Physics->setBorderFriction  (style()->borderFriction());
+    m_Physics->setMaximumVelocity (style()->maximumVelocity());
+
+    connect (m_Physics, SIGNAL(positionChanged(const QPointF &)),
+            this, SLOT(panningPhysicsPositionChanged(const QPointF &)));
+    connect (m_Physics, SIGNAL(panningStopped()),
+            this, SLOT(panningPhysicsPanningStopped()));
+
+    m_ScalePhysics = new MPhysics2DPanning (this);
+    m_ScalePhysics->setPanDirection (Qt::Vertical | Qt::Horizontal);
+    m_ScalePhysics->setEnabled(true);
+    
+    m_ScalePhysics->setPointerSpringK  (style()->pointerSpringK());
+    m_ScalePhysics->setFriction        (style()->friction());
+    m_ScalePhysics->setSlidingFriction (style()->slidingFriction());
+    m_ScalePhysics->setBorderSpringK   (style()->borderSpringK());
+    m_ScalePhysics->setBorderFriction  (style()->borderFriction());
+    m_ScalePhysics->setMaximumVelocity (style()->maximumVelocity());
+    m_ScalePhysics->setRange (
+            QRectF(rotationMin, scaleLowerLimit, rotationMax, scaleUpperLimit));
+    SYS_WARNING ("m_ScalePhysics->setPosition (%g, %g)", 0.0, 100.0);
+    m_ScalePhysics->setPosition (QPointF(0.0, 100.0));
+
+    connect (m_ScalePhysics, SIGNAL(positionChanged(const QPointF &)),
+            this, SLOT(scalePhysicsPositionChanged(const QPointF &)));
+    connect (m_ScalePhysics, SIGNAL(panningStopped()),
+            this, SLOT(scalePhysicsPanningStopped()));
+
 }
 
 void
