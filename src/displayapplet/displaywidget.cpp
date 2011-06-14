@@ -25,10 +25,6 @@
 #define WARNING
 #include "../debug.h"
 
-// Define this if you want handle-label for brightness-slider
-// XXX: for now it looks very ugly... it is visible over the dialogs :-S
-//#define WANT_HANDLE_LABEL
-
 #include <MButton>
 #include <MContainer>
 #include <MComboBox>
@@ -198,10 +194,6 @@ DisplayWidget::addSliderContainer ()
 
     connect (m_brightnessSlider, SIGNAL (valueChanged (int)),
              SLOT (sliderUpdated (int)));
-
-#ifdef WANT_HANDLE_LABEL
-    m_brightnessSlider->setHandleLabelVisible (true);
-#endif
 
     /*
      * Adding the slider to the panel. Please note that the theme might set the
@@ -409,9 +401,6 @@ void
 DisplayWidget::sliderUpdated (int val)
 {
     m_logic->setBrightnessValue (val);
-#ifdef WANT_HANDLE_LABEL
-    m_brightnessSlider->setHandleLabel (QString ("%1").arg (val));
-#endif
 }
 
 void
