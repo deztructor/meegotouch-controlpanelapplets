@@ -16,12 +16,15 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "displaybusinesslogic.h"
-#include <MGConfItem>
 
-#undef DEBUG
-#undef WARNING
+#include <MGConfItem>
+#include <QSettings>
+#include <QVariant>
+#include <QString>
+
+#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 static const QString GConfDir ("/system/osso/dsm/display");
@@ -29,16 +32,16 @@ static const QString GConfDir ("/system/osso/dsm/display");
 #ifdef HAVE_QMSYSTEM
 using namespace MeeGo;
 #else
-static const QString MaxBrightnessKey = 
+static const QString MaxBrightnessKey =
     GConfDir + "/max_display_brightness_levels";
-static const QString CurrentBrightnessKey = 
+static const QString CurrentBrightnessKey =
     GConfDir + "/display_brightness";
 #endif
 
 /*
  * gconftool --recursive-list /system/osso/dsm/display
  * gconftool --set /system/osso/dsm/display/use_low_power_mode --type boolean false
- * 
+ *
  * gconftool --recursive-list /system/osso/dsm/locks
  * gconftool --set /system/osso/dsm/locks/tklock_double_tap_gesture --type integer 0
  */
@@ -48,74 +51,94 @@ static const QString DimTimeoutsKey (
 static const QString DoubleTapKey (
         "/system/osso/dsm/locks/tklock_double_tap_gesture");
 
+static const QString mcompositorConfName ("mcompositor");
+static const QString closeFromTopKey ("swipe-action-down");
+static const QString closeFromTopEnabled ("close");
+static const QString closeFromTopDisabled ("away");
+
 static int TIMEGAP = 5; // time gap between blanking and dimming
 
 #ifdef HAVE_QMSYSTEM
 DisplayBusinessLogic::DisplayBusinessLogic (
         QObject* parent) :
     QObject (parent),
-    m_Display (new QmDisplayState)
+    m_Display (new MeeGo::QmDisplayState),
+    m_compositorConf (0)
 {
     m_possibleDimValues = new MGConfItem (DimTimeoutsKey);
     m_lowPower = new MGConfItem (LowPowerKey);
     m_DoubleTap = new MGConfItem (DoubleTapKey);
     m_devicemode = new MeeGo::QmDeviceMode (this);
 
-    connect (m_lowPower, SIGNAL(valueChanged()),
-            this, SLOT(lpmValueChanged()));
-    connect (m_DoubleTap, SIGNAL(valueChanged()),
-            this, SLOT(doubleTapValueChanged()));
+#ifndef MEEGO
+    m_compositorConf = new QSettings (
+        mcompositorConfName, mcompositorConfName);
+#endif
+
+    connect (m_lowPower, SIGNAL (valueChanged ()),
+             SLOT (lpmValueChanged ()));
+    connect (m_DoubleTap, SIGNAL (valueChanged ()),
+             SLOT (doubleTapValueChanged ()));
     connect (m_devicemode,
-            SIGNAL (devicePSMStateChanged (MeeGo::QmDeviceMode::PSMState)),
-            this, SLOT (PSMStateChanged (MeeGo::QmDeviceMode::PSMState)));
+             SIGNAL (devicePSMStateChanged (MeeGo::QmDeviceMode::PSMState)),
+             SLOT (PSMStateChanged (MeeGo::QmDeviceMode::PSMState)));
 }
 #else
 DisplayBusinessLogic::DisplayBusinessLogic (
         QObject* parent) :
-    QObject (parent)
+    QObject (parent),
+    m_compositorConf (0)
 {
     m_MaxDisplayBrightness = new MGConfItem (MaxBrightnessKey);
     m_CurrentBrightness = new MGConfItem (CurrentBrightnessKey);
     m_possibleDimValues = new MGConfItem (POSSIBLE_DIM_TIMEOUTS);
     m_lowPower = new MGConfItem (LowPowerKey);
     m_DoubleTap = new MGConfItem (DoubleTapKey);
-    
-    connect (m_lowPower, SIGNAL(valueChanged()),
-            this, SLOT(lpmValueChanged()));
-    connect (m_DoubleTap, SIGNAL(valueChanged()),
-            this, doubleTapValueChanged());
+
+#ifndef MEEGO
+    m_compositorConf = new QSettings (
+        mcompositorConfName, mcompositorConfName);
+#endif
+
+    connect (m_lowPower, SIGNAL (valueChanged ()),
+             SLOT (lpmValueChanged ()));
+    connect (m_DoubleTap, SIGNAL (valueChanged ()),
+             SLOT (doubleTapValueChanged ()));
 }
 #endif
 
 DisplayBusinessLogic::~DisplayBusinessLogic ()
 {
-    #ifdef HAVE_QMSYSTEM
+#ifdef HAVE_QMSYSTEM
     delete m_Display;
     m_Display = 0;
-    #else
+#else
     delete m_MaxDisplayBrightness;
     m_MaxDisplayBrightness = 0;
 
     delete m_CurrentBrightness;
     m_CurrentBrightness = 0;
-    #endif
+#endif
+
+#ifndef MEEGO
+    delete m_compositorConf;
+    m_compositorConf = 0;
+#endif
 
     delete m_possibleDimValues;
     m_possibleDimValues = 0;
 
-    if (m_lowPower)
-        delete m_lowPower;
-    if (m_DoubleTap)
-        delete m_DoubleTap;
+    delete m_lowPower;
+    m_lowPower = 0;
 
-    m_lowPower  = 0;
+    delete m_DoubleTap;
     m_DoubleTap = 0;
 }
 
 /*!
  * Returns a list of brightness values the underlying hw system accepts.
  */
-QList<int> 
+QList<int>
 DisplayBusinessLogic::brightnessValues ()
 {
     QList<int> values;
@@ -130,7 +153,7 @@ DisplayBusinessLogic::brightnessValues ()
     #else
     max = m_MaxDisplayBrightness->value().toInt();
     #endif
-    
+
     // Well, this must be some kind of last minute check...
     max = (max > 0 ? max : 5);
 
@@ -182,7 +205,7 @@ DisplayBusinessLogic::selectedBrightnessValue ()
 }
 
 /*!
- * Returns a list that contains the available touch screen backlight time-out 
+ * Returns a list that contains the available touch screen backlight time-out
  * values. All the elements are measuring timeout values in seconds.
  */
 QList<int>
@@ -216,7 +239,7 @@ DisplayBusinessLogic::screenLightsValues ()
  * FIXME: The name of the method should be modified: this method actually
  * returns the index of the screen dim timeout value.
  */
-int 
+int
 DisplayBusinessLogic::selectedScreenLightsValue ()
 {
     int index;
@@ -244,7 +267,7 @@ DisplayBusinessLogic::selectedScreenLightsValue ()
  * \param value The slider value, that starts from 0, the qmsystem value starts
  *   from 1, so we add +1 to this parameter.
  */
-void 
+void
 DisplayBusinessLogic::setBrightnessValue (
         int value)
 {
@@ -264,7 +287,7 @@ DisplayBusinessLogic::setBrightnessValue (
  * the screen dim delay values and sets the dim timeout and the blank timeout
  * accordingly.
  */
-void 
+void
 DisplayBusinessLogic::setScreenLightTimeouts (
 		int     index)
 {
@@ -273,7 +296,7 @@ DisplayBusinessLogic::setScreenLightTimeouts (
      */
     QList<int> values = screenLightsValues ();
     int seconds = values[index];
-    
+
     SYS_DEBUG ("*** index   = %d", index);
     SYS_DEBUG ("*** seconds = %d", seconds);
     #ifdef HAVE_QMSYSTEM
@@ -348,7 +371,7 @@ DisplayBusinessLogic::PSMStateChanged (
 {
     bool enabled =
         state == MeeGo::QmDeviceMode::PSMStateOn;
-    
+
     SYS_DEBUG ("*** state = %d", (int)state);
     SYS_DEBUG ("Emitting PSMValueReceived (%s)", SYS_BOOL(enabled));
     emit PSMValueReceived (enabled);
@@ -368,4 +391,37 @@ DisplayBusinessLogic::PSMValue ()
     return ret;
 }
 
+void
+DisplayBusinessLogic::setCloseFromTop (bool enable)
+{
+    SYS_DEBUG ("enable = %s", SYS_BOOL (enable));
+#ifndef MEEGO
+    QString val = enable ? closeFromTopEnabled : closeFromTopDisabled;
+
+    m_compositorConf->setValue (closeFromTopKey, val);
+    m_compositorConf->sync ();
+#endif
+}
+
+bool
+DisplayBusinessLogic::getCloseFromTopValue ()
+{
+    bool retval = false;
+
+    /*
+     * TODO: FIXME:
+     * Implement a tracker for this key to listen for
+     * value-changes... (but most probably no-one will
+     * modify this key...)
+     */
+#ifndef MEEGO
+    QString setting = m_compositorConf->value (
+        closeFromTopKey, QVariant (closeFromTopDisabled)).toString ();
+
+    retval = (setting == closeFromTopEnabled);
+#endif
+
+    SYS_DEBUG ("returning %s", SYS_BOOL (retval));
+    return retval;
+}
 
