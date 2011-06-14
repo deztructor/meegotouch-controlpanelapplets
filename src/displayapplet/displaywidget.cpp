@@ -25,10 +25,6 @@
 #define WARNING
 #include "../debug.h"
 
-// Define this if you want handle-label for brightness-slider
-// XXX: for now it looks very ugly... it is visible over the dialogs :-S
-//#define WANT_HANDLE_LABEL
-
 #include <MButton>
 #include <MContainer>
 #include <MComboBox>
@@ -87,10 +83,12 @@ void DisplayWidget::initWidget ()
      * remove the methods themselves.
      */
     // Row 1: The title label
+#ifndef MEEGO
     addHeaderContainer ();
-    #ifdef APP_TITLE_USES_SPACER
+#ifdef APP_TITLE_USES_SPACER
     addStretcher (APP_TITLE_DIVIDER_STYLE_NAME);
-    #endif
+#endif
+#endif
     //addSecHeaderContainer ();
     //addSliderContainer ();
     //addStretcher ("CommonItemDivider");
@@ -98,6 +96,9 @@ void DisplayWidget::initWidget ()
     //addStretcher ("CommonItemDivider");
     addLowPowerContainer ();
     addDoubleTapContainer ();
+#ifndef MEEGO
+    addFromTopCloseContainer ();
+#endif
     //addStretcher ("CommonSmallSpacerInverted");
     m_MainLayout->addStretch();
 }
@@ -127,7 +128,7 @@ DisplayWidget::addHeaderContainer ()
 }
 
 
-void 
+void
 DisplayWidget::addSecHeaderContainer ()
 {
     MContainer            *container;
@@ -162,7 +163,7 @@ DisplayWidget::addSecHeaderContainer ()
     m_MainLayout->setStretchFactor (container, 0);
 }
 
-void 
+void
 DisplayWidget::addSliderContainer ()
 {
 #if 0
@@ -199,10 +200,6 @@ DisplayWidget::addSliderContainer ()
     connect (m_brightnessSlider, SIGNAL (valueChanged (int)),
              SLOT (sliderUpdated (int)));
 
-#ifdef WANT_HANDLE_LABEL
-    m_brightnessSlider->setHandleLabelVisible (true);
-#endif
-
     /*
      * Adding the slider to the panel. Please note that the theme might set the
      * size of the slider, so we need stretchers to move the short slider to the
@@ -220,7 +217,7 @@ DisplayWidget::addSliderContainer ()
 #endif
 }
 
-void 
+void
 DisplayWidget::addScreenTimeoutContainer ()
 {
     /*
@@ -248,7 +245,7 @@ DisplayWidget::addScreenTimeoutContainer ()
     m_MainLayout->setStretchFactor (m_screenTimeout, 0);
 }
 
-void 
+void
 DisplayWidget::addLowPowerContainer ()
 {
     MContainer            *container;
@@ -303,7 +300,7 @@ DisplayWidget::addLowPowerContainer ()
     m_MainLayout->setStretchFactor (container, 0);
 }
 
-void 
+void
 DisplayWidget::addDoubleTapContainer ()
 {
     MContainer            *container;
@@ -351,6 +348,55 @@ DisplayWidget::addDoubleTapContainer ()
 }
 
 void
+DisplayWidget::addFromTopCloseContainer ()
+{
+#ifndef MEEGO
+    MContainer            *container;
+    QGraphicsLinearLayout *layout;
+
+    /*
+     * Creating a lcontainer and a layout.
+     */
+    container = new MContainer (this);
+    container->setContentsMargins (0,0,0,0);
+    container->setStyleName ("CommonLargePanelInverted");
+    container->setHeaderVisible (false);
+
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
+    layout->setContentsMargins (0,0,0,0);
+    layout->setSpacing (0);
+    container->centralWidget ()->setLayout (layout);
+
+    MLabel *descLabel = new MLabel;
+    descLabel->setWordWrap (true);
+    descLabel->setObjectName ("CloseFromTopLabel");
+    descLabel->setStyleName ("CommonSingleTitleInverted");
+    //% "Swipe from top to close"
+    descLabel->setText (qtTrId ("qtn_comm_swipe_to_close"));
+    layout->addItem (descLabel);
+    layout->setAlignment (descLabel, Qt::AlignVCenter);
+
+    m_CloseSwitch = new MButton;
+    m_CloseSwitch->setCheckable (true);
+    m_CloseSwitch->setViewType (MButton::switchType);
+    m_CloseSwitch->setStyleName ("CommonRightSwitchInverted");
+    m_CloseSwitch->setChecked (m_logic->getCloseFromTopValue ());
+
+    connect (m_CloseSwitch, SIGNAL (toggled (bool)),
+             m_logic, SLOT (setCloseFromTop (bool)));
+
+    layout->addItem (m_CloseSwitch);
+    layout->setAlignment (m_CloseSwitch, Qt::AlignVCenter | Qt::AlignRight);
+
+    /*
+     * Adding the whole row to the main container.
+     */
+    m_MainLayout->addItem (container);
+    m_MainLayout->setStretchFactor (container, 0);
+#endif
+}
+
+void
 DisplayWidget::updateScreenTimeoutCombo ()
 {
     bool fillNeeded = (m_screenTimeout->count () == 0);
@@ -394,7 +440,7 @@ DisplayWidget::updateScreenTimeoutCombo ()
     }
 }
 
-void 
+void
 DisplayWidget::addStretcher (
         const QString &styleName)
 {
@@ -409,9 +455,6 @@ void
 DisplayWidget::sliderUpdated (int val)
 {
     m_logic->setBrightnessValue (val);
-#ifdef WANT_HANDLE_LABEL
-    m_brightnessSlider->setHandleLabel (QString ("%1").arg (val));
-#endif
 }
 
 void
@@ -438,7 +481,7 @@ DisplayWidget::retranslateUi ()
         m_screenTimeout->setTitle (qtTrId ("qtn_disp_screenoff"));
 }
 
-void 
+void
 DisplayWidget::lowPowerModeChanged (
         bool lpm)
 {
@@ -447,7 +490,7 @@ DisplayWidget::lowPowerModeChanged (
         m_lowPowerSwitch->setChecked (lpm);
 }
 
-void 
+void
 DisplayWidget::doubleTapModeChanged (
         bool dt)
 {

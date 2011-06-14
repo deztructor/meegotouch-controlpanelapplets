@@ -23,12 +23,11 @@
 #ifdef HAVE_QMSYSTEM
 #  include <qmdisplaystate.h>
 #  include <qmdevicemode.h>
-
-using namespace MeeGo;
 #endif
 
 #include <QObject>
 
+class QSettings;
 class MGConfItem;
 
 /*!
@@ -42,54 +41,57 @@ class MGConfItem;
  */
 class DisplayBusinessLogic : public QObject
 {
-    Q_OBJECT
+Q_OBJECT
 
-    public:
-        DisplayBusinessLogic (QObject* parent = 0);
-        virtual ~DisplayBusinessLogic();
+public:
+    DisplayBusinessLogic (QObject* parent = 0);
+    virtual ~DisplayBusinessLogic ();
 
-        QList<int> brightnessValues();
-        int selectedBrightnessValueIndex ();
-        int selectedBrightnessValue ();
-        QList<int> screenLightsValues();
-        int selectedScreenLightsValue();
-        bool getLowPowerMode ();
-        bool getDoubleTapWakes ();
-        bool PSMValue ();
+    QList<int> brightnessValues ();
+    int selectedBrightnessValueIndex ();
+    int selectedBrightnessValue ();
+    QList<int> screenLightsValues ();
+    int selectedScreenLightsValue ();
+    bool PSMValue ();
+    bool getLowPowerMode ();
+    bool getDoubleTapWakes ();
+    bool getCloseFromTopValue ();
 
-    public slots:
-        void setBrightnessValue(int value);
-        void setScreenLightTimeouts (int index);
-        void setLowPowerMode (bool enable);
-        void setDoubleTapWakes (bool enable);
-        #ifdef HAVE_QMSYSTEM     
-        void PSMStateChanged (MeeGo::QmDeviceMode::PSMState state);
-        #endif
-    
-    private slots:
-        void lpmValueChanged ();
-        void doubleTapValueChanged ();
-    
-    signals:
-        void lowPowerModeChanged (bool lpm);
-        void doubleTapModeChanged (bool lpm);
-        void PSMValueReceived (bool enabled);
+public slots:
+    void setBrightnessValue (int value);
+    void setScreenLightTimeouts (int index);
+    void setLowPowerMode (bool enable);
+    void setDoubleTapWakes (bool enable);
+    void setCloseFromTop (bool enable);
+#ifdef HAVE_QMSYSTEM
+    void PSMStateChanged (MeeGo::QmDeviceMode::PSMState state);
+#endif
 
-private: 
-    #ifdef HAVE_QMSYSTEM
-    QmDisplayState      *m_Display;
-    MeeGo::QmDeviceMode *m_devicemode;
-    #else
-    MGConfItem          *m_MaxDisplayBrightness;
-    MGConfItem          *m_CurrentBrightness;
-    #endif
-    MGConfItem          *m_possibleDimValues;
-    MGConfItem          *m_lowPower;
-    MGConfItem          *m_DoubleTap;
+private slots:
+    void lpmValueChanged ();
+    void doubleTapValueChanged ();
 
-    #ifdef UNIT_TEST
+signals:
+    void lowPowerModeChanged (bool lpm);
+    void doubleTapModeChanged (bool lpm);
+    void PSMValueReceived (bool enabled);
+
+private:
+#ifdef HAVE_QMSYSTEM
+    MeeGo::QmDisplayState   *m_Display;
+    MeeGo::QmDeviceMode     *m_devicemode;
+#else
+    MGConfItem              *m_MaxDisplayBrightness;
+    MGConfItem              *m_CurrentBrightness;
+#endif
+    MGConfItem              *m_possibleDimValues;
+    MGConfItem              *m_lowPower;
+    MGConfItem              *m_DoubleTap;
+    QSettings               *m_compositorConf;
+
+#ifdef UNIT_TEST
     friend class Ut_DisplayBusinessLogic;
-    #endif
+#endif
 };
 
 #endif
