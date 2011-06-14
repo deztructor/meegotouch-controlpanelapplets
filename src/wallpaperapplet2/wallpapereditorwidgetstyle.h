@@ -24,7 +24,7 @@
 class M_CORE_EXPORT WallpaperEditorWidgetStyle : public WallpaperViewWidgetStyle
 {
     Q_OBJECT
-    M_STYLE_INTERNAL(WallpaperEditorWidgetStyle)
+    M_STYLE(WallpaperEditorWidgetStyle)
 
     M_STYLE_ATTRIBUTE(qreal, pointerSpringK,    PointerSpringK)
     M_STYLE_ATTRIBUTE(qreal, friction,          Friction)
@@ -36,7 +36,7 @@ class M_CORE_EXPORT WallpaperEditorWidgetStyle : public WallpaperViewWidgetStyle
 
 class M_CORE_EXPORT WallpaperEditorWidgetStyleContainer : public WallpaperViewWidgetStyleContainer 
 {
-    M_STYLE_CONTAINER_INTERNAL(WallpaperEditorWidgetStyle)
+    M_STYLE_CONTAINER(WallpaperEditorWidgetStyle)
 };
 
 

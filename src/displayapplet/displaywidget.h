@@ -35,17 +35,17 @@ class DisplayWidget : public DcpWidget
     Q_OBJECT
 
 public:
-    DisplayWidget(QGraphicsWidget *parent = 0);
-    virtual ~DisplayWidget();
+    DisplayWidget (QGraphicsWidget *parent = 0);
+    virtual ~DisplayWidget ();
 
 protected:
-    void initWidget();
+    void initWidget ();
 
-    private slots:
-        void screenTimeoutChanged (int index);
-        void sliderUpdated (int val);
-        void lowPowerModeChanged (bool lpm);
-        void doubleTapModeChanged (bool dt);
+private slots:
+    void screenTimeoutChanged (int index);
+    void sliderUpdated (int val);
+    void lowPowerModeChanged (bool lpm);
+    void doubleTapModeChanged (bool dt);
 
 private:
     void addHeaderContainer ();
@@ -54,6 +54,7 @@ private:
     void addScreenTimeoutContainer ();
     void addLowPowerContainer ();
     void addDoubleTapContainer ();
+    void addFromTopCloseContainer ();
     void addStretcher (const QString &styleName);
     void updateScreenTimeoutCombo ();
     void retranslateUi ();
@@ -72,10 +73,11 @@ private:
     MLabel                 *m_screenlightLabel;
     MButton                *m_lowPowerSwitch;
     MButton                *m_DoubleTapSwitch;
+    MButton                *m_CloseSwitch;
 
-    #ifdef UNIT_TEST
+#ifdef UNIT_TEST
     friend class Ut_DisplayWidget;
-    #endif
+#endif
 };
 
 #endif // DISPLAYWIDGET_H

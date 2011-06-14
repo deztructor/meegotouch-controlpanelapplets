@@ -6,4 +6,3 @@
     <for path="applauncherd-launcher::/usr/bin/applauncherd.bin" />
   </request>
 </aegis>
-

@@ -26,13 +26,14 @@
 #include <MApplicationPage>
 #include <MPannableViewport>
 #include <MPositionIndicator>
+#include <MWidgetStyle>
 
 #define DEBUG
 #define WARNING
 #include "../debug.h"
 
-#include "mwidgetcreator.h"
-M_REGISTER_WIDGET_NO_CREATE(WallpaperViewWidget)
+//#include "mwidgetcreator.h"
+//M_REGISTER_WIDGET_NO_CREATE(WallpaperViewWidget)
 
 /******************************************************************************
  *
@@ -52,6 +53,12 @@ WallpaperViewWidget::WallpaperViewWidget (
             this, SLOT(wallpaperSaved()));
     connect (m_BusinessLogic, SIGNAL(wallpaperLoaded (QuillImage, QSize)),
             this, SLOT(wallpaperLoaded (QuillImage, QSize)));
+}
+
+void 
+WallpaperViewWidget::applyStyle()
+{
+    m_BgColor = style()->imageBackgroundColor();
 }
 
 WallpaperViewWidget::~WallpaperViewWidget ()
