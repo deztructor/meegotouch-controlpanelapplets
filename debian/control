@@ -158,7 +158,7 @@ Package: duicontrolpanel-resetapplet
 Section: misc
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel, clean-device,
-         applauncherd-launcher, devicelock
+         applauncherd-launcher
 Description: Device clearing and restore settings applet.
 
 Package: duicontrolpanel-resetapplet-dbg
