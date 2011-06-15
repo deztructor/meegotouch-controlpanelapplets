@@ -176,7 +176,7 @@ AlertToneBrowser::createContent()
 
     retranslateUi();
 
-//    m_defaults->selectAndScroll (m_tone->fileName(), m_tone->niceName());
+    m_defaults->selectAndScroll (m_tone->fileName(), m_tone->niceName());
 
     connect (m_LiveFilterEditor, SIGNAL(textChanged()),
             this, SLOT(textChanged ()));

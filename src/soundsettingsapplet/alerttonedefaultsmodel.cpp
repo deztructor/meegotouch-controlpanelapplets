@@ -411,14 +411,3 @@ AlertToneDefaultsModel::ensureHasDirectory (
 
     return retval;
 }
-
-void
-AlertToneDefaultsModel::moveItem( const QModelIndex &mIdx, int from, int destination)
-{
-    SYS_DEBUG("move item from %d to %d", from, destination);
-    QVariant itemData = data(mIdx);
-    removeRow(from);
-    insertRow(0);
-    QModelIndex idx = index(0,0);
-    setData(idx, itemData);
-}
