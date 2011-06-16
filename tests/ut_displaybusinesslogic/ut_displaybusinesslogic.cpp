@@ -211,4 +211,27 @@ Ut_DisplayBusinessLogic::testScreenLightsValues ()
 }
 
 
+void
+Ut_DisplayBusinessLogic::testPSMValue()
+{
+
+    QVERIFY(!(m_Api->PSMValue()));
+
+}
+
+
+void
+Ut_DisplayBusinessLogic::testSetCloseFromTop ()
+{
+    m_Api->setCloseFromTop(true);
+    QVERIFY(m_Api->getCloseFromTopValue());
+   
+    m_Api->setCloseFromTop(false);
+    QVERIFY(!m_Api->getCloseFromTopValue());
+    
+
+}
+
+
+
 QTEST_APPLESS_MAIN(Ut_DisplayBusinessLogic)

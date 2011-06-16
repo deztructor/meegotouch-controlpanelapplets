@@ -16,22 +16,19 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "displaybusinesslogic.h"
 
 #undef DEBUG
 #undef WARNING
 
-
 int s_brightnessvalue;
 
 DisplayBusinessLogic::DisplayBusinessLogic (
         QObject* parent) :
-    QObject (parent)
+        QObject (parent)
 {
-qDebug (" DisplayBusinessLogic::DisplayBusinessLogic called" );
-s_brightnessvalue = 2;
-
+    qDebug (" DisplayBusinessLogic::DisplayBusinessLogic called" );
+    s_brightnessvalue = 2;
 }
 
 DisplayBusinessLogic::~DisplayBusinessLogic ()
@@ -44,18 +41,17 @@ DisplayBusinessLogic::~DisplayBusinessLogic ()
 QList<int> 
 DisplayBusinessLogic::brightnessValues ()
 {
+    QList<int> values;
+    int        max = 5;
 
-     QList<int> values;
-     int        max = 5;
-     
-     
-     for (int i = 1; i <= max; ++i) {
-      	  qDebug ("*** BrightnessValues[%d] = %d", i - 1, i);
-	  values << i;
+
+    for (int i = 1; i <= max; ++i)
+    {
+        qDebug ("*** BrightnessValues[%d] = %d", i - 1, i);
+        values << i;
    }
-	 
-	     return values;
-		
+
+    return values;
 }
 
 /*!
@@ -65,12 +61,13 @@ DisplayBusinessLogic::brightnessValues ()
 int
 DisplayBusinessLogic::selectedBrightnessValueIndex ()
 {
-return s_brightnessvalue;
+    return s_brightnessvalue;
 }
 
 int
 DisplayBusinessLogic::selectedBrightnessValue ()
 {
+    return 0;
 }
 
 /*!
@@ -91,7 +88,7 @@ DisplayBusinessLogic::screenLightsValues ()
 int 
 DisplayBusinessLogic::selectedScreenLightsValue ()
 {
-
+    return 0;
 }
 
 /*!
@@ -102,8 +99,7 @@ void
 DisplayBusinessLogic::setBrightnessValue (
         int value)
 {
-s_brightnessvalue = value;
-
+    s_brightnessvalue = value;
 }
 
 /*!
@@ -113,31 +109,35 @@ s_brightnessvalue = value;
  */
 void 
 DisplayBusinessLogic::setScreenLightTimeouts (
-		int     index)
+        int     index)
 {
+    Q_UNUSED (index);
 }
 
 void
 DisplayBusinessLogic::setLowPowerMode (
         bool enable)
 {
+    Q_UNUSED (enable);
 }
 
 void
 DisplayBusinessLogic::setDoubleTapWakes (
         bool enable)
 {
-
+    Q_UNUSED (enable);
 }
 
 bool
 DisplayBusinessLogic::getLowPowerMode ()
 {
+    return true;
 }
 
 bool
 DisplayBusinessLogic::getDoubleTapWakes ()
 {
+    return true;
 }
 
 void
@@ -160,7 +160,7 @@ void
 DisplayBusinessLogic::PSMStateChanged (
         MeeGo::QmDeviceMode::PSMState state)
 {
-
+    Q_UNUSED (state);
 }
 #endif
 
@@ -171,16 +171,16 @@ DisplayBusinessLogic::PSMValue ()
     return false;
 }
 
-
-
 void
 DisplayBusinessLogic::setCloseFromTop (bool enable)
- {
- }
+{
+    Q_UNUSED (enable);
+}
 
- bool
+bool
 DisplayBusinessLogic::getCloseFromTopValue ()
- {
-     bool retval = false;
- 
- }
+{
+    bool retval = false;
+    return retval;
+}
+

@@ -39,6 +39,8 @@ private slots:
     void testLightTimeouts ();
     void testSetBrightness ();
     void testScreenLightsValues ();
+    void testPSMValue();
+    void testSetCloseFromTop ();
 
 private:
     MApplication       *m_App;

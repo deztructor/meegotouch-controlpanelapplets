@@ -1,13 +1,20 @@
-meegotouch-controlpanelapplets (0.20.54~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.55~1) meegotouch; urgency=low
+
+  * [NEW VERSION]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 15 Jun 2011 13:04:59 +0200
+
+meegotouch-controlpanelapplets (0.20.54-1) meegotouch; urgency=low
 
   [ David Kedves ]
   * Fixes: NB#264306 - Display applet: a new switch needed
+  * Revert Zoltans changes...
 
   [ Laszlo Pere ]
   * Fixes: NB#265208 - do not show the remaining percentage when cable is
     still connected for charging
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 14 Jun 2011 12:15:58 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 15 Jun 2011 13:04:39 +0200
 
 meegotouch-controlpanelapplets (0.20.53-1) meegotouch; urgency=low
 

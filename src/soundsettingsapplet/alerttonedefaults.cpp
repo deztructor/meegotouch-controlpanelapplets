@@ -166,7 +166,7 @@ AlertToneDefaults::AlertToneDefaults (
      * We have to give the widget a chance to process the model events,
      * otherwise the scroollTo() method will not work.
      */
-        QTimer::singleShot(10, this, SLOT(toneChanged()));
+	QTimer::singleShot(10, this, SLOT(toneChanged()));
 
     connect (m_DefaultsModel, SIGNAL(finished()), 
             this, SLOT(loadingFinished()));
@@ -393,7 +393,7 @@ AlertToneDefaults::selectAndScroll (
         if (m_DefaultsModel->isFinished()) {
             idx = m_DefaultsModel->addSingleItem (
                     niceName,
-                    fileName,
+                    fileName, 
                     true);
             /*
              * We have to give the widget a chance to process the model events,
