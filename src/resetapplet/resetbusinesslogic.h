@@ -19,7 +19,11 @@
 #ifndef RESETBUSINESSLOGIC_H
 #define RESETBUSINESSLOGIC_H
 
+#include <QList>
 #include <QObject>
+
+#include <QPointer>
+class QDBusInterface;
 
 /*!
  * Provides the 'restore factory settings' and 'clear user data' operations for
@@ -56,6 +60,12 @@ signals:
 public slots:
     void performRestoreSettings ();
     void performClearData ();
+
+private slots:
+    void passwordResult (bool result);
+
+private:
+    QDBusInterface  *m_devlock;
 };
 
 #endif
