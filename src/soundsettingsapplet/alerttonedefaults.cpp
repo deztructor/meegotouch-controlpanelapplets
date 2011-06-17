@@ -32,7 +32,7 @@
 #include "alerttonedefaults.h"
 #include "alerttonedefaultsmodel.h"
 
-#define DEBUG
+//#define DEBUG
 //#define WARNING
 #include "../debug.h"
 
@@ -183,7 +183,7 @@ AlertToneDefaults::AlertToneDefaults (
      */
     connect (m_DefaultsModel, SIGNAL(loading()), 
             this, SLOT(checkSpinner()));
-    
+    m_FileFromMyMusicSelected = false;
 }
 
 /*!
@@ -376,15 +376,19 @@ AlertToneDefaults::selectAndScroll (
 
     idx = m_DefaultsModel->findItemByFileName (fileName);
 
-    if(idx >= 0)
+    SYS_DEBUG("m_FileFromMyMusicSelected is %s", SYS_BOOL(m_FileFromMyMusicSelected));
+    if(!m_FileFromMyMusicSelected && idx >= 0)
     {
-        SYS_DEBUG("has valid index, m_FileNameToSelect: %s", SYS_STR(m_FileNameToSelect));
         QModelIndex mIndex = m_DefaultsModel->index (idx, 0);
         m_DefaultsModel->moveItem(idx, 0);
         success = selectAndScroll (0);
+
     }
     else
-        success = false;
+    {
+        success = selectAndScroll (idx);
+    }
+
 
     SYS_WARNING ("*** idx = %d", idx);
     if (!success) {
@@ -409,6 +413,7 @@ AlertToneDefaults::selectAndScroll (
         SYS_DEBUG("success");
         m_FileNameToSelect = "";
         m_NiceNameToSelect = "";
+        m_FileFromMyMusicSelected = false;
     }
 
     return success;
@@ -448,6 +453,11 @@ AlertToneDefaults::showEvent (
     SYS_DEBUG ("*** m_FileNameToSelect = %s", SYS_STR(m_FileNameToSelect));
 
     event->accept ();
+
+    if(!isVisible())
+        m_FileFromMyMusicSelected = true;
+    else
+        m_FileFromMyMusicSelected = false;
 
     /*
      * If there is a pending selection we need to handle it but not now,

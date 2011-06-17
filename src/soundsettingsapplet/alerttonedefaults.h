@@ -77,6 +77,7 @@ private:
     QString                        m_NiceNameToSelect;
     bool                           m_PanningStarted;
     bool                           m_ShowingSpinner;
+    bool                           m_FileFromMyMusicSelected;
 #ifdef UNIT_TEST
     friend class Ut_AlertToneDefaultsTests;
 #endif
