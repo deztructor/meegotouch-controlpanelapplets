@@ -23,7 +23,7 @@ WallpaperBusinessLogic::WallpaperBusinessLogic (
         QObject *parent) :
     QObject (parent)
 {
-
+    Q_UNUSED (parent);
 }
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic ()
@@ -148,6 +148,7 @@ void
 WallpaperBusinessLogic::directoryChanged (
         const QString &path)
 {
+    Q_UNUSED (path);
     //emit fileListChanged ();
 }
 
@@ -155,4 +156,6 @@ void
 WallpaperBusinessLogic::fileChanged (
         const QString &path)
 {
+    Q_UNUSED (path);
 }
+

@@ -32,7 +32,8 @@
 #include <qmusbmode.h>
 #endif
 
-#undef DEBUG
+#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 ResetBusinessLogic::ResetBusinessLogic() :
