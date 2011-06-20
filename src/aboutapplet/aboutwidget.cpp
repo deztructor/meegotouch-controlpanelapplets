@@ -408,7 +408,7 @@ AboutWidget::addLicenseLabelContainer ()
     m_LicenseLabel->setMinimumHeight (100.0);
 
     connect (m_LicenseLabel, SIGNAL (linkActivated (const QString &)),
-             this, SLOT (linkActivated ()));
+             this, SLOT (linkActivated (const QString &)));
 
     addStretcher ("CommonLargeSpacer");
     addStretcher ("CommonHorizontalSeparatorInverted");
@@ -433,11 +433,10 @@ AboutWidget::addStretcher (
 }
 
 void
-AboutWidget::linkActivated ()
+AboutWidget::linkActivated (const QString &link)
 {
+    SYS_DEBUG ("link = \"%s\"", SYS_STR (link));
 #ifdef HAVE_CONTENT_ACTION
-    SYS_DEBUG ("");
-    QString link ("mailto:sourcecode.request@nokia.com");
     ContentAction::Action action =
         ContentAction::Action::defaultActionForScheme (link); 
 
