@@ -1,6 +1,8 @@
 meegotouch-controlpanelapplets (0.20.55~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  * ResetApplet: ask for devicelock code when it is set
+  * Fixes: NB#267533 - Device needs reset after setting close application with
+    top swipe
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 15 Jun 2011 13:04:59 +0200
 

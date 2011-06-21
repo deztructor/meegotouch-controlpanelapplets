@@ -22,6 +22,7 @@
 #include <QSettings>
 #include <QVariant>
 #include <QString>
+#include <stdlib.h>
 
 #undef DEBUG
 #undef WARNING
@@ -398,8 +399,19 @@ DisplayBusinessLogic::setCloseFromTop (bool enable)
 #ifndef MEEGO
     QString val = enable ? closeFromTopEnabled : closeFromTopDisabled;
 
+    bool oldVal = getCloseFromTopValue ();
+
     m_compositorConf->setValue (closeFromTopKey, val);
     m_compositorConf->sync ();
+
+    // HACK: BEGIN
+    if (enable != oldVal)
+    {
+        // Notify the mcompositor about the change
+        SYS_DEBUG ("Notifing mcompositor...");
+        system ("kill -SIGHUP $(pgrep mcompositor)");
+    }
+    // HACK: END
 #endif
 }
 
