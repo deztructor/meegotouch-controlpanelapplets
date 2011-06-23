@@ -56,11 +56,14 @@ DcpWidget* DisplayApplet::pageMain()
     return m_MainWidget;
 }
 
-QString DisplayApplet::title() const
+#if 0
+QString
+DisplayApplet::title() const
 {
     //% "Display"
     return qtTrId ("qtn_disp_display");
 }
+#endif
 
 QVector<MAction*> DisplayApplet::viewMenuItems()
 {
