@@ -22,6 +22,8 @@
 #undef DEBUG
 #include "../debug.h"
 
+#undef SHOW_TEXT_IN_POWERSAVE
+
 static const char brightnessKey[] = "/system/osso/dsm/display/display_brightness";
 
 BrightnessBrief::BrightnessBrief():
@@ -30,10 +32,12 @@ BrightnessBrief::BrightnessBrief():
     m_brightness_vals (m_logic->brightnessValues ())
 {
     m_gconfKey = new MGConfItem (brightnessKey);
+
     connect (m_gconfKey, SIGNAL (valueChanged ()),
              this, SIGNAL (valuesChanged ()));
-    connect (m_logic, SIGNAL(PSMValueReceived(bool)),
-            this, SLOT(PSMValueChanged(bool)));
+
+    connect (m_logic, SIGNAL (PSMValueReceived (bool)),
+             this, SLOT (PSMValueChanged (bool)));
 }
 
 BrightnessBrief::~BrightnessBrief ()
@@ -44,37 +48,59 @@ BrightnessBrief::~BrightnessBrief ()
     m_logic = 0;
 }
 
-QVariant BrightnessBrief::value() const
+QVariant
+BrightnessBrief::value() const
 {
-    SYS_DEBUG ("PSM = %s", SYS_BOOL(m_logic->PSMValue()));
-    if (m_logic->PSMValue()) {
-        SYS_DEBUG ("Returning invalid value()");
-        return QVariant();
+    if (m_logic->PSMValue())
+    {
+        return QVariant ();
     }
 
     return m_logic->selectedBrightnessValueIndex ();
 }
 
-void BrightnessBrief::setValue(const QVariant& value)
+QString
+BrightnessBrief::valueText () const
+{
+#ifdef SHOW_TEXT_IN_POWERSAVE
+    if (m_logic->PSMValue())
+    {
+        //% "In power save mode"
+        return qtTrId ("qtn_ener_power_save_mode");
+    }
+#endif
+    return QString ();
+}
+
+void
+BrightnessBrief::setValue (const QVariant& value)
 {
     m_logic->setBrightnessValue (value.toInt());
 }
 
 
-int BrightnessBrief::minValue() const
+int
+BrightnessBrief::minValue () const
 {
     SYS_DEBUG ("");
     return 0;
 }
 
-int BrightnessBrief::maxValue() const
+int
+BrightnessBrief::maxValue () const
 {
     SYS_DEBUG ("");
     return m_brightness_vals.size () - 1;
 }
 
-int BrightnessBrief::widgetTypeID() const
+int
+BrightnessBrief::widgetTypeID () const
 {
+#ifdef SHOW_TEXT_IN_POWERSAVE
+    if (m_logic->PSMValue())
+        return DcpWidgetType::Label;
+#endif
+
     return DcpWidgetType::Slider;
 }
 
@@ -84,6 +110,6 @@ BrightnessBrief::PSMValueChanged (
 {
     Q_UNUSED (enabled);
     SYS_DEBUG ("");
-    emit valuesChanged();
+    emit valuesChanged ();
 }
 

@@ -27,24 +27,26 @@ class DisplayBusinessLogic;
 
 class BrightnessBrief: public DcpBrief
 {
-    Q_OBJECT
+Q_OBJECT
+
 public:
-    BrightnessBrief();
-    ~BrightnessBrief();
-    virtual int widgetTypeID() const;
+    BrightnessBrief ();
+    ~BrightnessBrief ();
+    virtual int widgetTypeID () const;
 
-    virtual int minValue() const;
-    virtual int maxValue() const;
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant& value);
+    virtual int minValue () const;
+    virtual int maxValue () const;
+    virtual QVariant value () const;
+    virtual QString valueText () const;
+    virtual void setValue (const QVariant& value);
 
-    private slots:
-        void PSMValueChanged (bool enabled);
+private slots:
+    void PSMValueChanged (bool enabled);
 
-    private:
-        DisplayBusinessLogic   *m_logic;
-        MGConfItem             *m_gconfKey;
-        QList<int>              m_brightness_vals;
+private:
+    DisplayBusinessLogic   *m_logic;
+    MGConfItem             *m_gconfKey;
+    QList<int>              m_brightness_vals;
 };
 
 

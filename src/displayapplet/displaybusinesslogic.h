@@ -88,6 +88,7 @@ private:
     MGConfItem              *m_lowPower;
     MGConfItem              *m_DoubleTap;
     QSettings               *m_compositorConf;
+    bool                     m_psmValue;
 
 #ifdef UNIT_TEST
     friend class Ut_DisplayBusinessLogic;

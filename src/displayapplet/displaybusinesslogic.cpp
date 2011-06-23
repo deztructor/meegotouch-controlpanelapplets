@@ -18,6 +18,7 @@
 ****************************************************************************/
 #include "displaybusinesslogic.h"
 
+#include <QTimer>
 #include <MGConfItem>
 #include <QSettings>
 #include <QVariant>
@@ -64,7 +65,8 @@ DisplayBusinessLogic::DisplayBusinessLogic (
         QObject* parent) :
     QObject (parent),
     m_Display (new MeeGo::QmDisplayState),
-    m_compositorConf (0)
+    m_compositorConf (0),
+    m_psmValue (false)
 {
     m_possibleDimValues = new MGConfItem (DimTimeoutsKey);
     m_lowPower = new MGConfItem (LowPowerKey);
@@ -83,12 +85,16 @@ DisplayBusinessLogic::DisplayBusinessLogic (
     connect (m_devicemode,
              SIGNAL (devicePSMStateChanged (MeeGo::QmDeviceMode::PSMState)),
              SLOT (PSMStateChanged (MeeGo::QmDeviceMode::PSMState)));
+
+    m_psmValue =
+        (m_devicemode->getPSMState () == MeeGo::QmDeviceMode::PSMStateOn);
 }
-#else
+#else // Don't have QmSystem...
 DisplayBusinessLogic::DisplayBusinessLogic (
         QObject* parent) :
     QObject (parent),
-    m_compositorConf (0)
+    m_compositorConf (0),
+    m_psmValue (false)
 {
     m_MaxDisplayBrightness = new MGConfItem (MaxBrightnessKey);
     m_CurrentBrightness = new MGConfItem (CurrentBrightnessKey);
@@ -361,6 +367,17 @@ DisplayBusinessLogic::doubleTapValueChanged ()
     emit doubleTapModeChanged (value != 0);
 }
 
+#if 0
+void
+DisplayBusinessLogic::toTest ()
+{
+    m_psmValue = !m_psmValue;
+    emit PSMValueReceived (m_psmValue);
+
+    QTimer::singleShot (1500, this, SLOT (toTest ()));
+}
+#endif
+
 #ifdef HAVE_QMSYSTEM
 /*!
  * This slot will be called when the device power save mode is changed. The
@@ -370,26 +387,18 @@ void
 DisplayBusinessLogic::PSMStateChanged (
         MeeGo::QmDeviceMode::PSMState state)
 {
-    bool enabled =
-        state == MeeGo::QmDeviceMode::PSMStateOn;
+    m_psmValue = (state == MeeGo::QmDeviceMode::PSMStateOn);
 
     SYS_DEBUG ("*** state = %d", (int)state);
     SYS_DEBUG ("Emitting PSMValueReceived (%s)", SYS_BOOL(enabled));
-    emit PSMValueReceived (enabled);
+    emit PSMValueReceived (m_psmValue);
 }
 #endif
 
 bool
 DisplayBusinessLogic::PSMValue ()
 {
-    bool ret = false;
-
-#ifdef HAVE_QMSYSTEM
-    ret = (m_devicemode->getPSMState () ==
-           MeeGo::QmDeviceMode::PSMStateOn);
-#endif
-
-    return ret;
+    return m_psmValue;
 }
 
 void
