@@ -436,7 +436,8 @@ void
 AboutWidget::linkActivated (const QString &link)
 {
     // Seems sometimes it contains a \" string :-S
-    QString aLink = link.replace ("\\\"", "");
+    QString aLink (link);
+    aLink = aLink.replace ("\\\"", "");
     SYS_DEBUG ("link = \"%s\"", SYS_STR (aLink));
 
 #ifdef HAVE_CONTENT_ACTION
