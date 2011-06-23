@@ -34,7 +34,7 @@ ProfileContainer::ProfileContainer (
         const QString &title, 
         bool           vibra, 
         MWidget     *parent) :
-    MListItem (parent),
+    MWidgetController (parent),
     m_ProfileId (id),
     m_Button(0),
     m_Label(0)
@@ -44,7 +44,7 @@ ProfileContainer::ProfileContainer (
     /*
      * The layout.
      */
-    layout = new QGraphicsLinearLayout(Qt::Horizontal, this);
+    layout = new QGraphicsLinearLayout (Qt::Horizontal, this);
     layout->setContentsMargins (0., 0., 0., 0.);
     SYS_DEBUG ("Creating container for %s", SYS_STR(title)); 
 
@@ -56,24 +56,25 @@ ProfileContainer::ProfileContainer (
     m_Button->setViewType (MButton::switchType);
     m_Button->setStyleName ("CommonRightSwitchInverted");
     m_Button->setChecked (vibra);
-    connect(m_Button, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
+    connect (m_Button, SIGNAL (toggled (bool)),
+             this, SIGNAL (toggled (bool)));
 
     /*
      * The label.
      */
-    m_Label = new MLabel(title);
+    m_Label = new MLabel (title);
     m_Label->setStyleName ("CommonSingleTitleInverted");
 
     /*
      * Adding these things together.
      */
-    layout->addItem(m_Label);
-    layout->addItem(m_Button);
+    layout->addItem (m_Label);
+    layout->addItem (m_Button);
 
     layout->setAlignment (m_Label, Qt::AlignVCenter | Qt::AlignLeft);
     layout->setAlignment (m_Button, Qt::AlignVCenter | Qt::AlignLeft);
 
-    setLayout(layout);
+    setLayout (layout);
 
     setContentsMargins (0., 0., 0., 0.);
     setStyleName ("CommonPanelInverted");
@@ -83,7 +84,6 @@ ProfileContainer::ProfileContainer (
 
 ProfileContainer::~ProfileContainer()
 {
-    SYS_DEBUG ("");
 }
 
 int 

@@ -20,7 +20,7 @@
 #ifndef PROFILECONTAINER_H
 #define PROFILECONTAINER_H
 
-#include <MListItem>
+#include <MWidgetController>
 
 class MButton;
 class MLabel;
@@ -30,7 +30,7 @@ class MImageWidget;
  * A widget that shows and controls a profile's vibration on/off
  * property.
  */
-class ProfileContainer: public MListItem
+class ProfileContainer: public MWidgetController
 {
     Q_OBJECT
     Q_PROPERTY(bool checked READ isChecked WRITE setChecked)
