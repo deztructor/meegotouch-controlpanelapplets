@@ -15,6 +15,6 @@ X-DUIApplet-Applet=libdisplayapplet.so
 
 [DCP]
 Category=qtn_sett_main_battery
-Order=3
+Order=2
 WidgetType=Label
 

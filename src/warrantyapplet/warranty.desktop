@@ -12,8 +12,6 @@ X-Maemo-Fixed-Args=Warranty
 
 [DUI]
 X-DUIApplet-Applet=libwarrantyapplet.so
-X-DUIApplet-ImageLandscape=Widget_landscape_weather.png
-X-DUIApplet-ImagePortrait=Widget_portrait_weather.png
 
 [DCP]
 Category=qtn_sett_main_aboutmy
