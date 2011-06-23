@@ -435,10 +435,13 @@ AboutWidget::addStretcher (
 void
 AboutWidget::linkActivated (const QString &link)
 {
-    SYS_DEBUG ("link = \"%s\"", SYS_STR (link));
+    // Seems sometimes it contains a \" string :-S
+    QString aLink = link.replace ("\\\"", "");
+    SYS_DEBUG ("link = \"%s\"", SYS_STR (aLink));
+
 #ifdef HAVE_CONTENT_ACTION
     ContentAction::Action action =
-        ContentAction::Action::defaultActionForScheme (link); 
+        ContentAction::Action::defaultActionForScheme (aLink);
 
     SYS_DEBUG ("action.valid = %s", SYS_BOOL (action.isValid ()));
     SYS_DEBUG ("action.name = %s", SYS_STR (action.name ()));

@@ -104,6 +104,7 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
+#include <QTime>
 #include <QtDebug>
 
 #ifdef DEBUG_SUPPRESS_COLOR
@@ -120,7 +121,6 @@
 #  define TERM_BOLD    "\033[1m"
 #endif
 
-
 namespace SysDebug
 {
     void sysPrintMsg (
@@ -134,4 +134,7 @@ namespace SysDebug
 #define SYS_BOOL(boolean) (boolean ? \
         TERM_BOLD "true" TERM_NORMAL : \
         TERM_BOLD "false" TERM_NORMAL)
+
+#define SYS_TIME_STR SYS_STR(QTime::currentTime ().toString ("hh:mm:ss.zzz"))
+
 #endif

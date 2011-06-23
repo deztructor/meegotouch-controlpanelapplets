@@ -27,6 +27,7 @@
 #include "alerttonebrowser.h"
 #include "alerttoneappletwidget.h"
 
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -73,6 +74,7 @@ SoundSettingsApplet::init()
 DcpWidget *
 SoundSettingsApplet::constructWidget(int widgetId)
 {
+    SYS_DEBUG ("%s: widgetId = %d", SYS_TIME_STR, widgetId);
 	AlertToneToplevel *newWidget = NULL;
 	int realWidgetId = widgetId / 65536;
 	int alertToneIdx = widgetId - realWidgetId * 65536;
@@ -97,6 +99,7 @@ SoundSettingsApplet::constructWidget(int widgetId)
                  SLOT (toplevelDestroyed (QObject *)));
 	}
 
+    SYS_DEBUG ("%s: done", SYS_TIME_STR);
 	return newWidget;
 }
 
