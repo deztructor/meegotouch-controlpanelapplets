@@ -10,7 +10,6 @@ CONFIG(docs) {
     addSubDirs(doc)
 }
 
-addSubDirs(translations)
 addSubDirs(src)
 addSubDirs(tests)
 

@@ -2,7 +2,7 @@
 Type=ControlPanelApplet
 Name=USB
 X-logical-id=qtn_usb_title
-X-translation-catalog=usb
+X-translation-catalog=usbapplet,usb
 X-Maemo-Service=com.nokia.DuiControlPanel
 X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
 X-Maemo-Object-Path=/

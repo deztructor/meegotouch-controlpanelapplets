@@ -2,7 +2,7 @@
 Type=ControlPanelApplet
 Name=OfflineButton
 X-logical-id=qtn_sett_main_flightmode
-X-translation-catalog=offline
+X-translation-catalog=offline,offlineapplet
 X-Maemo-Service=com.nokia.DuiControlPanel
 X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
 X-Maemo-Object-Path=/

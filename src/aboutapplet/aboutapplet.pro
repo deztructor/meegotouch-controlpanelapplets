@@ -2,6 +2,8 @@ include(../../localconfig.pri)
 include(../coverage.pri)
 include(../../shared.pri)
 
+SUBDIRS += translations
+
 TEMPLATE = lib
 CONFIG += plugin \
           gui \

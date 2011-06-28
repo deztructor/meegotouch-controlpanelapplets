@@ -2,7 +2,7 @@
 Type=ControlPanelApplet
 Name=Alert Tones
 X-logical-id=qtn_sond_sounds
-X-translation-catalog=meegotouchcp-applets,sounds,profiles
+X-translation-catalog=soundsettingsapplet,sounds,profiles
 X-Maemo-Service=com.nokia.DuiControlPanel
 X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
 X-Maemo-Object-Path=/

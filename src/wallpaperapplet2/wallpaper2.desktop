@@ -2,7 +2,7 @@
 Type=ControlPanelApplet
 Name=Wallpaper2
 X-logical-id=qtn_wall_wallpaper2
-X-translation-catalog=meegotouchcp-applets,wallpaper
+X-translation-catalog=wallpaperapplet2,wallpaper
 Icon=
 Exec=
 X-Maemo-Service=com.nokia.DuiControlPanel
