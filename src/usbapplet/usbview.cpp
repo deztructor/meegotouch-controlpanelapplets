@@ -45,21 +45,31 @@
 using namespace MeeGo;
 
 #define qtTrIdShort(id) qtTrId(id).split(QChar(0x9c)).last()
+
+#ifndef MEEGO
 #define VALID_USB_MODE(modeType) \
     ((modeType == UsbModeAsk || \
       modeType == UsbModeMassStorage || \
       modeType == UsbModeOviSuite || \
       modeType == UsbModeSDK))
+#else
+#define VALID_USB_MODE(modeType) \
+    ((modeType == UsbModeAsk || \
+      modeType == UsbModeMassStorage || \
+      modeType == UsbModeOviSuite))
+#endif
 
 static const QString developerModeKey ("/Meego/System/DeveloperMode");
 static const QString usbModeKey ("/MeeGo/System/UsbMode");
 static const QString developerModeName ("windows_network");
 
-static QmUSBMode::Mode usbModes[] = { 
+static QmUSBMode::Mode usbModes[] = {
     QmUSBMode::Ask,
     QmUSBMode::MassStorage,
     QmUSBMode::OviSuite,
-    QmUSBMode::SDK
+#ifndef MEEGO
+    QmUSBMode::SDK,
+#endif
 };
 
 inline int
@@ -75,8 +85,8 @@ usbModeIndex (QmUSBMode::Mode mode)
     return ret;
 }
 
-#ifdef DEBUG 
-static QString 
+#ifdef DEBUG
+static QString
 usbModeName (QmUSBMode::Mode mode)
 {
     switch (mode) {
@@ -85,31 +95,31 @@ usbModeName (QmUSBMode::Mode mode)
 
         case QmUSBMode::DataInUse:
             return "QmUSBMode::DataInUse";
-        
+
         case QmUSBMode::Disconnected:
             return "QmUSBMode::Disconnected";
-        
+
         case QmUSBMode::MassStorage:
             return "QmUSBMode::MassStorage";
-        
+
         case QmUSBMode::ChargingOnly:
             return "QmUSBMode::ChargingOnly";
-        
+
         case QmUSBMode::OviSuite:
             return "QmUSBMode::OviSuite";
 
         case QmUSBMode::ModeRequest:
             return "QmUSBMode::ModeRequest";
-        
+
         case QmUSBMode::Ask:
             return "QmUSBMode::Ask";
-        
+#ifndef MEEGO
         case QmUSBMode::SDK:
             return "QmUSBMode::SDK";
-        
+#endif
         case QmUSBMode::Undefined:
             return "QmUSBMode::Undefined";
-        
+
         default:
             return "QmUSBMode::UnknownMode!";
     }
@@ -122,12 +132,14 @@ UsbView::UsbView (MeeGo::QmUSBMode *logic) :
     DcpStylableWidget (0),
     m_logic (logic),
     m_policy (0),
-    m_infoLabel (0)
+    m_infoLabel (0),
+    m_DeveloperMode (false)
 {
     MGConfItem  developerModeItem (developerModeKey);
 
+#ifndef MEEGO
     m_DeveloperMode = developerModeItem.value().toBool();
-    
+#endif
     setObjectName ("UsbView");
     initWidget ();
     connect (m_logic, SIGNAL (modeChanged (MeeGo::QmUSBMode::Mode)),
@@ -141,12 +153,13 @@ UsbView::UsbView (MeeGo::QmUSBMode *logic) :
 UsbView::UsbView (void *logic) :
     DcpStylableWidget (0),
     m_policy (0),
-    m_infoLabel (0)
+    m_infoLabel (0),
+    m_DeveloperMode (false)
 {
     MGConfItem  developerModeItem (developerModeKey);
-
+#ifndef MEEGO
     m_DeveloperMode = developerModeItem.value().toBool();
-
+#endif
     setObjectName ("UsbView");
     initWidget ();
 }
@@ -188,7 +201,8 @@ UsbView::initWidget ()
      * is going to be added by the infotext when it is necessary. The banner
      * below the subtitle is always there.
      */
-    addSubTitle (this, m_policy, 
+    //% "Default USB device mode"
+    addSubTitle (this, m_policy,
             qtTrId("qtn_usb_default_info"));
 
     separator = new MSeparator;
@@ -220,7 +234,7 @@ UsbView::usbModeActivated (int idx)
     QmUSBMode::Mode active = m_logic->getMode ();
 
     /*
-     * Error message, shown if user tries to change the USB mode in USB 
+     * Error message, shown if user tries to change the USB mode in USB
      * setting view (3.2) while the USB cable is connecting with the device.
      */
     if (active != QmUSBMode::Disconnected &&
@@ -245,7 +259,7 @@ UsbView::usbModeActivated (int idx)
 
     QmUSBMode::Mode newmode = usbModes[idx];
 
-    SYS_DEBUG ("Setting USB mode/default mode to %s", 
+    SYS_DEBUG ("Setting USB mode/default mode to %s",
             SYS_STR(usbModeName(newmode)));
     m_logic->setDefaultMode (newmode);
     m_logic->setMode (newmode);
@@ -284,7 +298,7 @@ UsbView::addSubTitle (
     container->setContentsMargins (0., 0., 0., 0.);
     container->setStyleName (SUBTITLE_PANEL_STYLE_NAME);
     container->setHeaderVisible (false);
-    
+
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
     layout->setContentsMargins (0., 0., 0., 0.);
     layout->setSpacing (0.);
@@ -299,7 +313,7 @@ UsbView::addSubTitle (
      */
     label = new MLabel (subTitle);
     label->setStyleName (SUBTITLE_LABEL_STYLE_NAME);
-    
+
 
     layout->addItem (separator);
     layout->setStretchFactor (separator, 2);
@@ -320,10 +334,10 @@ UsbView::addButtons ()
 
     #ifdef HAVE_QMSYSTEM
     currentModeIndex = usbModeIndex (m_logic->getDefaultMode ());
-    SYS_DEBUG ("The default mode is %s", 
+    SYS_DEBUG ("The default mode is %s",
             SYS_STR(usbModeName(m_logic->getDefaultMode ())));
     #endif
-    
+
     for (int n = 0; n < UsbModeLastMode; ++n) {
         MButton *button;
 
@@ -332,7 +346,7 @@ UsbView::addButtons ()
 
         SYS_DEBUG ("*** n = %d", n);
         button = new MButton (usbModeUIString(UsbModeType(n)));
-            
+
         group->addButton (button);
         button->setStyleName (usbModeButtonStyle(UsbModeType(n)));
         button->setViewType (MButton::groupType);
@@ -370,11 +384,11 @@ UsbView::currentText () const
             //% "Sync and connect in use"
             return qtTrId ("qtn_usb_sync_active");
             break;
-
+#ifndef MEEGO
         case QmUSBMode::SDK:
             return "SDK";
             break;
-
+#endif
         case QmUSBMode::ModeRequest:
             // Seems that the ChargingOnly comes late (30 sec or so), and we can
             // show the chargingonly early.
@@ -436,7 +450,7 @@ UsbView::updateInfoLabel ()
     }
 
     SYS_DEBUG ("creating the info-widget");
-    
+
     /*
      * When we shown no text we didn't need the separator, now we need one.
      */
@@ -477,7 +491,7 @@ UsbView::updateInfoLabel ()
     m_policy->insertItem (m_infoOrder + 1, separator);
 }
 
-void 
+void
 UsbView::buttonToggled (
         bool state)
 {
@@ -490,37 +504,30 @@ UsbView::buttonToggled (
      */
     if (!state)
         return;
-    
+
     index = selectedButtonIndex ();
     if (VALID_USB_MODE(index)) {
         usbModeActivated (index);
     } else {
         SYS_WARNING ("Unhandled mode.");
     }
-#if 0
-    // The support for this added to the QmUsbMode
-    else if (index == UsbModeSDK) {
-        MGConfItem modeItem (usbModeKey);
-    
-        SYS_WARNING ("%s -> %s", 
-                SYS_STR(developerModeName), SYS_STR(usbModeKey));
-        modeItem.set (QVariant(developerModeName));
-    }
-#endif
 }
 
-QString 
+QString
 UsbView::usbModeUIString (
         UsbModeType type) const
 {
     switch (type) {
         case UsbModeAsk:
+            //% "Always ask"
             return qtTrId ("qtn_usb_always_ask");
 
         case UsbModeMassStorage:
+            //% "Mass storage"
             return qtTrId("qtn_usb_mass_storage");
 
         case UsbModeOviSuite:
+            //% "Sync and connect"
             return qtTrId("qtn_usb_ovi_suite");
 
         case UsbModeSDK:
@@ -533,7 +540,7 @@ UsbView::usbModeUIString (
     return QString();
 }
 
-QString 
+QString
 UsbView::usbModeButtonStyle (
         UsbModeType type) const
 {
@@ -560,7 +567,7 @@ UsbView::usbModeButtonStyle (
     return QString();
 }
 
-int 
+int
 UsbView::selectedButtonIndex () const
 {
     int index = -1;

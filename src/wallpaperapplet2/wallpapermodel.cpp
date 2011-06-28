@@ -652,10 +652,10 @@ usbModeName (QmUSBMode::Mode mode)
         
         case QmUSBMode::Ask:
             return "QmUSBMode::Ask";
-        
+#ifndef MEEGO
         case QmUSBMode::SDK:
             return "QmUSBMode::SDK";
-        
+#endif
         case QmUSBMode::Undefined:
             return "QmUSBMode::Undefined";
         
