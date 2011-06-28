@@ -26,6 +26,7 @@
 #include <QPointer>
 #include <DcpAppletIf>
 
+class MSheet;
 class WallpaperWidget;
 class WallpaperEditorWidget;
 class WallpaperViewWidget;
