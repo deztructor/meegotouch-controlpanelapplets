@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.56~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.57~1) meegotouch; urgency=low
 
   [ David Kedves ]
   * ResetApplet: ask for devicelock code when it is set
@@ -8,16 +8,21 @@ meegotouch-controlpanelapplets (0.20.56~1) meegotouch; urgency=low
   * Fixed: 250348 - [TASK] Ringtone view to indicate currently selected
     ringtone on top of the view
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 28 Jun 2011 12:28:06 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 28 Jun 2011 12:57:31 +0300
 
-meegotouch-controlpanelapplets (0.20.55-5) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.56-1) meegotouch; urgency=low
 
-  * Fixes: NB#267533 - Device needs reset after setting close application with
-    top swipe
+  * Fixes: NB#NB#267533 - Device needs reset after setting close application
+    with top swipe
+
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 28 Jun 2011 12:55:41 +0300
+
+meegotouch-controlpanelapplets (0.20.55-6) meegotouch; urgency=low
+
   * Changes: remove mcompositor.conf during RFS
   * Fixes: NB#266632 - Wrong label for Brightness applet
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 28 Jun 2011 12:23:57 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 28 Jun 2011 12:55:11 +0300
 
 meegotouch-controlpanelapplets (0.20.54-2) meegotouch; urgency=low
 
