@@ -16,19 +16,22 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "warrantybusinesslogic.h"
+
+#include <QString>
+#include <QSettings>
+#include <QVariant>
 
 #ifdef HAVE_QMSYSTEM
 #  include <qmsystemstate.h>
 #endif
 
-// TODO: TBD
-#define WARRANTY_DAYS 365
+static const QString configPath ("/usr/share/about-contents/");
+static const QString configFile (configPath + "warranty.ini");
 
-#undef DEBUG
+#define DEBUG
+#define WARNING
 #include "../debug.h"
-
 
 WarrantyBusinessLogic::WarrantyBusinessLogic() 
 {
@@ -44,17 +47,18 @@ WarrantyBusinessLogic::getExpirationDays ()
     int retVal = -1;
 
 #ifdef HAVE_QMSYSTEM
+    QSettings warrantyConf (configFile, QSettings::IniFormat);
+    int warrantyDays = warrantyConf.value ("days", QVariant (365)).toInt ();
+
     MeeGo::QmSystemState  systemState;
     int elapsedDays = systemState.getPowerOnTimeInSeconds () / (60 * 60 * 24);
 
-    retVal = WARRANTY_DAYS - elapsedDays;
+    retVal = warrantyDays - elapsedDays;
+
+    SYS_DEBUG ("warrantyDays = %d, elapsedDays = %d", warrantyDays, elapsedDays);
 
     if (retVal < 0)
         retVal = 0;
-#else
-    /*
-     * FIXME: To implement a version that does not use the QmSystem.
-     */
 #endif
 
     return retVal;

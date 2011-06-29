@@ -24,7 +24,6 @@ CONFIG += \
     gui \
     quill \
     meegotouchcore \
-    plugin \
     duicontrolpanel
 
 contains(DEFINES, HAVE_QTSPARQL) {
