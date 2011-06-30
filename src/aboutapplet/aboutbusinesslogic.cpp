@@ -38,7 +38,7 @@ QTM_USE_NAMESPACE
 
 #define OS_NAME_FALLBACK "MeeGo"
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -360,7 +360,7 @@ AboutBusinessLogic::initializeAndStart ()
          * Type certifications may come from different customization
          */
         QSettings certsContent (certConfigFile, QSettings::IniFormat);
-        m_certsImage = content.value ("swtypeimage").toString ();
+        m_certsImage = certsContent.value ("swtypeimage").toString ();
     }
 
     if ((! m_certsImage.isEmpty ()) &&
