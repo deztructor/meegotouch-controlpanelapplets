@@ -22,6 +22,7 @@
 #include "wallpapereditorwidget.h"
 
 #include <MAction>
+#include "wallpaperthumb.h"
 
 #ifndef UNIT_TEST
 #include <MLibrary>
@@ -42,7 +43,8 @@ WallpaperApplet::WallpaperApplet() :
 
 WallpaperApplet::~WallpaperApplet() 
 {
-    SYS_WARNING ("Destroying applet...");
+    SYS_WARNING ("Destroying applet and the Thumbnailer");
+    delete WallpaperThumb::getInstance ();
 }
 
 void 

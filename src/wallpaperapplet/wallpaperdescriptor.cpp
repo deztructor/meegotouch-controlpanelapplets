@@ -29,6 +29,8 @@
 
 #include <MTheme>
 
+#include "wallpaperthumb.h"
+
 /*
  * Please note that printing non UTF-8 characters might break the tests.
  * Apparently the test engine can not tolerate the debug messages when there are
@@ -446,12 +448,14 @@ WallpaperDescriptor::WallpaperDescriptor(
 
 WallpaperDescriptor::~WallpaperDescriptor()
 {
+#ifndef THUMBNAILER_SINGLETON
     SYS_WARNING ("m_Thumbnailer valid = %s", SYS_BOOL(m_Thumbnailer));
     if (m_Thumbnailer != 0) {
         SYS_DEBUG ("DESTROYING THUMBNAILER");
         delete m_Thumbnailer;
         m_Thumbnailer = 0;
     }
+#endif
 }
 
 
@@ -659,7 +663,6 @@ WallpaperDescriptor::initiateThumbnailer ()
         }
     }
 
-
     /*
      * If the thumbnailer is already initiated we return.
      */
@@ -690,7 +693,12 @@ WallpaperDescriptor::initiateThumbnailer ()
     if (urisList.size() == 0)
         return;
 
+#ifdef THUMBNAILER_SINGLETON
+    m_Thumbnailer = WallpaperThumb::getInstance ()->thumbnailer ();
+#else
     m_Thumbnailer = new Thumbnailer;
+#endif
+
     #ifdef LOTDEBUG
     QStringList list = Thumbnailer::getFlavors();
     foreach (QString flavor, list) {
@@ -701,8 +709,10 @@ WallpaperDescriptor::initiateThumbnailer ()
             this, SLOT(thumbnailReady(QUrl,QUrl,QPixmap,QString)) );
     connect (m_Thumbnailer, SIGNAL(error(QString,QUrl)),
             this, SLOT(thumbnailError(QString,QUrl)) );
+#ifndef THUMBNAILER_SINGLETON
     connect (m_Thumbnailer, SIGNAL(finished(int)),
             this, SLOT(thumbnailLoadingFinished(int)));
+#endif
 
     m_Thumbnailer->request (urisList, mimeList, true, defaultFlavor);
 }

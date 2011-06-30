@@ -56,13 +56,15 @@ HEADERS += \
     $$SRC_PREFIX/wallpapergconf.h \
     $$SRC_PREFIX/wallpaperdescriptor.h \
     $$SRC_PREFIX/wallpaperitrans.h \
-    $$SRC_PREFIX/wallpapercurrentdescriptor.h
+    $$SRC_PREFIX/wallpapercurrentdescriptor.h \
+    $$SRC_PREFIX/wallpaperthumb.h
 
 SOURCES += \
     ../../src/debug.cpp \
     ft_wallpaperdescriptor.cpp \
     $$SRC_PREFIX/wallpaperdescriptor.cpp \
     $$SRC_PREFIX/wallpaperitrans.cpp \
-    $$SRC_PREFIX/wallpapercurrentdescriptor.cpp
+    $$SRC_PREFIX/wallpapercurrentdescriptor.cpp \
+    $$SRC_PREFIX/wallpaperthumb.cpp
 
 INSTALLS += target

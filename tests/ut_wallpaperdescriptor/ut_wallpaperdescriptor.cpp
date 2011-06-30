@@ -136,7 +136,9 @@ Ut_WallpaperDescriptor::testDefaults ()
 {
     createDescriptor ();
 
+#ifndef THUMBNAILER_SINGLETON
     QVERIFY (m_Desc->m_Thumbnailer == NULL);
+#endif
     QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_Filename.isEmpty());
     QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_MimeType.isEmpty());
     QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_HasThumbnail == false);
@@ -246,7 +248,9 @@ Ut_WallpaperDescriptor::testThumbnailing ()
 
     QVERIFY (m_Desc->isThumbnailLoaded());
     QVERIFY (m_SignalSink.m_ThumbnailLoaded);
+#ifndef THUMBNAILER_SINGLETON
     QVERIFY (m_Desc->m_Thumbnailer == 0);
+#endif
 
     dropDescriptor ();    
 }
@@ -279,7 +283,9 @@ Ut_WallpaperDescriptor::testThumbnailingByFilename ()
 
     QVERIFY (m_Desc->isThumbnailLoaded());
     QVERIFY (m_SignalSink.m_ThumbnailLoaded);
+#ifndef THUMBNAILER_SINGLETON
     QVERIFY (m_Desc->m_Thumbnailer == 0);
+#endif
 
     dropDescriptor ();    
 }
@@ -300,7 +306,9 @@ Ut_WallpaperDescriptor::testThumbnailingWithoutData ()
      */
     m_Desc->initiateThumbnailer ();
 
+#ifndef THUMBNAILER_SINGLETON
     QVERIFY (m_Desc->m_Thumbnailer == 0);
+#endif
     QVERIFY (!m_Desc->isThumbnailLoaded());
     QVERIFY (!m_SignalSink.m_ThumbnailLoaded);
 
@@ -342,8 +350,9 @@ Ut_WallpaperDescriptor::testThumbnailingFailure ()
 
     QVERIFY (!m_Desc->isThumbnailLoaded());
     QVERIFY (!m_SignalSink.m_ThumbnailLoaded);
+#ifndef THUMBNAILER_SINGLETON
     QVERIFY (m_Desc->m_Thumbnailer == 0);
-    
+#endif
     pixmapLoadSuccess = true;
 
     dropDescriptor ();    

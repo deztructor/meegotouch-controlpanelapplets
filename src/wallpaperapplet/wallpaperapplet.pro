@@ -53,7 +53,8 @@ HEADERS = \
     wallpaperwidget.h              \
     wallpaperinfoheader.h          \
     wallpapereditorsheet.h         \
-    wallpapereditorwidget.h \
+    wallpapereditorwidget.h        \
+    wallpaperthumb.h               \
     wallpaperitrans.h
 
 SOURCES = \
@@ -69,6 +70,7 @@ SOURCES = \
     wallpaperinfoheader.cpp        \
     wallpapereditorsheet.cpp       \
     wallpapereditorwidget.cpp      \
+    wallpaperthumb.cpp             \
     wallpaperitrans.cpp
 
 DESTDIR = lib

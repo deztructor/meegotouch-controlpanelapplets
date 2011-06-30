@@ -101,6 +101,7 @@ HEADERS =                                          \
     $$SOUNDSETTINGS_PATH/alerttonepreview.h        \
     $$SOUNDSETTINGS_PATH/trackerconnection.h       \
     $$SOUNDSETTINGS_PATH/drilldownitem.h           \
+    $$WALLPAPER_PATH/wallpaperthumb.h              \
     $$PUBLIC_HEADERS
 
 SOURCES =                                          \
@@ -112,6 +113,7 @@ SOURCES =                                          \
     $$WALLPAPER_PATH/wallpaperbusinesslogic.cpp    \
     $$WALLPAPER_PATH/wallpapereditorwidget.cpp     \
     $$WALLPAPER_PATH/wallpaperinfoheader.cpp       \
+    $$WALLPAPER_PATH/wallpaperthumb.cpp            \
     $$SOUNDSETTINGS_PATH/alerttone.cpp             \
     $$SOUNDSETTINGS_PATH/drilldownitem.cpp         \
     $$SOUNDSETTINGS_PATH/alerttonedefaults.cpp     \

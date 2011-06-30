@@ -35,13 +35,15 @@ HEADERS += \
     $$STUB_PREFIX/thumbnailerstub.h \
     ../../src/debug.h \
     ut_wallpaperdescriptor.h \
-    $$SRC_PREFIX/wallpaperdescriptor.h 
+    $$SRC_PREFIX/wallpaperdescriptor.h \
+    $$SRC_PREFIX/wallpaperthumb.h
 
 SOURCES += \
     $$STUB_PREFIX/thumbnailerstub.cpp \
     ../../src/debug.cpp \
     ut_wallpaperdescriptor.cpp \
-    $$SRC_PREFIX/wallpaperdescriptor.cpp 
+    $$SRC_PREFIX/wallpaperdescriptor.cpp \
+    $$SRC_PREFIX/wallpaperthumb.cpp
 
 INSTALLS += target
 

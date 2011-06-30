@@ -28,6 +28,12 @@
 #include <MApplication>
 #include <meegocontrolexport.h>
 
+/**
+ * XXX: INFO :XXX
+ * DEFINE THIS IF WE WANT TO AVOID MULTIPLE INSTANCES OF THUMBNAILER
+ */
+#define THUMBNAILER_SINGLETON
+
 #ifdef HAVE_QUILL_FILTER
 #  include <QuillFile>
 #  include <QuillImage>

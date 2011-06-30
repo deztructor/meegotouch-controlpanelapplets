@@ -51,7 +51,8 @@ HEADERS += \
     $$SRC_PREFIX/wallpapercurrentdescriptor.h \
     $$SRC_PREFIX/wallpaperdescriptor.h \
     $$SRC_PREFIX/wallpaperitrans.h \
-    $$SRC_PREFIX/wallpapermodel.h 
+    $$SRC_PREFIX/wallpapermodel.h \
+    $$SRC_PREFIX/wallpaperthumb.h
 
 SOURCES += \
     $$STUB_PREFIX/thumbnailerstub.cpp \
@@ -64,7 +65,8 @@ SOURCES += \
     $$SRC_PREFIX/wallpapercurrentdescriptor.cpp \
     $$SRC_PREFIX/wallpaperdescriptor.cpp \
     $$SRC_PREFIX/wallpaperitrans.cpp \
-    $$SRC_PREFIX/wallpapermodel.cpp 
+    $$SRC_PREFIX/wallpapermodel.cpp \
+    $$SRC_PREFIX/wallpaperthumb.cpp
 
 INSTALLS += target
 MOC_DIR = .moc
