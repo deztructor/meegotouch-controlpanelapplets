@@ -364,24 +364,30 @@ AboutBusinessLogic::initializeAndStart ()
           m_certsImages = images.split (",");
         else
           m_certsImages = certsContent.value ("swtypeimage").toStringList ();
+
+        SYS_WARNING ("count = %d", m_certsImages.count ());
     }
 
-    if (m_certsImages.count () > 0)
+    bool certsExists = false;
+    for (int i = 0; i < m_certsImages.count (); i++)
+    {
+        QString toCheck = m_certsImages[i];
+
+        if ((! toCheck.isEmpty ()) &&
+            (toCheck.at (0) != '/'))
+            m_certsImages[i] = configPath + toCheck;
+
+        if (QFile::exists (m_certsImages[i]))
+            certsExists = true;
+    }
+
+    if (certsExists)
     {
         /*
          * To avoid flickering we need to construct the
          * certificates image container as soon as possible
          */
         emit requestFinished (reqCertsImageNeeded, QVariant ());
-
-        for (int i = 0; i < m_certsImages.count (); i++)
-        {
-            QString toCheck = m_certsImages[i];
-
-            if ((! toCheck.isEmpty ()) &&
-                (toCheck.at (0) != '/'))
-                m_certsImages[i] = configPath + toCheck;
-        }
     }
 
     /*
