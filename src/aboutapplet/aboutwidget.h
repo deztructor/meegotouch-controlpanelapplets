@@ -28,6 +28,7 @@ class MLabel;
 class QGraphicsGridLayout;
 class MImageWidget;
 class ContentWidget;
+class CertsWidget;
 
 class AboutWidget : public DcpStylableWidget
 {
@@ -69,7 +70,7 @@ private:
     ContentWidget                  *m_IMEI;
     MLabel                         *m_LicenseLabel;
     MImageWidget                   *m_imgBarcode;
-    MImageWidget                   *m_imgCerts;
+    CertsWidget                    *m_imgCerts;
 
     int                             m_currentRow;
     int                             m_certsRow;

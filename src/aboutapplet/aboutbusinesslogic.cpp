@@ -350,7 +350,6 @@ AboutBusinessLogic::initializeAndStart ()
     QSettings content (configFile, QSettings::IniFormat);
 
     m_swName = content.value ("swname").toString ();
-    m_certsImage = content.value ("swtypeimage").toString ();
     m_licenseFile =
         content.value ("abouttext", QString (LICENSE_PATH)).toString ();
 
@@ -360,19 +359,30 @@ AboutBusinessLogic::initializeAndStart ()
          * Type certifications may come from different customization
          */
         QSettings certsContent (certConfigFile, QSettings::IniFormat);
-        m_certsImage = certsContent.value ("swtypeimage").toString ();
+        QString images = certsContent.value ("swtypeimage").toString ();
+        if (! images.isEmpty ())
+          m_certsImages = images.split (",");
+        else
+          m_certsImages = certsContent.value ("swtypeimage").toStringList ();
     }
 
-    if ((! m_certsImage.isEmpty ()) &&
-        (m_certsImage.at (0) != '/'))
-        m_certsImage = configPath + m_certsImage;
-
-    /*
-     * To avoid flickering we need to construct the
-     * certificates image container as soon as possible
-     */
-    if (QFile::exists (m_certsImage))
+    if (m_certsImages.count () > 0)
+    {
+        /*
+         * To avoid flickering we need to construct the
+         * certificates image container as soon as possible
+         */
         emit requestFinished (reqCertsImageNeeded, QVariant ());
+
+        for (int i = 0; i < m_certsImages.count (); i++)
+        {
+            QString toCheck = m_certsImages[i];
+
+            if ((! toCheck.isEmpty ()) &&
+                (toCheck.at (0) != '/'))
+                m_certsImages[i] = configPath + toCheck;
+        }
+    }
 
     /*
      * Lets run the barcode-generator if there is one...
@@ -387,16 +397,6 @@ AboutBusinessLogic::initializeAndStart ()
     }
 
     processNextRequest ();
-}
-
-QImage
-AboutBusinessLogic::certsImage ()
-{
-    /* Load the picture ... */
-    QImage img (m_certsImage);
-    SYS_DEBUG ("Image path = %s", SYS_STR (m_certsImage));
-
-    return img;
 }
 
 QImage
@@ -445,10 +445,7 @@ AboutBusinessLogic::processNextRequest ()
             emit requestFinished (current, licenseText ());
             break;
         case reqCertsImage:
-            if (QFile::exists (m_certsImage))
-            {
-                emit requestFinished (current, certsImage ());
-            }
+            emit requestFinished (current, m_certsImages);
             break;
         case reqOsVersion:
             emit requestFinished (current, osVersion ());

@@ -20,6 +20,7 @@
 
 #include <QFile>
 #include <QTimer>
+#include <QPixmap>
 #include <QTextStream>
 #include <QVariant>
 #include <QSettings>
@@ -29,6 +30,7 @@
 #include <MImageWidget>
 #include <MLabel>
 #include <MSeparator>
+#include <MWidgetController>
 #include <MLinearLayoutPolicy>
 #include <MLayout>
 
@@ -84,6 +86,56 @@ class ContentWidget: public MStylableWidget
   private:
     MLabel *m_title;
     MLabel *m_subTitle;
+};
+
+class CertsWidget : public MWidgetController
+{
+public:
+    explicit CertsWidget (QGraphicsItem *parent = 0) :
+        MWidgetController (parent)
+    {
+        certsLayout = new QGraphicsLinearLayout (Qt::Vertical);
+        certsLayout->setContentsMargins (0,0,0,0);
+        certsLayout->setSpacing (0);
+
+        setContentsMargins (0,0,0,0);
+        setLayout (certsLayout);
+    }
+
+    ~CertsWidget ()
+    {
+
+    }
+
+    void
+    setImages (QStringList images)
+    {
+        foreach (QString img, images)
+        {
+            QPixmap *pixmap = 0;
+            SYS_DEBUG ("loading %s ...", SYS_STR (img));
+            if (! QFile::exists (img))
+            {
+                SYS_WARNING ("%s is missing!", SYS_STR (img));
+                continue;
+            }
+
+            pixmap = new QPixmap;
+            if (pixmap->load (img))
+            {
+                MImageWidget *crt = new MImageWidget (pixmap);
+                crt->setContentsMargins (0,0,0,0);
+                certsLayout->addItem (crt);
+            }
+            else
+            {
+                SYS_WARNING ("%s can not be loaded!", SYS_STR (img));
+                continue;
+            }
+        }
+    }
+private:
+    QGraphicsLinearLayout *certsLayout;
 };
 
 AboutWidget::AboutWidget (QGraphicsWidget *parent) :
@@ -213,9 +265,7 @@ AboutWidget::gotInfo (
             break;
         case AboutBusinessLogic::reqCertsImage:
             if (m_imgCerts)
-            {
-                m_imgCerts->setImage (value.value<QImage>());
-            }
+                m_imgCerts->setImages (value.value<QStringList>());
             break;
         case AboutBusinessLogic::reqBarcodeImage:
             m_imgBarcode->setImage (value.value<QImage>());
@@ -265,6 +315,8 @@ AboutWidget::addLogoContainer ()
 
     QGraphicsLinearLayout *layout =
         new QGraphicsLinearLayout (Qt::Horizontal);
+    layout->setSpacing (0);
+    layout->setContentsMargins (0,0,0,0);
 
     /* Store this row... maybe there is a barcode... */
     m_logoRow = m_currentRow++;
@@ -295,15 +347,17 @@ AboutWidget::addCertsContainer ()
 
     QGraphicsLinearLayout *layout =
         new QGraphicsLinearLayout (Qt::Horizontal);
+    layout->setSpacing (0);
+    layout->setContentsMargins (0,0,0,0);
 
     m_currentRow = m_certsRow;
 
-    m_imgCerts = new MImageWidget;
+    m_imgCerts = new CertsWidget;
     m_imgCerts->setObjectName ("AboutAppletCertificates");
-    m_imgCerts->setMinimumHeight (150.0);
+    m_imgCerts->setMinimumHeight (64.0);
 
     layout->addItem (m_imgCerts);
-    layout->setAlignment (m_imgCerts, Qt::AlignRight);
+    layout->setAlignment (m_imgCerts, Qt::AlignCenter);
 
     addStretcher ("CommonLargeSpacer");
     addStretcher ("CommonHorizontalSeparatorInverted");

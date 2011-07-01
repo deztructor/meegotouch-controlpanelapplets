@@ -21,6 +21,8 @@
 
 #include <QMap>
 #include <QList>
+#include <QString>
+#include <QStringList>
 #include <QPointer>
 #include <QImage>
 #include <QThread>
@@ -30,7 +32,6 @@
 
 class QDBusObjectPath;
 class QProcess;
-class QString;
 
 /*!
  * This class allows to get some information about system
@@ -86,7 +87,6 @@ private:
     QString productName ();
     QString licenseText ();
 
-    QImage certsImage ();
     QImage barcodeImage ();
 
     QPointer<QDBusInterface> m_ManagerDBusIf;
@@ -97,7 +97,7 @@ private:
     QString m_licenseFile;
     QString m_swName;
     QString m_prodName;
-    QString m_certsImage;
+    QStringList m_certsImages;
 
     QProcess *m_generator;
 
