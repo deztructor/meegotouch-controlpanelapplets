@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.59~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.60~1) meegotouch; urgency=low
 
   [ David Kedves ]
   * ResetApplet: ask for devicelock code when it is set
@@ -9,12 +9,20 @@ meegotouch-controlpanelapplets (0.20.59~1) meegotouch; urgency=low
     ringtone on top of the view
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 28 Jun 2011 12:57:31 +0300
+
+meegotouch-controlpanelapplets (0.20.59-1) meegotouch; urgency=low
+
+  * Handle multiple certs as well (must be comma separated.)
+  * Fixes: NB#270156 - About Product needs to append type label pictures
+    provided by customization
+
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 01 Jul 2011 15:54:11 +0300
+
 meegotouch-controlpanelapplets (0.20.58-1) meegotouch; urgency=low
 
   * Fixes: NB#240855 (Make sure that only one Thumbnailer instance is exists)
 
  -- David Kedves <dkedves@blumsoft.eu>  Thu, 30 Jun 2011 14:49:41 +0300
-
 
 meegotouch-controlpanelapplets (0.20.57-1) meegotouch; urgency=low
 
