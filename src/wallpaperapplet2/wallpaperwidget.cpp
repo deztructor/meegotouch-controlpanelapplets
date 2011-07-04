@@ -239,10 +239,15 @@ WallpaperWidget::polishEvent ()
     /**************************************************************************
      * Hiding the home button. 
      */
+    #if 0
+    // The navigation bar is all wrong. This didn't help either.
+    page->setComponentsDisplayMode (
+            MApplicationPage::NavigationBar,
+            MApplicationPageModel::Show);
+    #endif
     page->setComponentsDisplayMode (
             MApplicationPage::HomeButton,
             MApplicationPageModel::Hide);
-
     /*
      * Adding the ovi action.
      */

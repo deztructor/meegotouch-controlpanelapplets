@@ -90,7 +90,7 @@ WallpaperApplet::constructStylableWidget (
         int widgetId)
 {
     SYS_DEBUG ("");
-    if (Wallpaper::useSheets)
+    if (Wallpaper::useSheetForMainView)
         return 0;
 
     return pageMain (widgetId);
@@ -101,7 +101,7 @@ WallpaperApplet::constructSheet (
         int widgetId)
 {
     SYS_DEBUG ("*** widgetId = %d", widgetId);
-    if (!Wallpaper::useSheets)
+    if (!Wallpaper::useSheetForMainView)
         return 0;
 
     if (!m_WallpaperBusinessLogic)

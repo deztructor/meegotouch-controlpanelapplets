@@ -28,6 +28,7 @@
 namespace Wallpaper 
 {
     const bool useSheets (true);
+    const bool useSheetForMainView (false);
     const bool useFullScreen (true);
     const bool supportEdit (true);
     const bool currentWallpaperAtTop (true);
