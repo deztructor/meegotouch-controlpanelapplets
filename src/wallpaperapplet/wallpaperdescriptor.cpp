@@ -667,11 +667,17 @@ WallpaperDescriptor::initiateThumbnailer ()
 
     /*
      * If the thumbnailer is already initiated we return.
+     *
+     * We're asking the m_Images already in the next for cycle.
+     * So no need for this pointer checking (as it is not working with
+     * one Thumbnailer instance properly...)
      */
+#if 0
     if (m_Thumbnailer != 0) {
         SYS_WARNING ("Thumbnailer already initiated");
         return;
     }
+#endif
 
     for (int n = Landscape; n < NVariants; ++n) {
         if (m_Images[n].hasThumbnail())
@@ -790,11 +796,13 @@ WallpaperDescriptor::thumbnailLoadingFinished (
 {
     Q_UNUSED (left);
 
+#ifndef THUMBNAILER_SINGLETON
     if (!m_Thumbnailer.isNull() && left == 0) {
         SYS_WARNING ("DESTROYING THUMBNAILER");
         delete m_Thumbnailer;
         m_Thumbnailer = 0;
     }
+#endif
 }
 
 /*!
