@@ -134,7 +134,6 @@ void
 WallpaperList::loadPictures ()
 {
     SYS_DEBUG ("");
-    filtering()->proxy()->sort(Qt::DisplayRole);
     /*
      * We used to get panningStopped() signals when we got hidden, so we will
      * not initiate loading of the images when we are not visible.
@@ -161,6 +160,11 @@ WallpaperList::loadPictures ()
     SYS_WARNING ("*** rowCount() = %d", m_Model->rowCount());
     m_ImageLoader->loadPictures (firstVisibleItem(), lastIndex);
 #else
+        SYS_DEBUG ("from %d, %d to %d, %d",
+            firstVisibleItem().column(),
+            firstVisibleItem().row(),
+            lastVisibleItem().column(),
+            lastVisibleItem().row());
     m_ImageLoader->loadPictures (firstVisibleItem(), lastVisibleItem());
 #endif
 }
@@ -169,6 +173,7 @@ void
 WallpaperList::modelChanged ()
 {
     SYS_DEBUG ("");
+
     QTimer::singleShot (100, this, SLOT(loadPictures()));
 }
 
@@ -240,6 +245,7 @@ WallpaperList::showEvent (
      * When we page back from the other widget we might want to load the images
      * we stopped loading when we become hidden.
      */
+    //filtering()->proxy()->sort(Qt::DisplayRole);
     QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
 }
 

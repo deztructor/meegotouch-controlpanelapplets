@@ -229,8 +229,6 @@ WallpaperList::slotItemLongTapped (
 void 
 WallpaperList::loadPictures ()
 {
-    //filtering()->proxy()->sort(Qt::DisplayRole);
-
     /*
      * We used to get panningStopped() signals when we got hidden, so we will
      * not initiate loading of the images when we are not visible.
@@ -238,6 +236,11 @@ WallpaperList::loadPictures ()
     if (!isVisible() || !m_Model)
         return;
 
+    SYS_DEBUG ("from %d, %d to %d, %d",
+            firstVisibleItem().column(),
+            firstVisibleItem().row(),
+            lastVisibleItem().column(),
+            lastVisibleItem().row());
     m_Model->loadThumbnails (firstVisibleItem(), lastVisibleItem());
 }
 

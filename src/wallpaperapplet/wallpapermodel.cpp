@@ -72,7 +72,10 @@ WallpaperImageLoader::loadPictures (
 
         QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
         WallpaperDescriptor *desc = data.value<WallpaperDescriptor*>();
-        
+       
+        SYS_DEBUG ("loaded = %s image = %s", 
+                SYS_BOOL(desc->isThumbnailLoaded()),
+                SYS_STR(desc->filename()));
         /*
          * We only create jobs for those items that has no thumbnail in the
          * memory yet.
@@ -112,6 +115,7 @@ WallpaperImageLoader::stopLoadingPictures()
 void 
 WallpaperImageLoader::processJobQueue ()
 {
+    SYS_DEBUG ("jobs = %d", m_ThumbnailLoadingJobs.size());
     if (m_ThumbnailLoadingJobs.isEmpty())
         return;
 
@@ -327,7 +331,8 @@ void
 WallpaperModel::wallpaperChanged ()
 {
     /*
-     * The current wallpaper is always the first, we need to refresh that.
+     * The current wallpaper is always the first (no matter where it is shown in
+     * the list), we need to refresh that.
      */
     QModelIndex first = index (0, 0);
     emit dataChanged (first, first);

@@ -37,8 +37,8 @@
  * weird file names around.
  */
 //#define LOTDEBUG
-#undef DEBUG
-//#define WARNING
+#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 static const QString dir = "";
@@ -652,6 +652,8 @@ WallpaperDescriptor::initiateThumbnailer ()
     QList<QUrl>      urisList;
     QStringList      mimeList;
 
+    SYS_DEBUG ("");
+    
     if (!qApp) {
         SYS_WARNING ("QApplication must be created before calling this method");
     } else {
@@ -667,6 +669,7 @@ WallpaperDescriptor::initiateThumbnailer ()
      * If the thumbnailer is already initiated we return.
      */
     if (m_Thumbnailer != 0) {
+        SYS_WARNING ("Thumbnailer already initiated");
         return;
     }
 
@@ -732,8 +735,8 @@ WallpaperDescriptor::thumbnailReady (
     Q_UNUSED (thumbnailUri);
     Q_UNUSED (flavor);
 
-    //SYS_DEBUG ("*** flavor = %s", SYS_STR(flavor));
-    //SYS_DEBUG ("*** size   = %dx%d", pixmap.width(), pixmap.height());
+    SYS_DEBUG ("*** flavor = %s", SYS_STR(flavor));
+    SYS_DEBUG ("*** size   = %dx%d", pixmap.width(), pixmap.height());
     /*
      * FIXME: should store the thumbnail URL as well.
      */
@@ -760,6 +763,7 @@ WallpaperDescriptor::thumbnailError (
 {
     Q_UNUSED (message);
 
+    SYS_WARNING ("*** message = %s", SYS_STR(message));
     for (int n = Landscape; n < NVariants; ++n) {
         if (m_Images[n].url() == fileUri) {
             bool success;
