@@ -230,6 +230,9 @@ WallpaperBusinessLogic::currentWallpaper (
     currentFilePath  = m_PPItem->value().toString ();
     originalFilePath = m_POItem->value().toString ();
 
+    if (currentFilePath.isEmpty())
+        currentFilePath = Wallpaper::CurrentPortraitDefault;
+
     currentFilePath  = Wallpaper::logicalIdToFilePath (currentFilePath);
     originalFilePath = Wallpaper::logicalIdToFilePath (originalFilePath);
 }

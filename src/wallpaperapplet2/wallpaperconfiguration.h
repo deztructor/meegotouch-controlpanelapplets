@@ -43,6 +43,8 @@ namespace Wallpaper
     const QString OriginalPortraitKey (
             "/desktop/meego/background/portrait/original_filename");
 
+    const QString CurrentPortraitDefault ("meegotouch-wallpaper-portrait");
+
     const QString themeNameKey ("/meegotouch/theme/name");
 
     const QString themeImagePath (
