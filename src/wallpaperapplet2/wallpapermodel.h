@@ -77,8 +77,10 @@ class WallpaperModel: public QAbstractTableModel
         /*
          *
          */
-        QModelIndex currentIndex () ;
+        QModelIndex currentIndex ();
 
+        void showProgressByFilepath (const QString  &path);
+        
     signals:
         void currentChanged (const QModelIndex &current);
 
@@ -114,6 +116,8 @@ class WallpaperModel: public QAbstractTableModel
         void loadFromDirectory ();
 
         void emitCurrentChanged ();
+        
+        void hideProgress ();
 
     protected:
         void ensureSelection ();

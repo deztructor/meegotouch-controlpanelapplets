@@ -239,6 +239,22 @@ WallpaperDescriptor::selected () const
     return m_Priv->selected ();
 }
 
+void
+WallpaperDescriptor::setProgress (
+        bool progress)
+{
+    RETURN_IF_NULL;
+    m_Priv->setProgress (progress);
+}
+
+bool 
+WallpaperDescriptor::progress () const
+{
+    RETURN_VAL_IF_NULL(false);
+
+    return m_Priv->progress ();
+}
+
 /******************************************************************************
  * Loading...
  */

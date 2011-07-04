@@ -61,18 +61,13 @@ void
 WallpaperListSheet::createHeaderWidget()
 {
     MBasicSheetHeader *basicHeader = new MBasicSheetHeader (this);
-    //QAction           *doneAction;
     QAction           *cancelAction;
 
     basicHeader->setStyleName ("Inverted");
-    //basicHeader->setProperty ("opacity", 0.2);
-    //doneAction = new QAction(qtTrId("qtn_comm_save"), basicHeader);
     cancelAction = new QAction(qtTrId("qtn_comm_cancel"), basicHeader);
     
-    //connect(doneAction, SIGNAL(triggered()), SLOT(doneActivated()));
     connect (cancelAction, SIGNAL(triggered()), SLOT(dismiss()));
 
-    //basicHeader->setPositiveAction (doneAction);
     basicHeader->setNegativeAction (cancelAction);
 
     setHeaderWidget(basicHeader);

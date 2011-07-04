@@ -249,7 +249,6 @@ GridImageWidget::paint (
     }
 }
 
-
 void 
 GridImageWidget::setPixmap(
         const QPixmap &pixmap)
@@ -267,6 +266,16 @@ GridImageWidget::setID (
     m_ID = id;
 }
 
+void 
+GridImageWidget::setProgress (
+        bool showProgress)
+{
+    if (showProgress) {
+        progressIndicator(true)->show();
+    } else if (m_ProgressIndicator) {
+        m_ProgressIndicator->hide();
+    }
+}
 
 MProgressIndicator *
 GridImageWidget::progressIndicator (

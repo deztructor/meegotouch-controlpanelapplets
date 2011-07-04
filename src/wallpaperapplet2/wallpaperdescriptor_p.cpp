@@ -25,6 +25,7 @@
 WallpaperDescriptorPrivate::WallpaperDescriptorPrivate () :
     m_ReferenceCounter (1),
     m_Selected (false),
+    m_Progress (false),
     m_ThumbnailPending (false),
     m_HasThumbnail (false)
 {
@@ -35,6 +36,7 @@ WallpaperDescriptorPrivate::WallpaperDescriptorPrivate (
     m_ReferenceCounter (1),
     m_FilePath (filePath),
     m_Selected (false),
+    m_Progress (false),
     m_ThumbnailPending (false),
     m_HasThumbnail (false)
 {
@@ -121,6 +123,19 @@ bool
 WallpaperDescriptorPrivate::selected () const
 {
     return m_Selected;
+}
+
+void
+WallpaperDescriptorPrivate::setProgress (
+        bool progress)
+{
+    m_Progress = progress;
+}
+
+bool 
+WallpaperDescriptorPrivate::progress () const
+{
+    return m_Progress;
 }
 
 /******************************************************************************

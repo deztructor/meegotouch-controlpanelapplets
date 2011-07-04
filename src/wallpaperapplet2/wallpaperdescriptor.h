@@ -77,6 +77,9 @@ class MC_EXPORT WallpaperDescriptor : public QObject
 
         void setSelected (bool selected = true);
         bool selected () const;
+        
+        void setProgress (bool progress = true);
+        bool progress () const;
 
         /*
          * Loading...

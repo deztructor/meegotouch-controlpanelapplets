@@ -100,18 +100,6 @@ WallpaperCellCreator::updateCell (
      * The selection. 
      */
     imageWidget->setCurrent (desc.selected());
-
-#if 0
-    // The spinner.
-    if (desc->loading()) {
-        imageWidget->progressIndicator(true)->show();
-    } else {
-        MProgressIndicator *indicator;
-
-        indicator = imageWidget->progressIndicator(false);
-        if (indicator)
-            indicator->hide();
-    }
-#endif
+    imageWidget->setProgress (desc.progress());
 }
 

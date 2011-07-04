@@ -211,6 +211,10 @@ WallpaperList::slotItemClicked (
     WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
 
     SYS_DEBUG ("*** filename = %s", SYS_STR(desc.filePath()));
+    
+    if (m_Model)
+        m_Model->showProgressByFilepath (desc.filePath());
+
     emit imageActivated(desc);
 }
 

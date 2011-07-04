@@ -64,7 +64,9 @@ WallpaperModel::WallpaperModel (
 
     connect (m_BusinessLogic, SIGNAL(wallpaperChanged()),
             this, SLOT(wallpaperChanged()));
-    
+    connect (m_BusinessLogic, SIGNAL(workerEnded()),
+            this, SLOT(hideProgress()));
+
     #ifdef HAVE_QMSYSTEM
     m_UsbMode = new MeeGo::QmUSBMode (this);
     connect (m_UsbMode, SIGNAL(modeChanged (MeeGo::QmUSBMode::Mode)),
@@ -748,6 +750,54 @@ WallpaperModel::currentIndex ()
     }
 
     return retval;
+}
+        
+void
+WallpaperModel::showProgressByFilepath (
+        const QString  &path)
+{
+    SYS_DEBUG ("*** path = %s", SYS_STR(path));
+    for (int n = 0; n < m_FilePathList.size(); ++n) {
+        QString              thisPath = m_FilePathList[n];
+        WallpaperDescriptor  desc = m_FilePathHash[thisPath];
+        bool                 changed = false;
+
+        if (desc.progress() && thisPath != path) {
+            desc.setProgress (false);
+            changed = true;
+        } else if (!desc.progress() && thisPath == path) {
+            desc.setProgress (true);
+            changed = true;
+        }
+
+        if (changed) {
+            QModelIndex          first;
+            
+            first = index (n, 0);
+            emit dataChanged (first, first);
+        }
+    }
+}
+
+void
+WallpaperModel::hideProgress ()
+{
+    for (int n = 0; n < m_FilePathList.size(); ++n) {
+        WallpaperDescriptor  desc = m_FilePathHash[m_FilePathList[n]];
+        bool                 changed = false;
+
+        if (desc.progress()) {
+            desc.setProgress (false);
+            changed = true;
+        }
+
+        if (changed) {
+            QModelIndex          first;
+            
+            first = index (n, 0);
+            emit dataChanged (first, first);
+        }
+    }
 }
 
 int

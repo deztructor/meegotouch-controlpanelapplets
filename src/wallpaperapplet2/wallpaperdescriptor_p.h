@@ -58,6 +58,9 @@ class WallpaperDescriptorPrivate
         void setSelected (bool selected);
         bool selected () const;
         
+        void setProgress (bool progress);
+        bool progress () const;
+
         /*
          * Loading...
          */
@@ -69,6 +72,7 @@ class WallpaperDescriptorPrivate
         int      m_ReferenceCounter;
         QString  m_FilePath;
         bool     m_Selected;
+        bool     m_Progress;
         bool     m_ThumbnailPending;
         bool     m_HasThumbnail;
         QPixmap  m_Thumbnail;

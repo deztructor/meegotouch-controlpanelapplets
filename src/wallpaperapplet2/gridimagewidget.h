@@ -57,6 +57,7 @@ class GridImageWidget : public MListItem
 
         QString image() const;
         void setID (const QString &id);
+        void setProgress (bool showProgress = true);
         void showAnimated();
 
     public Q_SLOTS:
