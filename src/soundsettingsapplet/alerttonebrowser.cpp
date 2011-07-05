@@ -84,6 +84,8 @@ public:
 AlertToneBrowser::AlertToneBrowser(AlertTone *tone, QGraphicsWidget *parent):
     AlertToneToplevel (parent),
     m_tone (tone),
+    m_my_music (0),
+    m_ovi_store (0),
     m_defaults (0),
     m_preview (0),
     m_MusicBrowser (0),
@@ -144,15 +146,19 @@ AlertToneBrowser::createContent()
 #endif
 
 #ifndef MEEGO
-    // "Get more from Ovi store"
-    m_ovi_store = new RightArrowItem;
-    m_ovi_store->setTitleStyleName ("CommonSingleTitleInverted");
-    m_ovi_store->setLayoutPosition (M::VerticalBottomPosition);
-    m_ovi_store->imageWidget()->setImage("icon-m-content-ovi-store-inverse");
-    m_ovi_store->imageWidget()->setStyleName ("CommonMainIcon");
-    m_ovi_store->setObjectName("MContentItem_getMoreFromOviStore");
-    m_MainLayout->addItem (m_ovi_store);
-    connect (m_ovi_store, SIGNAL (clicked ()), SLOT (launchOviStore ()));
+    // Workaround for NB#270433
+    if (m_tone->key ().contains ("ringing.alert.tone"))
+    {
+        // "Get more from Ovi store"
+        m_ovi_store = new RightArrowItem;
+        m_ovi_store->setTitleStyleName ("CommonSingleTitleInverted");
+        m_ovi_store->setLayoutPosition (M::VerticalBottomPosition);
+        m_ovi_store->imageWidget()->setImage("icon-m-content-ovi-store-inverse");
+        m_ovi_store->imageWidget()->setStyleName ("CommonMainIcon");
+        m_ovi_store->setObjectName("MContentItem_getMoreFromOviStore");
+        m_MainLayout->addItem (m_ovi_store);
+        connect (m_ovi_store, SIGNAL (clicked ()), SLOT (launchOviStore ()));
+    }
 #endif
 
     spacer = new MSeparator;
@@ -207,11 +213,13 @@ void
 AlertToneBrowser::retranslateUi()
 {
 #ifdef HAVE_CONTENT_MANAGER
-    m_my_music->setProperty ("title", qtTrId("qtn_sond_pick_music"));
+    if (m_my_music)
+        m_my_music->setProperty ("title", qtTrId("qtn_sond_pick_music"));
 #endif
 
 #ifndef MEEGO
-    m_ovi_store->setProperty("title", qtTrId("qtn_sond_store"));
+    if (m_ovi_store)
+        m_ovi_store->setProperty("title", qtTrId("qtn_sond_store"));
 #endif
 
     if (m_TitleLabel)
