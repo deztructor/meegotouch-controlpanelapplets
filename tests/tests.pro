@@ -19,8 +19,7 @@ contains(BUILD_FEATURES,coverage) {
     }
 }
 
-if (BUILD_APPLET)
-{
+if (!isEmpty(BUILD_APPLET)){
    message ("***Will build tests only for the given applets****")
    SUBDIRS = 
    APPLETLIST = BUILD_APPLET

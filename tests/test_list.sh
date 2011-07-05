@@ -1,9 +1,8 @@
 #! /bin/bash
 
 #
-# If a unit test fails we the calculation of the coverage will fail. This script
-# will print the names of those unit tests that are not set to be deleted and
-# disabled. 
+# Filtering out the ut and ft dirs with the prefix given by $1
+#except the disabled ones
 #
 
 for f in ut_$1*; do
@@ -15,3 +14,14 @@ for f in ut_$1*; do
 		echo $f
 	fi
 done
+
+for u in ft_$1*; do
+	if [ $u == "ft_template" ]; then
+		continue
+	fi
+
+	if [ ! -e $u/disabled -a ! -e $u/deleted ]; then
+		echo $u
+	fi
+done
+
