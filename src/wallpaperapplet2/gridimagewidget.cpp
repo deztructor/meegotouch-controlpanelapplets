@@ -224,6 +224,9 @@ GridImageWidget::paint (
     Q_UNUSED (widget);
 
     //MListItem::paint (painter, option, widget);
+    if (m_ProgressIndicator && m_ProgressIndicator->isVisible())
+        painter->setOpacity (0.5);
+
     painter->drawPixmap (
             0, 0, (int) geom.width(), (int) geom.height(), m_Pixmap);
 
@@ -288,7 +291,7 @@ GridImageWidget::progressIndicator (
         SYS_DEBUG ("Creating a progress indicator.");
         m_ProgressIndicator = new MProgressIndicator (this, progressType);
         m_ProgressIndicator->setObjectName ("WallpaperLoadingSpinner");
-        m_ProgressIndicator->setStyleName ("CommonProgressBarInverted");
+        m_ProgressIndicator->setStyleName ("CommonLargeSpinnerInverted");
         m_ProgressIndicator->setUnknownDuration (true);
         m_Layout->addItem (
                 m_ProgressIndicator, 

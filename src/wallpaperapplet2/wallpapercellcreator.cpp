@@ -79,6 +79,8 @@ WallpaperCellCreator::updateCell (
         if (desc.thumbnailPending()) {
             desc.setThumbnailPending (false);
         }
+
+        if (!desc.progress())
             imageWidget->showAnimated();
     } else {
         /*
