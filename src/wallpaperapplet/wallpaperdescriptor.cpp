@@ -739,8 +739,10 @@ WallpaperDescriptor::thumbnailReady (
     Q_UNUSED (thumbnailUri);
     Q_UNUSED (flavor);
 
+#ifdef LOTDEBUG
     SYS_DEBUG ("*** flavor = %s", SYS_STR(flavor));
     SYS_DEBUG ("*** size   = %dx%d", pixmap.width(), pixmap.height());
+#endif
     /*
      * FIXME: should store the thumbnail URL as well.
      */
