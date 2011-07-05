@@ -104,6 +104,7 @@ AlertToneAppletWidget::createContents()
 	mainLayout->setLandscapePolicy(policy);
 	mainLayout->setPortraitPolicy(policy);
 
+#ifndef MEEGO
     /*
      * The main title
      */
@@ -111,6 +112,7 @@ AlertToneAppletWidget::createContents()
             centralWidget, policy,
             APP_TITLE_LABEL_STYLE_NAME); 
     label->setText(qtTrId("qtn_sond_sounds"));
+#endif
 
 #if 0
     MSeparator            *spacer;
