@@ -32,6 +32,7 @@ class WallpaperWorkerThread;
 #include <QPointer>
 #include <QuillImage>
 #include <QSize>
+#include <QTimer>
 
 #include <wallpaperdescriptor.h>
 
@@ -72,7 +73,7 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
         void portraitGConfChanged ();
         void workerThreadFinishedLoad ();
         void workerThreadFinishedSave ();
-
+        void gconfTimerSlot ();
         #if 0
         bool supportsLandscape () const;
         bool supportsPortrait () const;
@@ -84,6 +85,7 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
         QPointer<MGConfItem>       m_POItem;
         WallpaperDescriptor        m_EditedImage;
         WallpaperWorkerThread     *m_WorkerThread;
+        QTimer                     m_GConfTimer;
 
 #ifdef UNIT_TEST
     friend class Ut_WallpaperBusinessLogic;

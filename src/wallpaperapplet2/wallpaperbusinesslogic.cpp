@@ -58,6 +58,15 @@ WallpaperBusinessLogic::WallpaperBusinessLogic() :
 
     connect (m_POItem, SIGNAL(valueChanged ()),
             this, SLOT(portraitGConfChanged()));
+    
+    /*
+     * A timer to handle multiple GConf keys as one by filtering multiple value
+     * change events.
+     */
+    m_GConfTimer.setInterval (200);
+    m_GConfTimer.setSingleShot (true);
+    connect (&m_GConfTimer, SIGNAL(timeout()),
+            this, SLOT(gconfTimerSlot()));
 }
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
@@ -216,10 +225,18 @@ WallpaperBusinessLogic::editedImage () const
  * Handling the GConf database.
  */
 void
-WallpaperBusinessLogic::portraitGConfChanged ()
+WallpaperBusinessLogic::gconfTimerSlot ()
 {
     SYS_DEBUG ("");
     emit wallpaperChanged ();
+}
+
+void
+WallpaperBusinessLogic::portraitGConfChanged ()
+{
+    SYS_DEBUG ("*** isActive() = %s", SYS_BOOL(m_GConfTimer.isActive()));
+    if (!m_GConfTimer.isActive())
+        m_GConfTimer.start();
 }
 
 void
