@@ -2,6 +2,15 @@ TEMPLATE = subdirs
 
 include(../shared.pri)
 
+######if no BUILD_APPLET given, we add all of the subdirs, 
+###### otherwise we just add the selected applets subdirs
+
+
+
+isEmpty(BUILD_APPLET) {
+
+message ("*********No BUILD_APPLET given, build all of the applets*************")
+
 addSubDirs(aboutapplet)
 addSubDirs(aboutapplet/translations)
 addSubDirs(themeapplet)
@@ -26,8 +35,77 @@ addSubDirs(wallpaperapplet/translations)
 addSubDirs(wallpaperapplet2)
 addSubDirs(wallpaperapplet2/translations)
 addSubDirs(warrantyapplet)
-addSubDirs(warrantyapplet/translations)
+}
 
+if (BUILD_APPLET)
+{
+contains(BUILD_APPLET,about){
+message ("*************build aboutapplet********************")
+addSubDirs(aboutapplet)
+addSubDirs(aboutapplet/translations)
+}
+contains (BUILD_APPLET, theme){
+message ("************build themeapplet*********************")
+addSubDirs(themeapplet)
+addSubDirs(themeapplet/translations)
+}
+contains (BUILD_APPLET,libmeegocontrol ){
+message ("***********build libmeegocon *********************")
+addSubDirs(libmeegocontrol)
+}
+contains (BUILD_APPLET, battery){
+message ("***********build battery *************************")
+addSubDirs(batteryapplet)
+addSubDirs(batteryapplet/translations)
+}
+contains (BUILD_APPLET,display ){
+message ("***********build display *************************")
+addSubDirs(displayapplet)
+addSubDirs(displayapplet/translations)
+}
+contains (BUILD_APPLET, offline){
+message ("***********build offline *************************")
+addSubDirs(offlineapplet)
+addSubDirs(offlineapplet/translations)
+}
+contains (BUILD_APPLET,reset ){
+message ("***********build reset ***************************")
+addSubDirs(resetapplet)
+addSubDirs(resetapplet/translations)
+}
+contains (BUILD_APPLET, sound){
+message ("***********build soundsettings *******************")
+addSubDirs(soundsettingsapplet)
+addSubDirs(soundsettingsapplet/translations)
+}
+contains (BUILD_APPLET,testapplet ){
+message ("***********build testapplet *********************")
+addSubDirs(testapplet)
+addSubDirs(testapplet/translations)
+}
+contains (BUILD_APPLET,usb){
+message ("***********build usb ****************************")
+addSubDirs(usbapplet)
+addSubDirs(usbapplet/translations)
+}
+contains (BUILD_APPLET,wallpaper ){
+message ("***********build wallpaper **********************")
+addSubDirs(wallpaperapplet)
+addSubDirs(wallpaperapplet/translations)
+}
+contains (BUILD_APPLET,wallpaper2 ){
+message ("***********build wallpaper2 *********************")
+addSubDirs(wallpaperapplet2)
+addSubDirs(wallpaperapplet2/translations)
+}
+contains (BUILD_APPLET, warranty){
+message ("***********build warranty ***********************")
+addSubDirs(warrantyapplet)
+addSubDirs(warrantyapplet/translations)
+}
+}
+
+####Disabled applets:
 # addSubDirs(profileapplet)
 # addSubDirs(profileplugin)
 

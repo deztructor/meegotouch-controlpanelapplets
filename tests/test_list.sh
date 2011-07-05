@@ -6,7 +6,7 @@
 # disabled. 
 #
 
-for f in ut_*; do
+for f in ut_$1*; do
 	if [ $f == "ut_template" ]; then
 		continue
 	fi

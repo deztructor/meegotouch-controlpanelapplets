@@ -27,3 +27,5 @@ contains(BUILD_FEATURES,coverage) {
                 tests/ut_*/selected.cov
 }
 
+   
+

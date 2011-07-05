@@ -19,11 +19,31 @@ contains(BUILD_FEATURES,coverage) {
     }
 }
 
+if (BUILD_APPLET)
+{
+   message ("***Will build tests only for the given applets****")
+   SUBDIRS = 
+   APPLETLIST = BUILD_APPLET
+      for(dirs, BUILD_APPLET){
+         message ("***Will build test for:" $$dirs)
+         SUBDIRLIST =  $$system(./test_list.sh $$dirs)
+         for(testdirs, SUBDIRLIST){
+             addSubDirs($${testdirs})
+             }
+      }
+
+}
+
+
 # nocheck option disables the test building
 contains(BUILD_FEATURES,nocheck) {
     message("*** Disabling unit/functional test building ***")
     SUBDIRS =
 }
+
+
+
+
 
 check.target = check
 check.depends =
