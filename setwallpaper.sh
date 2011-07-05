@@ -33,6 +33,8 @@ case "$1" in
         echo "Setting to: " "$2"
         gconftool-2 --type string --set /desktop/meego/background/portrait/picture_filename "$2"
         gconftool-2 --type string --set /desktop/meego/background/landscape/picture_filename "$2"
+        gconftool-2 --type string --set /desktop/meego/background/landscape/original_filename "$2"
+        gconftool-2 --type string --set /desktop/meego/background/portrait/original_filename "$2"
         
         gconftool-2 --recursive-list /desktop/meego/background
         ;;

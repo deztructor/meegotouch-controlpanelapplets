@@ -298,9 +298,9 @@ WallpaperModel::thumbnailReady (
     if (path.startsWith("file://"))
         path.remove (0, 7);
 
-    //SYS_DEBUG ("*** flavor = %s", SYS_STR(flavor));
-    //SYS_DEBUG ("*** size   = %dx%d", pixmap.width(), pixmap.height());
-    //SYS_DEBUG ("*** path   = %s", SYS_STR(path));
+    SYS_DEBUG ("*** flavor = %s", SYS_STR(flavor));
+    SYS_DEBUG ("*** size   = %dx%d", pixmap.width(), pixmap.height());
+    SYS_DEBUG ("*** path   = %s", SYS_STR(path));
     if (m_FilePathHash.contains(path)) {
         WallpaperDescriptor desc = m_FilePathHash[path];
         int                 idx = m_FilePathList.indexOf(path);
@@ -827,6 +827,9 @@ WallpaperModel::appendThumbnailRequest (
     QString             mimeType;
     bool                retval = true;
 
+    SYS_DEBUG ("*** %s %s", 
+            SYS_BOOL(desc.hasThumbnail()),
+            SYS_STR(desc.filePath()));
     if (!requestedFiles.contains(desc.filePath()))
         requestedFiles << desc.filePath();
 

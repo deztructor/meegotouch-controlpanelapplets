@@ -138,6 +138,7 @@ void
 WallpaperList::currentChanged (
         const QModelIndex &current)
 {
+    SYS_DEBUG ("");
     if (Wallpaper::currentWallpaperAtTop) {
         QModelIndex first = filtering()->proxy()->index (0, 0);
 
@@ -162,6 +163,12 @@ WallpaperList::currentChanged (
             scrollTo (myIndex, EnsureVisibleHint, Animated);
         }
     }
+
+    /*
+     * It is possible that the scrolling request is not going to actually
+     * scroll, so we need to load the pictures "manually".
+     */
+    QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
 }
 
 void

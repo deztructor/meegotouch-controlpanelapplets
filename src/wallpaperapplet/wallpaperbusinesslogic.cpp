@@ -834,6 +834,7 @@ WallpaperBusinessLogic::valueChanged ()
     QString                     desktopFile = dirPath() + destopFileName;
     bool                        success;
 
+    SYS_DEBUG ("->");
     currentDesc = WallpaperCurrentDescriptor::instance ();
     
     /*
