@@ -116,9 +116,7 @@ Image::setFilename (
 {
     SYS_DEBUG ("*** m_Filename = %s", SYS_STR(m_Filename));
     SYS_DEBUG ("*** fileName   = %s", SYS_STR(fileName));
-    if (fileName == m_Filename)
-        return;
-   
+
     reset ();
     m_Filename     = fileName;
     m_Url          = QUrl::fromLocalFile (fileName);
