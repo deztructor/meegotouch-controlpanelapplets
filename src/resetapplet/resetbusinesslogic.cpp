@@ -122,6 +122,9 @@ ResetBusinessLogic::getAccess ()
     SYS_DEBUG ("*** reply = %s", SYS_BOOL (success));
 #endif
 
+// TODO: FIXME: It seems we're getting 'true'
+// here when the lock code does not exists!!!
+
     /*
      * No password needed [ie. device-lock is disabled]
      */

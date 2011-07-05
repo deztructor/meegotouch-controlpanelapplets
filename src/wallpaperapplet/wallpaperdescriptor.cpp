@@ -116,9 +116,7 @@ Image::setFilename (
 {
     SYS_DEBUG ("*** m_Filename = %s", SYS_STR(m_Filename));
     SYS_DEBUG ("*** fileName   = %s", SYS_STR(fileName));
-    if (fileName == m_Filename)
-        return;
-   
+
     reset ();
     m_Filename     = fileName;
     m_Url          = QUrl::fromLocalFile (fileName);
@@ -672,7 +670,7 @@ WallpaperDescriptor::initiateThumbnailer ()
      * So no need for this pointer checking (as it is not working with
      * one Thumbnailer instance properly...)
      */
-#if 0
+#ifndef THUMBNAILER_SINGLETON
     if (m_Thumbnailer != 0) {
         SYS_WARNING ("Thumbnailer already initiated");
         return;
