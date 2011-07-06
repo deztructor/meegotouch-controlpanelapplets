@@ -28,12 +28,17 @@
 #include <MBasicSheetHeader>
 #include <QAction>
 
+#include "mwidgetcreator.h"
+M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorSheet)
+
+
 #define DEBUG
 #define WARNING
 #include "../debug.h"
 
 WallpaperEditorSheet::WallpaperEditorSheet (
         WallpaperBusinessLogic *wallpaperBusinessLogic) :
+    m_EditorWidget (0),
     m_Saving (false)
 {
     setStyleName ("Inverted");
@@ -53,13 +58,15 @@ WallpaperEditorSheet::createCentralWidget(
 
     if (Wallpaper::supportEdit) {
         m_EditorWidget = new WallpaperEditorWidget (
-                wallpaperBusinessLogic, this);
+                wallpaperBusinessLogic);
     } else {
         m_EditorWidget = new WallpaperViewWidget (
-                wallpaperBusinessLogic, this);
+                wallpaperBusinessLogic);
     }
 
+    SYS_DEBUG ("setCentralWidget(%p)", m_EditorWidget);
     setCentralWidget (m_EditorWidget);
+    SYS_DEBUG ("end");
 }
 
 void 
@@ -93,13 +100,17 @@ WallpaperEditorSheet::doneActivated ()
     header->negativeAction()->setEnabled(false);
 
     m_Saving = true;
-    m_EditorWidget->saveImage ();
+
+    if (m_EditorWidget)
+        m_EditorWidget->saveImage ();
 }
 
 void
 WallpaperEditorSheet::cancelActivated ()
 {
-    m_EditorWidget->dropImage ();
+    if (m_EditorWidget)
+        m_EditorWidget->dropImage ();
+
     dismiss ();
 }
 
@@ -111,7 +122,9 @@ WallpaperEditorSheet::wallpaperSaved ()
         return;
     }
 
-    m_EditorWidget->dropImage ();
+    if (m_EditorWidget)
+        m_EditorWidget->dropImage ();
+
     m_Saving = false;
     dismiss ();
 }

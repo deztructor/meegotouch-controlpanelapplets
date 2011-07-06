@@ -42,8 +42,8 @@
 #include <MApplicationWindow>
 #include <MApplication>
 
-//#include "mwidgetcreator.h"
-//M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
+#include "mwidgetcreator.h"
+M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
 static const qreal ScaleLowerLimit = 0.15;
 
@@ -76,6 +76,7 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     m_Physics (0),
     m_RotateAnimation (0)
 {
+    SYS_DEBUG ("start");
     MWindow *win = MApplication::activeWindow ();
 
     setObjectName ("WallpaperEditorWidget");
@@ -101,6 +102,7 @@ WallpaperEditorWidget::WallpaperEditorWidget (
 
     connect (&m_RotateAnimation, SIGNAL(finished()),
             this, SLOT(rotateAnimationFinished()));
+    SYS_DEBUG ("end");
 }
 
 /*!
@@ -108,11 +110,13 @@ WallpaperEditorWidget::WallpaperEditorWidget (
  */
 WallpaperEditorWidget::~WallpaperEditorWidget ()
 {
+    SYS_DEBUG ("");
 }
 
 void 
 WallpaperEditorWidget::applyStyle()
 {
+    SYS_DEBUG ("");
     if (m_Physics) {
         SYS_WARNING ("applyStyle already called.");
         return;
@@ -128,7 +132,7 @@ WallpaperEditorWidget::applyStyle()
     m_Physics->setPanDirection (Qt::Vertical | Qt::Horizontal);
     m_Physics->setEnabled(true);
   
-#if 0
+#if 1
     SYS_WARNING ("------------------------------------------------");
     SYS_DEBUG ("*** PointerSpringK  = %g", style()->pointerSpringK());
     SYS_DEBUG ("*** Friction        = %g", style()->friction());
@@ -177,6 +181,7 @@ WallpaperEditorWidget::initialize (
         QuillImage   &image,
         QSize         size)
 {
+    SYS_DEBUG ("");
     WallpaperViewWidget::initialize (image, size);
     setupPanningPhysics (true);
 }
@@ -185,7 +190,7 @@ void
 WallpaperEditorWidget::panningPhysicsPositionChanged(
         const QPointF    &position)
 {
-    //SYS_DEBUG ("panning -----------> %s", SYS_POINTF(position));
+    SYS_DEBUG ("panning -----------> %s", SYS_POINTF(position));
     m_UserOffset = position;
     redrawImage ();
 }
@@ -201,9 +206,10 @@ void
 WallpaperEditorWidget::scalePhysicsPositionChanged(
         const QPointF    &position)
 {
+    SYS_DEBUG ("");
     qreal scalefactor = position.y() / 100.0;
 
-    //SYS_WARNING ("scaling  --------> %s", SYS_POINTF(position));
+    SYS_WARNING ("scaling  --------> %s", SYS_POINTF(position));
     if (scalefactor < 0.05)
         scalefactor = 0.05;
 
@@ -217,6 +223,7 @@ WallpaperEditorWidget::scalePhysicsPositionChanged(
 void 
 WallpaperEditorWidget::scalePhysicsPanningStopped ()
 {
+    SYS_DEBUG ("");
     qreal rotation  = m_Trans.rotation();
     qreal rRotation = 0.0;
 
@@ -264,6 +271,7 @@ WallpaperEditorWidget::scalePhysicsPanningStopped ()
 void
 WallpaperEditorWidget::rotateAnimationFinished ()
 {
+    SYS_DEBUG ("");
     qreal rotation = m_ImageWidget->rotation();
 
     SYS_DEBUG ("");
@@ -384,6 +392,7 @@ WallpaperEditorWidget::back ()
 int
 WallpaperEditorWidget::imageX () const
 {
+    SYS_DEBUG ("");
     int retval = 0.0; //WallpaperViewWidget::imageX();
 
     retval += m_UserOffset.x();
@@ -398,6 +407,7 @@ WallpaperEditorWidget::imageX () const
 int
 WallpaperEditorWidget::imageY () const
 {
+    SYS_DEBUG ("");
     int retval = 0.0; //WallpaperViewWidget::imageY ();
     
     retval += m_UserOffset.y();
@@ -406,10 +416,10 @@ WallpaperEditorWidget::imageY () const
     return retval;
 }
 
-
 void 
 WallpaperEditorWidget::queueRedrawImage ()
 {
+    SYS_DEBUG ("");
     if (m_HasPendingRedraw) {
         //SYS_DEBUG ("Dropping...");
         return;
@@ -422,6 +432,7 @@ WallpaperEditorWidget::queueRedrawImage ()
 void 
 WallpaperEditorWidget::redrawImage ()
 {
+    SYS_DEBUG ("");
     m_HasPendingRedraw = false;
     WallpaperViewWidget::redrawImage ();
     //update();
@@ -437,7 +448,6 @@ WallpaperEditorWidget::redrawImage ()
 #endif
 }
 
-
 /******************************************************************************
  * Stuff for the normal mouse events.
  */
@@ -445,6 +455,7 @@ void
 WallpaperEditorWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
 {
+    SYS_DEBUG ("");
     bool     ctrl = QApplication::keyboardModifiers() & Qt::ControlModifier;
     
     /*
@@ -482,6 +493,7 @@ WallpaperEditorWidget::panGestureEvent (
         QGestureEvent *event, 
         QPanGesture   *panGesture)
 {
+    SYS_DEBUG ("");
     QTransform itemTransform(sceneTransform().inverted());
     QPointF itemSpaceOffset = 
         panGesture->offset() * itemTransform - 
@@ -530,6 +542,7 @@ WallpaperEditorWidget::pinchGestureEvent (
             QGestureEvent *event, 
             QPinchGesture *pinchGesture)
 {
+    SYS_DEBUG ("");
     Q_UNUSED (event);
 
     if (m_Saving)
@@ -671,6 +684,7 @@ void
 WallpaperEditorWidget::setupPanningPhysics (
         bool movePh)
 {
+    SYS_DEBUG ("");
     /*
      * The widget's geometry is disturbed by the transparent toolbar, 
      * but the expectedsize is stable.

@@ -190,19 +190,26 @@ void
 WallpaperWidget::slotEditWallpaper (
         WallpaperDescriptor desc)
 {
-    SYS_DEBUG ("");
+    SYS_DEBUG ("-------------- Start --------------------------------");
+    SYS_DEBUG ("scene() = %p", scene());
 
     if (Wallpaper::useSheets) {
         WallpaperEditorSheet  *sheet;
         sheet = new WallpaperEditorSheet (m_BusinessLogic);
-        if (Wallpaper::useFullScreen)
+        if (Wallpaper::useFullScreen) {
+            SYS_DEBUG ("1");
             sheet->appearSystemwide(MSceneWindow::DestroyWhenDone);
-        else
+        } else {
+            SYS_DEBUG ("2");
             sheet->appear(scene(), MSceneWindow::DestroyWhenDone);
+        }
     } else {
         SYS_DEBUG ("emit changeWidget (1);");
         emit changeWidget (1);
     }
+    
+    
+    SYS_DEBUG ("----------------------------------- End -------------");
 }
 
 

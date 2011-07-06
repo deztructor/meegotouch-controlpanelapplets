@@ -34,11 +34,11 @@ class WallpaperEditorSheet : public MSheet
     public:
         WallpaperEditorSheet (
                 WallpaperBusinessLogic *wallpaperBusinessLogic);
+        void createCentralWidget(
+                WallpaperBusinessLogic *wallpaperBusinessLogic);
 
     private:
         void createHeaderWidget();
-        void createCentralWidget(
-                WallpaperBusinessLogic *wallpaperBusinessLogic);
 
     private Q_SLOTS:
         void doneActivated ();

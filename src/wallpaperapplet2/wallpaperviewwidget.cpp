@@ -32,8 +32,8 @@
 #define WARNING
 #include "../debug.h"
 
-//#include "mwidgetcreator.h"
-//M_REGISTER_WIDGET_NO_CREATE(WallpaperViewWidget)
+#include "mwidgetcreator.h"
+M_REGISTER_WIDGET_NO_CREATE(WallpaperViewWidget)
 
 /******************************************************************************
  *
@@ -49,6 +49,8 @@ WallpaperViewWidget::WallpaperViewWidget (
     m_PageRealized (false),
     m_ImageWidget (0)
 {
+    SYS_DEBUG ("");
+
     connect (m_BusinessLogic, SIGNAL(wallpaperSaved()),
             this, SLOT(wallpaperSaved()));
     connect (m_BusinessLogic, SIGNAL(wallpaperLoaded (QuillImage, QSize)),
@@ -58,11 +60,13 @@ WallpaperViewWidget::WallpaperViewWidget (
 void 
 WallpaperViewWidget::applyStyle()
 {
+    SYS_DEBUG ("");
     m_BgColor = style()->imageBackgroundColor();
 }
 
 WallpaperViewWidget::~WallpaperViewWidget ()
 {
+    SYS_DEBUG ("");
     if (Wallpaper::useFullScreen) {
         MWindow *win = MApplication::activeWindow ();
 
@@ -74,6 +78,7 @@ WallpaperViewWidget::~WallpaperViewWidget ()
 void
 WallpaperViewWidget::saveImage ()
 {
+    SYS_DEBUG ("");
     if (Wallpaper::supportEdit || m_Trans.expectedSize() != m_OriginalSize) {
         SYS_DEBUG ("*** expectedSize = %s", SYS_SIZE(m_Trans.expectedSize()));
         SYS_DEBUG ("*** offset       = %s", SYS_POINTF(m_Trans.offset()));
@@ -98,6 +103,7 @@ WallpaperViewWidget::saveImage ()
 void
 WallpaperViewWidget::dropImage ()
 {
+    SYS_DEBUG ("");
     /*
      * Notifying the business logic about the editing ended. It is important,
      * otherwise the businesslogic will reject the next edit start requests.
@@ -110,6 +116,7 @@ WallpaperViewWidget::initialize (
         QuillImage   &image,
         QSize         size)
 {
+    SYS_DEBUG ("");
     WallpaperDescriptor  desc = m_BusinessLogic->editedImage ();
     QSize                sceneSize;
     int                  xMarg = 0;
@@ -156,6 +163,7 @@ WallpaperViewWidget::initialize (
 bool 
 WallpaperViewWidget::pagePans () const
 {
+    SYS_DEBUG ("");
     return false;
 }
 
@@ -246,6 +254,7 @@ WallpaperViewWidget::polishEvent ()
 int
 WallpaperViewWidget::imageX () const
 {
+    SYS_DEBUG ("");
     int retval = 0;
 
     retval += m_Trans.x();
@@ -255,6 +264,7 @@ WallpaperViewWidget::imageX () const
 int
 WallpaperViewWidget::imageY () const
 {
+    SYS_DEBUG ("");
     int retval = 0;
 
     retval += m_Trans.y();
@@ -267,12 +277,14 @@ WallpaperViewWidget::imageY () const
 int
 WallpaperViewWidget::imageDX () const
 {
+    SYS_DEBUG ("");
     return m_Trans.scale() * m_Image.width();
 }
 
 int
 WallpaperViewWidget::imageDY () const
 {
+    SYS_DEBUG ("");
     return m_Trans.scale() * m_Image.height();
 }
 
@@ -280,6 +292,7 @@ QPixmap
 WallpaperViewWidget::generatePixmap (
         const WallpaperITrans  &transformations)
 {
+    SYS_DEBUG ("");
     QImage    transformed = transformedImage();
     QPixmap   retval (transformations.expectedSize());
     QPainter  painter (&retval);
@@ -378,6 +391,7 @@ WallpaperViewWidget::wallpaperLoaded (
 void 
 WallpaperViewWidget::redrawImage ()
 {
+    SYS_DEBUG ("");
     QSize   imageSize = imageVisualSize ();
     QPointF offset (
             imageX() - m_ImageWidget->size().width() / 2.0, 
@@ -398,6 +412,7 @@ WallpaperViewWidget::redrawImage ()
 QSize
 WallpaperViewWidget::imageVisualSize (qreal scale)
 {
+    SYS_DEBUG ("");
     qreal realdx, realdy;
     QSize  retval;
 
@@ -421,6 +436,7 @@ WallpaperViewWidget::imageVisualSize (qreal scale)
 QImage
 WallpaperViewWidget::transformedImage ()
 {
+    SYS_DEBUG ("");
     QSize  visualSize (imageVisualSize(m_Trans.scale()));
     QImage retval (visualSize, QImage::Format_RGB16);
     QPainter  painter (&retval);
