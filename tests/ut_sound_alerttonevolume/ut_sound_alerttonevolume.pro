@@ -10,7 +10,7 @@ QT += \
 
 TEMPLATE = app
 DEFINES += UNIT_TEST
-TARGET = ut_alerttonevolume
+TARGET = ut_sound_alerttonevolume
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
