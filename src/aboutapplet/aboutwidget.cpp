@@ -326,7 +326,13 @@ AboutWidget::addLogoContainer ()
      */
     MImageWidget *logo;
     logo = new MImageWidget;
+//on meego we set the logo with diffrent ID:
+#ifndef MEEGO
     logo->setImage ("icon-l-about-nokia-logo");
+#else
+    logo->setImage ("icon-l-about-meego-logo");
+#endif
+
     logo->setObjectName ("AboutAppletLogoImage");
 
     layout->addItem (logo);
