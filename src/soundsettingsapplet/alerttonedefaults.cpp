@@ -32,7 +32,7 @@
 #include "alerttonedefaults.h"
 #include "alerttonedefaultsmodel.h"
 
-#define DEBUG
+//#define DEBUG
 //#define WARNING
 #include "../debug.h"
 
@@ -378,9 +378,8 @@ AlertToneDefaults::selectAndScroll (
 
     if(idx >= 0)
     {
-        SYS_DEBUG("has valid index, m_FileNameToSelect: %s", SYS_STR(m_FileNameToSelect));
         QModelIndex mIndex = m_DefaultsModel->index (idx, 0);
-        m_DefaultsModel->moveItem(idx, 0);
+        m_DefaultsModel->moveItem(mIndex, idx, 0);
         success = selectAndScroll (0);
     }
     else

@@ -30,7 +30,7 @@
  */
 #undef USE_ASYNC_LOADING
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -238,7 +238,6 @@ AlertToneDefaultsModel::findItemByFileName (
 {
     int retval = -1;
     for (int n = 0; n < rowCount(); ++n) {
-        SYS_DEBUG("item %d: %s", n, SYS_STR(fileName(n)));
         if (fileName(n) == FileName) {
             retval = n;
             break;
@@ -414,18 +413,12 @@ AlertToneDefaultsModel::ensureHasDirectory (
 }
 
 void
-AlertToneDefaultsModel::moveItem(int from, int destination)
+AlertToneDefaultsModel::moveItem( const QModelIndex &mIdx, int from, int destination)
 {
     SYS_DEBUG("move item from %d to %d", from, destination);
-
-    QVariant niceName = data(index(from, NiceNameColumn));
-    QVariant fileName = data(index(from, FullPathColumn));
-    QVariant forced = data(index(from, ForcedColumn));
-
+    QVariant itemData = data(mIdx);
     removeRow(from);
-    insertRow(destination);
-
-    setData (index(destination, NiceNameColumn), QVariant(niceName));
-    setData (index(destination, FullPathColumn), QVariant(fileName));
-    setData (index(destination, ForcedColumn), QVariant(forced));
+    insertRow(0);
+    QModelIndex idx = index(0,0);
+    setData(idx, itemData);
 }
