@@ -91,7 +91,6 @@ public:
         WallpaperModel         *m_Model;
         WallpaperCellCreator   *m_CellCreator;
         DataSourceType          m_DataSourceType;
-        bool                    m_Panning;
         #ifdef UNIT_TEST
         friend class Ut_WallpaperList;
         #endif

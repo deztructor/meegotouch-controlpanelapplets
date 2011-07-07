@@ -71,6 +71,8 @@ WallpaperEditorWidget::WallpaperEditorWidget (
     WallpaperViewWidget (wallpaperBusinessLogic, parent),
     m_OrientationLocked (false),
     m_PinchOngoing (false),
+    m_Scaling (false),
+    m_Rotating (false),
     m_PanOngoing (false),
     m_HasPendingRedraw (false),
     m_Physics (0),
@@ -206,15 +208,18 @@ void
 WallpaperEditorWidget::scalePhysicsPositionChanged(
         const QPointF    &position)
 {
-    SYS_DEBUG ("");
+    //SYS_DEBUG ("");
     qreal scalefactor = position.y() / 100.0;
 
-    SYS_WARNING ("scaling  --------> %s", SYS_POINTF(position));
+    //SYS_WARNING ("scaling  --------> %s", SYS_POINTF(position));
     if (scalefactor < 0.05)
         scalefactor = 0.05;
 
-    m_Trans.setScale (scalefactor);
-    m_Trans.setRotation (position.x());
+    if (m_Scaling)
+        m_Trans.setScale (scalefactor);
+
+    if (m_Rotating)
+        m_Trans.setRotation (position.x());
 
     queueRedrawImage ();
 }
@@ -392,7 +397,6 @@ WallpaperEditorWidget::back ()
 int
 WallpaperEditorWidget::imageX () const
 {
-    SYS_DEBUG ("");
     int retval = 0.0; //WallpaperViewWidget::imageX();
 
     retval += m_UserOffset.x();
@@ -407,7 +411,6 @@ WallpaperEditorWidget::imageX () const
 int
 WallpaperEditorWidget::imageY () const
 {
-    SYS_DEBUG ("");
     int retval = 0.0; //WallpaperViewWidget::imageY ();
     
     retval += m_UserOffset.y();
@@ -419,7 +422,6 @@ WallpaperEditorWidget::imageY () const
 void 
 WallpaperEditorWidget::queueRedrawImage ()
 {
-    SYS_DEBUG ("");
     if (m_HasPendingRedraw) {
         //SYS_DEBUG ("Dropping...");
         return;
@@ -432,7 +434,6 @@ WallpaperEditorWidget::queueRedrawImage ()
 void 
 WallpaperEditorWidget::redrawImage ()
 {
-    SYS_DEBUG ("");
     m_HasPendingRedraw = false;
     WallpaperViewWidget::redrawImage ();
     //update();
@@ -599,7 +600,10 @@ WallpaperEditorWidget::pinchGestureStarted (
      */
     if (m_RotateAnimation.state() == QAbstractAnimation::Running)
         return;
-            
+    
+    m_OriginalScaleFactor = pinchGesture->scaleFactor ();
+    m_OriginalRotation    = pinchGesture->rotationAngle ();
+
     QPointF pressAt (m_Trans.rotation(), m_Trans.scale() * 100.0);
             SYS_DEBUG ("m_ScalePhysics->pointerPress (%s)", SYS_POINTF(pressAt));
             m_ScalePhysics->pointerPress(pressAt);
@@ -613,12 +617,34 @@ WallpaperEditorWidget::pinchGestureUpdate (
     /*
      * 
      */
-    SYS_DEBUG ("*** rotation           = %g", m_Trans.rotation());
-    SYS_DEBUG ("*** scale              = %g", m_Trans.scale());
-    SYS_DEBUG ("*** rotationAngle      = %g", pinchGesture->rotationAngle());
-    SYS_DEBUG ("*** lastRotationAngle  = %g", pinchGesture->lastRotationAngle());
-    SYS_DEBUG ("*** scaleFactor        = %g", pinchGesture->scaleFactor());
-    SYS_DEBUG ("*** lastScaleFactor    = %g", pinchGesture->lastScaleFactor());
+    SYS_DEBUG ("**********************************************");
+    SYS_DEBUG ("*** rotation              = %g", m_Trans.rotation());
+    SYS_DEBUG ("*** scale                 = %g", m_Trans.scale());
+    SYS_DEBUG ("***");
+    SYS_DEBUG ("*** totalRotationAngle    = %g", pinchGesture->totalRotationAngle());
+    SYS_DEBUG ("*** rotationAngle         = %g", pinchGesture->rotationAngle());
+    SYS_DEBUG ("*** lastRotationAngle     = %g", pinchGesture->lastRotationAngle());
+    SYS_DEBUG ("***");
+    SYS_DEBUG ("*** totalScaleFactor      = %g", pinchGesture->totalScaleFactor());
+    SYS_DEBUG ("*** scaleFactor           = %g", pinchGesture->scaleFactor());
+    SYS_DEBUG ("*** lastScaleFactor       = %g", pinchGesture->lastScaleFactor());
+    SYS_DEBUG ("*** m_OriginalScaleFactor = %g", m_OriginalScaleFactor);
+    SYS_DEBUG ("*** m_OriginalRotation    = %g", m_OriginalRotation);
+    SYS_DEBUG ("*** m_Scaling             = %s", SYS_BOOL(m_Scaling));
+    SYS_DEBUG ("*** m_Rotating            = %s", SYS_BOOL(m_Rotating));
+
+    if (!m_Scaling && !m_Rotating) {
+        qreal scaleDiff = pinchGesture->totalScaleFactor();
+        qreal rotationDiff = m_OriginalRotation - pinchGesture->rotationAngle();
+
+        if (rotationDiff > 10.0 || rotationDiff < -10.0) {
+            SYS_WARNING ("NOW STARTING ROTATING.");
+            m_Rotating = true;
+        } else if (scaleDiff > 1.1 || scaleDiff < 0.9) {
+            SYS_WARNING ("NOW STARTING SCALING");
+            m_Scaling = true;
+        }
+    }
 #if 0
     if (!m_ScalePhysics->enabled()) {
         qreal scaleDiff = m_Trans.scale() - pinchGesture->scaleFactor();
@@ -642,6 +668,26 @@ WallpaperEditorWidget::pinchGestureUpdate (
         }
     } 
 #endif
+
+    if (m_Rotating) {
+        QPointF moveTo (
+                m_Trans.rotation() - pinchGesture->rotationAngle(),
+                m_Trans.scale() * 100.0);
+        
+        SYS_WARNING ("NOW ROTATING.");
+        SYS_WARNING ("*** m_ScalePhysics->pointerMove(%s)", SYS_POINTF(moveTo));
+        m_ScalePhysics->pointerMove(moveTo);
+    } else {
+        QPointF moveTo (
+                m_Trans.rotation(),
+                m_Trans.scale() - (pinchGesture->totalScaleFactor() * 100.0));
+        
+        SYS_WARNING ("NOW SCALING");
+        SYS_WARNING ("*** m_ScalePhysics->pointerMove(%s)", SYS_POINTF(moveTo));
+        m_ScalePhysics->pointerMove(moveTo); 
+    }
+
+#if 0
     if (m_ScalePhysics->enabled()) {
         QPointF moveTo (
                 -1.0 * pinchGesture->rotationAngle(),
@@ -650,6 +696,7 @@ WallpaperEditorWidget::pinchGestureUpdate (
         SYS_DEBUG ("m_ScalePhysics->pointerMove (%s)", SYS_POINTF(moveTo));
         m_ScalePhysics->pointerMove(moveTo);
     }
+#endif
 }
 
 void 
@@ -659,6 +706,9 @@ WallpaperEditorWidget::pinchGestureEnded (
 {
     SYS_DEBUG ("m_ScalePhysics->pointerRelease ()");
     m_ScalePhysics->pointerRelease ();
+
+    m_Scaling = false;
+    m_Rotating = false;
 }
 
 

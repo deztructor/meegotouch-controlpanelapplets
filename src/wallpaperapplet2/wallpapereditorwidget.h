@@ -114,7 +114,10 @@ public:
         QPointF               m_UserOffset;
 
         qreal                 m_OriginalScaleFactor;
+        qreal                 m_OriginalRotation;
         bool                  m_PinchOngoing;
+        bool                  m_Scaling;
+        bool                  m_Rotating;
         bool                  m_PanOngoing;
         bool                  m_HasPendingRedraw;
         MPhysics2DPanning    *m_Physics;

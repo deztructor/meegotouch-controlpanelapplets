@@ -220,6 +220,12 @@ WallpaperBusinessLogic::editedImage () const
     return m_EditedImage;
 }
 
+bool
+WallpaperBusinessLogic::hasEditedImage () const
+{
+    return !m_EditedImage.isNull();
+}
+
 
 /******************************************************************************
  * Handling the GConf database.

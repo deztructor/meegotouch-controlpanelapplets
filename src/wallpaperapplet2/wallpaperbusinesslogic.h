@@ -59,6 +59,8 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
         bool loadImage (WallpaperDescriptor &desc);
         
         WallpaperDescriptor editedImage () const;
+        bool hasEditedImage () const;
+
         QSize sceneSize () const;
         
     signals:
