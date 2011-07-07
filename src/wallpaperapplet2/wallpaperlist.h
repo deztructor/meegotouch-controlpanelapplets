@@ -43,6 +43,7 @@ public:
     WallpaperList (
             WallpaperBusinessLogic  *logic,
             QGraphicsItem           *parent = 0);
+    ~WallpaperList ();
 
     typedef enum {
         DataSourceLocal,

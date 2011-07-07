@@ -102,6 +102,15 @@ WallpaperList::WallpaperList (
     #endif
 }
 
+WallpaperList::~WallpaperList()
+{
+    /*
+     * The user might press the back button before the image is loaded in the
+     * other thread...
+     */
+    m_BusinessLogic->endEdit ();
+}
+
 /*
  * If we got new pictures we might need to get their thumbnails.
  */
