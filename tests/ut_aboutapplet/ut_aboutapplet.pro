@@ -26,7 +26,6 @@ CONFIG += \
     gui \
     meegotouchcore \
     mobility \
-    plugin \
     duicontrolpanel \
     link_pkgconfig
 
@@ -51,3 +50,4 @@ SOURCES += \
     $$SRC_PREFIX/aboutwidget.cpp
 
 INSTALLS += target
+

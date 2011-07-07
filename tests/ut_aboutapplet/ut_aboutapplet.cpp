@@ -37,6 +37,22 @@ QTM_USE_NAMESPACE
 #define DEBUG
 #include "../../src/debug.h"
 
+#ifdef HAVE_CONTENT_ACTION
+#include <contentaction.h>
+
+static bool contentActionTriggered = false;
+
+namespace ContentAction
+{
+
+void
+Action::trigger () const
+{
+    contentActionTriggered = true;
+}
+
+}
+#endif
 
 /******************************************************************************
  * Ut_AboutApplet implementation.
@@ -123,26 +139,6 @@ Ut_AboutApplet::testConstructWidget ()
     QVERIFY (m_Applet->m_MainWidget == widget);
     QVERIFY (!m_Applet->constructStylableWidget (1));
 
-    /* FIXME: TODO check this */
-#if 0
-    /*
-     * logic only should be created, when view is ready
-     */
-    QVERIFY (m_Applet->m_AboutBusinessLogic);
-
-    /*
-     * We are not testing the AboutBusinesslogic here, so the following lines
-     * act as a kind of mocking, the aboutbusinesslogic will not initiate
-     * outside communication if it has the data already.
-     */
-    m_Applet->m_AboutBusinessLogic->m_BluetoothAddress = "fakeBluetooth";
-    m_Applet->m_AboutBusinessLogic->m_Imei = "FakeImei";
-    m_Applet->m_AboutBusinessLogic->m_WifiAddress = "FakeWifi";
-    m_Applet->m_AboutBusinessLogic->m_OsName = "FakeOsName";
-    m_Applet->m_AboutBusinessLogic->m_OsVersion = "FakeOsVersion";
-
-#endif
-
     /*
      * Testing if the widget accepts the back. Our applets always accept back.
      */
@@ -162,6 +158,22 @@ Ut_AboutApplet::testMenuItems ()
     QVector<MAction*> items = m_Applet->viewMenuItems ();
 
     QVERIFY (items.size() == 0);
+}
+
+void
+Ut_AboutApplet::testLinkActivated ()
+{
+    AboutWidget     *widget;
+
+    widget = (AboutWidget *) m_Applet->constructStylableWidget (0);
+    QVERIFY (widget);
+
+#ifdef HAVE_CONTENTACTION
+    contentActionTriggered = false;
+    widget->linkActivated (QString ("http://www.nokia.com"));
+
+    QCOMPARE (contentActionTriggered, true);
+#endif
 }
 
 QTEST_APPLESS_MAIN(Ut_AboutApplet)
