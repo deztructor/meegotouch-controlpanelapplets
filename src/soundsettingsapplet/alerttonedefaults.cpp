@@ -375,15 +375,7 @@ AlertToneDefaults::selectAndScroll (
     }
 
     idx = m_DefaultsModel->findItemByFileName (fileName);
-
-    if(idx >= 0)
-    {
-        QModelIndex mIndex = m_DefaultsModel->index (idx, 0);
-        m_DefaultsModel->moveItem(mIndex, idx, 0);
-        success = selectAndScroll (0);
-    }
-    else
-        success = false;
+    success = selectAndScroll (idx);
 
     SYS_WARNING ("*** idx = %d", idx);
     if (!success) {
@@ -405,7 +397,6 @@ AlertToneDefaults::selectAndScroll (
             selectionModel()->clear();
         }
     } else {
-        SYS_DEBUG("success");
         m_FileNameToSelect = "";
         m_NiceNameToSelect = "";
     }

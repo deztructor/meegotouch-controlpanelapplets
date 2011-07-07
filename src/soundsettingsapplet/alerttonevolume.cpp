@@ -21,7 +21,7 @@
 #include <QDebug>
 #include "static.h"
 
-//#define DEBUG
+//#define DEBUG 
 #define WARNING
 #include "../debug.h"
 
