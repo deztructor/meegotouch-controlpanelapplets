@@ -62,7 +62,6 @@ HEADERS =                      \
     alerttonedefaultsmodel.h   \
     alerttonepreview.h         \
     alerttonetoplevel.h        \
-    alerttonevolume.h          \
     alerttonewidget.h          \
     gconfstringcombo.h         \
     profileintcombo.h          \
@@ -89,7 +88,6 @@ SOURCES =                      \
     alerttonedefaultsmodel.cpp \
     alerttonepreview.cpp       \
     alerttonetoplevel.cpp      \
-    alerttonevolume.cpp        \
     alerttonewidget.cpp        \
     gconfstringcombo.cpp       \
     profileintcombo.cpp        \

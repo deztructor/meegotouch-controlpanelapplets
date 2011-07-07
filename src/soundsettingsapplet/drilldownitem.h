@@ -44,6 +44,10 @@ Q_OBJECT
 
     private:
         QString m_TitleStyleName;
+
+#ifdef UNIT_TEST
+    friend class Ut_DrillDownItem;
+#endif
 };
 
 void

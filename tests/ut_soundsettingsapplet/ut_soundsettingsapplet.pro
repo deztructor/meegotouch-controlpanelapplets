@@ -47,7 +47,6 @@ HEADERS += \
     $$SRC_PREFIX/alerttonewidget.h \
     $$SRC_PREFIX/alerttonetoplevel.h \
     $$SRC_PREFIX/alerttonepreview.h \
-    $$SRC_PREFIX/alerttonevolume.h \
     $$SRC_PREFIX/alerttoneappletmaps.h \
     $$SRC_PREFIX/alerttoneappletwidget.h \
     $$SRC_PREFIX/alerttonebrowser.h \
@@ -62,8 +61,6 @@ HEADERS += \
     $$SRC_PREFIX/static.h \
     $$SRC_PREFIX/soundsettingsapplet.h
 
-
-
 SOURCES += \
     ut_soundsettingsapplet.cpp  \
     $$SRC_PREFIX/../debug.cpp \
@@ -76,7 +73,6 @@ SOURCES += \
     $$SRC_PREFIX/alerttonewidget.cpp \
     $$SRC_PREFIX/alerttonetoplevel.cpp \
     $$SRC_PREFIX/alerttonepreview.cpp \
-    $$SRC_PREFIX/alerttonevolume.cpp \
     $$SRC_PREFIX/alerttoneappletmaps.cpp \
     $$SRC_PREFIX/alerttoneappletwidget.cpp \
     $$SRC_PREFIX/alerttonebrowser.cpp \
@@ -90,9 +86,5 @@ SOURCES += \
     $$SRC_PREFIX/qgconfvalue.cpp \
     $$SRC_PREFIX/soundsettingsapplet.cpp
 
-
-
 INSTALLS += target
-
-
 
