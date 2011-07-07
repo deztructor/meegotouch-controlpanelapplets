@@ -171,41 +171,42 @@ WallpaperModel::loadFromDirectory ()
     QStringList             itemsToRemove;
     QStringList             directories;
 
+    SYS_DEBUG ("");
     directories <<
         m_SysImagesDir <<
         m_ImagesDir;
 
-    foreach (QString directory, directories)
-    {
-      /*
-       * Getting the full list of the given directory. 
-       */
-      entries = Wallpaper::readDir (
+    foreach (QString directory, directories) {
+        /*
+         * Getting the full list of the given directory. 
+         */
+        SYS_DEBUG ("Reading %s", SYS_STR(directory));
+        entries = Wallpaper::readDir (
             directory, Wallpaper::imageNameFilter(), entries);
+        SYS_DEBUG ("*** %d entries", entries.size());
+        /*
+         * Comparing the data we have with the file list we got. Removing from
+         * the new list data all the files that are already stored in the model.
+         * We also maintain a list of files that are 
+         */
+        foreach (QString oldPath, m_FilePathList) {
+            if (!Wallpaper::isInDir (directory, oldPath))
+                continue;
 
-      /*
-       * Comparing the data we have with the file list we got. Removing from the
-       * new list data all the files that are already stored in the model. We also
-       * maintain a list of files that are 
-       */
-      foreach (QString oldPath, m_FilePathList) {
-        if (!Wallpaper::isInDir (directory, oldPath))
-            continue;
-
-          if (entries.contains(oldPath)) {
-            /*
-             * Here we found a file, that we already have. This one we don't
-             * need to worry about.
-             */
-            entries.remove(oldPath);
-          } else {
-            /*
-             * Here we have a path that we have, it was in the given directory,
-             * but it is not found any more.
-             */
-            itemsToRemove << oldPath;
-          }
-      }
+            if (entries.contains(oldPath)) {
+                /*
+                 * Here we found a file, that we already have. This one we don't
+                 * need to worry about.
+                 */
+                 entries.remove(oldPath);
+            } else {
+                /*
+                 * Here we have a path that we have, it was in the given
+                 * directory, but it is not found any more.
+                 */
+                 itemsToRemove << oldPath;
+            }
+        }
     } // foreach in directories
     
     /*
@@ -238,16 +239,16 @@ WallpaperModel::loadFromDirectory ()
 
         if (m_PendingFiles.contains(newPath) &&
                 m_PendingFiles[newPath] == entries[newPath]) {
-                /*
-                 * Finished copying, we are going to add these right now.
-                 */
-                toAdd << newPath;
-                m_PendingFiles.remove (newPath);
+            /*
+             * Finished copying, we are going to add these right now.
+             */
+             toAdd << newPath;
+             m_PendingFiles.remove (newPath);
         } else {
-                /*
-                 * Otherwise we remember to add these later.
-                 */
-                m_PendingFiles[newPath] = entries[newPath];
+             /*
+              * Otherwise we remember to add these later.
+              */
+             m_PendingFiles[newPath] = entries[newPath];
         }
     }
 
@@ -369,7 +370,7 @@ WallpaperModel::loadThumbnails (
     QStringList  mimeTypes;
     int          start, end;
 
-    #if 1
+    #if 0
     SYS_DEBUG ("Between %d, %d - %d, %d", 
             firstVisibleRow.column(),
             firstVisibleRow.row(), 
@@ -681,7 +682,15 @@ WallpaperModel::usbModeChanged (
         MeeGo::QmUSBMode::Mode mode)
 {
     SYS_DEBUG ("Usbmode = %s", SYS_STR(usbModeName(mode)));
-    loadFromDirectory ();
+    
+    /*
+     * FIXME: Well, maybe we can find a robust solution for this issue?
+     */
+    if (mode == QmUSBMode::Undefined)
+        QTimer::singleShot (5000, this, SLOT(loadFromDirectory()));
+    else if (mode == QmUSBMode::MassStorage)
+        loadFromDirectory ();
+
     ensureSelection ();
 }
 #endif

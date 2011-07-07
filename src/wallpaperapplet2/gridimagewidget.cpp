@@ -11,8 +11,8 @@
 #include <MStyle>
 #include <mbuttoniconstyle.h>
 
-#define DEBUG
-#define WARNING
+//#define DEBUG
+//#define WARNING
 #include "../debug.h"
 
 #include <MWidgetCreator>
