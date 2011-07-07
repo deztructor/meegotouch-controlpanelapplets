@@ -74,6 +74,7 @@ Ut_AboutApplet::initTestCase()
      */
     QVERIFY (!m_Applet->m_MainWidget);
 
+#if 0
     /*
      * TODO: FIXME: remove this, but output can be helpful
      * for development & testing purposes
@@ -91,6 +92,7 @@ Ut_AboutApplet::initTestCase()
                SYS_STR(systemInfo.version (QSystemInfo::Os)),
                SYS_STR(systemInfo.version (QSystemInfo::QtCore)),
                SYS_STR(systemInfo.version (QSystemInfo::Firmware)));
+#endif
 }
 
 void
