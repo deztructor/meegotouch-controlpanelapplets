@@ -30,7 +30,7 @@
  */
 #undef USE_ASYNC_LOADING
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -238,6 +238,7 @@ AlertToneDefaultsModel::findItemByFileName (
 {
     int retval = -1;
     for (int n = 0; n < rowCount(); ++n) {
+        SYS_DEBUG("item %d: %s", n, SYS_STR(fileName(n)));
         if (fileName(n) == FileName) {
             retval = n;
             break;
