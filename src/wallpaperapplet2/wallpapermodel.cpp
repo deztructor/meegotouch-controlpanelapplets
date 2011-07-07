@@ -53,6 +53,7 @@ WallpaperModel::WallpaperModel (
     m_ThumbnailMagicNumber (1)
 {
     m_ImagesDir = Wallpaper::constructPath (Wallpaper::ImagesDir);
+    m_SysImagesDir = Wallpaper::constructPath (Wallpaper::SysImagesDir);
 
     m_FileSystemTimer.setInterval (fileSystemReCheckDelay);
     m_FileSystemTimer.setSingleShot (true);
@@ -168,36 +169,44 @@ WallpaperModel::loadFromDirectory ()
     QStringList             toAdd;
     QStringList             removedFilePaths;
     QStringList             itemsToRemove;
+    QStringList             directories;
 
-    /*
-     * Getting the full list of the given directory. 
-     */
-    entries = Wallpaper::readDir (
-            m_ImagesDir, Wallpaper::imageNameFilter());
+    directories <<
+        m_SysImagesDir <<
+        m_ImagesDir;
 
-    /*
-     * Comparing the data we have with the file list we got. Removing from the
-     * new list data all the files that are already stored in the model. We also
-     * maintain a list of files that are 
-     */
-    foreach (QString oldPath, m_FilePathList) {
-        if (!Wallpaper::isInDir (m_ImagesDir, oldPath))
+    foreach (QString directory, directories)
+    {
+      /*
+       * Getting the full list of the given directory. 
+       */
+      entries = Wallpaper::readDir (
+            directory, Wallpaper::imageNameFilter(), entries);
+
+      /*
+       * Comparing the data we have with the file list we got. Removing from the
+       * new list data all the files that are already stored in the model. We also
+       * maintain a list of files that are 
+       */
+      foreach (QString oldPath, m_FilePathList) {
+        if (!Wallpaper::isInDir (directory, oldPath))
             continue;
 
-        if (entries.contains(oldPath)) {
+          if (entries.contains(oldPath)) {
             /*
              * Here we found a file, that we already have. This one we don't
              * need to worry about.
              */
             entries.remove(oldPath);
-        } else {
+          } else {
             /*
              * Here we have a path that we have, it was in the given directory,
              * but it is not found any more.
              */
             itemsToRemove << oldPath;
-        }
-    }
+          }
+      }
+    } // foreach in directories
     
     /*
      * Immediately removing all the disappeared files.
@@ -705,6 +714,7 @@ WallpaperModel::startWatchFiles ()
     }
 
     SYS_DEBUG ("Watching directory %s", SYS_STR(m_ImagesDir));
+    /* No need to listen on SysImagesDir as it is on the rootfs */
     m_FileWatcher->addPath (m_ImagesDir);
 }
 

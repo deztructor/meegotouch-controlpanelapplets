@@ -56,7 +56,10 @@ class GridImageWidget : public MListItem
         void setCurrent (bool current);
 
         QString image() const;
+        
         void setID (const QString &id);
+        QString id () const;
+
         void setProgress (bool showProgress = true);
         void showAnimated();
 

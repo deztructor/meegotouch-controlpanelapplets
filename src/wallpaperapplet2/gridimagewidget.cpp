@@ -11,7 +11,7 @@
 #include <MStyle>
 #include <mbuttoniconstyle.h>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -224,6 +224,7 @@ GridImageWidget::paint (
     Q_UNUSED (widget);
 
     //MListItem::paint (painter, option, widget);
+
     if (m_ProgressIndicator && m_ProgressIndicator->isVisible())
         painter->setOpacity (0.5);
 
@@ -256,6 +257,8 @@ void
 GridImageWidget::setPixmap(
         const QPixmap &pixmap)
 {
+    SYS_DEBUG ("");
+
     if (!m_Layout)
         createLayout ();
 
@@ -269,10 +272,17 @@ GridImageWidget::setID (
     m_ID = id;
 }
 
+QString 
+GridImageWidget::id () const
+{
+    return m_ID;
+}
+
 void 
 GridImageWidget::setProgress (
         bool showProgress)
 {
+    SYS_DEBUG ("*** showProgress = %s", SYS_BOOL(showProgress));
     if (showProgress) {
         progressIndicator(true)->show();
     } else if (m_ProgressIndicator) {

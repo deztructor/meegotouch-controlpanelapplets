@@ -51,8 +51,7 @@ WallpaperList::WallpaperList (
     m_BusinessLogic (logic),
     m_Model (0),
     m_CellCreator (new WallpaperCellCreator),
-    m_DataSourceType (WallpaperList::DataSourceUnknown),
-    m_Panning (false)
+    m_DataSourceType (WallpaperList::DataSourceUnknown)
 {
     connect (this, SIGNAL(itemClicked(const QModelIndex &)),
             this, SLOT(slotItemClicked(const QModelIndex &)));
@@ -210,19 +209,15 @@ void
 WallpaperList::slotItemClicked (
         const QModelIndex &index)
 {
-    SYS_WARNING ("---------> *** m_Panning = %s", SYS_BOOL(m_Panning));
-    if (m_Panning)
-        return;
-
     QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
     WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
 
     SYS_DEBUG ("*** filename = %s", SYS_STR(desc.filePath()));
-    
-    if (m_Model)
-        m_Model->showProgressByFilepath (desc.filePath());
 
-    emit imageActivated(desc);
+    if (!m_BusinessLogic->hasEditedImage()) {
+        m_Model->showProgressByFilepath (desc.filePath());
+        emit imageActivated(desc);
+    }
 }
 
 void 
@@ -263,12 +258,6 @@ WallpaperList::stopLoadingPictures ()
 void 
 WallpaperList::slotPanningStarted ()
 {
-    SYS_WARNING ("--> m_Panning = %s", SYS_BOOL(m_Panning));
-
-    if (m_Panning)
-        return;
-
-    m_Panning = true;
     QTimer::singleShot (loadPicturesDelay, this, SLOT(stopLoadPictures()));
     //stopLoadingPictures ();
 }
@@ -276,12 +265,6 @@ WallpaperList::slotPanningStarted ()
 void 
 WallpaperList::slotPanningStopped ()
 {
-    SYS_WARNING ("--> m_Panning = %s", SYS_BOOL(m_Panning));
-
-    if (!m_Panning)
-        return;
-    
-    m_Panning = false;
     QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
     //loadPictures ();
 }

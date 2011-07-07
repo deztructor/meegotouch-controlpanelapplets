@@ -71,18 +71,23 @@ WallpaperCellCreator::updateCell (
     WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
    
     if (desc.hasThumbnail()) {
-        QPixmap thumb = desc.thumbnail ();
-        QSizeF  cSize = cellSize();
-        imageWidget->setPixmap (
+        if (imageWidget->id() != desc.filePath()) {
+            QPixmap thumb = desc.thumbnail ();
+            QSizeF  cSize = cellSize();
+            
+            imageWidget->setPixmap (
                 thumb.scaled((int)cSize.width(), (int)cSize.height()));
-        imageWidget->setID (desc.filePath());
-        if (desc.thumbnailPending()) {
-            desc.setThumbnailPending (false);
-        }
+            imageWidget->setID (desc.filePath());
 
-        if (!desc.progress())
+            if (desc.thumbnailPending()) {
+                desc.setThumbnailPending (false);
+            }
+
+            //if (!desc.progress())
             imageWidget->showAnimated();
+        }
     } else {
+        SYS_DEBUG ("NO THUMBNAIL");
         /*
          * resetting the cell thumbnail pixmap. We need this because the cells
          * are re-used.

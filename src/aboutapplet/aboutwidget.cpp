@@ -63,9 +63,13 @@ class ContentWidget: public MStylableWidget
 
         m_title = new MLabel;
         m_title->setStyleName ("CommonSubTitleTopInverted");
+        m_title->setWordWrap (true);
+        m_title->setWrapMode (QTextOption::WrapAtWordBoundaryOrAnywhere);
 
         m_subTitle = new MLabel;
         m_subTitle->setStyleName ("CommonTitleBottomInverted");
+        m_subTitle->setWordWrap (true);
+        m_subTitle->setWrapMode (QTextOption::WrapAtWordBoundaryOrAnywhere);
         m_subTitle->setText ("-");
 
         layout->addItem (m_title);
