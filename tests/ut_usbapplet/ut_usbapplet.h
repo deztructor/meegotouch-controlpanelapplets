@@ -37,6 +37,7 @@ private slots:
     void cleanupTestCase ();
 
     void testTitle ();
+    void testConstructBrief ();
     void testConstructWidget ();
     void testMenuItems ();
 
