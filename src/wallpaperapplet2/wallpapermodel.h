@@ -139,6 +139,7 @@ class WallpaperModel: public QAbstractTableModel
         WallpaperBusinessLogic                 *m_BusinessLogic;
         QStringList                             m_FilePathList;
         QHash<QString, WallpaperDescriptor>     m_FilePathHash; 
+        QString                                 m_SysImagesDir;
         QString                                 m_ImagesDir;
         QPointer<Thumbnailer>                   m_Thumbnailer;
         QPointer<QFileSystemWatcher>            m_FileWatcher;

@@ -66,6 +66,14 @@ namespace Wallpaper
             const QString     &directoryPath,
             const QStringList &nameFilters);
 
+    /*
+     * @hashTable: the data will be appended here
+     */
+    QHash<QString, qint64> readDir (
+            const QString           &directoryPath,
+            const QStringList       &nameFilters,
+            QHash<QString, qint64>  &hashTable);
+
     bool imageFile (
             const QString     &filePath);
 
