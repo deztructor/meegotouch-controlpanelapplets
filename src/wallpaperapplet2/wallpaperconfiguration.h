@@ -53,6 +53,7 @@ namespace Wallpaper
     //const QString themeImagePath (
     //        "/usr/share/themes/%1/meegotouch/proto/%2.jpg");
 
+    const QString SysImagesDir ("/usr/share/backgrounds");
     const QString ImagesDir ("~/MyDocs/.wallpapers");
     const QString ImagesSaveDir ("~/.wallpapers");
     const QString OutImgExt (".png");

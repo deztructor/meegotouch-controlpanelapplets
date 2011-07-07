@@ -300,23 +300,30 @@ WallpaperBusinessLogic::availableWallpapers () const
     list << desc;
 #endif
 
-    QString                 directoryPath = dirPath (DownloadDir);
-    WallpaperDir            directory (directoryPath);
-    QStringList             entryList;
+    QStringList             directories;
     QStringList             nameFilters;
 
-    if (!directory.exists(directoryPath))
-        goto finalize;
+    directories <<
+        dirPath (SystemDir) <<
+        dirPath (DownloadDir);
 
     nameFilters << 
         "*.jpg" << "*.jpeg" << "*.jpe" <<  "*.png" << "*.bmp" << "*.gif" << 
         "*.tif";
 
-    entryList = directory.entryList(
+    foreach (QString directoryPath, directories)
+    {
+      WallpaperDir            directory (directoryPath);
+      QStringList             entryList;
+
+      if (!directory.exists(directoryPath))
+        continue;
+
+      entryList = directory.entryList(
             nameFilters,
             QFlags<WallpaperDir::Filter>(WallpaperDir::Files | WallpaperDir::NoSymLinks | WallpaperDir::Readable));
 
-    for (int iList = 0; iList < entryList.count(); iList++) {
+      for (int iList = 0; iList < entryList.count(); iList++) {
         QString url = 
             QString ("file://") +
             directoryPath +
@@ -331,7 +338,8 @@ WallpaperBusinessLogic::availableWallpapers () const
         desc->setUrl (url, WallpaperDescriptor::Portrait);
         desc->setUrl (url, WallpaperDescriptor::Landscape);
         list << desc;
-    }
+      }
+    } // foreach
 
 finalize:
     SYS_DEBUG ("We have %d wallpapers.", list.size());
@@ -478,6 +486,10 @@ WallpaperBusinessLogic::dirPath (
         case MountDir:
             retval = homeDir + WallpaperDir::separator() + 
                mountDir + WallpaperDir::separator();
+            break;
+
+        case SystemDir:
+            retval = "/usr/share/backgrounds/";
             break;
     }
 

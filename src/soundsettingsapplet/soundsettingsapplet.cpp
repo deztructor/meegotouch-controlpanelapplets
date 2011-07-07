@@ -27,7 +27,7 @@
 #include "alerttonebrowser.h"
 #include "alerttoneappletwidget.h"
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 

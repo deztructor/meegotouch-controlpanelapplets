@@ -411,20 +411,3 @@ AlertToneDefaultsModel::ensureHasDirectory (
 
     return retval;
 }
-
-void
-AlertToneDefaultsModel::moveItem(int from, int destination)
-{
-    SYS_DEBUG("move item from %d to %d", from, destination);
-
-    QVariant niceName = data(index(from, NiceNameColumn));
-    QVariant fileName = data(index(from, FullPathColumn));
-    QVariant forced = data(index(from, ForcedColumn));
-
-    removeRow(from);
-    insertRow(destination);
-
-    setData (index(destination, NiceNameColumn), QVariant(niceName));
-    setData (index(destination, FullPathColumn), QVariant(fileName));
-    setData (index(destination, ForcedColumn), QVariant(forced));
-}

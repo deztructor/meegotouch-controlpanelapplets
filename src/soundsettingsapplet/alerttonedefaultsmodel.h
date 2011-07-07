@@ -55,9 +55,7 @@ public:
 
     QString fileName (const QModelIndex &item) const;
     QString fileName (int indexRow) const;
-
-    void moveItem(int from, int destination);
-
+    
     void refresh (); 
     
     static QString oviRingTonesPath ();

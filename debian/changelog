@@ -1,14 +1,17 @@
-meegotouch-controlpanelapplets (0.20.61~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.62~1) meegotouch; urgency=low
 
-  [ David Kedves ]
-  * ResetApplet: ask for devicelock code when it is set
-  * Fixed: 265952 - Reset does not ask for lock code even if enabled
+  * [NEW VERSION]
 
-  [ Zoltan Nyul ]
-  * Fixed: 250348 - [TASK] Ringtone view to indicate currently selected
-    ringtone on top of the view
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 07 Jul 2011 14:27:04 +0300
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 28 Jun 2011 12:57:31 +0300
+meegotouch-controlpanelapplets (0.20.61-1) meegotouch; urgency=low
+
+  * Fixes: NB#271025 - Cannot find operator custom wallpaper
+  * Fixed 270578 - Currently selected wallpaper thumbnail is not
+    getting updated in wallpaper applet view when the wallpaper is set
+    from gallery application from the second time onwards.
+
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 07 Jul 2011 14:26:38 +0300
 
 meegotouch-controlpanelapplets (0.20.60-1) meegotouch; urgency=low
 
