@@ -16,10 +16,11 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "resetbusinesslogic.h"
 #include <QString>
 #include <MGConfItem>
+
+#undef WANT_LOCK_CODE
 
 #include <QVariant>
 #include <QDBusInterface>
@@ -101,7 +102,7 @@ ResetBusinessLogic::getAccess ()
 
     bool success = false;
 
-#ifdef HAVE_DEVICELOCK
+#if defined(HAVE_DEVICELOCK) && defined (WANT_LOCK_CODE)
     QDBusMessage message;
     message = m_devlock->call (QDBus::Block, 
                                QString ("setState"),
@@ -124,6 +125,7 @@ ResetBusinessLogic::getAccess ()
 
 // TODO: FIXME: It seems we're getting 'true'
 // here when the lock code does not exists!!!
+//  Bug filed: NB#270754
 
     /*
      * No password needed [ie. device-lock is disabled]
