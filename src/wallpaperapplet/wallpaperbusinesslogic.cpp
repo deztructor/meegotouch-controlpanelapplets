@@ -329,11 +329,6 @@ WallpaperBusinessLogic::availableWallpapers () const
             directoryPath +
             entryList[iList];
 
-#if 0
-        SYS_DEBUG ("*** dir       = %s", SYS_STR(directoryPath));
-        SYS_DEBUG ("*** entry     = %s", SYS_STR(entryList[iList]));
-        SYS_DEBUG ("*** url       = %s", SYS_STR(url));
-#endif   
         desc = new WallpaperDescriptor;
         desc->setUrl (url, WallpaperDescriptor::Portrait);
         desc->setUrl (url, WallpaperDescriptor::Landscape);
@@ -341,7 +336,6 @@ WallpaperBusinessLogic::availableWallpapers () const
       }
     } // foreach
 
-finalize:
     SYS_DEBUG ("We have %d wallpapers.", list.size());
     return list;
 }
