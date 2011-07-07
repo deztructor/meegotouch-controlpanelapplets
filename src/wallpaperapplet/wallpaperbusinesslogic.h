@@ -106,7 +106,8 @@ private:
     typedef enum {
         SaveDir,
         DownloadDir,
-        MountDir
+        MountDir,
+        SystemDir
     } WallpaperDirectoryID;
 
     QString dirPath (WallpaperDirectoryID dirID = SaveDir) const;
