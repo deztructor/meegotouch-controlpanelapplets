@@ -57,6 +57,10 @@ QTM_USE_NAMESPACE
 #define LICENSE_PATH ""
 #endif
 
+#ifdef MEEGO
+#define LICENSE_PATH "/etc/meego-release"
+#endif
+
 static const QString barcodeGenerator ("/usr/bin/about-contents-barcode");
 static const QString configPath ("/usr/share/about-contents/");
 static const QString configFile (configPath + "contents.ini");

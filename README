@@ -27,3 +27,25 @@ DEB_BUILD_OPTIONS=wallpaper2
 
 # Disable tests building (an empty -tests package will be generated)
 DEB_BUILD_OPTIONS=nocheck
+
+
+# Build only certain applet(s)
+# If an applet given, the translations and test will built as well
+# If no BUILD_APPLET option, all of the applets will built, just as before
+BUILD_APPLET=<appletname>
+appletnames used ^^^^:
+
+about
+theme
+battery
+display
+offline
+reset
+sound
+testapplet
+usb
+wallpaper
+wallpaper2
+warranty
+# ^^ pls keep this list updated, together with src/src.pro
+
