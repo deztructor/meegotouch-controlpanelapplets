@@ -46,7 +46,6 @@ HEADERS += \
     $$SRC_PREFIX/profilecontainer.h         \
     $$SRC_PREFIX/alerttoneappletwidget.h \
     $$SRC_PREFIX/alerttonewidget.h \
-    $$SRC_PREFIX/alerttonevolume.h \
     $$SRC_PREFIX/alerttonetoplevel.h \
     $$SRC_PREFIX/alerttoneappletmaps.h \
     $$SRC_PREFIX/alerttonepreview.h \
@@ -69,7 +68,6 @@ SOURCES += \
     $$SRC_PREFIX/profilecontainer.cpp       \
     $$SRC_PREFIX/alerttoneappletwidget.cpp \
     $$SRC_PREFIX/alerttonewidget.cpp \
-    $$SRC_PREFIX/alerttonevolume.cpp \
     $$SRC_PREFIX/alerttonetoplevel.cpp \
     $$SRC_PREFIX/alerttoneappletmaps.cpp \
     $$SRC_PREFIX/alerttonepreview.cpp \
@@ -80,8 +78,5 @@ SOURCES += \
     $$SRC_PREFIX/qprofilevalue.cpp \
     $$SRC_PREFIX/qtrackedvariant.cpp
 
-
 INSTALLS += target
-
-
 

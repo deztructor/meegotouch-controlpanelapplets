@@ -308,5 +308,11 @@ Ut_UsbApplet::testMenuItems ()
     QCOMPARE (items.size (), 0);
 }
 
+void
+Ut_UsbApplet::testConstructBrief ()
+{
+    QVERIFY (m_Applet->constructBrief (0) == 0);
+}
+
 QTEST_APPLESS_MAIN(Ut_UsbApplet)
 

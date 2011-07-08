@@ -32,7 +32,7 @@
 #include "wallpapercellcreator.h"
 
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -100,6 +100,15 @@ WallpaperList::WallpaperList (
     SYS_DEBUG ("*** columns             = %d", columns);
     SYS_DEBUG ("*** width               = %g", width);
     #endif
+}
+
+WallpaperList::~WallpaperList()
+{
+    /*
+     * The user might press the back button before the image is loaded in the
+     * other thread...
+     */
+    m_BusinessLogic->endEdit ();
 }
 
 /*

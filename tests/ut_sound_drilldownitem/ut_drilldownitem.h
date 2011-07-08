@@ -3,6 +3,7 @@
 ** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
+** Author:  David Kedves <dkedves@blumsoft.eu>
 **
 ** This file is part of meegotouch-controlpanelapplets.
 **
@@ -16,30 +17,32 @@
 ** of this file.
 **
 ****************************************************************************/
-#ifndef UT_ALERTTONEVOLUME_H
-#define UT_ALERTTONEVOLUME_H
+#ifndef UT_DRILLDOWN_ITEM_H
+#define UT_DRILLDOWN_ITEM_H
 
 #include <QtTest/QtTest>
 #include <QObject>
-#include <MApplication>
 
+class MApplication;
+class RightArrowItem;
 
-class Ut_AlertToneVolumeTests : public QObject
+class Ut_DrillDownItem : public QObject 
 {
 Q_OBJECT
 
 private slots:
-      void initTestCase();
-      void cleanupTestCase();
+    void init ();
+    void cleanup ();
+    void initTestCase ();
+    void cleanupTestCase ();
 
-      void alerttonevolumeConstructor();
-      void alerttonevolumeVolumeChanged_data();
-      void alerttonevolumeVolumeChanged();
-      void alerttonevolumeFileNameChanged();
-      void alerttonevolumeSlider();
+    void testConstruct ();
+    void testCreateLayout ();
+    void testTitleStyleName ();
 
 private:
-      MApplication * m_App;
+    MApplication                 *m_App;
+    RightArrowItem               *m_raitem;
 };
 
 #endif
