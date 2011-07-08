@@ -97,6 +97,23 @@ AboutBusinessLogic::osVersion ()
     QString retval;
 
     QSystemInfo systemInfo;
+#ifdef MEEGO
+   
+    QFile rel_file ("/etc/meego-release");  
+      if (rel_file.open (QIODevice::ReadOnly))  
+      {  
+          QString contents (rel_file.readAll ().constData ());  
+           rel_file.close ();  
+    
+         QRegExp distrib_name ("BUILD: (\\S*)");  
+          int pos = distrib_name.indexIn (contents);  
+          if (pos > -1)  
+              retval = distrib_name.cap (1);  
+	      
+              return retval;
+      } 
+
+#endif
 
     retval = systemInfo.version (QSystemInfo::Firmware);
     /*
@@ -148,6 +165,19 @@ AboutBusinessLogic::osName ()
     //% "MeeGo"
     QString retval = qtTrId ("qtn_prod_sw_version");
 
+
+#ifdef MEEGO
+
+    QFile meegorel_file ("/etc/meego-release");  
+     if (meegorel_file.open (QIODevice::ReadOnly))  
+     {  
+         QString contents (meegorel_file.readAll ().constData ());  
+         meegorel_file.close ();  
+   
+         retval = contents.section('\n',0,0);  
+     }
+#endif
+
     /*
      * Try to get the version number from the lsb-release
      */
@@ -164,6 +194,7 @@ AboutBusinessLogic::osName ()
     }
 
     return retval;
+
 }
 
 /*!

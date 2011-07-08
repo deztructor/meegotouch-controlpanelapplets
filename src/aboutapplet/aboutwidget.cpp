@@ -74,9 +74,11 @@ class ContentWidget: public MStylableWidget
 
         layout->addItem (m_title);
         layout->addItem (m_subTitle);
-
+#ifndef MEEGO
         setStyleName ("CommonPanelInverted");
-
+#else
+        setStyleName ("AboutAppletCommonPanelInverted");
+#endif
         setLayout (layout);
     }
     void setTitle(QString const &title)
@@ -414,6 +416,7 @@ AboutWidget::addVersionContainer ()
 
     m_Version = new ContentWidget;
     m_Version->setTitle ("");
+    //% "OS version"
     m_Version->setTitle (qtTrId ("qtn_prod_version"));
     m_layout->addItem (m_Version, m_currentRow++, 0, 1, 2);
 }
