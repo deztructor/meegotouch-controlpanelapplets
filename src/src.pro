@@ -20,6 +20,8 @@ addSubDirs(batteryapplet)
 addSubDirs(batteryapplet/translations)
 addSubDirs(displayapplet)
 addSubDirs(displayapplet/translations)
+addSubDirs(gprsapplet)
+addSubDirs(gprsapplet/translations)
 addSubDirs(offlineapplet)
 addSubDirs(offlineapplet/translations)
 addSubDirs(resetapplet)
@@ -62,6 +64,11 @@ contains (BUILD_APPLET,display ){
 message ("***********build display *************************")
 addSubDirs(displayapplet)
 addSubDirs(displayapplet/translations)
+}
+contains (BUILD_APPLET,gprs ){
+message ("***********build gprs *************************")
+addSubDirs(gprsapplet)
+addSubDirs(gprsapplet/translations)
 }
 contains (BUILD_APPLET, offline){
 message ("***********build offline *************************")
