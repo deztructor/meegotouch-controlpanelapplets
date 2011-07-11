@@ -61,6 +61,11 @@ public:
         reqStartAll = 100
     } requestType;
 
+
+#ifdef MEEGO
+    QString GetAboutNames ();
+#endif
+
 protected:
     virtual void run ();
 

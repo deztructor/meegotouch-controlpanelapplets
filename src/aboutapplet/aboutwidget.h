@@ -53,6 +53,9 @@ private:
     void addBarcodeContainer ();
     void addLicenseLabelContainer ();
     void addStretcher (const QString &styleName);
+#ifdef MEEGO
+    void addNamesLabelContainer ();
+#endif
 
 private slots:
     void gotInfo (AboutBusinessLogic::requestType type,
@@ -71,6 +74,9 @@ private:
     MLabel                         *m_LicenseLabel;
     MImageWidget                   *m_imgBarcode;
     CertsWidget                    *m_imgCerts;
+#ifdef MEEGO
+    MLabel			   *m_NamesLabel;
+#endif
 
     int                             m_currentRow;
     int                             m_certsRow;

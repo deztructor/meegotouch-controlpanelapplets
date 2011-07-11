@@ -243,6 +243,10 @@ AboutWidget::createContent ()
 
     // Last Row: the license label
     addLicenseLabelContainer ();
+//in Meego add also a label with names read from /etc/about_names
+#ifdef MEEGO
+    addNamesLabelContainer ();
+#endif
 
     /*
      * And set the layout...
@@ -485,6 +489,33 @@ AboutWidget::addLicenseLabelContainer ()
      */
     m_layout->addItem (m_LicenseLabel, m_currentRow++, 0, 1, 2);
 }
+
+
+
+//The label with the names for Meego
+#ifdef MEEGO
+void
+AboutWidget::addNamesLabelContainer ()
+{
+  if (!m_layout)
+        return;
+
+    m_NamesLabel = new MLabel(m_AboutBusinessLogic->GetAboutNames());
+    m_NamesLabel->setWordWrap (true);
+    m_NamesLabel->setStyleName ("CommonBodyTextInverted");
+    m_NamesLabel->setObjectName ("AboutAppletNamesLabel");
+    m_NamesLabel->setMinimumHeight (100.0);
+
+
+    addStretcher ("CommonLargeSpacer");
+    addStretcher ("CommonHorizontalSeparatorInverted");
+    addStretcher ("CommonLargeSpacer");
+    /*
+     *  Adding the whole row to the main container.
+     */
+    m_layout->addItem (m_NamesLabel, m_currentRow++, 0, 1, 2);
+}
+#endif
 
 void
 AboutWidget::addStretcher (

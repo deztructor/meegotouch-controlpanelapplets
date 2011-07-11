@@ -58,7 +58,8 @@ QTM_USE_NAMESPACE
 #endif
 
 #ifdef MEEGO
-#define LICENSE_PATH "/etc/meego-release"
+#define LICENSE_PATH "/etc/meego-license"
+#define NAMES_PATH "/etc/about_names"
 #endif
 
 static const QString barcodeGenerator ("/usr/bin/about-contents-barcode");
@@ -519,3 +520,26 @@ AboutBusinessLogic::processNextRequest ()
     QTimer::singleShot (0, this, SLOT (processNextRequest ()));
 }
 
+
+#ifdef MEEGO
+QString
+AboutBusinessLogic::GetAboutNames ()
+{
+       QString retval;
+
+       QFile names_file(NAMES_PATH);
+       if (names_file.open (QIODevice::ReadOnly))
+       {
+       retval = (names_file.readAll().constData());
+       names_file.close();
+       }
+
+       else
+       {
+       retval = '-';  
+       }
+
+      return retval;
+
+}
+#endif
