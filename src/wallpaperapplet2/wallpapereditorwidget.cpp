@@ -27,7 +27,6 @@
 #include <QPixmap>
 #include <QImage>
 #include <QTimer>
-#include <MWidgetStyle>
 
 #include <QGestureEvent>
 #include <QTapAndHoldGesture>
@@ -41,13 +40,14 @@
 #include <MAction>
 #include <MApplicationWindow>
 #include <MApplication>
+#include <MWidgetStyle>
 
-#include "mwidgetcreator.h"
+#include <mwidgetcreator.h>
 M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorWidget)
 
 static const qreal ScaleLowerLimit = 0.15;
 
-//#define DEBUG
+#define DEBUG
 //#define WARNING
 #include "../debug.h"
 
@@ -119,12 +119,12 @@ void
 WallpaperEditorWidget::applyStyle()
 {
     SYS_DEBUG ("");
+    WallpaperViewWidget::applyStyle();
+
     if (m_Physics) {
         SYS_WARNING ("applyStyle already called.");
         return;
     }
-
-    WallpaperViewWidget::applyStyle();
 
     /*
      * Creating the MPhysics2DPanning object. These values are copyed from the 
@@ -812,4 +812,3 @@ WallpaperEditorWidget::setupPanningPhysics (
         m_Physics->setPosition (QPointF(hMargin, vMargin));
     }
 }
-

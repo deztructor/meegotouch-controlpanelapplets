@@ -28,6 +28,8 @@
 #include <QPointer>
 #include <MAction>
 #include <MImageWidget>
+#include <MPhysics2DPanning>
+#include <QPropertyAnimation>
 
 class WallpaperViewWidget : public DcpStylableWidget
 {
@@ -43,12 +45,8 @@ class WallpaperViewWidget : public DcpStylableWidget
         virtual void dropImage ();
 
         virtual bool pagePans () const; 
-#if 0
-        virtual void paint (
-            QPainter                        *painter,
-            const QStyleOptionGraphicsItem  *option,
-            QWidget *widget = 0);
-#endif
+
+        virtual bool back ();
 
     signals:
         void doneClicked ();
@@ -64,6 +62,38 @@ class WallpaperViewWidget : public DcpStylableWidget
         virtual QPixmap generatePixmap (
                 const WallpaperITrans  &transformations);
         QSize imageVisualSize (qreal scale = 1.0);
+        
+        /*
+         * Normal mouse events.
+         */
+        virtual void mousePressEvent (QGraphicsSceneMouseEvent *event);
+        virtual void wheelEvent (QGraphicsSceneWheelEvent *event);
+
+        /*
+         * One finger gestures.
+         */
+        void panGestureEvent (
+                QGestureEvent *event, 
+                QPanGesture   *panGesture);
+        /*
+         * Two finger gestures.
+         */
+        virtual void pinchGestureEvent (
+                QGestureEvent *event, 
+                QPinchGesture *pinchGesture);
+
+        virtual void pinchGestureStarted (
+                QGestureEvent *event, 
+                QPinchGesture *pinchGesture);
+
+        virtual void pinchGestureUpdate (
+                QGestureEvent *event, 
+                QPinchGesture *pinchGesture);
+    
+        virtual void pinchGestureEnded (
+                QGestureEvent *event, 
+                QPinchGesture *pinchGesture);        
+
 
     protected slots:
         virtual void initialize (QuillImage &image, QSize size);
@@ -71,8 +101,18 @@ class WallpaperViewWidget : public DcpStylableWidget
         virtual void slotCancelActivated ();
         virtual void wallpaperSaved ();
         virtual void wallpaperLoaded (QuillImage image, QSize originalSize);
+        void queueRedrawImage ();
         virtual void redrawImage ();
-        
+
+        /*
+         * Handling physics as they are changing.
+         */
+        void panningPhysicsPositionChanged (const QPointF &position);
+        void panningPhysicsPanningStopped ();
+        void scalePhysicsPositionChanged(const QPointF &position);
+        void scalePhysicsPanningStopped ();
+        void rotateAnimationFinished ();
+
     protected:
         QPointer<WallpaperBusinessLogic>  m_BusinessLogic;
         WallpaperITrans                   m_Trans;
@@ -86,11 +126,33 @@ class WallpaperViewWidget : public DcpStylableWidget
     private:
         M_STYLABLE_WIDGET(WallpaperViewWidgetStyle)
         QImage transformedImage ();
+        void setupPanningPhysics (bool movePh = false);
 
     private:
+        /*
+         * Tag variables for the editor functionality.
+         */
         bool                              m_PageRealized;
         QPointer<MAction>                 m_DoneAction;
         QPointer<MAction>                 m_CancelAction;
+
+        private:
+        bool                  m_OrientationLocked;
+        M::Orientation        m_Orientation;
+
+        QPointF               m_UserOffset;
+
+        qreal                 m_OriginalScaleFactor;
+        qreal                 m_OriginalRotation;
+        bool                  m_PinchOngoing;
+        bool                  m_Scaling;
+        bool                  m_Rotating;
+        bool                  m_PanOngoing;
+        bool                  m_HasPendingRedraw;
+        MPhysics2DPanning    *m_Physics;
+        MPhysics2DPanning    *m_ScalePhysics;
+        QPropertyAnimation    m_RotateAnimation;
+
 };
 
 #endif

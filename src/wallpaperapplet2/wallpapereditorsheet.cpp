@@ -28,7 +28,7 @@
 #include <MBasicSheetHeader>
 #include <QAction>
 
-#include "mwidgetcreator.h"
+#include <mwidgetcreator.h>
 M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorSheet)
 
 
@@ -53,16 +53,7 @@ void
 WallpaperEditorSheet::createCentralWidget(
         WallpaperBusinessLogic *wallpaperBusinessLogic)
 {
-    SYS_DEBUG ("**** Wallpaper::supportEdit = %s", 
-            SYS_BOOL(Wallpaper::supportEdit));
-
-    if (Wallpaper::supportEdit) {
-        m_EditorWidget = new WallpaperEditorWidget (
-                wallpaperBusinessLogic);
-    } else {
-        m_EditorWidget = new WallpaperViewWidget (
-                wallpaperBusinessLogic);
-    }
+    m_EditorWidget = new WallpaperViewWidget (wallpaperBusinessLogic);
 
     SYS_DEBUG ("setCentralWidget(%p)", m_EditorWidget);
     setCentralWidget (m_EditorWidget);

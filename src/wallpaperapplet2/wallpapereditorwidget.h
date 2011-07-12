@@ -45,14 +45,16 @@ class QGestureEvent;
 /*!
  *
  */
-class MC_EXPORT WallpaperEditorWidget : public WallpaperViewWidget
+class WallpaperEditorWidget : public WallpaperViewWidget
 {
     Q_OBJECT
 
-public:
+    public:
     WallpaperEditorWidget (
             WallpaperBusinessLogic *wallpaperBusinessLogic, 
             QGraphicsWidget        *parent = 0);
+
+
     ~WallpaperEditorWidget ();
 
 

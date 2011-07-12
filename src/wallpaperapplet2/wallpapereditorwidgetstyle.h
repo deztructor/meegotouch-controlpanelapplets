@@ -19,6 +19,7 @@
 #ifndef WALLPAPEREDITORWIDGETSTYLE_H
 #define WALLPAPEREDITORWIDGETSTYLE_H
 
+#include <mwidgetstyle.h>
 #include <wallpaperviewwidgetstyle.h>
 
 class M_CORE_EXPORT WallpaperEditorWidgetStyle : public WallpaperViewWidgetStyle

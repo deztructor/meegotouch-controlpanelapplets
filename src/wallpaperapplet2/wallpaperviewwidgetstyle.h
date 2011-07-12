@@ -28,6 +28,12 @@ class M_CORE_EXPORT WallpaperViewWidgetStyle : public MWidgetStyle
     M_STYLE(WallpaperViewWidgetStyle)
 
     M_STYLE_ATTRIBUTE(QColor, imageBackgroundColor,    ImageBackgroundColor)
+    M_STYLE_ATTRIBUTE(qreal, pointerSpringK,    PointerSpringK)
+    M_STYLE_ATTRIBUTE(qreal, friction,          Friction)
+    M_STYLE_ATTRIBUTE(qreal, slidingFriction,   SlidingFriction)
+    M_STYLE_ATTRIBUTE(qreal, borderSpringK,     BorderSpringK)
+    M_STYLE_ATTRIBUTE(qreal, borderFriction,    BorderFriction)
+    M_STYLE_ATTRIBUTE(qreal, maximumVelocity,   MaximumVelocity)
 };
 
 class M_CORE_EXPORT WallpaperViewWidgetStyleContainer : public MWidgetStyleContainer

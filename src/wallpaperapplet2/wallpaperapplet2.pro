@@ -12,6 +12,7 @@ QMAKE_LFLAGS_RPATH = -Wl
 QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden -fPIC
 
 CONFIG +=             \
+    m                 \
     plugin            \
     gui               \
     meegotouchcore    \
@@ -47,8 +48,7 @@ INCLUDEPATH += \
     /usr/include/thumbnailer 
 
 STYLE_HEADERS +=                   \
-    wallpaperviewwidgetstyle.h     \
-    wallpapereditorwidgetstyle.h
+    wallpaperviewwidgetstyle.h     
 
 HEADERS =                          \
     ../debug.h                     \
@@ -68,8 +68,6 @@ HEADERS =                          \
     wallpapereditorsheet.h         \
     wallpaperviewwidgetstyle.h     \
     wallpaperviewwidget.h          \
-    wallpapereditorwidgetstyle.h   \
-    wallpapereditorwidget.h        \
     wallpaperitrans.h
 
 SOURCES =                          \
@@ -89,7 +87,6 @@ SOURCES =                          \
     wallpaperlistsheet.cpp         \
     wallpapereditorsheet.cpp       \
     wallpaperviewwidget.cpp        \
-    wallpapereditorwidget.cpp      \
     wallpaperitrans.cpp
 
 DESTDIR = lib

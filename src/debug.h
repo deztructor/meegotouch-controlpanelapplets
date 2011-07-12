@@ -39,6 +39,7 @@
 #  ifndef DEBUG_SUPPRESS_COLOR
 #    define DEBUG_SUPPRESS_COLOR
 #  endif
+//# endif
 #endif
 
 /*

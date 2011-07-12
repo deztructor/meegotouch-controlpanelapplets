@@ -143,7 +143,7 @@ WallpaperBusinessLogic::setWallpaper (
     QString  filePath = m_EditedImage.filePath();
     QString  basename = Wallpaper::baseName (filePath);
     QString  targetPath;
-    bool     success;
+    bool     success = false;
 
     if (m_WorkerThread) {
         SYS_WARNING ("Worker thread is already there, giving up.");

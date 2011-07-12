@@ -25,6 +25,8 @@
 
 #include <MAction>
 
+Q_EXPORT_PLUGIN2(wallpaperapplet2, WallpaperApplet)
+
 #ifndef UNIT_TEST
 #include <MLibrary>
 M_LIBRARY
@@ -34,12 +36,11 @@ M_LIBRARY
 #define WARNING
 #include "../debug.h"
 
-Q_EXPORT_PLUGIN2(wallpaperapplet, WallpaperApplet)
 
 WallpaperApplet::WallpaperApplet() :
     m_WallpaperBusinessLogic (0)
 {
-    //SYS_WARNING ("Creating applet...");
+    SYS_WARNING ("Creating applet: %s", M_LIBRARY_NAME);
 }
 
 WallpaperApplet::~WallpaperApplet() 
@@ -67,14 +68,9 @@ WallpaperApplet::pageMain(
             return m_MainWidget;
 
         case EditorWidget:
-            if (m_EditorWidget == 0) {
-                if (Wallpaper::supportEdit)
-                    m_EditorWidget = new WallpaperEditorWidget (
-                            m_WallpaperBusinessLogic);
-                else
-                    m_EditorWidget = new WallpaperViewWidget (
-                            m_WallpaperBusinessLogic);
-            }
+            if (m_EditorWidget == 0) 
+                m_EditorWidget = new WallpaperViewWidget (
+                        m_WallpaperBusinessLogic);
 
             return m_EditorWidget;
 
