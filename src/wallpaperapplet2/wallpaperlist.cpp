@@ -228,7 +228,12 @@ WallpaperList::slotItemClicked (
     QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
     WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
 
-    SYS_DEBUG ("*** filename = %s", SYS_STR(desc.filePath()));
+    SYS_DEBUG ("***********************************************************");
+    SYS_DEBUG ("*** filename          = %s", SYS_STR(desc.filePath()));
+    SYS_DEBUG ("*** thumbnailPending  = %s", SYS_BOOL(desc.thumbnailPending()));
+    SYS_DEBUG ("*** hasThumbnail      = %s", SYS_BOOL(desc.hasThumbnail()));
+    SYS_DEBUG ("*** thumbnail         = %dx%d", 
+            desc.thumbnail().width(), desc.thumbnail().height());
 
     if (!m_BusinessLogic->hasEditedImage()) {
         m_Model->showProgressByFilepath (desc.filePath());
@@ -240,16 +245,16 @@ void
 WallpaperList::slotPanningStarted ()
 {
     m_Panning = true;
-    QTimer::singleShot (loadPicturesDelay, this, SLOT(stopLoadPictures()));
-    //stopLoadingPictures ();
+    //QTimer::singleShot (loadPicturesDelay, this, SLOT(stopLoadingPictures()));
+    stopLoadingPictures ();
 }
 
 void 
 WallpaperList::slotPanningStopped ()
 {
     m_Panning = false;
-    QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
-    //loadPictures ();
+    //QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
+    loadPictures ();
 }
 
 

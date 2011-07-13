@@ -332,11 +332,22 @@ WallpaperModel::thumbnailError (
             QString      message,
             QUrl         fileUri)
 {
+    QString path = fileUri.toString();
+
+    if (path.startsWith("file://"))
+        path.remove (0, 7);
+
     Q_UNUSED (message);
     Q_UNUSED (fileUri);
     SYS_WARNING ("Failed thumbnailing: %s: %s", 
             SYS_STR(message),
-            SYS_STR(fileUri.toString()));
+            SYS_STR(path));
+
+    if (m_FilePathHash.contains(path)) {
+        m_FilePathHash[path].setThumbnailPending (false);
+    } else {
+        SYS_WARNING ("Path not found.");
+    }
 }
 
 /*!
@@ -483,11 +494,11 @@ WallpaperModel::loadThumbnails (
 void
 WallpaperModel::stopLoadingThumbnails ()
 {
-    foreach (QString key, m_FilePathHash.keys())
-        m_FilePathHash[key].setThumbnailPending (false);
-
     if (m_Thumbnailer)
         m_Thumbnailer->cancel (false);
+    
+    foreach (QString key, m_FilePathHash.keys())
+        m_FilePathHash[key].setThumbnailPending (false);
 }
 
 /******************************************************************************
