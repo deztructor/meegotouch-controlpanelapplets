@@ -18,6 +18,7 @@
 ****************************************************************************/
 #include "wallpapercellcreator.h"
 
+#include "wallpaperconfiguration.h"
 #include "gridimagewidget.h"
 #include "wallpapermodel.h"
 
@@ -65,7 +66,6 @@ WallpaperCellCreator::updateCell (
         const QModelIndex &index, 
         MWidget           *cell) const
 {
-    static QPixmap   placeholderPixmap;
     GridImageWidget *imageWidget = qobject_cast<GridImageWidget *>(cell);
     QVariant         data = index.data(WallpaperModel::WallpaperDescriptorRole);
     WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
@@ -89,18 +89,15 @@ WallpaperCellCreator::updateCell (
     } else {
         SYS_DEBUG ("NO THUMBNAIL");
         /*
-         * resetting the cell thumbnail pixmap. We need this because the cells
-         * are re-used.
+         * Resetting the cell thumbnail pixmap. We need this always, because 
+         * the cells are re-used.
          */
-        if (placeholderPixmap.size() != cellSize()) {
+        if (m_PlaceholderPixmap.size() != cellSize()) {
             QSizeF  cSize = cellSize();
-
-            placeholderPixmap = QPixmap(
-                    (int)cSize.width(), (int)cSize.height());
-            placeholderPixmap.fill (QColor("black"));
+            createPlaceholderPixmap ((int)cSize.width(), (int)cSize.height());
         }
 
-        imageWidget->setPixmap (placeholderPixmap);
+        imageWidget->setPixmap (m_PlaceholderPixmap);
     }
     
     /*
@@ -110,3 +107,26 @@ WallpaperCellCreator::updateCell (
     imageWidget->setProgress (desc.progress());
 }
 
+
+void
+WallpaperCellCreator::createPlaceholderPixmap (
+        int width, 
+        int height) const
+{
+    m_PlaceholderPixmap = QPixmap (width, height);
+    m_PlaceholderPixmap.fill (QColor("black"));
+
+    if (Wallpaper::showThumbnailGrid) {
+        QPainter painter (&m_PlaceholderPixmap);
+        QPen     pen (QBrush(), 2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin);
+
+        pen.setColor ("Grey");
+        painter.setPen (pen);
+           
+        const int mod    = pen.width() % 2;
+        const int adjust = pen.width() / 2;
+        QRect rect (0, 0, width, height);
+        QRect frame = rect.adjusted(adjust,adjust,-(adjust+mod),-(adjust+mod));
+        painter.drawRect (frame);
+    }
+}

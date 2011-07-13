@@ -38,7 +38,11 @@ class WallpaperCellCreator :
                 MWidget *cell) const;
 
     private:
-        QSizeF   m_CellSize;
+        void createPlaceholderPixmap (int width, int height) const;
+        
+    private:
+        QSizeF           m_CellSize;
+        mutable QPixmap  m_PlaceholderPixmap;
 };
 
 #endif

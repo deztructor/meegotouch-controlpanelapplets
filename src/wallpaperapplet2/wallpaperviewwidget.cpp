@@ -386,26 +386,6 @@ WallpaperViewWidget::pagePans () const
     return false;
 }
 
-#if 0
-void
-WallpaperViewWidget::paint (
-        QPainter                          *painter,
-        const QStyleOptionGraphicsItem    *option,
-        QWidget                           *widget)
-{
-    MWidget::paint (painter, option, widget);
-    
-    painter->fillRect (
-            0, 0, 
-            m_Trans.expectedWidth (),
-            m_Trans.expectedHeight (),
-            m_BgColor);
-
-    painter->drawImage (
-            QRect (imageX(), imageY(), imageDX(), imageDY()),
-            m_Image);
-}
-#endif
 
 void
 WallpaperViewWidget::polishEvent ()
