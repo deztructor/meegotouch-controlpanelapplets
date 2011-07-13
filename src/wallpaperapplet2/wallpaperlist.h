@@ -60,13 +60,13 @@ public:
 
 
     private slots:
+        /*
+         * Item clicked, panning started and stopped.
+         */
         void slotItemClicked (const QModelIndex &index);
-        void slotItemLongTapped (
-                const QModelIndex  &index, 
-                const QPointF      &point);
-
         void slotPanningStarted ();
         void slotPanningStopped ();
+
         void loadPictures ();
         void stopLoadingPictures ();
 
@@ -92,6 +92,7 @@ public:
         WallpaperModel         *m_Model;
         WallpaperCellCreator   *m_CellCreator;
         DataSourceType          m_DataSourceType;
+        bool                    m_Panning;
         #ifdef UNIT_TEST
         friend class Ut_WallpaperList;
         #endif
