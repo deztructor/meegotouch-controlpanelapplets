@@ -60,6 +60,7 @@ class WallpaperDescriptorPrivate
         
         void setProgress (bool progress);
         bool progress () const;
+
         void setHistoryIndex (int index);
         int historyIndex () const;
 

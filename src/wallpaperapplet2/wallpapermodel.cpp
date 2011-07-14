@@ -50,7 +50,8 @@ WallpaperModel::WallpaperModel (
         QObject                *parent) :
     QAbstractTableModel (parent),
     m_BusinessLogic (logic),
-    m_ThumbnailMagicNumber (1)
+    m_ThumbnailMagicNumber (1),
+    m_OrderDirty (false)
 {
     m_ImagesDir = Wallpaper::constructPath (Wallpaper::ImagesDir);
     m_SysImagesDir = Wallpaper::constructPath (Wallpaper::SysImagesDir);
@@ -113,24 +114,22 @@ WallpaperModel::data (
 
     switch (role) {
         case Qt::DisplayRole:
+            if (m_OrderDirty)
+                mySort ();
             /*
              * We use this role to sort the wallpapers in the list widget.
              */
-            desc = m_FilePathHash[m_FilePathList[index.row()]];
-
-            if (Wallpaper::currentWallpaperAtTop) {
-                if (desc.selected())
-                    retval.setValue (
-                            QString("0") + desc.filePath());
-                else
-                    retval.setValue (
-                            QString("1") + desc.filePath());
-            } else {
-                    retval.setValue (desc.filePath());
+            //SYS_DEBUG ("Qt::DisplayRole");
+            if (!m_FilePathHash.contains(m_FilePathList[index.row()])) {
+                SYS_WARNING ("MISSING DESCRIPTOR AT %d: %s", index.row(),
+                        SYS_STR(m_FilePathList[index.row()]));
             }
+            
+            retval.setValue (m_OrderHash[m_FilePathList[index.row()]]);
             break;
 
         case WallpaperModel::WallpaperDescriptorRole:
+            //SYS_DEBUG ("WallpaperModel::WallpaperDescriptorRole");
             if (!m_FilePathHash.contains(m_FilePathList[index.row()])) {
                 SYS_WARNING ("MISSING DESCRIPTOR AT %d: %s", index.row(),
                         SYS_STR(m_FilePathList[index.row()]));
@@ -142,6 +141,7 @@ WallpaperModel::data (
             SYS_WARNING ("Unsupported role");
             retval.setValue (QString("Unsupported role"));
     }
+
     return retval;
 }
 
@@ -160,6 +160,7 @@ void
 WallpaperModel::wallpaperChanged ()
 {
     ensureSelection ();
+    m_OrderDirty = true;
 }
 
 void 
@@ -268,6 +269,7 @@ WallpaperModel::loadFromDirectory ()
 
             //SYS_DEBUG ("Adding '%s'", SYS_STR(newPath));
             m_FilePathList << newPath;
+            m_OrderDirty = true;
             m_FilePathHash[newPath] = desc;
         }
 
@@ -421,6 +423,12 @@ WallpaperModel::loadThumbnails (
         QVariant data = index.data(WallpaperModel::WallpaperDescriptorRole);
         WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
 
+        #if 0
+        SYS_DEBUG ("[%02d] -> %d, %s",
+                n, 
+                desc.historyIndex(),
+                SYS_STR(desc.filePath()));
+        #endif
         appendThumbnailRequest (uris, requestedFiles, mimeTypes, desc);
     }
 
@@ -575,6 +583,7 @@ WallpaperModel::tryAddAndSelect (
         beginInsertRows (parent, m_FilePathList.size(), m_FilePathList.size());
 
         m_FilePathList << filePath;
+        m_OrderDirty = true;
         m_FilePathHash[filePath] = desc;
         SYS_WARNING ("endInsertRows()");
         endInsertRows ();
@@ -883,4 +892,29 @@ finalize:
         return retval;
 }
 
+void 
+WallpaperModel::mySort () const
+{
+    QList<WallpaperDescriptor> list;
+    QStringList                history = m_BusinessLogic->history();
+
+    if (!m_OrderDirty) {
+        SYS_WARNING ("This method should not called when the order is not "
+                "dirty.");
+        return;
+    }
+    
+    foreach (WallpaperDescriptor desc, m_FilePathHash) {
+        desc.setHistoryIndex (history.indexOf(desc.filePath()));
+        list << desc;
+    }
+
+    qSort (list.begin(), list.end());
+
+    m_OrderHash.clear();
+    for (int n = 0; n < list.size(); ++n)
+        m_OrderHash[list[n].filePath()] = n;
+
+    m_OrderDirty = false;
+}
 

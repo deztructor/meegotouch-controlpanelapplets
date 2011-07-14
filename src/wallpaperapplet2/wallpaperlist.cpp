@@ -142,10 +142,11 @@ void
 WallpaperList::currentChanged (
         const QModelIndex &current)
 {
-    SYS_DEBUG ("");
+    SYS_WARNING ("-------------------------------------------------------");
     if (Wallpaper::currentWallpaperAtTop) {
         QModelIndex first = filtering()->proxy()->index (0, 0);
 
+        SYS_DEBUG ("Calling sort...");
         filtering()->proxy()->sort(Qt::DisplayRole);
         scrollTo (first, EnsureVisibleHint, Animated);
     } else {

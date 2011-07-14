@@ -135,6 +135,8 @@ class WallpaperModel: public QAbstractTableModel
                 QStringList          &mimeTypes,
                 WallpaperDescriptor  &desc);
 
+        void mySort () const;
+
     private:
         WallpaperBusinessLogic                 *m_BusinessLogic;
         QStringList                             m_FilePathList;
@@ -146,6 +148,8 @@ class WallpaperModel: public QAbstractTableModel
         int                                     m_ThumbnailMagicNumber;
         QHash<QString, qint64>                  m_PendingFiles;
         QTimer                                  m_FileSystemTimer;
+        mutable bool                            m_OrderDirty;
+        mutable QHash<QString, int>             m_OrderHash;
         #ifdef HAVE_QMSYSTEM
         MeeGo::QmUSBMode                       *m_UsbMode;
         #endif

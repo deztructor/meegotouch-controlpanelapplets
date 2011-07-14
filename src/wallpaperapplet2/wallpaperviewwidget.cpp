@@ -31,8 +31,8 @@
 #include <MPositionIndicator>
 #include <MWidgetStyle>
 
-#define DEBUG
-#define WARNING
+//#define DEBUG
+//#define WARNING
 #include "../debug.h"
 
 #include <mwidgetcreator.h>
@@ -74,14 +74,13 @@ WallpaperViewWidget::WallpaperViewWidget (
 
     SYS_DEBUG ("");
     setObjectName ("WallpaperViewWidget");
+
     /*
-     *
+     * FIXME: To clean up this...
      */
     if (win) {
         m_Orientation = win->orientation();
         m_OrientationLocked = win->isOrientationLocked ();
-        connect (win, SIGNAL(orientationChanged(M::Orientation)),
-                this, SLOT(orientationChanged(M::Orientation)));
     } else {
         SYS_WARNING ("We have a problem: We don't know the orientation! "
                     "Only in tests though...");

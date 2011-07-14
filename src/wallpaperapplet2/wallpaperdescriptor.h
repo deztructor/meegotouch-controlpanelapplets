@@ -53,8 +53,13 @@ class MC_EXPORT WallpaperDescriptor : public QObject
         WallpaperDescriptor (const WallpaperDescriptor &orig);
         ~WallpaperDescriptor ();
 
+        /*
+         * Operators and operator like methods.
+         */
         WallpaperDescriptor &operator= (
                  const WallpaperDescriptor &rhs);
+
+        bool operator< (const WallpaperDescriptor &desc) const;
 
         bool isNull() const;
 
@@ -80,6 +85,9 @@ class MC_EXPORT WallpaperDescriptor : public QObject
         
         void setProgress (bool progress = true);
         bool progress () const;
+
+        void setHistoryIndex (int index);
+        int historyIndex () const;
 
         /*
          * Loading...

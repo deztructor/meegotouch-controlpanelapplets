@@ -23,7 +23,7 @@
 #include <QUrl>
 #include <QDir>
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -94,6 +94,39 @@ WallpaperDescriptor::operator= (
 
     return *this;
 }
+
+bool 
+WallpaperDescriptor::operator< (
+        const WallpaperDescriptor &desc) const
+{
+    bool retval;
+
+    if (desc.isNull())
+        retval = false;
+    else if (isNull())
+        retval = true;
+    else if (desc.selected())
+        retval = false;
+    else if (selected())
+        retval = true;
+    else if (historyIndex() != -1 && desc.historyIndex() != -1)
+        retval = historyIndex() < desc.historyIndex();
+    else if (desc.historyIndex() != -1)
+        retval = false;
+    else if (historyIndex() != -1)
+        retval = true;
+    else
+        retval = filePath() < desc.filePath();
+
+    SYS_DEBUG ("%s < %s = %s", 
+            SYS_STR(filePath()), 
+            SYS_STR(desc.filePath()),
+            SYS_BOOL(retval));
+
+    return retval;
+}
+
+
 
 bool 
 WallpaperDescriptor::isNull() const
@@ -254,6 +287,23 @@ WallpaperDescriptor::progress () const
 
     return m_Priv->progress ();
 }
+
+void
+WallpaperDescriptor::setHistoryIndex (
+        int index)
+{
+    RETURN_IF_NULL;
+    m_Priv->setHistoryIndex (index);
+}
+
+int 
+WallpaperDescriptor::historyIndex () const
+{
+    RETURN_VAL_IF_NULL(-1);
+
+    return m_Priv->historyIndex ();
+}
+
 
 /******************************************************************************
  * Loading...
