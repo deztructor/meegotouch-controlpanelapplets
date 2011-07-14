@@ -159,6 +159,22 @@ WallpaperModel::columnCount (
 void 
 WallpaperModel::wallpaperChanged ()
 {
+    /*
+     * Boomer, the Gallery is saving the new image under the same file name.
+     * Maybe we should check the file date here?
+     */
+    QString currentPath;
+    QString originalPath;
+
+    m_BusinessLogic->currentWallpaper (currentPath, originalPath);
+    if (m_FilePathHash.contains(currentPath)) {
+        SYS_DEBUG ("Unsetting thumbnail.");
+        m_FilePathHash[currentPath].unsetThumbnail();
+    }
+
+    /*
+     *
+     */
     ensureSelection ();
     m_OrderDirty = true;
 }
@@ -614,6 +630,7 @@ WallpaperModel::selectByFilepath (
     bool retval = false;
 
     SYS_DEBUG ("*** filePath = '%s'", SYS_STR(filePath));
+
     for (int n = 0; n < m_FilePathList.size(); ++n) {
         QString              thisPath = m_FilePathList[n];
         WallpaperDescriptor  desc = m_FilePathHash[thisPath];
@@ -641,14 +658,9 @@ WallpaperModel::selectByFilepath (
         }
     }
 
-#if 1
-    if (retval) {
+    //if (retval)
         QTimer::singleShot(100, this, SLOT(emitCurrentChanged()));
-    }
-#else
-    if (retval)
-        emitCurrentChanged();
-#endif
+    
     return retval;
 }
 

@@ -33,7 +33,7 @@ namespace Wallpaper
     const bool currentWallpaperAtTop (true);
 
     const int maxThumbnails = 100;
-    const int nForwardThumbnails = 25;
+    const int nForwardThumbnails = 50;
     const int nBackwardThumbnails = 25;
     const bool showThumbnailGrid (true);
 
