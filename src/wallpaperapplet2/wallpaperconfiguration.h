@@ -43,6 +43,13 @@ namespace Wallpaper
     const QString OriginalPortraitKey (
             "/desktop/meego/background/portrait/original_filename");
 
+    /*
+     * The history of wallpapers follows as the user changes the wallpapers.
+     */
+    const QString PortraitHistoryKey (
+            "/desktop/meego/background/portrait/history");
+    const int historyMaxLength = 10;
+
     const QString CurrentPortraitDefault ("meegotouch-wallpaper-portrait");
 
     const QString themeNameKey ("/meegotouch/theme/name");

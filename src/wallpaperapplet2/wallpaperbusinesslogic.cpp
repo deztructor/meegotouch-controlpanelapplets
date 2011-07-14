@@ -52,6 +52,7 @@ WallpaperBusinessLogic::WallpaperBusinessLogic() :
 {
     m_PPItem = new MGConfItem (Wallpaper::CurrentPortraitKey, this);
     m_POItem = new MGConfItem (Wallpaper::OriginalPortraitKey, this);
+    m_PHItem = new MGConfItem (Wallpaper::PortraitHistoryKey, this);
 
     connect (m_PPItem, SIGNAL(valueChanged ()),
             this, SLOT(portraitGConfChanged()));
@@ -59,6 +60,9 @@ WallpaperBusinessLogic::WallpaperBusinessLogic() :
     connect (m_POItem, SIGNAL(valueChanged ()),
             this, SLOT(portraitGConfChanged()));
     
+    connect (m_PHItem, SIGNAL(valueChanged ()),
+            this, SLOT(portraitHistoryChanged()));
+   
     /*
      * A timer to handle multiple GConf keys as one by filtering multiple value
      * change events.
@@ -67,6 +71,11 @@ WallpaperBusinessLogic::WallpaperBusinessLogic() :
     m_GConfTimer.setSingleShot (true);
     connect (&m_GConfTimer, SIGNAL(timeout()),
             this, SLOT(gconfTimerSlot()));
+    
+    /*
+     * Reading and caching the history.
+     */
+    portraitHistoryChanged ();
 }
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
@@ -250,14 +259,28 @@ WallpaperBusinessLogic::currentWallpaper (
         QString   &currentFilePath,
         QString   &originalFilePath)
 {
-    currentFilePath  = m_PPItem->value().toString ();
-    originalFilePath = m_POItem->value().toString ();
+    QStringList origList = m_POItem->value().toStringList ();
 
+    /*
+     * The current file path.
+     */
+    currentFilePath  = m_PPItem->value().toString ();
     if (currentFilePath.isEmpty())
         currentFilePath = Wallpaper::CurrentPortraitDefault;
 
     currentFilePath  = Wallpaper::logicalIdToFilePath (currentFilePath);
-    originalFilePath = Wallpaper::logicalIdToFilePath (originalFilePath);
+
+    /*
+     * The original file path.
+     */
+    if (origList.size() == 2 && origList[0] == currentFilePath) {
+        originalFilePath = Wallpaper::logicalIdToFilePath (origList[1]);
+    } else {
+        originalFilePath = QString();
+    }
+
+    SYS_DEBUG ("*** currentFilePath  = %s", SYS_STR(currentFilePath));
+    SYS_DEBUG ("*** originalFilePath = %s", SYS_STR(originalFilePath));
 }
 
 void 
@@ -269,7 +292,9 @@ WallpaperBusinessLogic::workerThreadFinishedSave ()
     if (success) {
         QString origFile = m_WorkerThread->originalFileName ();
         QString outputFile = m_WorkerThread->outputFileName ();
-        
+        QStringList origList;
+
+        origList << outputFile << origFile;
         SYS_DEBUG ("*** original = %s", SYS_STR(origFile));
         SYS_DEBUG ("*** output   = %s", SYS_STR(outputFile));
 
@@ -280,7 +305,8 @@ WallpaperBusinessLogic::workerThreadFinishedSave ()
         if (m_PPItem->value().toString() == outputFile)
             m_PPItem->set ("");
 
-        m_POItem->set (origFile);
+        m_POItem->set (origList);
+        prependFileToHistory (origFile);
         m_PPItem->set (outputFile);
     }
 
@@ -309,4 +335,39 @@ WallpaperBusinessLogic::workerThreadFinishedLoad ()
     m_WorkerThread = 0;
 
     emit workerEnded ();
+}
+
+/******************************************************************************
+ * Methods to handle the history.
+ */
+void
+WallpaperBusinessLogic::prependFileToHistory (
+        const QString &path)
+{
+    QStringList  historyList;
+
+    historyList = m_PHItem->value().toStringList();
+
+    if (historyList.contains(path))
+        historyList.removeAt (historyList.indexOf(path));
+
+    while (historyList.size() >= Wallpaper::historyMaxLength)
+        historyList.takeLast();
+
+    historyList.prepend (path);
+
+    m_PHItem->set (historyList);
+}
+
+void
+WallpaperBusinessLogic::portraitHistoryChanged ()
+{
+    SYS_DEBUG ("---------------------------------------------------");
+    m_PortraitHistory =  m_PHItem->value().toStringList();
+}
+
+QStringList
+WallpaperBusinessLogic::history () const
+{
+    return m_PortraitHistory;
 }

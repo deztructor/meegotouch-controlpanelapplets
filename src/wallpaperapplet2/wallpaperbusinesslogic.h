@@ -52,6 +52,8 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
                 QString   &currentFilePath,
                 QString   &originalFilePath);
 
+        QStringList history () const;
+
         void startEdit (WallpaperDescriptor desc);
         void endEdit ();
         bool setWallpaper ();
@@ -73,6 +75,7 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
    
     private slots:
         void portraitGConfChanged ();
+        void portraitHistoryChanged ();
         void workerThreadFinishedLoad ();
         void workerThreadFinishedSave ();
         void gconfTimerSlot ();
@@ -82,12 +85,17 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
         #endif
 
     private:
+        void prependFileToHistory (const QString &path);
+
+    private:
         bool                       m_EditRequested;
         QPointer<MGConfItem>       m_PPItem;
         QPointer<MGConfItem>       m_POItem;
+        QPointer<MGConfItem>       m_PHItem;
         WallpaperDescriptor        m_EditedImage;
         WallpaperWorkerThread     *m_WorkerThread;
         QTimer                     m_GConfTimer;
+        QStringList                m_PortraitHistory;
 
 #ifdef UNIT_TEST
     friend class Ut_WallpaperBusinessLogic;

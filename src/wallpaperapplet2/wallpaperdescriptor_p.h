@@ -60,6 +60,8 @@ class WallpaperDescriptorPrivate
         
         void setProgress (bool progress);
         bool progress () const;
+        void setHistoryIndex (int index);
+        int historyIndex () const;
 
         /*
          * Loading...
@@ -75,6 +77,7 @@ class WallpaperDescriptorPrivate
         bool     m_Progress;
         bool     m_ThumbnailPending;
         bool     m_HasThumbnail;
+        int      m_HistoryIndex;
         QPixmap  m_Thumbnail;
 };
 

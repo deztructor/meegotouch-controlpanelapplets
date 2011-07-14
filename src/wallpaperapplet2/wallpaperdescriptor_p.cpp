@@ -27,7 +27,8 @@ WallpaperDescriptorPrivate::WallpaperDescriptorPrivate () :
     m_Selected (false),
     m_Progress (false),
     m_ThumbnailPending (false),
-    m_HasThumbnail (false)
+    m_HasThumbnail (false),
+    m_HistoryIndex (-1)
 {
 }
 
@@ -38,7 +39,8 @@ WallpaperDescriptorPrivate::WallpaperDescriptorPrivate (
     m_Selected (false),
     m_Progress (false),
     m_ThumbnailPending (false),
-    m_HasThumbnail (false)
+    m_HasThumbnail (false),
+    m_HistoryIndex (-1)
 {
 }
 
@@ -136,6 +138,19 @@ bool
 WallpaperDescriptorPrivate::progress () const
 {
     return m_Progress;
+}
+
+void
+WallpaperDescriptorPrivate::setHistoryIndex (
+        int   index)
+{
+    m_HistoryIndex = index;
+}
+
+int 
+WallpaperDescriptorPrivate::historyIndex () const
+{
+    return m_HistoryIndex;
 }
 
 /******************************************************************************
