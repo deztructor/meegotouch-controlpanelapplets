@@ -32,8 +32,8 @@ namespace Wallpaper
     const bool useFullScreen (false);
     const bool currentWallpaperAtTop (true);
 
-    const int maxThumbnails = 100;
-    const int nForwardThumbnails = 50;
+    const int maxThumbnails = 200;
+    const int nForwardThumbnails = 75;
     const int nBackwardThumbnails = 25;
     const bool showThumbnailGrid (true);
 

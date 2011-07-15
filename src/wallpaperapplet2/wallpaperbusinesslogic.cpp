@@ -250,8 +250,11 @@ void
 WallpaperBusinessLogic::portraitGConfChanged ()
 {
     SYS_DEBUG ("*** isActive() = %s", SYS_BOOL(m_GConfTimer.isActive()));
-    if (!m_GConfTimer.isActive())
+
+    if (!m_GConfTimer.isActive()) {
+        SYS_DEBUG ("\n\n\n\n-----------------------------------------------");
         m_GConfTimer.start();
+    }
 }
 
 void
