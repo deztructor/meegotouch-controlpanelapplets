@@ -5,10 +5,7 @@ include(../shared.pri)
 ######if no BUILD_APPLET given, we add all of the subdirs, 
 ###### otherwise we just add the selected applets subdirs
 
-
-
 isEmpty(BUILD_APPLET) {
-
 message ("*********No BUILD_APPLET given, build all of the applets*************")
 
 addSubDirs(aboutapplet)
