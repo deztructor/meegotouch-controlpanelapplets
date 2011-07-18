@@ -242,17 +242,14 @@ WallpaperBusinessLogic::hasEditedImage () const
 void
 WallpaperBusinessLogic::gconfTimerSlot ()
 {
-    SYS_DEBUG ("");
+    SYS_DEBUG ("\n\n\n\n-----------------------------------------------");
     emit wallpaperChanged ();
 }
 
 void
 WallpaperBusinessLogic::portraitGConfChanged ()
 {
-    SYS_DEBUG ("*** isActive() = %s", SYS_BOOL(m_GConfTimer.isActive()));
-
     if (!m_GConfTimer.isActive()) {
-        SYS_DEBUG ("\n\n\n\n-----------------------------------------------");
         m_GConfTimer.start();
     }
 }
@@ -365,7 +362,6 @@ WallpaperBusinessLogic::prependFileToHistory (
 void
 WallpaperBusinessLogic::portraitHistoryChanged ()
 {
-    SYS_DEBUG ("---------------------------------------------------");
     m_PortraitHistory =  m_PHItem->value().toStringList();
 }
 

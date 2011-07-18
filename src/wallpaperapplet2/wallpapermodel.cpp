@@ -159,14 +159,35 @@ WallpaperModel::columnCount (
 void 
 WallpaperModel::wallpaperChanged ()
 {
+    QString currentPath;
+    QString originalPath;
+    QString selected;
+
     /*
      * Boomer, the Gallery is saving the new image under the same file name.
      * Maybe we should check the file date here?
      */
-    QString currentPath;
-    QString originalPath;
-
     m_BusinessLogic->currentWallpaper (currentPath, originalPath);
+    selected = selectedPath();
+    
+    SYS_DEBUG ("*** selected          = %s", SYS_STR(selected));
+    SYS_DEBUG ("*** currentPath       = %s", SYS_STR(currentPath));
+    SYS_DEBUG ("*** originalPath      = %s", SYS_STR(originalPath));
+    if ((selected == currentPath || selected == originalPath) && 
+            m_Thumbnailer) {
+        QList<QUrl>  uris;
+        QStringList         requestedFiles;
+        QStringList         mimeTypes;
+        WallpaperDescriptor desc = m_FilePathHash[selected];
+
+        SYS_DEBUG ("Sneaky bastard wallpaper change...");
+        desc.unsetThumbnail ();
+        appendThumbnailRequest (uris, requestedFiles, mimeTypes, desc);
+        m_Thumbnailer->request (
+                uris, mimeTypes, true, Wallpaper::DefaultThumbnailFlavor);
+        return;
+    }
+
     if (m_FilePathHash.contains(currentPath)) {
         SYS_DEBUG ("Unsetting thumbnail.");
         m_FilePathHash[currentPath].unsetThumbnail();
@@ -325,10 +346,12 @@ WallpaperModel::thumbnailReady (
     path = fileUri.toString();
     if (path.startsWith("file://"))
         path.remove (0, 7);
+    
+    SYS_DEBUG ("*** flavor = %s", SYS_STR(flavor));
+    SYS_DEBUG ("*** size   = %dx%d", pixmap.width(), pixmap.height());
+    SYS_DEBUG ("*** path   = %s", SYS_STR(path));
 
-    //SYS_DEBUG ("*** flavor = %s", SYS_STR(flavor));
-    //SYS_DEBUG ("*** size   = %dx%d", pixmap.width(), pixmap.height());
-    //SYS_DEBUG ("*** path   = %s", SYS_STR(path));
+
     if (m_FilePathHash.contains(path)) {
         WallpaperDescriptor desc = m_FilePathHash[path];
         int                 idx = m_FilePathList.indexOf(path);
@@ -528,6 +551,17 @@ WallpaperModel::stopLoadingThumbnails ()
 /******************************************************************************
  * Methods to handle selection and current wallpaper. 
  */
+QString
+WallpaperModel::selectedPath () const
+{
+    foreach (WallpaperDescriptor desc, m_FilePathHash) {
+        if (desc.selected())
+            return desc.filePath();
+    }
+
+    return QString();
+}
+
 void 
 WallpaperModel::ensureSelection ()
 {
@@ -768,6 +802,8 @@ WallpaperModel::emitChangedSignal (
 {
     QModelIndex         first;
     first = index (idx, 0);
+
+    SYS_DEBUG ("emit dataChanged (%d, %d);", idx, idx);
     emit dataChanged (first, first);
 }
 

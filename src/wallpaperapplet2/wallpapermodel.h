@@ -122,8 +122,9 @@ class WallpaperModel: public QAbstractTableModel
     protected:
         void ensureSelection ();
         void startWatchFiles ();
-        
+
     private:
+        QString selectedPath () const;
         bool trySelect (const QString filePath);
         bool tryAddAndSelect (const QString filePath);
         bool selectByFilepath (const QString &filepath);

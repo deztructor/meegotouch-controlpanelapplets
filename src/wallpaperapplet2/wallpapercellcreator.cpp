@@ -69,28 +69,27 @@ WallpaperCellCreator::updateCell (
     GridImageWidget *imageWidget = qobject_cast<GridImageWidget *>(cell);
     QVariant         data = index.data(WallpaperModel::WallpaperDescriptorRole);
     WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
-   
+  
     if (desc.hasThumbnail()) {
-        if (imageWidget->id() != desc.filePath()) {
-            QPixmap thumb = desc.thumbnail ();
-            QSizeF  cSize = cellSize();
-            
-            imageWidget->setPixmap (
-                thumb.scaled((int)cSize.width(), (int)cSize.height()));
-            imageWidget->setID (desc.filePath());
+        QPixmap thumb = desc.thumbnail ();
+        QSizeF  cSize = cellSize();
+        
+        imageWidget->setPixmap (
+            thumb.scaled((int)cSize.width(), (int)cSize.height()));
+        /*
+         * It seems that this showAnimated() causes a flicker on the current
+         * wallpaper when the applet list view is shown... well, we should
+         * have a better solution to solve this, but this one works.
+         */
+        if (imageWidget->id() != desc.filePath() && !desc.selected())
+            imageWidget->showAnimated();
+        
+        imageWidget->setID (desc.filePath());
 
-            if (desc.thumbnailPending()) {
-                desc.setThumbnailPending (false);
-            }
-
-            /*
-             * It seems that this showAnimated() causes a flicker on the current
-             * wallpaper when the applet list view is shown... well, we should
-             * have a better solution to solve this, but this one works.
-             */
-            if (!desc.selected())
-                imageWidget->showAnimated();
+        if (desc.thumbnailPending()) {
+            desc.setThumbnailPending (false);
         }
+
     } else {
         /*
          * Resetting the cell thumbnail pixmap. We need this always, because 
