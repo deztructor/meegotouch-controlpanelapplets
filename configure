@@ -96,6 +96,14 @@ if [ $? -eq 0 ]; then
     if [ $? -eq 0 ]; then
         echo "DEFINES += HAVE_CONTENT_ACTION" >> ${FILENAME}
     fi
+
+    #
+    # ofono-qt is needed for GPRS applet
+    #
+    pkg-config --exists ofono-qt
+    if [ $? -eq 0 ]; then
+        echo "DEFINES += HAVE_OFONO_QT" >> ${FILENAME}
+    fi
 fi
 
 #

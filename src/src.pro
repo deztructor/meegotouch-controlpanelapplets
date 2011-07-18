@@ -17,8 +17,6 @@ addSubDirs(batteryapplet)
 addSubDirs(batteryapplet/translations)
 addSubDirs(displayapplet)
 addSubDirs(displayapplet/translations)
-addSubDirs(gprsapplet)
-addSubDirs(gprsapplet/translations)
 addSubDirs(offlineapplet)
 addSubDirs(offlineapplet/translations)
 addSubDirs(resetapplet)
@@ -34,6 +32,14 @@ addSubDirs(wallpaperapplet/translations)
 addSubDirs(wallpaperapplet2)
 addSubDirs(wallpaperapplet2/translations)
 addSubDirs(warrantyapplet)
+
+### Build only GPRS applet only if Ofono Qt is available
+### (XXX: It is not exists in Harmattan yet)
+contains(DEFINES, HAVE_OFONO_QT) {
+addSubDirs(gprsapplet)
+addSubDirs(gprsapplet/translations)
+}
+
 }
 
 if (BUILD_APPLET)
