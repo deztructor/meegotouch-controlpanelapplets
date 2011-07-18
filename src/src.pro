@@ -1,14 +1,12 @@
 TEMPLATE = subdirs
 
 include(../shared.pri)
+include(../localconfig.pri)
 
 ######if no BUILD_APPLET given, we add all of the subdirs, 
 ###### otherwise we just add the selected applets subdirs
 
-
-
 isEmpty(BUILD_APPLET) {
-
 message ("*********No BUILD_APPLET given, build all of the applets*************")
 
 addSubDirs(aboutapplet)
@@ -35,6 +33,14 @@ addSubDirs(wallpaperapplet/translations)
 addSubDirs(wallpaperapplet2)
 addSubDirs(wallpaperapplet2/translations)
 addSubDirs(warrantyapplet)
+
+### Build only GPRS applet only if Ofono Qt is available
+### (XXX: It is not exists in Harmattan yet)
+contains(DEFINES, HAVE_OFONO_QT) {
+addSubDirs(gprsapplet)
+addSubDirs(gprsapplet/translations)
+}
+
 }
 
 if (BUILD_APPLET)
@@ -62,6 +68,11 @@ contains (BUILD_APPLET,display ){
 message ("***********build display *************************")
 addSubDirs(displayapplet)
 addSubDirs(displayapplet/translations)
+}
+contains (BUILD_APPLET,gprs ){
+message ("***********build gprs *************************")
+addSubDirs(gprsapplet)
+addSubDirs(gprsapplet/translations)
 }
 contains (BUILD_APPLET, offline){
 message ("***********build offline *************************")
