@@ -208,7 +208,7 @@ WallpaperList::setDataSourceType (
     connect (m_Model, SIGNAL(currentChanged(const QModelIndex &)),
             this, SLOT(currentChanged(const QModelIndex &)));
 
-    currentChanged (m_Model->currentIndex());
+    //currentChanged (m_Model->currentIndex());
 }
 
 /******************************************************************************

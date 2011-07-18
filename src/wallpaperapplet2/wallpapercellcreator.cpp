@@ -83,8 +83,13 @@ WallpaperCellCreator::updateCell (
                 desc.setThumbnailPending (false);
             }
 
-            //if (!desc.progress())
-            imageWidget->showAnimated();
+            /*
+             * It seems that this showAnimated() causes a flicker on the current
+             * wallpaper when the applet list view is shown... well, we should
+             * have a better solution to solve this, but this one works.
+             */
+            if (!desc.selected())
+                imageWidget->showAnimated();
         }
     } else {
         /*
