@@ -119,6 +119,7 @@ WallpaperList::rowsInserted (
     Q_UNUSED (parent);
 
     SYS_DEBUG ("Added from %d to %d", start, end);
+    filtering()->proxy()->sort(Qt::DisplayRole);
     QTimer::singleShot (loadPicturesDelay, this, SLOT(loadPictures()));
 }
 

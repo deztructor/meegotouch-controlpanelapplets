@@ -87,7 +87,6 @@ WallpaperCellCreator::updateCell (
             imageWidget->showAnimated();
         }
     } else {
-        SYS_DEBUG ("NO THUMBNAIL");
         /*
          * Resetting the cell thumbnail pixmap. We need this always, because 
          * the cells are re-used.
