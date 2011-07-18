@@ -33,16 +33,11 @@ if (!isEmpty(BUILD_APPLET)){
 
 }
 
-
 # nocheck option disables the test building
 contains(BUILD_FEATURES,nocheck) {
     message("*** Disabling unit/functional test building ***")
     SUBDIRS =
 }
-
-
-
-
 
 check.target = check
 check.depends =
@@ -74,11 +69,11 @@ dummy_file.target = dummy_file
 dummy_file.files += $$OUT_PWD/keep_this_dir
 dummy_file.path = /usr/lib/$$TEST_PKG_NAME
 
-testscript.files = cylontest.sh
-testscript.path = /bin
+# DEPRECATED
+# testscript.files = cylontest.sh
+# testscript.path = /bin
 
 INSTALLS += \
     support_files \
-    dummy_file \
-    testscript
+    dummy_file
 
