@@ -37,8 +37,58 @@ class WallpaperWorkerThread;
 #include <wallpaperdescriptor.h>
 
 /*!
- * The logic which handling the loading/saving and management
- * work for wallpaper settings applet
+ * The logic which handling the loading/saving and management work for 
+ * wallpaper settings applet
+
+ A little help abou the wallpaper GConf settings. Here is how the GConf database
+ should look like:
+
+ /desktop/meego/background/portrait:
+  history = [/home/pipas/MyDocs/.wallpapers/100_0052.JPG,/home/pipas/MyDocs/.wallpapers/100_0051.JPG,/home/pipas/MyDocs/.wallpapers/100_0041.JPG,/home/pipas/MyDocs/.wallpapers/DSC05181.JPG,/home/pipas/MyDocs/.wallpapers/100_0037.JPG,/home/pipas/MyDocs/.wallpapers/DSCF2029.JPG,/home/pipas/MyDocs/.wallpapers/100_0039.JPG,/home/pipas/MyDocs/.wallpapers/100_0044.JPG,/home/pipas/MyDocs/.wallpapers/100_0038.JPG,/home/pipas/MyDocs/.wallpapers/100_0043.JPG]
+  picture_filename = /home/pipas/.wallpapers/100_0052.png
+  original_filename = [/home/pipas/.wallpapers/100_0052.png,/home/pipas/MyDocs/.wallpapers/100_0052.JPG]
+
+ (1) /desktop/meego/background/portrait/picture_filename
+
+     The full path of the current portrait wallpaper image or the logical name
+     of the theme image if a theme file is used. The path always starts with 
+     '/', the logical ID is never.
+
+     This value is used by any package that needs to get the portrait wallpaper 
+     image.
+
+ (2) /desktop/meego/background/portrait/original_filename
+
+     A string list that contains exactly two values, the current portrait
+     wallpaper image path (the same as in 1.) and the original image path that
+     was used as image source when the wallpaper image was set.
+
+     The wallpaper applet uses this value to find the original image file, so
+     that the list view of the wallpaper applet will never show both the
+     original image file and the current value. The current wallpaper image is
+     usually a slightly modified (or not modified at all) version of some
+     "original file" and apparently showing both images is a very bad user 
+     experience.
+
+     This GConf key holds both the original and the current value and if some
+     application is setting only the current wallpaper key (as in 1.) the
+     wallpaper applet will ignore the original image value. This is an important
+     protection.
+
+     All application that sets the portrait wallpaper should also set this
+     value.
+
+ (3) /desktop/meego/background/portrait/history
+
+     The wallpaper applet shows the available wallpapers in the order of the
+     "history", a backward timeline of modifications. This list contains the
+     last 10 wallpapers, the most recently used (current) at first, then the
+     previous wallpaper, and so on.
+
+     The applications that change the wallpaper should always add the original 
+     file path to the beginning of the list (or move this value to the first
+     place if it is already in the list) and truncate the list so that it
+     contains 10 items at max.
  */
 class MC_EXPORT WallpaperBusinessLogic : public QObject
 {
