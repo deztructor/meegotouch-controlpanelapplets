@@ -1,6 +1,7 @@
 TEMPLATE = subdirs
 
 include(../shared.pri)
+include(../localconfig.pri)
 
 ######if no BUILD_APPLET given, we add all of the subdirs, 
 ###### otherwise we just add the selected applets subdirs
