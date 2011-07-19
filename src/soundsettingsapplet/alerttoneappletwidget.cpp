@@ -107,10 +107,12 @@ AlertToneAppletWidget::createContents()
     /*
      * The main title
      */
+#ifndef MEEGO
     label = addTitleLabel (
             centralWidget, policy,
             APP_TITLE_LABEL_STYLE_NAME); 
     label->setText(qtTrId("qtn_sond_sounds"));
+#endif
 
 #if 0
     MSeparator            *spacer;

@@ -98,10 +98,12 @@ WallpaperWidget::createContent ()
     mainLayout->setSpacing (0.);
     setLayout (layout);
 
+#ifndef MEEGO
     /*
      * Adding the header/title
      */
     addHeaderContainer (mainLayout);
+#endif
 
     /*
      * The list of the available images.
