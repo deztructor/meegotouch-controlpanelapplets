@@ -22,6 +22,9 @@
 #define QIODEVICE_H
 
 #include <QObject>
+#include <QtGlobal>
+#include <QByteArray>
+#include <QString>
 
 class QString;
 
@@ -71,6 +74,7 @@ public:
     QStringList entryList (
 		    const QStringList &nameFilters, 
 		    Filters            filters = NoFilter);
+    static QString homePath () { return qgetenv ("HOME"); };
 
 private:
     QString       m_Path;
