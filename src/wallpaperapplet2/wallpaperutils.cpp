@@ -110,6 +110,35 @@ Wallpaper::setFileExtension (
     return retval;
 }
 
+QString
+Wallpaper::setFileVariant (
+        const QString &filePath,
+        const QString &variant)
+{
+    QString  retval = filePath;
+    QString  extension;
+    int      length = retval.length();
+
+    /*
+     * FIXME: This code is not very nice...
+     */
+    if (length > 5 && retval[length - 5] == '.') {
+        SYS_DEBUG ("1");
+        extension = retval.mid (length - 5, 5);
+        retval = retval.remove (length - 5, 5);
+    } else if (length > 4 && retval[length - 4] == '.') {
+        SYS_DEBUG ("2");
+        extension = retval.mid (length - 4, 4);
+        retval = retval.remove (length - 4, 4);
+    }
+
+    //SYS_WARNING ("*** extension = %s", SYS_STR(extension));
+    //SYS_WARNING ("*** retval    = %s", SYS_STR(retval));
+
+    retval = retval + variant + extension;
+    return retval;
+}
+
 QString 
 Wallpaper::logicalIdToFilePath (
         const QString    &id)

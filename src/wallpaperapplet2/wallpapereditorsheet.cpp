@@ -48,6 +48,10 @@ WallpaperEditorSheet::WallpaperEditorSheet (
     connect (wallpaperBusinessLogic, SIGNAL(wallpaperSaved()),
             this, SLOT(wallpaperSaved()));
     
+    /*
+     * Oh, they might change the picture behind my back. A filesystemwatcher
+     * might be a better idea...
+     */
     connect (wallpaperBusinessLogic, SIGNAL(wallpaperChanged()),
             this, SLOT(cancelActivated()));
 }

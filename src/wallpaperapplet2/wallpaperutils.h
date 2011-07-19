@@ -50,6 +50,10 @@ namespace Wallpaper
             const QString &fileName,
             const QString &extension);
 
+    QString setFileVariant (
+        const QString &filePath,
+        const QString &variant  = QString("-copy"));
+
     QString logicalIdToFilePath (
             const QString    &id);
 

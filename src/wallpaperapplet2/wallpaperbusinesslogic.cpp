@@ -126,17 +126,18 @@ WallpaperBusinessLogic::setWallpaper ()
      *
      */
     targetPath = Wallpaper::constructPath (targetPath, basename);
-    SYS_DEBUG ("*** filePath   = %s", SYS_STR(filePath));
-    SYS_DEBUG ("*** basename   = %s", SYS_STR(basename));
-    SYS_DEBUG ("*** targetPath = %s", SYS_STR(targetPath));
     
     if (filePath == targetPath) {
-        success = true;
-        goto finalize;
+        SYS_WARNING ("This is the same file!");
+        targetPath = Wallpaper::setFileVariant (targetPath);
     }
+    
+    SYS_DEBUG ("*** basename   = %s", SYS_STR(basename));
+    SYS_DEBUG ("*** targetPath = %s", SYS_STR(targetPath));
+    SYS_DEBUG ("*** filePath   = %s", SYS_STR(filePath));
 
     m_WorkerThread = new WallpaperWorkerThread (filePath, targetPath);
-    connect ( m_WorkerThread, SIGNAL(finished()), 
+    connect (m_WorkerThread, SIGNAL(finished()), 
             this, SLOT(workerThreadFinishedSave()), Qt::QueuedConnection);
     success = true;
     m_WorkerThread->start();
