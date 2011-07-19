@@ -47,6 +47,9 @@ WallpaperEditorSheet::WallpaperEditorSheet (
         
     connect (wallpaperBusinessLogic, SIGNAL(wallpaperSaved()),
             this, SLOT(wallpaperSaved()));
+    
+    connect (wallpaperBusinessLogic, SIGNAL(wallpaperChanged()),
+            this, SLOT(cancelActivated()));
 }
 
 void 
