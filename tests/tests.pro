@@ -58,7 +58,7 @@ contains(BUILD_FEATURES,coverage) {
   coverage.CONFIG = recursive
 }
 
-support_files.commands += $$PWD/gen-tests-xml.sh > $$OUT_PWD/tests.xml
+support_files.commands += $$PWD/gen-tests-xml.sh $$TEST_PKG_NAME > $$OUT_PWD/tests.xml
 support_files.target = support_files
 support_files.files += $$OUT_PWD/tests.xml
 support_files.path = /usr/share/$$TEST_PKG_NAME
