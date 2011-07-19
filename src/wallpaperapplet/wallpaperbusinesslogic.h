@@ -107,7 +107,8 @@ private:
         SaveDir,
         DownloadDir,
         MountDir,
-        SystemDir
+        SystemDir,
+        MeegoDir
     } WallpaperDirectoryID;
 
     QString dirPath (WallpaperDirectoryID dirID = SaveDir) const;

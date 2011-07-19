@@ -107,7 +107,7 @@ binary-arch: build install
 	dh_fixperms $(EXCLUSIONS)
 	dh_makeshlibs $(EXCLUSIONS)
 	dh_installdeb $(EXCLUSIONS)
-	dh_shlibdeps $(EXCLUSIONS)
+	dh_shlibdeps $(EXCLUSIONS) -- --warnings=0
 	dh_gencontrol $(EXCLUSIONS)
 	dh_md5sums $(EXCLUSIONS)
 	sed -e "s:/.*.sh::" -e "/^$$/d" -i debian/duicontrolpanel-resetapplet/DEBIAN/conffiles

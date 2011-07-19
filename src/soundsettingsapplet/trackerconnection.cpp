@@ -187,14 +187,15 @@ void
 TrackerConnection::processRequest (
         const QString &fileName)
 {
+    QString              title;
+    QString              trackerId;
+
 #ifdef HAVE_QTSPARQL
     static QSparqlQuery theQuery (
         "select nie:title(?u) ?u where { ?u a "
         "nmm:MusicPiece . ?u nie:url ?:fileUrl }");
     theQuery.bindValue ("fileUrl", QUrl::fromLocalFile(fileName));
 
-    QString              title;
-    QString              trackerId;
     QSparqlResult       *result = 0;
 
     SYS_DEBUG ("*** fileName = %s", SYS_STR (fileName));

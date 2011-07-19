@@ -605,8 +605,8 @@ WallpaperEditorWidget::pinchGestureStarted (
     m_OriginalRotation    = pinchGesture->rotationAngle ();
 
     QPointF pressAt (m_Trans.rotation(), m_Trans.scale() * 100.0);
-            SYS_DEBUG ("m_ScalePhysics->pointerPress (%s)", SYS_POINTF(pressAt));
-            m_ScalePhysics->pointerPress(pressAt);
+    SYS_DEBUG ("m_ScalePhysics->pointerPress (%s)", SYS_POINTF(pressAt));
+    m_ScalePhysics->pointerPress(pressAt);
 }
 
 void 

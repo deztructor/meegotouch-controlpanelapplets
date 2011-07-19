@@ -56,10 +56,9 @@ Description: libmeegocontrol to use some controlpanel applet as a library
 Package: libmeegocontrol-dev
 Architecture: any
 Section: libdevel
-Depends: ${shlibs:Depends}, ${misc:Depends}, libgstreamer0.10-dev,
+Depends: ${misc:Depends}, libgstreamer0.10-dev, libresourceqt-dev,
          libmeegocontrol0 (= ${binary:Version}), libthumbnailer-dev,
-         libduicontrolpanel-dev, libcontentmanager-dev,
-         libresourceqt-dev
+         libduicontrolpanel-dev, libcontentmanager-dev
 Description: libmeegocontrol development files
 
 Package: libmeegocontrol0-dbg
@@ -124,14 +123,14 @@ Description: display-applet debug symbols
 
 Package: duicontrolpanel-profileapplet
 Section: misc
+Priority: extra
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel
 Description: Profiles settings applet.
 
 Package: duistatusindicatormenu-profileplugin
 Section: misc
+Priority: extra
 Architecture: any
-Depends: ${misc:Depends}
 Description: dummy package until it is removed...
 
 Package: duicontrolpanel-profileapplet-dbg
