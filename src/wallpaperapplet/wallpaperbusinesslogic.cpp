@@ -69,6 +69,7 @@
 
 static const QString wallpaperDir = ".wallpapers";
 static const QString wallpapersDir = "MyDocs/.wallpapers";
+static const QString meegoWallsDir = "Pictures";
 static const QString mountDir = "MyDocs";
 static const QString destopFileName = "wallpaper.desktop";
 static const QString backupExtension = ".BAK";
@@ -303,9 +304,31 @@ WallpaperBusinessLogic::availableWallpapers () const
     QStringList             directories;
     QStringList             nameFilters;
 
+#ifndef MEEGO
     directories <<
         dirPath (SystemDir) <<
         dirPath (DownloadDir);
+#else
+    directories << dirPath (MeegoDir);
+
+    /*
+     * And we need to recurse into this dir one level
+     */
+    QDir subUserDirs (dirPath (MeegoDir));
+    QStringList meegoDirs;
+
+    meegoDirs = subUserDirs.entryList (QDir::Dirs | QDir::NoDotAndDotDot |
+                                       QDir::Readable | QDir::Executable);
+
+    foreach (QString aMeegoDir, meegoDirs)
+    {
+        directories <<
+            subUserDirs.absolutePath () + 
+            WallpaperDir::separator () +
+            aMeegoDir + WallpaperDir::separator ();
+        SYS_DEBUG ("found meego subdir: %s", SYS_STR (aMeegoDir));
+    }
+#endif
 
     nameFilters << 
         "*.jpg" << "*.jpeg" << "*.jpe" <<  "*.png" << "*.bmp" << "*.gif" << 
@@ -460,7 +483,7 @@ QString
 WallpaperBusinessLogic::dirPath (
         WallpaperDirectoryID   dirID) const
 {
-    QString homeDir (getenv("HOME"));
+    QString homeDir (QDir::homePath ());
     QString retval;
     
     if (homeDir.isEmpty())
@@ -484,6 +507,11 @@ WallpaperBusinessLogic::dirPath (
 
         case SystemDir:
             retval = "/usr/share/backgrounds/";
+            break;
+
+        case MeegoDir:
+            retval = homeDir + WallpaperDir::separator() + 
+                meegoWallsDir + WallpaperDir::separator();
             break;
     }
 

@@ -31,7 +31,7 @@
 #include <MPositionIndicator>
 #include <MWidgetStyle>
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -964,7 +964,9 @@ WallpaperViewWidget::pinchGestureUpdate (
     } else {
         QPointF moveTo (
                 m_Trans.rotation(),
-                m_Trans.scale() - (pinchGesture->totalScaleFactor() * 100.0));
+                m_Trans.scale() - (pinchGesture->totalScaleFactor () * 100.0));
+
+        SYS_WARNING ("*** scaleFactor = %.2f", pinchGesture->totalScaleFactor ());
         
         SYS_WARNING ("NOW SCALING");
         SYS_WARNING ("*** m_ScalePhysics->pointerMove(%s)", SYS_POINTF(moveTo));
