@@ -314,11 +314,12 @@ WallpaperBusinessLogic::availableWallpapers () const
     /*
      * And we need to recurse into this dir one level
      */
-    QDir subUserDirs (dirPath (MeegoDir));
+    WallpaperDir subUserDirs (dirPath (MeegoDir));
     QStringList meegoDirs;
 
-    meegoDirs = subUserDirs.entryList (QDir::Dirs | QDir::NoDotAndDotDot |
-                                       QDir::Readable | QDir::Executable);
+    meegoDirs = subUserDirs.entryList (
+        WallpaperDir::Dirs | WallpaperDir::NoDotAndDotDot |
+        WallpaperDir::Readable | WallpaperDir::Executable);
 
     foreach (QString aMeegoDir, meegoDirs)
     {
@@ -483,7 +484,7 @@ QString
 WallpaperBusinessLogic::dirPath (
         WallpaperDirectoryID   dirID) const
 {
-    QString homeDir (QDir::homePath ());
+    QString homeDir (WallpaperDir::homePath ());
     QString retval;
     
     if (homeDir.isEmpty())
