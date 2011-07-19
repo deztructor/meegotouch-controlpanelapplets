@@ -31,8 +31,8 @@
 #include <MPositionIndicator>
 #include <MWidgetStyle>
 
-//#define DEBUG
-//#define WARNING
+#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 #include <mwidgetcreator.h>
@@ -887,8 +887,8 @@ WallpaperViewWidget::pinchGestureStarted (
     m_OriginalRotation    = pinchGesture->rotationAngle ();
 
     QPointF pressAt (m_Trans.rotation(), m_Trans.scale() * 100.0);
-            SYS_DEBUG ("m_ScalePhysics->pointerPress (%s)", SYS_POINTF(pressAt));
-            m_ScalePhysics->pointerPress(pressAt);
+    SYS_DEBUG ("m_ScalePhysics->pointerPress (%s)", SYS_POINTF(pressAt));
+    m_ScalePhysics->pointerPress(pressAt);
 }
 
 void 
@@ -899,6 +899,7 @@ WallpaperViewWidget::pinchGestureUpdate (
     /*
      * 
      */
+#if 0
     SYS_DEBUG ("**********************************************");
     SYS_DEBUG ("*** rotation              = %g", m_Trans.rotation());
     SYS_DEBUG ("*** scale                 = %g", m_Trans.scale());
@@ -914,6 +915,7 @@ WallpaperViewWidget::pinchGestureUpdate (
     SYS_DEBUG ("*** m_OriginalRotation    = %g", m_OriginalRotation);
     SYS_DEBUG ("*** m_Scaling             = %s", SYS_BOOL(m_Scaling));
     SYS_DEBUG ("*** m_Rotating            = %s", SYS_BOOL(m_Rotating));
+#endif
 
     if (!m_Scaling && !m_Rotating) {
         qreal scaleDiff = pinchGesture->totalScaleFactor();
@@ -1075,3 +1077,4 @@ WallpaperViewWidget::setupPanningPhysics (
         m_Physics->setPosition (QPointF(hMargin, vMargin));
     }
 }
+

@@ -31,7 +31,7 @@
 #include "wallpaperdescriptor.h"
 #include "gridimagewidget.h"
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include <../debug.h>
 
