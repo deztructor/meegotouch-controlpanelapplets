@@ -109,6 +109,7 @@ class WallpaperModel: public QAbstractTableModel
          * Watching the file-system.
          */
         void directoryChanged (const QString &path);
+        void fileChanged (const QString &path);
         #ifdef HAVE_QMSYSTEM
         void usbModeChanged (MeeGo::QmUSBMode::Mode mode);
         #endif
@@ -136,6 +137,7 @@ class WallpaperModel: public QAbstractTableModel
                 QStringList          &mimeTypes,
                 WallpaperDescriptor  &desc);
 
+        void sneakyFileChange (const QString &filePath);
         void mySort () const;
 
     private:

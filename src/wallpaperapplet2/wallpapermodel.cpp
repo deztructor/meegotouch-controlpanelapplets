@@ -56,6 +56,17 @@ WallpaperModel::WallpaperModel (
     m_ImagesDir = Wallpaper::constructPath (Wallpaper::ImagesDir);
     m_SysImagesDir = Wallpaper::constructPath (Wallpaper::SysImagesDir);
 
+    /*
+     * Creating a new thumbnailer.
+     */
+    m_Thumbnailer = new Thumbnailer ();
+    connect (m_Thumbnailer, SIGNAL(thumbnail(QUrl,QUrl,QPixmap,QString)),
+            this, SLOT(thumbnailReady(QUrl,QUrl,QPixmap,QString)) );
+    connect (m_Thumbnailer, SIGNAL(error(QString,QUrl)),
+            this, SLOT(thumbnailError(QString,QUrl)) );
+    connect (m_Thumbnailer, SIGNAL(finished(int)),
+            this, SLOT(thumbnailLoadingFinished(int)));
+
     m_FileSystemTimer.setInterval (fileSystemReCheckDelay);
     m_FileSystemTimer.setSingleShot (true);
     connect (&m_FileSystemTimer, SIGNAL(timeout()),
@@ -173,18 +184,8 @@ WallpaperModel::wallpaperChanged ()
     SYS_DEBUG ("*** selected          = %s", SYS_STR(selected));
     SYS_DEBUG ("*** currentPath       = %s", SYS_STR(currentPath));
     SYS_DEBUG ("*** originalPath      = %s", SYS_STR(originalPath));
-    if ((selected == currentPath || selected == originalPath) && 
-            m_Thumbnailer) {
-        QList<QUrl>  uris;
-        QStringList         requestedFiles;
-        QStringList         mimeTypes;
-        WallpaperDescriptor desc = m_FilePathHash[selected];
-
-        SYS_DEBUG ("Sneaky bastard wallpaper change...");
-        desc.unsetThumbnail ();
-        appendThumbnailRequest (uris, requestedFiles, mimeTypes, desc);
-        m_Thumbnailer->request (
-                uris, mimeTypes, true, Wallpaper::DefaultThumbnailFlavor);
+    if ((selected == currentPath || selected == originalPath)) {
+        sneakyFileChange (selected);
         return;
     }
 
@@ -210,6 +211,22 @@ WallpaperModel::loadFromDirectory ()
     QStringList             directories;
 
     SYS_DEBUG ("");
+
+    /*
+     * Some static elements needed to be handled only when this method is called
+     * first.
+     */
+    if (m_FilePathList.isEmpty()) {
+        if (Wallpaper::showThemeDefault) {
+            toAdd << 
+                Wallpaper::logicalIdToFilePath (
+                        Wallpaper::CurrentPortraitDefault);
+        }
+    }
+
+    /*
+     * The directories that expected to hold wallpaper images.
+     */
     directories <<
         m_SysImagesDir <<
         m_ImagesDir;
@@ -311,6 +328,7 @@ WallpaperModel::loadFromDirectory ()
         }
 
         endInsertRows ();
+        startWatchFiles ();
     }
 
     if (!m_PendingFiles.isEmpty()) {
@@ -347,9 +365,9 @@ WallpaperModel::thumbnailReady (
     if (path.startsWith("file://"))
         path.remove (0, 7);
     
-    SYS_DEBUG ("*** flavor = %s", SYS_STR(flavor));
-    SYS_DEBUG ("*** size   = %dx%d", pixmap.width(), pixmap.height());
-    SYS_DEBUG ("*** path   = %s", SYS_STR(path));
+    //SYS_DEBUG ("*** flavor = %s", SYS_STR(flavor));
+    //SYS_DEBUG ("*** size   = %dx%d", pixmap.width(), pixmap.height());
+    //SYS_DEBUG ("*** path   = %s", SYS_STR(path));
 
 
     if (m_FilePathHash.contains(path)) {
@@ -400,15 +418,7 @@ WallpaperModel::thumbnailLoadingFinished (
             int          left)
 {
     SYS_DEBUG ("*** left = %d", left);
-#if 0
     Q_UNUSED (left);
-
-    if (!m_Thumbnailer.isNull() && left == 0) {
-        SYS_WARNING ("DESTROYING THUMBNAILER");
-        delete m_Thumbnailer;
-        m_Thumbnailer = 0;
-    }
-#endif
 }
 
 
@@ -435,20 +445,6 @@ WallpaperModel::loadThumbnails (
         SYS_WARNING ("*** %p", firstVisibleRow.model());
         SYS_WARNING ("*** %p", lastVisibleRow.model());
         return;
-    }
-
-    /*
-     * Creating a new thumbnailer if we have to.
-     */
-    if (!m_Thumbnailer) {
-        SYS_DEBUG ("Creating new thumbnailer...");
-        m_Thumbnailer = new Thumbnailer ();
-        connect (m_Thumbnailer, SIGNAL(thumbnail(QUrl,QUrl,QPixmap,QString)),
-                this, SLOT(thumbnailReady(QUrl,QUrl,QPixmap,QString)) );
-        connect (m_Thumbnailer, SIGNAL(error(QString,QUrl)),
-                this, SLOT(thumbnailError(QString,QUrl)) );
-        connect (m_Thumbnailer, SIGNAL(finished(int)),
-                this, SLOT(thumbnailLoadingFinished(int)));
     }
 
     /*
@@ -766,6 +762,7 @@ WallpaperModel::directoryChanged (
         const QString  &path)
 {
     SYS_DEBUG ("*** path = %s", SYS_STR(path));
+
     if (path != m_ImagesDir) {
         SYS_WARNING ("This is not our images directory?!");
     }
@@ -777,20 +774,45 @@ WallpaperModel::directoryChanged (
     // FIXME: ensureSelection() ?
 }
 
+void 	
+WallpaperModel::fileChanged (
+        const QString  &path)
+{
+    SYS_WARNING ("*************************************************");
+    SYS_WARNING ("*** path = %s", SYS_STR(path));
+    if (m_FilePathHash.contains(path) && Wallpaper::imageFile(path)) {
+        sneakyFileChange (path);
+    } else {
+       loadFromDirectory (); 
+    }
+}
+
 void
 WallpaperModel::startWatchFiles ()
 {
-
+    /*
+     * Creating the file-system watcher.
+     */
     if (!m_FileWatcher) {
-        SYS_DEBUG ("Creating file system watcher.");
         m_FileWatcher = new QFileSystemWatcher (this);
         connect (m_FileWatcher, SIGNAL(directoryChanged(const QString &)),
                 this, SLOT(directoryChanged(const QString &)));
+        connect (m_FileWatcher, SIGNAL(fileChanged(const QString &)),
+                this, SLOT(fileChanged(const QString &)));
     }
 
+    /* 
+     * No need to listen on SysImagesDir as it is on the rootfs 
+     */
     SYS_DEBUG ("Watching directory %s", SYS_STR(m_ImagesDir));
-    /* No need to listen on SysImagesDir as it is on the rootfs */
-    m_FileWatcher->addPath (m_ImagesDir);
+    if (!m_ImagesDir.isEmpty())
+        m_FileWatcher->addPath (m_ImagesDir);
+
+    /*
+     *
+     */
+    if (!m_FilePathList.isEmpty())
+        m_FileWatcher->addPaths (m_FilePathList);
 }
 
 /******************************************************************************
@@ -938,6 +960,24 @@ WallpaperModel::appendThumbnailRequest (
 
 finalize:
         return retval;
+}
+
+void
+WallpaperModel::sneakyFileChange (
+        const QString &filePath)
+{
+    if (m_FilePathHash.contains(filePath)) {
+        QList<QUrl>         uris;
+        QStringList         requestedFiles;
+        QStringList         mimeTypes;
+        WallpaperDescriptor desc = m_FilePathHash[filePath];
+
+        SYS_DEBUG ("Sneaky bastard wallpaper change...");
+        desc.unsetThumbnail ();
+        appendThumbnailRequest (uris, requestedFiles, mimeTypes, desc);
+        m_Thumbnailer->request (
+                uris, mimeTypes, true, Wallpaper::DefaultThumbnailFlavor);
+    }
 }
 
 void 
