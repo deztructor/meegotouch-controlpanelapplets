@@ -28,7 +28,6 @@ DEB_BUILD_OPTIONS=wallpaper2
 # Disable tests building (an empty -tests package will be generated)
 DEB_BUILD_OPTIONS=nocheck
 
-
 # Build only certain applet(s)
 # If an applet given, the translations and test will built as well
 # If no BUILD_APPLET option, all of the applets will built, just as before
@@ -47,5 +46,10 @@ usb
 wallpaper
 wallpaper2
 warranty
+gprs
 # ^^ pls keep this list updated, together with src/src.pro
+
+# Install the tests files to a different name directory
+# eg.: use meegotouchcp-wallpaper-tests with BUILD_APPLET=wallpaper
+TEST_PKG=<pkg-name>
 
