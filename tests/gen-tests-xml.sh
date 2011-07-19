@@ -9,6 +9,11 @@ TYPE="Functional"
 LEVEL="Component"
 BINARY_DIR="/usr/lib/meegotouch-controlpanelapplets-tests"
 
+# for meego.com separate packaging
+if [ "$1x" != "x" ]; then
+BINARY_DIR="/usr/lib/$1"
+fi
+
 #
 # The code. These lines should not contain configuration values.
 #
