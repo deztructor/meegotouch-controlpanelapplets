@@ -317,9 +317,9 @@ WallpaperBusinessLogic::availableWallpapers () const
     WallpaperDir subUserDirs (dirPath (MeegoDir));
     QStringList meegoDirs;
 
-    meegoDirs = subUserDirs.entryList (
-        WallpaperDir::Dirs | WallpaperDir::NoDotAndDotDot |
-        WallpaperDir::Readable | WallpaperDir::Executable);
+    meegoDirs = subUserDirs.entryList (QFlags<WallpaperDir::Filter> (
+                    WallpaperDir::Dirs | WallpaperDir::NoDotAndDotDot |
+                    WallpaperDir::Readable | WallpaperDir::Executable));
 
     foreach (QString aMeegoDir, meegoDirs)
     {

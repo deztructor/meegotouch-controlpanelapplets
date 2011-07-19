@@ -75,6 +75,7 @@ public:
 		    const QStringList &nameFilters, 
 		    Filters            filters = NoFilter);
     static QString homePath () { return qgetenv ("HOME"); };
+    QString absolutePath () const { return m_Path; };
 
 private:
     QString       m_Path;
