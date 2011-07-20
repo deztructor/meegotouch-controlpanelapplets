@@ -967,10 +967,8 @@ WallpaperViewWidget::pinchGestureUpdate (
     } else {
         QPointF moveTo (
                 m_Trans.rotation(),
-                m_Trans.scale() - (pinchGesture->totalScaleFactor () * 100.0));
+                (m_Trans.scale() - pinchGesture->totalScaleFactor ()*2) * 100.0);
 
-        SYS_WARNING ("*** scaleFactor = %.2f", pinchGesture->totalScaleFactor ());
-        
         SYS_WARNING ("NOW SCALING");
         SYS_WARNING ("*** m_ScalePhysics->pointerMove(%s)", SYS_POINTF(moveTo));
         m_ScalePhysics->pointerMove(moveTo); 
