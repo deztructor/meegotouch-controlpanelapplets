@@ -168,7 +168,7 @@ WallpaperViewWidget::applyStyle()
             QRectF(rotationMin, scaleLowerLimit, rotationMax, scaleUpperLimit));
     m_ScalePhysics->setBoundsBehavior (MPhysics2DPanning::StopAtBounds);
     SYS_WARNING ("m_ScalePhysics->setPosition (%g, %g)", 0.0, 100.0);
-    m_ScalePhysics->setPosition (QPointF(0.0, 100.0));
+    m_ScalePhysics->setPosition (QPointF(360.0, 100.0));
 
     connect (m_ScalePhysics, SIGNAL(positionChanged(const QPointF &)),
             this, SLOT(scalePhysicsPositionChanged(const QPointF &)));
@@ -288,7 +288,8 @@ WallpaperViewWidget::rotateAnimationFinished ()
     SYS_DEBUG ("m_ScalePhysics->position() = %g, %g", position.x(), position.y());
     SYS_DEBUG ("m_ScalePhysics->setPosition(%g, %g)",
             rotation, m_Trans.scale() * 100.0);
-    m_ScalePhysics->setPosition (QPointF(rotation, m_Trans.scale() * 100.0));
+
+    m_ScalePhysics->setPosition (QPointF(rotation+360.0, m_Trans.scale() * 100.0));
         
     setupPanningPhysics ();
 }
@@ -894,9 +895,9 @@ WallpaperViewWidget::pinchGestureStarted (
     m_OriginalScaleFactor = m_Trans.scale ();
     m_OriginalRotation    = pinchGesture->rotationAngle ();
 
-    QPointF pressAt (m_Trans.rotation(), m_Trans.scale() * 100.0);
-    SYS_DEBUG ("m_ScalePhysics->pointerPress (%s)", SYS_POINTF(pressAt));
-    m_ScalePhysics->pointerPress(pressAt);
+    QPointF pressAt (m_Trans.rotation()+360.0, m_Trans.scale() * 100.0);
+    SYS_DEBUG ("m_ScalePhysics->pointerPress (%s)", SYS_POINTF (pressAt));
+    m_ScalePhysics->pointerPress (pressAt);
 }
 
 void 
@@ -963,14 +964,13 @@ WallpaperViewWidget::pinchGestureUpdate (
 #endif
 
     if (m_Rotating) {
-        QPointF moveTo (
-                -pinchGesture->rotationAngle(),
-                m_Trans.scale() * 100.0);
+        qreal rotationAngle = 360.0-pinchGesture->rotationAngle ();
+        QPointF moveTo (rotationAngle, m_Trans.scale () * 100.0);
         
         SYS_WARNING ("NOW ROTATING.");
         SYS_WARNING ("*** m_ScalePhysics->pointerMove(%s)", SYS_POINTF(moveTo));
         m_ScalePhysics->pointerMove(moveTo);
-    } else {
+    } else if (m_Scaling) {
         QPointF moveTo (m_Trans.rotation(), -pinchGesture->totalScaleFactor () * 100);
 
         SYS_WARNING ("NOW SCALING");
