@@ -886,7 +886,7 @@ WallpaperViewWidget::pinchGestureStarted (
     if (m_RotateAnimation.state() == QAbstractAnimation::Running)
         return;
     
-    m_OriginalScaleFactor = pinchGesture->scaleFactor ();
+    m_OriginalScaleFactor = m_Trans.scale ();
     m_OriginalRotation    = pinchGesture->rotationAngle ();
 
     QPointF pressAt (m_Trans.rotation(), m_Trans.scale() * 100.0);
@@ -965,9 +965,10 @@ WallpaperViewWidget::pinchGestureUpdate (
         SYS_WARNING ("*** m_ScalePhysics->pointerMove(%s)", SYS_POINTF(moveTo));
         m_ScalePhysics->pointerMove(moveTo);
     } else {
-        QPointF moveTo (
-                m_Trans.rotation(),
-                (m_Trans.scale() - pinchGesture->totalScaleFactor ()*2) * 100.0);
+        qreal newScaleFactor = (m_OriginalScaleFactor - 
+                                pinchGesture->totalScaleFactor ()) * 100.0;
+
+        QPointF moveTo (m_Trans.rotation(), newScaleFactor);
 
         SYS_WARNING ("NOW SCALING");
         SYS_WARNING ("*** m_ScalePhysics->pointerMove(%s)", SYS_POINTF(moveTo));
