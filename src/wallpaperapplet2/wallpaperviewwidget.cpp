@@ -166,6 +166,7 @@ WallpaperViewWidget::applyStyle()
     m_ScalePhysics->setMaximumVelocity (style()->maximumVelocity());
     m_ScalePhysics->setRange (
             QRectF(rotationMin, scaleLowerLimit, rotationMax, scaleUpperLimit));
+    m_ScalePhysics->setBoundsBehavior (MPhysics2DPanning::StopAtBounds);
     SYS_WARNING ("m_ScalePhysics->setPosition (%g, %g)", 0.0, 100.0);
     m_ScalePhysics->setPosition (QPointF(0.0, 100.0));
 
@@ -258,7 +259,9 @@ WallpaperViewWidget::scalePhysicsPanningStopped ()
     } else { 
         setupPanningPhysics ();
     }
-    
+
+    queueRedrawImage ();
+
 #if 0
     if (m_ScalePhysics->enabled())
         m_ScalePhysics->setEnabled(false);
@@ -961,17 +964,14 @@ WallpaperViewWidget::pinchGestureUpdate (
 
     if (m_Rotating) {
         QPointF moveTo (
-                m_Trans.rotation() - pinchGesture->rotationAngle(),
+                -pinchGesture->rotationAngle(),
                 m_Trans.scale() * 100.0);
         
         SYS_WARNING ("NOW ROTATING.");
         SYS_WARNING ("*** m_ScalePhysics->pointerMove(%s)", SYS_POINTF(moveTo));
         m_ScalePhysics->pointerMove(moveTo);
     } else {
-        qreal newScaleFactor = (m_OriginalScaleFactor - 
-                                pinchGesture->totalScaleFactor ()) * 100.0;
-
-        QPointF moveTo (m_Trans.rotation(), newScaleFactor);
+        QPointF moveTo (m_Trans.rotation(), -pinchGesture->totalScaleFactor () * 100);
 
         SYS_WARNING ("NOW SCALING");
         SYS_WARNING ("*** m_ScalePhysics->pointerMove(%s)", SYS_POINTF(moveTo));
