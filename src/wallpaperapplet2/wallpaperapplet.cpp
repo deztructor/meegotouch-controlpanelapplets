@@ -97,6 +97,8 @@ WallpaperApplet::constructSheet (
         int widgetId)
 {
     SYS_DEBUG ("*** widgetId = %d", widgetId);
+    Q_UNUSED (widgetId);
+
     if (!Wallpaper::useSheetForMainView)
         return 0;
 

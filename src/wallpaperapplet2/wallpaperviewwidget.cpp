@@ -765,6 +765,7 @@ void
 WallpaperViewWidget::mousePressEvent (
         QGraphicsSceneMouseEvent *event)
 {
+    Q_UNUSED (event);
     m_Physics->stop();
 }
 
@@ -880,6 +881,7 @@ WallpaperViewWidget::pinchGestureStarted (
         QPinchGesture *pinchGesture)
 {
     SYS_DEBUG ("");
+    Q_UNUSED (event);
     /*
      * We might auto-rotate. If we do we don't accept nothing.
      */
@@ -902,6 +904,7 @@ WallpaperViewWidget::pinchGestureUpdate (
     /*
      * 
      */
+    Q_UNUSED (event);
 #if 0
     SYS_DEBUG ("**********************************************");
     SYS_DEBUG ("*** rotation              = %g", m_Trans.rotation());
@@ -992,6 +995,8 @@ WallpaperViewWidget::pinchGestureEnded (
             QGestureEvent *event, 
             QPinchGesture *pinchGesture)
 {
+    Q_UNUSED (event);
+    Q_UNUSED (pinchGesture);
     SYS_DEBUG ("m_ScalePhysics->pointerRelease ()");
     m_ScalePhysics->pointerRelease ();
 
