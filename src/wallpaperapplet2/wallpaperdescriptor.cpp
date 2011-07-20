@@ -155,6 +155,23 @@ WallpaperDescriptor::filePath () const
     return m_Priv->filePath ();
 }
 
+void
+WallpaperDescriptor::setOriginalFilePath (
+        const QString &filePath)
+{
+    RETURN_IF_NULL;
+
+    m_Priv->setOriginalFilePath (filePath);
+}
+
+QString
+WallpaperDescriptor::originalFilePath () const
+{
+    RETURN_VAL_IF_NULL(QString());
+
+    return m_Priv->originalFilePath ();
+}
+
 QUrl
 WallpaperDescriptor::url () const
 {

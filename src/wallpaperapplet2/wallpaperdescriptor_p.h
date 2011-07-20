@@ -47,6 +47,9 @@ class WallpaperDescriptorPrivate
         void setFilePath (const QString &filePath);
         QString filePath () const;
 
+        void setOriginalFilePath (const QString &filePath);
+        QString originalFilePath () const;
+        
         void setThumbnailPending (bool pending);
         bool thumbnailPending () const;
 
@@ -74,6 +77,7 @@ class WallpaperDescriptorPrivate
     private:
         int      m_ReferenceCounter;
         QString  m_FilePath;
+        QString  m_OriginalFilePath;
         bool     m_Selected;
         bool     m_Progress;
         bool     m_ThumbnailPending;

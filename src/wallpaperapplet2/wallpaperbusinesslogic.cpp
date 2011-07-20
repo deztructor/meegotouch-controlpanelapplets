@@ -192,6 +192,21 @@ WallpaperBusinessLogic::loadImage (
         goto finalize;
     }
 
+    /*
+     * The worker thread might want to open the original file so we don't get
+     * the black frames around the image while editing.
+     */
+    if (desc.selected()) {
+        QString currentFilePath;
+        QString originalFilePath;
+
+        currentWallpaper (currentFilePath, originalFilePath);
+        if (currentFilePath == desc.filePath())
+            desc.setOriginalFilePath (originalFilePath);
+    } else {
+        desc.setOriginalFilePath (QString());
+    }
+
     emit workerStarted ();
     m_WorkerThread = new WallpaperWorkerThread (desc, sceneSize());
     connect (m_WorkerThread, SIGNAL(finished()), 

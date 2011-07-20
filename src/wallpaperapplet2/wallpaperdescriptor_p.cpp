@@ -73,6 +73,19 @@ WallpaperDescriptorPrivate::filePath () const
     return m_FilePath;
 }
 
+void 
+WallpaperDescriptorPrivate::setOriginalFilePath (
+        const QString &filePath)
+{
+    m_OriginalFilePath = filePath;
+}
+        
+QString 
+WallpaperDescriptorPrivate::originalFilePath () const
+{
+    return m_OriginalFilePath;
+}
+
 void
 WallpaperDescriptorPrivate::setThumbnailPending (
         bool pending)
@@ -164,8 +177,15 @@ WallpaperDescriptorPrivate::load (
     QuillImage        retval;
     QSize             mySize;
     QuillImageFilter *loadFilter;
+    QString           fileName;
 
-    QuillFile quillFile  (filePath());
+    if (!m_OriginalFilePath.isEmpty() &&
+            Wallpaper::imageFile(m_OriginalFilePath))
+        fileName = m_OriginalFilePath;
+    else
+        fileName = m_FilePath;
+
+    QuillFile quillFile  (fileName);
     mySize = quillFile.fullImageSize ();
     originalSize = mySize;
    
@@ -181,7 +201,7 @@ WallpaperDescriptorPrivate::load (
             QuillImageFilter::Role_Load);
     loadFilter->setOption(
             QuillImageFilter::FileName,
-            QVariant(filePath()));
+            QVariant(fileName));
     retval = loadFilter->apply (QImage(mySize, QImage::Format_RGB16));
     delete loadFilter;
 

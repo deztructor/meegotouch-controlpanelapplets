@@ -69,6 +69,9 @@ class MC_EXPORT WallpaperDescriptor : public QObject
         void setFilePath (const QString &filePath);
         QString filePath () const;
 
+        void setOriginalFilePath (const QString &filePath);
+        QString originalFilePath () const;
+        
         QUrl url () const;
         QString mimeType () const;
 
@@ -88,7 +91,7 @@ class MC_EXPORT WallpaperDescriptor : public QObject
 
         void setHistoryIndex (int index);
         int historyIndex () const;
-
+        
         /*
          * Loading...
          */
