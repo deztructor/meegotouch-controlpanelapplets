@@ -246,3 +246,9 @@ WallpaperITrans::setOrientation (
     m_Orientation = orientation;
 }
 
+bool
+WallpaperITrans::noTransformation () const
+{
+    return m_Scale == 1.0 && m_Rotation == 0.0 &&
+        m_Offset.x() == 0.0 && m_Offset.y() == 0.0;
+}

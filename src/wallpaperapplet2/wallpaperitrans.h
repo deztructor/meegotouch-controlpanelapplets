@@ -36,42 +36,44 @@ class MC_EXPORT WallpaperITrans : public QObject
 {
     Q_OBJECT
 
-public:
-    WallpaperITrans ();
-    WallpaperITrans (const WallpaperITrans &orig);
+    public:
+        WallpaperITrans ();
+        WallpaperITrans (const WallpaperITrans &orig);
 
-    WallpaperITrans &operator= (const WallpaperITrans &rhs);
-    int operator* (const int i) const;
-    WallpaperITrans &operator+= (const QPointF &rsh);
+        WallpaperITrans &operator= (const WallpaperITrans &rhs);
+        int operator* (const int i) const;
+        WallpaperITrans &operator+= (const QPointF &rsh);
 
-    int x () const;
-    int y () const;
+        int x () const;
+        int y () const;
     
-    void setScale (qreal scale);
-    qreal scale () const;
-    void modScale (int i);
+        void setScale (qreal scale);
+        qreal scale () const;
+        void modScale (int i);
 
-    void setRotation (qreal rotation);
-    void modRotation (int i);
-    qreal rotation () const;
+        void setRotation (qreal rotation);
+        void modRotation (int i);
+        qreal rotation () const;
 
-    void setOffset (const QPointF &offset);
-    QPointF offset () const;
+        void setOffset (const QPointF &offset);
+        QPointF offset () const;
 
-    void setExpectedSize (const QSize &size);
-    QSize expectedSize () const;
+        void setExpectedSize (const QSize &size);
+        QSize expectedSize () const;
 
-    int expectedWidth () const;
-    int expectedHeight () const;
+        int expectedWidth () const;
+        int expectedHeight () const;
 
-    M::Orientation orientation () const;
-    void setOrientation (M::Orientation orientation);
-    
-private:
-    M::Orientation   m_Orientation;
-    qreal            m_Scale;
-    qreal            m_Rotation;
-    QPointF          m_Offset;
-    QSize            m_ExpectedSize;
+        M::Orientation orientation () const;
+        void setOrientation (M::Orientation orientation);
+   
+        bool noTransformation () const;
+
+    private:
+        M::Orientation   m_Orientation;
+        qreal            m_Scale;
+        qreal            m_Rotation;
+        QPointF          m_Offset;
+        QSize            m_ExpectedSize;
 };
 #endif
