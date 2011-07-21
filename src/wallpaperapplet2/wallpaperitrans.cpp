@@ -249,6 +249,7 @@ WallpaperITrans::setOrientation (
 bool
 WallpaperITrans::noTransformation () const
 {
-    return m_Scale == 1.0 && m_Rotation == 0.0 &&
-        m_Offset.x() == 0.0 && m_Offset.y() == 0.0;
+    return qAbs (m_Scale - 1.0f) < 0.01f && qAbs (m_Rotation) < 0.1f &&
+           qAbs (m_Offset.x ()) < 0.1f && qAbs (m_Offset.y ()) < 0.1f;
 }
+
