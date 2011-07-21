@@ -42,6 +42,7 @@ WallpaperDescriptorPrivate::WallpaperDescriptorPrivate (
     m_HasThumbnail (false),
     m_HistoryIndex (-1)
 {
+    m_TimeStamp = Wallpaper::fileTimeStamp (filePath);
 }
 
 
@@ -65,6 +66,7 @@ WallpaperDescriptorPrivate::setFilePath (
         const QString &filePath)
 {
     m_FilePath = filePath;
+    m_TimeStamp = Wallpaper::fileTimeStamp (filePath);
 }
         
 QString 
@@ -165,6 +167,13 @@ WallpaperDescriptorPrivate::historyIndex () const
 {
     return m_HistoryIndex;
 }
+
+QDateTime 
+WallpaperDescriptorPrivate::timeStamp () const
+{
+    return m_TimeStamp;
+}
+
 
 /******************************************************************************
  * Loading...

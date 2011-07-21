@@ -115,13 +115,12 @@ WallpaperDescriptor::operator< (
         retval = false;
     else if (historyIndex() != -1)
         retval = true;
+    else if (m_Priv->timeStamp() < desc.m_Priv->timeStamp())
+        return true;
+    else if (m_Priv->timeStamp() > desc.m_Priv->timeStamp())
+        return false;
     else
         retval = filePath() < desc.filePath();
-
-    SYS_DEBUG ("%s < %s = %s", 
-            SYS_STR(filePath()), 
-            SYS_STR(desc.filePath()),
-            SYS_BOOL(retval));
 
     return retval;
 }

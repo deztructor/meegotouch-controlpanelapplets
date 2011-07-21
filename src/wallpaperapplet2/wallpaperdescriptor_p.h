@@ -25,6 +25,7 @@
 #include <QuillImage>
 #include <QuillImageFilterFactory>
 #include <QImage>
+#include <QDateTime>
 
 #include <QuillFile>
 #include <QuillImage>
@@ -67,6 +68,7 @@ class WallpaperDescriptorPrivate
         void setHistoryIndex (int index);
         int historyIndex () const;
 
+        QDateTime timeStamp () const;
         /*
          * Loading...
          */
@@ -79,11 +81,12 @@ class WallpaperDescriptorPrivate
         QString  m_FilePath;
         QString  m_OriginalFilePath;
         bool     m_Selected;
-        bool     m_Progress;
-        bool     m_ThumbnailPending;
-        bool     m_HasThumbnail;
-        int      m_HistoryIndex;
-        QPixmap  m_Thumbnail;
+        bool      m_Progress;
+        bool      m_ThumbnailPending;
+        bool      m_HasThumbnail;
+        int       m_HistoryIndex;
+        QPixmap   m_Thumbnail;
+        QDateTime m_TimeStamp;
 };
 
 #endif

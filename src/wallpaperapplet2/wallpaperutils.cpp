@@ -34,10 +34,9 @@ using namespace Wallpaper;
 
 #include <QDir>
 #include <QFile>
+#include <QFileInfo>
 #include <QFileInfoList>
 #include <MGConfItem>
-//#include <QImage>
-//#include <QPainter>
 
 #undef DEBUG
 #define WARNING
@@ -87,6 +86,15 @@ Wallpaper::baseName (
     return retval;
 }
 
+QDateTime
+Wallpaper::fileTimeStamp (
+        const QString &filePath)
+{
+    QFileInfo info (filePath);
+    
+    return info.created ();
+}
+
 QString 
 Wallpaper::setFileExtension (
         const QString &fileName,
@@ -123,11 +131,9 @@ Wallpaper::setFileVariant (
      * FIXME: This code is not very nice...
      */
     if (length > 5 && retval[length - 5] == '.') {
-        SYS_DEBUG ("1");
         extension = retval.mid (length - 5, 5);
         retval = retval.remove (length - 5, 5);
     } else if (length > 4 && retval[length - 4] == '.') {
-        SYS_DEBUG ("2");
         extension = retval.mid (length - 4, 4);
         retval = retval.remove (length - 4, 4);
     }

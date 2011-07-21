@@ -27,6 +27,7 @@
 #include <QHash>
 #include <QSize>
 #include <QImage>
+#include <QDateTime>
 
 #define SYS_SIZE(size) \
     SYS_STR((QString::number(size.width())+"x"+QString::number(size.height())))
@@ -44,6 +45,9 @@ namespace Wallpaper
             const QString &filename = QString());
 
     QString baseName (
+            const QString &filePath);
+
+    QDateTime fileTimeStamp (
             const QString &filePath);
 
     QString setFileExtension (
