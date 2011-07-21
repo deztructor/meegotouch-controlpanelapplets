@@ -77,16 +77,16 @@ class WallpaperDescriptorPrivate
                 QSize       &originalSize);
 
     private:
-        int      m_ReferenceCounter;
-        QString  m_FilePath;
-        QString  m_OriginalFilePath;
-        bool     m_Selected;
-        bool      m_Progress;
-        bool      m_ThumbnailPending;
-        bool      m_HasThumbnail;
-        int       m_HistoryIndex;
-        QPixmap   m_Thumbnail;
-        QDateTime m_TimeStamp;
+        int        m_ReferenceCounter;
+        QString    m_FilePath;
+        QString    m_OriginalFilePath;
+        bool       m_Selected;
+        bool       m_Progress;
+        bool       m_ThumbnailPending;
+        bool       m_HasThumbnail;
+        int        m_HistoryIndex;
+        QPixmap    m_Thumbnail;
+        QDateTime  m_TimeStamp;
 };
 
 #endif
