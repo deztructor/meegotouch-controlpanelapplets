@@ -45,7 +45,7 @@ static const int alwaysVisibleFromImage = 15;
 
 static const qreal scaleLowerLimit = 20.0;
 static const qreal scaleUpperLimit = 400.0;
-static const qreal rotationMin = -0.0;
+static const qreal rotationMin = -360.0;
 static const qreal rotationMax = +720.0;
 
 /******************************************************************************
@@ -168,7 +168,7 @@ WallpaperViewWidget::applyStyle()
             QRectF(rotationMin, scaleLowerLimit, rotationMax, scaleUpperLimit));
     m_ScalePhysics->setBoundsBehavior (MPhysics2DPanning::StopAtBounds);
     SYS_WARNING ("m_ScalePhysics->setPosition (%g, %g)", 0.0, 100.0);
-    m_ScalePhysics->setPosition (QPointF(360.0, 100.0));
+    m_ScalePhysics->setPosition (QPointF(0, 100.0));
 
     connect (m_ScalePhysics, SIGNAL(positionChanged(const QPointF &)),
             this, SLOT(scalePhysicsPositionChanged(const QPointF &)));
@@ -229,9 +229,9 @@ WallpaperViewWidget::scalePhysicsPanningStopped ()
      * The starting (current) rotation.
      */
     while (rotation > 360.0)
-        rotation -= 360;
-    while (rotation < -360)
-        rotation += 360;
+        rotation -= 360.0;
+    while (rotation < -360.0)
+        rotation += 360.0;
     m_Trans.setRotation (rotation);
 
     /*
@@ -276,7 +276,7 @@ WallpaperViewWidget::rotateAnimationFinished ()
 
     SYS_DEBUG ("");
 
-    if (rotation == 360.0 || rotation == -360.0) {
+    if (qAbs (qAbs (rotation) - 360.0) < 0.1) {
         rotation = 0.0;
         m_ImageWidget->setRotation (rotation);
     }
@@ -289,7 +289,7 @@ WallpaperViewWidget::rotateAnimationFinished ()
     SYS_DEBUG ("m_ScalePhysics->setPosition(%g, %g)",
             rotation, m_Trans.scale() * 100.0);
 
-    m_ScalePhysics->setPosition (QPointF(rotation+360.0, m_Trans.scale() * 100.0));
+    m_ScalePhysics->setPosition (QPointF(rotation, m_Trans.scale() * 100.0));
         
     setupPanningPhysics ();
 }
@@ -895,7 +895,7 @@ WallpaperViewWidget::pinchGestureStarted (
     m_OriginalScaleFactor = m_Trans.scale ();
     m_OriginalRotation    = pinchGesture->rotationAngle ();
 
-    QPointF pressAt (m_Trans.rotation()+360.0, m_Trans.scale() * 100.0);
+    QPointF pressAt (m_Trans.rotation(), m_Trans.scale() * 100.0);
     SYS_DEBUG ("m_ScalePhysics->pointerPress (%s)", SYS_POINTF (pressAt));
     m_ScalePhysics->pointerPress (pressAt);
 }
@@ -964,9 +964,29 @@ WallpaperViewWidget::pinchGestureUpdate (
 #endif
 
     if (m_Rotating) {
-        qreal rotationAngle = 360.0-pinchGesture->rotationAngle ();
-        QPointF moveTo (rotationAngle, m_Trans.scale () * 100.0);
-        
+        /*
+         * INFO: Lets not to allow the user to rotate more than 180 degree
+         * in a pinch-rotate gesture, as the gesture rotationAngle could
+         * give as very bad values (i mean transition from 5 -> 355 degree)
+         * and the MPhysics will generates bad artifacts :-S
+         */
+        qreal rotationAngle = pinchGesture->rotationAngle ();
+
+        // To solve the bad transitions, lets translate the angles
+        if (rotationAngle > 180.0)
+            rotationAngle -= 360.0;
+        if (rotationAngle < -180.0)
+            rotationAngle += 360.0;
+
+        /*
+         * XXX: FIXME: This isn't working fully properly:
+         * Still there is a glitch when user rotates more than 180 degree in
+         * one pinch-rotate gesture :-S (Should we really care with this corner case?)
+         */
+        rotationAngle = qBound ((qreal)-180.0f, rotationAngle, (qreal)180.0f);
+
+        QPointF moveTo (-rotationAngle, m_Trans.scale () * 100.0);
+
         SYS_WARNING ("NOW ROTATING.");
         SYS_WARNING ("*** m_ScalePhysics->pointerMove(%s)", SYS_POINTF(moveTo));
         m_ScalePhysics->pointerMove(moveTo);
