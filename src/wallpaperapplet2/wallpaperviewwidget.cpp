@@ -917,7 +917,7 @@ WallpaperViewWidget::pinchGestureUpdate (
      * 
      */
     Q_UNUSED (event);
-#if 0
+#ifdef LOTDEBUG
     SYS_DEBUG ("**********************************************");
     SYS_DEBUG ("*** rotation              = %g", m_Trans.rotation());
     SYS_DEBUG ("*** scale                 = %g", m_Trans.scale());
@@ -1002,6 +1002,8 @@ WallpaperViewWidget::pinchGestureUpdate (
         QPointF moveTo (m_Trans.rotation(), -pinchGesture->totalScaleFactor () * 100);
 
         SYS_WARNING ("NOW SCALING");
+        SYS_WARNING ("\nXXXXXXXXXXXXXXXXXXXx m_ScalePhysics scale = %.2f",
+                     m_ScalePhysics->position ().y ());
         SYS_WARNING ("*** m_ScalePhysics->pointerMove(%s)", SYS_POINTF(moveTo));
         m_ScalePhysics->pointerMove(moveTo); 
     }
