@@ -21,15 +21,11 @@
 
 #include <QPixmap>
 #include <QString>
-#include <QuillFile>
-#include <QuillImage>
-#include <QuillImageFilterFactory>
 #include <QImage>
-#include <QDateTime>
-
 #include <QuillFile>
 #include <QuillImage>
 #include <QuillImageFilterFactory>
+#include <QDateTime>
 
 class QSize;
 
