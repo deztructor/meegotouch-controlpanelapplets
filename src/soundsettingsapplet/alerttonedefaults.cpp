@@ -32,8 +32,8 @@
 #include "alerttonedefaults.h"
 #include "alerttonedefaultsmodel.h"
 
-//#define DEBUG
-//#define WARNING
+#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 static const char *SelectionStartTag = "<font color='blue'>";
@@ -401,6 +401,7 @@ AlertToneDefaults::selectAndScroll (
         m_NiceNameToSelect = "";
     }
 
+    filtering()->proxy()->sort(Qt::DisplayRole);
     return success;
 }
 

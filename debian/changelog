@@ -1,6 +1,6 @@
 meegotouch-controlpanelapplets (0.20.62~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  * Fixes: NB#262474 - [TASK] AlertToneBrowser: newly added items aren't sorted 
 
  -- David Kedves <dkedves@blumsoft.eu>  Thu, 07 Jul 2011 14:27:04 +0300
 

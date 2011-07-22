@@ -30,7 +30,7 @@
  */
 #undef USE_ASYNC_LOADING
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -89,7 +89,6 @@ AlertToneDefaultsModel::AlertToneDefaultsModel() : QStandardItemModel(),
 void
 AlertToneDefaultsModel::addSingleItem()
 {
-    SYS_DEBUG ("*** m_isFinished = %s", SYS_BOOL(m_isFinished));
     if (m_isFinished) 
         return;
 
@@ -136,7 +135,6 @@ AlertToneDefaultsModel::addSingleItem()
                 extension == ".amr" ||
                 extension == ".mid") {
                 QString niceName = TrackerConnection::instance()->niceNameFromFileName (fullPath);
-                SYS_DEBUG ("calling niceNameFromFileName()");
                 addSingleItem (niceName, fullPath);
             }
         }
@@ -171,6 +169,7 @@ AlertToneDefaultsModel::addSingleItem (
 {
     int      row = rowCount();
     int      idx = findItemByFileName (fileName);
+    QString  myNiceName;
 
     if (idx >= 0)
         return row;
@@ -196,14 +195,17 @@ AlertToneDefaultsModel::addSingleItem (
     /*
      * Last minute checking, just to be sure.
      */
-    if (!niceName.isEmpty()) {
-        setData (index(row, NiceNameColumn), QVariant(niceName));
-    } else {
-        QString myNiceName = 
+    myNiceName = niceName;
+    if (myNiceName.isEmpty()) {
+        myNiceName = 
             TrackerConnection::instance()->niceNameFromFileName (fileName);
-        setData (index(row, NiceNameColumn), QVariant(myNiceName));
     }
-    
+
+    SYS_DEBUG ("   %-20s %-32s %s",
+            myNiceName.toUtf8().constData(),
+            fileName.toUtf8().constData(),
+            forced ? "forced" : "");
+    setData (index(row, NiceNameColumn), QVariant(myNiceName));
     setData (index(row, FullPathColumn), QVariant(fileName));
     setData (index(row, ForcedColumn), QVariant(forced));
 
