@@ -401,7 +401,7 @@ AlertToneDefaults::selectAndScroll (
         m_NiceNameToSelect = "";
     }
 
-    filtering()->proxy()->sort(Qt::DisplayRole);
+    filtering()->proxy()->sort(AlertToneDefaultsModel::NiceNameColumn);
     return success;
 }
 
@@ -427,7 +427,7 @@ AlertToneDefaults::polishEvent ()
     SYS_DEBUG ("");
     // Here we sort the model. Seems that it is not the best place for sorting,
     // but it at least works.
-    filtering()->proxy()->sort(Qt::DisplayRole);
+    filtering()->proxy()->sort(AlertToneDefaultsModel::NiceNameColumn);
     checkSpinner ();
 }
 
