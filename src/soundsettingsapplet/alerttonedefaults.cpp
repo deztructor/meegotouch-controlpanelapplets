@@ -183,7 +183,7 @@ AlertToneDefaults::AlertToneDefaults (
      */
     connect (m_DefaultsModel, SIGNAL(loading()), 
             this, SLOT(checkSpinner()));
-    
+    m_FileFromMyMusicSelected = false;
 }
 
 /*!
@@ -375,7 +375,20 @@ AlertToneDefaults::selectAndScroll (
     }
 
     idx = m_DefaultsModel->findItemByFileName (fileName);
-    success = selectAndScroll (idx);
+
+    SYS_DEBUG("m_FileFromMyMusicSelected is %s", SYS_BOOL(m_FileFromMyMusicSelected));
+    if(!m_FileFromMyMusicSelected && idx >= 0)
+    {
+        QModelIndex mIndex = m_DefaultsModel->index (idx, 0);
+        m_DefaultsModel->moveItem(idx, 0);
+        success = selectAndScroll (0);
+
+    }
+    else
+    {
+        success = selectAndScroll (idx);
+    }
+
 
     SYS_WARNING ("*** idx = %d", idx);
     if (!success) {
@@ -397,11 +410,14 @@ AlertToneDefaults::selectAndScroll (
             selectionModel()->clear();
         }
     } else {
+        SYS_DEBUG("success");
         m_FileNameToSelect = "";
         m_NiceNameToSelect = "";
+        m_FileFromMyMusicSelected = false;
     }
 
     filtering()->proxy()->sort(AlertToneDefaultsModel::NiceNameColumn);
+
     return success;
 }
 
@@ -439,6 +455,11 @@ AlertToneDefaults::showEvent (
     SYS_DEBUG ("*** m_FileNameToSelect = %s", SYS_STR(m_FileNameToSelect));
 
     event->accept ();
+
+    if(!isVisible())
+        m_FileFromMyMusicSelected = true;
+    else
+        m_FileFromMyMusicSelected = false;
 
     /*
      * If there is a pending selection we need to handle it but not now,
