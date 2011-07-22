@@ -66,9 +66,7 @@ WallpaperViewWidget::WallpaperViewWidget (
     m_Rotating (false),
     m_PanOngoing (false),
     m_HasPendingRedraw (false),
-    m_Physics (0),
-    m_RotateAnimation (0)
-
+    m_Physics (0)
 {
     MWindow *win = MApplication::activeWindow ();
 
@@ -546,7 +544,17 @@ WallpaperViewWidget::slotDoneActivated ()
         SYS_DEBUG ("Saving is being performed.");
         return;
     }
-    
+
+#if 0
+    // TODO: FIXME: ERR: this leads to a disabled
+    // toolbar, and there is no was to escape :-S
+    if (m_PinchOngoing || m_RotateAnimation.state () == QAbstractAnimation::Running)
+    {
+        SYS_WARNING ("Save can not be done now, as some operation is ongoing");
+        return;
+    }
+#endif
+
     /*
      * We ignore the button press while the image is moving.
      */
