@@ -143,6 +143,7 @@ AlertToneBrowser::createContent()
     connect (m_my_music, SIGNAL (clicked ()), SLOT (launchMusicBrowser ()));
 #endif
 
+#ifndef MEEGO
     // "Get more from Ovi store"
     m_ovi_store = new RightArrowItem;
     m_ovi_store->setTitleStyleName ("CommonSingleTitleInverted");
@@ -152,6 +153,7 @@ AlertToneBrowser::createContent()
     m_ovi_store->setObjectName("MContentItem_getMoreFromOviStore");
     m_MainLayout->addItem (m_ovi_store);
     connect (m_ovi_store, SIGNAL (clicked ()), SLOT (launchOviStore ()));
+#endif
 
     spacer = new MSeparator;
     spacer->setStyleName ("CommonItemDividerInverted");
@@ -209,7 +211,10 @@ AlertToneBrowser::retranslateUi()
 #ifdef HAVE_CONTENT_MANAGER
     m_my_music->setProperty ("title", qtTrId("qtn_sond_pick_music"));
 #endif
+
+#ifndef MEEGO
     m_ovi_store->setProperty("title", qtTrId("qtn_sond_store"));
+#endif
 
     if (m_TitleLabel)
         m_TitleLabel->setText (qtTrId("qtn_sond_ringtones"));
