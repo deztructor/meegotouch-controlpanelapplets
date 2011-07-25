@@ -47,6 +47,7 @@ static const QString dir = "";
  * Good to know: In order to use this flavor under scratchbox one must install
  * the media-settings-harmattan package. Then restart the desktop...
  */
+static const QString fallbackFlavor = "normal";
 static const QString defaultFlavor = "grid";
 static const int defaultThumbnailWidth = 172;
 static const int defaultThumbnailHeight = 172;
@@ -422,7 +423,8 @@ WallpaperDescriptor::WallpaperDescriptor(
         QObject *parent) : 
     QObject (parent),
     m_Images (NVariants),
-    m_Loading (false)
+    m_Loading (false),
+    m_thumbFlavor (defaultFlavor)
 {
 }
 
@@ -430,7 +432,8 @@ WallpaperDescriptor::WallpaperDescriptor (
         const WallpaperDescriptor &orig) :
     QObject (),
     m_Images (NVariants),
-    m_Loading (false)
+    m_Loading (false),
+    m_thumbFlavor (defaultFlavor)
 {
     m_Images = orig.m_Images;
 }
@@ -439,7 +442,8 @@ WallpaperDescriptor::WallpaperDescriptor(
         const QString &filename) : 
     QObject (),
     m_Images (NVariants),
-    m_Loading (false)
+    m_Loading (false),
+    m_thumbFlavor (defaultFlavor)
 {
     setFilename (filename);
 }
@@ -706,12 +710,24 @@ WallpaperDescriptor::initiateThumbnailer ()
     m_Thumbnailer = new Thumbnailer;
 #endif
 
-    #ifdef LOTDEBUG
     QStringList list = Thumbnailer::getFlavors();
+#ifdef LOTDEBUG
     foreach (QString flavor, list) {
         SYS_DEBUG ("*** flavor = %s", SYS_STR(flavor));
     }
-    #endif
+#endif
+
+    if (! list.contains (defaultFlavor))
+    {
+      SYS_DEBUG ("Default flavor \"%s\" is not exists, falling back to \"%s\"",
+                 SYS_STR (defaultFlavor), SYS_STR (fallbackFlavor));
+      m_thumbFlavor = fallbackFlavor;
+      if (! list.contains (fallbackFlavor))
+      {
+        SYS_WARNING ("ERROR: Flavor \"%s\" is not exists!!!");
+      }
+    }
+
     connect (m_Thumbnailer, SIGNAL(thumbnail(QUrl,QUrl,QPixmap,QString)),
             this, SLOT(thumbnailReady(QUrl,QUrl,QPixmap,QString)) );
     connect (m_Thumbnailer, SIGNAL(error(QString,QUrl)),
@@ -721,7 +737,7 @@ WallpaperDescriptor::initiateThumbnailer ()
             this, SLOT(thumbnailLoadingFinished(int)));
 #endif
 
-    m_Thumbnailer->request (urisList, mimeList, true, defaultFlavor);
+    m_Thumbnailer->request (urisList, mimeList, true, m_thumbFlavor);
 }
 
 /*!
