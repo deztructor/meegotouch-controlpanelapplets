@@ -43,10 +43,8 @@ static const int ExtraMargin = 0;
 static const int TitleBarHeight = 60;
 static const int alwaysVisibleFromImage = 15;
 
-static const qreal scaleLowerLimit = 20.0;
-static const qreal scaleUpperLimit = 400.0;
-static const qreal rotationMin = -360.0;
-static const qreal rotationMax = +720.0;
+static const qreal scaleLowerLimit = 0.2;
+static const qreal scaleUpperLimit = 4.0;
 
 /******************************************************************************
  *
@@ -88,6 +86,7 @@ WallpaperViewWidget::WallpaperViewWidget (
     /*
      * Enabling two finger gestures.
      */
+    setAcceptTouchEvents (true);
     grabGesture (Qt::PinchGesture, Qt::GestureFlags());
     grabGesture (Qt::PanGesture, Qt::GestureFlags());
 
@@ -150,27 +149,6 @@ WallpaperViewWidget::applyStyle()
     connect (m_Physics, SIGNAL(panningStopped()),
             this, SLOT(panningPhysicsPanningStopped()));
 
-    m_ScalePhysics = new MPhysics2DPanning (this);
-    m_ScalePhysics->setPanDirection (Qt::Vertical | Qt::Horizontal);
-    m_ScalePhysics->setEnabled(true);
-    
-    m_ScalePhysics->setPointerSpringK  (style()->pointerSpringK());
-    m_ScalePhysics->setFriction        (style()->friction());
-    m_ScalePhysics->setSlidingFriction (style()->slidingFriction());
-    m_ScalePhysics->setBorderSpringK   (style()->borderSpringK());
-    m_ScalePhysics->setBorderFriction  (style()->borderFriction());
-    m_ScalePhysics->setMaximumVelocity (style()->maximumVelocity());
-    m_ScalePhysics->setRange (
-            QRectF(rotationMin, scaleLowerLimit, rotationMax, scaleUpperLimit));
-    m_ScalePhysics->setBoundsBehavior (MPhysics2DPanning::StopAtBounds);
-    SYS_WARNING ("m_ScalePhysics->setPosition (%g, %g)", 0.0, 100.0);
-    m_ScalePhysics->setPosition (QPointF(0, 100.0));
-
-    connect (m_ScalePhysics, SIGNAL(positionChanged(const QPointF &)),
-            this, SLOT(scalePhysicsPositionChanged(const QPointF &)));
-    connect (m_ScalePhysics, SIGNAL(panningStopped()),
-            this, SLOT(scalePhysicsPanningStopped()));
-
     m_BgColor = style()->imageBackgroundColor();
 }
 
@@ -197,27 +175,7 @@ WallpaperViewWidget::panningPhysicsPanningStopped ()
 }
 
 void 
-WallpaperViewWidget::scalePhysicsPositionChanged(
-        const QPointF    &position)
-{
-    qreal scalefactor = position.y() / 100.0;
-
-    //SYS_WARNING ("scaling  --------> %s", SYS_POINTF(position));
-    if (scalefactor < 0.05)
-        scalefactor = 0.05;
-
-    if (m_Scaling)
-        m_Trans.setScale (scalefactor);
-
-    if (m_Rotating)
-        m_Trans.setRotation (position.x());
-
-    queueRedrawImage ();
-}
-
-
-void 
-WallpaperViewWidget::scalePhysicsPanningStopped ()
+WallpaperViewWidget::pinchStopped ()
 {
     SYS_DEBUG ("");
     qreal rotation  = m_Trans.rotation();
@@ -262,10 +220,6 @@ WallpaperViewWidget::scalePhysicsPanningStopped ()
 
     if (m_HasPendingSave)
         saveImage ();
-#if 0
-    if (m_ScalePhysics->enabled())
-        m_ScalePhysics->setEnabled(false);
-#endif
 }
 
 void
@@ -279,18 +233,10 @@ WallpaperViewWidget::rotateAnimationFinished ()
         m_ImageWidget->setRotation (rotation);
     }
 
-    m_Trans.setRotation(rotation);
+    m_Trans.setRotation (rotation);
 
-    QPointF position;
-    position =  m_ScalePhysics->position ();
-    SYS_DEBUG ("m_ScalePhysics->position() = %g, %g", position.x(), position.y());
-    SYS_DEBUG ("m_ScalePhysics->setPosition(%g, %g)",
-            rotation, m_Trans.scale() * 100.0);
-
-    m_ScalePhysics->setPosition (QPointF(rotation, m_Trans.scale() * 100.0));
-        
     setupPanningPhysics ();
-    
+
     if (m_HasPendingSave)
         saveImage ();
 }
@@ -309,11 +255,9 @@ WallpaperViewWidget::saveImage ()
     SYS_DEBUG ("*** rotation     = %g", m_Trans.rotation());
     SYS_DEBUG ("*** prop.running = %s",
             SYS_BOOL(m_RotateAnimation.state() == QAbstractAnimation::Running));
-    SYS_DEBUG ("*** scale.running= %s", SYS_BOOL(m_ScalePhysics->inMotion()));
     SYS_DEBUG ("*** pann.running = %s", SYS_BOOL(m_Physics->inMotion()));
 
     if (m_RotateAnimation.state() == QAbstractAnimation::Running ||
-        m_ScalePhysics->inMotion() ||
         m_Physics->inMotion()) {
         SYS_WARNING (">>>>>>>>>>>> delaying save....");
         m_HasPendingSave = true;
@@ -565,9 +509,6 @@ WallpaperViewWidget::slotDoneActivated ()
     if (m_Physics->inMotion())
         m_Physics->stop();
 
-    if (m_ScalePhysics->inMotion()) 
-        m_ScalePhysics->stop();
-
     saveImage ();
 }
  
@@ -586,9 +527,6 @@ WallpaperViewWidget::slotCancelActivated ()
      */
     if (m_Physics->inMotion())
         m_Physics->stop();
-
-    if (m_ScalePhysics->inMotion()) 
-        m_ScalePhysics->stop();
 
     /*
      * Emitting a signal to show the cancel is clicked. Then emitting a signal
@@ -756,6 +694,7 @@ WallpaperViewWidget::wheelEvent (
 
 
     m_Physics->stop ();
+#ifdef XYZ
     m_ScalePhysics->pointerPress(QPointF());
     
     if (!ctrl) {
@@ -767,6 +706,7 @@ WallpaperViewWidget::wheelEvent (
     }
 
     m_ScalePhysics->pointerRelease();
+#endif
 
     m_Rotating = false;
     m_Scaling = false;
@@ -900,12 +840,11 @@ WallpaperViewWidget::pinchGestureStarted (
     if (m_RotateAnimation.state() == QAbstractAnimation::Running)
         return;
     
-    m_OriginalScaleFactor = m_Trans.scale ();
-    m_OriginalRotation    = pinchGesture->rotationAngle ();
-
-    QPointF pressAt (m_Trans.rotation(), m_Trans.scale() * 100.0);
-    SYS_DEBUG ("m_ScalePhysics->pointerPress (%s)", SYS_POINTF (pressAt));
-    m_ScalePhysics->pointerPress (pressAt);
+    /*
+     * Save some values for pinchGestureUpdate
+     */
+    m_LastTransScale     = m_Trans.scale ();
+    m_LastTransRotation  = m_Trans.rotation ();
 }
 
 void 
@@ -917,29 +856,12 @@ WallpaperViewWidget::pinchGestureUpdate (
      * 
      */
     Q_UNUSED (event);
-#ifdef LOTDEBUG
-    SYS_DEBUG ("**********************************************");
-    SYS_DEBUG ("*** rotation              = %g", m_Trans.rotation());
-    SYS_DEBUG ("*** scale                 = %g", m_Trans.scale());
-    SYS_DEBUG ("***");
-    SYS_DEBUG ("*** totalRotationAngle    = %g", pinchGesture->totalRotationAngle());
-    SYS_DEBUG ("*** rotationAngle         = %g", pinchGesture->rotationAngle());
-    SYS_DEBUG ("*** lastRotationAngle     = %g", pinchGesture->lastRotationAngle());
-    SYS_DEBUG ("***");
-    SYS_DEBUG ("*** totalScaleFactor      = %g", pinchGesture->totalScaleFactor());
-    SYS_DEBUG ("*** scaleFactor           = %g", pinchGesture->scaleFactor());
-    SYS_DEBUG ("*** lastScaleFactor       = %g", pinchGesture->lastScaleFactor());
-    SYS_DEBUG ("*** m_OriginalScaleFactor = %g", m_OriginalScaleFactor);
-    SYS_DEBUG ("*** m_OriginalRotation    = %g", m_OriginalRotation);
-    SYS_DEBUG ("*** m_Scaling             = %s", SYS_BOOL(m_Scaling));
-    SYS_DEBUG ("*** m_Rotating            = %s", SYS_BOOL(m_Rotating));
-#endif
 
     if (!m_Scaling && !m_Rotating) {
         qreal scaleDiff = pinchGesture->totalScaleFactor();
-        qreal rotationDiff = m_OriginalRotation - pinchGesture->rotationAngle();
+        qreal rotationDiff = pinchGesture->rotationAngle();
 
-        if (rotationDiff > 10.0 || rotationDiff < -10.0) {
+        if (qAbs (rotationDiff) > 10.0) {
             SYS_WARNING ("NOW STARTING ROTATING.");
             m_Rotating = true;
         } else if (scaleDiff > 1.1 || scaleDiff < 0.9) {
@@ -947,81 +869,26 @@ WallpaperViewWidget::pinchGestureUpdate (
             m_Scaling = true;
         }
     }
-#if 0
-    if (!m_ScalePhysics->enabled()) {
-        qreal scaleDiff = m_Trans.scale() - pinchGesture->scaleFactor();
-        qreal rotationDiff = m_Trans.rotation() - pinchGesture->rotationAngle();
-        bool  enabled = false;
-
-        if (rotationDiff > 10.0 || rotationDiff < -10.0) {
-            m_ScalePhysics->setPanDirection (Qt::Horizontal | Qt::Vertical);
-            m_ScalePhysics->setEnabled(true);
-            enabled = true;
-        } else if (scaleDiff > 0.1 || scaleDiff < -0.1) {
-            m_ScalePhysics->setPanDirection (Qt::Horizontal | Qt::Vertical);
-            m_ScalePhysics->setEnabled(true);
-            enabled = true;
-        }
-       
-        if (enabled) {
-            QPointF pressAt (m_Trans.rotation(), m_Trans.scale() * 100.0);
-            SYS_DEBUG ("m_ScalePhysics->pointerPress (%s)", SYS_POINTF(pressAt));
-            m_ScalePhysics->pointerPress(pressAt);
-        }
-    } 
-#endif
 
     if (m_Rotating) {
-        /*
-         * INFO: Lets not to allow the user to rotate more than 180 degree
-         * in a pinch-rotate gesture, as the gesture rotationAngle could
-         * give as very bad values (i mean transition from 5 -> 355 degree)
-         * and the MPhysics will generates bad artifacts :-S
-         */
-        qreal rotationAngle = pinchGesture->rotationAngle ();
-
-        // To solve the bad transitions, lets translate the angles
-        if (rotationAngle > 180.0)
-            rotationAngle -= 360.0;
-        if (rotationAngle < -180.0)
-            rotationAngle += 360.0;
-
-        /*
-         * XXX: FIXME: This isn't working fully properly:
-         * Still there is a glitch when user rotates more than 180 degree in
-         * one pinch-rotate gesture :-S (Should we really care with this corner case?)
-         */
-        rotationAngle = qBound ((qreal)-180.0f, rotationAngle, (qreal)180.0f);
-
-        QPointF moveTo (-rotationAngle, m_Trans.scale () * 100.0);
-
-        SYS_WARNING ("NOW ROTATING.");
-        SYS_WARNING ("*** m_ScalePhysics->pointerMove(%s)", SYS_POINTF(moveTo));
-        m_ScalePhysics->pointerMove(moveTo);
+        // Keep it very simple:
+        m_Trans.setRotation (pinchGesture->rotationAngle () + m_LastTransRotation);
     } else if (m_Scaling) {
         /*
-         * With this formula the pinch-zoom seems to be good enough
-         * (the image size is almost properly changing as your fingers...)
+         * TODO: friction ... etc
          */
-        QPointF moveTo (m_Trans.rotation(),
-                        -pinchGesture->totalScaleFactor ()
-                        * (m_OriginalScaleFactor * 100.0));
+        qreal newScale = pinchGesture->totalScaleFactor () * m_LastTransScale;
 
-        SYS_WARNING ("NOW SCALING");
-        SYS_WARNING ("*** m_ScalePhysics->pointerMove(%s)", SYS_POINTF(moveTo));
-        m_ScalePhysics->pointerMove(moveTo);
+        /* Limiting */
+        if (newScale < scaleLowerLimit)
+            newScale = scaleLowerLimit;
+        else if (newScale > scaleUpperLimit)
+            newScale = scaleUpperLimit;
+
+        m_Trans.setScale (newScale);
     }
 
-#if 0
-    if (m_ScalePhysics->enabled()) {
-        QPointF moveTo (
-                -1.0 * pinchGesture->rotationAngle(),
-                -1.0 * pinchGesture->scaleFactor() * 100.0);
-    
-        SYS_DEBUG ("m_ScalePhysics->pointerMove (%s)", SYS_POINTF(moveTo));
-        m_ScalePhysics->pointerMove(moveTo);
-    }
-#endif
+    queueRedrawImage ();
 }
 
 void 
@@ -1031,8 +898,8 @@ WallpaperViewWidget::pinchGestureEnded (
 {
     Q_UNUSED (event);
     Q_UNUSED (pinchGesture);
-    SYS_DEBUG ("m_ScalePhysics->pointerRelease ()");
-    m_ScalePhysics->pointerRelease ();
+
+    pinchStopped ();
 
     m_Scaling = false;
     m_Rotating = false;
