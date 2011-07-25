@@ -149,10 +149,11 @@ class WallpaperViewWidget : public DcpStylableWidget
         bool                  m_Rotating;
         bool                  m_PanOngoing;
         bool                  m_HasPendingRedraw;
+        bool                  m_HasPendingSave;
         MPhysics2DPanning    *m_Physics;
         MPhysics2DPanning    *m_ScalePhysics;
         QPropertyAnimation    m_RotateAnimation;
-
+        
 };
 
 #endif

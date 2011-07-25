@@ -31,7 +31,7 @@
 #include <MPositionIndicator>
 #include <MWidgetStyle>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -66,11 +66,11 @@ WallpaperViewWidget::WallpaperViewWidget (
     m_Rotating (false),
     m_PanOngoing (false),
     m_HasPendingRedraw (false),
+    m_HasPendingSave (false),
     m_Physics (0)
 {
     MWindow *win = MApplication::activeWindow ();
 
-    SYS_DEBUG ("");
     setObjectName ("WallpaperViewWidget");
 
     /*
@@ -102,7 +102,6 @@ WallpaperViewWidget::WallpaperViewWidget (
 
 WallpaperViewWidget::~WallpaperViewWidget ()
 {
-    SYS_DEBUG ("");
     if (Wallpaper::useFullScreen) {
         MWindow *win = MApplication::activeWindow ();
 
@@ -114,7 +113,6 @@ WallpaperViewWidget::~WallpaperViewWidget ()
 void 
 WallpaperViewWidget::applyStyle()
 {
-    SYS_DEBUG ("");
     DcpStylableWidget::applyStyle ();
 
     if (m_Physics) {
@@ -193,13 +191,15 @@ WallpaperViewWidget::panningPhysicsPanningStopped ()
 {
     SYS_DEBUG ("");
     redrawImage ();
+
+    if (m_HasPendingSave)
+        saveImage ();
 }
 
 void 
 WallpaperViewWidget::scalePhysicsPositionChanged(
         const QPointF    &position)
 {
-    //SYS_DEBUG ("");
     qreal scalefactor = position.y() / 100.0;
 
     //SYS_WARNING ("scaling  --------> %s", SYS_POINTF(position));
@@ -260,6 +260,8 @@ WallpaperViewWidget::scalePhysicsPanningStopped ()
 
     queueRedrawImage ();
 
+    if (m_HasPendingSave)
+        saveImage ();
 #if 0
     if (m_ScalePhysics->enabled())
         m_ScalePhysics->setEnabled(false);
@@ -271,8 +273,6 @@ WallpaperViewWidget::rotateAnimationFinished ()
 {
     SYS_DEBUG ("");
     qreal rotation = m_ImageWidget->rotation();
-
-    SYS_DEBUG ("");
 
     if (qAbs (qAbs (rotation) - 360.0) < 0.1) {
         rotation = 0.0;
@@ -290,6 +290,9 @@ WallpaperViewWidget::rotateAnimationFinished ()
     m_ScalePhysics->setPosition (QPointF(rotation, m_Trans.scale() * 100.0));
         
     setupPanningPhysics ();
+    
+    if (m_HasPendingSave)
+        saveImage ();
 }
 
 
@@ -304,6 +307,18 @@ WallpaperViewWidget::saveImage ()
     SYS_DEBUG ("*** offset       = %s", SYS_POINTF(m_Trans.offset()));
     SYS_DEBUG ("*** scale        = %g", m_Trans.scale());
     SYS_DEBUG ("*** rotation     = %g", m_Trans.rotation());
+    SYS_DEBUG ("*** prop.running = %s",
+            SYS_BOOL(m_RotateAnimation.state() == QAbstractAnimation::Running));
+    SYS_DEBUG ("*** scale.running= %s", SYS_BOOL(m_ScalePhysics->inMotion()));
+    SYS_DEBUG ("*** pann.running = %s", SYS_BOOL(m_Physics->inMotion()));
+
+    if (m_RotateAnimation.state() == QAbstractAnimation::Running ||
+        m_ScalePhysics->inMotion() ||
+        m_Physics->inMotion()) {
+        SYS_WARNING (">>>>>>>>>>>> delaying save....");
+        m_HasPendingSave = true;
+        return;
+    }
 
     if (m_Trans.noTransformation()) {
         SYS_DEBUG ("No transformations, we can copy the file.");
@@ -322,12 +337,12 @@ WallpaperViewWidget::saveImage ()
      * otherwise the businesslogic will reject the next edit start requests.
      */
     m_BusinessLogic->endEdit ();
+    m_HasPendingSave = false;
 }
 
 void
 WallpaperViewWidget::dropImage ()
 {
-    SYS_DEBUG ("");
     /*
      * Notifying the business logic about the editing ended. It is important,
      * otherwise the businesslogic will reject the next edit start requests.
@@ -340,13 +355,11 @@ WallpaperViewWidget::initialize (
         QuillImage   &image,
         QSize         size)
 {
-    SYS_DEBUG ("");
     WallpaperDescriptor  desc = m_BusinessLogic->editedImage ();
     QSize                sceneSize;
     int                  xMarg = 0;
     int                  yMarg = 0;
 
-    SYS_DEBUG ("");
     if (m_Initialized) {
         SYS_WARNING ("Already initialized.");
         return;
@@ -386,7 +399,6 @@ WallpaperViewWidget::initialize (
 bool 
 WallpaperViewWidget::pagePans () const
 {
-    SYS_DEBUG ("");
     return false;
 }
 
@@ -394,7 +406,6 @@ WallpaperViewWidget::pagePans () const
 void
 WallpaperViewWidget::polishEvent ()
 {
-    SYS_DEBUG ("");
     QGraphicsWidget  *parent;
     MApplicationPage *page = 0;
 
@@ -460,14 +471,12 @@ WallpaperViewWidget::polishEvent ()
 bool 
 WallpaperViewWidget::back ()
 {
-    SYS_DEBUG ("");
     MWindow *win;
 
     /*
      * Turning back from fullscreen. This could be done in the destructor, but
      * that ends up with a segfault in the Qt...
      */
-    SYS_DEBUG ("");
 
     win = MApplication::activeWindow ();
     if (win)
@@ -481,7 +490,6 @@ WallpaperViewWidget::back ()
 int
 WallpaperViewWidget::imageX () const
 {
-    SYS_DEBUG ("");
     int retval = 0;
 
     //retval += m_Trans.x();
@@ -493,7 +501,6 @@ WallpaperViewWidget::imageX () const
 int
 WallpaperViewWidget::imageY () const
 {
-    SYS_DEBUG ("");
     int retval = 0;
 
     //retval += m_Trans.y();
@@ -505,14 +512,12 @@ WallpaperViewWidget::imageY () const
 int
 WallpaperViewWidget::imageDX () const
 {
-    SYS_DEBUG ("");
     return m_Trans.scale() * m_Image.width();
 }
 
 int
 WallpaperViewWidget::imageDY () const
 {
-    SYS_DEBUG ("");
     return m_Trans.scale() * m_Image.height();
 }
 
@@ -520,7 +525,6 @@ QPixmap
 WallpaperViewWidget::generatePixmap (
         const WallpaperITrans  &transformations)
 {
-    SYS_DEBUG ("");
     QImage    transformed = transformedImage();
     QPixmap   retval (transformations.expectedSize());
     QPainter  painter (&retval);
@@ -662,7 +666,6 @@ WallpaperViewWidget::queueRedrawImage ()
 void 
 WallpaperViewWidget::redrawImage ()
 {
-    SYS_DEBUG ("");
     QSize   imageSize = imageVisualSize ();
     QPointF offset (
             imageX() - m_ImageWidget->size().width() / 2.0, 
@@ -684,7 +687,6 @@ WallpaperViewWidget::redrawImage ()
 QSize
 WallpaperViewWidget::imageVisualSize (qreal scale)
 {
-    SYS_DEBUG ("");
     qreal realdx, realdy;
     QSize  retval;
 
@@ -708,7 +710,6 @@ WallpaperViewWidget::imageVisualSize (qreal scale)
 QImage
 WallpaperViewWidget::transformedImage ()
 {
-    SYS_DEBUG ("");
     QSize  visualSize (imageVisualSize(m_Trans.scale()));
     QImage retval (visualSize, QImage::Format_RGB16);
     QPainter  painter (&retval);
@@ -745,7 +746,6 @@ void
 WallpaperViewWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
 {
-    SYS_DEBUG ("");
     bool     ctrl = QApplication::keyboardModifiers() & Qt::ControlModifier;
     
     /*
@@ -1038,7 +1038,6 @@ void
 WallpaperViewWidget::setupPanningPhysics (
         bool movePh)
 {
-    SYS_DEBUG ("");
     /*
      * The widget's geometry is disturbed by the transparent toolbar, 
      * but the expectedsize is stable.
