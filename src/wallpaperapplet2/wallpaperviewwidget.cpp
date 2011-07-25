@@ -999,13 +999,17 @@ WallpaperViewWidget::pinchGestureUpdate (
         SYS_WARNING ("*** m_ScalePhysics->pointerMove(%s)", SYS_POINTF(moveTo));
         m_ScalePhysics->pointerMove(moveTo);
     } else if (m_Scaling) {
-        QPointF moveTo (m_Trans.rotation(), -pinchGesture->totalScaleFactor () * 100);
+        /*
+         * With this formula the pinch-zoom seems to be good enough
+         * (the image size is almost properly changing as your fingers...)
+         */
+        QPointF moveTo (m_Trans.rotation(),
+                        -pinchGesture->totalScaleFactor ()
+                        * (m_OriginalScaleFactor * 100.0));
 
         SYS_WARNING ("NOW SCALING");
-        SYS_WARNING ("\nXXXXXXXXXXXXXXXXXXXx m_ScalePhysics scale = %.2f",
-                     m_ScalePhysics->position ().y ());
         SYS_WARNING ("*** m_ScalePhysics->pointerMove(%s)", SYS_POINTF(moveTo));
-        m_ScalePhysics->pointerMove(moveTo); 
+        m_ScalePhysics->pointerMove(moveTo);
     }
 
 #if 0
