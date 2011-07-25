@@ -5,15 +5,15 @@
 #
 INSTALL_FILE=debian/duicontrolpanel-wallpaperapplet.install
 
-LIBNAME=libwallpaperapplet
-DESKTOPNAME=wallpaper
+LIBNAME=libwallpaperapplet2
+DESKTOPNAME=wallpaper2
 echo '##########################################################'
-if [ "$1x" == "improvedx" ]; then
-    LIBNAME=libwallpaperapplet2
-    DESKTOPNAME=wallpaper2
-    echo '##### Building package with the NEW wallpaper applet #####'
+if [ "$1x" == "oldx" ]; then
+    LIBNAME=libwallpaperapplet
+    DESKTOPNAME=wallpaper
+    echo '##### Building package with the *OLD* wallpaper applet #####'
 else
-    echo '##### Building package with the old wallpaper applet #####'
+    echo '##### Building package with the new wallpaper applet #####'
 fi
 echo '##########################################################'
 
