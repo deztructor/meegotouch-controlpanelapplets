@@ -35,6 +35,7 @@ QTM_USE_NAMESPACE
 #include <QProcess>
 #include <QDBusInterface>
 #include <QDBusObjectPath>
+#include <MGConfItem>
 
 #define OS_NAME_FALLBACK "MeeGo"
 
@@ -362,8 +363,20 @@ AboutBusinessLogic::licenseText ()
     if (m_licenseFile.isEmpty ())
         return "";
 
+    MGConfItem lang ("/meegotouch/i18n/language");
+    QString    langStr = lang.value ().toString ();
+
     if (m_licenseFile.at (0) != '/')
         m_licenseFile = configPath + m_licenseFile;
+
+    /*
+     * Check whether we can fetch actually the localized text
+     * (suffix should be the language or ISO code [fi/en_US..]
+     */
+    if (QFile::exists (m_licenseFile + "." + langStr))
+        m_licenseFile = m_licenseFile + "." + langStr;
+    else if (QFile::exists (m_licenseFile + "." + langStr.left (2)))
+        m_licenseFile = m_licenseFile + "." + langStr.left (2);
 
     QFile licenseFile (m_licenseFile);
     if (!licenseFile.open (QIODevice::ReadOnly | QIODevice::Text))
