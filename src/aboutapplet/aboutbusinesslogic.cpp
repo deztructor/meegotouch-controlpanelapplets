@@ -131,31 +131,33 @@ AboutBusinessLogic::osVersion ()
     if (index > 0)
         retval = retval.mid (index);
 
-    if ((retval.isNull () == false) && (retval != ""))
-    {
-        return retval;
-    }
+    if (retval.isEmpty()) {
+        /*
+         * This is a fallback method... (works fine on Ubuntu)
+         * Try to get the version number from the lsb-release
+         */
+        QFile lsbrel_file ("/etc/lsb-release");
+        if (lsbrel_file.open (QIODevice::ReadOnly)) {
+            QString contents (lsbrel_file.readAll ().constData ());
+            lsbrel_file.close ();
 
-    /*
-     * This is a fallback method... (works fine on Ubuntu)
-     * Try to get the version number from the lsb-release
-     */
-    QFile lsbrel_file ("/etc/lsb-release");
-    if (lsbrel_file.open (QIODevice::ReadOnly))
-    {
-        QString contents (lsbrel_file.readAll ().constData ());
-        lsbrel_file.close ();
-
-        QRegExp version ("DISTRIB_RELEASE=(\\S*)");
-        int pos = version.indexIn (contents);
-        if (pos > -1)
-        {
-            retval = version.cap (1);
-            return retval;
+            QRegExp version ("DISTRIB_RELEASE=(\\S*)");
+            int pos = version.indexIn (contents);
+            if (pos > -1) {
+                retval = version.cap (1);
+                goto finalize;
+            }
         }
     }
 
-    return "-";
+finalize:
+    if (retval.isEmpty()) {
+        retval = "-";
+    } else {
+        retval = "<b>PR1.1</b><br>(" + retval + ")";
+    }
+
+    return retval;
 }
 
 QString
