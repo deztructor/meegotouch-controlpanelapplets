@@ -23,7 +23,11 @@ DEB_BUILD_OPTIONS=parallel=5
 
 # Build duicontrolpanel-wallpaperapplet from the new
 # improved wallpaper applet source tree (wallpaperapplet2)
+# INFO: this is the *DEFAULT* now
 DEB_BUILD_OPTIONS=wallpaper2
+
+# Build the old wallpaper applet (instead of the new one^^^)
+DEB_BUILD_OPTIONS=wallpaper1
 
 # Disable tests building (an empty -tests package will be generated)
 DEB_BUILD_OPTIONS=nocheck

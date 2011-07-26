@@ -15,9 +15,9 @@ QMAKE_PARAMS = $(empty)
 # Define PUBLIC_RELEASE if changelog is not contains ~ in version number
 CXXFLAGS += `head -n 1 debian/changelog | grep '~' > /dev/null || echo -DPUBLIC_RELEASE`
 
-WALLPAPER = old
-ifneq (,$(findstring wallpaper2,$(DEB_BUILD_OPTIONS)))
-	WALLPAPER = improved
+WALLPAPER = improved
+ifneq (,$(findstring wallpaper1,$(DEB_BUILD_OPTIONS)))
+	WALLPAPER = old
 endif
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
@@ -122,12 +122,12 @@ binary-aegisgen:
 	              .. debian/duicontrolpanel-soundsettingsapplet.aegis=_aegis
 	aegis-deb-add -control debian/duicontrolpanel-batteryapplet/DEBIAN/control \
 	              .. debian/duicontrolpanel-batteryapplet.aegis=_aegis
-ifneq (,$(findstring wallpaper2,$(DEB_BUILD_OPTIONS)))
-	aegis-deb-add -control debian/duicontrolpanel-wallpaperapplet/DEBIAN/control \
-	              .. debian/duicontrolpanel-wallpaperapplet2.aegis=_aegis
-else
+ifneq (,$(findstring old,$(DEB_BUILD_OPTIONS)))
 	aegis-deb-add -control debian/duicontrolpanel-wallpaperapplet/DEBIAN/control \
 	              .. debian/duicontrolpanel-wallpaperapplet.aegis=_aegis
+else
+	aegis-deb-add -control debian/duicontrolpanel-wallpaperapplet/DEBIAN/control \
+	              .. debian/duicontrolpanel-wallpaperapplet2.aegis=_aegis
 endif
 
 

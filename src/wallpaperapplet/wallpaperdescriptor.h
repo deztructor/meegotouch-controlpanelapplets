@@ -240,6 +240,7 @@ protected:
     QVector<Image>        m_Images;
     QPointer<Thumbnailer> m_Thumbnailer;
     bool                  m_Loading;
+    QString               m_thumbFlavor;
 
     #ifdef UNIT_TEST
     friend class Ut_WallpaperDescriptor;

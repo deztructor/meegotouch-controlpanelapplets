@@ -1,8 +1,17 @@
 meegotouch-controlpanelapplets (0.20.62~1) meegotouch; urgency=low
 
   * Fixes: NB#262474 - [TASK] AlertToneBrowser: newly added items aren't sorted 
+  * Fixes: NB#273918 - either user should be able to set wallpaper in 
+    Arbitrary angles or shouldn't be
+  * Fixes: NB#261019 - settings doesn't respond for sometime while saving the
+    wallpaper.
+  * Fixes: NB#262622 - After downloading wallpaper from ovi-store it is
+    appears as black thumbnail placeholder in wallpaper applet
+  * Fixes: NB#270857 - [TASK] Add PR1.1 to "About product" applet before the 
+    actual version string
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 07 Jul 2011 14:27:04 +0300
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 25 Jul 2011 16:35:50 +0300
 
 meegotouch-controlpanelapplets (0.20.61-1) meegotouch; urgency=low
 

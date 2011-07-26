@@ -79,7 +79,7 @@ WallpaperWorkerThread::run ()
             break;
     }
 
-    SYS_WARNING ("End of thread");
+    SYS_DEBUG ("End of thread");
 }
 
 void

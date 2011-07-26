@@ -69,7 +69,7 @@ Wallpaper::constructPath (
         retval += filename;
     }
 
-    SYS_WARNING ("returning %s", SYS_STR(retval));
+    SYS_DEBUG ("returning %s", SYS_STR(retval));
     return retval;
 }
 
@@ -137,9 +137,6 @@ Wallpaper::setFileVariant (
         extension = retval.mid (length - 4, 4);
         retval = retval.remove (length - 4, 4);
     }
-
-    //SYS_WARNING ("*** extension = %s", SYS_STR(extension));
-    //SYS_WARNING ("*** retval    = %s", SYS_STR(retval));
 
     retval = retval + variant + extension;
     return retval;

@@ -79,8 +79,20 @@ target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 backup.files = wallpaper.conf
 backup.path  = /usr/share/backup-framework/applications/
 
-desktop.files += *.desktop
+contains(DEFINES, HAVE_CONTENT_MANAGER) {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += ContentManager
+}
+
+desktopsrc = wallpaper.desktop.harmattan
+contains(DEFINES, MEEGO) {
+    desktopsrc = wallpaper.desktop.meego
+}
+desktopfile = wallpaper.desktop
+desktop.files += $$desktopfile
 desktop.path = $$(DEBIAN_DESTDIR)/usr/lib/duicontrolpanel
+desktop.commands = cp $$desktopsrc $$desktopfile
+desktop.CONFIG += no_check_exist
 
 css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libwallpaperapplet/style
 css.files = libwallpaperapplet.css

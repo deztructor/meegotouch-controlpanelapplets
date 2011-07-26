@@ -109,8 +109,8 @@ class WallpaperViewWidget : public DcpStylableWidget
          */
         void panningPhysicsPositionChanged (const QPointF &position);
         void panningPhysicsPanningStopped ();
-        void scalePhysicsPositionChanged(const QPointF &position);
-        void scalePhysicsPanningStopped ();
+        void pinchUpdate ();
+        void pinchStopped ();
         void rotateAnimationFinished ();
 
     protected:
@@ -142,17 +142,16 @@ class WallpaperViewWidget : public DcpStylableWidget
 
         QPointF               m_UserOffset;
 
-        qreal                 m_OriginalScaleFactor;
-        qreal                 m_OriginalRotation;
+        qreal                 m_LastTransScale;
+        qreal                 m_LastTransRotation;
         bool                  m_PinchOngoing;
         bool                  m_Scaling;
         bool                  m_Rotating;
         bool                  m_PanOngoing;
         bool                  m_HasPendingRedraw;
+        bool                  m_HasPendingSave;
         MPhysics2DPanning    *m_Physics;
-        MPhysics2DPanning    *m_ScalePhysics;
         QPropertyAnimation    m_RotateAnimation;
-
 };
 
 #endif
