@@ -180,7 +180,7 @@ Ut_AboutBusinessLogic::testOsVersion ()
     systeminfo_firmware_retval = "HARDWARE_PROGRAM_VERSION13";
     name = m_Api->osVersion();
 
-    QCOMPARE (name, QString ("VERSION13"));
+    QVERIFY (name.contains (QString ("VERSION13")));
 
     // check the LSB release file version
     systeminfo_firmware_retval = "";
