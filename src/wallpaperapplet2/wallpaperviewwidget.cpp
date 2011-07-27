@@ -248,14 +248,17 @@ WallpaperViewWidget::rotateAnimationFinished ()
 void
 WallpaperViewWidget::saveImage ()
 {
+    #if 0
     SYS_DEBUG ("--------------------------------------------------------");
     SYS_DEBUG ("*** expectedSize = %s", SYS_SIZE(m_Trans.expectedSize()));
+    SYS_DEBUG ("*** originalSize = %s", SYS_SIZE(m_OriginalSize));
     SYS_DEBUG ("*** offset       = %s", SYS_POINTF(m_Trans.offset()));
     SYS_DEBUG ("*** scale        = %g", m_Trans.scale());
     SYS_DEBUG ("*** rotation     = %g", m_Trans.rotation());
     SYS_DEBUG ("*** prop.running = %s",
             SYS_BOOL(m_RotateAnimation.state() == QAbstractAnimation::Running));
     SYS_DEBUG ("*** pann.running = %s", SYS_BOOL(m_Physics->inMotion()));
+    #endif
 
     if (m_RotateAnimation.state() == QAbstractAnimation::Running ||
         m_Physics->inMotion()) {
@@ -264,12 +267,11 @@ WallpaperViewWidget::saveImage ()
         return;
     }
 
-    if (m_Trans.noTransformation()) {
-        SYS_DEBUG ("No transformations, we can copy the file.");
+    if (m_Trans.noTransformation() && 
+            m_Trans.expectedSize() == m_OriginalSize) {
         m_Saving = true;
         m_BusinessLogic->setWallpaper ();
     } else {
-        SYS_DEBUG ("We have transformations, we have to edit the file.");
         QPixmap pixmap = generatePixmap (m_Trans);
 
         m_Saving = true;
