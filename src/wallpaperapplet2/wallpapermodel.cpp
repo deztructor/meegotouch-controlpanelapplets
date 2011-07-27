@@ -31,7 +31,7 @@
 #include "wallpaperdescriptor.h"
 #include "gridimagewidget.h"
 
-#undef DEBUG
+//#define DEBUG
 #define WARNING
 #include <../debug.h>
 
@@ -67,10 +67,22 @@ WallpaperModel::WallpaperModel (
     connect (m_Thumbnailer, SIGNAL(finished(int)),
             this, SLOT(thumbnailLoadingFinished(int)));
 
+    /*
+     * A timer that is watching the file size changes.
+     */
     m_FileSystemTimer.setInterval (fileSystemReCheckDelay);
     m_FileSystemTimer.setSingleShot (true);
     connect (&m_FileSystemTimer, SIGNAL(timeout()),
             this, SLOT(loadFromDirectory()));
+
+    /*
+     * A timer that is watching the individual files.
+     */
+    m_FileTimer.setInterval (3 * fileSystemReCheckDelay);
+    m_FileTimer.setSingleShot (true);
+    connect (&m_FileTimer, SIGNAL(timeout()),
+            this, SLOT(fileTimerTimeout()));
+
 
     loadFromDirectory ();
     startWatchFiles ();
@@ -185,7 +197,8 @@ WallpaperModel::wallpaperChanged ()
     SYS_DEBUG ("*** currentPath       = %s", SYS_STR(currentPath));
     SYS_DEBUG ("*** originalPath      = %s", SYS_STR(originalPath));
     if ((selected == currentPath || selected == originalPath)) {
-        sneakyFileChange (selected);
+        //SYS_DEBUG ("2");
+        //sneakyFileChange (selected);
         return;
     }
 
@@ -355,6 +368,7 @@ WallpaperModel::thumbnailReady (
     Q_UNUSED (fileUri);
     Q_UNUSED (thumbnailUri);
 
+    SYS_DEBUG ("Arrived t. for %s", SYS_STR(fileUri.toString()));
     if (pixmap.isNull()) {
         SYS_WARNING ("ERROR: thumbnail is null for %s",
                 SYS_STR(fileUri.toString()));
@@ -375,6 +389,7 @@ WallpaperModel::thumbnailReady (
         int                 idx = m_FilePathList.indexOf(path);
 
         desc.setThumbnail (pixmap);
+        SYS_DEBUG ("emitChangedSignal (%d);", idx);
         emitChangedSignal (idx);
     } else {
         SYS_WARNING ("Descriptor path not found: %s", SYS_STR(path));
@@ -537,8 +552,10 @@ WallpaperModel::loadThumbnails (
 void
 WallpaperModel::stopLoadingThumbnails ()
 {
-    if (m_Thumbnailer)
+    if (m_Thumbnailer) {
+        SYS_WARNING ("Canceling thumbnails.");
         m_Thumbnailer->cancel (false);
+    }
     
     foreach (QString key, m_FilePathHash.keys())
         m_FilePathHash[key].setThumbnailPending (false);
@@ -774,16 +791,37 @@ WallpaperModel::directoryChanged (
     // FIXME: ensureSelection() ?
 }
 
-void 	
+void
+WallpaperModel::fileTimerTimeout ()
+{
+    while (!m_ChangedFiles.isEmpty()) {
+        QString thisFilePath = m_ChangedFiles.takeFirst();
+
+        if (m_FilePathHash.contains(thisFilePath)) {
+            sneakyFileChange (thisFilePath);
+        }
+    }
+}
+
+/*!
+ * This slot is activated when a watched image file is changed.
+ */
+void
 WallpaperModel::fileChanged (
         const QString  &path)
 {
-    SYS_WARNING ("*************************************************");
-    SYS_WARNING ("*** path = %s", SYS_STR(path));
+    //SYS_DEBUG ("*** path = %s", SYS_STR(path));
+
     if (m_FilePathHash.contains(path) && Wallpaper::imageFile(path)) {
-        sneakyFileChange (path);
+        if (!m_ChangedFiles.contains(path))
+           m_ChangedFiles << path;
+
+        if (m_FileTimer.isActive())
+            m_FileTimer.stop();
+
+        m_FileTimer.start();
     } else {
-       loadFromDirectory (); 
+        loadFromDirectory (); 
     }
 }
 
@@ -966,17 +1004,27 @@ void
 WallpaperModel::sneakyFileChange (
         const QString &filePath)
 {
+    SYS_WARNING ("*** filePath = %s", SYS_STR(filePath));
+
     if (m_FilePathHash.contains(filePath)) {
         QList<QUrl>         uris;
         QStringList         requestedFiles;
         QStringList         mimeTypes;
         WallpaperDescriptor desc = m_FilePathHash[filePath];
+        bool                success;
 
-        SYS_DEBUG ("Sneaky bastard wallpaper change...");
         desc.unsetThumbnail ();
         appendThumbnailRequest (uris, requestedFiles, mimeTypes, desc);
-        m_Thumbnailer->request (
+        //SYS_DEBUG ("Requesting thumbnail for %d items: %s",
+        //        requestedFiles.size(),
+        //        SYS_STR(requestedFiles.join(";")));
+        success = m_Thumbnailer->request (
                 uris, mimeTypes, true, Wallpaper::DefaultThumbnailFlavor);
+        //if (!success) {
+        //    SYS_WARNING ("FAILED!!!");
+        //}
+    } else {
+        SYS_WARNING ("Not found: %s", SYS_STR(filePath));
     }
 }
 
