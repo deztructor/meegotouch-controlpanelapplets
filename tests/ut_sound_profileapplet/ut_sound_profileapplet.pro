@@ -13,7 +13,7 @@ TEMPLATE = app
 DEFINES += \
 	UNIT_TEST 
 
-TARGET = ut_profileapplet
+TARGET = ut_sound_profileapplet
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \

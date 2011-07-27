@@ -13,7 +13,7 @@ QT += \
 
 TEMPLATE = app
 DEFINES += UNIT_TEST
-TARGET = ut_profilebackend
+TARGET = ut_sound_profiledatainterface
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
@@ -21,20 +21,16 @@ CONFIG += \
     meegotouchcore \
     link_pkgconfig \
 
-contains(DEFINES, HAVE_LIBPROFILE) {
-    PKGCONFIG += \
-        profile \
-        dbus-1
-}
-
 HEADERS += \
     ../../src/debug.h \
-    ut_profilebackend.h \
-    $$SRC_PREFIX/profilebackend.h
+    ut_profiledatainterface.h \
+    $$SRC_PREFIX/profilebackend.h \
+    $$SRC_PREFIX/profiledatainterface.h
 
 SOURCES += \
+    $$STUB_PREFIX/profilebackend_stub.cpp \
     ../../src/debug.cpp \
-    ut_profilebackend.cpp \
-    $$SRC_PREFIX/profilebackend.cpp
+    ut_profiledatainterface.cpp \
+    $$SRC_PREFIX/profiledatainterface.cpp
 
 INSTALLS += target
