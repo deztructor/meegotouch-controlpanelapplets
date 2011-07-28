@@ -109,9 +109,12 @@ binary-arch: build install
 	dh_installdeb $(EXCLUSIONS)
 	dh_shlibdeps $(EXCLUSIONS) -- --warnings=0
 	dh_gencontrol $(EXCLUSIONS)
-	sed -e "s:/.*.sh::" -e "/^$$/d" -i debian/duicontrolpanel-resetapplet/DEBIAN/conffiles
+	-@rm -f debian/duicontrolpanel-resetapplet/DEBIAN/conffiles
 	dh_md5sums $(EXCLUSIONS)
 	dh_builddeb --destdir=$(DEBDIR) $(EXCLUSIONS)
+
+# old solution, it was before the dh_md5sums call
+#	sed -e "s:/.*.sh::" -e "/^$$/d" -i debian/duicontrolpanel-resetapplet/DEBIAN/conffiles
 
 binary-aegisgen:
 	aegis-deb-add -control debian/duicontrolpanel-resetapplet/DEBIAN/control \
