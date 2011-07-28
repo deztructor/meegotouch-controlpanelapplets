@@ -31,7 +31,7 @@
 #include <MPositionIndicator>
 #include <MWidgetStyle>
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -128,7 +128,6 @@ WallpaperViewWidget::applyStyle()
     m_Physics->setEnabled(true);
   
 #if 1
-    SYS_WARNING ("------------------------------------------------");
     SYS_DEBUG ("*** PointerSpringK  = %g", style()->pointerSpringK());
     SYS_DEBUG ("*** Friction        = %g", style()->friction());
     SYS_DEBUG ("*** SlidingFriction = %g", style()->slidingFriction());
@@ -259,7 +258,6 @@ WallpaperViewWidget::saveImage ()
 
     if (m_RotateAnimation.state() == QAbstractAnimation::Running ||
         m_Physics->inMotion()) {
-        SYS_WARNING (">>>>>>>>>>>> delaying save....");
         m_HasPendingSave = true;
         return;
     }
@@ -491,16 +489,6 @@ WallpaperViewWidget::slotDoneActivated ()
         SYS_DEBUG ("Saving is being performed.");
         return;
     }
-
-#if 0
-    // TODO: FIXME: ERR: this leads to a disabled
-    // toolbar, and there is no was to escape :-S
-    if (m_PinchOngoing || m_RotateAnimation.state () == QAbstractAnimation::Running)
-    {
-        SYS_WARNING ("Save can not be done now, as some operation is ongoing");
-        return;
-    }
-#endif
 
     /*
      * We ignore the button press while the image is moving.
@@ -852,6 +840,7 @@ WallpaperViewWidget::pinchGestureUpdate (
     /*
      * 
      */
+    //SYS_DEBUG ("-> %g", pinchGesture->rotationAngle ());
     Q_UNUSED (event);
 
     if (!m_Scaling && !m_Rotating) {
@@ -859,10 +848,8 @@ WallpaperViewWidget::pinchGestureUpdate (
         qreal rotationDiff = pinchGesture->rotationAngle();
 
         if (qAbs (rotationDiff) > 10.0) {
-            SYS_WARNING ("NOW STARTING ROTATING.");
             m_Rotating = true;
         } else if (scaleDiff > 1.1 || scaleDiff < 0.9) {
-            SYS_WARNING ("NOW STARTING SCALING");
             m_Scaling = true;
         }
     }
