@@ -177,17 +177,14 @@ WallpaperViewWidget::panningPhysicsPanningStopped ()
 void 
 WallpaperViewWidget::pinchStopped ()
 {
-    SYS_DEBUG ("");
     qreal rotation  = m_Trans.rotation();
     qreal rRotation = 0.0;
+    int   tmp;
 
-    /*
-     * The starting (current) rotation.
-     */
-    while (rotation > 360.0)
-        rotation -= 360.0;
-    while (rotation < -360.0)
-        rotation += 360.0;
+    tmp = rotation;
+    tmp = tmp % 360;
+    rotation = tmp;
+
     m_Trans.setRotation (rotation);
 
     /*
@@ -731,7 +728,6 @@ WallpaperViewWidget::panGestureEvent (
         QGestureEvent *event, 
         QPanGesture   *panGesture)
 {
-    SYS_DEBUG ("");
     QTransform itemTransform(sceneTransform().inverted());
     QPointF itemSpaceOffset = 
         panGesture->offset() * itemTransform - 
@@ -783,7 +779,6 @@ WallpaperViewWidget::pinchGestureEvent (
             QGestureEvent *event, 
             QPinchGesture *pinchGesture)
 {
-    SYS_DEBUG ("");
     Q_UNUSED (event);
 
     if (m_Saving)
