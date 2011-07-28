@@ -28,9 +28,6 @@
 #include <MApplication>
 #include <meegocontrolexport.h>
 #include <QuillImage>
-#include <Thumbnailer>
-
-using namespace Thumbnails;
 
 class QString;
 class WallpaperDescriptorPrivate;

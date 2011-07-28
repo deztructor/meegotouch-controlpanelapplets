@@ -24,6 +24,8 @@
 #include <QHash>
 #include <QAbstractTableModel>
 #include <Thumbnailer>
+using namespace Thumbnails;
+
 #include <QFileSystemWatcher>
 
 #include <MAbstractCellCreator>

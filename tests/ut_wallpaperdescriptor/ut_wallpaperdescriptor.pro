@@ -1,6 +1,8 @@
 include(../common_top.pri)
 
-SRC_PREFIX = ../../src/wallpaperapplet
+MOC_DIR = .moc
+
+SRC_PREFIX = ../../src/wallpaperapplet2
 STUB_PREFIX = ../stubs
 INCLUDEPATH += \
 	$$SRC_PREFIX \
@@ -30,19 +32,19 @@ contains(DEFINES, HAVE_QUILL_METADATA) {
     CONFIG += quillmetadata
 }
 
-HEADERS += \
-    $$STUB_PREFIX/thumbnailerstub.h \
-    ../../src/debug.h \
-    ut_wallpaperdescriptor.h \
-    $$SRC_PREFIX/wallpaperdescriptor.h \
-    $$SRC_PREFIX/wallpaperthumb.h
+HEADERS +=                                  \
+    ../../src/debug.h                       \
+    ut_wallpaperdescriptor.h                \
+    $$SRC_PREFIX/wallpaperutils.h           \
+    $$SRC_PREFIX/wallpaperdescriptor.h      \
+    $$SRC_PREFIX/wallpaperdescriptor_p.h 
 
-SOURCES += \
-    $$STUB_PREFIX/thumbnailerstub.cpp \
-    ../../src/debug.cpp \
-    ut_wallpaperdescriptor.cpp \
-    $$SRC_PREFIX/wallpaperdescriptor.cpp \
-    $$SRC_PREFIX/wallpaperthumb.cpp
+SOURCES +=                                  \
+    ../../src/debug.cpp                     \
+    ut_wallpaperdescriptor.cpp              \
+    $$SRC_PREFIX/wallpaperutils.cpp         \
+    $$SRC_PREFIX/wallpaperdescriptor.cpp    \
+    $$SRC_PREFIX/wallpaperdescriptor_p.cpp
 
 INSTALLS += target
 
