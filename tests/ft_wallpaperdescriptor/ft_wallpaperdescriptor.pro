@@ -4,6 +4,8 @@ SRC_PREFIX = ../../src/wallpaperapplet
 MC_PREFIX = ../../src/libmeegocontrol
 STUB_PREFIX = ../stubs
 
+MOC_DIR = .moc
+
 INCLUDEPATH += \
     $$SRC_PREFIX
 
