@@ -1,6 +1,5 @@
 include(../common_top.pri)
 
-MOC_DIR = .moc
 SRC_PREFIX = ../../src/aboutapplet
 STUB_PREFIX = ../stubs
 

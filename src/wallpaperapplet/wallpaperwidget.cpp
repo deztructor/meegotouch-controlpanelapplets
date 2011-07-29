@@ -52,6 +52,9 @@ WallpaperWidget::WallpaperWidget (
     m_WallpaperBusinessLogic (wallpaperBusinessLogic),
     m_NavigationBarTransparency (-1)
 {
+    // For testability
+    setObjectName ("WallpaperWidget");
+
     MWindow *win = MApplication::activeWindow ();
 
     if (win) {

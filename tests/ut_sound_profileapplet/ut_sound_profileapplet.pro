@@ -1,6 +1,5 @@
 include(../common_top.pri)
 
-MOC_DIR = .moc
 SRC_PREFIX = ../../src/profileapplet
 STUB_PREFIX = ../stubs
 INCLUDEPATH += $$SRC_PREFIX \
@@ -14,7 +13,7 @@ TEMPLATE = app
 DEFINES += \
 	UNIT_TEST 
 
-TARGET = ut_profileapplet
+TARGET = ut_sound_profileapplet
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \

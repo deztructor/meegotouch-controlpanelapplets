@@ -374,6 +374,8 @@ AlertToneDefaults::selectAndScroll (
         m_NiceNameToSelect = niceName;
     }
 
+    filtering()->proxy()->sort(AlertToneDefaultsModel::NiceNameColumn);
+
     idx = m_DefaultsModel->findItemByFileName (fileName);
 
     SYS_DEBUG("m_FileFromMyMusicSelected is %s", SYS_BOOL(m_FileFromMyMusicSelected));
@@ -415,8 +417,6 @@ AlertToneDefaults::selectAndScroll (
         m_NiceNameToSelect = "";
         m_FileFromMyMusicSelected = false;
     }
-
-    filtering()->proxy()->sort(AlertToneDefaultsModel::NiceNameColumn);
 
     return success;
 }

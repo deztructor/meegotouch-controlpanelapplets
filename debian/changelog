@@ -9,6 +9,8 @@ meegotouch-controlpanelapplets (0.20.62~1) meegotouch; urgency=low
     appears as black thumbnail placeholder in wallpaper applet
   * Fixes: NB#270857 - [TASK] Add PR1.1 to "About product" applet before the 
     actual version string
+  * Fixes: NB#274606 - If the wallpaper set from gallery is re-edited, the
+    thumbnail of it in wallpaper applet is shown blank for a while.
 
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 25 Jul 2011 16:35:50 +0300

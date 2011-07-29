@@ -95,6 +95,7 @@ class WallpaperModel: public QAbstractTableModel
          */
         void thumbnailLoadingFinished (
                 int          left);
+
         void thumbnailError (
                 QString      message,
                 QUrl         fileUri);
@@ -110,6 +111,8 @@ class WallpaperModel: public QAbstractTableModel
          */
         void directoryChanged (const QString &path);
         void fileChanged (const QString &path);
+        void fileTimerTimeout ();
+
         #ifdef HAVE_QMSYSTEM
         void usbModeChanged (MeeGo::QmUSBMode::Mode mode);
         #endif
@@ -151,6 +154,8 @@ class WallpaperModel: public QAbstractTableModel
         int                                     m_ThumbnailMagicNumber;
         QHash<QString, qint64>                  m_PendingFiles;
         QTimer                                  m_FileSystemTimer;
+        QTimer                                  m_FileTimer;
+        QStringList                             m_ChangedFiles;
         mutable bool                            m_OrderDirty;
         mutable QHash<QString, int>             m_OrderHash;
         #ifdef HAVE_QMSYSTEM

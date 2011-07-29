@@ -336,16 +336,22 @@ void
 WallpaperBusinessLogic::workerThreadFinishedLoad ()
 {
     bool success = m_WorkerThread->success();
+
     SYS_DEBUG ("*** success  = %s", SYS_BOOL(success));
 
     if (m_EditRequested) {
-        emit editWallpaper (m_EditedImage);
+        if (success)
+            emit editWallpaper (m_EditedImage);
+        else 
+            endEdit ();
+
         m_EditRequested = false;
     }
 
-    emit wallpaperLoaded (
-            m_WorkerThread->image(),
-            m_WorkerThread->size());
+    if (success)
+        emit wallpaperLoaded (
+                m_WorkerThread->image(),
+                m_WorkerThread->size());
 
     delete m_WorkerThread;
     m_WorkerThread = 0;

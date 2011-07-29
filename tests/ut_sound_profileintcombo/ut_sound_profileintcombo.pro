@@ -10,7 +10,7 @@ QT += \
 
 TEMPLATE = app
 DEFINES += UNIT_TEST
-TARGET = ut_profilevalue
+TARGET = ut_sound_profileintcombo
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
@@ -23,34 +23,29 @@ CONFIG += \
 
 PKGCONFIG += dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
 
-contains(DEFINES, HAVE_LIBRESOURCEQT) {
-    PKGCONFIG += libresourceqt1
-}
-
 contains(DEFINES, HAVE_QTSPARQL) {
     CONFIG += qtsparql
 }
 
 HEADERS += \
-    ut_profilevalue.h \
+    ut_profileintcombo.h \
     $$SRC_PREFIX/../debug.h \
     $$SRC_PREFIX/trackerconnection.h \
-    $$SRC_PREFIX/alerttone.h \
-    $$SRC_PREFIX/alerttonepreview.h \
+    $$SRC_PREFIX/alerttoneappletmaps.h \
     $$SRC_PREFIX/qprofilevalue.h \
-    $$SRC_PREFIX/qtrackedvariant.h
+    $$SRC_PREFIX/qtrackedvariant.h  \
+    $$SRC_PREFIX/profileintcombo.h
+
+
 
 SOURCES += \
-    ut_profilevalue.cpp \
+    ut_profileintcombo.cpp  \
     $$SRC_PREFIX/../debug.cpp \
     $$SRC_PREFIX/trackerconnection.cpp \
-    $$SRC_PREFIX/alerttone.cpp \
-    $$SRC_PREFIX/alerttonepreview.cpp \
+    $$SRC_PREFIX/alerttoneappletmaps.cpp \
     $$SRC_PREFIX/qprofilevalue.cpp \
-    $$SRC_PREFIX/qtrackedvariant.cpp
-
+    $$SRC_PREFIX/qtrackedvariant.cpp  \
+    $$SRC_PREFIX/profileintcombo.cpp
 
 INSTALLS += target
-
-
 

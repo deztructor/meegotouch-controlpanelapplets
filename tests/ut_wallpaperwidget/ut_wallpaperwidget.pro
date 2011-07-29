@@ -81,4 +81,3 @@ SOURCES += \
     $$SRC_PREFIX/wallpaperthumb.cpp
 
 INSTALLS += target
-MOC_DIR = .moc

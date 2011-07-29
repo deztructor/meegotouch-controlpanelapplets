@@ -31,7 +31,7 @@
 #include <MPositionIndicator>
 #include <MWidgetStyle>
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -128,7 +128,6 @@ WallpaperViewWidget::applyStyle()
     m_Physics->setEnabled(true);
   
 #if 1
-    SYS_WARNING ("------------------------------------------------");
     SYS_DEBUG ("*** PointerSpringK  = %g", style()->pointerSpringK());
     SYS_DEBUG ("*** Friction        = %g", style()->friction());
     SYS_DEBUG ("*** SlidingFriction = %g", style()->slidingFriction());
@@ -177,17 +176,14 @@ WallpaperViewWidget::panningPhysicsPanningStopped ()
 void 
 WallpaperViewWidget::pinchStopped ()
 {
-    SYS_DEBUG ("");
     qreal rotation  = m_Trans.rotation();
     qreal rRotation = 0.0;
+    int   tmp;
 
-    /*
-     * The starting (current) rotation.
-     */
-    while (rotation > 360.0)
-        rotation -= 360.0;
-    while (rotation < -360.0)
-        rotation += 360.0;
+    tmp = rotation;
+    tmp = tmp % 360;
+    rotation = tmp;
+
     m_Trans.setRotation (rotation);
 
     /*
@@ -248,28 +244,29 @@ WallpaperViewWidget::rotateAnimationFinished ()
 void
 WallpaperViewWidget::saveImage ()
 {
+    #if 0
     SYS_DEBUG ("--------------------------------------------------------");
     SYS_DEBUG ("*** expectedSize = %s", SYS_SIZE(m_Trans.expectedSize()));
+    SYS_DEBUG ("*** originalSize = %s", SYS_SIZE(m_OriginalSize));
     SYS_DEBUG ("*** offset       = %s", SYS_POINTF(m_Trans.offset()));
     SYS_DEBUG ("*** scale        = %g", m_Trans.scale());
     SYS_DEBUG ("*** rotation     = %g", m_Trans.rotation());
     SYS_DEBUG ("*** prop.running = %s",
             SYS_BOOL(m_RotateAnimation.state() == QAbstractAnimation::Running));
     SYS_DEBUG ("*** pann.running = %s", SYS_BOOL(m_Physics->inMotion()));
+    #endif
 
     if (m_RotateAnimation.state() == QAbstractAnimation::Running ||
         m_Physics->inMotion()) {
-        SYS_WARNING (">>>>>>>>>>>> delaying save....");
         m_HasPendingSave = true;
         return;
     }
 
-    if (m_Trans.noTransformation()) {
-        SYS_DEBUG ("No transformations, we can copy the file.");
+    if (m_Trans.noTransformation() && 
+            m_Trans.expectedSize() == m_OriginalSize) {
         m_Saving = true;
         m_BusinessLogic->setWallpaper ();
     } else {
-        SYS_DEBUG ("We have transformations, we have to edit the file.");
         QPixmap pixmap = generatePixmap (m_Trans);
 
         m_Saving = true;
@@ -492,16 +489,6 @@ WallpaperViewWidget::slotDoneActivated ()
         SYS_DEBUG ("Saving is being performed.");
         return;
     }
-
-#if 0
-    // TODO: FIXME: ERR: this leads to a disabled
-    // toolbar, and there is no was to escape :-S
-    if (m_PinchOngoing || m_RotateAnimation.state () == QAbstractAnimation::Running)
-    {
-        SYS_WARNING ("Save can not be done now, as some operation is ongoing");
-        return;
-    }
-#endif
 
     /*
      * We ignore the button press while the image is moving.
@@ -729,7 +716,6 @@ WallpaperViewWidget::panGestureEvent (
         QGestureEvent *event, 
         QPanGesture   *panGesture)
 {
-    SYS_DEBUG ("");
     QTransform itemTransform(sceneTransform().inverted());
     QPointF itemSpaceOffset = 
         panGesture->offset() * itemTransform - 
@@ -781,7 +767,6 @@ WallpaperViewWidget::pinchGestureEvent (
             QGestureEvent *event, 
             QPinchGesture *pinchGesture)
 {
-    SYS_DEBUG ("");
     Q_UNUSED (event);
 
     if (m_Saving)
@@ -855,6 +840,7 @@ WallpaperViewWidget::pinchGestureUpdate (
     /*
      * 
      */
+    //SYS_DEBUG ("-> %g", pinchGesture->rotationAngle ());
     Q_UNUSED (event);
 
     if (!m_Scaling && !m_Rotating) {
@@ -862,10 +848,8 @@ WallpaperViewWidget::pinchGestureUpdate (
         qreal rotationDiff = pinchGesture->rotationAngle();
 
         if (qAbs (rotationDiff) > 10.0) {
-            SYS_WARNING ("NOW STARTING ROTATING.");
             m_Rotating = true;
         } else if (scaleDiff > 1.1 || scaleDiff < 0.9) {
-            SYS_WARNING ("NOW STARTING SCALING");
             m_Scaling = true;
         }
     }

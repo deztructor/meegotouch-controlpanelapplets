@@ -106,8 +106,11 @@ WallpaperWorkerThread::runLoadImage ()
 
     m_Image = m_Descriptor.load (m_Size, originalSize);
     m_Size = originalSize;
-    // FIXME: What if the loading is failed?
-    m_Success = true;
+
+    if (m_Image.width() == 0 || m_Image.height() == 0)
+        m_Success = false;
+    else
+        m_Success = true;
 }
 
 void

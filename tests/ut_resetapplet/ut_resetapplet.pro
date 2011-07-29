@@ -1,7 +1,6 @@
 include(../common_top.pri)
 include(../../localconfig.pri)
 
-MOC_DIR = .moc
 SRC_PREFIX = ../../src/resetapplet
 STUB_PREFIX = ../stubs
 
