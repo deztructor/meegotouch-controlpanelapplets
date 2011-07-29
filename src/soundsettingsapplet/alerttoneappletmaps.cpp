@@ -56,6 +56,38 @@ AlertToneAppletMaps::AlertToneAppletMaps()
 	m_map["1"]                                       = "qtn_sond_level_1";
 	m_map["2"]                                       = "qtn_sond_level_2";
 	m_map["3"]                                       = "qtn_sond_level_3";
+
+    /* XXX: Please keep this for eng.english generation: */
+#if 0
+    //% "Off"
+    qtTrId ("qtn_comm_settings_off");
+    //% "Level 1"
+    qtTrId ("qtn_sond_level_1");
+    //% "Level 2"
+    qtTrId ("qtn_sond_level_2");
+    //% "Level 3"
+    qtTrId ("qtn_sond_level_3");
+    //% "System sounds"
+    qtTrId ("qtn_sond_system");
+    //% "Keyboard feedback"
+    qtTrId ("qtn_sond_keyboard");
+    //% "Touch screen tones"
+    qtTrId ("qtn_sond_touch_screen");
+    //% "Touch screen vibration"
+    qtTrId ("qtn_sond_touch_vibra");
+    //% "Ringing tone"
+    qtTrId ("qtn_sond_ring_tone");
+    //% "Internet tone"
+    qtTrId ("qtn_sond_internet_tone");
+    //% "E-mail tone"
+    qtTrId ("qtn_sond_email_tone");
+    //% "SMS tone"
+    qtTrId ("qtn_sond_message_tone");
+    //% "Instant messaging tone"
+    qtTrId ("qtn_sond_ins_messaging");
+    //% "Calendar reminder tone
+	qtTrId ("qtn_sond_org_reminders");
+#endif
 }
 
 QString

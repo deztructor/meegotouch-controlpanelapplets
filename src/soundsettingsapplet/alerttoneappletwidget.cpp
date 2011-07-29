@@ -111,6 +111,7 @@ AlertToneAppletWidget::createContents()
     label = addTitleLabel (
             centralWidget, policy,
             APP_TITLE_LABEL_STYLE_NAME); 
+    //% "Alert tones"
     label->setText(qtTrId("qtn_sond_sounds"));
 #endif
 
@@ -130,6 +131,7 @@ AlertToneAppletWidget::createContents()
      */
     addSubTitle (
             centralWidget, policy,
+            //% "Vibration profile"
             qtTrId("qtn_prof_vibration"));
     /*
      *
@@ -148,6 +150,7 @@ AlertToneAppletWidget::createContents()
      */
     addSubTitle (
             centralWidget, policy, 
+            //% "Alert tones"
             qtTrId("qtn_sond_event_tones")); 
 
     /*
@@ -168,6 +171,7 @@ AlertToneAppletWidget::createContents()
      */
     addSubTitle (
             centralWidget, policy, 
+            //% "Feedback"
             qtTrId("qtn_sond_feedback"));
 #if 0
     m_FeedbackLabel = addTitleLabel (

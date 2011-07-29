@@ -114,13 +114,13 @@ SoundSettingsApplet::toplevelDestroyed(QObject *goner)
 QString
 SoundSettingsApplet::title() const
 {
-        QString title = qtTrId("qtn_sond_sounds");
+    //% "Alert tones"
+    QString title = qtTrId ("qtn_sond_sounds");
 
-	if (m_stack.size() > 0)
-  	if (m_stack.top())
-			title = qobject_cast<AlertToneToplevel *>(m_stack.top())->title();
+    if ((m_stack.size() > 0) && (m_stack.top()))
+        title = qobject_cast<AlertToneToplevel *>(m_stack.top())->title();
 
-	return title;
+    return title;
 }
 
 QVector<MAction*> 

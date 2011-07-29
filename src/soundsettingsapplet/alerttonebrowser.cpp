@@ -214,6 +214,7 @@ AlertToneBrowser::retranslateUi()
     m_ovi_store->setProperty("title", qtTrId("qtn_sond_store"));
 #endif
 
+    //% "Ringtones"
     if (m_TitleLabel)
         m_TitleLabel->setText (qtTrId("qtn_sond_ringtones"));
 
