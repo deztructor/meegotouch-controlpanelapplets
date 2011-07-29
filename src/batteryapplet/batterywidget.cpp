@@ -495,12 +495,6 @@ BatteryWidget::fromProperBatteryInfo (unsigned int pct)
     if (!m_RemainingContainer)
         return;
 
-    /*
-     * First hide the second label...
-     */
-    m_RemainingContainer->updateRemainingChargingTime (-1);
-    m_RemainingContainer->updateRemainingTime (-1, -1);
-
     if (!(m_logic->isCharging())) {
         if (!m_logic->PSMValue()) {
             m_RemainingContainer->updateCapacity (pct);

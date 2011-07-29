@@ -40,7 +40,6 @@ static const int animation_rate_charging_usb  = 1000;
 static const int animation_rate_charging_wall = 1000;
 #endif
 
-
 BatteryBusinessLogic::BatteryBusinessLogic (
         QObject *parent)
     : QObject (parent),
@@ -483,12 +482,6 @@ BatteryBusinessLogic::recalculateChargingInfo ()
     SYS_DEBUG ("*** chargingRate   = %d", chargingRate);
     SYS_DEBUG ("*** m_ChargingRate = %d", m_ChargingRate);
 
-    /*
-     * Removed while trying to fix bug #265208.
-     */
-    if (chargingRate == m_ChargingRate &&
-        couldBeCharging == m_Charging) 
-        return;
 
     /*
      * If the charging rate has been changed we need to notify the ui with a
