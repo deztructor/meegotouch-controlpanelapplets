@@ -40,8 +40,6 @@ static const int animation_rate_charging_usb  = 1000;
 static const int animation_rate_charging_wall = 1000;
 #endif
 
-#define HAVE_QMSYSTEM
-
 BatteryBusinessLogic::BatteryBusinessLogic (
         QObject *parent)
     : QObject (parent),
