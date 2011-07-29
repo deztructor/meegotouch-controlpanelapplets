@@ -351,13 +351,11 @@ AboutBusinessLogic::DBusMessagingFailure (
 QString
 AboutBusinessLogic::licenseText ()
 {
-    QString localizedText;
-    localizedText = qtTrId ("qtn_prod_legal").arg (
-        "<a href=\"mailto:sourcecode.request@nokia.com\">"
-        "sourcecode.request@nokia.com</a>");
+    static const char *legalTextId = "qtn_prod_legal";
+    QString localizedText (qtTrId (legalTextId));
 
     /* Wow, we have it translated, then return it... */
-    if (localizedText.length () > (int) qstrlen ("qtn_prod_legal"))
+    if (localizedText.length () > (int) qstrlen (legalTextId))
     {
         return localizedText;
     }

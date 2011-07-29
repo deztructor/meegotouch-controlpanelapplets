@@ -1,2 +1,2 @@
-CATALOGNAME = wallpaper
+CATALOGNAME = wallpaperapplet
 include(../../translations.pri)
