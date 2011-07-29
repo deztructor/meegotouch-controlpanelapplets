@@ -30,29 +30,27 @@ class QString;
 
 class Ut_WallpaperDescriptor : public QObject 
 {
-Q_OBJECT
+    Q_OBJECT
 
-private slots:
-    void init ();
-    void cleanup ();
-    void initTestCase ();
-    void cleanupTestCase ();
+    private slots:
+        void init ();
+        void cleanup ();
+        void initTestCase ();
+        void cleanupTestCase ();
 
-    void testDefaults ();
-    void testConstructors ();
-    void testFilenames ();
-    void testThumbnailing ();
-    void testThumbnailingByFilename ();
-    void testThumbnailingWithoutData ();
-    void testThumbnailingFailure ();
-    void testCache ();
+        void testDefaults ();
+        void testConstructors ();
+        void testThumbnail ();
+        void testUrlMimeType_data ();
+        void testUrlMimeType ();
+        void testOrder ();
 
-private:
-    void createDescriptor ();
-    void dropDescriptor ();
+    private:
+        bool checkHasNoThumbnail (WallpaperDescriptor *d);
+        bool checkHasThumbnail (WallpaperDescriptor *d);
 
-    MApplication              *m_App;
-    WallpaperDescriptor       *m_Desc;
+        MApplication              *m_App;
+        WallpaperDescriptor       *m_Desc;
 };
 
 #endif

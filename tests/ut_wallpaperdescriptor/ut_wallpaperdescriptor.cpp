@@ -30,7 +30,11 @@
 #include <MGConfItem>
 
 #define DEBUG
+#define WARNING
 #include "../../src/debug.h"
+
+static const int ThumbnailWidth  = 170;
+static const int ThumbnailHeight = 171;
 
 /******************************************************************************
  * 
@@ -131,292 +135,173 @@ Ut_WallpaperDescriptor::testDefaults ()
 void
 Ut_WallpaperDescriptor::testConstructors ()
 {
-#if 0
-    /*
-     * Testing the constructor that gets one filename.
-     */
-    WallpaperDescriptor desc1 ("/nodir/NoSuchFile.png");
-    
-    QVERIFY (desc1.m_Images[WallpaperDescriptor::Portrait].filename() == "/nodir/NoSuchFile.png");
-    QVERIFY (desc1.m_Images[WallpaperDescriptor::Portrait].basename() == "NoSuchFile");
-    QVERIFY (desc1.m_Images[WallpaperDescriptor::Portrait].extension() == "png");
-    QVERIFY (desc1.m_Images[WallpaperDescriptor::Portrait].m_Url.toString() == "file:///nodir/NoSuchFile.png");
-
-    /*
-     * Testing the copy constructor.
-     */
+    WallpaperDescriptor desc1 ("/testfile1");
     WallpaperDescriptor desc2 (desc1);
+    WallpaperDescriptor desc3;
 
-    QVERIFY (desc2.m_Images[WallpaperDescriptor::Portrait].filename() == "/nodir/NoSuchFile.png");
-    QVERIFY (desc2.m_Images[WallpaperDescriptor::Portrait].basename() == "NoSuchFile");
-    QVERIFY (desc2.m_Images[WallpaperDescriptor::Portrait].extension() == "png");
-    QVERIFY (desc2.m_Images[WallpaperDescriptor::Portrait].m_Url.toString() == "file:///nodir/NoSuchFile.png");
-#endif
-}
+    desc3 = desc2;
 
-/*!
- * Checking if the descriptor is created from a filename the various filename
- * properties are properly returned.
- */
-void
-Ut_WallpaperDescriptor::testFilenames ()
-{
-#if 0
-    const QString myFilename ("/nodir/NoSuchFile.png");
+    desc1.setOriginalFilePath ("/origfilepath");
+    desc1.setThumbnailPending (true);
+    desc1.setSelected (true);
+    desc1.setProgress (true);
+    desc1.setHistoryIndex (5);
 
-    WallpaperDescriptor desc (myFilename);
-    QString original  = desc.originalImageFile(M::Portrait);
-    QString portrait  = desc.suggestedOutputFilename(M::Portrait);
-    QString landscape = desc.suggestedOutputFilename(M::Landscape);
 
-    if (original != myFilename) {
-        SYS_WARNING ("originalImageFile(M::Landscape) should return '%s' "
-                "but it returns '%s'",
-                SYS_STR(myFilename),
-                SYS_STR(original));
-    }
-
-    QVERIFY (original == myFilename);
-    QVERIFY (!portrait.isEmpty());
-    QVERIFY (!landscape.isEmpty());
-    QVERIFY (!portrait.contains("/"));
-    QVERIFY (!landscape.contains("/"));
+    QVERIFY (desc2.filePath() == "/testfile1");
+    QVERIFY (desc2.originalFilePath() == "/origfilepath");
+    QVERIFY (desc2.thumbnailPending());
+    QVERIFY (desc2.selected());
+    QVERIFY (desc2.progress());
+    QVERIFY (desc2.historyIndex() == 5);
     
-    // Now this is important!
-    QVERIFY (landscape != portrait);
-#endif
+    QVERIFY (desc3.filePath() == "/testfile1");
+    QVERIFY (desc3.originalFilePath() == "/origfilepath");
+    QVERIFY (desc3.thumbnailPending());
+    QVERIFY (desc3.selected());
+    QVERIFY (desc3.progress());
+    QVERIFY (desc3.historyIndex() == 5);
 }
 
-/*!
- * When the descriptor has an url and a mime type it should be able to initiate
- * the thumbnailing and when the thumbnailing is successfull the descriptor
- * should report by emitting the thumbnailLoaded() signal and should have the
- * proper thumbnail.
- *
- * In this case the thumbnail is created by the Thumbnailer stub so there is no
- * file activity of any kind.
- */
 void
-Ut_WallpaperDescriptor::testThumbnailing ()
+Ut_WallpaperDescriptor::testThumbnail ()
 {
-#if 0
-    createDescriptor ();
-    m_SignalSink.reset ();
+    WallpaperDescriptor desc1 ("/testfile1");
+    WallpaperDescriptor desc2 (desc1);
+    WallpaperDescriptor desc3;
+    QPixmap             thumbnail;
+    QPixmap             pixmap (ThumbnailWidth, ThumbnailHeight);
+
+    desc3 = desc2;
 
     /*
-     * Let's see if the desscriptor does initiate the thumbnailing when a proper
-     * url and mimetype is set.
+     * Initially no thumbnails.
      */
-    m_Desc->setUrl ("file:///NoSuchAFile.png");
-    m_Desc->setMimeType ("image/png");
-    m_Desc->initiateThumbnailer ();
-
-    QVERIFY (m_Desc->m_Thumbnailer != 0);
-    QVERIFY (m_Desc->m_Thumbnailer->m_RequestCame);
+    QVERIFY (checkHasNoThumbnail(&desc1));
+    QVERIFY (checkHasNoThumbnail(&desc2));
+    QVERIFY (checkHasNoThumbnail(&desc3));
 
     /*
-     * Ok, now we emulate the case when the thumbnail creation is finished.
+     * Then we set one.
      */
-    m_Desc->m_Thumbnailer->sendThumbnail ();
-    m_Desc->m_Thumbnailer->sendFinished ();
+    desc1.setThumbnail (pixmap);
+    QVERIFY (checkHasThumbnail(&desc1));
+    QVERIFY (checkHasThumbnail(&desc2));
+    QVERIFY (checkHasThumbnail(&desc3));
 
-    QVERIFY (m_Desc->isThumbnailLoaded());
-    QVERIFY (m_SignalSink.m_ThumbnailLoaded);
-#ifndef THUMBNAILER_SINGLETON
-    QVERIFY (m_Desc->m_Thumbnailer == 0);
-#endif
-
-    dropDescriptor ();    
-#endif
+    /*
+     * Then unset...
+     */
+    desc1.unsetThumbnail ();
+    QVERIFY (checkHasNoThumbnail(&desc1));
+    QVERIFY (checkHasNoThumbnail(&desc2));
+    QVERIFY (checkHasNoThumbnail(&desc3));
 }
 
-/*
- * Tests the thumbnailing using a local file name and the mime type.
- */
 void
-Ut_WallpaperDescriptor::testThumbnailingByFilename ()
+Ut_WallpaperDescriptor::testUrlMimeType_data ()
 {
-#if 0
-    createDescriptor ();
-    m_SignalSink.reset ();
+    QTest::addColumn<QString>("filePath");
+    QTest::addColumn<QString>("mimeType");
+    QTest::addColumn<QString>("url");
 
-    /*
-     * Let's see if the desscriptor does initiate the thumbnailing when a proper
-     * url and mimetype is set.
-     */
-    m_Desc->setFilename ("/nodirectory/NoSuchAFile.png");
-    m_Desc->setMimeType ("image/png");
-    m_Desc->initiateThumbnailer ();
-
-    QVERIFY (m_Desc->m_Thumbnailer != 0);
-    QVERIFY (m_Desc->m_Thumbnailer->m_RequestCame);
-
-    /*
-     * Ok, now we emulate the case when the thumbnail creation is finished.
-     */
-    m_Desc->m_Thumbnailer->sendThumbnail ();
-    m_Desc->m_Thumbnailer->sendFinished ();
-
-    QVERIFY (m_Desc->isThumbnailLoaded());
-    QVERIFY (m_SignalSink.m_ThumbnailLoaded);
-#ifndef THUMBNAILER_SINGLETON
-    QVERIFY (m_Desc->m_Thumbnailer == 0);
-#endif
-
-    dropDescriptor ();    
-#endif
+    QTest::newRow("") << "/a.bmp" << "image/bmp" << "file:///a.bmp";
+    QTest::newRow("") << "/a.gif" << "image/gif" << "file:///a.gif";
+    QTest::newRow("") << "/a.jpg" << "image/jpeg" << "file:///a.jpg";
+    QTest::newRow("") << "/a.jpe" << "image/jpeg" << "file:///a.jpe";
+    QTest::newRow("") << "/a.jpeg" << "image/jpeg" << "file:///a.jpeg";
+    QTest::newRow("") << "/a.tif" << "image/tiff" << "file:///a.tif";
+    QTest::newRow("") << "/a.png" << "image/png" << "file:///a.png";
 }
 
-/*!
- * When the descriptor has no filename/url and/or mimetype the thumbnailing
- * should not be initiated.
- */
 void
-Ut_WallpaperDescriptor::testThumbnailingWithoutData ()
+Ut_WallpaperDescriptor::testUrlMimeType ()
 {
-#if 0
-    createDescriptor ();
-    m_SignalSink.reset ();
+    QFETCH(QString, filePath);
+    QFETCH(QString, mimeType);
+    QFETCH(QString, url);
+    
+    WallpaperDescriptor desc (filePath);
 
-    /*
-     * Let's see if the desscriptor does not initiate the thumbnailing when the
-     * filename and the url are missing.
-     */
-    m_Desc->initiateThumbnailer ();
-
-#ifndef THUMBNAILER_SINGLETON
-    QVERIFY (m_Desc->m_Thumbnailer == 0);
-#endif
-    QVERIFY (!m_Desc->isThumbnailLoaded());
-    QVERIFY (!m_SignalSink.m_ThumbnailLoaded);
-
-    dropDescriptor ();    
-#endif
+    desc.setFilePath (filePath);
+    QVERIFY (desc.mimeType() == mimeType);
+    QVERIFY (desc.url().toString() == url);
 }
 
-/*
- * When the thumbnailer fails the descriptor should destroy the thumbnailer and
- * should stay in a state where it has no thumbnail. Also the descriptor should
- * not emit a signal about the thumbnail load finished.
- */
 void
-Ut_WallpaperDescriptor::testThumbnailingFailure ()
+Ut_WallpaperDescriptor::testOrder ()
 {
-#if 0
-    createDescriptor ();
-    m_SignalSink.reset ();
+    WallpaperDescriptor desc1 ("/a file");
+    WallpaperDescriptor desc2 ("/b file");
+    WallpaperDescriptor inhistory1 ("/a file");
+    WallpaperDescriptor inhistory2 ("/a file");
+    WallpaperDescriptor selected ("/a file");
+    
+    inhistory1.setHistoryIndex (1);
+    inhistory2.setHistoryIndex (2);
+    selected.setSelected (true);
 
     /*
-     * Let's see if the desscriptor does initiate the thumbnailing when a proper
-     * url and mimetype is set.
+     * Selected one always comes first.
      */
-    m_Desc->setUrl ("file:///NoSuchAFile.png");
-    m_Desc->setMimeType ("image/png");
-    m_Desc->initiateThumbnailer ();
-
-    QVERIFY (m_Desc->m_Thumbnailer != 0);
-    QVERIFY (m_Desc->m_Thumbnailer->m_RequestCame);
-    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_MimeType == "image/png");
-    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].mimeType() == "image/png");
+    QVERIFY (selected < desc1);
+    QVERIFY (selected < desc2);
+    QVERIFY (selected < inhistory1);
+    QVERIFY (selected < inhistory2);
 
     /*
-     * Ok, now we emulate the case when the thumbnail creation is finished with
-     * an error. We have to make the QImage loader stub simulate failure,
-     * otherwise the descriptor does the thumbnailing by itself.
+     * History shall go before all non-history items, history index shall sort
+     * the items that has history...
      */
-    pixmapLoadSuccess = false;
-    m_Desc->m_Thumbnailer->sendError ();
-    m_Desc->m_Thumbnailer->sendFinished ();
+    QVERIFY (inhistory1 < desc1);
+    QVERIFY (inhistory1 < desc2);
+    QVERIFY (inhistory1 < inhistory2);
+    
+    /*
+     * Alphabetical order.
+     */
+    QVERIFY (desc1 < desc2);
 
-    QVERIFY (!m_Desc->isThumbnailLoaded());
-    QVERIFY (!m_SignalSink.m_ThumbnailLoaded);
-#ifndef THUMBNAILER_SINGLETON
-    QVERIFY (m_Desc->m_Thumbnailer == 0);
-#endif
-    pixmapLoadSuccess = true;
-
-    dropDescriptor ();    
-#endif
 }
-void
-Ut_WallpaperDescriptor::testCache ()
-{
-#if 0
-    createDescriptor ();
-    m_Desc->setUrl ("file:///simulatedexistingfile.png");
-
-    /*
-     * Caching with an existing image file from the main thread...
-     */
-    pixmapLoadSuccess = true;
-    m_Desc->cache();
-    QVERIFY (m_Desc->m_Images[WallpaperDescriptor::Portrait].m_Cached);
-
-    /*
-     * We have added some other combinations...
-     */
-
-    /*
-     * Uncaching...
-     */
-    m_Desc->unCache();
-    QVERIFY (!m_Desc->m_Images[WallpaperDescriptor::Portrait].m_Cached);
-
-    dropDescriptor ();
-#endif
-}
-
 
 /******************************************************************************
- * Low level test programs.
+ * Low level helper functions.
  */
-void
-Ut_WallpaperDescriptor::dropDescriptor ()
+bool
+Ut_WallpaperDescriptor::checkHasNoThumbnail (
+        WallpaperDescriptor *d)
 {
-#if 0
-    if (m_Desc) {
-        delete m_Desc;
-        m_Desc = 0;
+    QPixmap  thumbnail = d->thumbnail ();
+
+    if (d->hasThumbnail()) {
+        SYS_WARNING ("Descriptor should have no thumbnail");
+        return false;
     }
-#endif
+
+    if (thumbnail.width() != 0 || thumbnail.height() != 0) {
+        SYS_WARNING ("Size %dx%d not valid.", 
+                thumbnail.width(),
+                thumbnail.height());
+        return false;
+    }
+
+    return true;
 }
 
-void
-Ut_WallpaperDescriptor::createDescriptor ()
+bool
+Ut_WallpaperDescriptor::checkHasThumbnail (
+        WallpaperDescriptor *d)
 {
-#if 0
-    bool                 connectSuccess;
-    
-    if (m_Desc)
-        delete m_Desc;
+    QPixmap  thumbnail = d->thumbnail ();
 
-    m_Desc = new WallpaperDescriptor;
-    /*
-     * Checking if the signals are there and of course connecting to them.
-     */
-    connectSuccess = connect (
-            m_Desc, SIGNAL (thumbnailLoaded (WallpaperDescriptor *)),
-            &m_SignalSink, SLOT (thumbnailLoaded (WallpaperDescriptor *)));
-    QVERIFY (connectSuccess);
+    if (!d->hasThumbnail())
+        return false;
 
-    /*
-     * Checking if the slots are there.
-     */
-    connectSuccess = connect (
-            &m_SignalSink, SIGNAL(thumbnailReady(QUrl, QUrl, QPixmap, QString)),
-            m_Desc, SLOT (thumbnailReady(QUrl, QUrl, QPixmap, QString)));
-    QVERIFY (connectSuccess);
-    
-    connectSuccess = connect (
-            &m_SignalSink, SIGNAL(thumbnailError(QString, QUrl)),
-            m_Desc, SLOT (thumbnailError(QString, QUrl)));
-    QVERIFY (connectSuccess);
+    if (thumbnail.width() != ThumbnailWidth || 
+            thumbnail.height() != ThumbnailHeight)
+        return false;
 
-    connectSuccess = connect (
-            &m_SignalSink, SIGNAL(thumbnailLoadingFinished(int)),
-            m_Desc, SLOT (thumbnailLoadingFinished(int)));
-    QVERIFY (connectSuccess);
-#endif
+    return true;
 }
 
 QTEST_APPLESS_MAIN(Ut_WallpaperDescriptor)
