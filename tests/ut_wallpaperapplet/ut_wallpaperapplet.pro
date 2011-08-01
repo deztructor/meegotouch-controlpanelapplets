@@ -74,7 +74,7 @@ HEADERS +=                                       \
     $$SRC_PREFIX/wallpaperworkerthread.h         \
     $$SRC_PREFIX/wallpaperviewwidgetstyle.h      \
     $$SRC_PREFIX/wallpaperutils.h                \
-    $$SRC_PREFIX/wallpaperconfiguration.h                
+    $$SRC_PREFIX/wallpaperconfiguration.h        
 
 SOURCES +=                                       \
     $$STUB_PREFIX/thumbnailerstub.cpp            \
