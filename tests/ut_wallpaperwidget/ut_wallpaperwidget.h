@@ -30,41 +30,22 @@ class WallpaperBusinessLogic;
 class WallpaperWidget;
 class WallpaperDescriptor;
 
-class SignalSink : public QObject
-{
-    Q_OBJECT
-public:
-    SignalSink ();
-
-    void reset();
-
-public slots:
-    void changeWidget (int widgetId);
-    void imageEditRequested ();
-
-public:
-    bool   m_ChangeWidgetCame;
-    int    m_WidgetID;
-    bool   m_WallpaperImageEditRequestedCame;
-};
-
 class Ut_WallpaperWidget : public QObject 
 {
-Q_OBJECT
+    Q_OBJECT
 
-private slots:
-    void init ();
-    void cleanup ();
-    void initTestCase ();
-    void cleanupTestCase ();
+    private slots:
+        void init ();
+        void cleanup ();
+        void initTestCase ();
+        void cleanupTestCase ();
 
-    void testImageActivated ();
+        void test0 ();
    
-private:
-    MApplication              *m_App;
-    WallpaperBusinessLogic    *m_BusinessLogic;
-    WallpaperWidget           *m_Widget;
-    SignalSink                 m_Sink;
+    private:
+        MApplication              *m_App;
+        WallpaperBusinessLogic    *m_BusinessLogic;
+        WallpaperWidget           *m_Widget;
 };
 
 #endif

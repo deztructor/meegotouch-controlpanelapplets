@@ -176,16 +176,6 @@ WallpaperWidget::slotImageActivated (
     m_BusinessLogic->startEdit (desc);
 }
 
-/*
- * When this slot is activated the image has to be already loaded, so that the
- * editor widget can be shown without delay.
- */
-void 
-WallpaperWidget::slotImageActivated ()
-{
-    SYS_DEBUG ("");
-}
-
 void 
 WallpaperWidget::slotEditWallpaper (
         WallpaperDescriptor desc)
@@ -207,7 +197,6 @@ WallpaperWidget::slotEditWallpaper (
         SYS_DEBUG ("emit changeWidget (1);");
         emit changeWidget (1);
     }
-    
     
     SYS_DEBUG ("----------------------------------- End -------------");
 }

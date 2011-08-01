@@ -50,7 +50,6 @@ protected:
         void slotImageActivated (WallpaperDescriptor desc);
         void slotEditWallpaper (WallpaperDescriptor desc);
 
-    void slotImageActivated ();
     virtual void createContent ();
     void oviActivated ();
     
