@@ -206,94 +206,6 @@ Ut_WallpaperBusinessLogic::testCurrentWallpaper ()
     SYS_DEBUG ("*** originalFilePath = %s", SYS_STR(originalFilePath));
 }
 
-void
-Ut_WallpaperBusinessLogic::testEditedImage ()
-{
-#if 0
-    WallpaperDescriptor desc;
-
-    m_Api->setEditedImage (&desc);
-    QVERIFY (m_Api->editedImage() == &desc);
-
-    m_Api->setEditedImage (0);
-    QVERIFY (m_Api->editedImage() == 0);
-#endif
-}
-
-/*
- * The tracker is stubbed, so we can test the available wllpapers. It is only
- * the current wallpaper singleton, we have to do something with that too...
- */
-void
-Ut_WallpaperBusinessLogic::testAvailableWallpapers ()
-{
-#if 0
-    QList<WallpaperDescriptor *> availableWallpapers;
-    int n;
-
-    availableWallpapers = m_Api->availableWallpapers ();
-    /*
-     * There should be at least one available wallpaper, that is the current
-     * wallpaper.
-     */
-    SYS_DEBUG ("We have %d available wallpapers.", availableWallpapers.size());
-    QVERIFY (availableWallpapers.size() > 0);
-
-    n = 0;
-    foreach (WallpaperDescriptor *desc, availableWallpapers) {
-        QString   filename, basename;
-        QString   extension, mimetype;
-        QString   suggestedp, suggestedl;
-        QString   originalp, originall;
-        QString   imageID;
-
-        filename = desc->filename ();
-        imageID = desc->imageID ();
-        basename = desc->basename ();
-        extension = desc->extension ();
-        mimetype = desc->mimeType ();
-        suggestedp = desc->suggestedOutputFilename (M::Portrait);
-        suggestedl = desc->suggestedOutputFilename (M::Landscape);
-        originalp = desc->originalImageFile (M::Portrait);
-        originall = desc->originalImageFile (M::Landscape);
-
-        if ((filename.isEmpty() && imageID.isEmpty()) ||
-                (basename.isEmpty() && imageID.isEmpty()) ||
-                (mimetype.isEmpty() && imageID.isEmpty()) ||
-                suggestedp.isEmpty() ||
-                suggestedl.isEmpty() ||
-                (originalp.isEmpty() && imageID.isEmpty()) ||
-                (originall.isEmpty() && imageID.isEmpty())) {
-            /*
-             * These might prove usefull in the future, but obviously generate
-             * too much output.
-             */
-            SYS_DEBUG ("*** available wallpaper #%3d ***", n);
-            SYS_DEBUG ("*** filename   = %s", SYS_STR(filename));
-            SYS_DEBUG ("*** imageID    = %s", SYS_STR(imageID));
-            SYS_DEBUG ("*** basename   = %s", SYS_STR(basename));
-            SYS_DEBUG ("*** mimetype   = %s", SYS_STR(mimetype));
-            SYS_DEBUG ("*** extension  = %s", SYS_STR(extension));
-            SYS_DEBUG ("*** suggestedp = %s", SYS_STR(suggestedp));
-            SYS_DEBUG ("*** suggestedl = %s", SYS_STR(suggestedl));
-            SYS_DEBUG ("*** originalp  = %s", SYS_STR(originalp));
-            SYS_DEBUG ("*** originall  = %s", SYS_STR(originall));
-        }
-
-//        QVERIFY (!filename.isEmpty() || !imageID.isEmpty());
-//        QVERIFY (!basename.isEmpty() || !imageID.isEmpty());
-//        QVERIFY (!mimetype.isEmpty() || !imageID.isEmpty());
-//        QVERIFY (!suggestedp.isEmpty());
-//        QVERIFY (!suggestedl.isEmpty());
-//        QVERIFY (!originalp.isEmpty() || !imageID.isEmpty());
-//        QVERIFY (!originall.isEmpty() || !imageID.isEmpty());
-
-        ++n;
-    }
-#endif
-}
-
-
 /*!
  * Checks the low level WallpaperITrans class, its tag methods and overloaded
  * operators.
@@ -301,7 +213,6 @@ Ut_WallpaperBusinessLogic::testAvailableWallpapers ()
 void
 Ut_WallpaperBusinessLogic::testITrans ()
 {
-#if 0
     WallpaperITrans trans1, trans2;
 
     SYS_DEBUG ("Checking default values of WallpaperITrans...");
@@ -344,99 +255,9 @@ Ut_WallpaperBusinessLogic::testITrans ()
     SYS_DEBUG ("Testing operator*...");
     SYS_DEBUG ("*** trans1.scale() = %d", trans2 * 2);
     QVERIFY (trans2 * 2 == 4);
-#endif
 }
 
-void
-Ut_WallpaperBusinessLogic::testCreateDirectory ()
-{
-#if 0
-    m_Api->ensureHasDirectory ();
-    m_Api->ensureHasDirectory ();
 
-    QString dirPath = m_Api->dirPath ();
-    QDirStub dir (dirPath);
-    QVERIFY (dir.exists());
-#endif
-}
-
-void
-Ut_WallpaperBusinessLogic::testBackupFiles ()
-{
-#if 0
-    QFileStub desktopFile(m_Api->dirPath() + "wallpaper.desktop");
-    desktopFile.open (QIODevice::WriteOnly);
-
-    QFileStub desktopFileBak (m_Api->dirPath() + "wallpaper.desktop.BAK");
-
-    /*
-     *
-     */
-    m_Api->createBackupFiles ();
-
-    SYS_DEBUG ("*** desktopfile.exists = %s",
-            SYS_BOOL(desktopFile.exists()));
-    SYS_DEBUG ("*** backupfile.exists  = %s",
-            SYS_BOOL(desktopFileBak.exists()));
-    QVERIFY (!desktopFile.exists());
-    QVERIFY (desktopFileBak.exists());
-
-    m_Api->deleteBackupFiles ();
-    QVERIFY (!desktopFileBak.exists());
-#endif
-}
-
-#if 0
-/*
- * This test was remoed because it is sometimes fails on cita with a segfault. I
- * think the QIODevice::writeData() should be stubbed, because it is somehow
- * changed. It did not cause any problem before...
- */
-void
-Ut_WallpaperBusinessLogic::testSetBackground()
-{
-    WallpaperITrans landscapeITrans;
-    WallpaperITrans portraitITrans;
-    QList<WallpaperDescriptor *> availableWallpapers;
-    int n;
-
-    availableWallpapers = m_Api->availableWallpapers ();
-    for (n = 0; n < availableWallpapers.size(); ++n) {
-        if (!availableWallpapers[n]->isCurrent())
-            break;
-    }
-
-    SYS_DEBUG ("*** n = %d", n);
-    if (n == availableWallpapers.size()) {
-        SYS_WARNING ("Only one image?");
-        return;
-    }
-
-    m_SignalSink.reset ();
-    SYS_WARNING ("======================================================");
-    m_Api->setBackground (
-            &landscapeITrans,
-            &portraitITrans,
-             availableWallpapers[n]);
-    // Testing if the images are valid and we got a signal about the change.
-    QVERIFY (m_SignalSink.m_WallpaperChangedCame);
-}
-#endif
-
-#if 0
-/*
- * I suspect this check is not right, also it is a feature that we might remove.
- */
-void
-Ut_WallpaperBusinessLogic::testCheckForPendingSignals()
-{
-    MGConfItem requestCodeItem  (WALLPAPER_APPLET_REQUEST_CODE);
-    requestCodeItem.set(WallpaperRequestEdit);
-    m_Api->checkForPendingSignals();
-
-    QVERIFY (m_SignalSink.m_WallpaperImageEditRequestedCame);
-}
-#endif
 
 
 /******************************************************************************

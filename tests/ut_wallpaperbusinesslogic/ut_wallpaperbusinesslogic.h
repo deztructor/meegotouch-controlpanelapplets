@@ -53,13 +53,7 @@ class Ut_WallpaperBusinessLogic : public QObject
 
         void testGConfItems ();
         void testCurrentWallpaper ();
-        void testEditedImage ();
-        void testAvailableWallpapers ();
         void testITrans ();
-        void testCreateDirectory ();
-        void testBackupFiles ();
-        //void testSetBackground ();
-        //void testCheckForPendingSignals ();
     
     private:
         WallpaperBusinessLogic    *m_Api;
