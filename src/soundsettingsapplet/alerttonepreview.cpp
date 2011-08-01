@@ -31,7 +31,7 @@ static ResourcePolicy::ResourceSet *resources;
 
 static const char *GstStartCommand =
     "filesrc name=alerttonepreviewfilesrc ! "
-    "decodebin ! volume name=alerttonepreviewvolume ! "
+    "decodebin ! audioconvert ! volume name=alerttonepreviewvolume ! "
     "pulsesink name=alerttonepreviewpulsesink";
 
 AlertTonePreview::AlertTonePreview (const QString &fname) :
