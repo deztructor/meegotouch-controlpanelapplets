@@ -17,6 +17,11 @@ fi
 
 rm -fr ./coverage/*
 
+# For better branch coverage, lets filter out the debug messages
+CXXFLAGS="-DPUBLIC_RELEASE -O0 -Wnone -g"
+export CXXFLAGS=${CXXFLAGS}
+export QMAKE_CXXFLAGS=${CXXFLAGS}
+
 echo "qmake BUILD_FEATURES=coverage"
 qmake BUILD_FEATURES=coverage
 
