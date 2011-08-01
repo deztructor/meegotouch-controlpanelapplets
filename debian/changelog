@@ -13,8 +13,10 @@ meegotouch-controlpanelapplets (0.20.62~1) meegotouch; urgency=low
     thumbnail of it in wallpaper applet is shown blank for a while.
   * Fixes: NB#250348 - Ringtone view to indicate currently selected
     ringtone on top of the view
+  * Fixes: NB#267545 - Brigthness slider needs info about power save
+    mode (implementation part)
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 01 Aug 2011 11:33:39 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 01 Aug 2011 12:58:12 +0300
 
 meegotouch-controlpanelapplets (0.20.61-1) meegotouch; urgency=low
 
