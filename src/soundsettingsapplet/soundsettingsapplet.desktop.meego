@@ -2,20 +2,17 @@
 Type=ControlPanelApplet
 Name=Alert Tones
 X-logical-id=qtn_sond_sounds
-X-translation-catalog=soundsettingsapplet,sounds,profiles
+X-translation-catalog=soundsettingsapplet
 X-Maemo-Service=com.nokia.DuiControlPanel
 X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
 X-Maemo-Object-Path=/
 X-Maemo-Fixed-Args=Alert Tones
-
 Icon=
 Exec=
 
 [DUI]
 X-DUIApplet-Applet=libsoundsettingsapplet.so
-X-DUIApplet-ImageLandscape=Widget_landscape_NOT_DEFINED.png
-X-DUIApplet-ImagePortrait=Widget_portrait_NOT_DEFINED.png
 
 [DCP]
-Category=qtn_sett_main_sounds
+Category=qtn_sett_main_personalize
 Order=3

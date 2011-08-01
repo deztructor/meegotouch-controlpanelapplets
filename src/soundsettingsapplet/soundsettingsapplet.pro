@@ -103,8 +103,15 @@ DESTDIR = lib
 css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libsoundsettingsapplet/style
 css.files = libsoundsettingsapplet.css
 
-desktop.files += *.desktop
+desktopsrc = soundsettingsapplet.desktop.harmattan
+contains(DEFINES, MEEGO) {
+    desktopsrc = soundsettingsapplet.desktop.meego
+}
+desktopfile = soundsettingsapplet.desktop
+desktop.files += $$desktopfile
 desktop.path = $$(DEBIAN_DESTDIR)/$$DCP_DESKTOP_DIR
+desktop.commands = cp -f $$desktopsrc $$desktopfile
+desktop.CONFIG += no_check_exist
 
 target.path += $$(DEBIAN_DESTDIR)/$$DCP_APPLET_DIR
 
