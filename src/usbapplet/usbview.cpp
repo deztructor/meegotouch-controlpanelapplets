@@ -461,10 +461,6 @@ UsbView::updateInfoLabel ()
     /*
      * Create the info label widget, and initialize its contents...
      */
-    MWidgetController *infoWidget = new MWidgetController;
-    infoWidget->setStyleName ("CommonTextFrameInverted");
-    infoWidget->setContentsMargins (0,0,0,0);
-
     QGraphicsLinearLayout *iwLayout =
         new QGraphicsLinearLayout (Qt::Horizontal);
     iwLayout->setContentsMargins (0,0,0,0);
@@ -473,7 +469,6 @@ UsbView::updateInfoLabel ()
     MImageWidget *iwIcon = new MImageWidget;
     iwIcon->setStyleName ("CommonMainIcon");
     iwIcon->setImage ("icon-m-common-usb");
-    SYS_DEBUG ("iwIcon->setImage (\"icon-m-common-usb\");");
     iwLayout->addItem (iwIcon);
 
     m_infoLabel = new MLabel;
@@ -482,7 +477,11 @@ UsbView::updateInfoLabel ()
     m_infoLabel->setText (infoText);
     iwLayout->addItem (m_infoLabel);
 
+    MStylableWidget *infoWidget = new MStylableWidget;
+    infoWidget->setContentsMargins (0,0,0,0);
     infoWidget->setLayout (iwLayout);
+
+    infoWidget->setStyleName ("CommonTextFrameInverted");
 
     /*
      * Insert it to the proper place... after the separator.
