@@ -22,8 +22,6 @@
 #undef DEBUG
 #include "../debug.h"
 
-#undef SHOW_TEXT_IN_POWERSAVE
-
 static const char brightnessKey[] = "/system/osso/dsm/display/display_brightness";
 
 BrightnessBrief::BrightnessBrief():
@@ -62,13 +60,13 @@ BrightnessBrief::value() const
 QString
 BrightnessBrief::valueText () const
 {
-#ifdef SHOW_TEXT_IN_POWERSAVE
+
     if (m_logic->PSMValue())
     {
         //% "In power save mode"
         return qtTrId ("qtn_ener_power_save_mode");
     }
-#endif
+
     return QString ();
 }
 
@@ -96,7 +94,9 @@ BrightnessBrief::maxValue () const
 int
 BrightnessBrief::widgetTypeID () const
 {
-#ifdef SHOW_TEXT_IN_POWERSAVE
+
+#if 0
+// This is not needed anymore due to the dcps changes
     if (m_logic->PSMValue())
         return DcpWidgetType::Label;
 #endif
