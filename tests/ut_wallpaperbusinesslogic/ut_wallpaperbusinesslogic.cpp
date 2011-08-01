@@ -19,11 +19,13 @@
 
 #include "filesystemstub.h"
 #include "ut_wallpaperbusinesslogic.h"
-#include "wallpapergconf.h"
+//#include "wallpapergconf.h"
 
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperitrans.h"
-#include "wallpapergconf.h"
+//#include "wallpapergconf.h"
+#include "wallpaperutils.h"
+#include "wallpaperconfiguration.h"
 
 #include <MApplication>
 #include <MGConfItem>
@@ -36,6 +38,41 @@ static const QString PortraitKey =
 static const QString LandscapeKey = 
     "/desktop/meego/background/landscape/picture_filename";
 
+/******************************************************************************
+ * GConf stub.
+ */
+#include <gconf/gconf-client.h>
+#include <gconf/gconf-value.h>
+
+static QHash<QString, QString> MyGConfDatabase;
+
+GConfValue *
+gconf_client_get (
+        GConfClient* client,
+        const gchar* key,
+        GError** err)
+{
+    Q_UNUSED (client);
+    Q_UNUSED (err);
+    Q_ASSERT (qstrlen (key) >= 10);
+
+    QString myKey = key;
+    GConfValue *retval;
+
+    SYS_WARNING ("*** key = %s", SYS_STR(myKey));
+    if (MyGConfDatabase.contains(myKey)) {
+        const char *r = strdup(MyGConfDatabase[myKey].toUtf8().constData());
+
+        retval = gconf_value_new (GCONF_VALUE_STRING);
+        gconf_value_set_string (retval, r);
+        SYS_DEBUG ("returning '%s'", r);
+    } else {
+        SYS_DEBUG ("returning false");
+        retval = gconf_value_new (GCONF_VALUE_BOOL);
+    }
+
+    return retval;
+}
 
 /******************************************************************************
  * QImage stub.
@@ -79,7 +116,6 @@ void
 SignalSink::reset ()
 {
     m_WallpaperChangedCame = false;
-    m_WallpaperImageEditRequestedCame = false;
 }
 
 void
@@ -89,12 +125,6 @@ SignalSink::wallpaperChanged ()
     m_WallpaperChangedCame = true;
 }
 
-void
-SignalSink::imageEditRequested()
-{
-    SYS_DEBUG ("");
-    m_WallpaperImageEditRequestedCame = true;
-}
 /******************************************************************************
  * Ut_WallpaperBusinessLogic implementation. 
  */
@@ -115,16 +145,22 @@ static char* app_name = (char*) "./ut_wallpaperbusinesslogic";
 void 
 Ut_WallpaperBusinessLogic::initTestCase()
 {
-    m_App = new MApplication (argc, &app_name);
-    m_Api = new WallpaperBusinessLogic;
+    bool connectSuccess;
 
-    connect (
+    MyGConfDatabase["/meegotouch/theme/name"] = "MyThemeName";
+    MyGConfDatabase[Wallpaper::CurrentPortraitKey] = 
+        "/ak/current.jpg";
+    MyGConfDatabase[Wallpaper::OriginalPortraitKey] = "";
+
+    m_App = new MApplication (argc, &app_name);
+
+
+    m_Api = new WallpaperBusinessLogic;
+    connectSuccess = connect (
             m_Api, SIGNAL (wallpaperChanged()),
             &m_SignalSink, SLOT (wallpaperChanged()));
+    QVERIFY (connectSuccess);
 
-    connect (
-            m_Api, SIGNAL (imageEditRequested()),
-            &m_SignalSink, SLOT (imageEditRequested()));
 
     //QVERIFY (m_Api->m_EditedImage == 0);
 }
@@ -143,32 +179,31 @@ Ut_WallpaperBusinessLogic::cleanupTestCase()
 void
 Ut_WallpaperBusinessLogic::testGConfItems ()
 {
-#if 0
-    QVERIFY (m_Api->m_LandscapeGConfItem != 0);
-    QVERIFY (m_Api->m_LandscapeGConfItem->key() == LandscapeKey); 
-            
-    QVERIFY (m_Api->m_PortraitGConfItem != 0);
-    QVERIFY (m_Api->m_PortraitGConfItem->key() == PortraitKey);
-#endif
+    QVERIFY (m_Api->m_PPItem != NULL);
+    QVERIFY (m_Api->m_PPItem->key() == Wallpaper::CurrentPortraitKey);
+
+    QVERIFY (m_Api->m_POItem != NULL);
+    QVERIFY (m_Api->m_POItem->key() == Wallpaper::OriginalPortraitKey);
+
+    QVERIFY (m_Api->m_PHItem != NULL);
+    QVERIFY (m_Api->m_PHItem->key() == Wallpaper::PortraitHistoryKey);
 }
 
 /*!
- * Checks if the dirpath the businesslogic uses as a target directory to save
- * fiels is actually an absolute path inside the /home directory. Please note
- * that this test will not actually create this directory, hence this test is in
- * the unit test set.
  */
 void
-Ut_WallpaperBusinessLogic::testDirPath ()
+Ut_WallpaperBusinessLogic::testCurrentWallpaper ()
 {
-#if 0
-    QString path = m_Api->dirPath ();
+    QString currentFilePath;
+    QString originalFilePath;
 
-    SYS_DEBUG ("*** dirPath() = %s", SYS_STR(path));
-    QVERIFY (!path.isEmpty());
-    QVERIFY (path.startsWith("/home") || path.startsWith("/root"));
-    QVERIFY (path.endsWith("/"));
-#endif
+
+    m_Api->currentWallpaper (currentFilePath, originalFilePath);
+    QVERIFY (currentFilePath == "/ak/current.jpg");
+    QVERIFY (originalFilePath.isEmpty());
+
+    SYS_DEBUG ("*** currentFilePath  = %s", SYS_STR(currentFilePath));
+    SYS_DEBUG ("*** originalFilePath = %s", SYS_STR(originalFilePath));
 }
 
 void

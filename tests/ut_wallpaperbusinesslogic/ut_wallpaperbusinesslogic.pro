@@ -23,12 +23,16 @@ DEFINES += UNIT_TEST
 TARGET = ut_wallpaperbusinesslogic
 target.path = /usr/lib/$$TEST_PKG_NAME
 
-CONFIG += \
-    plugin \
-    gui \
-    quill \
-    meegotouchcore \
+CONFIG +=            \
+    link_pkgconfig   \
+    plugin           \
+    gui              \
+    quill            \
+    meegotouchcore   \
     duicontrolpanel
+
+PKGCONFIG += gconf-2.0 
+
 
 contains(DEFINES, HAVE_QTSPARQL) {
     CONFIG += qtsparql
