@@ -128,3 +128,11 @@ Thumbnailer::request (
     return true;
 }
 
+void
+Thumbnailer::cancel  (
+        bool sendRemainingSignals, 
+        bool unqueueFromTumbler)
+{
+    Q_UNUSED (sendRemainingSignals);
+    Q_UNUSED (unqueueFromTumbler);
+}

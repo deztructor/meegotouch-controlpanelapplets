@@ -1,15 +1,20 @@
 include(../common_top.pri)
 
-MOC_DIR = .moc
+#
+# FIXME: Temporary thing until the unit tests are set to the new wallpaper
+# source.
+#
+MOC_DIR = ../.wallpaper2moc
 
 SRC_PREFIX = ../../src/wallpaperapplet2
 STUB_PREFIX = ../stubs
-INCLUDEPATH += \
-	$$SRC_PREFIX \
-        $$STUB_PREFIX
 
-QT += \
-    testlib \
+INCLUDEPATH +=         \
+	$$SRC_PREFIX       \
+    $$STUB_PREFIX
+
+QT +=                  \
+    testlib            \
     dbus 
 
 TEMPLATE = app
@@ -17,12 +22,16 @@ DEFINES += UNIT_TEST
 TARGET = ut_wallpaperdescriptor
 target.path = /usr/lib/$$TEST_PKG_NAME
 
-CONFIG += \
-	plugin \
-	gui \
-    quill \
-	meegotouchcore \
+CONFIG +=             \
+	plugin            \
+	gui               \
+    quill             \
+	meegotouchcore    \
 	duicontrolpanel
+
+#contains(DEFINES, HAVE_QMSYSTEM) {
+    CONFIG += qmsystem2
+#}
 
 contains(DEFINES, HAVE_QUILL_FILTER) {
     CONFIG += quillimagefilter

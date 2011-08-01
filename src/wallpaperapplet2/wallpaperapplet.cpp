@@ -40,7 +40,6 @@ M_LIBRARY
 WallpaperApplet::WallpaperApplet() :
     m_WallpaperBusinessLogic (0)
 {
-    SYS_WARNING ("Creating applet: %s", M_LIBRARY_NAME);
 }
 
 WallpaperApplet::~WallpaperApplet() 

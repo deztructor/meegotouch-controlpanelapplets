@@ -83,17 +83,17 @@ Ut_WallpaperApplet::testTitle ()
 void
 Ut_WallpaperApplet::testConstructWidget ()
 {
-    DcpWidget *widget, *editorWidget;
-    bool       backAccepted;
+    DcpStylableWidget *widget, *editorWidget;
+    bool               backAccepted;
 
     /*
      * Testing if the applet creates a widget the first time.
      */
-    widget = m_Applet->constructWidget (WallpaperApplet::MainWidget);
+    widget = m_Applet->constructStylableWidget (WallpaperApplet::MainWidget);
     QVERIFY (widget);
     QVERIFY (m_Applet->m_MainWidget == widget);
     
-    editorWidget = m_Applet->constructWidget (WallpaperApplet::EditorWidget);
+    editorWidget = m_Applet->constructStylableWidget (WallpaperApplet::EditorWidget);
     QVERIFY (editorWidget);
     QVERIFY (m_Applet->m_EditorWidget == editorWidget);
     

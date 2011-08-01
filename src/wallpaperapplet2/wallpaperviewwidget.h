@@ -109,7 +109,7 @@ class WallpaperViewWidget : public DcpStylableWidget
          */
         void panningPhysicsPositionChanged (const QPointF &position);
         void panningPhysicsPanningStopped ();
-        void pinchUpdate ();
+        //void pinchUpdate ();
         void pinchStopped ();
         void rotateAnimationFinished ();
 

@@ -53,6 +53,10 @@ public:
             bool autoCancel = false, 
             bool sendRemainingSignals = true );
 
+    void cancel  (
+            bool sendRemainingSignals = true, 
+            bool unqueueFromTumbler = true);
+
 signals:
     void finished (int left);
 
