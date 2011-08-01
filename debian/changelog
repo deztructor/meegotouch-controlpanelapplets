@@ -11,9 +11,10 @@ meegotouch-controlpanelapplets (0.20.62~1) meegotouch; urgency=low
     actual version string
   * Fixes: NB#274606 - If the wallpaper set from gallery is re-edited, the
     thumbnail of it in wallpaper applet is shown blank for a while.
+  * Fixes: NB#250348 - Ringtone view to indicate currently selected
+    ringtone on top of the view
 
-
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 25 Jul 2011 16:35:50 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 01 Aug 2011 11:33:39 +0300
 
 meegotouch-controlpanelapplets (0.20.61-1) meegotouch; urgency=low
 
