@@ -20,10 +20,10 @@ meegotouch-controlpanelapplets (0.20.62~1) meegotouch; urgency=low
   [ David Kedves ]
   * Fixes: NB#267545 - Brigthness slider needs info about power save
     mode (implementation part)
-  * Fixes: NB#272908 - Cannot set new message tone (signed wav problem)
+  * Fixed 272908 - Cannot set new message tone (unsigned wav problem)
   * Some meego.com changes in wallpaper and soundsettings applets
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 01 Aug 2011 13:03:14 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 01 Aug 2011 13:08:24 +0300
 
 meegotouch-controlpanelapplets (0.20.61-1) meegotouch; urgency=low
 
