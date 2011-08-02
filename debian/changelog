@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.62~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.62~2) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#262474 - [TASK] AlertToneBrowser: newly added items aren't sorted 
@@ -23,7 +23,7 @@ meegotouch-controlpanelapplets (0.20.62~1) meegotouch; urgency=low
   * Fixed 272908 - Cannot set new message tone (unsigned wav problem)
   * Some meego.com changes in wallpaper and soundsettings applets
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 01 Aug 2011 13:08:24 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 02 Aug 2011 13:22:43 +0300
 
 meegotouch-controlpanelapplets (0.20.61-1) meegotouch; urgency=low
 
