@@ -22,9 +22,8 @@ meegotouch-controlpanelapplets (0.20.62~2) meegotouch; urgency=low
     mode (implementation part)
   * Fixed 272908 - Cannot set new message tone (unsigned wav problem)
   * Some meego.com changes in wallpaper and soundsettings applets
-  * Fixes: NB#265952 - Reset does not ask for lock code even if enabled
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 02 Aug 2011 11:45:30 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 02 Aug 2011 13:22:43 +0300
 
 meegotouch-controlpanelapplets (0.20.61-1) meegotouch; urgency=low
 
