@@ -46,7 +46,9 @@
 #define WARNING
 #include "../debug.h"
 
-WallpaperBusinessLogic::WallpaperBusinessLogic() :
+WallpaperBusinessLogic::WallpaperBusinessLogic (
+        QObject     *parent) :
+    QObject (parent),
     m_EditRequested (false),
     m_WorkerThread (0)
 {

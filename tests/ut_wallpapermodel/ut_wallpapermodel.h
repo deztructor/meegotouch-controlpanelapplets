@@ -32,23 +32,16 @@ class Ut_WallpaperModel : public QObject
 {
 Q_OBJECT
 
-private slots:
-    void init ();
-    void cleanup ();
-    void initTestCase ();
-    void cleanupTestCase ();
+    private slots:
+        void init ();
+        void cleanup ();
+        void initTestCase ();
+        void cleanupTestCase ();
 
-    void testRowsColumns ();
-    void testData ();
-    void testCellCreator ();
-    void testImageLoader ();
-
-private:
-    bool isWallpaperDescriptorValid (WallpaperDescriptor *desc);
-
-    MApplication              *m_App;
-    WallpaperBusinessLogic    *m_BusinessLogic;
-    WallpaperModel            *m_Model;
+    private:
+        MApplication              *m_App;
+        WallpaperBusinessLogic    *m_BusinessLogic;
+        WallpaperModel            *m_Model;
 };
 
 #endif

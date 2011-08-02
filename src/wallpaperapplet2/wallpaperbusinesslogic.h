@@ -95,7 +95,7 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
     Q_OBJECT
 
     public:
-        WallpaperBusinessLogic ();
+        WallpaperBusinessLogic (QObject *parent = 0);
         ~WallpaperBusinessLogic ();
 
         void currentWallpaper (

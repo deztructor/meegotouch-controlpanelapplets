@@ -31,6 +31,45 @@ WallpaperBusinessLogic::~WallpaperBusinessLogic ()
 
 }
 
+void
+WallpaperBusinessLogic::currentWallpaper (
+        QString   &currentFilePath,
+        QString   &originalFilePath)
+{
+}
+
+void 
+WallpaperBusinessLogic::workerThreadFinishedSave ()
+{
+}
+
+void
+WallpaperBusinessLogic::gconfTimerSlot ()
+{
+}
+
+
+void 
+WallpaperBusinessLogic::workerThreadFinishedLoad ()
+{
+}
+
+void
+WallpaperBusinessLogic::portraitGConfChanged ()
+{
+}
+
+void
+WallpaperBusinessLogic::portraitHistoryChanged ()
+{
+}
+
+QStringList
+WallpaperBusinessLogic::history () const
+{
+}
+
+#if 0
 QList<WallpaperDescriptor *>
 WallpaperBusinessLogic::availableWallpapers () const
 {
@@ -71,13 +110,16 @@ WallpaperBusinessLogic::availableWallpapers () const
 
     return testList;
 }
+#endif
 
+#if 0
 void 
 WallpaperBusinessLogic::directoryChangedDelayed ()
 {
-
 }
+#endif
 
+#if 0
 void
 WallpaperBusinessLogic::setEditedImage (
     WallpaperDescriptor *desc,
@@ -86,7 +128,9 @@ WallpaperBusinessLogic::setEditedImage (
     m_EditedImage = desc;
     m_EditedImageOurs = ours;
 }
+#endif
 
+#if 0
 void
 WallpaperBusinessLogic::startEdit (WallpaperDescriptor *desc)
 {
@@ -94,13 +138,17 @@ WallpaperBusinessLogic::startEdit (WallpaperDescriptor *desc)
 
     emit imageEditRequested ();
 }
+#endif
 
+#if 0
 WallpaperDescriptor *
 WallpaperBusinessLogic::editedImage ()
 {
     return m_EditedImage;
 }
+#endif
 
+#if 0
 void
 WallpaperBusinessLogic::setBackground (
         WallpaperITrans     *landscapeITrans,
@@ -111,25 +159,32 @@ WallpaperBusinessLogic::setBackground (
     Q_UNUSED (portraitITrans);
     Q_UNUSED (desc);
 }
+#endif
 
+#if 0
 bool
 WallpaperBusinessLogic::supportsLandscape () const
 {
     return true;
 }
+#endif
 
+#if 0
 bool
 WallpaperBusinessLogic::supportsPortrait () const
 {
     return true;
 }
+#endif
 
+#if 0
 void
 WallpaperBusinessLogic::valueChanged ()
 {
-
 }
+#endif
 
+#if 0
 void
 WallpaperBusinessLogic::editRequestArrived (
     QString a, QString b)
@@ -137,13 +192,16 @@ WallpaperBusinessLogic::editRequestArrived (
     Q_UNUSED (a);
     Q_UNUSED (b);
 }
+#endif
 
+#if 0
 void
 WallpaperBusinessLogic::startEditThreadEnded ()
 {
-
 }
+#endif
 
+#if 0
 void 
 WallpaperBusinessLogic::directoryChanged (
         const QString &path)
@@ -151,11 +209,13 @@ WallpaperBusinessLogic::directoryChanged (
     Q_UNUSED (path);
     //emit fileListChanged ();
 }
+#endif
 
+#if 0
 void 
 WallpaperBusinessLogic::fileChanged (
         const QString &path)
 {
     Q_UNUSED (path);
 }
-
+#endif
