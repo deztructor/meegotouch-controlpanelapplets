@@ -23,7 +23,7 @@
 #include "wallpapereditorsheet.h"
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperconfiguration.h"
-#include "wallpapereditorwidget.h"
+#include "wallpaperviewwidget.h"
 
 #include <MBasicSheetHeader>
 #include <QAction>

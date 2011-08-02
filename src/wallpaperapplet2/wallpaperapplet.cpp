@@ -19,7 +19,7 @@
 
 #include "wallpaperapplet.h"
 #include "wallpaperwidget.h"
-#include "wallpapereditorwidget.h"
+#include "wallpaperviewwidget.h"
 #include "wallpaperconfiguration.h"
 #include "wallpaperlistsheet.h"
 

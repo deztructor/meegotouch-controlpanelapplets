@@ -137,21 +137,23 @@ class WallpaperViewWidget : public DcpStylableWidget
         QPointer<MAction>                 m_CancelAction;
 
         private:
-        bool                  m_OrientationLocked;
-        M::Orientation        m_Orientation;
+            bool                  m_OrientationLocked;
+            M::Orientation        m_Orientation;
 
-        QPointF               m_UserOffset;
+            QPointF               m_UserOffset;
 
-        qreal                 m_LastTransScale;
-        qreal                 m_LastTransRotation;
-        bool                  m_PinchOngoing;
-        bool                  m_Scaling;
-        bool                  m_Rotating;
-        bool                  m_PanOngoing;
-        bool                  m_HasPendingRedraw;
-        bool                  m_HasPendingSave;
-        MPhysics2DPanning    *m_Physics;
-        QPropertyAnimation    m_RotateAnimation;
+            qreal                 m_LastTransScale;
+            qreal                 m_LastTransRotation;
+            bool                  m_PinchOngoing;
+            bool                  m_Scaling;
+            bool                  m_Rotating;
+            bool                  m_PanOngoing;
+            bool                  m_HasPendingRedraw;
+            bool                  m_HasPendingSave;
+            MPhysics2DPanning    *m_Physics;
+            QPropertyAnimation    m_RotateAnimation;
+
+        friend class Ut_WallpaperEditorWidget;
 };
 
 #endif

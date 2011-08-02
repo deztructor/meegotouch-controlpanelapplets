@@ -23,7 +23,7 @@
 #include <QtTest/QtTest>
 #include <QObject>
 
-class WallpaperEditorWidget;
+class WallpaperViewWidget;
 class WallpaperBusinessLogic;
 class WallpaperDescriptor;
 class MApplication;
@@ -55,7 +55,7 @@ private:
     
     MApplication              *m_App;
     WallpaperBusinessLogic    *m_BusinessLogic;
-    WallpaperEditorWidget     *m_Widget;
+    WallpaperViewWidget       *m_Widget;
 };
 
 #endif

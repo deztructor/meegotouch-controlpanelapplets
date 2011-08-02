@@ -19,8 +19,7 @@
 
 #include "ut_wallpapereditorwidget.h"
 #include "wallpaperbusinesslogic.h"
-#include "wallpapereditorwidget.h"
-#include "wallpapercurrentdescriptor.h"
+#include "wallpaperviewwidget.h"
 #include "wallpapergconf.h"
 
 /*
@@ -213,7 +212,6 @@ void
 Ut_WallpaperEditorWidget::testCreateContentFail ()
 {
     createObjects ();
-    QVERIFY (!m_Widget->m_InfoHeader);
     QVERIFY (!m_Widget->m_DoneAction);
     QVERIFY (!m_Widget->m_CancelAction);
     QVERIFY (m_Widget->back());
@@ -471,19 +469,19 @@ Ut_WallpaperEditorWidget::createObjects (
 
         case DescriptorCurrent:
             // The current wallpaper will be edited.
-            m_BusinessLogic->setEditedImage (
-                    WallpaperCurrentDescriptor::instance());
+            //m_BusinessLogic->setEditedImage (
+            //        WallpaperCurrentDescriptor::instance());
             break;
 
         case DescriptorNotCurrent:
             // The not-current image will be edited. The index 0 contains the
             // current image descriptor.
-            descriptors = m_BusinessLogic->availableWallpapers ();
-            m_BusinessLogic->setEditedImage (descriptors[1]);
+            //descriptors = m_BusinessLogic->availableWallpapers ();
+            //m_BusinessLogic->setEditedImage (descriptors[1]);
             break;
     }
 
-    m_Widget = new WallpaperEditorWidget (m_BusinessLogic);
+    m_Widget = new WallpaperViewWidget (m_BusinessLogic);
     QTest::qWait (100);
 }
 
@@ -495,7 +493,6 @@ Ut_WallpaperEditorWidget::dropObjects ()
     if (m_BusinessLogic)
         delete m_BusinessLogic;
 
-    delete WallpaperCurrentDescriptor::instance();
     m_Widget = 0;
     m_BusinessLogic = 0;
 }
