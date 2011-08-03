@@ -1,29 +1,21 @@
-meegotouch-controlpanelapplets (0.20.62~2) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.62~3) meegotouch; urgency=low
 
   [ Laszlo Pere ]
-  * Fixes: NB#262474 - [TASK] AlertToneBrowser: newly added items aren't sorted 
-  * Fixes: NB#273918 - either user should be able to set wallpaper in 
-    Arbitrary angles or shouldn't be
   * Fixes: NB#261019 - settings doesn't respond for sometime while saving the
     wallpaper.
   * Fixes: NB#262622 - After downloading wallpaper from ovi-store it is
     appears as black thumbnail placeholder in wallpaper applet
   * Fixes: NB#270857 - [TASK] Add PR1.1 to "About product" applet before the 
     actual version string
-  * Fixes: NB#274606 - If the wallpaper set from gallery is re-edited, the
-    thumbnail of it in wallpaper applet is shown blank for a while.
 
   [ Zoltan Nyul ]
   * Fixes: NB#250348 - Ringtone view to indicate currently selected
     ringtone on top of the view
 
   [ David Kedves ]
-  * Fixes: NB#267545 - Brigthness slider needs info about power save
-    mode (implementation part)
-  * Fixed 272908 - Cannot set new message tone (unsigned wav problem)
   * Some meego.com changes in wallpaper and soundsettings applets
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 02 Aug 2011 13:22:43 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 03 Aug 2011 13:49:58 +0300
 
 meegotouch-controlpanelapplets (0.20.61-1) meegotouch; urgency=low
 
