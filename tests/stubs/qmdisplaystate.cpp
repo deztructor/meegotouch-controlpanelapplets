@@ -22,7 +22,8 @@
 #define DEBUG
 #include "../../src/debug.h"
 
-using namespace MeeGo;
+namespace MeeGo
+{
 
 QmDisplayState::QmDisplayState ()
 {
@@ -110,4 +111,7 @@ QmDisplayState::getBlankingWhenCharging()
     SYS_DEBUG ("returning %s", SYS_BOOL(m_BlankingWhenCharging));
     return m_BlankingWhenCharging;
 }
+
+} // namespace MeeGo
+
 
