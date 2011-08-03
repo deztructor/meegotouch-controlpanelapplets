@@ -38,7 +38,7 @@ using namespace Wallpaper;
 #include <QFileInfoList>
 #include <MGConfItem>
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include <../debug.h>
 
@@ -181,6 +181,16 @@ Wallpaper::imageNameFilter ()
 /******************************************************************************
  * File-system manipulation methods.
  */
+static QHash<QString, qint64> fileSystem;
+
+void
+stubAddFileToFilesystem (
+        const QString  &filePath,
+        qint64          fileSize)
+{
+    fileSystem[filePath] = fileSize;
+}
+
 QHash<QString, qint64> 
 Wallpaper::readDir (
         const QString     &directoryPath,
@@ -197,37 +207,23 @@ Wallpaper::readDir (
         const QStringList       &nameFilters,
         QHash<QString, qint64>  &hashTable)
 {
-    QDir                   directory (directoryPath);
-    QFileInfoList          entryList;
+    SYS_DEBUG ("**********************************************");
+    SYS_DEBUG ("*** returning %3d simulated files          ***",
+            fileSystem.size());
+    SYS_DEBUG ("**********************************************");
 
-    if (!directory.exists(directoryPath))
-        goto finalize;
-
-    entryList = directory.entryInfoList (
-            nameFilters, QDir::Files | QDir::NoSymLinks | QDir::Readable);
-
-    for (int iList = 0; iList < entryList.count(); iList++) {
-        SYS_DEBUG ("entryList[%d] = '%s'", iList, 
-                SYS_STR(entryList[iList].filePath()));
-        hashTable[entryList[iList].filePath()] = entryList[iList].size();
-    }
-    
 finalize:
-    return hashTable;
+    return fileSystem;
 }
 
 bool
 Wallpaper::imageFile (
             const QString     &filePath)
 {
-    bool retval = false;
+    bool retval = fileSystem.contains(filePath);
 
-    if (filePath.startsWith(QDir::separator())) {
-        QFile   thisFile(filePath);
-
-        if (thisFile.exists())
-            retval = true;
-    }
+    SYS_DEBUG ("*** filePath = %s", SYS_STR(filePath));
+    SYS_DEBUG ("*** returning %s", SYS_BOOL(retval));
 
     return retval;
 }

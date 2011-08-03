@@ -163,6 +163,8 @@ class WallpaperModel: public QAbstractTableModel
         #ifdef HAVE_QMSYSTEM
         MeeGo::QmUSBMode                       *m_UsbMode;
         #endif
+        
+        friend class Ut_WallpaperModel;
 };
 
 

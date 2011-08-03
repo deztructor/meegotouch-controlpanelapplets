@@ -15,43 +15,17 @@
 ** and appearing in the file LICENSE.LGPL included in the packaging
 ** of this file.
 **
+** Contact: Karoliina T. Salminen <karoliina.t.salminen@nokia.com>
+** Authors: David Kedves <dkedves@blumsoft.eu>
+**          Laszlo Pere <lpere@blumsoft.eu>
+**
 ****************************************************************************/
+#ifndef WALLPAPERUTILS_STUB_H
+#define WALLPAPERUTILS_STUB_H
 
-#ifndef UT_WALLPAPERMODEL_H
-#define UT_WALLPAPERMODEL_H
+#include <QString>
 
-#include <QtTest/QtTest>
-#include <QObject>
-
-class MApplication;
-class WallpaperBusinessLogic;
-class WallpaperModel;
-class WallpaperDescriptor;
-
-class WallpaperModelSignals : public QObject 
-{
-Q_OBJECT
-
-    public slots:
-        void currentChanged (const QModelIndex &current);
-};
-
-class Ut_WallpaperModel : public QObject 
-{
-Q_OBJECT
-
-    private slots:
-        void init ();
-        void cleanup ();
-        void initTestCase ();
-        void cleanupTestCase ();
-
-    private:
-        MApplication              *m_App;
-        WallpaperBusinessLogic    *m_BusinessLogic;
-        WallpaperModel            *m_Model;
-        WallpaperModelSignals      m_Signals;
-};
-
+void stubAddFileToFilesystem (
+        const QString  &filePath,
+        qint64          fileSize);
 #endif
-

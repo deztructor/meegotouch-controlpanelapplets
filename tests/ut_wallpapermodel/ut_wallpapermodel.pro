@@ -49,6 +49,7 @@ HEADERS += \
     $$STUB_PREFIX/thumbnailerstub.h              \
     $$STUB_PREFIX/filesystemstub.h               \
     $$STUB_PREFIX/qmusbmode.h                    \
+    $$STUB_PREFIX/wallpaperutils_stub.h          \
     ../../src/debug.h                            \
     ut_wallpapermodel.h                          \
     $$SRC_PREFIX/gridimagewidget.h               \
@@ -68,6 +69,7 @@ SOURCES +=                                       \
     $$STUB_PREFIX/filesystemstub.cpp             \
     $$STUB_PREFIX/qmusbmode.cpp                  \
     $$STUB_PREFIX/wallpaperbusinesslogic_stub.cpp \
+    $$STUB_PREFIX/wallpaperutils_stub.cpp        \
     ../../src/debug.cpp                          \
     ut_wallpapermodel.cpp                        \
     $$SRC_PREFIX/gridimagewidget.cpp             \
@@ -75,7 +77,6 @@ SOURCES +=                                       \
     $$SRC_PREFIX/wallpapermodel.cpp              \
     $$SRC_PREFIX/wallpaperdescriptor_p.cpp       \
     $$SRC_PREFIX/wallpaperworkerthread.cpp       \
-    $$SRC_PREFIX/wallpaperitrans.cpp             \
-    $$SRC_PREFIX/wallpaperutils.cpp              
+    $$SRC_PREFIX/wallpaperitrans.cpp             
 
 INSTALLS += target

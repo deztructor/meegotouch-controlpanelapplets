@@ -18,9 +18,13 @@
 ****************************************************************************/
 
 #include "ut_wallpapermodel.h"
+#include "wallpaperutils_stub.h"
+
 #include "wallpapermodel.h"
 #include "wallpaperdescriptor.h"
 #include "wallpaperbusinesslogic.h"
+#include "wallpaperconfiguration.h"
+#include "wallpaperutils.h"
 
 #include <MGConfItem>
 #include <MApplication>
@@ -32,6 +36,20 @@ static const QString PortraitKey =
     "/desktop/meego/background/portrait/picture_filename";
 static const QString LandscapeKey =
     "/desktop/meego/background/landscape/picture_filename";
+
+
+
+/******************************************************************************
+ * WallpaperModelSignals implementation. 
+ */
+void
+WallpaperModelSignals::currentChanged (
+        const QModelIndex &current)
+{
+    SYS_DEBUG ("");
+}
+
+
 
 /******************************************************************************
  * Ut_WallpaperModel implementation. 
@@ -65,9 +83,46 @@ static char *app_name = (char*) "./ut_wallpapermodel";
 void 
 Ut_WallpaperModel::initTestCase()
 {
+    bool signalSuccess;
+
+    stubAddFileToFilesystem ("/testFile1.png", 100);
+    stubAddFileToFilesystem ("/testFile2.png", 100);
+
     m_App = new MApplication (argc, &app_name);
     m_BusinessLogic = new WallpaperBusinessLogic;
     m_Model = new WallpaperModel (m_BusinessLogic);
+
+    signalSuccess = connect (
+            m_Model, SIGNAL(currentChanged(const QModelIndex &)),
+            &m_Signals, SLOT(currentChanged(const QModelIndex &)));
+    QVERIFY (signalSuccess);
+
+    QVERIFY (m_Model->m_ImagesDir == 
+            Wallpaper::constructPath (Wallpaper::ImagesDir));
+    QVERIFY (m_Model->m_SysImagesDir == 
+            Wallpaper::constructPath (Wallpaper::SysImagesDir));
+
+    #if 0
+    SYS_DEBUG ("*** rowCount() = %d", m_Model->rowCount());
+    for (int n = 0; n < m_Model->m_FilePathList.size(); ++n) {
+        SYS_DEBUG ("[%03d] %s", n, SYS_STR(m_Model->m_FilePathList[n]));
+    }
+    #endif
+    
+    /*
+     * Re-calling the loadFromDirectory() is delayed, but we force calling it
+     * now.
+     */
+    m_Model->loadFromDirectory ();
+    SYS_DEBUG ("*** rowCount() = %d", m_Model->rowCount());
+    for (int n = 0; n < m_Model->m_FilePathList.size(); ++n) {
+        SYS_DEBUG ("[%03d] %s", n, SYS_STR(m_Model->m_FilePathList[n]));
+    }
+
+    /*
+     * We must have one current image and the two simulated files in the model.
+     */
+    QVERIFY(m_Model->rowCount() == 3);
 }
 
 void 
