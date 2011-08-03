@@ -4,6 +4,7 @@ include(common.pri)
 #
 # The coverage target will not build the functional tests.
 #
+
 contains(BUILD_FEATURES,coverage) {
     #
     # Sometimes it is good to disable all but one unit tests.
@@ -33,8 +34,8 @@ if (!isEmpty(BUILD_APPLET)){
 
 }
 
-# nocheck option disables the test building
 contains(BUILD_FEATURES,nocheck) {
+    # nocheck option disables the test building
     message("*** Disabling unit/functional test building ***")
     SUBDIRS =
 }
