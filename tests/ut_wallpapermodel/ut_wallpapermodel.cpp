@@ -37,7 +37,9 @@ static const QString PortraitKey =
 static const QString LandscapeKey =
     "/desktop/meego/background/landscape/picture_filename";
 
-
+static const QString testFile1 ("/testFile1.png");
+static const QString testFile2 ("/testFile2.png");
+static const QString testFile3 ("/testFile3.png");
 
 /******************************************************************************
  * WallpaperModelSignals implementation. 
@@ -85,8 +87,8 @@ Ut_WallpaperModel::initTestCase()
 {
     bool signalSuccess;
 
-    stubAddFileToFilesystem ("/testFile1.png", 100);
-    stubAddFileToFilesystem ("/testFile2.png", 100);
+    stubAddFileToFilesystem (testFile1, 100);
+    stubAddFileToFilesystem (testFile2, 100);
 
     m_App = new MApplication (argc, &app_name);
     m_BusinessLogic = new WallpaperBusinessLogic;
@@ -133,6 +135,41 @@ Ut_WallpaperModel::cleanupTestCase()
     m_App->deleteLater ();
 }
 
+void 
+Ut_WallpaperModel::testData ()
+{
+    for (int n = 0; n < m_Model->rowCount(); ++n) {
+        QModelIndex index = m_Model->index (n, 0);
+        QVariant    data = index.data(WallpaperModel::WallpaperDescriptorRole);
+        WallpaperDescriptor desc = data.value<WallpaperDescriptor>();
+
+        SYS_DEBUG ("[%03d] desc = %s", n, SYS_STR(desc.filePath()));
+        SYS_DEBUG ("[%03d] intr = %s", n, SYS_STR(m_Model->m_FilePathList[n]));
+        QVERIFY (desc.filePath() == m_Model->m_FilePathList[n]);
+    }
+}
+
+void
+Ut_WallpaperModel::testSelectByFilepath ()
+{
+    m_Model->selectByFilepath (testFile1);
+    QVERIFY(m_Model->selectedPath() == testFile1);
+
+    /*
+     * We "create" the file and then we re-load the directory. 
+     * FIXME: What happens when the selectByFilepath() is called before the
+     * model has the chance to read the directory twice?
+     */
+    stubAddFileToFilesystem (testFile3, 1000);
+    m_Model->loadFromDirectory ();
+    m_Model->loadFromDirectory ();
+
+    /*
+     * Now we select the file and check if it is selected.
+     */
+    m_Model->selectByFilepath (testFile3);
+    QVERIFY(m_Model->selectedPath() == testFile3);
+}
 
 QTEST_APPLESS_MAIN(Ut_WallpaperModel)
 

@@ -46,6 +46,8 @@ Q_OBJECT
         void initTestCase ();
         void cleanupTestCase ();
 
+        void testData ();
+        void testSelectByFilepath ();
     private:
         MApplication              *m_App;
         WallpaperBusinessLogic    *m_BusinessLogic;
