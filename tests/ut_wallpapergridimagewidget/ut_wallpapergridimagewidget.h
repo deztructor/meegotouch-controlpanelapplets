@@ -16,16 +16,15 @@
 ** of this file.
 **
 ****************************************************************************/
-#ifndef UT_WALLPAPERAPPLET_H
-#define UT_WALLPAPERAPPLET_H
+#ifndef UT_WALLPAPERGRIDIMAGEWIDGET_H
+#define UT_WALLPAPERGRIDIMAGEWIDGET_H
 
 #include <QtTest/QtTest>
 #include <QObject>
 
-class WallpaperApplet;
 class MApplication;
 
-class Ut_WallpaperApplet : public QObject 
+class Ut_WallpaperGridImageWidget : public QObject 
 {
     Q_OBJECT
 
@@ -34,15 +33,13 @@ class Ut_WallpaperApplet : public QObject
         void cleanup ();
         void initTestCase ();
         void cleanupTestCase ();
-
-        void testTitle ();
-        void testConstructWidget ();
-        void testMenuItems ();
+        
+        void testID ();
+        void testProgress ();
 
     private:
         MApplication              *m_App;
-        WallpaperApplet           *m_Applet;
 };
 
-#endif
 
+#endif

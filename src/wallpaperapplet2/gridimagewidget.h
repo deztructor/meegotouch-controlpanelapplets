@@ -89,5 +89,7 @@ class GridImageWidget : public MListItem
         const MButtonIconStyle *m_HighlightStyle;
         QString                 m_ID;
         QPropertyAnimation     *m_OpacityAnimation;
+
+    friend class Ut_WallpaperGridImageWidget;
 };
 #endif
