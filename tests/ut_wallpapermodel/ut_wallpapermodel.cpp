@@ -26,6 +26,7 @@
 #include "wallpaperconfiguration.h"
 #include "wallpaperutils.h"
 
+#include <QSet>
 #include <MGConfItem>
 #include <MApplication>
 
@@ -138,6 +139,8 @@ Ut_WallpaperModel::cleanupTestCase()
 void 
 Ut_WallpaperModel::testData ()
 {
+    QSet<int> theSet;
+
     for (int n = 0; n < m_Model->rowCount(); ++n) {
         QModelIndex index = m_Model->index (n, 0);
         QVariant    data = index.data(WallpaperModel::WallpaperDescriptorRole);
@@ -146,6 +149,18 @@ Ut_WallpaperModel::testData ()
         SYS_DEBUG ("[%03d] desc = %s", n, SYS_STR(desc.filePath()));
         SYS_DEBUG ("[%03d] intr = %s", n, SYS_STR(m_Model->m_FilePathList[n]));
         QVERIFY (desc.filePath() == m_Model->m_FilePathList[n]);
+    }
+
+    for (int n = 0; n < m_Model->rowCount(); ++n) {
+        QModelIndex index = m_Model->index (n, 0);
+        QVariant    data;
+        data = index.data(Qt::DisplayRole);
+        int         iData= data.toInt ();
+
+        SYS_DEBUG ("[%03d] order= %d", n, iData);
+        SYS_DEBUG ("[%03d] intr = %s", n, SYS_STR(m_Model->m_FilePathList[n]));
+        QVERIFY (!theSet.contains(iData));
+        theSet.insert (iData);
     }
 }
 

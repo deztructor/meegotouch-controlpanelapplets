@@ -74,6 +74,8 @@ WallpaperDescriptor::~WallpaperDescriptor ()
         if (m_Priv->unRef() == 0)
             delete m_Priv;
     }
+
+    m_Priv = 0;
 }
 
 WallpaperDescriptor &

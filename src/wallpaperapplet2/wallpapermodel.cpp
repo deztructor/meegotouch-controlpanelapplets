@@ -31,7 +31,7 @@
 #include "wallpaperdescriptor.h"
 #include "gridimagewidget.h"
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include <../debug.h>
 
@@ -130,7 +130,6 @@ WallpaperModel::data (
         int                role) const
 {
     QVariant             retval;
-    WallpaperDescriptor  desc;
 
     Q_ASSERT (index.row() >= 0);
     Q_ASSERT (index.row() < m_FilePathList.size());
@@ -142,7 +141,7 @@ WallpaperModel::data (
             /*
              * We use this role to sort the wallpapers in the list widget.
              */
-            //SYS_DEBUG ("Qt::DisplayRole");
+            SYS_DEBUG ("Qt::DisplayRole");
             if (!m_FilePathHash.contains(m_FilePathList[index.row()])) {
                 SYS_WARNING ("MISSING DESCRIPTOR AT %d: %s", index.row(),
                         SYS_STR(m_FilePathList[index.row()]));
@@ -152,7 +151,7 @@ WallpaperModel::data (
             break;
 
         case WallpaperModel::WallpaperDescriptorRole:
-            //SYS_DEBUG ("WallpaperModel::WallpaperDescriptorRole");
+            SYS_DEBUG ("WallpaperModel::WallpaperDescriptorRole");
             if (!m_FilePathHash.contains(m_FilePathList[index.row()])) {
                 SYS_WARNING ("MISSING DESCRIPTOR AT %d: %s", index.row(),
                         SYS_STR(m_FilePathList[index.row()]));
@@ -165,6 +164,7 @@ WallpaperModel::data (
             retval.setValue (QString("Unsupported role"));
     }
 
+    SYS_DEBUG ("Returning %s", retval.typeName());
     return retval;
 }
 
