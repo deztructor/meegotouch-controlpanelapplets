@@ -66,13 +66,13 @@ SOURCES +=                                       \
     $$STUB_PREFIX/thumbnailerstub.cpp            \
     $$STUB_PREFIX/mdesktopentry.cpp              \
     $$STUB_PREFIX/filesystemstub.cpp             \
+    $$STUB_PREFIX/wallpaperutils_stub.cpp        \
     ../../src/debug.cpp                          \
     ut_wallpaperbusinesslogic.cpp                \
     $$SRC_PREFIX/wallpaperbusinesslogic.cpp      \
     $$SRC_PREFIX/wallpaperdescriptor.cpp         \
     $$SRC_PREFIX/wallpaperdescriptor_p.cpp       \
     $$SRC_PREFIX/wallpaperworkerthread.cpp       \
-    $$SRC_PREFIX/wallpaperitrans.cpp             \
-    $$SRC_PREFIX/wallpaperutils.cpp              
+    $$SRC_PREFIX/wallpaperitrans.cpp             
 
 INSTALLS += target

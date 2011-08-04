@@ -51,9 +51,11 @@ class Ut_WallpaperBusinessLogic : public QObject
         void initTestCase ();
         void cleanupTestCase ();
 
+        void testITrans ();
         void testGConfItems ();
         void testCurrentWallpaper ();
-        void testITrans ();
+        void testSceneSize ();
+        void testEditedImage ();
     
     private:
         WallpaperBusinessLogic    *m_Api;

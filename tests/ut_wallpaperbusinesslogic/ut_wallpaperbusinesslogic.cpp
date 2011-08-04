@@ -174,39 +174,6 @@ Ut_WallpaperBusinessLogic::cleanupTestCase()
 }
 
 /*!
- * Checks if the GConfItem objects are created with the right keys.
- */
-void
-Ut_WallpaperBusinessLogic::testGConfItems ()
-{
-    QVERIFY (m_Api->m_PPItem != NULL);
-    QVERIFY (m_Api->m_PPItem->key() == Wallpaper::CurrentPortraitKey);
-
-    QVERIFY (m_Api->m_POItem != NULL);
-    QVERIFY (m_Api->m_POItem->key() == Wallpaper::OriginalPortraitKey);
-
-    QVERIFY (m_Api->m_PHItem != NULL);
-    QVERIFY (m_Api->m_PHItem->key() == Wallpaper::PortraitHistoryKey);
-}
-
-/*!
- */
-void
-Ut_WallpaperBusinessLogic::testCurrentWallpaper ()
-{
-    QString currentFilePath;
-    QString originalFilePath;
-
-
-    m_Api->currentWallpaper (currentFilePath, originalFilePath);
-    QVERIFY (currentFilePath == "/ak/current.jpg");
-    QVERIFY (originalFilePath.isEmpty());
-
-    SYS_DEBUG ("*** currentFilePath  = %s", SYS_STR(currentFilePath));
-    SYS_DEBUG ("*** originalFilePath = %s", SYS_STR(originalFilePath));
-}
-
-/*!
  * Checks the low level WallpaperITrans class, its tag methods and overloaded
  * operators.
  */
@@ -257,8 +224,57 @@ Ut_WallpaperBusinessLogic::testITrans ()
     QVERIFY (trans2 * 2 == 4);
 }
 
+/*!
+ * Checks if the GConfItem objects are created with the right keys.
+ */
+void
+Ut_WallpaperBusinessLogic::testGConfItems ()
+{
+    QVERIFY (m_Api->m_PPItem != NULL);
+    QVERIFY (m_Api->m_PPItem->key() == Wallpaper::CurrentPortraitKey);
+
+    QVERIFY (m_Api->m_POItem != NULL);
+    QVERIFY (m_Api->m_POItem->key() == Wallpaper::OriginalPortraitKey);
+
+    QVERIFY (m_Api->m_PHItem != NULL);
+    QVERIFY (m_Api->m_PHItem->key() == Wallpaper::PortraitHistoryKey);
+}
+
+/*!
+ */
+void
+Ut_WallpaperBusinessLogic::testCurrentWallpaper ()
+{
+    QString currentFilePath;
+    QString originalFilePath;
 
 
+    m_Api->currentWallpaper (currentFilePath, originalFilePath);
+    QVERIFY (currentFilePath == "/ak/current.jpg");
+    QVERIFY (originalFilePath.isEmpty());
+
+    SYS_DEBUG ("*** currentFilePath  = %s", SYS_STR(currentFilePath));
+    SYS_DEBUG ("*** originalFilePath = %s", SYS_STR(originalFilePath));
+}
+
+void
+Ut_WallpaperBusinessLogic::testSceneSize ()
+{
+    QSize size = m_Api->sceneSize ();
+    QSize expected = QSize (480, 854);
+
+    QVERIFY (size == expected);
+}
+
+void
+Ut_WallpaperBusinessLogic::testEditedImage ()
+{
+    QVERIFY (!m_Api->hasEditedImage ());
+
+    m_Api->endEdit ();
+    QVERIFY (!m_Api->hasEditedImage ());
+
+}
 
 /******************************************************************************
  * Private functions.
