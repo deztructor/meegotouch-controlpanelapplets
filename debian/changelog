@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.62~3) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.62-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#261019 - settings doesn't respond for sometime while saving the
@@ -15,7 +15,7 @@ meegotouch-controlpanelapplets (0.20.62~3) meegotouch; urgency=low
   [ David Kedves ]
   * Some meego.com changes in wallpaper and soundsettings applets
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 03 Aug 2011 13:49:58 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 04 Aug 2011 09:52:36 +0300
 
 meegotouch-controlpanelapplets (0.20.61-1) meegotouch; urgency=low
 
