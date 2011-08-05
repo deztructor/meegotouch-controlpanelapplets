@@ -180,8 +180,8 @@ Ut_WallpaperBusinessLogic::cleanupTestCase()
 void
 Ut_WallpaperBusinessLogic::testITrans ()
 {
-    WallpaperITrans trans1, trans2;
-
+    WallpaperITrans trans1, trans2, trans4, trans5;
+    
     SYS_DEBUG ("Checking default values of WallpaperITrans...");
     QVERIFY (trans1.x() == 0);
     QVERIFY (trans1.y() == 0);
@@ -196,15 +196,19 @@ Ut_WallpaperBusinessLogic::testITrans ()
 
     QVERIFY (trans2.x() == 10);
     QVERIFY (trans2.y() == 11);
+    QVERIFY (trans2.offset() == QPointF(10, 11));
     QVERIFY (trans2.scale() == 2.0);
     QVERIFY (trans2.orientation() == M::Portrait);
     QVERIFY (trans2.expectedWidth() == 864);
     QVERIFY (trans2.expectedHeight() == 480);
 
+    trans2 += QPointF(1.0, 1.0);
+    QVERIFY (trans2.offset() == QPointF(11, 12));
+
     SYS_DEBUG ("Testing the copy constructor.");
     WallpaperITrans trans3 (trans2);
-    QVERIFY (trans3.x() == 10);
-    QVERIFY (trans3.y() == 11);
+    QVERIFY (trans3.x() == 11);
+    QVERIFY (trans3.y() == 12);
     QVERIFY (trans3.scale() == 2.0);
     QVERIFY (trans3.orientation() == M::Portrait);
     QVERIFY (trans3.expectedWidth() == 864);
@@ -212,16 +216,37 @@ Ut_WallpaperBusinessLogic::testITrans ()
 
     SYS_DEBUG ("testing operator=...");
     trans1 = trans2;
-    QVERIFY (trans1.x() == 10);
-    QVERIFY (trans1.y() == 11);
+    QVERIFY (trans1.x() == 11);
+    QVERIFY (trans1.y() == 12);
     QVERIFY (trans1.scale() == 2.0);
     QVERIFY (trans1.orientation() == M::Portrait);
     QVERIFY (trans1.expectedWidth() == 864);
     QVERIFY (trans1.expectedHeight() == 480);
+    QVERIFY (trans1.expectedSize() == QSize(864, 480));
 
     SYS_DEBUG ("Testing operator*...");
     SYS_DEBUG ("*** trans1.scale() = %d", trans2 * 2);
     QVERIFY (trans2 * 2 == 4);
+
+
+    QVERIFY (trans4.noTransformation ());
+    QVERIFY (trans4.rotation() == 0.0);
+    trans4.setRotation(90.0);
+    QVERIFY (!trans4.noTransformation ());
+    QVERIFY (trans4.rotation() == 90.0);
+    trans4.modRotation(1200.0);
+    QVERIFY (trans4.rotation() > 90.0);
+
+    QVERIFY (trans5.noTransformation ());
+    trans5.modScale(1200);
+    QVERIFY (!trans5.noTransformation ());
+    QVERIFY (trans5.scale() > 1.0);
+
+    trans5.setScale (0.1);
+    trans5.modScale (-1200);
+    trans5.modScale (-1200);
+    trans5.modScale (-1200);
+    QVERIFY (trans5.scale() > 0.0);
 }
 
 /*!
