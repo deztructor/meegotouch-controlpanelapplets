@@ -76,6 +76,8 @@ class WallpaperWorkerThread : public QThread
         WallpaperDescriptor  m_Descriptor;
         QSize                m_Size;
         bool                 m_Success;
+
+        friend class Ut_WallpaperWorkerThread;
 };
 
 #endif
