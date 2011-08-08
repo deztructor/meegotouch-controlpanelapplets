@@ -48,5 +48,7 @@ class WallpaperEditorSheet : public MSheet
     private:
         WallpaperViewWidget  *m_EditorWidget;
         bool                  m_Saving;
+
+        friend class Ut_WallpaperEditorSheet;
 };
 #endif
