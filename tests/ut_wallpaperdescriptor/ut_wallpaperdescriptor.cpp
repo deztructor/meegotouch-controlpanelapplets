@@ -35,7 +35,7 @@
 
 static const int ThumbnailWidth  = 170;
 static const int ThumbnailHeight = 171;
-
+static const QString fileToLoad ("a file to load.png");
 /******************************************************************************
  * QuillFile stub.
  */
@@ -248,7 +248,7 @@ Ut_WallpaperDescriptor::testOrder ()
 void
 Ut_WallpaperDescriptor::testLoad ()
 {
-    WallpaperDescriptor desc1 ("/a file to load.png");
+    WallpaperDescriptor desc1 (fileToLoad);
     QSize               expectedSize (170, 171);
     QSize               originalSize;
     QuillImage          image;

@@ -78,12 +78,12 @@ SOURCES +=                                       \
     $$STUB_PREFIX/mdesktopentry.cpp              \
     $$STUB_PREFIX/filesystemstub.cpp             \
     $$STUB_PREFIX/qmusbmode.cpp                  \
+    $$STUB_PREFIX/wallpaperbusinesslogic_stub.cpp \
     ../../src/debug.cpp                          \
     ut_wallpapereditorwidget.cpp                 \
     $$SRC_PREFIX/gridimagewidget.cpp             \
     $$SRC_PREFIX/wallpaperlist.cpp               \
     $$SRC_PREFIX/wallpapereditorsheet.cpp        \
-    $$SRC_PREFIX/wallpaperbusinesslogic.cpp      \
     $$SRC_PREFIX/wallpaperdescriptor.cpp         \
     $$SRC_PREFIX/wallpaperdescriptor_p.cpp       \
     $$SRC_PREFIX/wallpaperviewwidget.cpp         \

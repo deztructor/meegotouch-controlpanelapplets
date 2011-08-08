@@ -45,6 +45,9 @@ private slots:
     void cleanupTestCase ();
 
     void testCreateContentFail ();
+    void test1 ();
+    void test2 ();
+
     void testCreateContentCurrent ();
     void testCreateContentNonCurrent ();
     void testMouseEvents ();

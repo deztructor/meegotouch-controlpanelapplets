@@ -220,6 +220,41 @@ Ut_WallpaperEditorWidget::testCreateContentFail ()
 }
 
 void
+Ut_WallpaperEditorWidget::test1 ()
+{
+    //m_BusinessLogic->m_EditedImage = WallpaperDescriptor("/editedimage.png");
+    QuillImage image;
+    QSize      size (1024, 1024);
+
+    createObjects ();
+
+    m_Widget->applyStyle ();
+    m_Widget->initialize (image, size);
+    
+    dropObjects ();
+}
+
+void
+Ut_WallpaperEditorWidget::test2 ()
+{
+    createObjects ();
+
+    m_Widget->applyStyle ();
+    QVERIFY (m_Widget->m_Physics);
+    QVERIFY (m_Widget->m_Physics->panDirection () == 
+            (Qt::Vertical | Qt::Horizontal));
+    QVERIFY (m_Widget->m_Physics->enabled());
+    
+    m_Widget->applyStyle ();
+    QVERIFY (m_Widget->m_Physics);
+    QVERIFY (m_Widget->m_Physics->panDirection () == 
+            (Qt::Vertical | Qt::Horizontal));
+    QVERIFY (m_Widget->m_Physics->enabled());
+
+    dropObjects ();
+}
+
+void
 Ut_WallpaperEditorWidget::testCreateContentCurrent ()
 {
 #if 0

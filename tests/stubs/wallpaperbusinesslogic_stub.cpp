@@ -70,4 +70,48 @@ WallpaperBusinessLogic::history () const
     return QStringList();
 }
 
+bool
+WallpaperBusinessLogic::hasEditedImage () const
+{
+    return true;
+}
+
+bool
+WallpaperBusinessLogic::setWallpaper ()
+{
+    return true;
+}
+
+bool
+WallpaperBusinessLogic::setWallpaper (
+        QPixmap   &pixmap)
+{
+    return true;
+}
+
+QSize
+WallpaperBusinessLogic::sceneSize () const
+{
+    return QSize (480, 854);
+}
+
+
+void
+WallpaperBusinessLogic::startEdit (
+        WallpaperDescriptor desc)
+{
+    m_EditedImage = desc;
+}
+
+void
+WallpaperBusinessLogic::endEdit ()
+{
+    m_EditedImage = WallpaperDescriptor();
+}
+
+WallpaperDescriptor 
+WallpaperBusinessLogic::editedImage () const
+{
+    return m_EditedImage;
+}
 
