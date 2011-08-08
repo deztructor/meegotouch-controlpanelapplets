@@ -37,45 +37,26 @@ static const int ThumbnailWidth  = 170;
 static const int ThumbnailHeight = 171;
 
 /******************************************************************************
- * 
+ * QuillFile stub.
  */
-#if 0
-static bool pixmapLoadSuccess = true;
+#include <QuillFile>
 
-bool 	
-QPixmap::load (
-        const QString & fileName, 
-        const char * format, 
-        Qt::ImageConversionFlags flags)
+QSize 
+QuillFile::fullImageSize () const
 {
-    Q_UNUSED (fileName);
-    Q_UNUSED (format);
-    Q_UNUSED (flags);
-    SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
-    if (pixmapLoadSuccess)
-        *this = QPixmap (100, 100);
-
-    return pixmapLoadSuccess;
+    SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName()));
+    return QSize(1024, 1025);
 }
 
-#include <QImage>
-bool
-QImage::load (
-        const QString &fileName, 
-        const char     *format)
+#include <QuillImageFilter>
+QuillImage 
+QuillImageFilter::apply (
+        const QuillImage &image) const
 {
-    Q_UNUSED (fileName);
-    Q_UNUSED (format);
-    SYS_WARNING ("Emulating load of %s", SYS_STR(fileName));
-    if (pixmapLoadSuccess) {
-        *this = QImage (QSize(864, 480), QImage::Format_RGB16);
-        this->fill (0);
-    }
+    SYS_DEBUG ("image %dx%d", image.width(), image.height());
 
-    return pixmapLoadSuccess;
+    return image;
 }
-#endif
-
 
 
 /******************************************************************************
@@ -262,6 +243,19 @@ Ut_WallpaperDescriptor::testOrder ()
      */
     QVERIFY (desc1 < desc2);
 
+}
+
+void
+Ut_WallpaperDescriptor::testLoad ()
+{
+    WallpaperDescriptor desc1 ("/a file to load.png");
+    QSize               expectedSize (170, 171);
+    QSize               originalSize;
+    QuillImage          image;
+
+    image = desc1.load (expectedSize, originalSize);
+    QVERIFY (originalSize == QSize(1024, 1025));
+    QVERIFY (image.width() == 170 && image.height() == 171);
 }
 
 /******************************************************************************

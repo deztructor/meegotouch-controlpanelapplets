@@ -44,7 +44,7 @@ class Ut_WallpaperDescriptor : public QObject
         void testUrlMimeType_data ();
         void testUrlMimeType ();
         void testOrder ();
-
+        void testLoad ();
     private:
         bool checkHasNoThumbnail (WallpaperDescriptor *d);
         bool checkHasThumbnail (WallpaperDescriptor *d);
