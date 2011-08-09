@@ -25,7 +25,7 @@
 #include <QPixmap>
 
 #include <MButton>
-#include <MContainer>
+#include <MWidgetController>
 #include <MImageWidget>
 #include <MLayout>
 #include <MLinearLayoutPolicy>
@@ -57,7 +57,7 @@ ThemeDialog::ThemeDialog (
     MLinearLayoutPolicy   *portraitLayoutPolicy;
     MLinearLayoutPolicy   *landscapeLayoutPolicy;
 
-    MContainer            *hbox;
+    MWidgetController     *hbox;
     MImageWidget          *image1, *image2;
     QString                landscapePreviewFileName;
     QString                portraitPreviewFileName;
@@ -133,8 +133,7 @@ ThemeDialog::ThemeDialog (
     mainLayout->setLandscapePolicy (landscapeLayoutPolicy);
     mainLayout->setPortraitPolicy (portraitLayoutPolicy);
 
-    hbox = new MContainer (this);
-    hbox->setHeaderVisible (false);
+    hbox = new MWidgetController (this);
     hbox->setLayout (mainLayout);
 
     setCentralWidget (hbox);
