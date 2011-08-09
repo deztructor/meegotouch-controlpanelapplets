@@ -22,11 +22,13 @@
 #include "dcpprofile.h"
 
 #include <QGraphicsLinearLayout>
-#include <MContainer>
+#include <MWidgetController>
 #include <MLabel>
 #include <MSlider>
 #include <QVariant>
 #include <MGConfItem>
+
+#include "../styles.h"
 
 #undef DEBUG
 #include "../debug.h"
@@ -90,26 +92,12 @@ ProfileWidget::initProfiles ()
     vibraLayout->setContentsMargins (0., 0., 0., 0.);
     vibraLayout->setSpacing (0.);
 
-    MContainer *headerContainer = new MContainer;
-    headerContainer->setHeaderVisible (false);
-    headerContainer->setStyleName ("CommonLargeHeaderPanelInverted");
-
-    QGraphicsLinearLayout *headerLayout =
-        new QGraphicsLinearLayout (Qt::Horizontal);
-    headerLayout->setContentsMargins (0., 0., 0., 0.);
-
     MLabel *titleLabel = new MLabel;
     //% "Profile"
     titleLabel->setText (qtTrId ("qtn_prof_profile"));
-    titleLabel->setStyleName ("CommonLargeHeaderInverted");
-    headerLayout->addItem (titleLabel);
+    titleLabel->setStyleName (APP_TITLE_LABEL_STYLE_NAME);
 
-    headerLayout->addStretch ();
-
-
-    headerContainer->centralWidget ()->setLayout (headerLayout);
-
-    mainLayout->addItem (headerContainer);
+    mainLayout->addItem (titleLabel);
 
     /*
      *
@@ -120,8 +108,7 @@ ProfileWidget::initProfiles ()
     /*
      *
      */
-    MContainer *listContainer = new MContainer;
-    listContainer->setHeaderVisible (false);
+    MWidgetController *listContainer = new MWidgetController;
     listContainer->setStyleName ("CommonPanelInverted");
     listContainer->setContentsMargins (0., 0., 0., 0.);
 
@@ -163,7 +150,7 @@ ProfileWidget::initProfiles ()
             connect (cont, SIGNAL (clicked ()), SLOT (selectionChanged ()));
         }
     }
-    listContainer->centralWidget ()->setLayout (vibraLayout);
+    listContainer->setLayout (vibraLayout);
 
     /*
      * mainLayout

@@ -25,7 +25,7 @@
 
 class MLabel;
 class MSlider;
-class MContainer;
+class MWidgetController;
 class ProfileContainer;
 
 class ProfileWidget : public DcpWidget
