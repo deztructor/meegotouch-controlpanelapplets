@@ -26,7 +26,7 @@
 #include "../debug.h"
 
 #include <MButton>
-#include <MContainer>
+#include <MWidgetController>
 #include <MComboBox>
 #include <MLabel>
 #include <MLayout>
@@ -131,20 +131,18 @@ DisplayWidget::addHeaderContainer ()
 void
 DisplayWidget::addSecHeaderContainer ()
 {
-    MContainer            *container;
+    MWidgetController            *container;
     QGraphicsLinearLayout *layout;
 
     /*
      * Creating a lcontainer and a layout.
      */
-    container = new MContainer (this);
+    container = new MWidgetController (this);
     container->setStyleName ("CommonHeaderPanelInverted");
-
-    container->setHeaderVisible (false);
     container->setContentsMargins (0,0,0,0);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
-    container->centralWidget()->setLayout (layout);
+    container->setLayout (layout);
     layout->setContentsMargins (0,0,0,0);
 
     /*
@@ -167,20 +165,19 @@ void
 DisplayWidget::addSliderContainer ()
 {
 #if 0
-    MContainer            *container;
+    MWidgetController            *container;
     QGraphicsLinearLayout *layout;
 
     /*
      * Creating a lcontainer and a layout.
      */
-    container = new MContainer (this);
+    container = new MWidgetController (this);
     container->setContentsMargins (0,0,0,0);
     container->setStyleName ("CommonLargePanelInverted");
-    container->setHeaderVisible (false);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
     layout->setContentsMargins (0,0,0,0);
-    container->centralWidget()->setLayout (layout);
+    container->setLayout (layout);
 
     /*
      * The slider to set the brighness of the display.
@@ -248,21 +245,20 @@ DisplayWidget::addScreenTimeoutContainer ()
 void
 DisplayWidget::addLowPowerContainer ()
 {
-    MContainer            *container;
+    MWidgetController            *container;
     QGraphicsLinearLayout *layout;
 
     /*
      * Creating a lcontainer and a layout.
      */
-    container = new MContainer (this);
+    container = new MWidgetController (this);
     container->setContentsMargins (0,0,0,0);
     container->setStyleName ("CommonLargePanelInverted");
-    container->setHeaderVisible (false);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
     layout->setContentsMargins (0,0,0,0);
     layout->setSpacing (0);
-    container->centralWidget()->setLayout (layout);
+    container->setLayout (layout);
 
     MLabel *lowPowerLabel = new MLabel;
     lowPowerLabel->setWordWrap (true);
@@ -303,21 +299,20 @@ DisplayWidget::addLowPowerContainer ()
 void
 DisplayWidget::addDoubleTapContainer ()
 {
-    MContainer            *container;
+    MWidgetController            *container;
     QGraphicsLinearLayout *layout;
 
     /*
      * Creating a lcontainer and a layout.
      */
-    container = new MContainer (this);
+    container = new MWidgetController (this);
     container->setContentsMargins (0,0,0,0);
     container->setStyleName ("CommonLargePanelInverted");
-    container->setHeaderVisible (false);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
     layout->setContentsMargins (0,0,0,0);
     layout->setSpacing (0);
-    container->centralWidget()->setLayout (layout);
+    container->setLayout (layout);
 
     MLabel *lowPowerLabel = new MLabel;
     lowPowerLabel->setWordWrap (true);
@@ -351,21 +346,20 @@ void
 DisplayWidget::addFromTopCloseContainer ()
 {
 #ifndef MEEGO
-    MContainer            *container;
+    MWidgetController            *container;
     QGraphicsLinearLayout *layout;
 
     /*
      * Creating a lcontainer and a layout.
      */
-    container = new MContainer (this);
+    container = new MWidgetController (this);
     container->setContentsMargins (0,0,0,0);
     container->setStyleName ("CommonLargePanelInverted");
-    container->setHeaderVisible (false);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
     layout->setContentsMargins (0,0,0,0);
     layout->setSpacing (0);
-    container->centralWidget ()->setLayout (layout);
+    container->setLayout (layout);
 
     MLabel *descLabel = new MLabel;
     descLabel->setWordWrap (true);
