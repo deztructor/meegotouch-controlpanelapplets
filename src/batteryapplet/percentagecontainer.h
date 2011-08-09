@@ -19,7 +19,7 @@
 #ifndef PERCENTAGECONTAINER_H
 #define PERCENTAGECONTAINER_H
 
-#include <MContainer>
+#include <MWidgetController>
 
 class QGraphicsLinearLayout;
 class MSeparator;
@@ -32,7 +32,7 @@ class MLabel;
  * in stand-by and active mode.
  * This widget also holds an image, but does not handle its changes.
  */
-class PercentageContainer : public MContainer
+class PercentageContainer : public MWidgetController
 {
 public:
     PercentageContainer(
@@ -49,7 +49,7 @@ public slots:
     void charging (int);
 
 private:
-    void setLayout ();
+    void setMainLayout ();
     QString formatTime (int remTime);
     void toggleSubLabelVisibility (bool visible);
 

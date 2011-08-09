@@ -33,7 +33,7 @@
 
 SliderContainer::SliderContainer (
         MWidget *parent) :
-    MContainer (parent),
+    MWidgetController (parent),
     m_PSMSlider (0),
     m_SliderExists (false)
 {
@@ -56,14 +56,13 @@ SliderContainer::createWidgets (MWidget *parent)
     /*
      * A container for the two labels.
      */
-    setHeaderVisible (false);
     setContentsMargins (0, 0, 0, 0);
     //setStyleName ("CommonPanelInverted");
 
     layout = new QGraphicsLinearLayout (Qt::Vertical);
     layout->setContentsMargins (0,0,0,0);
     layout->setSpacing (0);
-    centralWidget()->setLayout (layout);
+    setLayout (layout);
 
     /*
      * "Auto activate power save" label

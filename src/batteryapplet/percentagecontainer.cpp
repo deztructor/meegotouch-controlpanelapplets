@@ -32,7 +32,7 @@ PercentageContainer::PercentageContainer(
         const QString  &text,
         MImageWidget   *image,
         MWidget        *parent) :
-    MContainer (parent),
+    MWidgetController (parent),
     m_MainLayout (0),
     m_Image (image),
     m_TextLabel (0),
@@ -47,8 +47,7 @@ PercentageContainer::PercentageContainer(
     m_TextLabel->setStyleName ("CommonSingleTitleInverted");
     m_TextLabel->setWordWrap (true);
 
-    setHeaderVisible (false);
-    setLayout ();
+    setMainLayout ();
 }
 
 
@@ -88,7 +87,7 @@ PercentageContainer::updateRemainingChargingTime (
  * This method will create all the internal widgets. 
  */
 void 
-PercentageContainer::setLayout()
+PercentageContainer::setMainLayout()
 {
     QGraphicsLinearLayout *layout;
 
@@ -109,7 +108,7 @@ PercentageContainer::setLayout()
     m_MainLayout->addItem (layout);
 
     // set the layout
-    centralWidget ()->setLayout (m_MainLayout);
+    setLayout (m_MainLayout);
 }
 
 void
