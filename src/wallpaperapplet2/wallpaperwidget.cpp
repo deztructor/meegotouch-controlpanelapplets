@@ -21,7 +21,6 @@
 #include <MApplicationPage>
 #include <MLayout>
 #include <MLinearLayoutPolicy>
-#include <MContainer>
 #include <QTimer>
 #include <MContentItem>
 #include <MAction>
