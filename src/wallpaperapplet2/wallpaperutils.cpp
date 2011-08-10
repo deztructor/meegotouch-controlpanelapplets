@@ -245,10 +245,20 @@ Wallpaper::ensureHasDirectory (
     } else if (!dir.mkpath(directoryPath)) {
         SYS_WARNING ("Unable to create %s directory.", SYS_STR(directoryPath));
     } else {
+        SYS_DEBUG ("Created directory '%s'", SYS_STR(directoryPath));
         retval = true;
     }
 
     return retval;
+}
+
+bool
+Wallpaper::hasDirectory (
+        const QString &directoryPath)
+{
+    QDir dir (directoryPath);
+
+    return dir.exists();
 }
 
 /******************************************************************************

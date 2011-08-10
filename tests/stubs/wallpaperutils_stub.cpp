@@ -247,6 +247,13 @@ Wallpaper::ensureHasDirectory (
     return retval;
 }
 
+bool
+Wallpaper::hasDirectory (
+        const QString &directoryPath)
+{
+    return true;
+}
+
 /******************************************************************************
  * Graphics.
  */

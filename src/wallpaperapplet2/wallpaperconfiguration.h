@@ -67,6 +67,7 @@ namespace Wallpaper
 
     const QString SysImagesDir ("/usr/share/backgrounds");
     const QString ImagesDir ("~/MyDocs/.wallpapers");
+    const QString MountDir ("~/MyDocs");
     const QString ImagesSaveDir ("~/.wallpapers");
     const QString OutImgExt (".png");
 

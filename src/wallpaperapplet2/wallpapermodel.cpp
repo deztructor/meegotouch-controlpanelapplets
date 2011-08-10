@@ -31,7 +31,7 @@
 #include "wallpaperdescriptor.h"
 #include "gridimagewidget.h"
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include <../debug.h>
 
@@ -828,6 +828,15 @@ WallpaperModel::fileChanged (
 void
 WallpaperModel::startWatchFiles ()
 {
+    QString mountDir;
+
+    /*
+     * Early creation of the images directory so we can watch it.
+     */
+    mountDir = Wallpaper::constructPath (Wallpaper::MountDir);
+    if (Wallpaper::hasDirectory(mountDir))
+        Wallpaper::ensureHasDirectory (m_ImagesDir);
+
     /*
      * Creating the file-system watcher.
      */

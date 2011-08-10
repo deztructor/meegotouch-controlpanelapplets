@@ -88,6 +88,9 @@ namespace Wallpaper
     bool ensureHasDirectory (
             const QString &directoryPath);
 
+    bool hasDirectory (
+            const QString &directoryPath);
+
     /*
      * Graphics
      */
