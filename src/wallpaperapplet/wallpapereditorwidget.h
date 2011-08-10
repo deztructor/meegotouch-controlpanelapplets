@@ -27,7 +27,6 @@
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperitrans.h"
 
-class MContainer;
 class MLinearLayoutPolicy;
 class QGraphicsSceneMouseEvent;
 class QGraphicsSceneWheelEvent;

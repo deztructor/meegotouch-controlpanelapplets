@@ -24,7 +24,6 @@
 #include "dcpwidget.h"
 #include "wallpaperbusinesslogic.h"
 
-class MContainer;
 class MLinearLayoutPolicy;
 class MLabel;
 class MList;

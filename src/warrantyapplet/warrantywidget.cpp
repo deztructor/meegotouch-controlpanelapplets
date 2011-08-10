@@ -31,7 +31,6 @@
 #include <QVariant>
 #include <MLinearLayoutPolicy>
 #include <QGraphicsLinearLayout>
-#include <MContainer>
 #include <MSeparator>
 
 #include "../styles.h" 

@@ -41,25 +41,22 @@ using namespace QtMobility;
 /******************************************************************************
  * Helper functions.
  */
-static MContainer *
+static MWidgetController *
 createEmptyContainer(
         QGraphicsWidget      *parent, 
-        MLinearLayoutPolicy **p_policy, 
-        QGraphicsWidget     **p_centralWidget)
+        MLinearLayoutPolicy **p_policy)
 {
-	MContainer *container = new MContainer (parent);
-	MLayout    *layout;
+	MWidgetController *container = new MWidgetController (parent);
+	MLayout           *layout;
 
     container->setContentsMargins (0., 0., 0., 0.);
-    container->setHeaderVisible (false);
-	(*p_centralWidget) = container->centralWidget();
 
-	layout = new MLayout((*p_centralWidget));
+	layout = new MLayout (container);
     layout->setContentsMargins (0., 0., 0., 0.);
 
-	(*p_policy) = new MLinearLayoutPolicy(layout, Qt::Vertical);
-	layout->setLandscapePolicy((*p_policy));
-	layout->setPortraitPolicy((*p_policy));
+	(*p_policy) = new MLinearLayoutPolicy (layout, Qt::Vertical);
+	layout->setLandscapePolicy ((*p_policy));
+	layout->setPortraitPolicy ((*p_policy));
 
 	return container;
 }
@@ -91,7 +88,7 @@ AlertToneAppletWidget::~AlertToneAppletWidget ()
 void
 AlertToneAppletWidget::createContents()
 {
-	QGraphicsWidget       *centralWidget = this/*->centralWidget()*/;
+	QGraphicsWidget       *centralWidget = this;
 	MLayout               *mainLayout;
 	MLinearLayoutPolicy   *policy;
     MLabel                *label;
@@ -229,15 +226,14 @@ AlertToneAppletWidget::vibrationChanged (
     m_ProfileIf->setVibration (profile->id (), enabled);
 }
 
-MContainer *
+MWidgetController *
 AlertToneAppletWidget::createFeedbackList(
         QGraphicsWidget *parent)
 {
-    MContainer *container;
+    MWidgetController   *container;
     MLinearLayoutPolicy *policy;
-    QGraphicsWidget *centralWidget;
 
-    container = createEmptyContainer(parent, &policy, &centralWidget);
+    container = createEmptyContainer (parent, &policy);
 
     ProfileIntCombo *picombo = 0;
 
@@ -254,7 +250,7 @@ AlertToneAppletWidget::createFeedbackList(
     {
         picombo = new ProfileIntCombo (
             "keypad.sound.level", true,
-            centralWidget);
+            container);
 
         picombo->setObjectName("ProfileIntCombo_keypad.sound.level");
         picombo->setStyleName ("CommonComboBoxInverted");
@@ -263,7 +259,7 @@ AlertToneAppletWidget::createFeedbackList(
 
 	picombo = new ProfileIntCombo(
 		"system.sound.level", true,
-		centralWidget);
+		container);
 	picombo->setObjectName("ProfileIntCombo_system.sound.level");
     picombo->setStyleName ("CommonComboBoxInverted");
 	policy->addItem(picombo);
@@ -271,7 +267,7 @@ AlertToneAppletWidget::createFeedbackList(
 	GConfStringCombo *combo = new GConfStringCombo(
 		"/meegotouch/input_feedback/volume/priority2/pulse",
 		QStringList() << "off" << "low" << "medium" << "high",
-		centralWidget);
+		container);
 	combo->setObjectName("GConfStringCombo_pulse");
     combo->setStyleName ("CommonComboBoxInverted");
 	policy->addItem(combo);
@@ -279,7 +275,7 @@ AlertToneAppletWidget::createFeedbackList(
 	combo = new GConfStringCombo(
 		"/meegotouch/input_feedback/volume/priority2/vibra",
 		QStringList() << "off" << "low" << "medium" << "high",
-		centralWidget);
+		container);
 	combo->setObjectName("GConfStringCombo_vibra");
     combo->setStyleName ("CommonComboBoxInverted");
 	policy->addItem(combo);
@@ -290,29 +286,27 @@ AlertToneAppletWidget::createFeedbackList(
 }
 
 
-MContainer *
-AlertToneAppletWidget::createAlertTonesList(QGraphicsWidget *parent)
+MWidgetController *
+AlertToneAppletWidget::createAlertTonesList (QGraphicsWidget *parent)
 {
-	MContainer *container;
+	MWidgetController   *container;
 	MLinearLayoutPolicy *policy;
-	QGraphicsWidget *centralWidget;
-	AlertToneWidget *alertToneWidget;
+	AlertToneWidget     *alertToneWidget;
 
-	container = createEmptyContainer(parent, &policy, &centralWidget);
-
+	container = createEmptyContainer (parent, &policy);
 
     /*
      * And then the list...
      */
-	for (int Nix = 0; Nix < m_alertTones.size(); Nix++) {
+	for (int i = 0; i < m_alertTones.size(); i++) {
 		alertToneWidget = new AlertToneWidget (
-                m_alertTones[Nix], Nix, this, centralWidget);
+                m_alertTones[i], i, this, container);
 		alertToneWidget->setObjectName (
-                "AlertToneWidget_" + m_alertTones[Nix]->key());
+                "AlertToneWidget_" + m_alertTones[i]->key());
 		policy->addItem(alertToneWidget);
 	}
 
-	container->setObjectName("MContainer_tones");
+	container->setObjectName ("MWidgetController_tones");
     container->setStyleName ("CommonLargePanelInverted");
 	return container;
 }

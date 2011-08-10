@@ -27,7 +27,7 @@ class MComboBox;
 class MLabel;
 class MLayout;
 class MLinearLayoutPolicy;
-class MContainer;
+class MWidgetController;
 class BatteryBusinessLogic;
 class BatteryImage;
 class SliderContainer;
@@ -80,7 +80,7 @@ private:
     BatteryBusinessLogic    *m_logic;
     MLinearLayoutPolicy     *m_MainLayout;
     PercentageContainer     *m_RemainingContainer;
-    MContainer              *m_ActivationContainer;
+    MWidgetController       *m_ActivationContainer;
     // SliderContainer is not a container any more!
     SliderContainer         *m_SliderContainer;
     MComboBox               *m_PSMAutoCombo;

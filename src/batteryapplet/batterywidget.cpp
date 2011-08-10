@@ -30,7 +30,7 @@
 #include <MLayout>
 #include <MLinearLayoutPolicy>
 #include <MButton>
-#include <MContainer>
+#include <MWidgetController>
 #include <MLabel>
 #include <MSlider>
 #include <MHelpButton>
@@ -256,16 +256,15 @@ BatteryWidget::addAutoActivationWidget ()
     /*
      * Creating the container and the layout.
      */
-    m_ActivationContainer = new MContainer (this);
+    m_ActivationContainer = new MWidgetController (this);
     m_ActivationContainer->setContentsMargins (0,0,0,0);
 
     m_ActivationContainer->setStyleName ("CommonPanelInverted");
-    m_ActivationContainer->setHeaderVisible (false);
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
     layout->setContentsMargins (0,0,0,0);
     layout->setSpacing (0.);
 
-    m_ActivationContainer->centralWidget()->setLayout (layout);
+    m_ActivationContainer->setLayout (layout);
 
     /*
      * A label for the PSM auto activation.
@@ -344,7 +343,7 @@ void
 BatteryWidget::addBatteryConditionWidget ()
 {
     MSeparator            *spacer;
-    MContainer            *container;
+    MWidgetController            *container;
     QGraphicsLinearLayout *containerLayout;
     bool                   batteryPoor;
     QString                batteryConditionShortDescription;
@@ -364,11 +363,10 @@ BatteryWidget::addBatteryConditionWidget ()
     /*
      * Creating a container and a layout.
      */
-    container = new MContainer ();
+    container = new MWidgetController ();
     container->setStyleName ("CommonTextFrameInverted");
-    container->setHeaderVisible (false);
     container->setContentsMargins (0,0,0,0);
-    container->centralWidget()->setLayout (containerLayout);
+    container->setLayout (containerLayout);
 #if 0
     QGraphicsLinearLayout *layout;
     layout = new QGraphicsLinearLayout (Qt::Vertical);

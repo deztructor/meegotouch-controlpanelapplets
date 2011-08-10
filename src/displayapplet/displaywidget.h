@@ -25,7 +25,6 @@
 class MButton;
 class MSlider;
 class MLabel;
-class MContainer;
 class MComboBox;
 class DisplayBusinessLogic;
 class MLinearLayoutPolicy;

@@ -20,7 +20,7 @@
 #ifndef _ALERT_TONE_APPLET_WIDGET_H_
 #define _ALERT_TONE_APPLET_WIDGET_H_
 
-#include <MContainer>
+#include <MWidgetController>
 #include <QPointer>
 
 #include "profiledatainterface.h"
@@ -49,8 +49,8 @@ class AlertToneAppletWidget : public AlertToneToplevel
         void vibrationChanged (bool enabled);
 
     private:
-        MContainer *createAlertTonesList (QGraphicsWidget *parent);
-        MContainer *createFeedbackList (QGraphicsWidget *parent);
+        MWidgetController *createAlertTonesList (QGraphicsWidget *parent);
+        MWidgetController *createFeedbackList (QGraphicsWidget *parent);
         void createProfileSwitches (
                 MLinearLayoutPolicy   *policy,
                 QGraphicsWidget       *parent);
@@ -58,8 +58,8 @@ class AlertToneAppletWidget : public AlertToneToplevel
     private:
         QList<AlertTone *>               m_alertTones;
         QPointer<ProfileDataInterface>   m_ProfileIf;
-        MContainer                      *m_tones;
-        MContainer                      *m_feedback;
+        MWidgetController               *m_tones;
+        MWidgetController               *m_feedback;
 
 #ifdef UNIT_TEST
     friend class Ut_AlertToneAppletWidgetTests;

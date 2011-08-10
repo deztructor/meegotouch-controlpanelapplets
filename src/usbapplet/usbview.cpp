@@ -28,7 +28,7 @@
 #include <MBanner>
 #include <MApplication>
 #include <MImageWidget>
-#include <MContainer>
+#include <MWidgetController>
 #include <MWidgetController>
 #include <MGConfItem>
 
@@ -289,15 +289,14 @@ UsbView::addSubTitle (
         MLinearLayoutPolicy *targetPolicy,
         const QString       &subTitle)
 {
-    MContainer              *container;
+    MWidgetController       *container;
     QGraphicsLinearLayout   *layout;
     MLabel                  *label;
     MSeparator              *separator;
 
-    container = new MContainer (parent);
+    container = new MWidgetController (parent);
     container->setContentsMargins (0., 0., 0., 0.);
     container->setStyleName (SUBTITLE_PANEL_STYLE_NAME);
-    container->setHeaderVisible (false);
 
     layout = new QGraphicsLinearLayout (Qt::Horizontal);
     layout->setContentsMargins (0., 0., 0., 0.);
@@ -322,7 +321,7 @@ UsbView::addSubTitle (
     layout->setAlignment (label, Qt::AlignLeft);
     layout->setStretchFactor (label, 0);
 
-    container->centralWidget()->setLayout (layout);
+    container->setLayout (layout);
     targetPolicy->addItem (container);
 }
 

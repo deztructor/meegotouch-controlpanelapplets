@@ -20,7 +20,7 @@
 #define SLIDERCONTAINER_H
 
 #include <QObject>
-#include <MContainer>
+#include <MWidgetController>
 
 class MButton;
 class MLabel;
@@ -29,13 +29,13 @@ class MLinearLayoutPolicy;
 
 /*!
  * The original layout guide specified these widgets to be put in a single
- * container, so the original SliderContainer was inherited from MContainer. The
+ * container, so the original SliderContainer was inherited from MWidgetController. The
  * layout guide was modified, these widgets should go into two separate
  * containers now. So this class has been modified and the two separate
  * container can be accessed through sliderContainer() and labelContainer()
  * methods.
  */
-class SliderContainer : public MContainer
+class SliderContainer : public MWidgetController
 {
     Q_OBJECT
 
@@ -43,9 +43,6 @@ public:
     SliderContainer (MWidget *parent = 0);
     ~SliderContainer ();
     
-    //MContainer *sliderContainer () const { return m_SliderContainer; };
-    //MContainer *labelContainer () const { return m_LabelContainer; };
-
 public slots:
     void initSlider (const QStringList &values);
     void updateSlider (const int value);
@@ -61,8 +58,6 @@ private:
     void createWidgets (MWidget *parent);
 
 private:
-    //MContainer            *m_LabelContainer;
-    //MContainer            *m_SliderContainer;
     MSlider               *m_PSMSlider;
     MLabel                *m_AutoPSMLabel;
     MLabel                *m_PsmValueLabel;

@@ -18,7 +18,6 @@
 ****************************************************************************/
 #include "resetwidget.h"
 
-#include <MContainer>
 #include <MLayout>
 #include <MBanner>
 #include <MApplication>
@@ -61,8 +60,7 @@ ResetWidget::createContent ()
     MLinearLayoutPolicy *policy;
     MButton             *restoreButton;
     MButton             *clearButton;
-    MSeparator            *spacer;
-
+    MSeparator          *spacer;
 
     /*
      *
