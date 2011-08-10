@@ -74,7 +74,10 @@ class ContentWidget: public MStylableWidget
 
         layout->addItem (m_title);
         layout->addItem (m_subTitle);
-        
+       
+        /*
+         * Fixes: NB#276291
+         */
         setStyleName ("CommonLargePanelInverted");
         setLayout (layout);
     }
