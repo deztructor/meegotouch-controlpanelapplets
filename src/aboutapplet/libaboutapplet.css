@@ -17,15 +17,3 @@ AboutWidget MImageWidgetStyle#AboutAppletBarcodeImage {
 }
 
 
-AboutAppletCommonPanelInverted {
- minimum-size:      $SIZE_LIST $SIZE_LIST;
- preferred-size:    -1 $SIZE_LIST;
- maximum-size:      16;
- background-tiles:  ;
- background-image:  $CP_INVERTED_BG;
- background-color:  ;
- margin-top:        0;
- margin-bottom:     0;
- margin-left:       0;
- margin-right:      0;
- }

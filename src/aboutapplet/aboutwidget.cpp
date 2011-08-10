@@ -74,11 +74,8 @@ class ContentWidget: public MStylableWidget
 
         layout->addItem (m_title);
         layout->addItem (m_subTitle);
-#ifndef MEEGO
+        
         setStyleName ("CommonLargePanelInverted");
-#else
-        setStyleName ("AboutAppletCommonPanelInverted");
-#endif
         setLayout (layout);
     }
     void setTitle(QString const &title)

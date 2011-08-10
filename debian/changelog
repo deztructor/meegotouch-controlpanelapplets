@@ -1,6 +1,8 @@
 meegotouch-controlpanelapplets (0.20.63~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  [ Laszlo Pere ]
+  * Fixes: NB#276291 - About Product: The overlapping of the software version
+    information in the about product setting view in Arabic language.
 
  -- David Kedves <dkedves@blumsoft.eu>  Thu, 04 Aug 2011 09:52:57 +0300
 
