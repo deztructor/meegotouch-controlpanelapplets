@@ -20,6 +20,10 @@
 #include <QTimer>
 #include <QFile>
 
+#ifdef MEEGO
+#include <MTheme>
+#endif
+
 #include "trackerconnection.h"
 #include "alerttonedefaultsmodel.h"
 #include "alerttone.h"
@@ -55,6 +59,19 @@ AlertToneDefaultsModel::AlertToneDefaultsModel() : QStandardItemModel(),
     m_dirIdx.push(0);
     m_dirStack.push(QDir(oviDirPath));
     m_dirIdx.push(0);
+
+//for meego.com, we have to add sounds from 
+//  "/usr/share/sounds/meego/stereo/"
+
+#ifdef MEEGO
+   QString meegoPath = "/usr/share/sounds/meego/stereo/";
+
+   SYS_DEBUG ("*** MEEGO sounds path = %s", SYS_STR(meegoPath));
+   
+   m_dirStack.push(QDir(meegoPath));
+   m_dirIdx.push(0);
+
+#endif
 
     /*
      * Creatig a file system watcher.
