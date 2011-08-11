@@ -405,7 +405,7 @@ AlertToneDefaultsModel::directoryChanged (
 QString 
 AlertToneDefaultsModel::oviRingTonesPath ()
 {
-    QString retval (OVI_RINGTINE_PATH);
+    QString retval (OVI_RINGTONE_PATH);
     QString homeDir (getenv("HOME"));
 
     retval.replace ('~', homeDir);
