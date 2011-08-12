@@ -36,6 +36,8 @@ WallpaperBusinessLogic::currentWallpaper (
         QString   &currentFilePath,
         QString   &originalFilePath)
 {
+    Q_UNUSED (currentFilePath);
+    Q_UNUSED (originalFilePath);
 }
 
 void 
@@ -86,6 +88,7 @@ bool
 WallpaperBusinessLogic::setWallpaper (
         QPixmap   &pixmap)
 {
+    Q_UNUSED (pixmap);
     return true;
 }
 

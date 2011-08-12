@@ -58,6 +58,7 @@ void
 WallpaperViewWidget::panningPhysicsPositionChanged(
         const QPointF    &position)
 {
+    Q_UNUSED (position);
     SYS_DEBUG ("");
 }
 
@@ -84,6 +85,8 @@ WallpaperViewWidget::initialize (
         QuillImage   &image,
         QSize         size)
 {
+    Q_UNUSED (image);
+    Q_UNUSED (size);
     SYS_DEBUG ("");
 }
 
@@ -139,6 +142,7 @@ QPixmap
 WallpaperViewWidget::generatePixmap (
         const WallpaperITrans  &transformations)
 {
+    Q_UNUSED (transformations);
     SYS_DEBUG ("");
     return QPixmap();
 }
@@ -166,6 +170,8 @@ WallpaperViewWidget::wallpaperLoaded (
         QuillImage    image, 
         QSize         originalSize)
 {
+    Q_UNUSED (image);
+    Q_UNUSED (originalSize);
     SYS_DEBUG ("");
 }
 
@@ -184,6 +190,7 @@ WallpaperViewWidget::redrawImage ()
 QSize
 WallpaperViewWidget::imageVisualSize (qreal scale)
 {
+    Q_UNUSED (scale);
     SYS_DEBUG ("");
     return QSize();
 }
@@ -199,6 +206,7 @@ void
 WallpaperViewWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
 {
+    Q_UNUSED (event);
     SYS_DEBUG ("");
 }
 
@@ -206,6 +214,7 @@ void
 WallpaperViewWidget::mousePressEvent (
         QGraphicsSceneMouseEvent *event)
 {
+    Q_UNUSED (event);
     SYS_DEBUG ("");
 }
 
@@ -214,6 +223,8 @@ WallpaperViewWidget::panGestureEvent (
         QGestureEvent *event, 
         QPanGesture   *panGesture)
 {
+    Q_UNUSED (event);
+    Q_UNUSED (panGesture);
     SYS_DEBUG ("");
 }
 
@@ -222,6 +233,8 @@ WallpaperViewWidget::pinchGestureEvent (
             QGestureEvent *event, 
             QPinchGesture *pinchGesture)
 {
+    Q_UNUSED (event);
+    Q_UNUSED (pinchGesture);
     SYS_DEBUG ("");
 }
 
@@ -230,6 +243,8 @@ WallpaperViewWidget::pinchGestureStarted (
         QGestureEvent *event, 
         QPinchGesture *pinchGesture)
 {
+    Q_UNUSED (event);
+    Q_UNUSED (pinchGesture);
     SYS_DEBUG ("");
 }
 
@@ -238,6 +253,8 @@ WallpaperViewWidget::pinchGestureUpdate (
             QGestureEvent *event, 
             QPinchGesture *pinchGesture)
 {
+    Q_UNUSED (event);
+    Q_UNUSED (pinchGesture);
     SYS_DEBUG ("");
 }
 
@@ -246,6 +263,8 @@ WallpaperViewWidget::pinchGestureEnded (
             QGestureEvent *event, 
             QPinchGesture *pinchGesture)
 {
+    Q_UNUSED (event);
+    Q_UNUSED (pinchGesture);
     SYS_DEBUG ("");
 }
 
@@ -253,7 +272,7 @@ void
 WallpaperViewWidget::setupPanningPhysics (
         bool movePh)
 {
+    Q_UNUSED (movePh);
     SYS_DEBUG ("");
 }
-
 
