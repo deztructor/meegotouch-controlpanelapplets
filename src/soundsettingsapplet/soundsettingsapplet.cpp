@@ -31,10 +31,6 @@
 #include "alerttonepreview.h"
 #include "trackerconnection.h"
 
-#ifdef HAVE_LIBRESOURCEQT
-#include <policy/resource-set.h>
-#endif
-
 #define DEBUG
 #define WARNING
 #include "../debug.h"
@@ -68,10 +64,7 @@ SoundSettingsApplet::~SoundSettingsApplet()
      */
     delete TrackerConnection::instance ();
 
-#ifdef HAVE_LIBRESOURCEQT
-    if (AlertTonePreview::getResourceSet ())
-        delete AlertTonePreview::getResourceSet ();
-#endif
+    AlertTonePreview::freeResources ();
 }
 
 void

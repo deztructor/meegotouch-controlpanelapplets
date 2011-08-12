@@ -22,7 +22,8 @@
 
 #ifdef HAVE_LIBRESOURCEQT
 #include <policy/resource-set.h>
-ResourcePolicy::ResourceSet *resources = 0;
+ResourcePolicy::ResourceSet   *resources = 0;
+ResourcePolicy::AudioResource *audioResource = 0;
 #endif
 
 #define DEBUG
@@ -131,7 +132,6 @@ AlertTonePreview::getResources()
         resources->setAlwaysReply ();
     }
 
-    static ResourcePolicy::AudioResource *audioResource;
     if (! audioResource)
     {
         /*
@@ -248,9 +248,18 @@ AlertTonePreview::gstSignalHandler (
         atp->rewind ();
 }
 
-ResourcePolicy::ResourceSet *
-AlertTonePreview::getResourceSet ()
+void
+AlertTonePreview::freeResources ()
 {
-    return resources;
+    SYS_DEBUG ("");
+#ifdef HAVE_LIBRESOURCEQT
+    delete resources;
+    resources = 0;
+    audioResource = 0;
+/*
+ * This causes crash, and done already by the ResourceSet :
+    delete audioResource;
+ */
+#endif
 }
 

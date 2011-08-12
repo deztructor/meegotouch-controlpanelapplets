@@ -24,12 +24,6 @@
 #include <QString>
 #include "qprofilevalue.h"
 
-// forward declaration
-namespace ResourcePolicy
-{
-    class ResourceSet;
-}
-
 class AlertTonePreview : public QObject
 {
 Q_OBJECT
@@ -39,7 +33,7 @@ public:
     ~AlertTonePreview ();
     QString fname () const;
 
-    static ResourcePolicy::ResourceSet *getResourceSet ();
+    static void freeResources ();
 
 private:
     GstElement     *m_gstPipeline;
