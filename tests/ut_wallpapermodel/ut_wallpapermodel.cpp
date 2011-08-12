@@ -49,10 +49,9 @@ void
 WallpaperModelSignals::currentChanged (
         const QModelIndex &current)
 {
+    Q_UNUSED (current);
     SYS_DEBUG ("");
 }
-
-
 
 /******************************************************************************
  * Ut_WallpaperModel implementation. 
