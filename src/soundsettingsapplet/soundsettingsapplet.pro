@@ -70,6 +70,7 @@ HEADERS =                      \
     qprofilevalue.h            \
     qtrackedvariant.h          \
     soundsettingsapplet.h      \
+    soundsettingsutils.h       \
     static.h                   \
     $$(NULL)
 
@@ -95,6 +96,7 @@ SOURCES =                      \
     qgconfvalue.cpp            \
     qprofilevalue.cpp          \
     qtrackedvariant.cpp        \
+    soundsettingsutils.cpp     \
     soundsettingsapplet.cpp    \
     $$(NULL)
 

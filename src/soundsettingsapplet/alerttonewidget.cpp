@@ -26,6 +26,10 @@
 #include "alerttoneappletmaps.h"
 #include "soundsettingsapplet.h"
 
+#define DEBUG
+#define WARNING
+#include "../debug.h"
+
 AlertToneWidget::AlertToneWidget (
         AlertTone           *tone, 
         int                  idx, 
@@ -53,6 +57,7 @@ AlertToneWidget::AlertToneWidget (
 void
 AlertToneWidget::alertToneChanged()
 {
+    SYS_DEBUG ("");
 	setProperty("subtitle", QVariant(m_tone->niceName()));
 }
 

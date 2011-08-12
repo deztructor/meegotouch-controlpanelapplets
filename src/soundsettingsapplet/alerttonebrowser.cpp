@@ -22,6 +22,7 @@
 #include "alerttoneappletmaps.h"
 #include "trackerconnection.h"
 #include "drilldownitem.h"
+#include "soundsettingsutils.h"
 
 #include <QGraphicsLinearLayout>
 #include <QDBusInterface>
@@ -45,8 +46,8 @@
 
 #include "../styles.h"
 
-//#define DEBUG
-//#define WARNING
+#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 static const int filterEditorPosition = 2;
@@ -243,8 +244,14 @@ AlertToneBrowser::accept()
     SYS_DEBUG ("");
     stopPlayingSound ();
 
-    if (!currSelectedFile.isEmpty())
+    if (!currSelectedFile.isEmpty()) {
+        if (SoundSettings::isTemporaryFile(currSelectedFile)) {
+            currSelectedFile = SoundSettings::saveFile(currSelectedFile);
+            SYS_WARNING ("copy at '%s'", SYS_STR(currSelectedFile));
+        }
+
         m_tone->set(currSelectedFile);
+    }
 
     emit closePage();
 }

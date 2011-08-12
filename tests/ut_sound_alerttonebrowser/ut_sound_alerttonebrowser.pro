@@ -34,6 +34,7 @@ contains(DEFINES, HAVE_QTSPARQL) {
 HEADERS += \
     ut_alerttonebrowser.h \
     $$SRC_PREFIX/../debug.h \
+    $$SRC_PREFIX/soundsettingsutils.h \
     $$SRC_PREFIX/drilldownitem.h \
     $$SRC_PREFIX/trackerconnection.h \
     $$SRC_PREFIX/alerttone.h \
@@ -52,14 +53,15 @@ HEADERS += \
 SOURCES += \
     ut_alerttonebrowser.cpp  \
     $$SRC_PREFIX/../debug.cpp \
-    $$SRC_PREFIX/drilldownitem.cpp \
-    $$SRC_PREFIX/trackerconnection.cpp \
-    $$SRC_PREFIX/alerttone.cpp \
-    $$SRC_PREFIX/alerttonepreview.cpp \
-    $$SRC_PREFIX/alerttonedefaults.cpp \
+    $$SRC_PREFIX/soundsettingsutils.cpp     \
+    $$SRC_PREFIX/drilldownitem.cpp          \
+    $$SRC_PREFIX/trackerconnection.cpp      \
+    $$SRC_PREFIX/alerttone.cpp              \
+    $$SRC_PREFIX/alerttonepreview.cpp       \
+    $$SRC_PREFIX/alerttonedefaults.cpp      \
     $$SRC_PREFIX/alerttonedefaultsmodel.cpp \
-    $$SRC_PREFIX/alerttonetoplevel.cpp \
-    $$SRC_PREFIX/alerttoneappletmaps.cpp \
+    $$SRC_PREFIX/alerttonetoplevel.cpp      \
+    $$SRC_PREFIX/alerttoneappletmaps.cpp    \
     $$SRC_PREFIX/qtrackedvariant.cpp \
     $$SRC_PREFIX/qprofilevalue.cpp \
     $$SRC_PREFIX/alerttonebrowser.cpp

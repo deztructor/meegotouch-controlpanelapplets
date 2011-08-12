@@ -44,14 +44,14 @@ class MC_EXPORT AlertTone: public QProfileValue
 {
     Q_OBJECT
 
-public:
-	AlertTone(const QString &key);
+    public:
+	    AlertTone(const QString &key);
 
-	static QList<AlertTone *> alertTones();
+    	static QList<AlertTone *> alertTones();
 
-	QString fileName();
-	QString niceName();
-	QString trackerId();
+	    QString fileName();
+    	QString niceName();
+	    QString trackerId();
 
 protected:
 	virtual void fetchFromBackend();

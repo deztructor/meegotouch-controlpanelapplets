@@ -34,7 +34,7 @@ using namespace QtMobility;
 
 #include "../styles.h"
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 

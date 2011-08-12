@@ -86,6 +86,7 @@ PUBLIC_HEADERS = \
     $$SOUNDSETTINGS_PATH/qprofilevalue.h           \
     $$SOUNDSETTINGS_PATH/qtrackedvariant.h         \
     $$SOUNDSETTINGS_PATH/alerttonedefaultsmodel.h  \
+    $$SOUNDSETTINGS_PATH/soundsettingsutils.h      \
     WallpaperBusinessLogic                         \
     WallpaperDescriptor                            \
     WallpaperCurrentDescriptor                     \
@@ -124,6 +125,7 @@ SOURCES =                                          \
     $$SOUNDSETTINGS_PATH/qprofilevalue.cpp         \
     $$SOUNDSETTINGS_PATH/qtrackedvariant.cpp       \
     $$SOUNDSETTINGS_PATH/alerttonedefaultsmodel.cpp \
+    $$SOUNDSETTINGS_PATH/soundsettingsutils.cpp    \
     $$SOUNDSETTINGS_PATH/alerttonepreview.cpp      
 
 DESTDIR = lib

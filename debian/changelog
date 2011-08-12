@@ -5,6 +5,8 @@ meegotouch-controlpanelapplets (0.20.63~1) meegotouch; urgency=low
     information in the about product setting view in Arabic language.
   * Fixes: NB#276550 - Wallpaper list is not updating in wallpaper applet after
     downloading a wallpaper from ovi-store for the first time.
+  * File copy for soundsettingsapplet implemented. It is not perfect yet, but
+    the basics are working.
 
  -- David Kedves <dkedves@blumsoft.eu>  Thu, 04 Aug 2011 09:52:57 +0300
 
