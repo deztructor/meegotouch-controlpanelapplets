@@ -245,10 +245,12 @@ AlertToneBrowser::accept()
     stopPlayingSound ();
 
     if (!currSelectedFile.isEmpty()) {
+        #ifdef COPY_SOUND_FILES
         if (SoundSettings::isTemporaryFile(currSelectedFile)) {
             currSelectedFile = SoundSettings::saveFile(currSelectedFile);
             SYS_WARNING ("copy at '%s'", SYS_STR(currSelectedFile));
         }
+        #endif
 
         m_tone->set(currSelectedFile);
     }
