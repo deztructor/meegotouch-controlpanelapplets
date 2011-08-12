@@ -85,7 +85,7 @@ AlertToneAppletMaps::AlertToneAppletMaps()
     qtTrId ("qtn_sond_message_tone");
     //% "Instant messaging tone"
     qtTrId ("qtn_sond_ins_messaging");
-    //% "Calendar reminder tone
+    //% "Calendar reminder tone"
 	qtTrId ("qtn_sond_org_reminders");
 #endif
 }

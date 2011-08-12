@@ -22,7 +22,7 @@
 
 #ifdef HAVE_LIBRESOURCEQT
 #include <policy/resource-set.h>
-static ResourcePolicy::ResourceSet *resources;
+ResourcePolicy::ResourceSet *resources = 0;
 #endif
 
 #define DEBUG
@@ -246,5 +246,11 @@ AlertTonePreview::gstSignalHandler (
     }
     else if (GST_MESSAGE_TYPE (msg) == GST_MESSAGE_EOS)
         atp->rewind ();
+}
+
+ResourcePolicy::ResourceSet *
+AlertTonePreview::getResourceSet ()
+{
+    return resources;
 }
 
