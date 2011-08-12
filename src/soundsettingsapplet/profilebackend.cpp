@@ -29,6 +29,8 @@
 const char *keyVolume    = "ringing.alert.volume";
 const char *keyVibration = "vibrating.alert.enabled";
 
+static ProfileBackend *backend = 0;
+
 inline const char* toCharArray (QString &str)
 {
     return str.toAscii().constData();
@@ -46,13 +48,12 @@ ProfileBackend::~ProfileBackend ()
 #ifdef HAVE_LIBPROFILE
     profile_tracker_quit ();
 #endif
+    backend = 0;
 }
 
 ProfileBackend *
 ProfileBackend::getInstance ()
 {
-    static ProfileBackend *backend;
-
     if (! backend)
         backend = new ProfileBackend;
 

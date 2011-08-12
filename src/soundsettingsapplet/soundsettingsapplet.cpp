@@ -30,6 +30,7 @@
 // for freeing up the singletons
 #include "alerttonepreview.h"
 #include "trackerconnection.h"
+#include "profilebackend.h"
 
 #define DEBUG
 #define WARNING
@@ -62,6 +63,8 @@ SoundSettingsApplet::~SoundSettingsApplet()
     /*
      * And then free up the singletons
      */
+    delete ProfileBackend::getInstance ();
+
     delete TrackerConnection::instance ();
 
     AlertTonePreview::freeResources ();
