@@ -819,6 +819,7 @@ WallpaperViewWidget::pinchGestureStarted (
 {
     SYS_DEBUG ("");
     Q_UNUSED (event);
+    Q_UNUSED (pinchGesture);
     /*
      * We might auto-rotate. If we do we don't accept nothing.
      */

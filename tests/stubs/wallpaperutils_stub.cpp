@@ -207,12 +207,16 @@ Wallpaper::readDir (
         const QStringList       &nameFilters,
         QHash<QString, qint64>  &hashTable)
 {
+    Q_UNUSED (directoryPath);
+    Q_UNUSED (nameFilters);
+    Q_UNUSED (hashTable);
+
     SYS_DEBUG ("**********************************************");
     SYS_DEBUG ("*** returning %3d simulated files          ***",
             fileSystem.size());
     SYS_DEBUG ("**********************************************");
 
-finalize:
+//finalize:
     return fileSystem;
 }
 
@@ -251,6 +255,7 @@ bool
 Wallpaper::hasDirectory (
         const QString &directoryPath)
 {
+    Q_UNUSED (directoryPath);
     return true;
 }
 

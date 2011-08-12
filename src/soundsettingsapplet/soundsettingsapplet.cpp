@@ -27,6 +27,14 @@
 #include "alerttonebrowser.h"
 #include "alerttoneappletwidget.h"
 
+// for freeing up the singletons
+#include "alerttonepreview.h"
+#include "trackerconnection.h"
+
+#ifdef HAVE_LIBRESOURCEQT
+#include <policy/resource-set.h>
+#endif
+
 #define DEBUG
 #define WARNING
 #include "../debug.h"
@@ -47,13 +55,23 @@ SoundSettingsApplet::SoundSettingsApplet()
 
 SoundSettingsApplet::~SoundSettingsApplet()
 {
-	gst_deinit ();
+    gst_deinit ();
 
     if ((gst_argv != NULL) && (gst_argv[0] != NULL))
     {
         delete[] gst_argv[0];
         delete[] gst_argv;
     }
+
+    /*
+     * And then free up the singletons
+     */
+    delete TrackerConnection::instance ();
+
+#ifdef HAVE_LIBRESOURCEQT
+    if (AlertTonePreview::getResourceSet ())
+        delete AlertTonePreview::getResourceSet ();
+#endif
 }
 
 void
@@ -75,40 +93,40 @@ DcpWidget *
 SoundSettingsApplet::constructWidget(int widgetId)
 {
     SYS_DEBUG ("%s: widgetId = %d", SYS_TIME_STR, widgetId);
-	AlertToneToplevel *newWidget = NULL;
-	int realWidgetId = widgetId / 65536;
-	int alertToneIdx = widgetId - realWidgetId * 65536;
+    AlertToneToplevel *newWidget = NULL;
+    int realWidgetId = widgetId / 65536;
+    int alertToneIdx = widgetId - realWidgetId * 65536;
 
-	if (m_stack.size() > 0)
-		if (((m_stack.top()->getWidgetId() / 65536) == AlertToneBrowser_id      && realWidgetId == AlertToneBrowser_id) ||
-		    ((m_stack.top()->getWidgetId() / 65536) == AlertToneAppletWidget_id && realWidgetId != AlertToneBrowser_id))
-			return NULL;
+    if (m_stack.size() > 0)
+        if (((m_stack.top()->getWidgetId() / 65536) == AlertToneBrowser_id      && realWidgetId == AlertToneBrowser_id) ||
+            ((m_stack.top()->getWidgetId() / 65536) == AlertToneAppletWidget_id && realWidgetId != AlertToneBrowser_id))
+            return NULL;
 
-	if (AlertToneAppletWidget_id == realWidgetId)
-		newWidget = new AlertToneAppletWidget(m_alertTones);
-	else
-	if (AlertToneBrowser_id == realWidgetId && alertToneIdx >= 0 && alertToneIdx < m_alertTones.size())
-		newWidget = new AlertToneBrowser(m_alertTones[alertToneIdx]);
-	else
-		SYS_WARNING ("Invalid widgetId = %d", widgetId);
+    if (AlertToneAppletWidget_id == realWidgetId)
+        newWidget = new AlertToneAppletWidget(m_alertTones);
+    else
+    if (AlertToneBrowser_id == realWidgetId && alertToneIdx >= 0 && alertToneIdx < m_alertTones.size())
+        newWidget = new AlertToneBrowser(m_alertTones[alertToneIdx]);
+    else
+        SYS_WARNING ("Invalid widgetId = %d", widgetId);
 
-	if (newWidget)
+    if (newWidget)
     {
-		m_stack.push(newWidget);
-		connect (newWidget, SIGNAL (destroyed (QObject *)),
+        m_stack.push(newWidget);
+        connect (newWidget, SIGNAL (destroyed (QObject *)),
                  SLOT (toplevelDestroyed (QObject *)));
-	}
+    }
 
     SYS_DEBUG ("%s: done", SYS_TIME_STR);
-	return newWidget;
+    return newWidget;
 }
 
 void
 SoundSettingsApplet::toplevelDestroyed(QObject *goner)
 {
-	if (m_stack.size() > 0)
-		if (goner == qobject_cast<QObject *>(m_stack.top()))
-			m_stack.pop();
+    if (m_stack.size() > 0)
+        if (goner == qobject_cast<QObject *>(m_stack.top()))
+            m_stack.pop();
 }
 
 QString
@@ -126,13 +144,13 @@ SoundSettingsApplet::title() const
 QVector<MAction*> 
 SoundSettingsApplet::viewMenuItems()
 {
-	QVector<MAction*> vector;
+    QVector<MAction*> vector;
 
-	if (m_stack.size() > 0)
-		if (m_stack.top())
-			vector = qobject_cast<AlertToneToplevel *>(m_stack.top())->viewMenuItems();
+    if (m_stack.size() > 0)
+        if (m_stack.top())
+            vector = qobject_cast<AlertToneToplevel *>(m_stack.top())->viewMenuItems();
 
-	return vector;
+    return vector;
 }
 
 DcpBrief *
