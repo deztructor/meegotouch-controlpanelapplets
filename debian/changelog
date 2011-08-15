@@ -1,14 +1,22 @@
-meegotouch-controlpanelapplets (0.20.63~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.64~1) meegotouch; urgency=low
+
+  * [NEW VERSION]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 15 Aug 2011 11:15:23 +0300
+
+meegotouch-controlpanelapplets (0.20.63-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#276291 - About Product: The overlapping of the software version
     information in the about product setting view in Arabic language.
-  * Fixes: NB#276550 - Wallpaper list is not updating in wallpaper applet after
-    downloading a wallpaper from ovi-store for the first time.
   * File copy for soundsettingsapplet implemented. It is not perfect yet, but
     the basics are working.
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 04 Aug 2011 09:52:57 +0300
+  [ David Kedves ]
+  * Disable the soundsettingsapplet file copy feature for now.
+  * MContainer usage fixes. (eliminated from most of the places)
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 15 Aug 2011 11:15:06 +0300
 
 meegotouch-controlpanelapplets (0.20.62-1) meegotouch; urgency=low
 
