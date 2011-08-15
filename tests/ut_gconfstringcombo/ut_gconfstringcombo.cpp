@@ -61,6 +61,12 @@ MGConfItem::value () const
     return value (QVariant (false));
 }
 
+void
+MGConfItem::set (const QVariant &val)
+{
+    MyGConfDatabase[key ()] = val.toString ();
+}
+
 /*******************************************************************************
  * Stubbing the localization.
  */
