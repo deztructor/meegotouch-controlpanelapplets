@@ -135,23 +135,19 @@ SoundSettings::loadXML (
     while(!xml->atEnd() && !xml->hasError()) {
         QString name(xml->name().toString());
 
-        #if 1
+        #if 0
         SYS_DEBUG ("*************************************");
         SYS_DEBUG ("*** name: %s", SYS_STR(name));
         SYS_DEBUG ("*** lineNumber : %d", xml->lineNumber());
         #endif
 
 		if (xml->isStartElement()) {
-		   	SYS_DEBUG ("StartElement: ");
             names << xml->name().toString();
 		} else if (xml->isEndElement()) {
-            SYS_DEBUG ("EndElement");
             names.removeLast();
         } else if (xml->isCharacters()) {
             QString path = names.join("/");
-            SYS_DEBUG ("Characters at %s.", SYS_STR(path));
-            SYS_DEBUG ("*** characters: %s", 
-                    SYS_STR(xml->text().toString()));
+            
             if (path == "soundsettings-applet/orig-file")
                 origFileName = xml->text().toString();
             else if (path == "soundsettings-applet/copy-file")
