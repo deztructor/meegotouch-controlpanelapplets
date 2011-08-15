@@ -273,6 +273,12 @@ TrackerConnection::processRequest (
 #endif
 
 fallback:
+    if (result)
+    {
+        delete result;
+        result = 0;
+    }
+
     /*
      * This part is handling the case when the tracker information is not
      * available. In this case we are creating a nice name from the filename. We
@@ -324,9 +330,7 @@ TrackerConnection::trackerIdToFilename (
     static QSparqlQuery theQuery ("select ?u where { ?:trackerId nie:url ?u }");
     theQuery.bindValue ("trackerId", QUrl(trackerId));
 
-    QSparqlResult *result =
-        m_sparqlconn->syncExec (theQuery);
-
+    QSparqlResult *result = m_sparqlconn->syncExec (theQuery);
     result->waitForFinished ();
 
     if (result->hasError()) {
@@ -334,14 +338,17 @@ TrackerConnection::trackerIdToFilename (
                      SYS_STR (trackerId),
                      SYS_STR (result->lastError ().message ()));
 
+        delete result;
         return QString ("");
     } else if (! result->first()) {
         SYS_WARNING ("Tracker id not found: %s",
                      SYS_STR (trackerId));
 
+        delete result;
         return QString ("");
     } else {
         QUrl url (result->value (0).toUrl ());
+        delete result;
 
         if (! url.isValid () || !(url.scheme () == "file"))
         {
