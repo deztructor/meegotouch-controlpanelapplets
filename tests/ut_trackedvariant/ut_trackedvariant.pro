@@ -21,7 +21,7 @@ CONFIG += \
     link_pkgconfig  \
     duicontrolpanel
 
-PKGCONFIG += dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
+PKGCONFIG += dbus-1 profile
 
 contains(DEFINES, HAVE_LIBRESOURCEQT) {
     PKGCONFIG += libresourceqt1
@@ -37,7 +37,6 @@ HEADERS +=                                    \
     $$SRC_PREFIX/soundsettingsutils.h         \
     $$SRC_PREFIX/trackerconnection.h \
     $$SRC_PREFIX/alerttone.h \
-    $$SRC_PREFIX/alerttonepreview.h \
     $$SRC_PREFIX/qprofilevalue.h \
     $$SRC_PREFIX/qtrackedvariant.h
 
@@ -48,14 +47,8 @@ SOURCES +=                                    \
     $$SRC_PREFIX/soundsettingsutils.cpp       \
     $$SRC_PREFIX/trackerconnection.cpp \
     $$SRC_PREFIX/alerttone.cpp \
-    $$SRC_PREFIX/alerttonepreview.cpp \
     $$SRC_PREFIX/qprofilevalue.cpp \
     $$SRC_PREFIX/qtrackedvariant.cpp
 
-
-
-
 INSTALLS += target
-
-
 

@@ -16,12 +16,11 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #ifndef _GCONF_STRING_COMBO_H_
 #define _GCONF_STRING_COMBO_H_
 
 #include <MComboBox>
-#include "qgconfvalue.h"
+class MGConfItem;
 
 /*!
  * A simple combobox widget that holds a list of possible GConf string values,
@@ -30,7 +29,7 @@
  */
 class GConfStringCombo : public MComboBox
 {
-	Q_OBJECT
+Q_OBJECT
 
 public:
     typedef enum {
@@ -38,21 +37,24 @@ public:
         ColumnGConfString,
     } GConfStringComboColumns;
 
-	GConfStringCombo(const QString &gconfKey, const QStringList &possibleValues, QGraphicsItem *parent = NULL);
+    GConfStringCombo (const QString &gconfKey,
+                      const QStringList &possibleValues,
+                      QGraphicsItem *parent = NULL);
+    ~GConfStringCombo ();
 
 public slots:
-	void retranslateUi();
+    void retranslateUi ();
 
 private slots:
-	void changedInGConf();
-	void currentIndexChanged(int index);
+    void changedInGConf ();
+    void currentIndexChanged (int index);
 
 private:
-	QGConfValue m_val;
-	QStringList m_possibleValues;
+    MGConfItem      *m_gconfItem;
+    QStringList      m_possibleValues;
 #ifdef UNIT_TEST
     friend class Ut_GConfStringComboTests;
 #endif
 };
 
-#endif /* !_GCONF_STRING_COMBO_H_ */
+#endif

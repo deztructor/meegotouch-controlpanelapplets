@@ -21,7 +21,7 @@ CONFIG += \
     link_pkgconfig  \
     duicontrolpanel
 
-PKGCONFIG += dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
+PKGCONFIG += dbus-1 profile ContentManager gstreamer-0.10
 
 contains(DEFINES, HAVE_LIBRESOURCEQT) {
     PKGCONFIG += libresourceqt1

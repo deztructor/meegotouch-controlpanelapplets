@@ -27,7 +27,7 @@ QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden -fPIC
 # some of these, but for that we need to use the LIBMEEGOCONTROL define in the
 # soundsettingsapplet source.
 #
-PKGCONFIG += dbus-1 profile gconf-2.0 gstreamer-0.10
+PKGCONFIG += dbus-1 profile gstreamer-0.10
 
 #########################################
 # wallpaper setting extra dependencies  #

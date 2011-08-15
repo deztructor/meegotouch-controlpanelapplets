@@ -31,8 +31,7 @@ CONFIG +=            \
     meegotouchcore   \
     duicontrolpanel
 
-PKGCONFIG += gconf-2.0 
-
+PKGCONFIG += gconf-2.0
 
 contains(DEFINES, HAVE_QTSPARQL) {
     CONFIG += qtsparql
