@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.63~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.63-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#276291 - About Product: The overlapping of the software version
@@ -10,7 +10,7 @@ meegotouch-controlpanelapplets (0.20.63~1) meegotouch; urgency=low
   * Disable the soundsettingsapplet file copy feature for now.
   * MContainer usage fixes. (eliminated from most of the places)
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 15 Aug 2011 10:56:31 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 15 Aug 2011 11:15:06 +0300
 
 meegotouch-controlpanelapplets (0.20.62-1) meegotouch; urgency=low
 
