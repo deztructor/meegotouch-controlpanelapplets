@@ -27,9 +27,10 @@ contains(DEFINES, HAVE_QTSPARQL) {
     CONFIG += qtsparql
 }
 
-HEADERS += \
-    ut_profileintcombo.h \
-    $$SRC_PREFIX/../debug.h \
+HEADERS +=                                    \
+    ut_profileintcombo.h                      \
+    $$SRC_PREFIX/../debug.h                   \
+    $$SRC_PREFIX/soundsettingsutils.h         \
     $$SRC_PREFIX/trackerconnection.h \
     $$SRC_PREFIX/alerttoneappletmaps.h \
     $$SRC_PREFIX/qprofilevalue.h \
@@ -38,9 +39,10 @@ HEADERS += \
 
 
 
-SOURCES += \
-    ut_profileintcombo.cpp  \
-    $$SRC_PREFIX/../debug.cpp \
+SOURCES +=                                    \
+    ut_profileintcombo.cpp                    \
+    $$SRC_PREFIX/../debug.cpp                 \
+    $$SRC_PREFIX/soundsettingsutils.cpp       \
     $$SRC_PREFIX/trackerconnection.cpp \
     $$SRC_PREFIX/alerttoneappletmaps.cpp \
     $$SRC_PREFIX/qprofilevalue.cpp \

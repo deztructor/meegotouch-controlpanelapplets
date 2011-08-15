@@ -18,9 +18,13 @@
 ****************************************************************************/
 #include "soundsettingsutils.h"
 
+#include <QFile>
 #include <QDir>
 #include <QFileInfo>
 #include <QCryptographicHash>
+#include <QXmlStreamWriter>
+
+#include "trackerconnection.h"
 
 #define DEBUG
 #define WARNING
@@ -37,7 +41,7 @@ SoundSettings::mountPoint ()
 QString
 SoundSettings::userSaveDir ()
 {
-    QString retval = "~/ringtones";
+    QString retval = "~/.ringtones";
 
     retval.replace ("~", QDir::homePath ());
 
@@ -56,11 +60,33 @@ SoundSettings::isTemporaryFile (
     return retval;
 }
 
+bool 
+SoundSettings::isFileCopy (
+        const QString &filePath)
+{
+    bool     retval = filePath.startsWith(userSaveDir());
+
+    SYS_WARNING ("returning %s", SYS_BOOL(retval));
+    return retval;
+}
+
+void 
+SoundSettings::suggestedXmlFilePath (
+            const QString &filePath,
+            QString       &xmlFilePath)
+{
+    QFileInfo          fileInfo (filePath);
+
+    xmlFilePath = fileInfo.path() + QDir::separator() +
+        fileInfo.baseName() + ".xml"; 
+}
+
 void
 SoundSettings::suggestedTargetFilePath (
         const QString &filePath,
         QString       &baseDir,
-        QString       &fileName)
+        QString       &fileName,
+        QString       &xmlFileName)
 {
     QString            subDir;
     QFileInfo          fileInfo (filePath);
@@ -75,10 +101,76 @@ SoundSettings::suggestedTargetFilePath (
         subDir;
 
     fileName = fileInfo.baseName() + "." + fileInfo.completeSuffix();
+    xmlFileName = fileInfo.baseName() + ".xml";
 
     SYS_DEBUG ("*** baseName()       = %s", SYS_STR(fileInfo.baseName()));
     SYS_DEBUG ("*** path()           = %s", SYS_STR(fileInfo.path()));
     SYS_DEBUG ("*** completeSuffix() = %s", SYS_STR(fileInfo.completeSuffix()));
+}
+
+bool
+SoundSettings::loadXML (
+        const QString   &xmlFileName,
+        QString         &origFileName,
+        QString         &copyFileName,
+        QString         &title)
+{
+    bool retval = false;
+    SYS_DEBUG ("*** xmlFileName = %s", SYS_STR(xmlFileName));
+
+    return retval;
+}
+
+void
+SoundSettings::saveXML (
+        const QString   &xmlFileName,
+        const QString   &origFileName,
+        const QString   &copyFileName,
+        const QString   &title)
+{
+    QXmlStreamWriter *writer;
+    QFile             file (xmlFileName);
+    
+    SYS_WARNING ("-----------------------------------------------------");
+    SYS_WARNING ("*** xmlFileName = %s", SYS_STR(xmlFileName));
+
+    if (!file.open(QIODevice::WriteOnly)) {
+        SYS_WARNING ("Unable to open file for writing: %s", 
+                SYS_STR(xmlFileName));
+        return;
+    }
+
+    /*
+     *
+     */
+    writer = new QXmlStreamWriter();
+    writer->setDevice (&file);
+    writer->setAutoFormatting(true);
+    writer->setCodec ("UTF-8");
+    writer->writeStartDocument ();
+	writer->writeStartElement ("soundsettings-applet");
+
+    writer->writeStartElement("orig-file");
+        writer->writeCharacters (origFileName);
+    writer->writeEndElement ();
+    
+    writer->writeStartElement("copy-file");
+        writer->writeCharacters (copyFileName);
+    writer->writeEndElement ();
+    
+    writer->writeStartElement("title");
+        writer->writeCharacters (title);
+    writer->writeEndElement ();
+
+    /*
+     *
+     */
+    writer->writeEndElement();
+	writer->writeEndDocument();
+
+     
+    delete writer;
+    file.close ();
 }
 
 QString 
@@ -88,11 +180,12 @@ SoundSettings::saveFile (
     QFile         sourceFile (filePath);
     QString       baseDir;
     QString       fileName;
+    QString       xmlFileName;
     QString       retval = filePath;
     QDir          baseDirectory;
     QString       targetFilePath;
 
-    suggestedTargetFilePath (filePath, baseDir, fileName);
+    suggestedTargetFilePath (filePath, baseDir, fileName, xmlFileName);
 
     SYS_DEBUG ("*** baseDir  = %s", SYS_STR(baseDir));
     SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName));
@@ -106,6 +199,8 @@ SoundSettings::saveFile (
 
     targetFilePath = 
         baseDir + QDir::separator() + fileName;
+    xmlFileName =
+        baseDir + QDir::separator() + xmlFileName;
     
     if (QFile(targetFilePath).exists()) {
         SYS_DEBUG ("The file '%s' already exists.", SYS_STR(targetFilePath));
@@ -123,5 +218,14 @@ SoundSettings::saveFile (
     }
 
 finalize:
+    if (retval != filePath) {
+        TrackerConnection *tracker = TrackerConnection::instance();
+        QString title;
+
+        tracker->registerFileCopy (filePath, retval);
+        title = tracker->niceNameFromFileName (filePath);
+        saveXML (xmlFileName, filePath, retval, title);
+    }
+
     return retval;
 }

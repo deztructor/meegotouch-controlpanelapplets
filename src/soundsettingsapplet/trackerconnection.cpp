@@ -17,6 +17,7 @@
 **
 ****************************************************************************/
 #include "trackerconnection.h"
+#include "soundsettingsutils.h"
 
 #include <QUrl>
 
@@ -81,14 +82,36 @@ QString
 TrackerConnection::niceNameFromFileName (
         const QString &fileName)
 {
-    QString                           niceName;
+    QString     niceName;
+    QString     myFileName = fileName;
+
+    if (SoundSettings::isTemporaryFile(fileName)) {
+        QString  xmlFileName;
+        QString  origFileName;
+        QString  copyFileName;
+        QString  title;
+
+        SYS_WARNING ("This is a file copy...");
+        SoundSettings::suggestedXmlFilePath (fileName, xmlFileName);
+        SoundSettings::loadXML (
+                xmlFileName, origFileName, copyFileName, title);
+    }
+
+    /*
+     * If the requested file is a copy we might try to use the original file...
+     * nope, this is not gonna work.
+     */
+    if (m_FileCopies.contains (myFileName)) {
+        SYS_WARNING ("*** myFileName = %s", SYS_STR(myFileName));
+        myFileName = m_FileCopies[myFileName];
+    }
 
     /**************************************************************************
      * First we try to find the filename in the cache. If we find the nice name
      * in the cache we are returning it and will not initiate a tracker request.
      */
-    if (TRACKER_HAS_A_CHANCE(fileName)) 
-        niceName = m_NiceNameCache[fileName];
+    if (TRACKER_HAS_A_CHANCE(myFileName)) 
+        niceName = m_NiceNameCache[myFileName];
 
     #ifdef DEBUG
     ++nRequests;
@@ -133,14 +156,14 @@ TrackerConnection::niceNameFromFileName (
      * tracker is not answering. We are of course not adding this value to the 
      * cache.
      */
-    if (m_PendingRequests.indexOf(fileName) < 0) {
-        m_PendingRequests << fileName;
+    if (m_PendingRequests.indexOf(myFileName) < 0) {
+        m_PendingRequests << myFileName;
         if (m_PendingRequests.size() == 1)
             QTimer::singleShot (
                     delayFirstRequests, this, SLOT(processPendingRequests()));
     }
 
-    niceName = poorNiceName (fileName);
+    niceName = poorNiceName (myFileName);
 
     SYS_DEBUG ("*** returning %s", SYS_STR(niceName));
     return niceName;
@@ -323,3 +346,13 @@ TrackerConnection::trackerIdToFilename (
     return QString("");
 }
 
+void
+TrackerConnection::registerFileCopy (
+        const QString     &originalFilePath,
+        const QString     &copyFilePath)
+{
+    SYS_DEBUG ("*** originalFilePath  = %s", SYS_STR(originalFilePath));
+    SYS_DEBUG ("*** copyFilePath      = %s", SYS_STR(copyFilePath));
+    
+    m_FileCopies[copyFilePath] = originalFilePath;
+}

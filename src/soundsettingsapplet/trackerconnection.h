@@ -46,6 +46,10 @@ public:
     QString trackerIdFromFileName (const QString &fileName);
     QString trackerIdToFilename (const QString &trackerId);
 
+    void registerFileCopy (
+            const QString     &originalFilePath,
+            const QString     &copyFilePath);
+
 protected:
     TrackerConnection ();
     QString poorNiceName (const QString &filename);
@@ -64,6 +68,7 @@ private:
     static TrackerConnection    *s_Instance;
     QHash<QString, QString>      m_NiceNameCache;
     QHash<QString, QString>      m_TrackerIdCache;
+    QHash<QString, QString>      m_FileCopies;
     QStringList                  m_PendingRequests;
     QSparqlConnection           *m_sparqlconn;
 };

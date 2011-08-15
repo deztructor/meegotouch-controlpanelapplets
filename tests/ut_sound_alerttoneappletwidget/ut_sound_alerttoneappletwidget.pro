@@ -35,9 +35,10 @@ contains(DEFINES, HAVE_LIBRESOURCEQT) {
     PKGCONFIG += libresourceqt1
 }
 
-HEADERS += \
-    ut_alerttoneappletwidget.h \
-    $$SRC_PREFIX/../debug.h \
+HEADERS +=                                    \
+    ut_alerttoneappletwidget.h                \
+    $$SRC_PREFIX/../debug.h                   \
+    $$SRC_PREFIX/soundsettingsutils.h         \    
     $$SRC_PREFIX/drilldownitem.h \
     $$SRC_PREFIX/trackerconnection.h \
     $$SRC_PREFIX/alerttone.h \
@@ -57,9 +58,10 @@ HEADERS += \
     $$SRC_PREFIX/static.h \
     $$SRC_PREFIX/qtrackedvariant.h
 
-SOURCES += \
-    ut_alerttoneappletwidget.cpp \
-    $$SRC_PREFIX/../debug.cpp \
+SOURCES +=                                    \
+    ut_alerttoneappletwidget.cpp              \
+    $$SRC_PREFIX/../debug.cpp                 \
+    $$SRC_PREFIX/soundsettingsutils.cpp       \    
     $$SRC_PREFIX/drilldownitem.cpp \
     $$SRC_PREFIX/trackerconnection.cpp \
     $$SRC_PREFIX/alerttone.cpp \

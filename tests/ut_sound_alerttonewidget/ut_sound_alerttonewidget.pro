@@ -31,9 +31,10 @@ contains(DEFINES, HAVE_QTSPARQL) {
     CONFIG += qtsparql
 }
 
-HEADERS += \
-    ut_alerttonewidget.h \
-    $$SRC_PREFIX/../debug.h \
+HEADERS +=                                    \
+    ut_alerttonewidget.h                      \
+    $$SRC_PREFIX/../debug.h                   \
+    $$SRC_PREFIX/soundsettingsutils.h         \
     $$SRC_PREFIX/drilldownitem.h \
     $$SRC_PREFIX/trackerconnection.h \
     $$SRC_PREFIX/alerttone.h \
@@ -47,9 +48,10 @@ HEADERS += \
 
 
 
-SOURCES += \
-    ut_alerttonewidget.cpp  \
-    $$SRC_PREFIX/../debug.cpp \
+SOURCES +=                                    \
+    ut_alerttonewidget.cpp                    \
+    $$SRC_PREFIX/../debug.cpp                 \
+    $$SRC_PREFIX/soundsettingsutils.cpp       \
     $$SRC_PREFIX/drilldownitem.cpp \
     $$SRC_PREFIX/trackerconnection.cpp \
     $$SRC_PREFIX/alerttone.cpp \

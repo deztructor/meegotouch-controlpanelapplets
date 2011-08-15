@@ -27,26 +27,28 @@ contains(DEFINES, HAVE_QTSPARQL) {
     CONFIG += qtsparql
 }
 
-HEADERS += \
-    ut_gconfstringcombo.h \
-    $$SRC_PREFIX/../debug.h \
-    $$SRC_PREFIX/trackerconnection.h \
-    $$SRC_PREFIX/alerttoneappletmaps.h \
-    $$SRC_PREFIX/qprofilevalue.h \
-    $$SRC_PREFIX/qgconfdirmanager.h \
-    $$SRC_PREFIX/qtrackedvariant.h  \
-    $$SRC_PREFIX/qgconfvalue.h  \
+HEADERS +=                                  \
+    ut_gconfstringcombo.h                   \
+    $$SRC_PREFIX/../debug.h                 \
+    $$SRC_PREFIX/soundsettingsutils.h       \
+    $$SRC_PREFIX/trackerconnection.h        \
+    $$SRC_PREFIX/alerttoneappletmaps.h      \
+    $$SRC_PREFIX/qprofilevalue.h            \
+    $$SRC_PREFIX/qgconfdirmanager.h         \
+    $$SRC_PREFIX/qtrackedvariant.h          \
+    $$SRC_PREFIX/qgconfvalue.h              \
     $$SRC_PREFIX/gconfstringcombo.h
 
-SOURCES += \
-    ut_gconfstringcombo.cpp  \
-    $$SRC_PREFIX/../debug.cpp \
-    $$SRC_PREFIX/trackerconnection.cpp \
-    $$SRC_PREFIX/alerttoneappletmaps.cpp \
-    $$SRC_PREFIX/qprofilevalue.cpp \
-    $$SRC_PREFIX/qgconfdirmanager.cpp \
-    $$SRC_PREFIX/qtrackedvariant.cpp  \
-    $$SRC_PREFIX/qgconfvalue.cpp  \
+SOURCES +=                                  \
+    ut_gconfstringcombo.cpp                 \
+    $$SRC_PREFIX/../debug.cpp               \
+    $$SRC_PREFIX/soundsettingsutils.cpp     \
+    $$SRC_PREFIX/trackerconnection.cpp      \
+    $$SRC_PREFIX/alerttoneappletmaps.cpp    \
+    $$SRC_PREFIX/qprofilevalue.cpp          \
+    $$SRC_PREFIX/qgconfdirmanager.cpp       \
+    $$SRC_PREFIX/qtrackedvariant.cpp        \
+    $$SRC_PREFIX/qgconfvalue.cpp            \
     $$SRC_PREFIX/gconfstringcombo.cpp
 
 INSTALLS += target

@@ -27,14 +27,33 @@ namespace SoundSettings
 {
     QString mountPoint ();
     QString userSaveDir ();
+
     bool isTemporaryFile (const QString &filePath);
+    bool isFileCopy (const QString &filePath);
+
+    void suggestedXmlFilePath (
+            const QString &filePath,
+            QString       &xmlFilePath);
 
     void suggestedTargetFilePath (
             const QString &filePath,
             QString       &baseDir,
-            QString       &fileName);
+            QString       &fileName,
+            QString       &xmlFileName);
 
     QString saveFile (
             const QString &filePath);
+
+    bool loadXML (
+            const QString   &xmlFileName,
+            QString         &origFileName,
+            QString         &copyFileName,
+            QString         &title);
+
+    void saveXML (
+            const QString   &xmlFileName,
+            const QString   &origFileName,
+            const QString   &copyFileName,
+            const QString   &title);
 };
 #endif
