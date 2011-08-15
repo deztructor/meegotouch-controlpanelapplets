@@ -58,6 +58,7 @@ QProfileValue::QProfileValue(
  */
 QProfileValue::~QProfileValue ()
 {
+    stopWatchFiles ();
     delNotify ();
 }
 
