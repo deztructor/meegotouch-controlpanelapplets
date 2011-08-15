@@ -1,3 +1,9 @@
+meegotouch-controlpanelapplets (0.20.64~1) meegotouch; urgency=low
+
+  * [NEW VERSION]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 15 Aug 2011 11:15:23 +0300
+
 meegotouch-controlpanelapplets (0.20.63-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
