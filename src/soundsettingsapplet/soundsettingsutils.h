@@ -21,7 +21,7 @@
 
 #include <QString>
 
-#undef COPY_SOUND_FILES
+#define COPY_SOUND_FILES
 
 namespace SoundSettings 
 {
