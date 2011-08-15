@@ -82,7 +82,6 @@ AlertTonePreview::gstInit ()
     GError *err = NULL;
     SYS_DEBUG ("*** fname = %s", SYS_STR (m_Filename));
     SYS_DEBUG ("Starting the playback.");
-    GstElement *pulsesink;
 
     m_gstPipeline = gst_parse_launch (GstStartCommand, &err);
     if (err)
@@ -97,8 +96,6 @@ AlertTonePreview::gstInit ()
         GST_BIN(m_gstPipeline), "alerttonepreviewvolume");
     m_gstFilesrc = gst_bin_get_by_name(
         GST_BIN(m_gstPipeline), "alerttonepreviewfilesrc");
-    pulsesink = gst_bin_get_by_name(
-        GST_BIN(m_gstPipeline), "alerttonepreviewpulsesink");
 
     if (m_gstVolume && m_gstFilesrc) {
         g_object_set (G_OBJECT(m_gstVolume),

@@ -73,6 +73,7 @@ SoundSettingsApplet::~SoundSettingsApplet()
 void
 SoundSettingsApplet::init()
 {
+    SYS_DEBUG ("");
     gst_argv = new char*[2];
     gst_argv[0] = qstrdup ("app");
     gst_argv[1] = NULL;
