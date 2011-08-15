@@ -64,10 +64,11 @@ SoundSettingsApplet::~SoundSettingsApplet()
      * And then free up the singletons
      */
     delete ProfileBackend::getInstance ();
-
     delete TrackerConnection::instance ();
 
     AlertTonePreview::freeResources ();
+
+    SysDebug::closeDebugFile ();
 }
 
 void

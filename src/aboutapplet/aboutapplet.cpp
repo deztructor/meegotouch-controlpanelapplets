@@ -35,6 +35,7 @@ AboutApplet::AboutApplet()
 
 AboutApplet::~AboutApplet()
 {
+    SysDebug::closeDebugFile ();
 }
 
 void

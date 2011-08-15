@@ -130,6 +130,7 @@ namespace SysDebug
         const char   *function,
         const char   *formatstring,
         ...);
+    void closeDebugFile ();
 };
 
 #define SYS_STR(qstring) (TERM_BOLD+qstring+TERM_NORMAL).toLatin1().constData()

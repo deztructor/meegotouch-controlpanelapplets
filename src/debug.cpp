@@ -132,6 +132,16 @@ openDebugFile ()
     }
 }
 
+void
+SysDebug::closeDebugFile ()
+{
+    if (! debugStream)
+        return;
+
+    fflush (debugStream);
+    fclose (debugStream);
+}
+
 /*
  * This function is used to print debug and error messages, an enhanced version
  * of the SysDebug::sysMsg(). Please use this function anly through macros (like
