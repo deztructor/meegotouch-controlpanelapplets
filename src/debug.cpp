@@ -135,11 +135,14 @@ openDebugFile ()
 void
 SysDebug::closeDebugFile ()
 {
+#ifndef UNIT_TEST
     if (! debugStream)
         return;
 
     fflush (debugStream);
     fclose (debugStream);
+    debugStream = NULL;
+#endif
 }
 
 /*

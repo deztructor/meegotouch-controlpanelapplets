@@ -32,7 +32,8 @@ class MC_EXPORT AlertToneDefaultsModel : public QStandardItemModel
 	Q_OBJECT
 
 public:
-	AlertToneDefaultsModel();
+	AlertToneDefaultsModel ();
+    ~AlertToneDefaultsModel ();
 
     typedef enum {
         NiceNameColumn  = 0,

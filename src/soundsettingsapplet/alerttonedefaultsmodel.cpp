@@ -60,17 +60,16 @@ AlertToneDefaultsModel::AlertToneDefaultsModel() : QStandardItemModel(),
     m_dirStack.push(QDir(oviDirPath));
     m_dirIdx.push(0);
 
-//for meego.com, we have to add sounds from 
+//for meego.com, we have to add sounds from
 //  "/usr/share/sounds/meego/stereo/"
 
 #ifdef MEEGO
    QString meegoPath = "/usr/share/sounds/meego/stereo/";
 
    SYS_DEBUG ("*** MEEGO sounds path = %s", SYS_STR(meegoPath));
-   
+
    m_dirStack.push(QDir(meegoPath));
    m_dirIdx.push(0);
-
 #endif
 
     /*
@@ -86,9 +85,9 @@ AlertToneDefaultsModel::AlertToneDefaultsModel() : QStandardItemModel(),
     /*
      * TrackerConnection might send a signal about the tracker answer.
      */
-    connect (TrackerConnection::instance(), 
+    connect (TrackerConnection::instance(),
             SIGNAL(dataReady(QString,QString,QString)),
-            this, 
+            this,
             SLOT(dataReceived(QString,QString,QString)));
 
     #ifdef USE_ASYNC_LOADING
@@ -97,16 +96,21 @@ AlertToneDefaultsModel::AlertToneDefaultsModel() : QStandardItemModel(),
      * want to be as fast as possible... this is not a perfect solution though.
      */
     QTimer::singleShot(0, this, SLOT(addSingleItem()));
-    #else 
+    #else
     while (!m_isFinished)
         addSingleItem();
     #endif
 }
 
+AlertToneDefaultsModel::~AlertToneDefaultsModel ()
+{
+    delete m_FileWatcher.data ();
+}
+
 void
 AlertToneDefaultsModel::addSingleItem()
 {
-    if (m_isFinished) 
+    if (m_isFinished)
         return;
 
     while (m_dirStack.count() > 0) {
@@ -122,12 +126,12 @@ AlertToneDefaultsModel::addSingleItem()
         m_isFinished = true;
         emit finished();
         return;
-    } 
+    }
 
     #if 0
-    SYS_DEBUG ("*** path        = %s", 
+    SYS_DEBUG ("*** path        = %s",
             SYS_STR(m_dirStack.top().absolutePath()));
-    SYS_DEBUG ("***             = %s", 
+    SYS_DEBUG ("***             = %s",
             SYS_STR(m_dirStack.top()[m_dirIdx.top()]));
     #endif
     int currentLevel = m_dirIdx.count() - 1;
