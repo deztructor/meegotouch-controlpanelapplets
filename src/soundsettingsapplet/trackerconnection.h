@@ -66,7 +66,9 @@ private slots:
 
 private:
     static TrackerConnection    *s_Instance;
+    // FullFilePath => niceName
     QHash<QString, QString>      m_NiceNameCache;
+    // copyFilePath => origFilePath
     QHash<QString, QString>      m_TrackerIdCache;
     QHash<QString, QString>      m_FileCopies;
     QStringList                  m_PendingRequests;

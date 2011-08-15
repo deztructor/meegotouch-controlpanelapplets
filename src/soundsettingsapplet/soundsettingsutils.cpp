@@ -23,6 +23,7 @@
 #include <QFileInfo>
 #include <QCryptographicHash>
 #include <QXmlStreamWriter>
+#include <QXmlStreamReader>
 
 #include "trackerconnection.h"
 
@@ -66,6 +67,8 @@ SoundSettings::isFileCopy (
 {
     bool     retval = filePath.startsWith(userSaveDir());
 
+    SYS_DEBUG ("*** filePath = %s", SYS_STR(filePath));
+    SYS_DEBUG ("*** dir      = %s", SYS_STR(userSaveDir()));
     SYS_WARNING ("returning %s", SYS_BOOL(retval));
     return retval;
 }
@@ -115,9 +118,57 @@ SoundSettings::loadXML (
         QString         &copyFileName,
         QString         &title)
 {
-    bool retval = false;
-    SYS_DEBUG ("*** xmlFileName = %s", SYS_STR(xmlFileName));
+    QFile            *file = 0;
+    QXmlStreamReader *xml  = 0;
+    bool              retval = false;
+    QStringList       names;
 
+    SYS_DEBUG ("*** xmlFileName = %s", SYS_STR(xmlFileName));
+	file = new QFile(xmlFileName);
+	if (!file->open(QIODevice::ReadOnly | QIODevice::Text)) {
+        SYS_WARNING ("Can not open '%s' for reading: %m", 
+                SYS_STR(xmlFileName));
+		goto finalize;
+	}
+
+    xml = new QXmlStreamReader(file);
+    while(!xml->atEnd() && !xml->hasError()) {
+        QString name(xml->name().toString());
+
+        #if 1
+        SYS_DEBUG ("*************************************");
+        SYS_DEBUG ("*** name: %s", SYS_STR(name));
+        SYS_DEBUG ("*** lineNumber : %d", xml->lineNumber());
+        #endif
+
+		if (xml->isStartElement()) {
+		   	SYS_DEBUG ("StartElement: ");
+            names << xml->name().toString();
+		} else if (xml->isEndElement()) {
+            SYS_DEBUG ("EndElement");
+            names.removeLast();
+        } else if (xml->isCharacters()) {
+            QString path = names.join("/");
+            SYS_DEBUG ("Characters at %s.", SYS_STR(path));
+            SYS_DEBUG ("*** characters: %s", 
+                    SYS_STR(xml->text().toString()));
+            if (path == "soundsettings-applet/orig-file")
+                origFileName = xml->text().toString();
+            else if (path == "soundsettings-applet/copy-file")
+                copyFileName = xml->text().toString();
+            else if (path == "soundsettings-applet/title")
+                title = xml->text().toString();
+        }
+
+        xml->readNext();
+    } 
+
+finalize:
+    if (xml)
+        delete xml;
+    if (file)
+        delete file;
+    
     return retval;
 }
 

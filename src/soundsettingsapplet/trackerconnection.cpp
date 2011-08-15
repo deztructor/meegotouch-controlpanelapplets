@@ -85,7 +85,7 @@ TrackerConnection::niceNameFromFileName (
     QString     niceName;
     QString     myFileName = fileName;
 
-    if (SoundSettings::isTemporaryFile(fileName)) {
+    if (SoundSettings::isFileCopy(fileName)) {
         QString  xmlFileName;
         QString  origFileName;
         QString  copyFileName;
@@ -95,13 +95,23 @@ TrackerConnection::niceNameFromFileName (
         SoundSettings::suggestedXmlFilePath (fileName, xmlFileName);
         SoundSettings::loadXML (
                 xmlFileName, origFileName, copyFileName, title);
+
+        if (!origFileName.isEmpty() && 
+                !copyFileName.isEmpty() && 
+                !title.isEmpty()) {
+            m_NiceNameCache[origFileName] = title;
+            m_NiceNameCache[copyFileName] = title;
+            m_FileCopies[copyFileName]    = origFileName;
+        }
     }
 
     /*
      * If the requested file is a copy we might try to use the original file...
      * nope, this is not gonna work.
      */
-    if (m_FileCopies.contains (myFileName)) {
+    if (m_FileCopies.contains (myFileName) && 
+            m_NiceNameCache.contains(m_FileCopies[myFileName]) &&
+            !m_NiceNameCache.contains(myFileName)) {
         SYS_WARNING ("*** myFileName = %s", SYS_STR(myFileName));
         myFileName = m_FileCopies[myFileName];
     }
