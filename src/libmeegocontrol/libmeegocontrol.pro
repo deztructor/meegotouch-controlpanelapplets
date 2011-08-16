@@ -82,7 +82,6 @@ PUBLIC_HEADERS = \
     $$SOUNDSETTINGS_PATH/alerttonedefaults.h       \
     $$SOUNDSETTINGS_PATH/alerttonetoplevel.h       \
     $$SOUNDSETTINGS_PATH/alerttonebrowser.h        \
-    $$SOUNDSETTINGS_PATH/alerttoneappletmaps.h     \
     $$SOUNDSETTINGS_PATH/qprofilevalue.h           \
     $$SOUNDSETTINGS_PATH/qtrackedvariant.h         \
     $$SOUNDSETTINGS_PATH/alerttonedefaultsmodel.h  \
@@ -102,6 +101,7 @@ HEADERS =                                          \
     $$SOUNDSETTINGS_PATH/alerttonepreview.h        \
     $$SOUNDSETTINGS_PATH/trackerconnection.h       \
     $$SOUNDSETTINGS_PATH/drilldownitem.h           \
+    $$SOUNDSETTINGS_PATH/alerttoneappletmaps.h     \
     $$WALLPAPER_PATH/wallpaperthumb.h              \
     $$PUBLIC_HEADERS
 
