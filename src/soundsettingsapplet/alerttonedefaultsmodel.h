@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #ifndef _ALERT_TONE_DEFAULTS_MODEL_H_
 #define _ALERT_TONE_DEFAULTS_MODEL_H_
 
@@ -25,9 +24,8 @@
 #include <QStandardItemModel>
 #include <QPointer>
 #include <QFileSystemWatcher>
-#include <meegocontrolexport.h>
 
-class MC_EXPORT AlertToneDefaultsModel : public QStandardItemModel
+class AlertToneDefaultsModel : public QStandardItemModel
 {
 	Q_OBJECT
 

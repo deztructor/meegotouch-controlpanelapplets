@@ -22,7 +22,6 @@
 
 #include <MList>
 #include <MBasicListItem>
-#include <meegocontrolexport.h>
 #include "alerttone.h"
 
 class QString;
@@ -40,7 +39,7 @@ class MyListItem : public MBasicListItem {
 };
 
 
-class MC_EXPORT AlertToneDefaults : public MList
+class AlertToneDefaults : public MList
 {
 	Q_OBJECT
 
