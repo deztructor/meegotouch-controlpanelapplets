@@ -16,35 +16,19 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #ifndef _ALERT_TONE_APPLET_MAPS_H_
 #define _ALERT_TONE_APPLET_MAPS_H_
 
-#include <QObject>
-#include <QMap>
 #include <QString>
 #include <QVariant>
-#include <meegocontrolexport.h>
 
-class MC_EXPORT AlertToneAppletMaps
+namespace AlertToneAppletMaps
 {
-public:
-	static const AlertToneAppletMaps &instance();
-	AlertToneAppletMaps();
-
-
-    static QVariant mapToUiString (const QString &str);
-    static QVariant mapToUiString (int integer);
-
-private:
-	QString map(const QString &str) const;
-	QString map(const int &i) const;
-
-	static const AlertToneAppletMaps maps;
-	QMap<QString, const char *> m_map;
-    #ifdef UNIT_TEST
-    friend class Ut_AlertToneAppletMapsTests;
-    #endif
+    QVariant mapToUiString (const QString &str);
+    QVariant mapToUiString (int integer);
+// these are only giving logical ids:
+    QString map (const QString &str);
+    QString map (const int &i);
 };
 
-#endif /* !_ALERT_TONE_APPLET_MAPS_H_ */
+#endif

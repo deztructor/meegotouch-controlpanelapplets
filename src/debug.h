@@ -113,12 +113,14 @@
 #  define TERM_RED     ""
 #  define TERM_YELLOW  ""
 #  define TERM_GREEN   ""
+#  define TERM_BLUE    ""
 #  define TERM_NORMAL  ""
 #  define TERM_BOLD    ""
 #else 
 #  define TERM_YELLOW  "\033[1;31m" 
 #  define TERM_RED     "\033[1;33m" 
 #  define TERM_GREEN   "\033[1;32m"
+#  define TERM_BLUE    "\033[1;34m"
 #  define TERM_NORMAL  "\033[0;39m"
 #  define TERM_BOLD    "\033[1m"
 #endif
@@ -130,6 +132,7 @@ namespace SysDebug
         const char   *function,
         const char   *formatstring,
         ...);
+    void closeDebugFile ();
 };
 
 #define SYS_STR(qstring) (TERM_BOLD+qstring+TERM_NORMAL).toLatin1().constData()

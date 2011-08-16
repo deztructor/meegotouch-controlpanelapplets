@@ -25,7 +25,7 @@ CONFIG += \
 MOBILITY += \
     systeminfo
 
-PKGCONFIG += dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
+PKGCONFIG += dbus-1 profile ContentManager gstreamer-0.10
 
 contains(DEFINES, HAVE_LIBRESOURCEQT) {
     PKGCONFIG += libresourceqt1
@@ -55,10 +55,8 @@ HEADERS +=                                  \
     $$SRC_PREFIX/alerttonedefaultsmodel.h   \
     $$SRC_PREFIX/qtrackedvariant.h          \
     $$SRC_PREFIX/qprofilevalue.h            \
-    $$SRC_PREFIX/qgconfdirmanager.h         \
     $$SRC_PREFIX/gconfstringcombo.h         \
     $$SRC_PREFIX/profileintcombo.h          \
-    $$SRC_PREFIX/qgconfvalue.h              \
     $$SRC_PREFIX/static.h                   \
     $$SRC_PREFIX/soundsettingsapplet.h
 
@@ -82,10 +80,8 @@ SOURCES +=                                  \
     $$SRC_PREFIX/alerttonedefaultsmodel.cpp \
     $$SRC_PREFIX/qtrackedvariant.cpp        \
     $$SRC_PREFIX/qprofilevalue.cpp          \
-    $$SRC_PREFIX/qgconfdirmanager.cpp       \
     $$SRC_PREFIX/gconfstringcombo.cpp       \
     $$SRC_PREFIX/profileintcombo.cpp        \
-    $$SRC_PREFIX/qgconfvalue.cpp            \
     $$SRC_PREFIX/soundsettingsapplet.cpp
 
 INSTALLS += target

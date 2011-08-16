@@ -45,6 +45,7 @@ BatteryApplet::BatteryApplet ():
 BatteryApplet::~BatteryApplet ()
 {
     SYS_DEBUG ("Destroying %p", this);
+    SysDebug::closeDebugFile ();
 }
 
 void BatteryApplet::init()

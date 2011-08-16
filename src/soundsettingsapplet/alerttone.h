@@ -42,20 +42,20 @@ alertTone = new AlertTone ("ringing.alert.tone");
  */
 class MC_EXPORT AlertTone: public QProfileValue
 {
-    Q_OBJECT
+Q_OBJECT
 
-    public:
-	    AlertTone(const QString &key);
+public:
+    AlertTone(const QString &key);
 
-    	static QList<AlertTone *> alertTones();
+    static QList<AlertTone *> alertTones();
 
-	    QString fileName();
-    	QString niceName();
-	    QString trackerId();
+    QString fileName();
+    QString niceName();
+    QString trackerId();
 
 protected:
-	virtual void fetchFromBackend();
-	virtual void realSetValue(const QVariant &newValue);
+    virtual void fetchFromBackend();
+    virtual void realSetValue(const QVariant &newValue);
 
 signals:
     /*! This signal is emitted when the value is not changed but a new detail
@@ -73,9 +73,9 @@ private slots:
             const QString   &trackerId);
 
 private:
-	void maybeUpdate();
-	QString m_niceName;
-	QString m_trackerId;
+    void maybeUpdate();
+    QString m_niceName;
+    QString m_trackerId;
 
 #ifdef UNIT_TEST
     friend class Ut_AlertToneTests;

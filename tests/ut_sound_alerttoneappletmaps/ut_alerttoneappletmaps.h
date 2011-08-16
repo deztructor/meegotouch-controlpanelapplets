@@ -16,27 +16,21 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #ifndef UT_ALERTTONEAPPLETMAPS_H
 #define UT_ALERTTONEAPPLETMAPS_H
 
 #include <QtTest/QtTest>
 #include <QObject>
 
-
 class Ut_AlertToneAppletMapsTests: public QObject
 {
 Q_OBJECT
 
 private slots:
-      void init();
-      void cleanup();
-      void initTestCase(){};
-      void cleanupTestCase(){};
-      void alertToneAppletMapsContent_data();
-      void alertToneAppletMapsContent();
-private:
-private slots:
+    void init ();
+    void cleanup ();
+    void alertToneAppletMapsContent_data ();
+    void alertToneAppletMapsContent ();
 };
 
 #endif

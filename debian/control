@@ -21,9 +21,8 @@ Provides: systemui-applets-tests, duicontrolpanel-soundsettingsapplet-tests
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, duicontrolpanel-usbapplet,
          duicontrolpanel-batteryapplet, duicontrolpanel-aboutapplet,
-         duicontrolpanel-displayapplet, duicontrolpanel-profileapplet,
-         duicontrolpanel-wallpaperapplet, duicontrolpanel-resetapplet,
-         duicontrolpanel-warrantyapplet, duicontrolpanel-offlineapplet,
+         duicontrolpanel-displayapplet, duicontrolpanel-wallpaperapplet,
+         duicontrolpanel-resetapplet, duicontrolpanel-offlineapplet,
          duicontrolpanel-soundsettingsapplet
 XB-Maemo-CI-Packages: libmeegocontrol0, duicontrolpanel-soundsettingsapplet
 XB-Maemo-CI-Stage: fast, staging, acceptance, validation

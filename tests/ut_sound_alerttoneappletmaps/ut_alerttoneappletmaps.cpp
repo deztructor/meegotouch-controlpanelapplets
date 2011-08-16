@@ -16,14 +16,10 @@
 ** of this file.
 **
 ****************************************************************************/
-
-#include <MApplication>
 #include <QString>
 #include <QStringList>
 #include "ut_alerttoneappletmaps.h"
 #include "alerttoneappletmaps.h"
-#include <profiled/libprofile.h>
-#include <QDebug>
 
 /******************************************************************************
  * Ut_AlertToneAppletMaps implementation.
@@ -40,36 +36,30 @@ Ut_AlertToneAppletMapsTests::cleanup()
 
 void Ut_AlertToneAppletMapsTests::alertToneAppletMapsContent_data()
 {
-      QTest::addColumn<QString>("key");
-      QTest::addColumn<QString>("content");
-      QTest::newRow("") << "ringing.alert.tone@general" << "qtn_sond_ring_tone";
-      QTest::newRow("") << "email.alert.tone@general" << "qtn_sond_email_tone";
-      QTest::newRow("") << "sms.alert.tone@general" << "qtn_sond_message_tone";
-      QTest::newRow("") << "im.alert.tone@general" << "qtn_sond_ins_messaging";
-      QTest::newRow("") << "calendar.alert.tone@general" << "qtn_sond_org_reminders";
-      QTest::newRow("") << "keypad.sound.level" << "qtn_sond_keyboard";
-      QTest::newRow("") << "system.sound.level" << "qtn_sond_system";
-      QTest::newRow("") << "/meegotouch/input_feedback/volume/priority2/pulse" << "qtn_sond_touch_screen";
-      QTest::newRow("") << "/meegotouch/input_feedback/volume/priority2/vibra" << "qtn_sond_touch_vibra";
-      QTest::newRow("") << "off" << "qtn_comm_settings_off";
-      QTest::newRow("") << "low" << "qtn_sond_level_1";
-      QTest::newRow("") << "medium" << "qtn_sond_level_2";
-      QTest::newRow("") << "high" << "qtn_sond_level_3";
+    QTest::addColumn<QString>("key");
+    QTest::addColumn<QString>("content");
+    QTest::newRow("") << "ringing.alert.tone@general" << "qtn_sond_ring_tone";
+    QTest::newRow("") << "email.alert.tone@general" << "qtn_sond_email_tone";
+    QTest::newRow("") << "sms.alert.tone@general" << "qtn_sond_message_tone";
+    QTest::newRow("") << "im.alert.tone@general" << "qtn_sond_ins_messaging";
+    QTest::newRow("") << "calendar.alert.tone@general" << "qtn_sond_org_reminders";
+    QTest::newRow("") << "keypad.sound.level" << "qtn_sond_keyboard";
+    QTest::newRow("") << "system.sound.level" << "qtn_sond_system";
+    QTest::newRow("") << "/meegotouch/input_feedback/volume/priority2/pulse" << "qtn_sond_touch_screen";
+    QTest::newRow("") << "/meegotouch/input_feedback/volume/priority2/vibra" << "qtn_sond_touch_vibra";
+    QTest::newRow("") << "off" << "qtn_comm_settings_off";
+    QTest::newRow("") << "low" << "qtn_sond_level_1";
+    QTest::newRow("") << "medium" << "qtn_sond_level_2";
+    QTest::newRow("") << "high" << "qtn_sond_level_3";
 }
 
 void Ut_AlertToneAppletMapsTests::alertToneAppletMapsContent()
 {
-      AlertToneAppletMaps  atam;
-      QFETCH(QString, key);
-      QFETCH(QString, content);
+    QFETCH (QString, key);
+    QFETCH (QString, content);
 
-      QString  result;
-      result =  atam.map(key);
-      QCOMPARE( content , result );
+    QString result = AlertToneAppletMaps::map (key);
+    QCOMPARE (content, result);
 }
 
-MApplication *app;
-
-
-
-QTEST_APPLESS_MAIN(Ut_AlertToneAppletMapsTests)
+QTEST_APPLESS_MAIN (Ut_AlertToneAppletMapsTests)

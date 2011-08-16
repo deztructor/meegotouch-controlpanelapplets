@@ -27,7 +27,7 @@ QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden -fPIC
 # some of these, but for that we need to use the LIBMEEGOCONTROL define in the
 # soundsettingsapplet source.
 #
-PKGCONFIG += dbus-1 profile gconf-2.0 gstreamer-0.10
+PKGCONFIG += dbus-1 profile gstreamer-0.10
 
 #########################################
 # wallpaper setting extra dependencies  #
@@ -79,14 +79,10 @@ PUBLIC_HEADERS = \
     $$WALLPAPER_PATH/wallpapereditorwidget.h       \
     $$WALLPAPER_PATH/wallpaperinfoheader.h         \
     $$SOUNDSETTINGS_PATH/alerttone.h               \
-    $$SOUNDSETTINGS_PATH/alerttonedefaults.h       \
     $$SOUNDSETTINGS_PATH/alerttonetoplevel.h       \
     $$SOUNDSETTINGS_PATH/alerttonebrowser.h        \
-    $$SOUNDSETTINGS_PATH/alerttoneappletmaps.h     \
     $$SOUNDSETTINGS_PATH/qprofilevalue.h           \
     $$SOUNDSETTINGS_PATH/qtrackedvariant.h         \
-    $$SOUNDSETTINGS_PATH/alerttonedefaultsmodel.h  \
-    $$SOUNDSETTINGS_PATH/soundsettingsutils.h      \
     WallpaperBusinessLogic                         \
     WallpaperDescriptor                            \
     WallpaperCurrentDescriptor                     \
@@ -102,6 +98,10 @@ HEADERS =                                          \
     $$SOUNDSETTINGS_PATH/alerttonepreview.h        \
     $$SOUNDSETTINGS_PATH/trackerconnection.h       \
     $$SOUNDSETTINGS_PATH/drilldownitem.h           \
+    $$SOUNDSETTINGS_PATH/alerttoneappletmaps.h     \
+    $$SOUNDSETTINGS_PATH/alerttonedefaultsmodel.h  \
+    $$SOUNDSETTINGS_PATH/soundsettingsutils.h      \
+    $$SOUNDSETTINGS_PATH/alerttonedefaults.h       \
     $$WALLPAPER_PATH/wallpaperthumb.h              \
     $$PUBLIC_HEADERS
 

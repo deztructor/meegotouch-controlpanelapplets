@@ -16,128 +16,140 @@
 ** of this file.
 **
 ****************************************************************************/
-
-#include <QDebug>
 #include "gconfstringcombo.h"
 #include "alerttoneappletmaps.h"
-
-#define TO_STRING(string) ((string).toUtf8().constData())
+#include <MGConfItem>
 
 //#define DEBUG
 #define WARNING
 #include "../debug.h"
 
 GConfStringCombo::GConfStringCombo (
-        const QString &gconfKey, 
-        const QStringList &possibleValues, 
-        QGraphicsItem *parent) :
-	MComboBox(parent),
-	m_val(gconfKey),
-	m_possibleValues(possibleValues)
+        const QString     &gconfKey,
+        const QStringList &possibleValues,
+        QGraphicsItem     *parent) :
+    MComboBox (parent),
+    m_gconfItem (new MGConfItem (gconfKey)),
+    m_possibleValues (possibleValues)
 {
-    SYS_DEBUG ("*** gconfKey = %s", SYS_STR(gconfKey));
+    SYS_DEBUG ("*** gconfKey = %s", SYS_STR (gconfKey));
 
-	QAbstractItemModel *model = itemModel();
-	model->insertColumn(ColumnGConfString);
+    QAbstractItemModel *model = itemModel ();
+    model->insertColumn (ColumnGConfString);
 
-    connect (this, SIGNAL(currentIndexChanged(int)), 
-            this, SLOT(currentIndexChanged(int)));
-	connect (&m_val, SIGNAL(changed()), 
-            this, SLOT(changedInGConf()));
+    connect (this, SIGNAL (currentIndexChanged (int)),
+             SLOT (currentIndexChanged (int)));
+    connect (m_gconfItem, SIGNAL (valueChanged ()),
+             SLOT (changedInGConf ()));
 
-	retranslateUi();
+    retranslateUi();
+}
+
+GConfStringCombo::~GConfStringCombo ()
+{
+    delete m_gconfItem;
+    m_gconfItem = 0;
 }
 
 void
-GConfStringCombo::retranslateUi()
+GConfStringCombo::retranslateUi ()
 {
-	QAbstractItemModel *model = itemModel();
-	int                 Nix;
+    QAbstractItemModel *model = itemModel ();
+    int                 i;
     int                 idx = -1;
     SYS_DEBUG ("");
 
     /*
      * Removing every row from the list.
      */
-	model->removeRows(0, model->rowCount());
+    model->removeRows (0, model->rowCount ());
 
     /*
      * Setting the title of the combobox.
      */
-	setProperty("title", AlertToneAppletMaps::mapToUiString(m_val.key()));
+    setProperty (
+        "title",
+        AlertToneAppletMaps::mapToUiString (m_gconfItem->key ()));
 
     /*
      * Fetching the current value.
      */
-	QString gconfVal = m_val.value().toString();
+    QString gconfVal = m_gconfItem->value ().toString ();
 
     /*
      * Adding a row for every possible value with the UI string and the possible
      * value code name.
      */
-	for (Nix = 0; Nix < m_possibleValues.size(); Nix++) {
-		model->insertRow(model->rowCount());
-		model->setData (
-                model->index(Nix, ColumnUiString), 
-                AlertToneAppletMaps::mapToUiString (m_possibleValues[Nix]));
-		model->setData(
-                model->index(Nix, ColumnGConfString), 
-                QVariant(m_possibleValues[Nix]));
+    for (i = 0; i < m_possibleValues.size(); i++)
+    {
+        model->insertRow (model->rowCount ());
+        model->setData (
+                model->index (i, ColumnUiString),
+                AlertToneAppletMaps::mapToUiString (m_possibleValues[i]));
+        model->setData(
+                model->index (i, ColumnGConfString),
+                QVariant (m_possibleValues[i]));
 
         /*
          * This will show us the current index.
          */
-        if (gconfVal == m_possibleValues[Nix])
-            idx = Nix;
-	}
+        if (gconfVal == m_possibleValues[i])
+            idx = i;
+    }
 
-    if (idx != -1) {
+    if (idx != -1)
+    {
         /*
          * We found the index, let's just select it.
          */
         setCurrentIndex (idx);
-    } else if (!gconfVal.isEmpty()) {
+    }
+    else if (!gconfVal.isEmpty ())
+    {
         /*
          * We did not find the index, but we can add the value since the current
          * value is not null.
          * FIXME: This way we let the unsupported value go into the combobox,
          * but of course, it is the current value...
          */
-        idx = model->rowCount();
+        idx = model->rowCount ();
 
-		model->insertRow (idx);
-		model->setData (
-                model->index(idx, ColumnUiString),
+        model->insertRow (idx);
+        model->setData (
+                model->index (idx, ColumnUiString),
                 AlertToneAppletMaps::mapToUiString (gconfVal));
 
-		model->setData (
-                model->index(idx, ColumnGConfString), 
-                QVariant(gconfVal));
-        
+        model->setData (
+                model->index (idx, ColumnGConfString),
+                QVariant (gconfVal));
+
         setCurrentIndex (idx);
     }
 }
 
 void
-GConfStringCombo::changedInGConf()
+GConfStringCombo::changedInGConf ()
 {
-	QAbstractItemModel *model = itemModel();
-    
+    QAbstractItemModel *model = itemModel ();
+
     /*
      * If the item is already shown as current item we don't need to do
      * anything.
      */
     if (currentIndex() >= 0 &&
-            model->data (model->index(currentIndex(),
-                    ColumnGConfString)) == m_val.value())
+        model->data (model->index (currentIndex(), ColumnGConfString)) ==
+        m_gconfItem->value ())
         return;
 
     /*
      * Let's see where is that item and let's select it.
      */
-	for (int Nix = 0 ; Nix < count() ; Nix++) {
-		if (model->data(model->index(Nix, ColumnGConfString)) == m_val.value()) {
-            setCurrentIndex(Nix);
+    for (int i = 0 ; i < count() ; i++)
+    {
+        if (model->data (model->index (i, ColumnGConfString)) ==
+            m_gconfItem->value ())
+        {
+            setCurrentIndex (i);
             break;
         }
     }
@@ -148,12 +160,14 @@ GConfStringCombo::changedInGConf()
  * method will set the value in GConf using the QGConfValue object.
  */
 void
-GConfStringCombo::currentIndexChanged(
+GConfStringCombo::currentIndexChanged (
         int index)
 {
     SYS_DEBUG ("");
-	if (index >= 0) {
-		QAbstractItemModel *model = itemModel();
-		m_val.set(model->data(model->index(index, ColumnGConfString)));
-	}
+    if (index >= 0)
+    {
+        QAbstractItemModel *model = itemModel ();
+        m_gconfItem->set (model->data (model->index (index, ColumnGConfString)));
+    }
 }
+

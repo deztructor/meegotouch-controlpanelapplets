@@ -31,6 +31,7 @@
 #include "../debug.h"
 
 #define TO_STRING(string) ((string).toUtf8().constData())
+#define NEED_TO_WATCH(string) ((string).startsWith ("/home"))
 
 int QProfileValue::nTrackedValues = 0;
 
@@ -58,6 +59,7 @@ QProfileValue::QProfileValue(
  */
 QProfileValue::~QProfileValue ()
 {
+    stopWatchFiles ();
     delNotify ();
 }
 
@@ -527,10 +529,17 @@ QProfileValue::startWatchFile (
         goto finalize;
     }
 
-    m_FileWatcher = new QFileSystemWatcher (this);
-    m_FileWatcher->addPath (filename);
-    connect (m_FileWatcher, SIGNAL (fileChanged (const QString &)),
-             SLOT (fileChanged (const QString &)));
+    /*
+     * There is no sense to watch the files in the rootfs, as those are
+     * only modified by SSU, and after that reboot is initiated.
+     */
+    if (NEED_TO_WATCH(filename))
+    {
+        m_FileWatcher = new QFileSystemWatcher (this);
+        m_FileWatcher->addPath (filename);
+        connect (m_FileWatcher, SIGNAL (fileChanged (const QString &)),
+                 SLOT (fileChanged (const QString &)));
+    }
 
 finalize:
     SYS_DEBUG ("returning %s", SYS_BOOL(!exists));

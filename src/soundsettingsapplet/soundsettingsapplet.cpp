@@ -20,7 +20,6 @@
 
 #include <gst/gst.h>
 #include <MAction>
-#include <QByteArray>
 
 #include "alerttone.h"
 #include "alerttonetoplevel.h"
@@ -60,19 +59,29 @@ SoundSettingsApplet::~SoundSettingsApplet()
         delete[] gst_argv;
     }
 
+    // free up the m_alertTones member
+    if (! m_alertTones.isEmpty ())
+    {
+        foreach (AlertTone *tone, m_alertTones)
+            delete tone;
+        m_alertTones.clear ();
+    }
+
     /*
      * And then free up the singletons
      */
     delete ProfileBackend::getInstance ();
-
     delete TrackerConnection::instance ();
 
     AlertTonePreview::freeResources ();
+
+    SysDebug::closeDebugFile ();
 }
 
 void
 SoundSettingsApplet::init()
 {
+    SYS_DEBUG ("");
     gst_argv = new char*[2];
     gst_argv[0] = qstrdup ("app");
     gst_argv[1] = NULL;

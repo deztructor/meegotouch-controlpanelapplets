@@ -247,7 +247,10 @@ Ft_Applets::testwallpaperapplet ()
 void
 Ft_Applets::testwarrantyapplet ()
 {
+#if 0
+    /* Not in use... */
     doAppletTest ("libwarrantyapplet.so", false, HaveStylableView);
+#endif
 }
 
 void

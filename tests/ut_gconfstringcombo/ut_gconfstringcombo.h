@@ -22,8 +22,6 @@
 #include <QtTest/QtTest>
 #include <QObject>
 
-class QGConfValue;
-
 class Ut_GConfStringComboTests : public QObject
 {
 Q_OBJECT
@@ -47,8 +45,7 @@ private slots:
 private:
       void _setGConfReturnString (
               const QString   &key,
-              const QString   &newValue, 
-              QGConfValue     *toNotify);
+              const QString   &newValue);
 };
 
 #endif

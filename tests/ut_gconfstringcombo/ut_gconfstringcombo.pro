@@ -21,7 +21,7 @@ CONFIG += \
     link_pkgconfig  \
     duicontrolpanel
 
-PKGCONFIG += dbus-1 profile gconf-2.0 ContentManager gstreamer-0.10
+PKGCONFIG += dbus-1 profile
 
 contains(DEFINES, HAVE_QTSPARQL) {
     CONFIG += qtsparql
@@ -34,9 +34,7 @@ HEADERS +=                                  \
     $$SRC_PREFIX/trackerconnection.h        \
     $$SRC_PREFIX/alerttoneappletmaps.h      \
     $$SRC_PREFIX/qprofilevalue.h            \
-    $$SRC_PREFIX/qgconfdirmanager.h         \
     $$SRC_PREFIX/qtrackedvariant.h          \
-    $$SRC_PREFIX/qgconfvalue.h              \
     $$SRC_PREFIX/gconfstringcombo.h
 
 SOURCES +=                                  \
@@ -46,9 +44,7 @@ SOURCES +=                                  \
     $$SRC_PREFIX/trackerconnection.cpp      \
     $$SRC_PREFIX/alerttoneappletmaps.cpp    \
     $$SRC_PREFIX/qprofilevalue.cpp          \
-    $$SRC_PREFIX/qgconfdirmanager.cpp       \
     $$SRC_PREFIX/qtrackedvariant.cpp        \
-    $$SRC_PREFIX/qgconfvalue.cpp            \
     $$SRC_PREFIX/gconfstringcombo.cpp
 
 INSTALLS += target

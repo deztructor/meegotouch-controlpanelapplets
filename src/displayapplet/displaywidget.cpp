@@ -25,6 +25,11 @@
 #define WARNING
 #include "../debug.h"
 
+/*
+ * define this if you want to show the top-close switch
+ */
+#undef TOP_CLOSE_ENABLED
+
 #include <MButton>
 #include <MWidgetController>
 #include <MComboBox>
@@ -96,7 +101,7 @@ void DisplayWidget::initWidget ()
     //addStretcher ("CommonItemDivider");
     addLowPowerContainer ();
     addDoubleTapContainer ();
-#ifndef MEEGO
+#if (! defined (MEEGO)) && defined (TOP_CLOSE_ENABLED)
     addFromTopCloseContainer ();
 #endif
     //addStretcher ("CommonSmallSpacerInverted");

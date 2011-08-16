@@ -17,7 +17,7 @@ CONFIG +=           \
 MOBILITY +=         \
     systeminfo
 
-PKGCONFIG += dbus-1 profile gconf-2.0 gstreamer-0.10
+PKGCONFIG += dbus-1 profile gstreamer-0.10
 
 DEFINES += MC_EXPORT=""
 INCLUDEPATH += \
@@ -65,8 +65,6 @@ HEADERS =                      \
     alerttonewidget.h          \
     gconfstringcombo.h         \
     profileintcombo.h          \
-    qgconfdirmanager.h         \
-    qgconfvalue.h              \
     qprofilevalue.h            \
     qtrackedvariant.h          \
     soundsettingsapplet.h      \
@@ -92,8 +90,6 @@ SOURCES =                      \
     alerttonewidget.cpp        \
     gconfstringcombo.cpp       \
     profileintcombo.cpp        \
-    qgconfdirmanager.cpp       \
-    qgconfvalue.cpp            \
     qprofilevalue.cpp          \
     qtrackedvariant.cpp        \
     soundsettingsutils.cpp     \
