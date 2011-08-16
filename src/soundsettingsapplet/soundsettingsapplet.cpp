@@ -47,18 +47,24 @@ char** gst_argv = NULL;
 
 SoundSettingsApplet::SoundSettingsApplet()
 {
-    SYS_DEBUG ("%sconstruct%s", TERM_BLUE, TERM_NORMAL);
 }
 
 SoundSettingsApplet::~SoundSettingsApplet()
 {
-    SYS_DEBUG ("%sdestruct%s", TERM_BLUE, TERM_NORMAL);
     gst_deinit ();
 
     if ((gst_argv != NULL) && (gst_argv[0] != NULL))
     {
         delete[] gst_argv[0];
         delete[] gst_argv;
+    }
+
+    // free up the m_alertTones member
+    if (! m_alertTones.isEmpty ())
+    {
+        foreach (AlertTone *tone, m_alertTones)
+            delete tone;
+        m_alertTones.clear ();
     }
 
     /*

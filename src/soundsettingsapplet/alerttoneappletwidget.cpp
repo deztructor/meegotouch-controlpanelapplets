@@ -73,6 +73,8 @@ AlertToneAppletWidget::AlertToneAppletWidget (
 	m_tones (0),
 	m_feedback (0)
 {
+    SYS_DEBUG ("%sconstruct%s", TERM_BLUE, TERM_NORMAL);
+
     /*
      * This should be called later, not from the constructor.
      */
@@ -81,6 +83,8 @@ AlertToneAppletWidget::AlertToneAppletWidget (
 
 AlertToneAppletWidget::~AlertToneAppletWidget ()
 {
+    SYS_DEBUG ("%sdestruct%s", TERM_BLUE, TERM_NORMAL);
+
     delete m_ProfileIf;
     m_ProfileIf = 0;
 }
