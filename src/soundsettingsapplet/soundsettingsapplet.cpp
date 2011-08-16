@@ -20,7 +20,6 @@
 
 #include <gst/gst.h>
 #include <MAction>
-#include <QByteArray>
 
 #include "alerttone.h"
 #include "alerttonetoplevel.h"
@@ -48,10 +47,12 @@ char** gst_argv = NULL;
 
 SoundSettingsApplet::SoundSettingsApplet()
 {
+    SYS_DEBUG ("%sconstruct%s", TERM_BLUE, TERM_NORMAL);
 }
 
 SoundSettingsApplet::~SoundSettingsApplet()
 {
+    SYS_DEBUG ("%sdestruct%s", TERM_BLUE, TERM_NORMAL);
     gst_deinit ();
 
     if ((gst_argv != NULL) && (gst_argv[0] != NULL))
