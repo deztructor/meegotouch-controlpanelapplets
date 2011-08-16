@@ -1,12 +1,13 @@
-meegotouch-controlpanelapplets (0.20.64~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.64-1) meegotouch; urgency=low
 
   [ David Kedves ]
   * Fixes: NB#277403 - Remove Top-close settings from Display settings
+  * Fixed few soundsettings-applet memory leaks.
 
   [ Laszlo Pere ]
   * Finished the sound-settings applet file copy mechanism.
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 16 Aug 2011 10:48:27 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 16 Aug 2011 16:15:39 +0300
 
 meegotouch-controlpanelapplets (0.20.63-1) meegotouch; urgency=low
 
