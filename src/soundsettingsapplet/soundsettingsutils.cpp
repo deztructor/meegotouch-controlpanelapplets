@@ -276,3 +276,84 @@ finalize:
 
     return retval;
 }
+
+/*!
+ * \param usedFiles The sound files that are used so shouldn't be removed.
+ *
+ * Collects the sound files that are saved into the directory but not used any
+ * more. 
+ */
+static void 
+collectFilesRecursive (
+        QSet<QString>   &usedFiles,
+        QSet<QString>   &toRemove,
+        const QString    dirName)
+{
+    QDir           dir(dirName);
+    QFileInfoList  list = dir.entryInfoList();
+
+    for (int iList = 0; iList < list.count(); iList++) {
+        QFileInfo  info = list[iList];
+        QString    sFilePath = info.filePath();
+
+        if (info.fileName().startsWith(".") ||
+                info.fileName().endsWith(".xml"))
+            continue;
+
+        if (info.isDir()) {
+            if (info.symLinkTarget().isEmpty())
+                collectFilesRecursive (usedFiles, toRemove, sFilePath);
+        } else {
+            if (!usedFiles.contains(sFilePath)) {
+                toRemove += sFilePath;
+            }
+        }
+    }
+}
+
+/*!
+ * Removes the saved but not used sound siles, their XML descriptor files and
+ * the empty directories if any.
+ */
+void
+SoundSettings::removeUnusedFiles (
+        QSet<QString>   &usedFiles)
+{
+    QSet<QString>    toRemove;
+    QSet<QString>    directories;
+    
+    /*
+     * Collecting unused files.
+     */
+    collectFilesRecursive (usedFiles, toRemove, userSaveDir());
+
+    /*
+     * Removing all the unused files.
+     */
+    foreach (QString fileName, toRemove) {
+        QFileInfo fileInfo (fileName);
+        QString   xmlFileName (fileInfo.path() + QDir::separator() + 
+                fileInfo.baseName() + ".xml");
+        QFile     binFile (fileName);
+        QFile     xmlFile (xmlFileName);
+
+        if (binFile.remove()) {
+            if (!xmlFile.remove()) {
+                SYS_WARNING ("Unable to remove %s: %m", SYS_STR(xmlFileName));
+            }
+        } else {
+            SYS_WARNING ("Unable to remove %s: %m", SYS_STR(fileName));
+        }
+
+        if (!directories.contains(fileInfo.path()))
+            directories += fileInfo.path();
+    }
+
+    /*
+     * Once we removed the files some directory might become empty, so we can
+     * remove them too.
+     */
+    foreach (QString dirName, directories) {
+        QDir::root().rmdir(dirName);
+    }
+}

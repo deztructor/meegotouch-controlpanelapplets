@@ -26,6 +26,7 @@
 #include <QSystemDeviceInfo>
 using namespace QtMobility;
 
+#include "soundsettingsutils.h"
 #include "alerttonewidget.h"
 #include "gconfstringcombo.h"
 #include "profileintcombo.h"
@@ -64,6 +65,8 @@ createEmptyContainer(
 /******************************************************************************
  * AlertToneAppletWidget implementation
  */
+#include <QSet>
+
 AlertToneAppletWidget::AlertToneAppletWidget (
         QList<AlertTone *>    alertTones, 
         QGraphicsWidget      *parent):
@@ -81,6 +84,17 @@ AlertToneAppletWidget::AlertToneAppletWidget (
 
 AlertToneAppletWidget::~AlertToneAppletWidget ()
 {
+    /*
+     * Removing the unused files. This is not the best place, but we have no
+     * business-logic, so we do it here. 
+     */
+    QSet<QString> files;
+    for (int n = 0; n < m_alertTones.size(); ++n) {
+        files += m_alertTones[n]->fileName();
+    }
+    
+    SoundSettings::removeUnusedFiles (files);
+
     delete m_ProfileIf;
     m_ProfileIf = 0;
 }

@@ -20,6 +20,7 @@
 #define SOUNDSETTINGSUTILS_H
 
 #include <QString>
+#include <QSet>
 
 #define COPY_SOUND_FILES
 
@@ -55,5 +56,8 @@ namespace SoundSettings
             const QString   &origFileName,
             const QString   &copyFileName,
             const QString   &title);
+
+    void removeUnusedFiles (
+        QSet<QString>   &usedFiles);
 };
 #endif
