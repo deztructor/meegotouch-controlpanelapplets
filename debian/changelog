@@ -1,3 +1,9 @@
+meegotouch-controlpanelapplets (0.20.66~1) meegotouch; urgency=low
+
+  * [NEW VERSION] 
+
+ -- David Kedves <ext-david.1.kedves@nokia.com>  Wed, 17 Aug 2011 17:44:28 +0200
+
 meegotouch-controlpanelapplets (0.20.65-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
