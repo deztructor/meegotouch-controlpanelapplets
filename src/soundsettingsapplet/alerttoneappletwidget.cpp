@@ -184,6 +184,8 @@ AlertToneAppletWidget::createContents()
     /*
      * An other secondary title, that says 'Feedback'.
      */
+    SYS_WARNING ("*** qtn_sond_feedback = %s", 
+            SYS_STR(qtTrId("qtn_sond_feedback")));
     addSubTitle (
             centralWidget, policy, 
             //% "Feedback"
