@@ -34,6 +34,8 @@ class M_CORE_EXPORT WallpaperViewWidgetStyle : public MWidgetStyle
     M_STYLE_ATTRIBUTE(qreal, borderSpringK,     BorderSpringK)
     M_STYLE_ATTRIBUTE(qreal, borderFriction,    BorderFriction)
     M_STYLE_ATTRIBUTE(qreal, maximumVelocity,   MaximumVelocity)
+    M_STYLE_ATTRIBUTE(bool,  supportPanEdit,    SupportPanEdit)
+    M_STYLE_ATTRIBUTE(bool,  supportPinchEdit,  SupportPinchEdit)
 };
 
 class M_CORE_EXPORT WallpaperViewWidgetStyleContainer : public MWidgetStyleContainer

@@ -152,6 +152,8 @@ class WallpaperViewWidget : public DcpStylableWidget
             bool                  m_HasPendingSave;
             MPhysics2DPanning    *m_Physics;
             QPropertyAnimation    m_RotateAnimation;
+            bool                  m_SupportPanEdit;
+            bool                  m_SupportPinchEdit;
 
         friend class Ut_WallpaperEditorWidget;
 };

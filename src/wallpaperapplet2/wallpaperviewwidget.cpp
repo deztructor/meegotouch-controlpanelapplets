@@ -65,7 +65,9 @@ WallpaperViewWidget::WallpaperViewWidget (
     m_PanOngoing (false),
     m_HasPendingRedraw (false),
     m_HasPendingSave (false),
-    m_Physics (0)
+    m_Physics (0),
+    m_SupportPanEdit (false),
+    m_SupportPinchEdit (false)
 {
     MWindow *win = MApplication::activeWindow ();
 
@@ -135,7 +137,8 @@ WallpaperViewWidget::applyStyle()
     SYS_DEBUG ("*** BorderFriction  = %g", style()->borderFriction());
     SYS_DEBUG ("*** maximumvelocity = %g", style()->maximumVelocity());
 #endif
-
+    m_SupportPanEdit = style()->supportPanEdit();
+    m_SupportPinchEdit = style()->supportPinchEdit();
     m_Physics->setPointerSpringK  (style()->pointerSpringK());
     m_Physics->setFriction        (style()->friction());
     m_Physics->setSlidingFriction (style()->slidingFriction());
@@ -672,7 +675,9 @@ WallpaperViewWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
 {
     bool     ctrl = QApplication::keyboardModifiers() & Qt::ControlModifier;
-    
+   
+    if (!m_SupportPinchEdit)
+        return;
     /*
      * We might auto-rotate. If we do we don't accept nothing.
      */
@@ -723,6 +728,9 @@ WallpaperViewWidget::panGestureEvent (
 
     if (m_PinchOngoing || m_Saving)
         return;
+    
+    if (!m_SupportPanEdit)
+        goto finalize;
 
     switch (panGesture->state()) {
         case Qt::GestureStarted:
@@ -756,6 +764,7 @@ WallpaperViewWidget::panGestureEvent (
             break;
     }
 
+finalize:
     event->accept (panGesture);
 }
 
@@ -768,6 +777,9 @@ WallpaperViewWidget::pinchGestureEvent (
             QPinchGesture *pinchGesture)
 {
     Q_UNUSED (event);
+
+    if (!m_SupportPinchEdit)
+        goto finalize;
 
     if (m_Saving)
         return;
@@ -808,7 +820,8 @@ WallpaperViewWidget::pinchGestureEvent (
             SYS_WARNING ("I dont know what to do when Qt::NoGesture");
             break;
     }
-    
+
+finalize:
     event->accept (pinchGesture);
 }
 
