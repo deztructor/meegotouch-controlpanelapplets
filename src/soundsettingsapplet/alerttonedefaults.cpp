@@ -186,6 +186,13 @@ AlertToneDefaults::AlertToneDefaults (
     m_FileFromMyMusicSelected = false;
 }
 
+void
+AlertToneDefaults::~AlertToneDefaults ()
+{
+    delete m_DefaultsModel;
+    m_DefaultsModel = 0;
+}
+
 /*!
  * This slot will be activated when the tone setting is changed.
  */

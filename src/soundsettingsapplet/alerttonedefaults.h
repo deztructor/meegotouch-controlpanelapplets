@@ -30,7 +30,7 @@ class AlertToneDefaultsModel;
 class ShowEvent;
 
 class MyListItem : public MBasicListItem {
-	Q_OBJECT
+Q_OBJECT
     public:
         MyListItem (
                 MBasicListItem::ItemStyle style=SingleTitle, 
@@ -41,13 +41,14 @@ class MyListItem : public MBasicListItem {
 
 class AlertToneDefaults : public MList
 {
-	Q_OBJECT
+Q_OBJECT
 
 Q_SIGNALS:
-	void defaultItemClicked(const QString &fname);
+    void defaultItemClicked(const QString &fname);
 
 public:
-	AlertToneDefaults(AlertTone *tone, QGraphicsWidget *parent = 0);
+    AlertToneDefaults (AlertTone *tone, QGraphicsWidget *parent = 0);
+    ~AlertToneDefaults ();
     
     void setFilterText (const QString &filter);
     bool selectAndScroll (int idx);
@@ -56,20 +57,20 @@ public:
         const QString &niceName = QString(""));
 
 public slots:
-	void toneChanged();
+    void toneChanged();
 
 protected:
     virtual void polishEvent ();
     virtual void showEvent (QShowEvent *event);
 
 private slots:
-	void itemClicked(const QModelIndex &item);
-	void loadingFinished ();
+    void itemClicked(const QModelIndex &item);
+    void loadingFinished ();
     void userPanningStarted ();
     void checkSpinner ();
 
 private:
-	AlertTone                     *m_tone;
+    AlertTone                     *m_tone;
     AlertToneDefaultsCellCreator  *m_CellCreator;
     AlertToneDefaultsModel        *m_DefaultsModel;
     QString                        m_FileNameToSelect;
