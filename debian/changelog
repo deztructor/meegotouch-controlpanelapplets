@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.65~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.65-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#277710 - Wallpaper settings should remove their own editor
@@ -6,7 +6,7 @@ meegotouch-controlpanelapplets (0.20.65~1) meegotouch; urgency=low
   [ David Kedves ]
   * SoundSettingsApplet: more memory leak fixes.
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 17 Aug 2011 13:25:10 +0300
+ -- David Kedves <ext-david.1.kedves@nokia.com>  Wed, 17 Aug 2011 17:43:53 +0200
 
 meegotouch-controlpanelapplets (0.20.64-1) meegotouch; urgency=low
 
