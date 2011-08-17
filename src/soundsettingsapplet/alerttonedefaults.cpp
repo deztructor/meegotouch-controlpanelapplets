@@ -186,7 +186,6 @@ AlertToneDefaults::AlertToneDefaults (
     m_FileFromMyMusicSelected = false;
 }
 
-void
 AlertToneDefaults::~AlertToneDefaults ()
 {
     delete m_DefaultsModel;
