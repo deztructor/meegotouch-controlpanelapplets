@@ -105,8 +105,13 @@ AlertToneBrowser::AlertToneBrowser(AlertTone *tone, QGraphicsWidget *parent):
  */
 AlertToneBrowser::~AlertToneBrowser()
 {
-    SYS_DEBUG ("");
     stopPlayingSound ();
+
+    if (m_defaults)
+    {
+        delete m_defaults;
+        m_defaults = 0;
+    }
 }
 
 void

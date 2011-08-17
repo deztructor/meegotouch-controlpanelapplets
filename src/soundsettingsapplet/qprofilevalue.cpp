@@ -59,8 +59,10 @@ QProfileValue::QProfileValue(
  */
 QProfileValue::~QProfileValue ()
 {
-    stopWatchFiles ();
+    SYS_DEBUG ("%sdestruct%s", TERM_BLUE, TERM_NORMAL);
+
     delNotify ();
+    stopWatchFiles ();
 }
 
 /*!

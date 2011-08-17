@@ -27,7 +27,7 @@
 
 #include "trackerconnection.h"
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -69,7 +69,7 @@ SoundSettings::isFileCopy (
 
     SYS_DEBUG ("*** filePath = %s", SYS_STR(filePath));
     SYS_DEBUG ("*** dir      = %s", SYS_STR(userSaveDir()));
-    SYS_WARNING ("returning %s", SYS_BOOL(retval));
+    SYS_DEBUG ("returning %s", SYS_BOOL(retval));
     return retval;
 }
 
@@ -178,8 +178,8 @@ SoundSettings::saveXML (
     QXmlStreamWriter *writer;
     QFile             file (xmlFileName);
     
-    SYS_WARNING ("-----------------------------------------------------");
-    SYS_WARNING ("*** xmlFileName = %s", SYS_STR(xmlFileName));
+    SYS_DEBUG ("-----------------------------------------------------");
+    SYS_DEBUG ("*** xmlFileName = %s", SYS_STR(xmlFileName));
 
     if (!file.open(QIODevice::WriteOnly)) {
         SYS_WARNING ("Unable to open file for writing: %s", 
