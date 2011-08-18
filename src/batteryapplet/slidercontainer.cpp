@@ -22,6 +22,7 @@
 #include <QGraphicsLinearLayout>
 #include <MLabel>
 #include <MSlider>
+#include <MLocale>
 
 #include "percentagecontainer.h"
 
@@ -180,10 +181,17 @@ SliderContainer::updateSliderValueLabel (int index)
         index = 0;
 
     if (index >= 0 && index < m_SliderValues.size()) {
-        m_PsmValueLabel->setText (QString ("%1%").arg (
-                    m_SliderValues[index]));
-        m_PSMSlider->setHandleLabel(QString ("%1%").arg (
-                m_SliderValues[index]));
+        MLocale locale;
+        QString theString = locale.formatPercent(
+                m_SliderValues[index].toDouble() / 100.0, 0);
+
+        /*
+         * This is what the UI spec uses...
+         * m_PSMSlider->setHandleLabel(
+         *        QString ("%L1%").arg(m_SliderValues[index]));
+         */
+        m_PsmValueLabel->setText (theString);
+        m_PSMSlider->setHandleLabel(theString);
     }
 }
 
