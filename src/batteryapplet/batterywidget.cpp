@@ -145,6 +145,10 @@ BatteryWidget::initWidget ()
              m_BatteryImage, SLOT (startCharging (int)));
     connect (m_logic, SIGNAL (batteryBarValueReceived (int)),
              m_BatteryImage, SLOT (updateBatteryLevel (int)));
+    connect (m_logic, SIGNAL(batteryFull()),
+             m_BatteryImage, SLOT(chargeComplete()));
+    connect (m_logic, SIGNAL (PSMValueReceived (bool)),
+             m_BatteryImage, SLOT (setPSMValue (bool)));
 
     // Connecting the signals of the businesslogic.
     connect (m_logic, SIGNAL (PSMValueReceived (bool)),
@@ -153,8 +157,6 @@ BatteryWidget::initWidget ()
     connect (m_logic, SIGNAL (updateUIonPowerSaveModeChange (PowerSaveOpt)),
              this, SLOT (updateUIonPowerSaveModeChange (PowerSaveOpt)));
 
-    connect (m_logic, SIGNAL(batteryFull()),
-             m_BatteryImage, SLOT(chargeComplete()));
     connect (m_logic, SIGNAL(batteryFull()),
              this, SLOT(chargeComplete()));
     

@@ -1,9 +1,19 @@
-meegotouch-controlpanelapplets (0.20.65~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.66~1) meegotouch; urgency=low
+
+  [ David Kedves ]
+  * Fixes: Wong icon for power safe mode in settings view
+
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 18 Aug 2011 13:03:08 +0300
+
+meegotouch-controlpanelapplets (0.20.65-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#277710 - Wallpaper settings should remove their own editor
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 16 Aug 2011 16:16:22 +0300
+  [ David Kedves ]
+  * SoundSettingsApplet: more memory leak fixes.
+
+ -- David Kedves <ext-david.1.kedves@nokia.com>  Wed, 17 Aug 2011 17:43:53 +0200
 
 meegotouch-controlpanelapplets (0.20.64-1) meegotouch; urgency=low
 
