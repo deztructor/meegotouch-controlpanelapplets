@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.20.66~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.66-1) meegotouch; urgency=low
 
   [ David Kedves ]
   * Fixes: Wong icon for power safe mode in settings view
@@ -7,7 +7,7 @@ meegotouch-controlpanelapplets (0.20.66~1) meegotouch; urgency=low
   * Fixes: NB#273733 - Energy: Wrong location of the percentage symbol"%" in 
     the string §qtn_ener_battery_level§.
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 18 Aug 2011 13:03:08 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 18 Aug 2011 14:14:53 +0300
 
 meegotouch-controlpanelapplets (0.20.65-1) meegotouch; urgency=low
 
