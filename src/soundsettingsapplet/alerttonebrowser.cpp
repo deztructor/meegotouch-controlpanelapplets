@@ -30,6 +30,9 @@
 
 #ifdef HAVE_CONTENT_MANAGER
 #include <ContentItemsPage.h>
+#  ifdef USE_CONTENT_ITEM_SHEET
+#    include <ContentItemsSheet.h>
+#  endif
 #endif
 
 #include <MList>
@@ -274,8 +277,8 @@ AlertToneBrowser::launchMusicBrowser()
 #ifdef HAVE_CONTENT_MANAGER
     SYS_DEBUG ("launching content picker...");
 
-    if (!m_MusicBrowser)
-    {
+    #ifndef USE_CONTENT_ITEM_SHEET
+    if (!m_MusicBrowser) {
         ContentItemsPage *page = new ContentItemsPage (this);
         page->enableConfirmationButton (false);
 
@@ -297,6 +300,23 @@ AlertToneBrowser::launchMusicBrowser()
     }
 
     m_MusicBrowser->appear (MSceneWindow::DestroyWhenDismissed);
+    #else
+    QStringList contentTypes;
+    QStringList selectedItems;
+
+    contentTypes << "http://www.tracker-project.org/temp/nmm#MusicPiece";
+    //selectedItems << m_tone->trackerId ();
+
+    m_MusicBrowser = new ContentItemsSheet ();
+    //m_MusicBrowser->setInvertedLayout (true);
+    m_MusicBrowser->setContentTypes (contentTypes);
+    m_MusicBrowser->initialize (selectedItems, true);
+    connect (m_MusicBrowser, SIGNAL (itemClicked (const QString&)),
+            SLOT (selectingMusicItem (const QString&)));
+
+    m_MusicBrowser->appear(scene(), MSceneWindow::DestroyWhenDone);
+    #endif
+
 #endif
 }
 
@@ -460,8 +480,10 @@ AlertToneBrowser::browserBackButtonClicked ()
     SYS_DEBUG ("");
     stopPlayingSound ();
 #ifdef HAVE_CONTENT_MANAGER
+    #ifndef USE_CONTENT_ITEM_SHEET
     m_MusicBrowser->dismiss ();
     m_MusicBrowser = 0;
+    #endif
 #endif
 }
 
@@ -486,11 +508,12 @@ AlertToneBrowser::selectingMusicItem (
     SYS_DEBUG ("*** trackerID = %s", SYS_STR(item));
     SYS_DEBUG ("*** fname     = %s", SYS_STR(fname));
 
-    if (m_MusicBrowser)
-    {
+    #ifndef USE_CONTENT_ITEM_SHEET
+    if (m_MusicBrowser) {
         m_MusicBrowser->dismiss ();
         m_MusicBrowser = 0;
     }
+    #endif
 
     setAlertTone (fname, true);
     startPlayingSound (fname);

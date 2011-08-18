@@ -34,6 +34,12 @@ class AlertToneDefaults;
 class MApplicationPage;
 class MLabel;
 
+//#define USE_CONTENT_ITEM_SHEET
+
+#ifdef USE_CONTENT_ITEM_SHEET
+class ContentItemsSheet;
+#endif
+
 /*!
  * A compound widget that holds two buttons and a list widget. The two buttons
  * can be used to pick a sound file using a content picker page and load a sound
@@ -85,7 +91,11 @@ private:
     MTextEdit                       *m_LiveFilterEditor;
     QString                          currSelectedFile;
     AlertTonePreview                *m_preview;
+    #ifndef USE_CONTENT_ITEM_SHEET
     MApplicationPage                *m_MusicBrowser;
+    #else
+    ContentItemsSheet                *m_MusicBrowser;
+    #endif
 
     MAction                         *m_DoneAction;
     MAction                         *m_CancelAction;
