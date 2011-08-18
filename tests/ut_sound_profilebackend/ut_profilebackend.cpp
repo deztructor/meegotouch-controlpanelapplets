@@ -148,6 +148,7 @@ void
 Ut_ProfileBackend::cleanup()
 {
 }
+    delete m_backend;
 
 void
 Ut_ProfileBackend::initTestCase()

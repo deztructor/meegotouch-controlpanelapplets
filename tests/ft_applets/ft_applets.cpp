@@ -241,7 +241,7 @@ Ft_Applets::testthemeapplet ()
 void
 Ft_Applets::testwallpaperapplet ()
 {
-    doAppletTest ("libwallpaperapplet.so", false);
+    doAppletTest ("libwallpaperapplet2.so", false);
 }
 
 void
