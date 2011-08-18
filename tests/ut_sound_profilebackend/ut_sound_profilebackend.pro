@@ -1,6 +1,6 @@
 include(../common_top.pri)
 
-SRC_PREFIX = ../../src/profileapplet
+SRC_PREFIX = ../../src/soundsettingsapplet
 STUB_PREFIX = ../stubs
 
 INCLUDEPATH += \

@@ -1,6 +1,6 @@
 include(../common_top.pri)
 
-SRC_PREFIX = ../../src/profileapplet
+SRC_PREFIX = ../../src/soundsettingsapplet
 STUB_PREFIX = ../stubs
 
 INCLUDEPATH += \
@@ -11,7 +11,7 @@ QT += \
     dbus 
 
 TEMPLATE = app
-TARGET = ft_profiledatainterface
+TARGET = ft_sound_profiledatainterface
 target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \

@@ -37,10 +37,12 @@ extern const char *keyVolume;
  */
 #include <libprofile.h>
 
-char *stub_active_profile = NULL;
 char *stub_profiles[] = { (char *) "testprofile1",
                           (char *) "testprofile2",
+                          (char *) "testprofile3",
+                          (char *) "testprofile4",
                           NULL };
+char *stub_active_profile = NULL;
 int stub_volumelevel = 0;
 int stub_vibration = 0;
 
@@ -61,6 +63,10 @@ profile_free_profiles (char **profiles)
 char *
 profile_get_profile ()
 {
+    if (! stub_active_profile)
+    {
+        stub_active_profile = qstrdup (stub_profiles[0]);
+    }
     return stub_active_profile;
 }
 
@@ -142,13 +148,15 @@ Ut_ProfileBackend::init()
 #endif
 
     m_backend = ProfileBackend::getInstance ();
+    m_backend->initialize ();
 }
 
 void
 Ut_ProfileBackend::cleanup()
 {
-}
     delete m_backend;
+    m_backend = 0;
+}
 
 void
 Ut_ProfileBackend::initTestCase()

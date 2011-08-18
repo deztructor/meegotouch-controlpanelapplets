@@ -116,7 +116,3 @@ addSubDirs(warrantyapplet/translations)
 }
 }
 
-####Disabled applets:
-# addSubDirs(profileapplet)
-# addSubDirs(profileplugin)
-
