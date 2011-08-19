@@ -501,6 +501,7 @@ BatteryWidget::fromProperBatteryInfo (unsigned int pct)
         } else {
             //% "Power save mode"
             m_RemainingContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
+            m_BatteryImage->setPSMValue (true);
         }
         m_RemainingContainer->updateRemainingTime (
                 m_logic->remainingTalkTime (),
