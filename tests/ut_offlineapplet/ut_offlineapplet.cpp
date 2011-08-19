@@ -74,6 +74,15 @@ MDialog::appear (MSceneWindow::DeletionPolicy policy)
     mmessageBoxApereance = true;
 }
 
+void
+MDialog::appear (MWindow *window, MSceneWindow::DeletionPolicy policy)
+{
+    Q_UNUSED (window);
+    Q_UNUSED (policy);
+
+    mmessageBoxApereance = true;
+}
+
 /******************************************************************************
  * Stub for MNotification
  */
@@ -163,8 +172,14 @@ Ut_OfflineApplet::testBriefConstruct ()
 
     QVERIFY (widget);
     QCOMPARE (int(widget->widgetTypeID()), int(DcpWidgetType::Toggle));
-
+    QVERIFY (widget->valueText ().isEmpty ());
+    QCOMPARE (widget->titleText (), qtTrId ("qtn_sett_main_flightmode"));
     QCOMPARE (widget->toggle (), false);
+
+    OfflineBrief *test = qobject_cast<OfflineBrief *>(widget);
+    QVERIFY (test);
+    QCOMPARE (test->currentText (), qtTrId ("qtn_offl_activate"));
+
     delete widget;
     #endif
 }
@@ -175,22 +190,14 @@ Ut_OfflineApplet::testCurrentText ()
     #ifdef HAVE_QMSYSTEM
     OfflineBrief brief;
 
-#if 0
     brief.m_LastMode = MeeGo::QmDeviceMode::Normal;
     QCOMPARE (brief.currentText(), qtTrId("qtn_offl_activate"));
 
     brief.m_LastMode = MeeGo::QmDeviceMode::Flight;
     QCOMPARE (brief.currentText(), qtTrId("qtn_offl_deactivate"));
-#endif
 
     QCOMPARE (brief.titleText (), qtTrId ("qtn_sett_main_flightmode"));
 
-/*
- * Brief never should be empty!
- *
-    brief.m_LastMode = MeeGo::QmDeviceMode::Error;
-    QVERIFY (brief.currentText().isEmpty());
- */
     brief.m_LastMode = MeeGo::QmDeviceMode::Error;
     QVERIFY (brief.currentText().isEmpty() == false);
     #endif
@@ -211,7 +218,6 @@ Ut_OfflineApplet::testBriefInit ()
     brief = new OfflineBrief();
     QVERIFY (brief);
     QCOMPARE (brief->toggle (), false);
-    // QCOMPARE (brief->valueText(), qtTrId("qtn_offl_activate"));
     delete brief;
 
     gQmDeviceModeStub->stubSetReturnValue<MeeGo::QmDeviceMode::DeviceMode> (
@@ -219,7 +225,6 @@ Ut_OfflineApplet::testBriefInit ()
     brief = new OfflineBrief();
     QVERIFY (brief);
     QCOMPARE (brief->toggle (), true);
-    // QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
     delete brief;
     #endif
 }
@@ -293,7 +298,6 @@ Ut_OfflineApplet::testBriefSetToggle ()
     #endif
 }
 
-#if 0
 void
 Ut_OfflineApplet::testProcessDialogResult()
 {
@@ -306,12 +310,8 @@ Ut_OfflineApplet::testProcessDialogResult()
 
     brief = new OfflineBrief();
     QVERIFY (brief);
-    QCOMPARE (brief->valueText(), qtTrId("qtn_offl_deactivate"));
 
-    SignalChecker m_sChecker(brief);
-    m_sChecker.addSignalChecker(signalValuesChanged);
-
-    brief->setToggle(true);
+    brief->setToggle(false);
     QCOMPARE(mmessageBoxText, qtTrId("qtn_offl_exiting"));
     QVERIFY(mmessageBoxApereance);
     brief->processDialogResult();
@@ -321,7 +321,6 @@ Ut_OfflineApplet::testProcessDialogResult()
     delete brief;
     #endif
 }
-#endif
 
 QTEST_APPLESS_MAIN(Ut_OfflineApplet)
 

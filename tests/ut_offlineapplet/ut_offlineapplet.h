@@ -43,9 +43,7 @@ private slots:
     void testBriefInit ();
     void testBriefValueText ();
     void testBriefSetToggle ();
-#if 0
     void testProcessDialogResult ();
-#endif
 
 private:
     OfflineApplet             *m_Applet;
