@@ -1,10 +1,4 @@
-meegotouch-controlpanelapplets (0.20.67~1) meegotouch; urgency=low
-
-  * [NEW VERSION]
-
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 19 Aug 2011 11:54:37 +0300
-
-meegotouch-controlpanelapplets (0.20.66-2) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.66-3) meegotouch; urgency=low
 
   [ David Kedves ]
   * Fixes: Wong icon for power safe mode in settings view

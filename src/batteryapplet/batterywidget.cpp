@@ -325,7 +325,7 @@ BatteryWidget::showSlider (
     if (!m_SliderContainer)
         return;
 
-    if (show) {
+    if (show && !m_SliderContainer->isVisible ()) {
         m_SliderContainer->updateSlider (m_logic->PSMThresholdValue ());
         
         SYS_DEBUG ("SliderContainerPosition = %d", SliderContainerPosition);
@@ -334,7 +334,7 @@ BatteryWidget::showSlider (
 
         spacer->show();
         m_SliderContainer->show();
-    } else {
+    } else if (!show && m_SliderContainer->isVisible ()) {
         m_SliderContainer->hide();
         spacer->hide();
         m_MainLayout->removeItem (m_SliderContainer);
