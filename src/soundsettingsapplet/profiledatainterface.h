@@ -79,6 +79,8 @@ private:
 
 private:
     ProfileBackend  *m_backend;
+
+friend class Ut_ProfileDataInterface;
 };
 
 #endif

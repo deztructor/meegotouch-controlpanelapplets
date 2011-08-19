@@ -25,7 +25,7 @@
 class MApplication;
 class ProfileDataInterface;
 
-class Ut_ProfileDataInterface : public QObject 
+class Ut_ProfileDataInterface : public QObject
 {
 Q_OBJECT
 
@@ -38,6 +38,8 @@ private slots:
     void testGetProfilesData ();
     void testSetGetProfile ();
     void testSetVibration ();
+    void testVerifyIconIds ();
+    void testCurrentProfile ();
 
 private:
     MApplication       *m_App;

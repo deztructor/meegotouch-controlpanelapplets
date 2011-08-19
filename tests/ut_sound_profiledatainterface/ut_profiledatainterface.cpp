@@ -21,27 +21,31 @@
 #include "profiledatainterface.h"
 
 #include <MApplication>
+#include <QSignalSpy>
+#include <QVariant>
+#include <QList>
+#include <QString>
 
 #define DEBUG
 #include "../../src/debug.h"
 
 /******************************************************************************
- * Ut_ProfileDataInterface implementation. 
+ * Ut_ProfileDataInterface implementation.
  */
-void 
+void
 Ut_ProfileDataInterface::init()
 {
 }
 
-void 
+void
 Ut_ProfileDataInterface::cleanup()
 {
 }
 
 static int argc = 1;
-static char* app_name = (char*) "./Ut_ProfileDataInterface";
+static char* app_name = (char*) "./ut_profiledatainterface";
 
-void 
+void
 Ut_ProfileDataInterface::initTestCase()
 {
 
@@ -49,7 +53,7 @@ Ut_ProfileDataInterface::initTestCase()
     m_Api = new ProfileDataInterface;
 }
 
-void 
+void
 Ut_ProfileDataInterface::cleanupTestCase()
 {
     delete m_Api;
@@ -60,7 +64,7 @@ Ut_ProfileDataInterface::cleanupTestCase()
  * Reads the profile data and prints the details with debug messages. Chacks if
  * there is at least 1 available profiles.
  */
-void 
+void
 Ut_ProfileDataInterface::testGetProfilesData ()
 {
     QList<ProfileDataInterface::ProfileData> list = m_Api->getProfilesData ();
@@ -88,7 +92,7 @@ Ut_ProfileDataInterface::testGetProfilesData ()
  * Will go through the profiles and set each and every one of them as current
  * profile. Tests if the setting of the current profile was successfull.
  */
-void 
+void
 Ut_ProfileDataInterface::testSetGetProfile ()
 {
 #if 0
@@ -103,12 +107,12 @@ Ut_ProfileDataInterface::testSetGetProfile ()
 }
 
 /*!
- * Tests if the vibration can be enabled/disabled in the profile. 
+ * Tests if the vibration can be enabled/disabled in the profile.
  *
  * Please note that this test is currently disabled, since there is some bug in
  * the backend. Ok, as NB#161433 is fixed I re-enable the test.
  */
-void 
+void
 Ut_ProfileDataInterface::testSetVibration ()
 {
     QList<ProfileDataInterface::ProfileData> list;
@@ -149,6 +153,55 @@ Ut_ProfileDataInterface::testSetVibration ()
 
         QVERIFY (item.vibrationEnabled);
     }
+}
+
+void
+Ut_ProfileDataInterface::testVerifyIconIds ()
+{
+    QString icon;
+
+    /*
+     * ID -> STATUS MENU ICON ID
+     */
+    icon = m_Api->mapId2StatusIconId (ProfileDataInterface::ProfileIdRinging);
+    QCOMPARE (icon, QString ("icon-m-status-menu-normal"));
+
+    icon = m_Api->mapId2StatusIconId (ProfileDataInterface::ProfileIdSilent);
+    QCOMPARE (icon, QString ("icon-m-status-menu-profile-silent"));
+
+    icon = m_Api->mapId2StatusIconId (ProfileDataInterface::ProfileIdBeep);
+    QCOMPARE (icon, QString ("icon-m-status-menu-profile-beep"));
+
+    /*
+     * ID -> ICON ID
+     */
+    icon = m_Api->mapId2IconId (ProfileDataInterface::ProfileIdRinging);
+    QCOMPARE (icon, QString ("icon-m-profile-normal"));
+
+    icon = m_Api->mapId2IconId (ProfileDataInterface::ProfileIdSilent);
+    QCOMPARE (icon, QString ("icon-m-profile-silent"));
+
+    icon = m_Api->mapId2IconId (ProfileDataInterface::ProfileIdBeep);
+    QCOMPARE (icon, QString ("icon-m-profile-beep"));
+
+}
+
+void
+Ut_ProfileDataInterface::testCurrentProfile ()
+{
+    QSignalSpy spy (m_Api, SIGNAL (currentProfile (int)));
+
+    m_Api->setProfile (ProfileDataInterface::ProfileIdSilent);
+
+    QCOMPARE (m_Api->getCurrentProfile (),
+              (int) ProfileDataInterface::ProfileIdSilent);
+
+    // switch to normal
+    m_Api->currentProfileNameChanged ("general");
+    QVERIFY (spy.count () > 0);
+    QList<QVariant> args = spy.takeLast ();
+    QCOMPARE (args.at (0).toInt (),
+              (int) ProfileDataInterface::ProfileIdRinging);
 }
 
 QTEST_APPLESS_MAIN(Ut_ProfileDataInterface)
