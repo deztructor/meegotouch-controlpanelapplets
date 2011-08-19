@@ -28,22 +28,6 @@ class QUrl;
 class QPixmap;
 class QString;
 
-class SignalSink : public QObject
-{
-Q_OBJECT
-
-public:
-    SignalSink ();
-
-    void reset ();
-    
-public slots:
-    void thumbnailLoaded (WallpaperDescriptor *desc);
-
-public:
-    bool   m_ThumbnailLoaded;
-};
-
 class Ft_WallpaperDescriptor : public QObject 
 {
 Q_OBJECT
@@ -58,11 +42,7 @@ private slots:
     void testThumbnailing ();
 
 private:
-    void createDescriptor ();
-    void dropDescriptor ();
-
     MApplication              *m_App;
-    SignalSink                 m_SignalSink;
     WallpaperDescriptor       *m_Desc;
 };
 
