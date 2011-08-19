@@ -11,9 +11,7 @@ if test "x$LCOV" = x; then
     exit 1;
 fi
 
-if test "x$SBOX_USE_CCACHE" = xyes; then
-	export SBOX_USE_CCACHE=no
-fi
+export SBOX_USE_CCACHE=no
 
 rm -fr ./coverage/*
 
