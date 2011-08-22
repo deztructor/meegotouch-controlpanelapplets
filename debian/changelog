@@ -1,6 +1,7 @@
 meegotouch-controlpanelapplets (0.20.67~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  [ David Kedves ]
+  * Fixes: NB#278497 - About license text fix.
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 19 Aug 2011 12:30:48 +0300
 
