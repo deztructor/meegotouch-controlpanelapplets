@@ -200,7 +200,7 @@ AlertToneBrowser::createContent()
 void
 AlertToneBrowser::defaultsDisplayEntered()
 {
-    SYS_DEBUG ("");
+    SYS_DEBUG ("Start");
 
     /*
      * A fix for the NB#198788 - Live filtering text editor loses focus in
@@ -208,6 +208,8 @@ AlertToneBrowser::defaultsDisplayEntered()
      */
     if (!m_LiveFilterEditor || !m_LiveFilterEditor->isOnDisplay())
         m_defaults->setFocus();
+
+    SYS_DEBUG ("end");
 }
 
 /*!
@@ -318,6 +320,11 @@ AlertToneBrowser::launchMusicBrowser()
             SLOT (selectingMusicItem (const QString&)));
 
     musicBrowser->appear(scene(), MSceneWindow::DestroyWhenDismissed);
+    
+    // This is not working either.
+    //musicBrowser->appear(
+    //        MApplication::activeApplicationWindow(), 
+    //        MSceneWindow::DestroyWhenDismissed);
     #endif
 
 #endif
