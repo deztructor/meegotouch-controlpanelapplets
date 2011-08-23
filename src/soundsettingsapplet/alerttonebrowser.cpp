@@ -90,7 +90,9 @@ AlertToneBrowser::AlertToneBrowser(AlertTone *tone, QGraphicsWidget *parent):
     m_tone (tone),
     m_defaults (0),
     m_preview (0),
+    #ifndef USE_CONTENT_ITEM_SHEET
     m_MusicBrowser (0),
+    #endif
     m_DoneAction (0),
     m_CancelAction (0)
 {
@@ -301,20 +303,21 @@ AlertToneBrowser::launchMusicBrowser()
 
     m_MusicBrowser->appear (MSceneWindow::DestroyWhenDismissed);
     #else
-    QStringList contentTypes;
-    QStringList selectedItems;
+    ContentItemsSheet *musicBrowser;
+    QStringList        contentTypes;
+    QStringList        selectedItems;
 
     contentTypes << "http://www.tracker-project.org/temp/nmm#MusicPiece";
     //selectedItems << m_tone->trackerId ();
 
-    m_MusicBrowser = new ContentItemsSheet ();
-    //m_MusicBrowser->setInvertedLayout (true);
-    m_MusicBrowser->setContentTypes (contentTypes);
-    m_MusicBrowser->initialize (selectedItems, true);
-    connect (m_MusicBrowser, SIGNAL (itemClicked (const QString&)),
+    musicBrowser = new ContentItemsSheet ();
+    musicBrowser->initialize (selectedItems, true);
+    musicBrowser->setInvertedLayout (true);
+    musicBrowser->setContentTypes (contentTypes);
+    connect (musicBrowser, SIGNAL (itemClicked (const QString&)),
             SLOT (selectingMusicItem (const QString&)));
 
-    m_MusicBrowser->appear(scene(), MSceneWindow::DestroyWhenDone);
+    musicBrowser->appear(scene(), MSceneWindow::DestroyWhenDismissed);
     #endif
 
 #endif
@@ -495,7 +498,7 @@ void
 AlertToneBrowser::selectingMusicItem (
         const QString &item)
 {
-    SYS_DEBUG("");
+    SYS_DEBUG("*** item = %s", SYS_STR(item));
     QString fname =
         TrackerConnection::instance ()-> trackerIdToFilename (item);
 

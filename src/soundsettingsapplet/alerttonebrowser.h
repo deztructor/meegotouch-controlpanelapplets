@@ -93,8 +93,6 @@ private:
     AlertTonePreview                *m_preview;
     #ifndef USE_CONTENT_ITEM_SHEET
     MApplicationPage                *m_MusicBrowser;
-    #else
-    ContentItemsSheet                *m_MusicBrowser;
     #endif
 
     MAction                         *m_DoneAction;
