@@ -40,6 +40,7 @@ private slots:
     void testConstructWidget ();
     void testMenuItems ();
     void testLinkActivated ();
+    void testWidgets ();
 
 private:
     MApplication              *m_App;

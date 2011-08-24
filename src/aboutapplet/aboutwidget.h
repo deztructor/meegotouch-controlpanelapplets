@@ -75,7 +75,7 @@ private:
     MImageWidget                   *m_imgBarcode;
     CertsWidget                    *m_imgCerts;
 #ifdef MEEGO
-    MLabel			   *m_NamesLabel;
+    MLabel                         *m_NamesLabel;
 #endif
 
     int                             m_currentRow;
