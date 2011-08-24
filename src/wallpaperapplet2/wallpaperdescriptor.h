@@ -44,10 +44,18 @@ class MC_EXPORT WallpaperDescriptor : public QObject
     public:
         WallpaperDescriptor (
                 QObject        *parent = 0);
+
         WallpaperDescriptor (
                 const QString  &filePath,
                 QObject        *parent = 0);
-        WallpaperDescriptor (const WallpaperDescriptor &orig);
+
+        WallpaperDescriptor (
+                const QUrl     &url,
+                QObject        *parent = 0);
+
+        WallpaperDescriptor (
+                const WallpaperDescriptor &orig);
+
         ~WallpaperDescriptor ();
 
         /*

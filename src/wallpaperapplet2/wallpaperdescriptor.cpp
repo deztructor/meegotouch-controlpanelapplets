@@ -57,6 +57,19 @@ WallpaperDescriptor::WallpaperDescriptor(
 {
 }
 
+WallpaperDescriptor::WallpaperDescriptor(
+        const QUrl     &url,
+        QObject        *parent) : 
+    QObject (parent)
+{
+    QString filePath = url.path();
+
+    SYS_WARNING ("*** filePath = '%s'", SYS_STR(filePath));
+
+    filePath.replace ("%20", " ");
+
+    m_Priv = new WallpaperDescriptorPrivate (filePath);
+}
 
 WallpaperDescriptor::WallpaperDescriptor (
         const WallpaperDescriptor &orig) :

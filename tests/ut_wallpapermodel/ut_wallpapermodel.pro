@@ -33,8 +33,13 @@ CONFIG += \
     plugin \
     duicontrolpanel 
 
+contains(DEFINES, HAVE_GALLERYCORE) {
+    CONFIG += gallerycore
+}
+
 contains(DEFINES, HAVE_QTSPARQL) {
     CONFIG += qtsparql
+    CONFIG += qtsparql-tracker-live
 }
 
 contains(DEFINES, HAVE_QUILL_FILTER) {

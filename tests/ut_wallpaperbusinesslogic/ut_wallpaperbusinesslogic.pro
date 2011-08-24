@@ -33,8 +33,13 @@ CONFIG +=            \
 
 PKGCONFIG += gconf-2.0
 
+contains(DEFINES, HAVE_GALLERYCORE) {
+    CONFIG += gallerycore
+}
+
 contains(DEFINES, HAVE_QTSPARQL) {
     CONFIG += qtsparql
+    CONFIG += qtsparql-tracker-live
 }
 
 contains(DEFINES, HAVE_QUILL_FILTER) {
@@ -59,7 +64,9 @@ HEADERS +=                                       \
     $$SRC_PREFIX/wallpaperitrans.h               \
     $$SRC_PREFIX/wallpaperworkerthread.h         \
     $$SRC_PREFIX/wallpaperutils.h                \
-    $$SRC_PREFIX/wallpaperconfiguration.h        
+    $$SRC_PREFIX/wallpaperconfiguration.h        \
+    $$SRC_PREFIX/wallpaperimagecontentprovider.h \
+    $$SRC_PREFIX/wallpaperimagecontentprovider_p.h
 
 SOURCES +=                                       \
     $$STUB_PREFIX/thumbnailerstub.cpp            \
@@ -72,6 +79,7 @@ SOURCES +=                                       \
     $$SRC_PREFIX/wallpaperdescriptor.cpp         \
     $$SRC_PREFIX/wallpaperdescriptor_p.cpp       \
     $$SRC_PREFIX/wallpaperworkerthread.cpp       \
-    $$SRC_PREFIX/wallpaperitrans.cpp             
+    $$SRC_PREFIX/wallpaperitrans.cpp             \
+    $$SRC_PREFIX/wallpaperimagecontentprovider.cpp
 
 INSTALLS += target

@@ -33,8 +33,13 @@ CONFIG += \
     meegotouchcore \
     duicontrolpanel
 
+contains(DEFINES, HAVE_GALLERYCORE) {
+    CONFIG += gallerycore
+}
+
 contains(DEFINES, HAVE_QTSPARQL) {
     CONFIG += qtsparql
+    CONFIG += qtsparql-tracker-live
 }
 
 contains(DEFINES, HAVE_QUILL_FILTER) {
@@ -75,7 +80,9 @@ HEADERS +=                                       \
     $$SRC_PREFIX/wallpaperwidget.h               \
     $$SRC_PREFIX/wallpaperworkerthread.h         \
     $$SRC_PREFIX/wallpaperutils.h                \
-    $$SRC_PREFIX/wallpaperconfiguration.h                
+    $$SRC_PREFIX/wallpaperconfiguration.h        \
+    $$SRC_PREFIX/wallpaperimagecontentprovider.h \
+    $$SRC_PREFIX/wallpaperimagecontentprovider_p.h
 
 SOURCES +=                                       \
     $$STUB_PREFIX/thumbnailerstub.cpp            \
@@ -96,6 +103,7 @@ SOURCES +=                                       \
     $$SRC_PREFIX/wallpaperlist.cpp               \
     $$SRC_PREFIX/wallpaperwidget.cpp             \
     $$SRC_PREFIX/wallpaperworkerthread.cpp       \
-    $$SRC_PREFIX/wallpaperutils.cpp              
+    $$SRC_PREFIX/wallpaperutils.cpp              \
+    $$SRC_PREFIX/wallpaperimagecontentprovider.cpp
 
 INSTALLS += target

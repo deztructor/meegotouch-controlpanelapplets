@@ -26,16 +26,25 @@ DEFINES += \
 TARGET = ut_wallpaperapplet
 target.path = /usr/lib/$$TEST_PKG_NAME
 
-CONFIG += \
-        gui \
-        meegotouchcore \
-        plugin \
-        quill \
-        duicontrolpanel \
-        link_pkgconfig
+CONFIG +=             \
+    m                 \
+    plugin            \
+    gui               \
+    meegotouchcore    \
+    quill             \
+    duicontrolpanel
 
-contains(DEFINES, HAVE_QTSPARQL) {
-    CONFIG += qtsparql
+contains(DEFINES, HAVE_GALLERYCORE) {
+    CONFIG += gallerycore
+}
+
+contains(DEFINES, HAVE_QMSYSTEM) {
+    CONFIG += qmsystem2
+}
+
+contains(DEFINES, HAVE_CONTENT_MANAGER) {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += ContentManager
 }
 
 contains(DEFINES, HAVE_QUILL_FILTER) {
@@ -46,7 +55,14 @@ contains(DEFINES, HAVE_QUILL_METADATA) {
     CONFIG += quillmetadata
 }
 
-PKGCONFIG += ContentManager
+contains(DEFINES, HAVE_QTSPARQL) {
+    CONFIG += qtsparql
+    CONFIG += qtsparql-tracker-live
+}
+
+LIBS +=            \
+    -lthumbnailer 
+
 
 STYLE_HEADERS +=                                 \
     $$SRC_PREFIX/wallpaperviewwidgetstyle.h     
@@ -74,7 +90,9 @@ HEADERS +=                                       \
     $$SRC_PREFIX/wallpaperworkerthread.h         \
     $$SRC_PREFIX/wallpaperviewwidgetstyle.h      \
     $$SRC_PREFIX/wallpaperutils.h                \
-    $$SRC_PREFIX/wallpaperconfiguration.h        
+    $$SRC_PREFIX/wallpaperconfiguration.h        \    
+    $$SRC_PREFIX/wallpaperimagecontentprovider.h \
+    $$SRC_PREFIX/wallpaperimagecontentprovider_p.h
 
 SOURCES +=                                       \
     $$STUB_PREFIX/thumbnailerstub.cpp            \
@@ -96,7 +114,8 @@ SOURCES +=                                       \
     $$SRC_PREFIX/wallpapercellcreator.cpp        \
     $$SRC_PREFIX/wallpaperwidget.cpp             \
     $$SRC_PREFIX/wallpaperworkerthread.cpp       \
-    $$SRC_PREFIX/wallpaperutils.cpp                
+    $$SRC_PREFIX/wallpaperutils.cpp              \
+    $$SRC_PREFIX/wallpaperimagecontentprovider.cpp
 
 
 INSTALLS += target

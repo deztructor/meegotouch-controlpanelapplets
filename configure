@@ -82,7 +82,6 @@ if [ $? -eq 0 ]; then
 
     #
     # QtSparqlTrackerLive needed for ringtone/wallpaper applet
-    # in the future
     #
     pkg-config --exists QtSparqlTrackerLive
     if [ $? -eq 0 ]; then
@@ -104,6 +103,13 @@ if [ $? -eq 0 ]; then
     if [ $? -eq 0 ]; then
         echo "DEFINES += HAVE_OFONO_QT" >> ${FILENAME}
     fi
+fi
+
+#
+# The widgets and tools the Gallery application provides.
+#
+if [ -e /usr/share/qt4/mkspecs/features/gallerycore.prf ]; then
+    echo "DEFINES += HAVE_GALLERYCORE" >> ${FILENAME}
 fi
 
 #

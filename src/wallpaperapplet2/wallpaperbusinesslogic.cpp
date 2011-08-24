@@ -41,11 +41,16 @@
 #include <MGConfItem>
 #include <MApplication>
 #include <MApplicationWindow>
+#include <MBasicSheetHeader>
+#include <QAction>
 
 #define DEBUG
 #define WARNING
 #include "../debug.h"
 
+/******************************************************************************
+ * WallpaperBusinessLogic implementation
+ */
 WallpaperBusinessLogic::WallpaperBusinessLogic (
         QObject     *parent) :
     QObject (parent),
@@ -83,8 +88,6 @@ WallpaperBusinessLogic::WallpaperBusinessLogic (
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
 {
 }
-
-
 
 void
 WallpaperBusinessLogic::startEdit (
@@ -157,6 +160,7 @@ WallpaperBusinessLogic::setWallpaper (
     QString  targetPath;
     bool     success = false;
 
+    SYS_DEBUG ("*** Setting the wallpaper ************************");
     if (m_WorkerThread) {
         SYS_WARNING ("Worker thread is already there, giving up.");
         goto finalize;
@@ -253,6 +257,109 @@ WallpaperBusinessLogic::hasEditedImage () const
     return !m_EditedImage.isNull();
 }
 
+/******************************************************************************
+ * Gallery connection.
+ */
+#ifdef HAVE_GALLERYCORE
+void 
+WallpaperBusinessLogic::galleryActivated ()
+{
+    GalleryModel       *m_GalleryModel;
+    ImageContentProvider *imageContentProvider;
+
+    SYS_DEBUG (">>> Gallery activated.");
+    m_GalleryModel = new GalleryModel (this);
+    imageContentProvider = new ImageContentProvider (*m_GalleryModel);
+    m_GalleryModel->addContentProvider (imageContentProvider);
+
+    m_GalleryGridPage = new GalleryGridPage (*m_GalleryModel);
+
+    m_GalleryGridPage->setStyleName(
+            QLatin1String("CommonApplicationPageInverted"));
+    //m_GalleryGridPage->setTopBarText("Testing...");
+    //m_GalleryGridPage->showTopBar(true);
+    m_GalleryGridPage->selectItem();
+    m_GalleryGridPage->setNavigationBarVisible(true);
+
+    m_FullScreenPage = new GalleryFullScreenPage (*m_GalleryModel);
+    m_FullScreenPage->setCropAspectRatio (
+            GalleryFullScreenPage::PortraitScreenAspectRatio);
+    m_FullScreenPage->setStyleName(
+            QLatin1String("CommonApplicationPageInverted"));
+
+    connect (m_GalleryGridPage, SIGNAL(itemSelected(QUrl)), 
+            this, SLOT(onGridPageItemSelected(QUrl)));
+    connect (m_GalleryGridPage, SIGNAL(singleSelectionCancelled()), 
+            this, SLOT(onGridPageCancelled()));
+
+    connect (m_FullScreenPage, SIGNAL(croppingDone(QImage)), 
+            this, SLOT(croppingDone(QImage)));
+    connect (m_FullScreenPage, SIGNAL(croppingCancelled()), 
+            this, SLOT(croppingCancelled()));
+
+
+    m_GalleryGridPage->sheet().appear (
+            MApplication::instance()->activeWindow(), 
+            MSceneWindow::DestroyWhenDismissed);
+}
+#endif
+
+#ifdef HAVE_GALLERYCORE
+void 
+WallpaperBusinessLogic::onGridPageItemSelected (
+        QUrl    url)
+{
+    SYS_DEBUG ("*** url = %s", SYS_STR(url.toString()));
+    m_EditedImage = WallpaperDescriptor (url, this);
+    m_FullScreenPage->sheet().appear (MApplication::instance()->activeWindow());
+    m_FullScreenPage->openItemInCropper (url);
+}
+#endif
+
+#ifdef HAVE_GALLERYCORE
+void 
+WallpaperBusinessLogic::onGridPageCancelled ()
+{
+    SYS_DEBUG ("*** have m_GalleryGridPage = %s", SYS_BOOL(m_GalleryGridPage));
+    if (m_GalleryGridPage)
+        m_GalleryGridPage->sheet().disappear();
+}
+#endif
+
+
+#ifdef HAVE_GALLERYCORE
+void 
+WallpaperBusinessLogic::croppingDone (
+        QImage croppedImage)
+{
+    QPixmap            pixmap = QPixmap::fromImage(croppedImage);
+    MBasicSheetHeader *header;
+
+    SYS_DEBUG ("");
+    header = dynamic_cast<MBasicSheetHeader*>(
+            m_FullScreenPage->sheet().headerWidget());
+    
+    if (header) {
+        header->setProgressIndicatorVisible (true);
+        header->positiveAction()->setEnabled(false);
+        header->negativeAction()->setEnabled(false);
+    } else {
+        SYS_WARNING ("No header");
+    }
+
+    setWallpaper (pixmap);
+}
+#endif
+
+#ifdef HAVE_GALLERYCORE
+void 
+WallpaperBusinessLogic::croppingCancelled ()
+{
+    SYS_DEBUG ("");
+    endEdit ();
+}
+
+#endif
 
 /******************************************************************************
  * Handling the GConf database.
@@ -326,6 +433,13 @@ WallpaperBusinessLogic::workerThreadFinishedSave ()
         m_POItem->set (origList);
         prependFileToHistory (origFile);
         m_PPItem->set (outputFile);
+    }
+
+    if (m_FullScreenPage) {
+        SYS_DEBUG ("We have a GalleryFullScreenPage, we dismiss it.");
+        endEdit ();
+        m_FullScreenPage->sheet().disappear();
+        m_FullScreenPage = 0;
     }
 
     emit wallpaperSaved ();

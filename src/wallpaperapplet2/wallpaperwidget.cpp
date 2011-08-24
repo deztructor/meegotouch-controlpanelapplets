@@ -200,7 +200,6 @@ WallpaperWidget::slotEditWallpaper (
     SYS_DEBUG ("----------------------------------- End -------------");
 }
 
-
 void 
 WallpaperWidget::oviActivated ()
 {
@@ -234,15 +233,20 @@ WallpaperWidget::polishEvent ()
     /**************************************************************************
      * Hiding the home button. 
      */
-    #if 0
-    // The navigation bar is all wrong. This didn't help either.
-    page->setComponentsDisplayMode (
-            MApplicationPage::NavigationBar,
-            MApplicationPageModel::Show);
-    #endif
     page->setComponentsDisplayMode (
             MApplicationPage::HomeButton,
             MApplicationPageModel::Hide);
+
+#ifdef HAVE_GALLERYCORE
+    if (Wallpaper::useGallery) {
+        action = new MAction("icon-m-toolbar-gallery-white", "", this);
+        action->setLocation(MAction::ToolBarLocation);
+        page->addAction(action);
+        connect(action, SIGNAL(triggered()), 
+                m_BusinessLogic, SLOT(galleryActivated()));
+    }
+#endif
+
     /*
      * Adding the ovi action.
      */

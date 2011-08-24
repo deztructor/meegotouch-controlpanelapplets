@@ -19,6 +19,10 @@ CONFIG +=             \
     quill             \
     duicontrolpanel
 
+contains(DEFINES, HAVE_GALLERYCORE) {
+    CONFIG += gallerycore
+}
+
 contains(DEFINES, HAVE_QMSYSTEM) {
     CONFIG += qmsystem2
 }
@@ -38,6 +42,7 @@ contains(DEFINES, HAVE_QUILL_METADATA) {
 
 contains(DEFINES, HAVE_QTSPARQL) {
     CONFIG += qtsparql
+    CONFIG += qtsparql-tracker-live
 }
 
 LIBS += \
@@ -68,7 +73,9 @@ HEADERS =                          \
     wallpapereditorsheet.h         \
     wallpaperviewwidgetstyle.h     \
     wallpaperviewwidget.h          \
-    wallpaperitrans.h
+    wallpaperitrans.h              \
+    wallpaperimagecontentprovider_p.h \
+    wallpaperimagecontentprovider.h
 
 SOURCES =                          \
     ../debug.cpp                   \
@@ -87,7 +94,8 @@ SOURCES =                          \
     wallpaperlistsheet.cpp         \
     wallpapereditorsheet.cpp       \
     wallpaperviewwidget.cpp        \
-    wallpaperitrans.cpp
+    wallpaperitrans.cpp            \
+    wallpaperimagecontentprovider.cpp
 
 DESTDIR = lib
 target.path += $$(DEBIAN_DESTDIR)$$[QT_INSTALL_LIBS]/duicontrolpanel/applets

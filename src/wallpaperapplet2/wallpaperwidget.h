@@ -50,7 +50,9 @@ protected:
         void slotEditWallpaper (WallpaperDescriptor desc);
 
     virtual void createContent ();
+
     void oviActivated ();
+
     
 private:
     void addHeaderContainer (MLinearLayoutPolicy *mainLayout);

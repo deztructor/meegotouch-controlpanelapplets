@@ -118,3 +118,44 @@ WallpaperBusinessLogic::editedImage () const
     return m_EditedImage;
 }
 
+/******************************************************************************
+ * Gallery connection.
+ */
+#ifdef HAVE_GALLERYCORE
+void 
+WallpaperBusinessLogic::galleryActivated ()
+{
+}
+#endif
+
+#ifdef HAVE_GALLERYCORE
+void 
+WallpaperBusinessLogic::onGridPageItemSelected (
+        QUrl    url)
+{
+}
+#endif
+
+#ifdef HAVE_GALLERYCORE
+void 
+WallpaperBusinessLogic::onGridPageCancelled ()
+{
+}
+#endif
+
+
+#ifdef HAVE_GALLERYCORE
+void 
+WallpaperBusinessLogic::croppingDone (
+        QImage croppedImage)
+{
+}
+#endif
+
+#ifdef HAVE_GALLERYCORE
+void 
+WallpaperBusinessLogic::croppingCancelled ()
+{
+}
+#endif
+

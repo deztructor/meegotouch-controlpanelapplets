@@ -20,7 +20,17 @@
 #define WALLPAPERBUSINESSLOGIC_H
 
 #include <QObject>
-//#include <meegocontrolexport.h>
+
+#include <QPointer>
+
+#ifdef HAVE_GALLERYCORE
+#include <QUrl>
+#include <QImage>
+#include <gallerymodel.h>
+#include <gallerygridpage.h>
+#include <galleryfullscreenpage.h>
+#include "wallpaperimagecontentprovider.h"
+#endif
 
 class QString;
 class MGConfItem;
@@ -122,7 +132,18 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
         void workerEnded ();
         void wallpaperLoaded (QuillImage image, QSize originalSize);
         void editWallpaper (WallpaperDescriptor desc);
-   
+
+    public slots:
+        #ifdef HAVE_GALLERYCORE
+        void galleryActivated ();
+
+        void onGridPageItemSelected (QUrl url);
+        void onGridPageCancelled ();
+
+        void croppingDone (QImage croppedImage);
+        void croppingCancelled ();
+        #endif 
+
     private slots:
         void portraitGConfChanged ();
         void portraitHistoryChanged ();
@@ -146,6 +167,10 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
         WallpaperWorkerThread     *m_WorkerThread;
         QTimer                     m_GConfTimer;
         QStringList                m_PortraitHistory;
+#ifdef HAVE_GALLERYCORE
+        QPointer<GalleryFullScreenPage>   m_FullScreenPage;
+        QPointer<GalleryGridPage>         m_GalleryGridPage;
+#endif
 
 #ifdef UNIT_TEST
     friend class Ut_WallpaperBusinessLogic;
