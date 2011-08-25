@@ -16,36 +16,54 @@
 ** of this file.
 **
 ****************************************************************************/
+#include "ut_trackerconnection.h"
 
-#ifndef UT_ALERTTONETESTS_H
-#define UT_ALERTTONETESTS_H
+#include <QString>
+#include <QStringList>
+#include "trackerconnection.h"
 
-#include <QtTest/QtTest>
-#include <QObject>
-#include <MApplication>
+#define DEBUG 
+#define WARNING
+#include "../debug.h"
 
-class Ut_AlertToneTests: public QObject
+void
+Ut_TrackerConnection::initTestCase ()
 {
-Q_OBJECT
+    SYS_DEBUG ("");
+}
 
-public:
-      Ut_AlertToneTests(){m_App = 0;}
-private slots:
-      void init(){};
-      void cleanup(){};
-      void initTestCase();
-      void cleanupTestCase();
-      void alerttonesAlertTones_data(){};
-      void alerttonesAlertTones();
-      void alerttoneFetchFromBackend();
-      void alerttoneRealSetValue();
-      void alerttoneMaybeUpdate();
+void
+Ut_TrackerConnection::cleanupTestCase ()
+{
+    SYS_DEBUG ("");
+}
 
-      void alertToneChanged();
-private:
-    bool checkIfAlarmTone (QString name);
-    MApplication* m_App;
-    bool called_alertToneChanged;
-};
+void
+Ut_TrackerConnection::init ()
+{
+    SYS_DEBUG ("");
+}
 
-#endif
+void
+Ut_TrackerConnection::cleanup ()
+{
+    SYS_DEBUG ("");
+}
+
+void
+Ut_TrackerConnection::testConstructDestruct ()
+{
+    TrackerConnection *tc = 0;
+
+    tc = TrackerConnection::instance ();
+
+    QVERIFY (tc);
+    QCOMPARE (tc, tc->s_Instance);
+
+    delete tc;
+
+    QVERIFY (! tc->s_Instance);
+}
+
+QTEST_MAIN(Ut_TrackerConnection)
+

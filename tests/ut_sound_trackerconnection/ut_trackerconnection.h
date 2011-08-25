@@ -4,7 +4,7 @@
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
-** This file is part of meegotouch-controlpanelapplets.
+** This file is part of meegotouch-controlpanelsoundsettingsapplet.
 **
 ** If you have questions regarding the use of this file, please contact
 ** Nokia at directui@nokia.com.
@@ -17,33 +17,21 @@
 **
 ****************************************************************************/
 
-#ifndef UT_ALERTTONEAPPLETWIDGET_H
-#define UT_ALERTTONEAPPLETWIDGET_H
+#ifndef UT_TRACKERCONNECTION_H
+#define UT_TRACKERCONNECTION_H
 
 #include <QtTest/QtTest>
-#include <QObject>
-#include <MApplication>
 
-class Ut_AlertToneAppletWidgetTests: public QObject
+class Ut_TrackerConnection : public QObject
 {
 Q_OBJECT
+private slots:
+      void init ();
+      void cleanup ();
+      void initTestCase ();
+      void cleanupTestCase ();
 
-public:
-      Ut_AlertToneAppletWidgetTests() { m_App = 0; }
-private slots:
-      void init(){};
-      void cleanup(){};
-      void initTestCase();
-      void cleanupTestCase();
-      void alerttoneappletwidgetConstructor();
-      void alerttoneappletwidgetCreateContent();
-#if 0
-      void alerttoneappletwidgetCreateAlertTonesList();
-#endif
-      void alerttoneappletwidgetCreateFeedbackList();
-private:
-      MApplication * m_App;
-private slots:
+      void testConstructDestruct ();
 };
 
 #endif

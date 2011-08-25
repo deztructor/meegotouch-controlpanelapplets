@@ -21,6 +21,11 @@
 #include "aboutapplet.h"
 #include "aboutwidget.h"
 
+#include <QVariant>
+#include <QString>
+#include <QStringList>
+#include <QImage>
+
 #include <dcpstylablewidget.h>
 #include <dcpwidgettypes.h>
 
@@ -32,6 +37,7 @@ QTM_USE_NAMESPACE
 #include <mdesktopentry.h>
 #include <MApplication>
 #include <MAction>
+#include <MLabel>
 #include <QVector>
 
 #define DEBUG
@@ -174,6 +180,41 @@ Ut_AboutApplet::testLinkActivated ()
 
     QCOMPARE (contentActionTriggered, true);
 #endif
+}
+
+void
+Ut_AboutApplet::testWidgets ()
+{
+    AboutWidget     *widget;
+
+    widget = qobject_cast<AboutWidget*>(m_Applet->constructStylableWidget (0));
+    QVERIFY (widget);
+
+    widget->gotInfo (AboutBusinessLogic::reqCertsImageNeeded, QVariant ());
+    QVERIFY (widget->m_imgCerts);
+    widget->gotInfo (AboutBusinessLogic::reqProdName, QVariant ("product-name"));
+    QVERIFY (widget->m_ProductName);
+    widget->gotInfo (AboutBusinessLogic::reqSwName, QVariant ("sw-name"));
+    QVERIFY (widget->m_ProductName);
+    widget->gotInfo (AboutBusinessLogic::reqLicense, QVariant ("long-long-license"));
+    QCOMPARE (widget->m_LicenseLabel->text (), QString ("long-long-license"));
+    QStringList testCertImageList;
+    testCertImageList << "a.jpg" << "b.jpg";
+    // and add some valid one (it is not a problem if it fails, but less coverage)
+    testCertImageList << "/usr/share/themes/blanco/meegotouch/icons/icon-l-settings.png";
+    widget->gotInfo (AboutBusinessLogic::reqCertsImage, testCertImageList);
+
+    QImage testImage;
+    widget->gotInfo (AboutBusinessLogic::reqBarcodeImage, testImage);
+    QVERIFY (widget->m_imgBarcode);
+
+    // to cover all:
+    widget->gotInfo (AboutBusinessLogic::reqOsVersion, QVariant ("os-version"));
+    widget->gotInfo (AboutBusinessLogic::reqImei, QVariant ("imei"));
+    widget->gotInfo (AboutBusinessLogic::reqWifiAddr, QVariant ("wifi-mac"));
+    widget->gotInfo (AboutBusinessLogic::reqBtAddr, QVariant ("bt-mac"));
+
+    delete widget;
 }
 
 QTEST_APPLESS_MAIN(Ut_AboutApplet)
