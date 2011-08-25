@@ -57,23 +57,7 @@ WallpaperBusinessLogic::WallpaperBusinessLogic (
     m_EditRequested (false),
     m_WorkerThread (0)
 {
-#ifdef HAVE_GALLERYCORE
-    /*
-     * Unfortunatelly this must be eraly, otherwise the Gallery grid page won't
-     * load the thumbnails if started after the first image has been opened from
-     * the original wallpaper grid.
-     */
-    m_GalleryModel = new GalleryModel (this);
-    m_ImageContentProvider = new ImageContentProvider (*m_GalleryModel);
-    m_GalleryModel->addContentProvider (m_ImageContentProvider);
-    m_GalleryGridPage = new GalleryGridPage (*m_GalleryModel);
-    m_GalleryGridPage->setStyleName(
-            QLatin1String("CommonApplicationPageInverted"));
-    //m_GalleryGridPage->setTopBarText("Testing...");
-    //m_GalleryGridPage->showTopBar(true);
-    m_GalleryGridPage->selectItem();
-    //m_GalleryGridPage->setNavigationBarVisible(true);
-#endif
+    SYS_WARNING ("");
     m_PPItem = new MGConfItem (Wallpaper::CurrentPortraitKey, this);
     m_POItem = new MGConfItem (Wallpaper::OriginalPortraitKey, this);
     m_PHItem = new MGConfItem (Wallpaper::PortraitHistoryKey, this);
@@ -105,6 +89,7 @@ WallpaperBusinessLogic::WallpaperBusinessLogic (
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
 {
     SYS_WARNING ("");
+#if 0
 #ifdef HAVE_GALLERYCORE
     delete m_GalleryGridPage;
     delete m_FullScreenPage;
@@ -113,6 +98,7 @@ WallpaperBusinessLogic::~WallpaperBusinessLogic()
         delete m_ImageContentProvider;
         delete m_GalleryModel;
     }
+#endif
 #endif
 }
 
@@ -225,6 +211,8 @@ WallpaperBusinessLogic::loadImage (
         goto finalize;
     }
 
+    prepareGalleryWidgets ();
+
     /*
      * The worker thread might want to open the original file so we don't get
      * the black frames around the image while editing.
@@ -287,6 +275,30 @@ WallpaperBusinessLogic::hasEditedImage () const
 /******************************************************************************
  * Gallery connection.
  */
+void
+WallpaperBusinessLogic::prepareGalleryWidgets ()
+{
+#ifdef HAVE_GALLERYCORE
+    if (m_GalleryModel)
+        return;
+    /*
+     * Unfortunatelly this must be eraly, otherwise the Gallery grid page won't
+     * load the thumbnails if started after the first image has been opened from
+     * the original wallpaper grid.
+     */
+    m_GalleryModel = new GalleryModel (this);
+    m_ImageContentProvider = new ImageContentProvider (*m_GalleryModel);
+    m_GalleryModel->addContentProvider (m_ImageContentProvider);
+    m_GalleryGridPage = new GalleryGridPage (*m_GalleryModel);
+    m_GalleryGridPage->setStyleName(
+            QLatin1String("CommonApplicationPageInverted"));
+    //m_GalleryGridPage->setTopBarText("Testing...");
+    //m_GalleryGridPage->showTopBar(true);
+    m_GalleryGridPage->selectItem();
+    //m_GalleryGridPage->setNavigationBarVisible(true);
+#endif
+}
+
 #ifdef HAVE_GALLERYCORE
 void 
 WallpaperBusinessLogic::galleryActivated ()
@@ -295,7 +307,8 @@ WallpaperBusinessLogic::galleryActivated ()
     SYS_DEBUG (">>> Gallery activated.");
 #if 0 
     /*
-     * Check the constructor for details.
+     * If we create the widgets here the grid won1t show the thunbnails if a
+     * file was already opened. Must be a bug in the gallery core library.
      */
     m_GalleryModel = new GalleryModel (this);
     m_ImageContentProvider = new ImageContentProvider (*m_GalleryModel);

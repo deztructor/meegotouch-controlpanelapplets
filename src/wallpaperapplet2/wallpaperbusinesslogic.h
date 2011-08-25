@@ -157,6 +157,7 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
 
     private:
         void prependFileToHistory (const QString &path);
+        void prepareGalleryWidgets ();
 
     private:
         bool                       m_EditRequested;
