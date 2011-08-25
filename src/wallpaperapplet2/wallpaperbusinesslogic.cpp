@@ -296,32 +296,7 @@ WallpaperBusinessLogic::prepareGalleryWidgets ()
     //m_GalleryGridPage->showTopBar(true);
     m_GalleryGridPage->selectItem();
     //m_GalleryGridPage->setNavigationBarVisible(true);
-#endif
-}
-
-#ifdef HAVE_GALLERYCORE
-void 
-WallpaperBusinessLogic::galleryActivated ()
-{
-    prepareGalleryWidgets ();
-    SYS_DEBUG (">>> Gallery activated.");
-#if 0 
-    /*
-     * If we create the widgets here the grid won1t show the thunbnails if a
-     * file was already opened. Must be a bug in the gallery core library.
-     */
-    m_GalleryModel = new GalleryModel (this);
-    m_ImageContentProvider = new ImageContentProvider (*m_GalleryModel);
-    m_GalleryModel->addContentProvider (m_ImageContentProvider);
-    m_GalleryGridPage = new GalleryGridPage (*m_GalleryModel);
-    m_GalleryGridPage->setStyleName(
-            QLatin1String("CommonApplicationPageInverted"));
-    //m_GalleryGridPage->setTopBarText("Testing...");
-    //m_GalleryGridPage->showTopBar(true);
-    m_GalleryGridPage->selectItem();
-    //m_GalleryGridPage->setNavigationBarVisible(true);
-#endif
-
+    
     m_FullScreenPage = new GalleryFullScreenPage (*m_GalleryModel);
     m_FullScreenPage->setCropAspectRatio (
             GalleryFullScreenPage::PortraitScreenAspectRatio);
@@ -337,8 +312,17 @@ WallpaperBusinessLogic::galleryActivated ()
             this, SLOT(croppingDone(QImage)));
     connect (m_FullScreenPage, SIGNAL(croppingCancelled()), 
             this, SLOT(croppingCancelled()));
+#endif
+}
 
-
+#ifdef HAVE_GALLERYCORE
+void 
+WallpaperBusinessLogic::galleryActivated ()
+{
+    SYS_DEBUG (">>> Gallery activated.");
+    
+    prepareGalleryWidgets ();
+    
     m_GalleryGridPage->sheet().appear (
             MApplication::instance()->activeWindow(), 
             MSceneWindow::KeepWhenDone);
@@ -350,9 +334,12 @@ void
 WallpaperBusinessLogic::onGridPageItemSelected (
         QUrl    url)
 {
-    SYS_DEBUG ("*** url = %s", SYS_STR(url.toString()));
+    SYS_DEBUG ("*** url               = %s", SYS_STR(url.toString()));
+    SYS_DEBUG ("*** m_FullScreenPage  = %s", SYS_BOOL(m_FullScreenPage));
     m_EditedImage = WallpaperDescriptor (url, this);
-    m_FullScreenPage->sheet().appear (MApplication::instance()->activeWindow());
+    m_FullScreenPage->sheet().appear (
+            MApplication::instance()->activeWindow(),
+            MSceneWindow::KeepWhenDone);
     m_FullScreenPage->openItemInCropper (url);
 }
 #endif
@@ -374,20 +361,8 @@ WallpaperBusinessLogic::croppingDone (
         QImage croppedImage)
 {
     QPixmap            pixmap = QPixmap::fromImage(croppedImage);
-    MBasicSheetHeader *header;
 
-    SYS_DEBUG ("");
-    header = dynamic_cast<MBasicSheetHeader*>(
-            m_FullScreenPage->sheet().headerWidget());
-    
-    if (header) {
-        header->setProgressIndicatorVisible (true);
-        header->positiveAction()->setEnabled(false);
-        header->negativeAction()->setEnabled(false);
-    } else {
-        SYS_WARNING ("No header");
-    }
-
+    setProgressIndicator (true);
     setWallpaper (pixmap);
 }
 #endif
@@ -399,7 +374,27 @@ WallpaperBusinessLogic::croppingCancelled ()
     SYS_DEBUG ("");
     endEdit ();
 }
+#endif
 
+#ifdef HAVE_GALLERYCORE
+void
+WallpaperBusinessLogic::setProgressIndicator (
+        bool    busy)
+{
+    MBasicSheetHeader *header;
+
+    if (!m_FullScreenPage) 
+        return;
+
+    header = dynamic_cast<MBasicSheetHeader*>(
+            m_FullScreenPage->sheet().headerWidget());
+    
+    if (header) {
+        header->setProgressIndicatorVisible (busy);
+        header->positiveAction()->setEnabled (!busy);
+        header->negativeAction()->setEnabled (!busy);
+    }
+}
 #endif
 
 /******************************************************************************
@@ -479,8 +474,8 @@ WallpaperBusinessLogic::workerThreadFinishedSave ()
     if (m_FullScreenPage) {
         SYS_DEBUG ("We have a GalleryFullScreenPage, we dismiss it.");
         endEdit ();
+        setProgressIndicator (false);
         m_FullScreenPage->sheet().disappear();
-        m_FullScreenPage = 0;
     }
 
     emit wallpaperSaved ();

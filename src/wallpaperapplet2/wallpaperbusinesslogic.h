@@ -142,6 +142,7 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
 
         void croppingDone (QImage croppedImage);
         void croppingCancelled ();
+        void setProgressIndicator (bool busy);
         #endif 
 
     private slots:
