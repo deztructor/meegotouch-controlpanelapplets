@@ -9,7 +9,8 @@ Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.11.8),
                libqtm-dev, libqtm-systeminfo-dev, libresourceqt-dev,
                libquillimagefilter-dev, libquillmetadata-dev, libquill-dev,
                libqtsparql-dev, libqtsparql-tracker-live-dev, 
-               libcontentaction-dev, aegis-builder, devicelock-dev
+               libcontentaction-dev, aegis-builder, devicelock-dev,
+               libgallerycore-dev
 Standards-Version: 3.9.1
 
 Package: meegotouch-controlpanelapplets-tests
