@@ -303,7 +303,7 @@ WallpaperBusinessLogic::prepareGalleryWidgets ()
 void 
 WallpaperBusinessLogic::galleryActivated ()
 {
-
+    prepareGalleryWidgets ();
     SYS_DEBUG (">>> Gallery activated.");
 #if 0 
     /*
