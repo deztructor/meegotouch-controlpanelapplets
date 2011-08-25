@@ -36,7 +36,7 @@ class QSparqlConnection;
  */
 class TrackerConnection : public QObject
 {
-	Q_OBJECT
+Q_OBJECT
 
 public:
     ~TrackerConnection ();
@@ -73,6 +73,11 @@ private:
     QHash<QString, QString>      m_FileCopies;
     QStringList                  m_PendingRequests;
     QSparqlConnection           *m_sparqlconn;
+
+#ifdef UNIT_TEST
+    friend class Ut_TrackerConnection;
+#endif
 };
+
 #endif
 
