@@ -57,7 +57,7 @@ WallpaperBusinessLogic::WallpaperBusinessLogic (
     m_EditRequested (false),
     m_WorkerThread (0)
 {
-#if 1
+#ifdef HAVE_GALLERYCORE
     /*
      * Unfortunatelly this must be eraly, otherwise the Gallery grid page won't
      * load the thumbnails if started after the first image has been opened from
@@ -105,7 +105,7 @@ WallpaperBusinessLogic::WallpaperBusinessLogic (
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
 {
     SYS_WARNING ("");
-
+#ifdef HAVE_GALLERYCORE
     delete m_GalleryGridPage;
     delete m_FullScreenPage;
     if (m_GalleryModel) {
@@ -113,6 +113,7 @@ WallpaperBusinessLogic::~WallpaperBusinessLogic()
         delete m_ImageContentProvider;
         delete m_GalleryModel;
     }
+#endif
 }
 
 void
