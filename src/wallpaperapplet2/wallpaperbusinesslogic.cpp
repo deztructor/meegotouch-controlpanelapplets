@@ -57,6 +57,23 @@ WallpaperBusinessLogic::WallpaperBusinessLogic (
     m_EditRequested (false),
     m_WorkerThread (0)
 {
+#if 1
+    /*
+     * Unfortunatelly this must be eraly, otherwise the Gallery grid page won't
+     * load the thumbnails if started after the first image has been opened from
+     * the original wallpaper grid.
+     */
+    m_GalleryModel = new GalleryModel (this);
+    m_ImageContentProvider = new ImageContentProvider (*m_GalleryModel);
+    m_GalleryModel->addContentProvider (m_ImageContentProvider);
+    m_GalleryGridPage = new GalleryGridPage (*m_GalleryModel);
+    m_GalleryGridPage->setStyleName(
+            QLatin1String("CommonApplicationPageInverted"));
+    //m_GalleryGridPage->setTopBarText("Testing...");
+    //m_GalleryGridPage->showTopBar(true);
+    m_GalleryGridPage->selectItem();
+    //m_GalleryGridPage->setNavigationBarVisible(true);
+#endif
     m_PPItem = new MGConfItem (Wallpaper::CurrentPortraitKey, this);
     m_POItem = new MGConfItem (Wallpaper::OriginalPortraitKey, this);
     m_PHItem = new MGConfItem (Wallpaper::PortraitHistoryKey, this);
@@ -87,6 +104,15 @@ WallpaperBusinessLogic::WallpaperBusinessLogic (
 
 WallpaperBusinessLogic::~WallpaperBusinessLogic()
 {
+    SYS_WARNING ("");
+
+    delete m_GalleryGridPage;
+    delete m_FullScreenPage;
+    if (m_GalleryModel) {
+        m_GalleryModel->removeContentProvider (m_ImageContentProvider);
+        delete m_ImageContentProvider;
+        delete m_GalleryModel;
+    }
 }
 
 void
@@ -264,27 +290,28 @@ WallpaperBusinessLogic::hasEditedImage () const
 void 
 WallpaperBusinessLogic::galleryActivated ()
 {
-    GalleryModel       *m_GalleryModel;
-    ImageContentProvider *imageContentProvider;
 
     SYS_DEBUG (">>> Gallery activated.");
+#if 0 
+    /*
+     * Check the constructor for details.
+     */
     m_GalleryModel = new GalleryModel (this);
-    imageContentProvider = new ImageContentProvider (*m_GalleryModel);
-    m_GalleryModel->addContentProvider (imageContentProvider);
-
+    m_ImageContentProvider = new ImageContentProvider (*m_GalleryModel);
+    m_GalleryModel->addContentProvider (m_ImageContentProvider);
     m_GalleryGridPage = new GalleryGridPage (*m_GalleryModel);
-
     m_GalleryGridPage->setStyleName(
             QLatin1String("CommonApplicationPageInverted"));
     //m_GalleryGridPage->setTopBarText("Testing...");
     //m_GalleryGridPage->showTopBar(true);
     m_GalleryGridPage->selectItem();
-    m_GalleryGridPage->setNavigationBarVisible(true);
+    //m_GalleryGridPage->setNavigationBarVisible(true);
+#endif
 
     m_FullScreenPage = new GalleryFullScreenPage (*m_GalleryModel);
     m_FullScreenPage->setCropAspectRatio (
             GalleryFullScreenPage::PortraitScreenAspectRatio);
-    m_FullScreenPage->setStyleName(
+    m_FullScreenPage->setStyleName (
             QLatin1String("CommonApplicationPageInverted"));
 
     connect (m_GalleryGridPage, SIGNAL(itemSelected(QUrl)), 
@@ -300,7 +327,7 @@ WallpaperBusinessLogic::galleryActivated ()
 
     m_GalleryGridPage->sheet().appear (
             MApplication::instance()->activeWindow(), 
-            MSceneWindow::DestroyWhenDismissed);
+            MSceneWindow::KeepWhenDone);
 }
 #endif
 

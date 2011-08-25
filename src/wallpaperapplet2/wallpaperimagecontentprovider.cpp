@@ -56,10 +56,12 @@ ImageContentProvider::ImageContentProvider (
     GalleryContentProvider (parent),
     d_ptr (new ImageContentProviderPrivate(galleryModel))
 {
+    SYS_WARNING ("");
 }
 
 ImageContentProvider::~ImageContentProvider()
 {
+    SYS_WARNING ("");
     delete d_ptr;
     d_ptr = 0;
 }
@@ -135,6 +137,7 @@ ImageContentProviderPrivate::~ImageContentProviderPrivate()
 
 void ImageContentProviderPrivate::onInitialQueryFinished()
 {
+    SYS_DEBUG ("Query finished.");
     mQueryRunning = false;
 }
 
