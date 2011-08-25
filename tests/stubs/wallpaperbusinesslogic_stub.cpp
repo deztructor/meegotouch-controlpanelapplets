@@ -126,36 +126,35 @@ void
 WallpaperBusinessLogic::galleryActivated ()
 {
 }
-#endif
 
-#ifdef HAVE_GALLERYCORE
 void 
 WallpaperBusinessLogic::onGridPageItemSelected (
         QUrl    url)
 {
+    Q_UNUSED (url);
 }
-#endif
 
-#ifdef HAVE_GALLERYCORE
 void 
 WallpaperBusinessLogic::onGridPageCancelled ()
 {
 }
-#endif
 
-
-#ifdef HAVE_GALLERYCORE
 void 
 WallpaperBusinessLogic::croppingDone (
         QImage croppedImage)
 {
+    Q_UNUSED (croppedImage);
 }
-#endif
 
-#ifdef HAVE_GALLERYCORE
 void 
 WallpaperBusinessLogic::croppingCancelled ()
 {
+}
+
+void
+WallpaperBusinessLogic::setProgressIndicator (bool busy)
+{
+    Q_UNUSED (busy);
 }
 #endif
 
