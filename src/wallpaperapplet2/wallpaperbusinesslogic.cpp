@@ -322,10 +322,12 @@ WallpaperBusinessLogic::galleryActivated ()
     SYS_DEBUG (">>> Gallery activated.");
     
     prepareGalleryWidgets ();
-    
-    m_GalleryGridPage->sheet().appear (
-            MApplication::instance()->activeWindow(), 
-            MSceneWindow::KeepWhenDone);
+   
+    SYS_WARNING ("*** m_GalleryGridPage = %s", SYS_BOOL(m_GalleryGridPage));
+    if (m_GalleryGridPage)
+        m_GalleryGridPage->sheet().appear (
+                MApplication::instance()->activeWindow(), 
+                MSceneWindow::KeepWhenDone);
 }
 #endif
 
