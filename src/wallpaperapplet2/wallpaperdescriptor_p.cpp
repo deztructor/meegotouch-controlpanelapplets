@@ -18,6 +18,8 @@
 ****************************************************************************/
 #include "wallpaperdescriptor_p.h"
 #include "wallpaperutils.h"
+#include "wallpaperconfiguration.h"
+
 #define DEBUG
 #define WARNING
 #include "../debug.h"
@@ -201,10 +203,14 @@ WallpaperDescriptorPrivate::load (
     SYS_DEBUG ("*** expectedSize = %s", SYS_SIZE(expectedSize));
     SYS_DEBUG ("*** mySize       = %s", SYS_SIZE(mySize));
 
-    if (Wallpaper::smallerSize(mySize, expectedSize))
+    if (Wallpaper::disableBiggerThanScreen || 
+            Wallpaper::smallerSize(mySize, expectedSize)) {
         mySize.scale (expectedSize, Qt::KeepAspectRatio);
-    else
+        SYS_DEBUG ("*** chosen small = %s", SYS_SIZE(mySize));
+    } else {
         mySize.scale (expectedSize, Qt::KeepAspectRatioByExpanding);
+        SYS_DEBUG ("*** chosen big   = %s", SYS_SIZE(mySize));
+    }
 
     loadFilter = QuillImageFilterFactory::createImageFilter(
             QuillImageFilter::Role_Load);

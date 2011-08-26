@@ -32,6 +32,7 @@ namespace Wallpaper
     const bool useSheetForMainView (false);
     const bool useFullScreen (false);
     const bool currentWallpaperAtTop (true);
+    const bool disableBiggerThanScreen (true);
 
     const int maxThumbnails = 200;
     const int nForwardThumbnails = 75;
