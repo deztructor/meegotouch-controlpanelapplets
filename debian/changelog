@@ -1,8 +1,9 @@
-meegotouch-controlpanelapplets (0.20.69~2) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.69~3) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  [ Laszlo Pere ]
+  * Fixes: NB#277711 - Add 'Pick from Gallery' feature in Wallpaper settings
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 25 Aug 2011 12:05:22 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 26 Aug 2011 14:19:34 +0300
 
 meegotouch-controlpanelapplets (0.20.68-1) meegotouch; urgency=low
 
