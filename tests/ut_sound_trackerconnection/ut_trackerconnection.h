@@ -32,6 +32,10 @@ private slots:
       void cleanupTestCase ();
 
       void testConstructDestruct ();
+      void testRegisterFileCopy ();
+      void testTrackerIDfromFileName ();
+      void testTrackerIDtoFileName ();
+      void testProcessRequest ();
 };
 
 #endif
