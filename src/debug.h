@@ -31,7 +31,10 @@
 //#ifdef UNIT_TEST
 //#  undef DEBUG
 //#endif
+
+#ifndef UNIT_TEST
 #define DEBUG_TO_FILE
+#endif
 
 #if defined(__ARMEL__) && !defined(DEBUG_TO_FILE)
 //#if !defined(DEBUG_TO_FILE)
