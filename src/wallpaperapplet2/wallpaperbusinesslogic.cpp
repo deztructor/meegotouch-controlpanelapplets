@@ -474,7 +474,9 @@ WallpaperBusinessLogic::workerThreadFinishedSave ()
     if (m_FullScreenPage) {
         SYS_DEBUG ("We have a GalleryFullScreenPage, we dismiss it.");
         endEdit ();
+        #ifdef HAVE_GALLERYCORE
         setProgressIndicator (false);
+        #endif
         m_FullScreenPage->sheet().disappear();
     }
 

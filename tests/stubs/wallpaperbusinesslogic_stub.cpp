@@ -159,3 +159,11 @@ WallpaperBusinessLogic::croppingCancelled ()
 }
 #endif
 
+#ifdef HAVE_GALLERYCORE
+void
+WallpaperBusinessLogic::setProgressIndicator (
+        bool    busy)
+{
+}
+#endif
+
