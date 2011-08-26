@@ -172,8 +172,8 @@ class MC_EXPORT WallpaperBusinessLogic : public QObject
 #ifdef HAVE_GALLERYCORE
         QPointer<GalleryFullScreenPage>   m_FullScreenPage;
         QPointer<GalleryGridPage>         m_GalleryGridPage;
-        GalleryModel                     *m_GalleryModel;
-        ImageContentProvider             *m_ImageContentProvider;
+        QPointer<GalleryModel>            m_GalleryModel;
+        QPointer<ImageContentProvider>    m_ImageContentProvider;
 #endif
 
 #ifdef UNIT_TEST
