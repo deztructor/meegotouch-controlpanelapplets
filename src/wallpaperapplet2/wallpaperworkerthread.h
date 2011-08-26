@@ -39,7 +39,8 @@ class WallpaperWorkerThread : public QThread
         WallpaperWorkerThread (
                 QPixmap       &pixmap, 
                 const QString &originalFileName,
-                const QString &outputFileName);
+                const QString &outputFileName,
+                const QSize   &size);
         
         WallpaperWorkerThread (
                 const QString &originalFileName,

@@ -24,17 +24,19 @@
 #include "wallpaperdescriptor.h"
 #include <QFile>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
 WallpaperWorkerThread::WallpaperWorkerThread (
         QPixmap         &pixmap, 
         const QString   &originalFileName,
-        const QString   &outputFileName) :
+        const QString   &outputFileName,
+        const QSize     &size) :
     m_Task (TaskSaveImage),
     m_OriginalFileName (originalFileName),
     m_OutputFileName (outputFileName),
+    m_Size (size),
     m_Success (false)
 {
     m_Image = pixmap.toImage();
@@ -96,7 +98,12 @@ WallpaperWorkerThread::runSaveImage ()
         }
     }
 
-    m_Success = m_Image.save (m_OutputFileName);
+    if (m_Image.size() != m_Size) {
+        SYS_DEBUG ("Size mismatch...");
+        m_Success = m_Image.scaled (m_Size).save (m_OutputFileName);
+    } else {
+        m_Success = m_Image.save (m_OutputFileName);
+    }
 }
 
 void

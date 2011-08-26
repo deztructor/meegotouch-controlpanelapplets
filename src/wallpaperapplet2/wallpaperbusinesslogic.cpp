@@ -190,7 +190,9 @@ WallpaperBusinessLogic::setWallpaper (
     basename = Wallpaper::setFileExtension (basename, Wallpaper::OutImgExt);
     targetPath = Wallpaper::constructPath (targetPath, basename);
 
-    m_WorkerThread = new WallpaperWorkerThread (pixmap, filePath, targetPath);
+    m_WorkerThread = new WallpaperWorkerThread (
+            pixmap, filePath, targetPath, sceneSize());
+
     connect (m_WorkerThread, SIGNAL(finished()), 
             this, SLOT(workerThreadFinishedSave()), Qt::QueuedConnection);
     success = true;

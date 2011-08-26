@@ -65,12 +65,13 @@ Ut_WallpaperWorkerThread::testConstructors ()
     WallpaperWorkerThread *thread;
 
     thread = new WallpaperWorkerThread (
-            pixmap, originalFileName, outputFileName);
+            pixmap, originalFileName, outputFileName, size);
     QVERIFY (thread->m_Task == WallpaperWorkerThread::TaskSaveImage);
     QVERIFY (thread->image().width() == 170);
     QVERIFY (thread->image().height() == 171);
     QVERIFY (thread->originalFileName() == originalFileName);
     QVERIFY (thread->outputFileName() == outputFileName);
+    QVERIFY (thread->m_Size == size);
     delete thread;
 
     thread = new WallpaperWorkerThread (
