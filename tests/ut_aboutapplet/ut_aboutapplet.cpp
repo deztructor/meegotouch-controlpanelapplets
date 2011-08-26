@@ -174,7 +174,7 @@ Ut_AboutApplet::testLinkActivated ()
     widget = (AboutWidget *) m_Applet->constructStylableWidget (0);
     QVERIFY (widget);
 
-#ifdef HAVE_CONTENTACTION
+#ifdef HAVE_CONTENT_ACTION
     contentActionTriggered = false;
     widget->linkActivated (QString ("http://www.nokia.com"));
 

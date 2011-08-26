@@ -75,7 +75,7 @@ WallpaperBusinessLogic::history () const
 bool
 WallpaperBusinessLogic::hasEditedImage () const
 {
-    return true;
+    return false;
 }
 
 bool

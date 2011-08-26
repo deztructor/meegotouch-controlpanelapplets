@@ -16,106 +16,112 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #include "ut_wallpaperlist.h"
 #include "wallpaperlist.h"
 #include "wallpaperbusinesslogic.h"
 #include "wallpaperdescriptor.h"
 #include "wallpapermodel.h"
 
+#include <QSignalSpy>
+#include <QList>
+#include <QVariant>
 #include <MApplication>
 
 #define DEBUG
 #include "../../src/debug.h"
 
 /******************************************************************************
- * SignalSink implementation. 
+ * Ut_WallpaperList implementation.
  */
-SignalSink::SignalSink () :
-    m_Desc ()
+
+static int argc = 1;
+static char *app_name = (char*) "./ut_wallpaperlist";
+
+void
+Ut_WallpaperList::initTestCase ()
 {
+    m_App = new MApplication (argc, &app_name);
+    m_BusinessLogic = new WallpaperBusinessLogic;
 }
 
-void 
-SignalSink::imageActivated (
-        WallpaperDescriptor *desc)
+void
+Ut_WallpaperList::cleanupTestCase ()
+{
+    delete m_BusinessLogic;
+    m_BusinessLogic = 0;
+    m_App->deleteLater ();
+    m_App = 0;
+}
+
+void
+Ut_WallpaperList::init ()
 {
     SYS_DEBUG ("");
-    m_Desc = desc;
-}
-
-/******************************************************************************
- * Ut_WallpaperList implementation. 
- */
-void 
-Ut_WallpaperList::init()
-{
-    bool connectSuccess;
 
     m_List = new WallpaperList (m_BusinessLogic);
-    connectSuccess = connect (
-            m_List, SIGNAL(imageActivated(WallpaperDescriptor *)),
-            &m_Sink, SLOT(imageActivated(WallpaperDescriptor *)));
-    QVERIFY(connectSuccess);
-
     m_List->setDataSourceType (WallpaperList::DataSourceLocal);
+
     QVERIFY (m_List->m_DataSourceType == WallpaperList::DataSourceLocal);
     QVERIFY (m_List->m_Model);
 }
 
-void 
-Ut_WallpaperList::cleanup()
+void
+Ut_WallpaperList::cleanup ()
 {
+    SYS_DEBUG ("");
     delete m_List;
+    m_List = 0;
 }
 
-
-static int argc = 1;
-static char *app_name = (char*) "./Ut_WallpaperList";
-
-void 
-Ut_WallpaperList::initTestCase()
-{
-    m_App = new MApplication (argc, &app_name);
-    m_BusinessLogic = new WallpaperBusinessLogic; 
-}
-
-void 
-Ut_WallpaperList::cleanupTestCase()
-{
-    delete m_BusinessLogic;
-    m_App->deleteLater ();
-}
-
-void 
+void
 Ut_WallpaperList::testItemClicked ()
 {
-    QModelIndex          index;
-    
+    QModelIndex  index;
+    QSignalSpy   spy (m_List, SIGNAL (imageActivated (WallpaperDescriptor)));
+
     index = m_List->m_Model->index (0, 0);
     QVERIFY (index.isValid ());
 
+    /*
+     * During panning, click shouldn't work
+     */
+    m_List->slotPanningStarted ();
     m_List->slotItemClicked (index);
-    QVERIFY (m_Sink.m_Desc);
+
+    QCOMPARE (spy.count (), 0);
+
+    m_List->slotPanningStopped ();
+    m_List->slotItemClicked (index);
+
+    QCOMPARE (spy.count (), 1);
 }
 
-void 
+void
 Ut_WallpaperList::testShowHide ()
 {
+//XXX: this is crashing :-S
 #if 0
     m_List->showEvent (0);
     QTest::qWait (300);
-    
+
     // FIXME: We should find a way to test the loading of the thumbnails here.
     // Some code was removed trom the tested unit, so this method became empty.
-
     m_List->hideEvent (0);
     // Well, maybe the stopLoadingImages should be checked too?
 #endif
-// XXX: This testcase causes crash... but apparently doesn't do anything...
-//      so i disabled it (dkedves)
 }
 
+void
+Ut_WallpaperList::testPanningStartStop ()
+{
+    m_List->slotPanningStarted ();
+
+    QCOMPARE (m_List->m_Panning, true);
+
+    m_List->slotPanningStopped ();
+
+    QCOMPARE (m_List->m_Panning, false);
+}
 
 QTEST_APPLESS_MAIN(Ut_WallpaperList)
 
