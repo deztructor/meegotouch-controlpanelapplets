@@ -3,6 +3,7 @@
 ** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
+** Author: Laszlo Pere <lpere@blumsoft.eu>
 **
 ** This file is part of meegotouch-controlpanelapplets.
 **
@@ -35,10 +36,10 @@ class WallpaperCellCreator;
 /*!
  * A list widget that shows a list of the available wallpapers.
  */
-class WallpaperList : public MList 
+class WallpaperList : public MList
 {
-    Q_OBJECT
-        
+Q_OBJECT
+
 public:
     WallpaperList (
             WallpaperBusinessLogic  *logic,
@@ -53,49 +54,48 @@ public:
 
     void setDataSourceType (WallpaperList::DataSourceType sourceType);
 
-    protected:
-        virtual void orientationChangeEvent (MOrientationChangeEvent *event);
-        void hideEvent (QHideEvent *event);
-        void showEvent (QShowEvent *event);
+protected:
+    virtual void orientationChangeEvent (MOrientationChangeEvent *event);
+    void hideEvent (QHideEvent *event);
+    void showEvent (QShowEvent *event);
 
 
-    private slots:
-        /*
-         * Item clicked, panning started and stopped.
-         */
-        void slotItemClicked (const QModelIndex &index);
-        void slotPanningStarted ();
-        void slotPanningStopped ();
+private slots:
+    /*
+     * Item clicked, panning started and stopped.
+     */
+    void slotItemClicked (const QModelIndex &index);
+    void slotPanningStarted ();
+    void slotPanningStopped ();
+    void loadPictures ();
+    void stopLoadingPictures ();
 
-        void loadPictures ();
-        void stopLoadingPictures ();
+    void rowsInserted (
+            const QModelIndex &parent, 
+            int                start, 
+            int                end);
 
-        
-        void rowsInserted (
-                const QModelIndex &parent, 
-                int                start, 
-                int                end);
-        
-        void rowsRemoved (
-                const QModelIndex &parent, 
-                int                start, 
-                int                end);
+    void rowsRemoved (
+            const QModelIndex &parent, 
+            int                start, 
+            int                end);
 
-        void currentChanged (
-                const QModelIndex &current);
+    void currentChanged (
+            const QModelIndex &current);
 
-    signals:
-        void imageActivated (WallpaperDescriptor desc);
+signals:
+    void imageActivated (WallpaperDescriptor desc);
 
-    private:
-        WallpaperBusinessLogic *m_BusinessLogic;
-        WallpaperModel         *m_Model;
-        WallpaperCellCreator   *m_CellCreator;
-        DataSourceType          m_DataSourceType;
-        bool                    m_Panning;
-        #ifdef UNIT_TEST
-        friend class Ut_WallpaperList;
-        #endif
+private:
+    WallpaperBusinessLogic *m_BusinessLogic;
+    WallpaperModel         *m_Model;
+    WallpaperCellCreator   *m_CellCreator;
+    DataSourceType          m_DataSourceType;
+    bool                    m_Panning;
+
+#ifdef UNIT_TEST
+    friend class Ut_WallpaperList;
+#endif
 };
 
 #endif

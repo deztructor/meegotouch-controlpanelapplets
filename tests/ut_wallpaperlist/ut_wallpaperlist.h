@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #ifndef UT_WALLPAPERLIST_H
 #define UT_WALLPAPERLIST_H
 
@@ -30,20 +29,7 @@ class WallpaperBusinessLogic;
 class WallpaperList;
 class WallpaperDescriptor;
 
-class SignalSink : public QObject
-{
-    Q_OBJECT
-public:
-    SignalSink ();
-
-public slots:
-    void imageActivated (WallpaperDescriptor *desc);
-
-public:
-    WallpaperDescriptor   *m_Desc;
-};
-
-class Ut_WallpaperList : public QObject 
+class Ut_WallpaperList : public QObject
 {
 Q_OBJECT
 
@@ -54,13 +40,13 @@ private slots:
     void cleanupTestCase ();
 
     void testItemClicked ();
+    void testPanningStartStop ();
     void testShowHide ();
-    
+
 private:
     MApplication              *m_App;
     WallpaperBusinessLogic    *m_BusinessLogic;
     WallpaperList             *m_List;
-    SignalSink                 m_Sink;
 };
 
 #endif
