@@ -468,8 +468,6 @@ DisplayWidget::screenTimeoutChanged (int index)
 void
 DisplayWidget::retranslateUi ()
 {
-    updateScreenTimeoutCombo ();
-
     if (m_TitleLabel)
         m_TitleLabel->setText (qtTrId("qtn_disp_display"));
 
@@ -477,7 +475,10 @@ DisplayWidget::retranslateUi ()
         m_SubTitleLabel->setText (qtTrId("qtn_disp_bright"));
 
     if (m_screenTimeout)
+    {
+        updateScreenTimeoutCombo ();
         m_screenTimeout->setTitle (qtTrId ("qtn_disp_screenoff"));
+    }
 }
 
 void

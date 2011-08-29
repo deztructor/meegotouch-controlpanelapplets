@@ -118,18 +118,19 @@ public:
     {
         foreach (QString img, images)
         {
-            QPixmap *pixmap = 0;
             SYS_DEBUG ("loading %s ...", SYS_STR (img));
+
             if (! QFile::exists (img))
             {
                 SYS_WARNING ("%s is missing!", SYS_STR (img));
                 continue;
             }
 
-            pixmap = new QPixmap;
-            if (pixmap->load (img))
+            QPixmap pixmap;
+
+            if (pixmap.load (img))
             {
-                MImageWidget *crt = new MImageWidget (pixmap);
+                MImageWidget *crt = new MImageWidget (&pixmap);
                 crt->setContentsMargins (0,0,0,0);
                 certsLayout->addItem (crt);
             }

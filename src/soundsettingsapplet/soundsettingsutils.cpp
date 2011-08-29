@@ -49,7 +49,7 @@ SoundSettings::userSaveDir ()
     return retval;
 }
 
-bool 
+bool
 SoundSettings::isTemporaryFile (
         const QString &filePath)
 {
@@ -61,7 +61,7 @@ SoundSettings::isTemporaryFile (
     return retval;
 }
 
-bool 
+bool
 SoundSettings::isFileCopy (
         const QString &filePath)
 {
@@ -73,7 +73,7 @@ SoundSettings::isFileCopy (
     return retval;
 }
 
-void 
+void
 SoundSettings::suggestedXmlFilePath (
             const QString &filePath,
             QString       &xmlFilePath)
@@ -81,7 +81,7 @@ SoundSettings::suggestedXmlFilePath (
     QFileInfo          fileInfo (filePath);
 
     xmlFilePath = fileInfo.path() + QDir::separator() +
-        fileInfo.baseName() + ".xml"; 
+        fileInfo.baseName() + ".xml";
 }
 
 void
@@ -124,12 +124,14 @@ SoundSettings::loadXML (
     QStringList       names;
 
     SYS_DEBUG ("*** xmlFileName = %s", SYS_STR(xmlFileName));
-	file = new QFile(xmlFileName);
-	if (!file->open(QIODevice::ReadOnly | QIODevice::Text)) {
-        SYS_WARNING ("Can not open '%s' for reading: %m", 
+    file = new QFile(xmlFileName);
+
+    if (!file || !file->open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        SYS_WARNING ("Can not open '%s' for reading: %m",
                 SYS_STR(xmlFileName));
-		goto finalize;
-	}
+        goto finalize;
+    }
 
     xml = new QXmlStreamReader(file);
     while(!xml->atEnd() && !xml->hasError()) {
@@ -141,13 +143,13 @@ SoundSettings::loadXML (
         SYS_DEBUG ("*** lineNumber : %d", xml->lineNumber());
         #endif
 
-		if (xml->isStartElement()) {
+        if (xml->isStartElement()) {
             names << xml->name().toString();
-		} else if (xml->isEndElement()) {
+        } else if (xml->isEndElement()) {
             names.removeLast();
         } else if (xml->isCharacters()) {
             QString path = names.join("/");
-            
+
             if (path == "soundsettings-applet/orig-file")
                 origFileName = xml->text().toString();
             else if (path == "soundsettings-applet/copy-file")
@@ -157,14 +159,14 @@ SoundSettings::loadXML (
         }
 
         xml->readNext();
-    } 
+    }
 
 finalize:
     if (xml)
         delete xml;
     if (file)
         delete file;
-    
+
     return retval;
 }
 
@@ -177,12 +179,12 @@ SoundSettings::saveXML (
 {
     QXmlStreamWriter *writer;
     QFile             file (xmlFileName);
-    
+
     SYS_DEBUG ("-----------------------------------------------------");
     SYS_DEBUG ("*** xmlFileName = %s", SYS_STR(xmlFileName));
 
     if (!file.open(QIODevice::WriteOnly)) {
-        SYS_WARNING ("Unable to open file for writing: %s", 
+        SYS_WARNING ("Unable to open file for writing: %s",
                 SYS_STR(xmlFileName));
         return;
     }
@@ -195,16 +197,16 @@ SoundSettings::saveXML (
     writer->setAutoFormatting(true);
     writer->setCodec ("UTF-8");
     writer->writeStartDocument ();
-	writer->writeStartElement ("soundsettings-applet");
+    writer->writeStartElement ("soundsettings-applet");
 
     writer->writeStartElement("orig-file");
         writer->writeCharacters (origFileName);
     writer->writeEndElement ();
-    
+
     writer->writeStartElement("copy-file");
         writer->writeCharacters (copyFileName);
     writer->writeEndElement ();
-    
+
     writer->writeStartElement("title");
         writer->writeCharacters (title);
     writer->writeEndElement ();
@@ -213,14 +215,13 @@ SoundSettings::saveXML (
      *
      */
     writer->writeEndElement();
-	writer->writeEndDocument();
+    writer->writeEndDocument();
 
-     
     delete writer;
     file.close ();
 }
 
-QString 
+QString
 SoundSettings::saveFile (
         const QString &filePath)
 {
@@ -244,11 +245,11 @@ SoundSettings::saveFile (
         }
     }
 
-    targetFilePath = 
+    targetFilePath =
         baseDir + QDir::separator() + fileName;
     xmlFileName =
         baseDir + QDir::separator() + xmlFileName;
-    
+
     if (QFile(targetFilePath).exists()) {
         SYS_DEBUG ("The file '%s' already exists.", SYS_STR(targetFilePath));
         retval = targetFilePath;
@@ -281,9 +282,9 @@ finalize:
  * \param usedFiles The sound files that are used so shouldn't be removed.
  *
  * Collects the sound files that are saved into the directory but not used any
- * more. 
+ * more.
  */
-static void 
+static void
 collectFilesRecursive (
         QSet<QString>   &usedFiles,
         QSet<QString>   &toRemove,
@@ -321,7 +322,7 @@ SoundSettings::removeUnusedFiles (
 {
     QSet<QString>    toRemove;
     QSet<QString>    directories;
-    
+
     /*
      * Collecting unused files.
      */
@@ -332,7 +333,7 @@ SoundSettings::removeUnusedFiles (
      */
     foreach (QString fileName, toRemove) {
         QFileInfo fileInfo (fileName);
-        QString   xmlFileName (fileInfo.path() + QDir::separator() + 
+        QString   xmlFileName (fileInfo.path() + QDir::separator() +
                 fileInfo.baseName() + ".xml");
         QFile     binFile (fileName);
         QFile     xmlFile (xmlFileName);
