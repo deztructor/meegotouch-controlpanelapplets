@@ -20,7 +20,7 @@
 #include <QString>
 #include <MGConfItem>
 
-#undef WANT_LOCK_CODE
+#define WANT_LOCK_CODE
 
 #include <QVariant>
 #include <QDBusInterface>
