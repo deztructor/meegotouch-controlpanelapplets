@@ -161,6 +161,7 @@ WallpaperBusinessLogic::setWallpaper ()
     m_WorkerThread->start();
 
 finalize:
+
     return success;
 }
 
@@ -199,6 +200,14 @@ WallpaperBusinessLogic::setWallpaper (
     m_WorkerThread->start();
 
 finalize:
+    /*
+     * We have to drop this sheet in the backround early, because if we do it
+     * the same time we dismiss the cropper sheet the application window remains
+     * black.
+     */
+    if (m_GalleryGridPage)
+        m_GalleryGridPage->sheet().disappear();
+
     return success;
 }
 
