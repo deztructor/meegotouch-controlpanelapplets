@@ -200,6 +200,7 @@ WallpaperBusinessLogic::setWallpaper (
     m_WorkerThread->start();
 
 finalize:
+#if 1
     /*
      * We have to drop this sheet in the backround early, because if we do it
      * the same time we dismiss the cropper sheet the application window remains
@@ -207,7 +208,7 @@ finalize:
      */
     if (m_GalleryGridPage)
         m_GalleryGridPage->sheet().disappear();
-
+#endif
     return success;
 }
 
@@ -301,6 +302,7 @@ WallpaperBusinessLogic::prepareGalleryWidgets ()
     m_ImageContentProvider = new ImageContentProvider (*m_GalleryModel);
     m_GalleryModel->addContentProvider (m_ImageContentProvider);
     m_GalleryGridPage = new GalleryGridPage (*m_GalleryModel);
+    m_GalleryGridPage->setMemorySavingMode (true);
     m_GalleryGridPage->setStyleName(
             QLatin1String("CommonApplicationPageInverted"));
     //m_GalleryGridPage->setTopBarText("Testing...");
@@ -309,6 +311,7 @@ WallpaperBusinessLogic::prepareGalleryWidgets ()
     //m_GalleryGridPage->setNavigationBarVisible(true);
     
     m_FullScreenPage = new GalleryFullScreenPage (*m_GalleryModel);
+    m_FullScreenPage->setMemorySavingMode (true);
     m_FullScreenPage->setCropAspectRatio (
             GalleryFullScreenPage::PortraitScreenAspectRatio);
     m_FullScreenPage->setStyleName (

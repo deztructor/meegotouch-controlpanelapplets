@@ -51,6 +51,7 @@ namespace Wallpaper
     const QString PortraitHistoryKey (
             "/desktop/meego/background/portrait/history");
     const int historyMaxLength = 10;
+    const bool alwaysShowHistoryItems (true);
 
     /*
      * Stuff for the default wallpaper image, the image file that is stored in

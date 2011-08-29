@@ -319,6 +319,22 @@ WallpaperModel::loadFromDirectory ()
              m_PendingFiles[newPath] = entries[newPath];
         }
     }
+   
+    /*
+     * Adding the files from history.
+     */
+    if (Wallpaper::alwaysShowHistoryItems) {
+        QStringList  history = m_BusinessLogic->history();
+        
+        foreach (QString filePath, history) {
+            if (!Wallpaper::imageFile(filePath) ||
+                 m_FilePathList.contains(filePath) || 
+                 toAdd.contains(filePath)) 
+                continue;
+
+            toAdd << filePath;
+        }
+    }
 
     /*
      * Adding the files that are not changing any more.
@@ -343,6 +359,7 @@ WallpaperModel::loadFromDirectory ()
         endInsertRows ();
         startWatchFiles ();
     }
+
 
     if (!m_PendingFiles.isEmpty()) {
         m_FileSystemTimer.start ();
