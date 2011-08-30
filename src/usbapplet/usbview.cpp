@@ -29,7 +29,6 @@
 #include <MApplication>
 #include <MImageWidget>
 #include <MWidgetController>
-#include <MWidgetController>
 #include <MGConfItem>
 
 #include <QTimer>
