@@ -30,6 +30,7 @@
  */
 #undef TOP_CLOSE_ENABLED
 
+#include <QVariant>
 #include <MButton>
 #include <MWidgetController>
 #include <MComboBox>
@@ -40,6 +41,7 @@
 #include <QGraphicsLinearLayout>
 #include <MSeparator>
 #include <MHelpButton>
+#include <MGConfItem>
 
 DisplayWidget::DisplayWidget (QGraphicsWidget *parent) :
         DcpWidget (parent),
@@ -57,6 +59,15 @@ DisplayWidget::DisplayWidget (QGraphicsWidget *parent) :
     setContentsMargins (0, 0, 0, 0);
     m_logic = new DisplayBusinessLogic;
 
+    /*
+     * Lets have these configurable via gconf keys
+     */
+    MGConfItem lps ("/meegotouch/settings/low_power_switchable");
+    m_lowPowerChangeable = lps.value (true).toBool ();
+
+    MGConfItem tcs ("/meegotouch/settings/top_swipe_switchable");
+    m_topCloseChangeable = tcs.value (false).toBool ();
+
     connect (m_logic, SIGNAL(lowPowerModeChanged(bool)),
             this, SLOT(lowPowerModeChanged(bool)));
     connect (m_logic, SIGNAL(doubleTapModeChanged(bool)),
@@ -67,6 +78,8 @@ DisplayWidget::DisplayWidget (QGraphicsWidget *parent) :
 
 DisplayWidget::~DisplayWidget ()
 {
+    delete m_logic;
+    m_logic = 0;
 }
 
 void DisplayWidget::initWidget ()
@@ -96,15 +109,22 @@ void DisplayWidget::initWidget ()
 #endif
     //addSecHeaderContainer ();
     //addSliderContainer ();
-    //addStretcher ("CommonItemDivider");
+
     addScreenTimeoutContainer ();
-    //addStretcher ("CommonItemDivider");
-    addLowPowerContainer ();
+
+    if (m_lowPowerChangeable)
+    {
+        addLowPowerContainer ();
+    }
     addDoubleTapContainer ();
-#if (! defined (MEEGO)) && defined (TOP_CLOSE_ENABLED)
-    addFromTopCloseContainer ();
+
+#ifndef MEEGO
+    if (m_topCloseChangeable)
+    {
+        addFromTopCloseContainer ();
+    }
 #endif
-    //addStretcher ("CommonSmallSpacerInverted");
+
     m_MainLayout->addStretch();
 }
 
@@ -250,7 +270,7 @@ DisplayWidget::addScreenTimeoutContainer ()
 void
 DisplayWidget::addLowPowerContainer ()
 {
-    MWidgetController            *container;
+    MWidgetController     *container;
     QGraphicsLinearLayout *layout;
 
     /*
@@ -498,3 +518,4 @@ DisplayWidget::doubleTapModeChanged (
     if (m_DoubleTapSwitch)
         m_DoubleTapSwitch->setChecked (dt);
 }
+
