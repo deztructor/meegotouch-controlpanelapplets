@@ -40,6 +40,7 @@ private slots:
     void testConstructBrief ();
     void testConstructWidget ();
     void testMenuItems ();
+    void testInfoWidget ();
 
 private:
     MApplication              *m_App;

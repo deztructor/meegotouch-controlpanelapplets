@@ -33,7 +33,7 @@ class MLinearLayoutPolicy;
 
 class UsbView : public DcpStylableWidget
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
 #ifdef HAVE_QMSYSTEM
@@ -43,56 +43,54 @@ public:
 #endif
     ~UsbView ();
 
-    private slots:
-        void usbModeActivated (int idx);
-        void updateInfoLabel ();
-        void buttonToggled (bool state);
+private slots:
+    void usbModeActivated (int idx);
+    void updateInfoLabel ();
+    void buttonToggled (bool state);
 
-    private:
-        typedef enum {
-            UsbModeAsk           = 0,
-            UsbModeMassStorage   = 1,
-            UsbModeOviSuite      = 2,
-            UsbModeSDK           = 3,
-            UsbModeLastMode      = 4,
-        } UsbModeType;
+private:
+    typedef enum {
+        UsbModeAsk           = 0,
+        UsbModeMassStorage   = 1,
+        UsbModeOviSuite      = 2,
+        UsbModeSDK           = 3,
+        UsbModeLastMode      = 4,
+    } UsbModeType;
 
-        void initWidget ();
-        QString usbModeUIString (UsbModeType type) const;
-        QString usbModeButtonStyle (UsbModeType type) const;
-        int selectedButtonIndex () const;
-        void setSelectedButtonIndex (int index);
+    void initWidget ();
+    QString usbModeUIString (UsbModeType type) const;
+    QString usbModeButtonStyle (UsbModeType type) const;
+    int selectedButtonIndex () const;
+    void setSelectedButtonIndex (int index);
 
-        /*
-         * Private methods that add widgets.
-         */
-        MLabel *addTitleLabel (
-                QGraphicsWidget     *parent,
-                MLinearLayoutPolicy *targetPolicy,
-                const char          *labelStyleName);
+    /*
+     * Private methods that add widgets.
+     */
+    MLabel *addTitleLabel (
+            QGraphicsWidget     *parent,
+            MLinearLayoutPolicy *targetPolicy,
+            const char          *labelStyleName);
 
-        void addSubTitle (
-                QGraphicsWidget     *parent,
-                MLinearLayoutPolicy *targetPolicy,
-                const QString       &subTitle);
+    void addSubTitle (
+            QGraphicsWidget     *parent,
+            MLinearLayoutPolicy *targetPolicy,
+            const QString       &subTitle);
 
-        void addSubtitle ();
-        void addButtons ();
-    
+    void addSubtitle ();
+    void addButtons ();
+
     QString currentText () const;
 
-    #ifdef HAVE_QMSYSTEM
+#ifdef HAVE_QMSYSTEM
     MeeGo::QmUSBMode    *m_logic;
-    #endif
+#endif
     MLinearLayoutPolicy *m_policy;
     MLabel              *m_infoLabel;
     int                  m_infoOrder;
     QList<MButton *>     m_Buttons;
     bool                 m_DeveloperMode;
-    
-    #ifdef UNIT_TEST
-    friend class Ut_UsbApplet;
-    #endif
+
+friend class Ut_UsbApplet;
 };
 
 #endif

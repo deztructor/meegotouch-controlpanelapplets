@@ -314,5 +314,11 @@ Ut_UsbApplet::testConstructBrief ()
     QVERIFY (m_Applet->constructBrief (0) == 0);
 }
 
+void
+Ut_UsbApplet::testInfoWidget ()
+{
+
+}
+
 QTEST_APPLESS_MAIN(Ut_UsbApplet)
 

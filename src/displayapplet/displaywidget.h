@@ -26,6 +26,7 @@ class MButton;
 class MSlider;
 class MLabel;
 class MComboBox;
+class MGConfItem;
 class DisplayBusinessLogic;
 class MLinearLayoutPolicy;
 
@@ -73,6 +74,9 @@ private:
     MButton                *m_lowPowerSwitch;
     MButton                *m_DoubleTapSwitch;
     MButton                *m_CloseSwitch;
+
+    bool                    m_lowPowerChangeable;
+    bool                    m_topCloseChangeable;
 
 #ifdef UNIT_TEST
     friend class Ut_DisplayWidget;
