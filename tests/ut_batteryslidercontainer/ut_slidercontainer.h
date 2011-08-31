@@ -16,17 +16,17 @@
 ** of this file.
 **
 ****************************************************************************/
-#ifndef UT_USBAPPLET_H
-#define UT_USBAPPLET_H
+#ifndef UT_BATTERY_SLIDER_CONTAINER_H
+#define UT_BATTERY_SLIDER_CONTAINER_H
 
 #include <QtTest/QtTest>
+#include <QStringList>
 #include <QObject>
 
-class UsbApplet;
-class MWindow;
 class MApplication;
+class SliderContainer;
 
-class Ut_UsbApplet : public QObject 
+class Ut_SliderContainer : public QObject
 {
 Q_OBJECT
 
@@ -36,19 +36,14 @@ private slots:
     void initTestCase ();
     void cleanupTestCase ();
 
-    void testTitle ();
-    void testConstructBrief ();
-    void testConstructWidget ();
-    void testMenuItems ();
-    void testCurrentText ();
-    void testInfoWidget ();
+    void testConstructDestruct ();
+    void testUpdateSlider ();
+    void testSliderChanged ();
 
 private:
-    MApplication              *m_App;
-    MWindow                   *m_window;
-    UsbApplet                 *m_Applet;
+    MApplication            *m_App;
+    SliderContainer         *m_slider;
+    QStringList              m_testValues;
 };
 
 #endif
-
-
