@@ -49,8 +49,10 @@ private slots:
 
 private:
     void addHeaderContainer ();
+#if 0
     void addSecHeaderContainer ();
     void addSliderContainer ();
+#endif
     void addScreenTimeoutContainer ();
     void addLowPowerContainer ();
     void addDoubleTapContainer ();

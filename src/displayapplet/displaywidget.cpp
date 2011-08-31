@@ -107,8 +107,11 @@ void DisplayWidget::initWidget ()
     addStretcher (APP_TITLE_DIVIDER_STYLE_NAME);
 #endif
 #endif
-    //addSecHeaderContainer ();
-    //addSliderContainer ();
+
+#if 0
+    addSecHeaderContainer ();
+    addSliderContainer ();
+#endif
 
     addScreenTimeoutContainer ();
 
@@ -152,7 +155,7 @@ DisplayWidget::addHeaderContainer ()
     m_MainLayout->setStretchFactor (layout, 0);
 }
 
-
+#if 0
 void
 DisplayWidget::addSecHeaderContainer ()
 {
@@ -189,7 +192,6 @@ DisplayWidget::addSecHeaderContainer ()
 void
 DisplayWidget::addSliderContainer ()
 {
-#if 0
     MWidgetController            *container;
     QGraphicsLinearLayout *layout;
 
@@ -236,8 +238,8 @@ DisplayWidget::addSliderContainer ()
      */
     m_MainLayout->addItem (container);
     m_MainLayout->setStretchFactor (container, 0);
-#endif
 }
+#endif
 
 void
 DisplayWidget::addScreenTimeoutContainer ()
