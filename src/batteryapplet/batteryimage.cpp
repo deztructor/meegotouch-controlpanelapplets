@@ -125,12 +125,12 @@ BatteryImage::setIconSet ()
         type = ICON_CHARGING;
     }
 
+    stopTimer ();
     if (m_iconCurrentSet != type) {
         SYS_DEBUG ("*** new type = %d", type);
-        stopTimer ();
         loadImages (type);
-        maybeStartTimer ();
     }
+    maybeStartTimer ();
 }
 
 void
