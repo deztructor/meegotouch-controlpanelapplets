@@ -40,6 +40,7 @@ private slots:
     void testConstructBrief ();
     void testConstructWidget ();
     void testMenuItems ();
+    void testCurrentText ();
     void testInfoWidget ();
 
 private:

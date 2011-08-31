@@ -36,6 +36,7 @@ using namespace MeeGo;
 #include <MWindow>
 #include <MAction>
 #include <MBanner>
+#include <MLabel>
 
 #include <QVector>
 #include <QList>
@@ -141,22 +142,6 @@ MSceneWindow::appear (MWindow *window, MSceneWindow::DeletionPolicy policy)
 void
 Ut_UsbApplet::init()
 {
-}
-
-void
-Ut_UsbApplet::cleanup()
-{
-}
-
-
-static int argc = 1;
-static char *app_name = (char*) "./ut_usbapplet";
-
-void
-Ut_UsbApplet::initTestCase()
-{
-    m_App = new MApplication (argc, &app_name);
-    m_window = new MWindow;
     m_Applet = new UsbApplet;
 
     QVERIFY (!m_Applet->m_MainWidget);
@@ -169,10 +154,25 @@ Ut_UsbApplet::initTestCase()
 }
 
 void
-Ut_UsbApplet::cleanupTestCase()
+Ut_UsbApplet::cleanup()
 {
     delete m_Applet;
     m_Applet = 0;
+}
+
+static int argc = 1;
+static char *app_name = (char*) "./ut_usbapplet";
+
+void
+Ut_UsbApplet::initTestCase()
+{
+    m_App = new MApplication (argc, &app_name);
+    m_window = new MWindow;
+}
+
+void
+Ut_UsbApplet::cleanupTestCase()
+{
     delete m_window;
     m_window = 0;
     m_App->deleteLater ();
@@ -315,8 +315,67 @@ Ut_UsbApplet::testConstructBrief ()
 }
 
 void
+Ut_UsbApplet::testCurrentText ()
+{
+    UsbView *usbWidget =
+        qobject_cast<UsbView*>(m_Applet->constructStylableWidget (0));
+    QVERIFY (usbWidget);
+
+#ifndef HAVE_QMSYSTEM
+    QCOMPARE (usbWidget->currentText (), QString (""));
+#else // if HAVE_QMSYSTEM
+    usbWidget->m_logic->setMode (QmUSBMode::MassStorage);
+    QCOMPARE (usbWidget->currentText (), qtTrId ("qtn_usb_storage_active"));
+
+    usbWidget->m_logic->setMode (QmUSBMode::OviSuite);
+    QCOMPARE (usbWidget->currentText (), qtTrId ("qtn_usb_sync_active"));
+
+#ifndef MEEGO
+    usbWidget->m_logic->setMode (QmUSBMode::SDK);
+    QCOMPARE (usbWidget->currentText (), QString ("SDK"));
+#endif
+
+    usbWidget->m_logic->setMode (QmUSBMode::ChargingOnly);
+    QCOMPARE (usbWidget->currentText (), qtTrId ("qtn_usb_charging"));
+
+    usbWidget->m_logic->setMode (QmUSBMode::Disconnected);
+    QCOMPARE (usbWidget->currentText (), QString (""));
+#endif
+}
+
+void
 Ut_UsbApplet::testInfoWidget ()
 {
+    UsbView *usbWidget =
+        qobject_cast<UsbView*>(m_Applet->constructStylableWidget (0));
+    QVERIFY (usbWidget);
+
+    // infoLabel should not exists at this point
+    QVERIFY (! usbWidget->m_infoLabel);
+
+#ifdef HAVE_QMSYSTEM
+    usbWidget->m_logic->setMode (QmUSBMode::MassStorage);
+    usbWidget->updateInfoLabel ();
+    QVERIFY (usbWidget->m_infoLabel);
+    QCOMPARE (usbWidget->m_infoLabel->text (),
+              qtTrId ("qtn_usb_storage_active"));
+
+    usbWidget->m_logic->setMode (QmUSBMode::OviSuite);
+    usbWidget->updateInfoLabel ();
+    QVERIFY (usbWidget->m_infoLabel);
+    QCOMPARE (usbWidget->m_infoLabel->text (),
+              qtTrId ("qtn_usb_sync_active"));
+
+    usbWidget->m_logic->setMode (QmUSBMode::ChargingOnly);
+    usbWidget->updateInfoLabel ();
+    QVERIFY (usbWidget->m_infoLabel);
+    QCOMPARE (usbWidget->m_infoLabel->text (),
+              qtTrId ("qtn_usb_charging"));
+
+    usbWidget->m_logic->setMode (QmUSBMode::Disconnected);
+    usbWidget->updateInfoLabel ();
+    QVERIFY (! usbWidget->m_infoLabel);
+#endif
 
 }
 
