@@ -317,20 +317,17 @@ AlertToneBrowser::launchMusicBrowser()
     musicBrowser->setInvertedLayout (true);
     musicBrowser->setContentTypes (contentTypes);
 
+    // It seems that this signal is never received... somehow.
     //connect (musicBrowser, SIGNAL (itemClicked (const QString&)),
     //        SLOT (selectingMusicItem (const QString&)));
     
     connect (musicBrowser, SIGNAL (doneClicked()),
             SLOT (contentItemsSheetDoneClicked ()));
 
-    #if 0
-    musicBrowser->appear(scene(), MSceneWindow::KeepWhenDone);
-    #else
     musicBrowser->appear(
             MApplication::activeApplicationWindow(), 
             MSceneWindow::DestroyWhenDismissed);
     #endif
-#endif
 #endif
 }
 
