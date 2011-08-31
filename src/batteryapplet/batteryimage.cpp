@@ -118,10 +118,11 @@ BatteryImage::setIconSet ()
     BatteryImage::BatteryIconType type;
 
     type = ICON_NORMAL;
-    if (charging()) {
-        type = ICON_CHARGING;
-    } else if (m_PowerSave) {
+
+    if (m_PowerSave) {
         type = ICON_POWERSAVE;
+    } else if (charging()) {
+        type = ICON_CHARGING;
     }
 
     if (m_iconCurrentSet != type) {

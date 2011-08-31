@@ -3,6 +3,8 @@ meegotouch-controlpanelapplets (0.20.70~1) meegotouch; urgency=low
   [ Laszlo Pere ]
   * Fixes: NB#277711 - Add 'Pick from Gallery' feature in Wallpaper settings
   * Fixes: NB#277805 - [TASK] Use sheet picker in Sounds & Vibration settings.
+  * Fixes: NB#280113 - Please keep power saver icon in the battery applet 
+    while charging in power saver mode.
 
   [ David Kedves ]
   * Fixes: NB#265952 - Reset does not ask for lock code even if enabled
