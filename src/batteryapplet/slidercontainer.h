@@ -25,7 +25,7 @@
 class MButton;
 class MLabel;
 class MSlider;
-class MLinearLayoutPolicy; 
+class MLinearLayoutPolicy;
 
 /*!
  * The original layout guide specified these widgets to be put in a single
@@ -37,12 +37,12 @@ class MLinearLayoutPolicy;
  */
 class SliderContainer : public MWidgetController
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
     SliderContainer (MWidget *parent = 0);
     ~SliderContainer ();
-    
+
 public slots:
     void initSlider (const QStringList &values);
     void updateSlider (const int value);
@@ -64,6 +64,8 @@ private:
     QStringList            m_SliderValues;
     MLinearLayoutPolicy   *m_LayoutPolicy;
     bool                   m_SliderExists;
+
+friend class Ut_SliderContainer;
 };
 
 #endif // SLIDERCONTAINER_H
