@@ -189,7 +189,8 @@ Ut_BatteryImage::testAnimation ()
     image->setPSMValue (true);
     image->updateBatteryLevel (2);
     QVERIFY (animationIsOngoing(image));
-    QVERIFY (image->m_iconCurrentSet == BatteryImage::ICON_CHARGING);
+    // See NB#280113
+    QVERIFY (image->m_iconCurrentSet == BatteryImage::ICON_POWERSAVE);
 
     image->stopCharging ();
     QVERIFY (!animationIsOngoing(image));
