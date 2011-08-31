@@ -46,9 +46,9 @@ AlertToneDefaultsModel::AlertToneDefaultsModel() : QStandardItemModel(),
 {
     QString oviDirPath = oviRingTonesPath ();
 
-    insertColumn(NiceNameColumn);
-    insertColumn(FullPathColumn);
-    insertColumn(ForcedColumn);
+    insertColumn (NiceNameColumn);
+    insertColumn (FullPathColumn);
+    insertColumn (ForcedColumn);
 
     // Creating the directory so that we can connect and watch them.
     ensureHasDirectory (oviDirPath);
@@ -261,12 +261,19 @@ AlertToneDefaultsModel::findItemByFileName (
 {
     int retval = -1;
     for (int n = 0; n < rowCount(); ++n) {
-        if (fileName(n) == FileName) {
+        #if 0
+        SYS_WARNING ("[%03d] %s ? %s => %s",
+                n, SYS_STR(fileName(n)), SYS_STR(FileName),
+                SYS_BOOL(fileName(n) == FileName));
+        #endif
+        if (fileName(n) == FileName || 
+                originalFileName(n) == FileName) {
             retval = n;
             break;
         }
     }
 
+    SYS_WARNING ("Returning %d", retval);
     return retval;
 }
 
@@ -337,6 +344,16 @@ AlertToneDefaultsModel::fileName (
 {
     QModelIndex myItem = index (indexRow, FullPathColumn);
     return data(myItem).toString ();
+}
+
+QString
+AlertToneDefaultsModel::originalFileName (
+        int indexRow) const
+{
+    QModelIndex myItem   = index (indexRow, FullPathColumn);
+    QString     filePath = data(myItem).toString ();
+
+    return TrackerConnection::instance()->getFileCopyOriginal (filePath);   
 }
 
 /*!
@@ -440,14 +457,14 @@ AlertToneDefaultsModel::moveItem(int from, int destination)
 {
     SYS_DEBUG("move item from %d to %d", from, destination);
 
-    QVariant niceName = data(index(from, NiceNameColumn));
-    QVariant fileName = data(index(from, FullPathColumn));
-    QVariant forced = data(index(from, ForcedColumn));
+    QVariant niceName = data (index(from, NiceNameColumn));
+    QVariant fileName = data (index(from, FullPathColumn));
+    QVariant forced   = data (index(from, ForcedColumn));
 
     removeRow(from);
     insertRow(destination);
 
     setData (index(destination, NiceNameColumn), QVariant(niceName));
     setData (index(destination, FullPathColumn), QVariant(fileName));
-    setData (index(destination, ForcedColumn), QVariant(forced));
+    setData (index(destination, ForcedColumn),   QVariant(forced));
 }

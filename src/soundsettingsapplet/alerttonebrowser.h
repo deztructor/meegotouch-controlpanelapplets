@@ -34,7 +34,7 @@ class AlertToneDefaults;
 class MApplicationPage;
 class MLabel;
 
-//#define USE_CONTENT_ITEM_SHEET
+#define USE_CONTENT_ITEM_SHEET
 
 #ifdef USE_CONTENT_ITEM_SHEET
 class ContentItemsSheet;
@@ -72,6 +72,9 @@ private slots:
     void textChanged ();
     void browserBackButtonClicked ();
     void stopPlayingSound ();
+    #ifdef USE_CONTENT_ITEM_SHEET
+    void contentItemsSheetDoneClicked ();
+    #endif
 
 protected:
     virtual void retranslateUi();
@@ -93,6 +96,8 @@ private:
     AlertTonePreview                *m_preview;
     #ifndef USE_CONTENT_ITEM_SHEET
     MApplicationPage                *m_MusicBrowser;
+    #else
+    QStringList                      m_selectedItems;
     #endif
 
     MAction                         *m_DoneAction;

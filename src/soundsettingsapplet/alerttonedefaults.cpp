@@ -363,6 +363,7 @@ AlertToneDefaults::selectAndScroll (
     int      idx;
     bool     success;
 
+    SYS_DEBUG ("--------------------------------------------------");
     SYS_DEBUG ("*** fileName    = %s", SYS_STR(fileName));
     SYS_DEBUG ("*** niceName    = %s", SYS_STR(niceName));
     SYS_DEBUG ("*** isVisible() = %s", SYS_BOOL(isVisible()));
@@ -384,21 +385,22 @@ AlertToneDefaults::selectAndScroll (
 
     idx = m_DefaultsModel->findItemByFileName (fileName);
 
-    SYS_DEBUG("m_FileFromMyMusicSelected is %s", SYS_BOOL(m_FileFromMyMusicSelected));
-    if(!m_FileFromMyMusicSelected && idx >= 0)
-    {
+    SYS_DEBUG ("m_FileFromMyMusicSelected = %s", 
+            SYS_BOOL(m_FileFromMyMusicSelected));
+    SYS_DEBUG ("idx                       = %d", idx);
+    if(!m_FileFromMyMusicSelected && idx >= 0) {
+        SYS_DEBUG ("Moving");
         QModelIndex mIndex = m_DefaultsModel->index (idx, 0);
         m_DefaultsModel->moveItem(idx, 0);
         success = selectAndScroll (0);
-
-    }
-    else
-    {
+    } else {
+        SYS_DEBUG ("Selecting");
         success = selectAndScroll (idx);
     }
 
 
-    SYS_WARNING ("*** idx = %d", idx);
+    SYS_DEBUG ("idx                       = %d", idx);
+    SYS_DEBUG ("success                   = %s", SYS_BOOL(idx));
     if (!success) {
         m_FileNameToSelect = fileName;
         m_NiceNameToSelect = niceName;
@@ -418,7 +420,6 @@ AlertToneDefaults::selectAndScroll (
             selectionModel()->clear();
         }
     } else {
-        SYS_DEBUG("success");
         m_FileNameToSelect = "";
         m_NiceNameToSelect = "";
         m_FileFromMyMusicSelected = false;

@@ -373,3 +373,12 @@ TrackerConnection::registerFileCopy (
     
     m_FileCopies[copyFilePath] = originalFilePath;
 }
+
+QString
+TrackerConnection::getFileCopyOriginal (
+        const QString     &copyFilePath)
+{
+    SYS_DEBUG ("*** copyFilePath      = %s", SYS_STR(copyFilePath));
+    SYS_DEBUG ("*** original          = %s", SYS_STR(m_FileCopies[copyFilePath]));
+    return m_FileCopies[copyFilePath];
+}

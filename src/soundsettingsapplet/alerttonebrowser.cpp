@@ -49,6 +49,7 @@
 
 #include "../styles.h"
 
+
 #define DEBUG
 #define WARNING
 #include "../debug.h"
@@ -307,28 +308,45 @@ AlertToneBrowser::launchMusicBrowser()
     #else
     ContentItemsSheet *musicBrowser;
     QStringList        contentTypes;
-    QStringList        selectedItems;
 
     contentTypes << "http://www.tracker-project.org/temp/nmm#MusicPiece";
-    //selectedItems << m_tone->trackerId ();
+    m_selectedItems.clear();
 
     musicBrowser = new ContentItemsSheet ();
-    musicBrowser->initialize (selectedItems, true);
+    musicBrowser->initialize (m_selectedItems, true);
     musicBrowser->setInvertedLayout (true);
     musicBrowser->setContentTypes (contentTypes);
-    connect (musicBrowser, SIGNAL (itemClicked (const QString&)),
-            SLOT (selectingMusicItem (const QString&)));
 
-    musicBrowser->appear(scene(), MSceneWindow::DestroyWhenDismissed);
+    //connect (musicBrowser, SIGNAL (itemClicked (const QString&)),
+    //        SLOT (selectingMusicItem (const QString&)));
     
-    // This is not working either.
-    //musicBrowser->appear(
-    //        MApplication::activeApplicationWindow(), 
-    //        MSceneWindow::DestroyWhenDismissed);
-    #endif
+    connect (musicBrowser, SIGNAL (doneClicked()),
+            SLOT (contentItemsSheetDoneClicked ()));
 
+    #if 0
+    musicBrowser->appear(scene(), MSceneWindow::KeepWhenDone);
+    #else
+    musicBrowser->appear(
+            MApplication::activeApplicationWindow(), 
+            MSceneWindow::DestroyWhenDismissed);
+    #endif
+#endif
 #endif
 }
+
+#ifdef USE_CONTENT_ITEM_SHEET
+void 
+AlertToneBrowser::contentItemsSheetDoneClicked ()
+{
+    SYS_WARNING ("m_selectedItems = %s", SYS_STR(m_selectedItems.join(";")));
+    if (m_selectedItems.isEmpty()) {
+        SYS_WARNING ("No selected item.");
+        return;
+    }
+
+    selectingMusicItem (m_selectedItems[0]);
+}
+#endif
 
 void
 AlertToneBrowser::launchOviStore()
@@ -505,7 +523,8 @@ void
 AlertToneBrowser::selectingMusicItem (
         const QString &item)
 {
-    SYS_DEBUG("*** item = %s", SYS_STR(item));
+    SYS_WARNING ("----------------------------------------------------");
+    SYS_WARNING ("*** item = %s", SYS_STR(item));
     QString fname =
         TrackerConnection::instance ()-> trackerIdToFilename (item);
 

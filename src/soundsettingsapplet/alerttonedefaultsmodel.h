@@ -54,6 +54,7 @@ public:
 
     QString fileName (const QModelIndex &item) const;
     QString fileName (int indexRow) const;
+    QString originalFileName (int indexRow) const;
 
     void moveItem(int from, int destination);
 

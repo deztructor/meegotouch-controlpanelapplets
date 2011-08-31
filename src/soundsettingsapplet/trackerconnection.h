@@ -50,6 +50,9 @@ public:
             const QString     &originalFilePath,
             const QString     &copyFilePath);
 
+    QString getFileCopyOriginal (
+            const QString     &copyFilePath);
+
 protected:
     TrackerConnection ();
     QString poorNiceName (const QString &filename);
