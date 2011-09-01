@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #ifndef PROFILECONTAINER_H
 #define PROFILECONTAINER_H
 
@@ -33,29 +32,33 @@ class MImageWidget;
 class ProfileContainer: public MWidgetController
 {
     Q_OBJECT
-    Q_PROPERTY(bool checked READ isChecked WRITE setChecked)
+    Q_PROPERTY (bool checked READ isChecked WRITE setChecked)
 
 public:
-    ProfileContainer(
-            int            id, 
-            const QString &title, 
-            bool           vibra, 
-            MWidget     *parent = 0);
+    ProfileContainer (
+            int            id,
+            const QString &title,
+            bool           vibra,
+            MWidget       *parent = 0);
     ~ProfileContainer ();
 
     int id ();
-    bool isChecked() const;
-    void setChecked(bool buttonChecked);
-    void setText(const QString &text);
-    QString text() const;
+    bool isChecked () const;
+    void setChecked (bool buttonChecked);
+    void setText (const QString &text);
+    QString text () const;
 
 signals:
-    void toggled(bool checked);
+    void toggled (bool checked);
 
 private:
     const int       m_ProfileId;
     MButton        *m_Button;
     MLabel         *m_Label;
+
+#ifdef UNIT_TEST
+friend class Ut_ProfileContainer;
+#endif
 };
 
 #endif
