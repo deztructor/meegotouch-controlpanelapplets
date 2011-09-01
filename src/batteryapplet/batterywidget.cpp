@@ -498,14 +498,19 @@ BatteryWidget::fromProperBatteryInfo (unsigned int pct)
     if (!(m_logic->isCharging())) {
         if (!m_logic->PSMValue()) {
             m_RemainingContainer->updateCapacity (pct);
+            m_RemainingContainer->updateRemainingTime (
+                    m_logic->remainingTalkTime (),
+                    m_logic->remainingIdleTime (),
+                    -1);
         } else {
             //% "Power save mode"
             m_RemainingContainer->setText (qtTrId ("qtn_ener_power_save_mode"));
             m_BatteryImage->setPSMValue (true);
+            m_RemainingContainer->updateRemainingTime (
+                    m_logic->remainingTalkTime (),
+                    m_logic->remainingIdleTime (),
+                    pct);
         }
-        m_RemainingContainer->updateRemainingTime (
-                m_logic->remainingTalkTime (),
-                m_logic->remainingIdleTime ());
     } else {
             m_RemainingContainer->setText(qtTrId ("qtn_ener_charging"));
             m_RemainingContainer->updateRemainingChargingTime (

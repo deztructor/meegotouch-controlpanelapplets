@@ -140,24 +140,42 @@ PercentageContainer::toggleSubLabelVisibility (bool visible)
 
 void
 PercentageContainer::updateRemainingTime (
-    int     talk,
-    int     idle)
+        int     remainingTalk,
+        int     remainingIdle,
+        int     batteryPercent)
 {
-    toggleSubLabelVisibility ((talk > 0) || (idle > 0));
+    QString  labelText;
 
-    if (talk > 0)
-    {
+    toggleSubLabelVisibility (
+            remainingTalk > 0 || 
+            remainingIdle > 0 || 
+            batteryPercent > -1);
+
+    if (batteryPercent > -1) {
+        //% "Battery level \%L1\%"
+        labelText += qtTrId ("qtn_ener_battery_level").arg (batteryPercent);
+    }
+
+    if (remainingTalk > 0) {
+        if (!labelText.isEmpty())
+            labelText += "<br>";
+
         //% "Remaining talk time: %1"
-        m_SubTextLabel->setText (
-            qtTrId ("qtn_ener_remaining_talk").arg (formatTime (talk)));
+        labelText += qtTrId ("qtn_ener_remaining_talk").arg (
+                formatTime(remainingTalk));
     }
 
-    if (idle > 0)
-    {
+    if (remainingIdle > 0) {
+        if (!labelText.isEmpty())
+            labelText += "<br>";
+
         //% "Remaining standby time: %1"
-        m_SubTextLabel->setText (m_SubTextLabel->text () + "<br>" +
-            qtTrId ("qtn_ener_remaining_standby").arg (formatTime (idle)));
+        labelText += 
+            qtTrId ("qtn_ener_remaining_standby").arg(
+                    formatTime(remainingIdle));
     }
+
+    m_SubTextLabel->setText (labelText);
 }
 
 QString

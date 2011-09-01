@@ -42,7 +42,10 @@ public:
 
     void updateCapacity (const int value);
     void updateRemainingChargingTime (int ChTime);
-    void updateRemainingTime (int talk, int idle);
+    void updateRemainingTime (
+            int remainingTalk, 
+            int remainingIdle,
+            int batteryPercent);
     void setText (const QString &text);
 
 public slots:

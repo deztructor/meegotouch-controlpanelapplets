@@ -5,6 +5,8 @@ meegotouch-controlpanelapplets (0.20.70~1) meegotouch; urgency=low
   * Fixes: NB#277805 - [TASK] Use sheet picker in Sounds & Vibration settings.
   * Fixes: NB#280113 - Please keep power saver icon in the battery applet 
     while charging in power saver mode.
+  * Fixes: NB#253772 - [TASK] Make battery percentage visible also when power
+    save is activated manually
 
   [ David Kedves ]
   * Fixes: NB#265952 - Reset does not ask for lock code even if enabled
