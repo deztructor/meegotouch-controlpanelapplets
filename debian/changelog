@@ -11,7 +11,7 @@ meegotouch-controlpanelapplets (0.20.70~1) meegotouch; urgency=low
   [ David Kedves ]
   * Fixes: NB#265952 - Reset does not ask for lock code even if enabled
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 30 Aug 2011 11:15:44 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 01 Sep 2011 13:10:13 +0300
 
 meegotouch-controlpanelapplets (0.20.69-1) meegotouch; urgency=low
 
