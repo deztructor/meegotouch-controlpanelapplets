@@ -1,6 +1,8 @@
 meegotouch-controlpanelapplets (0.20.71~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  * [ Laszlo Pere ]
+  * Fixes: NB#255436 - When charging is complete and charger still connected, 
+    activating power save mode should not change state
 
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 05 Sep 2011 09:43:36 +0200
 
@@ -13,8 +15,6 @@ meegotouch-controlpanelapplets (0.20.70-1) meegotouch; urgency=low
     while charging in power saver mode.
   * Fixes: NB#253772 - [TASK] Make battery percentage visible also when power
     save is activated manually
-  * Fixes: NB#255436 - When charging is complete and charger still connected, 
-    activating power save mode should not change state
 
   [ David Kedves ]
   * Fixes: NB#265952 - Reset does not ask for lock code even if enabled
