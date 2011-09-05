@@ -495,7 +495,12 @@ BatteryWidget::fromProperBatteryInfo (unsigned int pct)
     if (!m_RemainingContainer)
         return;
 
-    if (!(m_logic->isCharging())) {
+    if (m_logic->isBatteryFull ()) {
+        //% "Charging complete"
+        m_RemainingContainer->setText(qtTrId ("qtn_ener_charcomp"));
+        m_RemainingContainer->updateRemainingChargingTime (-1);
+        m_BatteryImage->setPSMValue (m_logic->PSMValue());
+    } else if (!m_logic->isCharging()) {
         if (!m_logic->PSMValue()) {
             m_RemainingContainer->updateCapacity (pct);
             m_RemainingContainer->updateRemainingTime (
@@ -564,9 +569,12 @@ void BatteryWidget::charging(int animation_rate)
 
 void BatteryWidget::chargeComplete()
 {
+    fromProperBatteryInfo (-1);
+    #if 0
     //% "Charging complete"
     m_RemainingContainer->setText(qtTrId ("qtn_ener_charcomp"));
     m_RemainingContainer->updateRemainingChargingTime (-1);
+    #endif
 }
 
 /*!

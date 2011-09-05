@@ -312,7 +312,7 @@ BatteryBusinessLogic::batteryRemCapacityChanged (
     emit batteryBarValueReceived (batteryBarValue (percentage));
 
     /* Fixes: NB#265208 */
-    if (m_battery->getBatteryState () == MeeGo::QmBattery::StateFull)
+    if (isBatteryFull())
         emit batteryFull ();
     else
         emit remainingBatteryCapacityChanged (percentage);
@@ -525,6 +525,16 @@ bool
 BatteryBusinessLogic::isCharging()
 {
     return m_Charging;
+}
+
+bool 
+BatteryBusinessLogic::isBatteryFull ()
+{
+    #ifdef HAVE_QMSYSTEM
+    return m_battery->getBatteryState () == MeeGo::QmBattery::StateFull;
+    #else
+    return false;
+    #endif
 }
 
 BatteryBusinessLogic::Condition

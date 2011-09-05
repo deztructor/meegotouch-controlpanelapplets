@@ -60,6 +60,7 @@ public:
     bool PSMAutoValue ();
     bool PSMValue ();
     bool isCharging ();
+    bool isBatteryFull ();
     Condition getCondition ();
     unsigned int getBatteryLevel();
     int remainingChargingTime ();
