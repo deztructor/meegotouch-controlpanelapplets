@@ -1,4 +1,10 @@
-meegotouch-controlpanelapplets (0.20.70~2) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.71~1) meegotouch; urgency=low
+
+  * [NEW VERSION]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 05 Sep 2011 09:43:36 +0200
+
+meegotouch-controlpanelapplets (0.20.70-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#277711 - Add 'Pick from Gallery' feature in Wallpaper settings
@@ -13,7 +19,7 @@ meegotouch-controlpanelapplets (0.20.70~2) meegotouch; urgency=low
   [ David Kedves ]
   * Fixes: NB#265952 - Reset does not ask for lock code even if enabled
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 01 Sep 2011 13:10:39 +0300
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 05 Sep 2011 09:43:21 +0200
 
 meegotouch-controlpanelapplets (0.20.69-1) meegotouch; urgency=low
 
