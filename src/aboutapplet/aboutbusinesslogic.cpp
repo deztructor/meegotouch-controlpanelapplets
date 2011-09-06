@@ -97,7 +97,7 @@ AboutBusinessLogic::run ()
 }
 
 QString
-AboutBusinessLogic::osVersion ()
+AboutBusinessLogic::osVersion (QString lsbFilePath )
 {
     QString retval;
 
@@ -136,7 +136,7 @@ AboutBusinessLogic::osVersion ()
          * This is a fallback method... (works fine on Ubuntu)
          * Try to get the version number from the lsb-release
          */
-        QFile lsbrel_file ("/etc/lsb-release");
+        QFile lsbrel_file (lsbFilePath);
         if (lsbrel_file.open (QIODevice::ReadOnly)) {
             QString contents (lsbrel_file.readAll ().constData ());
             lsbrel_file.close ();
@@ -161,7 +161,7 @@ finalize:
 }
 
 QString
-AboutBusinessLogic::osName ()
+AboutBusinessLogic::osName (QString lsbFilePath)
 {
     /*
      * Customization overrides any value...
@@ -188,7 +188,7 @@ AboutBusinessLogic::osName ()
     /*
      * Try to get the version number from the lsb-release
      */
-    QFile lsbrel_file ("/etc/lsb-release");
+    QFile lsbrel_file (lsbFilePath);
     if (lsbrel_file.open (QIODevice::ReadOnly))
     {
         QString contents (lsbrel_file.readAll ().constData ());
@@ -362,7 +362,7 @@ AboutBusinessLogic::licenseText ()
     QFile licenseFile (m_licenseFile);
     if (!licenseFile.open (QIODevice::ReadOnly | QIODevice::Text))
     {
-        SYS_WARNING ("Unable to open %s", SYS_STR (configPath + m_licenseFile));
+        SYS_WARNING ("Unable to open %s", SYS_STR (m_licenseFile));
         return localizedText;
     }
 
