@@ -30,7 +30,7 @@
 #endif
 #include <QTimer>
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 

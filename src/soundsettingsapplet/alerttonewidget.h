@@ -16,40 +16,38 @@
 ** of this file.
 **
 ****************************************************************************/
+
 #ifndef _ALERT_TONE_WIDGET_H_
 #define _ALERT_TONE_WIDGET_H_
 
+#include "alerttonetoplevel.h"
 #include "alerttone.h"
 #include "drilldownitem.h"
 
-class AlertToneWidget : public RightArrowItem
+class AlertToneWidget : public RightArrowItem 
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	AlertToneWidget (
-            AlertTone             *tone,
-            int                    idx,
+            AlertTone             *tone, 
+            int                    idx, 
+            AlertToneToplevel     *changer, 
             QGraphicsItem         *parent = 0);
 
-private slots:
-    void alertToneChanged ();
-    void clicked ();
-
-signals:
-    void changeWidget (int widgetId);
-
-protected:
-    void retranslateUi ();
-
 private:
-	AlertTone   *m_tone;
-	int          m_idx;
+	void retranslateUi();
 
+	AlertTone *m_tone;
+	AlertToneToplevel *m_changer;
+	int m_idx;
+
+private slots:
+	void alertToneChanged();
+	void clicked();
 #ifdef UNIT_TEST
     friend class Ut_AlertToneWidgetTests;
 #endif
 };
 
-#endif
-
+#endif /* !_ALERT_TONE_WIDGET_H_ */

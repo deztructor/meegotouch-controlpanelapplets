@@ -70,7 +70,6 @@ HEADERS =                      \
     soundsettingsapplet.h      \
     soundsettingsutils.h       \
     static.h                   \
-    alerttonebrowserstylable.h \
     $$(NULL)
 
 SOURCES =                      \
@@ -95,7 +94,6 @@ SOURCES =                      \
     qtrackedvariant.cpp        \
     soundsettingsutils.cpp     \
     soundsettingsapplet.cpp    \
-    alerttonebrowserstylable.cpp \
     $$(NULL)
 
 DESTDIR = lib

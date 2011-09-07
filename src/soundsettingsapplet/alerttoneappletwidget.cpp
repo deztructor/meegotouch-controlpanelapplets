@@ -18,8 +18,6 @@
 ****************************************************************************/
 #include "alerttoneappletwidget.h"
 
-#include <QSet>
-#include <MApplicationExtensionArea>
 #include <MLayout>
 #include <MLabel>
 #include <MLinearLayoutPolicy>
@@ -67,18 +65,17 @@ createEmptyContainer(
 /******************************************************************************
  * AlertToneAppletWidget implementation
  */
+#include <QSet>
 
 AlertToneAppletWidget::AlertToneAppletWidget (
         QList<AlertTone *>    alertTones, 
         QGraphicsWidget      *parent):
-	DcpStylableWidget (parent),
+	AlertToneToplevel (parent),
 	m_alertTones(alertTones),
     m_ProfileIf (new ProfileDataInterface),
 	m_tones (0),
 	m_feedback (0)
 {
-    setContentsMargins (0., 0., 0., 0.);
-
     /*
      * This should be called later, not from the constructor.
      */
@@ -100,13 +97,10 @@ AlertToneAppletWidget::~AlertToneAppletWidget ()
 
     delete m_ProfileIf;
     m_ProfileIf = 0;
-
-    delete m_volumeExtension;
-    m_volumeExtension = 0;
 }
 
 void
-AlertToneAppletWidget::createContents ()
+AlertToneAppletWidget::createContents()
 {
 	QGraphicsWidget       *centralWidget = this;
 	MLayout               *mainLayout;
@@ -132,16 +126,16 @@ AlertToneAppletWidget::createContents ()
     label->setText(qtTrId("qtn_sond_sounds"));
 #endif
 
-    /*
-     * Try to add the Status-Menus volume/profile chooser widget here
-     */
-    m_volumeExtension = new MApplicationExtensionArea ("com.meego.core.MStatusIndicatorMenuExtensionInterface/1.0");
-    m_volumeExtension->setInProcessFilter (QRegExp("/statusindicatormenu-volume.desktop$"));
-    m_volumeExtension->setOutOfProcessFilter (QRegExp("$^"));
-    bool volumeInitSuccess = m_volumeExtension->init ();
-    SYS_WARNING ("volume init success = %s", SYS_BOOL (volumeInitSuccess));
+#if 0
+    MSeparator            *spacer;
 
-    policy->addItem (m_volumeExtension);
+    /*
+     * Adding a spacer.
+     */
+    spacer = new MSeparator;
+    spacer->setStyleName ("CommonHeaderDividerInverted");
+    policy->addItem (spacer);
+#endif
 
     /*
      * A subtitle that shows 'Profile vibration'
@@ -154,7 +148,14 @@ AlertToneAppletWidget::createContents ()
      *
      */
     createProfileSwitches (policy, centralWidget);
-
+#if 0
+    /*
+     * Adding a spacer.
+     */
+    spacer = new MSeparator;
+    spacer->setStyleName ("CommonHeaderDividerInverted");
+    policy->addItem (spacer);
+#endif
     /*
      * A secondary title, it says 'Tones'
      */
@@ -168,7 +169,14 @@ AlertToneAppletWidget::createContents ()
      */
 	m_tones = createAlertTonesList(centralWidget);
 	policy->addItem(m_tones);
-
+#if 0
+    /*
+     * Adding a spacer.
+     */
+    spacer = new MSeparator;
+    spacer->setStyleName ("CommonHeaderDividerInverted");
+    policy->addItem (spacer);
+#endif
     /*
      * An other secondary title, that says 'Feedback'.
      */
@@ -178,6 +186,12 @@ AlertToneAppletWidget::createContents ()
             centralWidget, policy, 
             //% "Feedback"
             qtTrId("qtn_sond_feedback"));
+#if 0
+    m_FeedbackLabel = addTitleLabel (
+            centralWidget, policy, 
+            "CommonGroupHeaderPanelInverted", 
+            "CommonGroupHeaderInverted");
+#endif
 
     /*
      * The list with the feedback setting widgets.
@@ -300,18 +314,12 @@ AlertToneAppletWidget::createAlertTonesList (QGraphicsWidget *parent)
     /*
      * And then the list...
      */
-	for (int i = 0; i < m_alertTones.size (); i++)
-    {
+	for (int i = 0; i < m_alertTones.size(); i++) {
 		alertToneWidget = new AlertToneWidget (
-                m_alertTones[i], i, container);
+                m_alertTones[i], i, this, container);
 		alertToneWidget->setObjectName (
                 "AlertToneWidget_" + m_alertTones[i]->key());
-
-        // connect the widgets changeWidget signal
-        connect (alertToneWidget, SIGNAL (changeWidget (int)),
-                 this, SIGNAL (changeWidget (int)));
-
-		policy->addItem (alertToneWidget);
+		policy->addItem(alertToneWidget);
 	}
 
 	container->setObjectName ("MWidgetController_tones");

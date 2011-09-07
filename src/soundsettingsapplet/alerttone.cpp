@@ -23,7 +23,7 @@
 #include <profiled/libprofile.h>
 #endif
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 

@@ -16,32 +16,32 @@
 ** of this file.
 **
 ****************************************************************************/
+
 #ifndef _ALERT_TONE_TOPLEVEL_H_
 #define _ALERT_TONE_TOPLEVEL_H_
 
-class MAction;
+#include <MAction>
 #include <dcpwidget.h>
 #include <meegocontrolexport.h>
 
 class MC_EXPORT AlertToneToplevel : public DcpWidget
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
-    AlertToneToplevel (QGraphicsWidget *parent = 0);
+	AlertToneToplevel(QGraphicsWidget *parent = 0);
 
-    void setTitle (QString str);
-    QString title () const;
+	void setTitle(QString str);
+	QString title() const;
 
-    Q_DECL_DEPRECATED void setViewMenuItems (QVector<MAction *>viewMenuItems);
-    Q_DECL_DEPRECATED QVector<MAction *>viewMenuItems () const;
+	void setViewMenuItems(QVector<MAction *>viewMenuItems);
+	QVector<MAction *>viewMenuItems() const;
 
-    void emit_changeWidget (int widgetId);
+	void emit_changeWidget(int widgetId);
 
 private:
-    QString             m_title;
-    QVector<MAction *>  m_viewMenuItems;
+	QString m_title;
+	QVector<MAction *> m_viewMenuItems;
 };
 
-#endif
-
+#endif /* !_ALERT_TONE_TOPLEVEL_H_ */

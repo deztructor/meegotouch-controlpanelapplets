@@ -16,44 +16,44 @@
 ** of this file.
 **
 ****************************************************************************/
+
+#include <QDebug>
 #include "alerttonetoplevel.h"
 
-AlertToneToplevel::AlertToneToplevel (QGraphicsWidget *parent) :
-    DcpWidget (parent)
+AlertToneToplevel::AlertToneToplevel(QGraphicsWidget *parent):
+	DcpWidget(parent)
 {
-
 }
 
 void
-AlertToneToplevel::emit_changeWidget (int widgetId)
+AlertToneToplevel::emit_changeWidget(int widgetId)
 {
-    emit changeWidget (widgetId);
+	emit changeWidget(widgetId);
 }
 
 void
-AlertToneToplevel::setTitle (QString str)
+AlertToneToplevel::setTitle(QString str)
 {
-    m_title = str;
+	m_title = str;
 }
 
 QString
-AlertToneToplevel::title () const
+AlertToneToplevel::title() const
 {
-    return qtTrId (m_title.toUtf8 ().constData ());
+	return qtTrId(m_title.toUtf8().constData());
 }
 
 /*!
  * These methods that are handling menu items are obsolete...
  */
 void
-AlertToneToplevel::setViewMenuItems (QVector<MAction *> viewMenuItems)
+AlertToneToplevel::setViewMenuItems(QVector<MAction *> viewMenuItems)
 {
-    m_viewMenuItems = viewMenuItems;
+	m_viewMenuItems = viewMenuItems;
 }
 
 QVector<MAction *>
-AlertToneToplevel::viewMenuItems () const
+AlertToneToplevel::viewMenuItems() const
 {
-    return m_viewMenuItems;
+	return m_viewMenuItems;
 }
-

@@ -86,8 +86,8 @@ private:
 
     AlertTone                       *m_tone;
     MLabel                          *m_TitleLabel;
-    RightArrowItem                  *m_my_music;
-    RightArrowItem                  *m_ovi_store;
+    RightArrowItem                   *m_my_music;
+    RightArrowItem                   *m_ovi_store;
 
     QGraphicsLinearLayout           *m_MainLayout;
     AlertToneDefaults               *m_defaults;
