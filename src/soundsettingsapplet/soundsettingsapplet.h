@@ -28,28 +28,31 @@ class MAction;
 
 class Q_DECL_EXPORT SoundSettingsApplet : public QObject, public DcpAppletIf
 {
-	Q_OBJECT
-	Q_INTERFACES (DcpAppletIf)
+Q_OBJECT
+Q_INTERFACES (DcpAppletIf)
 
 public:
-	SoundSettingsApplet ();
-	~SoundSettingsApplet ();
+    SoundSettingsApplet ();
+    ~SoundSettingsApplet ();
 
-	static const int AlertToneAppletWidget_id = 0;
-	static const int AlertToneBrowser_id = 1;
+    static const int AlertToneAppletWidget_id = 0;
+    static const int AlertToneBrowser_id = 1;
 
-	virtual void init ();
-	virtual DcpWidget* constructWidget (int widgetId);
-	virtual QString title () const;
-	virtual QVector<MAction *> viewMenuItems ();
-	virtual DcpBrief* constructBrief (int partId);
+    virtual void init ();
+    virtual QString title () const;
+
+    virtual DcpBrief* constructBrief (int partId);
+    virtual DcpStylableWidget *constructStylableWidget (int widgetId);
+
+    // deprecated
+    virtual QVector<MAction *> viewMenuItems ();
 
 public slots:
-	void toplevelDestroyed (QObject *goner);
+    void toplevelDestroyed (QObject *goner);
 
 private:
-	QStack<AlertToneToplevel *> m_stack;
-	QList<AlertTone *>          m_alertTones;
+    QStack<DcpStylableWidget *>     m_stack;
+    QList<AlertTone *>              m_alertTones;
 
 #ifdef UNIT_TEST
     friend class Ut_SoundSettingsAppletTests;
