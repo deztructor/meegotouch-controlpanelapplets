@@ -29,7 +29,6 @@
 
 class MLabel;
 class MLinearLayoutPolicy;
-class MApplicationExtensionArea;
 
 class AlertToneAppletWidget : public AlertToneToplevel
 {
@@ -61,7 +60,6 @@ class AlertToneAppletWidget : public AlertToneToplevel
         QPointer<ProfileDataInterface>   m_ProfileIf;
         MWidgetController               *m_tones;
         MWidgetController               *m_feedback;
-        MApplicationExtensionArea       *m_volumeExtension;
 
 #ifdef UNIT_TEST
     friend class Ut_AlertToneAppletWidgetTests;

@@ -18,8 +18,6 @@
 ****************************************************************************/
 #include "alerttoneappletwidget.h"
 
-#include <QSet>
-#include <MApplicationExtensionArea>
 #include <MLayout>
 #include <MLabel>
 #include <MLinearLayoutPolicy>
@@ -67,6 +65,8 @@ createEmptyContainer(
 /******************************************************************************
  * AlertToneAppletWidget implementation
  */
+#include <QSet>
+
 AlertToneAppletWidget::AlertToneAppletWidget (
         QList<AlertTone *>    alertTones, 
         QGraphicsWidget      *parent):
@@ -97,9 +97,6 @@ AlertToneAppletWidget::~AlertToneAppletWidget ()
 
     delete m_ProfileIf;
     m_ProfileIf = 0;
-
-    delete m_volumeExtension;
-    m_volumeExtension = 0;
 }
 
 void
@@ -129,15 +126,16 @@ AlertToneAppletWidget::createContents()
     label->setText(qtTrId("qtn_sond_sounds"));
 #endif
 
-    /*
-     * Try to add the Status-Menus volume/profile chooser widget here
-     */
-    m_volumeExtension = new MApplicationExtensionArea ("com.meego.core.MStatusIndicatorMenuExtensionInterface/1.0");
-    m_volumeExtension->setInProcessFilter (QRegExp("/statusindicatormenu-volume.desktop$"));
-    m_volumeExtension->setOutOfProcessFilter (QRegExp("$^"));
-    m_volumeExtension->init ();
+#if 0
+    MSeparator            *spacer;
 
-    policy->addItem (m_volumeExtension);
+    /*
+     * Adding a spacer.
+     */
+    spacer = new MSeparator;
+    spacer->setStyleName ("CommonHeaderDividerInverted");
+    policy->addItem (spacer);
+#endif
 
     /*
      * A subtitle that shows 'Profile vibration'
