@@ -3,7 +3,7 @@ set -e
 # Yes, this is a HACK:
 CSS_DIR=/usr/share/themes/blanco/meegotouch/duicontrolpanel/style
 CSS_FILE=duicontrolpanel.css
-MYCSS_FILE=soundsettings.css
+MYCSS_FILE=soundsettingsapplet.css
 
 mkdir -p $CSS_DIR || true
 touch $CSS_DIR/$CSS_FILE
