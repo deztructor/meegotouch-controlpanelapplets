@@ -1,13 +1,14 @@
-#AlertToneDefaults
+AlertToneAppletWidget MApplicationExtensionAreaStyle#VolumeExtensionArea
 {
-	margin-left: 0;
-	margin-top: 0;
-	margin-right: 0;
-	margin-bottom: 0;
+    background-image: ;
+    background-color: $COLOR_INVERTED_BACKGROUND;
+
+    container-mode: false;
+    layout-orientation: vertical;
 }
 
-#MApplicationWindow {
+#MApplicationWindow
+{
     tool-bar-style-name: "MToolBarStyleInverted";
-    /*toolbar-style-name: "MToolbarStyleInverted";*/
 }
 

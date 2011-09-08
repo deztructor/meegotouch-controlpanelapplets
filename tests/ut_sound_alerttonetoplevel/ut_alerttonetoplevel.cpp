@@ -18,6 +18,7 @@
 ****************************************************************************/
 #include "ut_alerttonetoplevel.h"
 
+#include <MAction>
 #include <MApplication>
 #include <QString>
 #include <QStringList>

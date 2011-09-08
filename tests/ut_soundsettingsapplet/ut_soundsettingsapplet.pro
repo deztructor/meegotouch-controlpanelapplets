@@ -58,7 +58,8 @@ HEADERS +=                                  \
     $$SRC_PREFIX/gconfstringcombo.h         \
     $$SRC_PREFIX/profileintcombo.h          \
     $$SRC_PREFIX/static.h                   \
-    $$SRC_PREFIX/soundsettingsapplet.h
+    $$SRC_PREFIX/soundsettingsapplet.h      \
+    $$SRC_PREFIX/alerttonebrowserstylable.h
 
 SOURCES +=                                  \
     ut_soundsettingsapplet.cpp              \
@@ -82,7 +83,8 @@ SOURCES +=                                  \
     $$SRC_PREFIX/qprofilevalue.cpp          \
     $$SRC_PREFIX/gconfstringcombo.cpp       \
     $$SRC_PREFIX/profileintcombo.cpp        \
-    $$SRC_PREFIX/soundsettingsapplet.cpp
+    $$SRC_PREFIX/soundsettingsapplet.cpp    \
+    $$SRC_PREFIX/alerttonebrowserstylable.cpp
 
 INSTALLS += target
 

@@ -103,6 +103,11 @@ DESTDIR = lib
 css.path += $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libsoundsettingsapplet/style
 css.files = libsoundsettingsapplet.css
 
+# XXX: HACK:
+# This file will be added as an import to duicontrolpanels css file in postinst script
+harmattancss.path += $$(DEBIAN_DESTDIR)/usr/share/themes/blanco/meegotouch/duicontrolpanel/style
+harmattancss.files += soundsettingsapplet.css
+
 desktopsrc = soundsettingsapplet.desktop.harmattan
 contains(DEFINES, MEEGO) {
     desktopsrc = soundsettingsapplet.desktop.meego
@@ -118,5 +123,6 @@ target.path += $$(DEBIAN_DESTDIR)/$$DCP_APPLET_DIR
 INSTALLS += \
     target  \
     desktop \
-    css
+    css \
+    harmattancss
 

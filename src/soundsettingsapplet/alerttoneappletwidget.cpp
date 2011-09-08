@@ -35,6 +35,9 @@ using namespace QtMobility;
 #include "profiledatainterface.h"
 #include "profilecontainer.h"
 
+#include <MWidgetCreator>
+M_REGISTER_WIDGET_NO_CREATE(AlertToneAppletWidget)
+
 #include "../styles.h"
 
 #define DEBUG
@@ -138,8 +141,9 @@ AlertToneAppletWidget::createContents ()
     m_volumeExtension = new MApplicationExtensionArea ("com.meego.core.MStatusIndicatorMenuExtensionInterface/1.0");
     m_volumeExtension->setInProcessFilter (QRegExp("/statusindicatormenu-volume.desktop$"));
     m_volumeExtension->setOutOfProcessFilter (QRegExp("$^"));
-    bool volumeInitSuccess = m_volumeExtension->init ();
-    SYS_WARNING ("volume init success = %s", SYS_BOOL (volumeInitSuccess));
+    m_volumeExtension->setObjectName ("VolumeExtensionArea");
+    m_volumeExtension->setStyleName ("VolumeExtensionArea");
+    m_volumeExtension->init ();
 
     policy->addItem (m_volumeExtension);
 

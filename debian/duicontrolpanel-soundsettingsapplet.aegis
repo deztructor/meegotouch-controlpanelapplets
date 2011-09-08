@@ -5,5 +5,9 @@
     <for path="duicontrolpanel::/usr/bin/duicontrolpanel.launch" />
     <for path="applauncherd-launcher::/usr/bin/applauncherd.bin" />
   </request>
+  <request context="INSTALL">
+    <credential name="CAP::chown" />
+    <credential name="CAP::dac_override" />
+  </request>
 </aegis>
 

@@ -29,19 +29,19 @@ class Ut_SoundSettingsAppletTests : public QObject
 Q_OBJECT
 
 private slots:
-      void init(){};
-      void cleanup(){};
-      void initTestCase();
-      void cleanupTestCase();
+      void init (){};
+      void cleanup (){};
+      void initTestCase ();
+      void cleanupTestCase ();
       void soundsettingsappletConstructor ();
       void soundsettingsappletconstructWidget ();
-      void soundsettingsappletinit();
-      void soundsettingsapplettitle();
-      void soundsettingsappletviewMenuItems();
-      void soundsettingsappletToplevelDestroyed();
+      void soundsettingsappletinit ();
+      void soundsettingsapplettitle ();
+      void soundsettingsappletviewMenuItems ();
+      void soundsettingsappletToplevelDestroyed ();
+
 private:
-      MApplication * m_App;
-private slots:
+      MApplication      *m_App;
 };
 
 #endif
