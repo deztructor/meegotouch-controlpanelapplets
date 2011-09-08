@@ -136,6 +136,14 @@ AlertToneAppletWidget::createContents ()
 #endif
 
     /*
+     * A subtitle that shows 'Profile vibration'
+     */
+    addSubTitle (
+            centralWidget, policy,
+            //% "Vibration profile"
+            qtTrId("qtn_prof_vibration"));
+
+    /*
      * Try to add the Status-Menus volume/profile chooser widget here
      */
     m_volumeExtension = new MApplicationExtensionArea ("com.meego.core.MStatusIndicatorMenuExtensionInterface/1.0");
@@ -148,14 +156,7 @@ AlertToneAppletWidget::createContents ()
     policy->addItem (m_volumeExtension);
 
     /*
-     * A subtitle that shows 'Profile vibration'
-     */
-    addSubTitle (
-            centralWidget, policy,
-            //% "Vibration profile"
-            qtTrId("qtn_prof_vibration"));
-    /*
-     *
+     * Add the profie vibration switches...
      */
     createProfileSwitches (policy, centralWidget);
 

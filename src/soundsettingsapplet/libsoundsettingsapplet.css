@@ -2,9 +2,26 @@ AlertToneAppletWidget MApplicationExtensionAreaStyle#VolumeExtensionArea
 {
     background-image: ;
     background-color: $COLOR_INVERTED_BACKGROUND;
+    /* align it to center */
+    margin-left: 16px;
+    margin-right: 16px;
 
     container-mode: false;
     layout-orientation: vertical;
+}
+
+AlertToneAppletWidget VolumeBarStyle
+{
+    /* media volume */
+    minimum-size: 44.8mm 3.0mm;
+    maximum-size: 44.8mm 3.0mm;
+}
+
+AlertToneAppletWidget ProfileVolumeBarStyle
+{
+    /* profile volume */
+    minimum-size: 44.8mm 3.0mm;
+    maximum-size: 44.8mm 3.0mm;
 }
 
 #MApplicationWindow
