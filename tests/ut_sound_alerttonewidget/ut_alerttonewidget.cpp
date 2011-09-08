@@ -96,7 +96,7 @@ Ut_AlertToneWidgetTests::alerttonewidgetClicked()
 {
       AlertTone         at ("email.alert.tone");
       AlertToneWidget   atw (&at, 1, 0);
-      QSignalSpy        spy (&at, SIGNAL (changeWidget (int)));
+      QSignalSpy        spy (&atw, SIGNAL (changeWidget (int)));
 
       atw.click ();
 

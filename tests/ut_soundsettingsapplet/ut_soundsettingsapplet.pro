@@ -84,7 +84,8 @@ SOURCES +=                                  \
     $$SRC_PREFIX/gconfstringcombo.cpp       \
     $$SRC_PREFIX/profileintcombo.cpp        \
     $$SRC_PREFIX/soundsettingsapplet.cpp    \
-    $$SRC_PREFIX/alerttonebrowserstylable.cpp
+    $$SRC_PREFIX/alerttonebrowserstylable.cpp \
+    $$STUB_PREFIX/mapplicationextensionarea_stub.cpp
 
 INSTALLS += target
 

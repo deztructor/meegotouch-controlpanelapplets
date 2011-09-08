@@ -262,7 +262,7 @@ Ft_Applets::testofflineapplet ()
 void
 Ft_Applets::testsoundsettingsapplet ()
 {
-    doAppletTest ("libsoundsettingsapplet.so", false);
+    doAppletTest ("libsoundsettingsapplet.so", false, HaveStylableView);
 }
 
 
