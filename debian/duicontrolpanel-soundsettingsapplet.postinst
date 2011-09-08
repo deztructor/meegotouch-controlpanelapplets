@@ -12,7 +12,7 @@ if cat $CSS_DIR/$CSS_FILE | grep $MYCSS_FILE > /dev/null; then
   echo "Okay!"
 else
   echo "Patching CSS."
-  echo "@import \"soundsettings.css\";" >> $CSS_DIR/$CSS_FILE
+  echo "@import \"$MYCSS_FILE\";" >> $CSS_DIR/$CSS_FILE
 fi
 
 #DEBHELPER#
