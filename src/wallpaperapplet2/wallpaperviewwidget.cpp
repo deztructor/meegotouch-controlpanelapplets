@@ -67,7 +67,8 @@ WallpaperViewWidget::WallpaperViewWidget (
     m_HasPendingSave (false),
     m_Physics (0),
     m_SupportPanEdit (false),
-    m_SupportPinchEdit (false)
+    m_SupportPinchEdit (false),
+    m_FullScreen (false)
 {
     MWindow *win = MApplication::activeWindow ();
 
@@ -709,8 +710,12 @@ void
 WallpaperViewWidget::mousePressEvent (
         QGraphicsSceneMouseEvent *event)
 {
+    SYS_WARNING ("");
     Q_UNUSED (event);
     m_Physics->stop();
+
+    m_FullScreen = !m_FullScreen;
+    emit fullScreenRequest (m_FullScreen);
 }
 
 /*******************************************************************************

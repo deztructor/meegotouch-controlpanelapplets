@@ -64,6 +64,10 @@ WallpaperEditorSheet::createCentralWidget(
 
     SYS_DEBUG ("setCentralWidget(%p)", m_EditorWidget);
     setCentralWidget (m_EditorWidget);
+
+    connect (m_EditorWidget, SIGNAL(fullScreenRequest(bool)),
+            this, SLOT(fullScreenRequest(bool)));
+
     SYS_DEBUG ("end");
 }
 
@@ -86,6 +90,7 @@ WallpaperEditorSheet::createHeaderWidget()
     basicHeader->setNegativeAction (cancelAction);
 
     setHeaderWidget(basicHeader);
+
 }
 
 void
@@ -126,3 +131,11 @@ WallpaperEditorSheet::wallpaperSaved ()
     m_Saving = false;
     dismiss ();
 }
+
+void
+WallpaperEditorSheet::fullScreenRequest (
+        bool fullScreen)
+{
+    setHeaderVisible (!fullScreen);
+}
+

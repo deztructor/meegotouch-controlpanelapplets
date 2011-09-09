@@ -44,7 +44,8 @@ class WallpaperEditorSheet : public MSheet
         void doneActivated ();
         void cancelActivated ();
         void wallpaperSaved ();
-
+        void fullScreenRequest (bool fullScreen);
+        
     private:
         WallpaperViewWidget  *m_EditorWidget;
         bool                  m_Saving;

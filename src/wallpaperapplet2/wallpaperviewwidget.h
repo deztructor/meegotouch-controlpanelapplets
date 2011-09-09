@@ -51,6 +51,7 @@ class WallpaperViewWidget : public DcpStylableWidget
     signals:
         void doneClicked ();
         void cancelClicked ();
+        void fullScreenRequest (bool fullScreen);
 
     protected:
         virtual void applyStyle ();
@@ -154,6 +155,7 @@ class WallpaperViewWidget : public DcpStylableWidget
             QPropertyAnimation    m_RotateAnimation;
             bool                  m_SupportPanEdit;
             bool                  m_SupportPinchEdit;
+            bool                  m_FullScreen;
 
         friend class Ut_WallpaperEditorWidget;
 };
