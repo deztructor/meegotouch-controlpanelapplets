@@ -16,40 +16,26 @@
 ** of this file.
 **
 ****************************************************************************/
-#ifndef _ALERT_TONE_WIDGET_H_
-#define _ALERT_TONE_WIDGET_H_
+#ifndef _ALERTTONEBROWSERSTYLABLE_H
+#define _ALERTTONEBROWSERSTYLABLE_H
 
-#include "alerttone.h"
-#include "drilldownitem.h"
+#include <dcpstylablewidget.h>
 
-class AlertToneWidget : public RightArrowItem
+class AlertTone;
+class AlertToneBrowser;
+
+class AlertToneBrowserStylable : public DcpStylableWidget
 {
 Q_OBJECT
-
 public:
-	AlertToneWidget (
-            AlertTone             *tone,
-            int                    idx,
-            QGraphicsItem         *parent = 0);
+    AlertToneBrowserStylable (AlertTone *tone, QGraphicsWidget *parent = 0);
+    ~AlertToneBrowserStylable ();
 
-private slots:
-    void alertToneChanged ();
-    void clicked ();
-
-signals:
-    void changeWidget (int widgetId);
-
-protected:
-    void retranslateUi ();
+    virtual bool pagePans () const;
+    virtual QString title () const;
 
 private:
-	AlertTone   *m_tone;
-	int          m_idx;
-
-#ifdef UNIT_TEST
-    friend class Ut_AlertToneWidgetTests;
-#endif
+    AlertToneBrowser    *m_browser;
 };
 
 #endif
-

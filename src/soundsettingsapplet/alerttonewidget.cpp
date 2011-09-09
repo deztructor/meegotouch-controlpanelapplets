@@ -16,12 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
-#include <QDebug>
-#include <MImageWidget>
-#include <MLabel>
-#include <QGraphicsGridLayout>
-
 #include "alerttonewidget.h"
 #include "alerttoneappletmaps.h"
 #include "soundsettingsapplet.h"
@@ -33,42 +27,41 @@
 AlertToneWidget::AlertToneWidget (
         AlertTone           *tone, 
         int                  idx, 
-        AlertToneToplevel   *changer, 
         QGraphicsItem       *parent) :
     RightArrowItem (MBasicListItem::TitleWithSubtitle, parent),
-	m_tone(tone),
-	m_changer(changer),
-	m_idx(idx)
+	m_tone (tone),
+	m_idx (idx)
 {
     /*
-     *
+     * Connect to signals
      */
-	connect (m_tone, SIGNAL(changed()), 
-            this, SLOT(alertToneChanged()));
-	connect (m_tone, SIGNAL(refreshed()), 
-            this, SLOT(alertToneChanged()));
-	connect(this, SIGNAL(clicked()), 
-            this, SLOT(clicked()));
+	connect (m_tone, SIGNAL (changed ()), SLOT (alertToneChanged ()));
+	connect (m_tone, SIGNAL (refreshed ()), SLOT (alertToneChanged ()));
+	connect (this, SIGNAL (clicked ()), SLOT (clicked ()));
 	
-    setProperty ("title", AlertToneAppletMaps::mapToUiString(m_tone->key()));
-	setProperty ("subtitle", QVariant(m_tone->niceName()));
+    setProperty ("title", AlertToneAppletMaps::mapToUiString (m_tone->key ()));
+	setProperty ("subtitle", QVariant (m_tone->niceName ()));
 }
 
 void
-AlertToneWidget::alertToneChanged()
+AlertToneWidget::alertToneChanged ()
 {
     SYS_DEBUG ("");
-	setProperty("subtitle", QVariant(m_tone->niceName()));
+	setProperty ("subtitle", QVariant (m_tone->niceName ()));
 }
 
 void
-AlertToneWidget::clicked()
+AlertToneWidget::clicked ()
 {
-	m_changer->emit_changeWidget((SoundSettingsApplet::AlertToneBrowser_id * 65536) + m_idx);
+    int dcpWidgetId = 
+        (SoundSettingsApplet::AlertToneBrowser_id * 65536) + m_idx;
+
+    emit changeWidget (dcpWidgetId);
 }
 
 void
-AlertToneWidget::retranslateUi()
+AlertToneWidget::retranslateUi ()
 {
-	setProperty ("title", AlertToneAppletMaps::mapToUiString(m_tone->key()));
+	setProperty ("title", AlertToneAppletMaps::mapToUiString (m_tone->key ()));
 }
+

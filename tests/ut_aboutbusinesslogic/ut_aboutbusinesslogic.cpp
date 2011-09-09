@@ -32,10 +32,15 @@
 #include <QSystemNetworkInfo>
 #include <QNetworkInterface>
 
+#include <QFile>
+#include <QIODevice>
+
+
 #include <MApplication>
 
 #define DEBUG
 #include "../../src/debug.h"
+
 
 /******************************************************************************
  * Stubbing the QNetworkInfo
@@ -170,6 +175,8 @@ Ut_AboutBusinessLogic::testOsName ()
 
     name = m_Api->osName();
     QCOMPARE (name, QString ("qtn_prod_sw_version"));
+
+    
 }
 
 void
@@ -184,7 +191,17 @@ Ut_AboutBusinessLogic::testOsVersion ()
 
     // check the LSB release file version
     systeminfo_firmware_retval = "";
-    QVERIFY (name != m_Api->osVersion ());
+    system("echo  'DISTRIB_ID=Ubuntu' > ./testfile");
+    system("echo  'DISTRIB_RELEASE=11.04' >> ./testfile");
+    system("echo  'DISTRIB_ID=Ubuntu' >> ./testfile");
+    
+    name = m_Api->osVersion("./testfile");
+    qDebug() << qPrintable(m_Api->osVersion("./testfile"));
+    
+    QVERIFY (name.contains (QString ("11.04")));
+    system ("rm -f ./testfile");
+	  
+
 }
 
 void
@@ -252,6 +269,22 @@ Ut_AboutBusinessLogic::testHwAddresses ()
 
     QCOMPARE (m_Api->WiFiAddress (), qnetworkinterface_hwaddr);
 }
+
+void
+Ut_AboutBusinessLogic::testLicenseText ()
+{
+    system ("echo 'testtext' > /usr/share/about-contents/testlicensefile");
+    m_Api->m_licenseFile = QString ("testlicensefile");
+    
+    QCOMPARE (m_Api->licenseText (), QString ("testtext\n"));
+    system ("rm /usr/share/about-contents/testlicensefile");
+
+    //check what if the file  doesn't exist
+    QCOMPARE (m_Api->licenseText (), QString ("qtn_prod_legal"));
+    
+}
+
+
 
 /**
  * Check that all mandatory informations are passed

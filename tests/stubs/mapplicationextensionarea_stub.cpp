@@ -4,7 +4,7 @@
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
-** This file is part of meegotouch-controlpanelsoundsettingsapplet.
+** This file is part of meegotouch-controlpanelapplets.
 **
 ** If you have questions regarding the use of this file, please contact
 ** Nokia at directui@nokia.com.
@@ -16,40 +16,37 @@
 ** of this file.
 **
 ****************************************************************************/
-#ifndef _ALERT_TONE_WIDGET_H_
-#define _ALERT_TONE_WIDGET_H_
+#include <MApplicationExtensionArea>
 
-#include "alerttone.h"
-#include "drilldownitem.h"
-
-class AlertToneWidget : public RightArrowItem
+MApplicationExtensionArea::MApplicationExtensionArea (
+        const QString       &interface,
+        QGraphicsItem       *parent)
 {
-Q_OBJECT
+    Q_UNUSED (interface);
+    Q_UNUSED (parent);
+}
 
-public:
-	AlertToneWidget (
-            AlertTone             *tone,
-            int                    idx,
-            QGraphicsItem         *parent = 0);
+MApplicationExtensionArea::~MApplicationExtensionArea ()
+{
 
-private slots:
-    void alertToneChanged ();
-    void clicked ();
+}
 
-signals:
-    void changeWidget (int widgetId);
+void
+MApplicationExtensionArea::setInProcessFilter (
+       const QRegExp       &inProcessFilter)
+{
+    Q_UNUSED (inProcessFilter);
+}
+void
+MApplicationExtensionArea::setOutOfProcessFilter (
+        const QRegExp       &outOfProcessFilter)
+{
+    Q_UNUSED (outOfProcessFilter);
+}
 
-protected:
-    void retranslateUi ();
-
-private:
-	AlertTone   *m_tone;
-	int          m_idx;
-
-#ifdef UNIT_TEST
-    friend class Ut_AlertToneWidgetTests;
-#endif
-};
-
-#endif
+bool
+MApplicationExtensionArea::init ()
+{
+    return true;
+}
 

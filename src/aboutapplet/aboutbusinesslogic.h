@@ -85,8 +85,8 @@ private slots:
 
 private:
     void initiateBluetoothQueries ();
-    QString osVersion ();
-    QString osName ();
+    QString osVersion (QString lsbFilePath = "/etc/lsb-release");
+    QString osName (QString lsbFilePath = "/etc/lsb-release");
     QString WiFiAddress ();
     QString IMEI ();
     QString productName ();

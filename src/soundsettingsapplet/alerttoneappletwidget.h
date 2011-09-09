@@ -16,50 +16,49 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #ifndef _ALERT_TONE_APPLET_WIDGET_H_
 #define _ALERT_TONE_APPLET_WIDGET_H_
 
+#include <dcpstylablewidget.h>
 #include <MWidgetController>
 #include <QPointer>
 
 #include "profiledatainterface.h"
-#include "alerttonetoplevel.h"
 #include "alerttone.h"
 
-class MLabel;
 class MLinearLayoutPolicy;
+class MApplicationExtensionArea;
 
-class AlertToneAppletWidget : public AlertToneToplevel
+class AlertToneAppletWidget : public DcpStylableWidget
 {
-    Q_OBJECT
+Q_OBJECT
 
-    public:
-        AlertToneAppletWidget (
-                QList<AlertTone *>  alertTones, 
-                QGraphicsWidget    *parent = 0);
-        ~AlertToneAppletWidget ();
+public:
+    AlertToneAppletWidget (
+            QList<AlertTone *>  alertTones,
+            QGraphicsWidget    *parent = 0);
+    ~AlertToneAppletWidget ();
 
+protected:
+    virtual void polishEvent ();
+    virtual void createContents ();
 
-    protected:
-        virtual void polishEvent ();
-        virtual void createContents();
+private slots:
+    void vibrationChanged (bool enabled);
 
-    private slots:
-        void vibrationChanged (bool enabled);
+private:
+    MWidgetController *createAlertTonesList (QGraphicsWidget *parent);
+    MWidgetController *createFeedbackList (QGraphicsWidget *parent);
+    void createProfileSwitches (
+            MLinearLayoutPolicy   *policy,
+            QGraphicsWidget       *parent);
 
-    private:
-        MWidgetController *createAlertTonesList (QGraphicsWidget *parent);
-        MWidgetController *createFeedbackList (QGraphicsWidget *parent);
-        void createProfileSwitches (
-                MLinearLayoutPolicy   *policy,
-                QGraphicsWidget       *parent);
-
-    private:
-        QList<AlertTone *>               m_alertTones;
-        QPointer<ProfileDataInterface>   m_ProfileIf;
-        MWidgetController               *m_tones;
-        MWidgetController               *m_feedback;
+private:
+    QList<AlertTone *>               m_alertTones;
+    QPointer<ProfileDataInterface>   m_ProfileIf;
+    MWidgetController               *m_tones;
+    MWidgetController               *m_feedback;
+    MApplicationExtensionArea       *m_volumeExtension;
 
 #ifdef UNIT_TEST
     friend class Ut_AlertToneAppletWidgetTests;

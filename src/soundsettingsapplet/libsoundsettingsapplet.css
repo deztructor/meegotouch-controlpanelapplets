@@ -1,13 +1,31 @@
-#AlertToneDefaults
+AlertToneAppletWidget MApplicationExtensionAreaStyle#VolumeExtensionArea
 {
-	margin-left: 0;
-	margin-top: 0;
-	margin-right: 0;
-	margin-bottom: 0;
+    background-image: ;
+    background-color: $COLOR_INVERTED_BACKGROUND;
+    /* align it to center */
+    margin-left: 16px;
+    margin-right: 16px;
+
+    container-mode: false;
+    layout-orientation: vertical;
 }
 
-#MApplicationWindow {
+AlertToneAppletWidget VolumeBarStyle
+{
+    /* media volume */
+    minimum-size: 44.8mm 3.0mm;
+    maximum-size: 44.8mm 3.0mm;
+}
+
+AlertToneAppletWidget ProfileVolumeBarStyle
+{
+    /* profile volume */
+    minimum-size: 44.8mm 3.0mm;
+    maximum-size: 44.8mm 3.0mm;
+}
+
+#MApplicationWindow
+{
     tool-bar-style-name: "MToolBarStyleInverted";
-    /*toolbar-style-name: "MToolbarStyleInverted";*/
 }
 

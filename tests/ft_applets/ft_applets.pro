@@ -3,11 +3,12 @@ include(../common_top.pri)
 TEMPLATE = app
 QT += testlib
 SRCDIR = ../../src
+STUBDIR = ../stubs
 INCLUDEPATH += $$SRCDIR
 
 CONFIG += \
-    meegotouchcore \
-    duicontrolpanel \
+    meegotouch \
+    duicontrolpanel
 
 TARGET = ft_applets
 target.path = /usr/lib/$$TEST_PKG_NAME
@@ -17,7 +18,8 @@ include($$[QT_INSTALL_DATA]/mkspecs/dcpconfig.pri)
 
 SOURCES += \
     $$SRCDIR/debug.cpp \
-    ft_applets.cpp
+    ft_applets.cpp \
+    $$STUBDIR/mapplicationextensionarea_stub.cpp
 
 HEADERS += \
     $$SRCDIR/debug.h \

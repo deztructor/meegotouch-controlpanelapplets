@@ -74,7 +74,8 @@ SOURCES +=                                    \
     $$SRC_PREFIX/gconfstringcombo.cpp \
     $$SRC_PREFIX/profileintcombo.cpp \
     $$SRC_PREFIX/qprofilevalue.cpp \
-    $$SRC_PREFIX/qtrackedvariant.cpp
+    $$SRC_PREFIX/qtrackedvariant.cpp \
+    $$STUB_PREFIX/mapplicationextensionarea_stub.cpp
 
 INSTALLS += target
 

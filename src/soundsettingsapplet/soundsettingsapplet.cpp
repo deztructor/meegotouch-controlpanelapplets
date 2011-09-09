@@ -22,8 +22,7 @@
 #include <MAction>
 
 #include "alerttone.h"
-#include "alerttonetoplevel.h"
-#include "alerttonebrowser.h"
+#include "alerttonebrowserstylable.h"
 #include "alerttoneappletwidget.h"
 
 // for freeing up the singletons
@@ -40,16 +39,17 @@
 M_LIBRARY
 #endif
 
-Q_EXPORT_PLUGIN2(soundsettingsapplet, SoundSettingsApplet)
+Q_EXPORT_PLUGIN2 (soundsettingsapplet, SoundSettingsApplet)
 
 int    gst_argc = 1;
 char** gst_argv = NULL;
 
-SoundSettingsApplet::SoundSettingsApplet()
+SoundSettingsApplet::SoundSettingsApplet ()
 {
+    SYS_WARNING ("****************");
 }
 
-SoundSettingsApplet::~SoundSettingsApplet()
+SoundSettingsApplet::~SoundSettingsApplet ()
 {
     gst_deinit ();
 
@@ -79,7 +79,7 @@ SoundSettingsApplet::~SoundSettingsApplet()
 }
 
 void
-SoundSettingsApplet::init()
+SoundSettingsApplet::init ()
 {
     SYS_DEBUG ("");
     gst_argv = new char*[2];
@@ -91,78 +91,81 @@ SoundSettingsApplet::init()
     m_alertTones = AlertTone::alertTones ();
 }
 
-/* widgetId: 0xaaaabbbb where 
-   0xaaaa is the widget ID and 
+/* widgetId: 0xaaaabbbb where
+   0xaaaa is the widget ID and
    0xbbbb is the alert tone index */
-DcpWidget *
-SoundSettingsApplet::constructWidget(int widgetId)
+DcpStylableWidget *
+SoundSettingsApplet::constructStylableWidget (int widgetId)
 {
     SYS_DEBUG ("%s: widgetId = %d", SYS_TIME_STR, widgetId);
-    AlertToneToplevel *newWidget = NULL;
+
+    DcpStylableWidget *newWidget = 0;
     int realWidgetId = widgetId / 65536;
-    int alertToneIdx = widgetId - realWidgetId * 65536;
 
-    if (m_stack.size() > 0)
-        if (((m_stack.top()->getWidgetId() / 65536) == AlertToneBrowser_id      && realWidgetId == AlertToneBrowser_id) ||
-            ((m_stack.top()->getWidgetId() / 65536) == AlertToneAppletWidget_id && realWidgetId != AlertToneBrowser_id))
-            return NULL;
+    if (realWidgetId == AlertToneAppletWidget_id)
+    {
+        /*
+         * Do not re-create the main view if it is on top already
+         */
+        if (m_stack.isEmpty () ||
+            qobject_cast<AlertToneAppletWidget*>(m_stack.top ()) == 0)
+            newWidget = new AlertToneAppletWidget (m_alertTones);
+    }
+    else if (realWidgetId == AlertToneBrowser_id)
+    {
+        /*
+         * Lets handle the AlertToneBrowser widgets here
+         */
+        int alertToneIdx = widgetId - realWidgetId * 65536;
 
-    if (AlertToneAppletWidget_id == realWidgetId)
-        newWidget = new AlertToneAppletWidget(m_alertTones);
-    else
-    if (AlertToneBrowser_id == realWidgetId && alertToneIdx >= 0 && alertToneIdx < m_alertTones.size())
-        newWidget = new AlertToneBrowser(m_alertTones[alertToneIdx]);
-    else
-        SYS_WARNING ("Invalid widgetId = %d", widgetId);
+        if (alertToneIdx >= 0 && alertToneIdx < m_alertTones.size ())
+            newWidget = new AlertToneBrowserStylable (m_alertTones[alertToneIdx]);
+    }
 
     if (newWidget)
     {
-        m_stack.push(newWidget);
+        m_stack.push (newWidget);
         connect (newWidget, SIGNAL (destroyed (QObject *)),
                  SLOT (toplevelDestroyed (QObject *)));
     }
 
-    SYS_DEBUG ("%s: done", SYS_TIME_STR);
     return newWidget;
 }
 
 void
-SoundSettingsApplet::toplevelDestroyed(QObject *goner)
+SoundSettingsApplet::toplevelDestroyed (QObject *goner)
 {
-    if (m_stack.size() > 0)
-        if (goner == qobject_cast<QObject *>(m_stack.top()))
-            m_stack.pop();
+    if (m_stack.size () == 0)
+        return;
+
+    if (goner == qobject_cast<QObject *> (m_stack.top ()))
+        m_stack.pop ();
 }
 
 QString
-SoundSettingsApplet::title() const
+SoundSettingsApplet::title () const
 {
     //% "Alert tones"
     QString title = qtTrId ("qtn_sond_sounds");
 
-    if ((m_stack.size() > 0) && (m_stack.top()))
-        title = qobject_cast<AlertToneToplevel *>(m_stack.top())->title();
+    if ((m_stack.size () > 0) && (m_stack.top ()))
+        title = qobject_cast<DcpStylableWidget *> (m_stack.top ())->title ();
 
     return title;
 }
 
-QVector<MAction*> 
-SoundSettingsApplet::viewMenuItems()
+QVector<MAction *>
+SoundSettingsApplet::viewMenuItems ()
 {
     QVector<MAction*> vector;
-
-    if (m_stack.size() > 0)
-        if (m_stack.top())
-            vector = qobject_cast<AlertToneToplevel *>(m_stack.top())->viewMenuItems();
 
     return vector;
 }
 
 DcpBrief *
-SoundSettingsApplet::constructBrief (
-        int partId)
+SoundSettingsApplet::constructBrief (int partId)
 {
     Q_UNUSED (partId);
-    return NULL;
+    return 0;
 }
 

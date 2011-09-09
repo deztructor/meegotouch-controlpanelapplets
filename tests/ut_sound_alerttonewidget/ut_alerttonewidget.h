@@ -16,7 +16,6 @@
 ** of this file.
 **
 ****************************************************************************/
-
 #ifndef UT_ALERTTONEWIDGET_H
 #define UT_ALERTTONEWIDGET_H
 
@@ -27,22 +26,18 @@
 class Ut_AlertToneWidgetTests : public QObject
 {
 Q_OBJECT
-public:
-      Ut_AlertToneWidgetTests(){m_App = 0;}
 private slots:
-      void init(){};
-      void cleanup(){};
-      void initTestCase();
-      void cleanupTestCase();
+      void init (){};
+      void cleanup (){};
+      void initTestCase ();
+      void cleanupTestCase ();
       void alerttonewidgetConstructor ();
-      void alerttonewidgetAlertToneChanged();
-      void alerttonewidgetRetranslateUi();
-      void alerttonewidgetClicked();
+      void alerttonewidgetAlertToneChanged ();
+      void alerttonewidgetRetranslateUi ();
+      void alerttonewidgetClicked ();
+
 private:
-      MApplication * m_App;
-      int  signalFlag;
-protected slots:
-      void  receiveSignal(int){signalFlag = 1;}
+      MApplication      *m_App;
 };
 
 #endif
