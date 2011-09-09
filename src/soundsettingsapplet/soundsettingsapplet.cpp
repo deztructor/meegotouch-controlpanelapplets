@@ -129,6 +129,7 @@ SoundSettingsApplet::constructStylableWidget (int widgetId)
                  SLOT (toplevelDestroyed (QObject *)));
     }
 
+    SYS_DEBUG ("%s [DONE]: widgetId = %d", SYS_TIME_STR, widgetId);
     return newWidget;
 }
 

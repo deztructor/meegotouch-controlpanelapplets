@@ -26,7 +26,7 @@
 #include "profiledatainterface.h"
 #include "alerttone.h"
 
-class MLinearLayoutPolicy;
+class QGraphicsLinearLayout;
 class MApplicationExtensionArea;
 
 class AlertToneAppletWidget : public DcpStylableWidget
@@ -50,8 +50,8 @@ private:
     MWidgetController *createAlertTonesList (QGraphicsWidget *parent);
     MWidgetController *createFeedbackList (QGraphicsWidget *parent);
     void createProfileSwitches (
-            MLinearLayoutPolicy   *policy,
-            QGraphicsWidget       *parent);
+            QGraphicsLinearLayout   *layout,
+            QGraphicsWidget         *parent);
 
 private:
     QList<AlertTone *>               m_alertTones;

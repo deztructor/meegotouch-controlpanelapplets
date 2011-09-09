@@ -22,44 +22,30 @@
 #include <QObject>
 #include <MBasicListItem>
 
-class QGraphicsWidget;
-class MLinearLayoutPolicy;
-
 /*!
  * A simple list item widget that supports inverted theme and drill down icon at
  * the right hand side.
  */
-class RightArrowItem : public MBasicListItem {
+class RightArrowItem : public MBasicListItem
+{
 Q_OBJECT
     
-    public:
-        RightArrowItem (
-                MBasicListItem::ItemStyle style = IconWithTitle, 
-                QGraphicsItem             *parent = NULL);
+public:
+    RightArrowItem (
+            MBasicListItem::ItemStyle style = IconWithTitle, 
+            QGraphicsItem             *parent = NULL);
 
-        void setTitleStyleName (const QString &styleName);
+     void setTitleStyleName (const QString &styleName);
 
-    protected:
-        virtual QGraphicsLayout *createLayout();
+protected:
+    virtual QGraphicsLayout *createLayout ();
 
-    private:
-        QString m_TitleStyleName;
+private:
+    QString m_TitleStyleName;
 
 #ifdef UNIT_TEST
     friend class Ut_DrillDownItem;
 #endif
 };
-
-void
-addSubTitle (
-        QGraphicsWidget     *parent,
-        MLinearLayoutPolicy *targetPolicy,
-        const QString       &subTitle);
-
-MLabel *
-addTitleLabel (
-        QGraphicsWidget     *parent,
-        MLinearLayoutPolicy *targetPolicy,
-        const char          *labelStyleName);
 
 #endif 
