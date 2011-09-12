@@ -206,8 +206,11 @@ finalize:
      * the same time we dismiss the cropper sheet the application window remains
      * black.
      */
+#ifdef HAVE_GALLERYCORE
     if (m_GalleryGridPage)
         m_GalleryGridPage->sheet().disappear();
+#endif
+
 #endif
     return success;
 }
@@ -487,14 +490,14 @@ WallpaperBusinessLogic::workerThreadFinishedSave ()
         m_PPItem->set (outputFile);
     }
 
+#ifdef HAVE_GALLERYCORE
     if (m_FullScreenPage) {
         SYS_DEBUG ("We have a GalleryFullScreenPage, we dismiss it.");
         endEdit ();
-        #ifdef HAVE_GALLERYCORE
         setProgressIndicator (false);
-        #endif
         m_FullScreenPage->sheet().disappear();
     }
+#endif
 
     emit wallpaperSaved ();
 

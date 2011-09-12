@@ -20,13 +20,16 @@
 **          Laszlo Pere <lpere@blumsoft.eu>
 **
 ****************************************************************************/
-#include <QtSparql>
-#include <TrackerLiveQuery>
-#include <gallerymodel.h>
-#include <QDebug>
 
 #include "wallpaperimagecontentprovider.h"
+
+#ifdef HAVE_GALLERYCORE
+
+#include <QtSparql>
+#include <TrackerLiveQuery>
+
 #include "wallpaperimagecontentprovider_p.h"
+#include <gallerymodel.h>
 
 static const QString liveQuery = "SELECT "
       "nie:url(?urn) AS ?url "
@@ -141,3 +144,4 @@ void ImageContentProviderPrivate::onInitialQueryFinished()
     mQueryRunning = false;
 }
 
+#endif // HAVE_GALLERYCORE
