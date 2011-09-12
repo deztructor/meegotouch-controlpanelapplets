@@ -30,8 +30,8 @@
  */
 #undef USE_ASYNC_LOADING
 
-#undef DEBUG
-#define WARNING
+//#define DEBUG
+//#define WARNING
 #include "../debug.h"
 
 /******************************************************************************

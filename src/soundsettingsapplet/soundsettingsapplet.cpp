@@ -30,7 +30,7 @@
 #include "trackerconnection.h"
 #include "profilebackend.h"
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 

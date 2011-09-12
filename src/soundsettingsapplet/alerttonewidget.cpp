@@ -20,7 +20,7 @@
 #include "alerttoneappletmaps.h"
 #include "soundsettingsapplet.h"
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 

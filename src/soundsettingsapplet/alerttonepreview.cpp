@@ -26,7 +26,7 @@ ResourcePolicy::ResourceSet   *resources = 0;
 ResourcePolicy::AudioResource *audioResource = 0;
 #endif
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 

@@ -39,7 +39,7 @@ M_REGISTER_WIDGET_NO_CREATE(AlertToneAppletWidget)
 
 #include "../styles.h"
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
