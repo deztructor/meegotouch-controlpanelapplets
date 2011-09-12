@@ -77,11 +77,13 @@ private slots:
 
     private:
         bool ensureHasDirectory (const QString &directoryPath);
-private:
-	QStack<QDir>                 m_dirStack;
-	QStack<unsigned int>         m_dirIdx;
-    QPointer<QFileSystemWatcher> m_FileWatcher;
-	bool                         m_isFinished;
+
+    private:
+    	QStack<QDir>                 m_dirStack;
+	    QStack<unsigned int>         m_dirIdx;
+        QPointer<QFileSystemWatcher> m_FileWatcher;
+	    bool                         m_isFinished;
+        QHash<QString, int>          m_FileNameCache;
 
 #ifdef UNIT_TEST
     friend class Ut_AlertToneDefaultsModelTests;

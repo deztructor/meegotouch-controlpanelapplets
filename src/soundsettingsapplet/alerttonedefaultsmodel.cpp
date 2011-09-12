@@ -226,6 +226,8 @@ AlertToneDefaultsModel::addSingleItem (
             myNiceName.toUtf8().constData(),
             fileName.toUtf8().constData(),
             forced ? "forced" : "");
+
+    m_FileNameCache[fileName] = row;
     setData (index(row, NiceNameColumn), QVariant(myNiceName));
     setData (index(row, FullPathColumn), QVariant(fileName));
     setData (index(row, ForcedColumn), QVariant(forced));
@@ -260,6 +262,19 @@ AlertToneDefaultsModel::findItemByFileName (
         const QString &FileName) const
 {
     int retval = -1;
+
+    if (m_FileNameCache.contains(FileName)) {
+        retval = m_FileNameCache[FileName];
+        goto finalize;
+    } else {
+        QString originalFile = 
+            TrackerConnection::instance()->getFileCopyOriginal (FileName);
+
+        if (!originalFile.isEmpty() && 
+                m_FileNameCache.contains(originalFile))
+            retval = m_FileNameCache[originalFile];
+    }
+#if 0
     for (int n = 0; n < rowCount(); ++n) {
         #if 0
         SYS_WARNING ("[%03d] %s ? %s => %s",
@@ -272,7 +287,9 @@ AlertToneDefaultsModel::findItemByFileName (
             break;
         }
     }
+#endif
 
+finalize:
     SYS_WARNING ("Returning %d", retval);
     return retval;
 }
@@ -456,7 +473,8 @@ void
 AlertToneDefaultsModel::moveItem(int from, int destination)
 {
     SYS_DEBUG("move item from %d to %d", from, destination);
-
+    QString  destFileName = 
+        data (index(destination, FullPathColumn)).toString();
     QVariant niceName = data (index(from, NiceNameColumn));
     QVariant fileName = data (index(from, FullPathColumn));
     QVariant forced   = data (index(from, ForcedColumn));
@@ -464,6 +482,8 @@ AlertToneDefaultsModel::moveItem(int from, int destination)
     removeRow(from);
     insertRow(destination);
 
+    m_FileNameCache.remove (destFileName);
+    m_FileNameCache[fileName.toString()] = destination;
     setData (index(destination, NiceNameColumn), QVariant(niceName));
     setData (index(destination, FullPathColumn), QVariant(fileName));
     setData (index(destination, ForcedColumn),   QVariant(forced));
