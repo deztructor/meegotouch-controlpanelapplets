@@ -175,7 +175,7 @@ PercentageContainer::updateRemainingTime (
                     formatTime(remainingIdle));
     }
 
-    if (! labelText.isEmpty ())
+    if (m_SubTextLabel)
         m_SubTextLabel->setText (labelText);
 }
 
