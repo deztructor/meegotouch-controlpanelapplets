@@ -23,8 +23,6 @@
 #include <MImageWidget>
 #include <QGraphicsGridLayout>
 #include <QGraphicsLinearLayout>
-#include <MLinearLayoutPolicy>
-#include <MSeparator>
 
 #include "../styles.h"
 
@@ -54,7 +52,7 @@ RightArrowItem::createLayout()
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
 
-    titleLabel =  titleLabelWidget ();
+    titleLabel = titleLabelWidget ();
     titleLabel->setWordWrap (true);
 
     drillIconWidget = new MImageWidget ("icon-m-common-drilldown-arrow-inverse");
@@ -148,67 +146,4 @@ RightArrowItem::setTitleStyleName (
 {
     m_TitleStyleName = styleName;
 }
-
-/******************************************************************************
- *
- */
-void
-addSubTitle (
-        QGraphicsWidget     *parent,
-        MLinearLayoutPolicy *targetPolicy,
-        const QString       &subTitle)
-{
-    MWidgetController       *container;
-    QGraphicsLinearLayout   *layout;
-    MLabel                  *label;
-    MSeparator              *separator;
-
-    container = new MWidgetController (parent);
-    container->setContentsMargins (0., 0., 0., 0.);
-    container->setStyleName (SUBTITLE_PANEL_STYLE_NAME);
-    
-    layout = new QGraphicsLinearLayout (Qt::Horizontal);
-    layout->setContentsMargins (0., 0., 0., 0.);
-    layout->setSpacing (0.);
-    /*
-     *
-     */
-    separator = new MSeparator;
-    separator->setStyleName (SUBTITLE_DIVIDER_STYLE_NAME);
-
-    /*
-     *
-     */
-    label = new MLabel (subTitle);
-    label->setStyleName (SUBTITLE_LABEL_STYLE_NAME);
-    
-
-    layout->addItem (separator);
-    layout->setStretchFactor (separator, 2);
-
-    layout->addItem (label);
-    layout->setAlignment (label, Qt::AlignLeft);
-    layout->setStretchFactor (label, 0);
-
-    container->setLayout (layout);
-    targetPolicy->addItem (container);
-}
-
-MLabel *
-addTitleLabel (
-        QGraphicsWidget     *parent,
-        MLinearLayoutPolicy *targetPolicy,
-        const char          *labelStyleName)
-{
-    Q_UNUSED (parent);
-    MLabel                  *label;
-
-    label = new MLabel;
-    label->setStyleName (labelStyleName);
-
-    targetPolicy->addItem (label);
-    return label;
-}
-
-
 

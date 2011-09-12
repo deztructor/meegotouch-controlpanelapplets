@@ -20,9 +20,8 @@
 
 #include <QSet>
 #include <MApplicationExtensionArea>
-#include <MLayout>
 #include <MLabel>
-#include <MLinearLayoutPolicy>
+#include <QGraphicsLinearLayout>
 #include <MSeparator>
 #include <MApplicationPage>
 #include <QSystemDeviceInfo>
@@ -49,22 +48,76 @@ M_REGISTER_WIDGET_NO_CREATE(AlertToneAppletWidget)
  */
 static MWidgetController *
 createEmptyContainer(
-        QGraphicsWidget      *parent, 
-        MLinearLayoutPolicy **p_policy)
+        QGraphicsWidget          *parent,
+        QGraphicsLinearLayout   **layout)
 {
-	MWidgetController *container = new MWidgetController (parent);
-	MLayout           *layout;
+    MWidgetController       *container =
+        new MWidgetController (parent);
 
     container->setContentsMargins (0., 0., 0., 0.);
 
-	layout = new MLayout (container);
+    (*layout) = new QGraphicsLinearLayout (Qt::Vertical);
+    (*layout)->setContentsMargins (0., 0., 0., 0.);
+    container->setLayout (*layout);
+
+    return container;
+}
+
+static void
+addSubTitle (
+        QGraphicsWidget         *parent,
+        QGraphicsLinearLayout   *targetLayout,
+        const QString           &subTitle)
+{
+    MWidgetController       *container;
+    QGraphicsLinearLayout   *layout;
+    MLabel                  *label;
+    MSeparator              *separator;
+
+    container = new MWidgetController (parent);
+    container->setContentsMargins (0., 0., 0., 0.);
+    container->setStyleName (SUBTITLE_PANEL_STYLE_NAME);
+
+    layout = new QGraphicsLinearLayout (Qt::Horizontal);
     layout->setContentsMargins (0., 0., 0., 0.);
+    layout->setSpacing (0.);
+    /*
+     *
+     */
+    separator = new MSeparator;
+    separator->setStyleName (SUBTITLE_DIVIDER_STYLE_NAME);
 
-	(*p_policy) = new MLinearLayoutPolicy (layout, Qt::Vertical);
-	layout->setLandscapePolicy ((*p_policy));
-	layout->setPortraitPolicy ((*p_policy));
+    /*
+     *
+     */
+    label = new MLabel (subTitle);
+    label->setStyleName (SUBTITLE_LABEL_STYLE_NAME);
 
-	return container;
+    layout->addItem (separator);
+    layout->setStretchFactor (separator, 2);
+
+    layout->addItem (label);
+    layout->setAlignment (label, Qt::AlignLeft);
+    layout->setStretchFactor (label, 0);
+
+    container->setLayout (layout);
+    targetLayout->addItem (container);
+}
+
+static MLabel *
+addTitleLabel (
+        QGraphicsWidget         *parent,
+        QGraphicsLinearLayout   *targetLayout,
+        const char              *labelStyleName)
+{
+    Q_UNUSED (parent);
+    MLabel                  *label;
+
+    label = new MLabel;
+    label->setStyleName (labelStyleName);
+
+    targetLayout->addItem (label);
+    return label;
 }
 
 /******************************************************************************
@@ -72,13 +125,13 @@ createEmptyContainer(
  */
 
 AlertToneAppletWidget::AlertToneAppletWidget (
-        QList<AlertTone *>    alertTones, 
+        QList<AlertTone *>    alertTones,
         QGraphicsWidget      *parent):
-	DcpStylableWidget (parent),
-	m_alertTones(alertTones),
+    DcpStylableWidget (parent),
+    m_alertTones(alertTones),
     m_ProfileIf (new ProfileDataInterface),
-	m_tones (0),
-	m_feedback (0)
+    m_tones (0),
+    m_feedback (0)
 {
     setContentsMargins (0., 0., 0., 0.);
 
@@ -92,13 +145,13 @@ AlertToneAppletWidget::~AlertToneAppletWidget ()
 {
     /*
      * Removing the unused files. This is not the best place, but we have no
-     * business-logic, so we do it here. 
+     * business-logic, so we do it here.
      */
     QSet<QString> files;
     for (int n = 0; n < m_alertTones.size(); ++n) {
         files += m_alertTones[n]->fileName();
     }
-    
+
     SoundSettings::removeUnusedFiles (files);
 
     delete m_ProfileIf;
@@ -111,30 +164,28 @@ AlertToneAppletWidget::~AlertToneAppletWidget ()
 void
 AlertToneAppletWidget::createContents ()
 {
-	QGraphicsWidget       *centralWidget = this;
-	MLayout               *mainLayout;
-	MLinearLayoutPolicy   *policy;
-    MLabel                *label;
+    QGraphicsLinearLayout   *layout;
+    MLabel                  *label;
 
-	mainLayout = new MLayout (centralWidget);
+    setContentsMargins (0., 0., 0., 0);
+    layout = new QGraphicsLinearLayout (Qt::Vertical);
+    layout->setContentsMargins (0., 0., 0., 0.);
+    layout->setSpacing (0.);
 
-	policy = new MLinearLayoutPolicy(mainLayout, Qt::Vertical);
-    policy->setContentsMargins (0., 0., 0., 0.);
-    policy->setSpacing (0.);
-	mainLayout->setLandscapePolicy(policy);
-	mainLayout->setPortraitPolicy(policy);
+    setLayout (layout);
 
     /*
      * The main title
      */
 #ifndef MEEGO
     label = addTitleLabel (
-            centralWidget, policy,
-            APP_TITLE_LABEL_STYLE_NAME); 
+            this, layout,
+            APP_TITLE_LABEL_STYLE_NAME);
     //% "Alert tones"
     label->setText(qtTrId("qtn_sond_sounds"));
 #endif
 
+    SYS_DEBUG ("%s: constructing volumeExtension", SYS_TIME_STR);
     /*
      * Try to add the Status-Menus volume/profile chooser widget here
      */
@@ -145,87 +196,87 @@ AlertToneAppletWidget::createContents ()
     m_volumeExtension->setStyleName ("VolumeExtensionArea");
     m_volumeExtension->init ();
 
-    policy->addItem (m_volumeExtension);
+    layout->addItem (m_volumeExtension);
+    SYS_DEBUG ("%s DONE: constructing volumeExtension", SYS_TIME_STR);
 
     /*
      * A subtitle that shows 'Profile vibration'
      */
     addSubTitle (
-            centralWidget, policy,
+            this, layout,
             //% "Vibration profile"
             qtTrId("qtn_prof_vibration"));
 
     /*
      * Add the profie vibration switches...
      */
-    createProfileSwitches (policy, centralWidget);
+    createProfileSwitches (layout, this);
 
     /*
      * A secondary title, it says 'Tones'
      */
     addSubTitle (
-            centralWidget, policy, 
+            this, layout,
             //% "Alert tones"
-            qtTrId("qtn_sond_event_tones")); 
+            qtTrId("qtn_sond_event_tones"));
 
     /*
      * A list with the sound file setting widgets.
      */
-	m_tones = createAlertTonesList(centralWidget);
-	policy->addItem(m_tones);
+    m_tones = createAlertTonesList (this);
+    layout->addItem (m_tones);
 
     /*
      * An other secondary title, that says 'Feedback'.
      */
-    SYS_WARNING ("*** qtn_sond_feedback = %s", 
+    SYS_WARNING ("*** qtn_sond_feedback = %s",
             SYS_STR(qtTrId("qtn_sond_feedback")));
     addSubTitle (
-            centralWidget, policy, 
+            this, layout,
             //% "Feedback"
             qtTrId("qtn_sond_feedback"));
 
     /*
      * The list with the feedback setting widgets.
      */
-	m_feedback = createFeedbackList(centralWidget);
-	policy->addItem(m_feedback);
+    m_feedback = createFeedbackList (this);
+    layout->addItem (m_feedback);
 
-	retranslateUi();
+    retranslateUi ();
 }
-        
-void 
+
+void
 AlertToneAppletWidget::createProfileSwitches (
-        MLinearLayoutPolicy   *policy,
-        QGraphicsWidget       *parent)
+        QGraphicsLinearLayout   *layout,
+        QGraphicsWidget         *parent)
 {
     Q_UNUSED (parent);
 
-    QList<ProfileDataInterface::ProfileData> profileDataList = 
+    QList<ProfileDataInterface::ProfileData> profileDataList =
         m_ProfileIf->getProfilesData();
 
     for (int i = 0; i < profileDataList.size(); ++i) {
         ProfileDataInterface::ProfileData  d = profileDataList[i];
         ProfileContainer                  *widget;
-        
+
         widget = new ProfileContainer (
                 d.profileId, d.profileName, d.vibrationEnabled);
 
         // For testability driver: set some object name...
         widget->setObjectName (ProfileDataInterface::mapId (d.profileId));
 
-        connect (widget, SIGNAL (toggled(bool)), 
+        connect (widget, SIGNAL (toggled(bool)),
                  this, SLOT (vibrationChanged(bool)));
 
-        policy->addItem(widget);
+        layout->addItem (widget);
     }
-
 }
 
 void
 AlertToneAppletWidget::vibrationChanged (
         bool enabled)
 {
-    //NOTE: MButton->isChecked() method returns the state before the 
+    //NOTE: MButton->isChecked() method returns the state before the
     // press at this point
     ProfileContainer *profile =
         static_cast<ProfileContainer*> (this->sender ());
@@ -237,10 +288,10 @@ MWidgetController *
 AlertToneAppletWidget::createFeedbackList(
         QGraphicsWidget *parent)
 {
-    MWidgetController   *container;
-    MLinearLayoutPolicy *policy;
+    MWidgetController       *container;
+    QGraphicsLinearLayout   *layout;
 
-    container = createEmptyContainer (parent, &policy);
+    container = createEmptyContainer (parent, &layout);
 
     ProfileIntCombo *picombo = 0;
 
@@ -261,80 +312,78 @@ AlertToneAppletWidget::createFeedbackList(
 
         picombo->setObjectName("ProfileIntCombo_keypad.sound.level");
         picombo->setStyleName ("CommonComboBoxInverted");
-        policy->addItem(picombo);
+        layout->addItem (picombo);
     }
 
-	picombo = new ProfileIntCombo(
-		"system.sound.level", true,
-		container);
-	picombo->setObjectName("ProfileIntCombo_system.sound.level");
+    picombo = new ProfileIntCombo ("system.sound.level", true, container);
+    picombo->setObjectName("ProfileIntCombo_system.sound.level");
     picombo->setStyleName ("CommonComboBoxInverted");
-	policy->addItem(picombo);
+    layout->addItem (picombo);
 
-	GConfStringCombo *combo = new GConfStringCombo(
-		"/meegotouch/input_feedback/volume/priority2/pulse",
-		QStringList() << "off" << "low" << "medium" << "high",
-		container);
-	combo->setObjectName("GConfStringCombo_pulse");
+    GConfStringCombo *combo = new GConfStringCombo(
+        "/meegotouch/input_feedback/volume/priority2/pulse",
+        QStringList() << "off" << "low" << "medium" << "high",
+        container);
+    combo->setObjectName("GConfStringCombo_pulse");
     combo->setStyleName ("CommonComboBoxInverted");
-	policy->addItem(combo);
+    layout->addItem (combo);
 
-	combo = new GConfStringCombo(
-		"/meegotouch/input_feedback/volume/priority2/vibra",
-		QStringList() << "off" << "low" << "medium" << "high",
-		container);
-	combo->setObjectName("GConfStringCombo_vibra");
+    combo = new GConfStringCombo(
+        "/meegotouch/input_feedback/volume/priority2/vibra",
+        QStringList() << "off" << "low" << "medium" << "high",
+        container);
+    combo->setObjectName("GConfStringCombo_vibra");
     combo->setStyleName ("CommonComboBoxInverted");
-	policy->addItem(combo);
+    layout->addItem (combo);
 
-	container->setObjectName("MConcreateAlertTonePreviewtainer_feedback");
+    container->setObjectName("MConcreateAlertTonePreviewtainer_feedback");
     container->setStyleName ("CommonLargePanelInverted");
-	return container;
+    return container;
 }
 
 
 MWidgetController *
 AlertToneAppletWidget::createAlertTonesList (QGraphicsWidget *parent)
 {
-	MWidgetController   *container;
-	MLinearLayoutPolicy *policy;
-	AlertToneWidget     *alertToneWidget;
+    MWidgetController       *container;
+    QGraphicsLinearLayout   *layout;
+    AlertToneWidget         *alertToneWidget;
 
-	container = createEmptyContainer (parent, &policy);
+    container = createEmptyContainer (parent, &layout);
 
     /*
      * And then the list...
      */
-	for (int i = 0; i < m_alertTones.size (); i++)
+    for (int i = 0; i < m_alertTones.size (); i++)
     {
-		alertToneWidget = new AlertToneWidget (
+        alertToneWidget = new AlertToneWidget (
                 m_alertTones[i], i, container);
-		alertToneWidget->setObjectName (
+        alertToneWidget->setObjectName (
                 "AlertToneWidget_" + m_alertTones[i]->key());
 
         // connect the widgets changeWidget signal
         connect (alertToneWidget, SIGNAL (changeWidget (int)),
                  this, SIGNAL (changeWidget (int)));
 
-		policy->addItem (alertToneWidget);
-	}
+        layout->addItem (alertToneWidget);
+    }
 
-	container->setObjectName ("MWidgetController_tones");
+    container->setObjectName ("MWidgetController_tones");
     container->setStyleName ("CommonLargePanelInverted");
-	return container;
+    return container;
 }
 
 
 /*
  * This virtual method is called when the MApplicationPage for the widget is
- * already there, so we can initialize it. 
+ * already there, so we can initialize it.
  */
 void
 AlertToneAppletWidget::polishEvent ()
 {
     QGraphicsWidget  *parent;
     MApplicationPage *page = 0;
-   
+
     /*
      * We need to find the MApplicationPage among our parents.
      */
@@ -350,7 +399,7 @@ AlertToneAppletWidget::polishEvent ()
         return;
 
     /*
-     * Hiding the home button. 
+     * Hiding the home button.
      */
     page->setComponentsDisplayMode (
             MApplicationPage::HomeButton,
