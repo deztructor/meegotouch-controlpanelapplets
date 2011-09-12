@@ -125,25 +125,26 @@ AlertToneDefaultsModel::addSingleItem()
     }
 
     #if 0
-    SYS_DEBUG ("*** path        = %s",
+    SYS_WARNING ("*** path        = %s",
             SYS_STR(m_dirStack.top().absolutePath()));
-    SYS_DEBUG ("***             = %s",
+    SYS_WARNING ("***             = %s",
             SYS_STR(m_dirStack.top()[m_dirIdx.top()]));
     #endif
-    int currentLevel = m_dirIdx.count() - 1;
-    if (m_dirStack.top()[m_dirIdx.top()] != "." &&
-        m_dirStack.top()[m_dirIdx.top()] != "..")
+    int      currentLevel = m_dirIdx.count() - 1;
+    QString  baseName     = m_dirStack.top()[m_dirIdx.top()];
+
+    if (baseName != "." && baseName != "..")
     {
         QString fullPath = m_dirStack.top().absolutePath() + 
-                QDir::separator() + m_dirStack.top()[m_dirIdx.top()];
+                QDir::separator() + baseName;
 
         QDir subdir(fullPath);
 
-        if (subdir.count() > 0) {
+        if (subdir.exists() && subdir.count() > 0) {
             m_dirStack.push(subdir);
             m_dirIdx.push(0);
         } else {
-            QString extension = fullPath.right(4).toLower();
+            QString extension = baseName.right(4).toLower();
 
             if (extension == ".aac" ||
                 extension == ".mp3" ||
@@ -152,7 +153,8 @@ AlertToneDefaultsModel::addSingleItem()
                 extension == ".mp2" ||
                 extension == ".amr" ||
                 extension == ".mid") {
-                QString niceName = TrackerConnection::instance()->niceNameFromFileName (fullPath);
+                QString niceName = TrackerConnection::instance()->
+                    niceNameFromFileName (fullPath);
                 addSingleItem (niceName, fullPath);
             }
         }
