@@ -175,7 +175,8 @@ PercentageContainer::updateRemainingTime (
                     formatTime(remainingIdle));
     }
 
-    m_SubTextLabel->setText (labelText);
+    if (! labelText.isEmpty ())
+        m_SubTextLabel->setText (labelText);
 }
 
 QString
