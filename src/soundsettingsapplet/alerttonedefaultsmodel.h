@@ -27,10 +27,10 @@
 
 class AlertToneDefaultsModel : public QStandardItemModel
 {
-	Q_OBJECT
+Q_OBJECT
 
 public:
-	AlertToneDefaultsModel ();
+    AlertToneDefaultsModel ();
     ~AlertToneDefaultsModel ();
 
     typedef enum {
@@ -41,7 +41,7 @@ public:
 
     bool isFinished () const;
 
-	int addSingleItem (
+    int addSingleItem (
             const QString &niceName, 
             const QString &fileName,
             bool           forced = false);
@@ -63,13 +63,13 @@ public:
     static QString oviRingTonesPath ();
     
 Q_SIGNALS:
-	void finished();
+    void finished ();
     void loading ();
     
 private slots:
     void fileChanged (const QString &filename);
     void directoryChanged (const QString &directory);
-	void addSingleItem();
+    void addSingleItem ();
     void dataReceived (
             const QString   &filename, 
             const QString   &title,

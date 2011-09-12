@@ -20,10 +20,6 @@
 #include <QTimer>
 #include <QFile>
 
-#ifdef MEEGO
-#include <MTheme>
-#endif
-
 #include "trackerconnection.h"
 #include "alerttonedefaultsmodel.h"
 #include "alerttone.h"
@@ -136,7 +132,8 @@ AlertToneDefaultsModel::addSingleItem()
     #endif
     int currentLevel = m_dirIdx.count() - 1;
     if (m_dirStack.top()[m_dirIdx.top()] != "." &&
-            m_dirStack.top()[m_dirIdx.top()] != "..") {
+        m_dirStack.top()[m_dirIdx.top()] != "..")
+    {
         QString fullPath = m_dirStack.top().absolutePath() + 
                 QDir::separator() + m_dirStack.top()[m_dirIdx.top()];
 
