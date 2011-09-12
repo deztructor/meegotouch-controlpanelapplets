@@ -17,15 +17,23 @@
 **
 ****************************************************************************/
 #include <MApplication>
+#include <MWindow>
 #include <QString>
 #include <QStringList>
+#include <QSignalSpy>
+#include <QVariant>
+#include <QList>
 #include "ut_alerttonebrowser.h"
 #include "alerttonebrowser.h"
 #include "drilldownitem.h"
 
 #include <MContentItem>
-#include <gst/gst.h>
+#include <MSceneWindow>
 #include <QGraphicsLinearLayout>
+
+#define DEBUG
+#define WARNING
+#include "../debug.h"
 
 static const QString validSoundFile1 = "/usr/share/sounds/ring-tones/Beep.aac";
 
@@ -61,7 +69,7 @@ ResourceSet::addResourceObject (Resource *resource)
 bool
 ResourceSet::acquire ()
 {
-    return true;
+    return false;
 }
 
 bool
@@ -89,8 +97,19 @@ AudioResource::setStreamTag (const QString &name, const QString &value)
 }
 
 }
-
 #endif
+
+bool stubAppearCalled = false;
+void
+MSceneWindow::appear (MWindow *window, MSceneWindow::DeletionPolicy policy)
+{
+    SYS_DEBUG ("");
+    Q_UNUSED (window);
+    Q_UNUSED (policy);
+
+    stubAppearCalled = true;
+}
+
 
 /******************************************************************************
  * Ut_AlertToneBrowser implementation.
@@ -98,10 +117,10 @@ AudioResource::setStreamTag (const QString &name, const QString &value)
 class MCustomContentItem: public MContentItem
 {
 public:
-	MCustomContentItem (MContentItem::ContentItemStyle itemStyle=MContentItem::IconAndTwoTextLabels, QGraphicsItem *parent=0)
-	:MContentItem(itemStyle,parent),fullPath("") {}
+    MCustomContentItem (MContentItem::ContentItemStyle itemStyle=MContentItem::IconAndTwoTextLabels, QGraphicsItem *parent=0)
+    :MContentItem(itemStyle,parent),fullPath("") {}
 
-	QString fullPath;
+    QString fullPath;
 };
 
 void
@@ -114,24 +133,19 @@ Ut_AlertToneBrowserTests::cleanup()
 {
 }
 
+static int   m_argc = 1;
+static char *m_argv[] = { (char*) "./ut_alerttonebrowser", NULL };
+
 void
 Ut_AlertToneBrowserTests::initTestCase()
 {
-    at = new AlertTone("email.alert.tone");
-    savedAlertTone = at->fileName();
+    m_App = new MApplication (m_argc, m_argv);
 
-    char *argv1;
+    at = new AlertTone ("email.alert.tone");
+    savedAlertTone = at->fileName ();
 
-    m_argc = 1;
-    m_argv = (char **)malloc(2 * sizeof(char *));
-    memset(m_argv, 0, 2 * sizeof(char *));
-    argv1 = (char *)malloc(strlen("my_argv") + 1);
-    strcpy(argv1, "my_argv");
-    (*m_argv) = argv1;
-
-    gst_init(&m_argc, &m_argv);
-
-    m_App = new MApplication(m_argc, m_argv);
+    m_window = new MWindow;
+    m_window->show ();
 }
 
 void
@@ -143,13 +157,12 @@ Ut_AlertToneBrowserTests::cleanupTestCase()
         delete at;
         at = 0;
     }
-    gst_deinit();
 
-    free((*m_argv));
-	  free(m_argv);
+    delete m_window;
+    m_window = 0;
 
     if (m_App)
-    delete  m_App;
+        delete m_App;
 }
 
 void
@@ -165,6 +178,11 @@ Ut_AlertToneBrowserTests::alerttonebrowserConstructor ()
 #endif
     QCOMPARE (atbt.m_ovi_store->objectName (),
               QString ("MContentItem_getMoreFromOviStore"));
+
+    // this will fails to find the MApplicationPage
+    atbt.polishEvent ();
+    // this does nothing basically, just sets the focus on the AlertToneDefaults
+    atbt.defaultsDisplayEntered ();
 }
 
 void
@@ -174,10 +192,10 @@ Ut_AlertToneBrowserTests::alerttonebrowserRetranslateUi()
     atbt.retranslateUi();
 
 #ifdef HAVE_CONTENT_MANAGER
-	QCOMPARE (atbt.m_my_music->property ("title").toString (),
+    QCOMPARE (atbt.m_my_music->property ("title").toString (),
               qtTrId ("qtn_sond_pick_music"));
 #endif
-	QCOMPARE (atbt.m_ovi_store->property ("title").toString(),
+    QCOMPARE (atbt.m_ovi_store->property ("title").toString(),
               qtTrId ("qtn_sond_store"));
 }
 
@@ -205,6 +223,9 @@ Ut_AlertToneBrowserTests::alerttonebrowserSetAlertTone()
     // Setting the same filename again should stop the playback!
     atbt.startPlayingSound (filename);
     QVERIFY(atbt.m_preview == NULL);
+
+    atbt.set (filename);
+    QCOMPARE (atbt.currSelectedFile, filename);
 }
 
 /*!
@@ -221,6 +242,47 @@ Ut_AlertToneBrowserTests::alerttonebrowserAccept()
     QCOMPARE(at->fileName(), validSoundFile1);
 }
 
+void
+Ut_AlertToneBrowserTests::alerttonebrowserCancel ()
+{
+    AlertToneBrowser atbt (at);
+    QSignalSpy       spy (&atbt, SIGNAL (closePage ()));
 
+    atbt.cancel ();
+
+    QCOMPARE (spy.count (), 1);
+}
+
+void
+Ut_AlertToneBrowserTests::testLaunchMusicBrowser ()
+{
+    stubAppearCalled = false;
+
+#ifdef HAVE_CONTENT_MANAGER
+    AlertToneBrowser atbt (at);
+
+    SYS_DEBUG ("*** HAVE_CONTENT_MANAGER");
+
+    atbt.launchMusicBrowser ();
+#ifndef USE_CONTENT_ITEM_SHEET
+    QVERIFY (atbt.m_MusicBrowser);
+#endif
+
+    QCOMPARE (stubAppearCalled, true);
+
+#ifdef USE_CONTENT_ITEM_SHEET
+    // this does nothing as we can not select music from unit-test
+    atbt.contentItemsSheetDoneClicked ();
+#endif
+
+    //Now lets close it
+    atbt.browserBackButtonClicked ();
+
+#ifndef USE_CONTENT_ITEM_SHEET
+    QVERIFY (! atbt.m_MusicBrowser);
+#endif
+
+#endif
+}
 
 QTEST_APPLESS_MAIN(Ut_AlertToneBrowserTests)

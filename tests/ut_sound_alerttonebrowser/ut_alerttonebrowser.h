@@ -24,28 +24,32 @@
 #include <MApplication>
 #include "alerttonebrowser.h"
 
+class MWindow;
+
 class Ut_AlertToneBrowserTests : public QObject
 {
 Q_OBJECT
 
 public:
-      Ut_AlertToneBrowserTests() { m_App = 0;}
-private slots:
+    Ut_AlertToneBrowserTests() { m_App = 0;}
 
-      void init();
-      void cleanup();
-      void initTestCase();
-      void cleanupTestCase();
-      void alerttonebrowserConstructor();
-      void alerttonebrowserRetranslateUi();
-      void alerttonebrowserSetAlertTone();
-      void alerttonebrowserAccept();
+private slots:
+    void init ();
+    void cleanup ();
+    void initTestCase ();
+    void cleanupTestCase ();
+    void alerttonebrowserConstructor ();
+    void alerttonebrowserRetranslateUi ();
+    void alerttonebrowserSetAlertTone ();
+    void alerttonebrowserAccept ();
+    void alerttonebrowserCancel ();
+    void testLaunchMusicBrowser ();
+
 private:
-      MApplication * m_App;
-      AlertTone *  at;
-      int m_argc;
-      char **m_argv;
-      QString savedAlertTone;
+    MApplication *m_App;
+    MWindow      *m_window;
+    AlertTone    *at;
+    QString       savedAlertTone;
 private slots:
 };
 
