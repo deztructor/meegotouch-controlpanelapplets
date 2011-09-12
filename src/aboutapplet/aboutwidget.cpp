@@ -64,11 +64,13 @@ class ContentWidget: public MStylableWidget
         m_title = new MLabel;
         m_title->setStyleName ("CommonSubTitleTopInverted");
         m_title->setWordWrap (true);
+        m_title->setAlignment (Qt::AlignLeft | Qt::AlignAbsolute);
         m_title->setWrapMode (QTextOption::WrapAtWordBoundaryOrAnywhere);
 
         m_subTitle = new MLabel;
         m_subTitle->setStyleName ("CommonTitleBottomInverted");
         m_subTitle->setWordWrap (true);
+        m_subTitle->setAlignment (Qt::AlignLeft | Qt::AlignAbsolute);
         m_subTitle->setWrapMode (QTextOption::WrapAtWordBoundaryOrAnywhere);
         m_subTitle->setText ("-");
 
@@ -311,7 +313,7 @@ AboutWidget::addHeaderContainer ()
     m_TitleLabel = new MLabel (qtTrId("qtn_prod_about_product"));
     m_TitleLabel->setStyleName (APP_TITLE_LABEL_STYLE_NAME);
     m_layout->addItem (m_TitleLabel, m_currentRow++, 0, 1, 2);
-    m_layout->setAlignment (m_TitleLabel, Qt::AlignLeft);
+    m_layout->setAlignment (m_TitleLabel, Qt::AlignLeft | Qt::AlignAbsolute);
 
 #ifdef APP_TITLE_USES_SPACER
     addStretcher (APP_TITLE_DIVIDER_STYLE_NAME);
