@@ -241,7 +241,8 @@ GridImageWidget::paint (
         const int adjust = pen.width() / 2;
         QRect rect (0, 0, 
                 (int) geom.width(), (int) geom.height());
-        const QRect selection = rect.adjusted(adjust,adjust,-(adjust+mod),-(adjust+mod));
+        const QRect selection = rect.adjusted (
+                adjust, adjust, -(adjust + mod), -(adjust + mod));
         painter->drawRect(selection);
     }
 }
