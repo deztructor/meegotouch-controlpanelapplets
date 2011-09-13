@@ -39,6 +39,8 @@ namespace Wallpaper
     const int nBackwardThumbnails = 25;
     const bool showThumbnailGrid (true);
 
+    const qreal navBarTransparency = 0.85;
+
     const QString CurrentPortraitKey (
             "/desktop/meego/background/portrait/picture_filename");
 

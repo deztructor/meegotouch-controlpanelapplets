@@ -37,9 +37,6 @@
  */
 static const int loadPictureDelay = 0;
 
-// FIXME: This icon is not yet specified, this is a substitute.
-static const QString checkIconId = "icon-m-common-checkbox-checked";
-
 /******************************************************************************
  * WallpaperImageLoader implementation.
  */
