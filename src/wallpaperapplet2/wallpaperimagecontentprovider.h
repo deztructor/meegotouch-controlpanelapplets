@@ -1,6 +1,7 @@
 #ifndef IMAGECONTENTPROVIDER_H
 #define IMAGECONTENTPROVIDER_H
 
+#ifdef HAVE_GALLERYCORE
 #include <gallerycontentprovider.h>
 
 class ImageContentProviderPrivate;
@@ -27,5 +28,7 @@ class ImageContentProvider : public GalleryContentProvider
         Q_DECLARE_PRIVATE (ImageContentProvider);
         Q_DISABLE_COPY (ImageContentProvider);
 };
+
+#endif // HAVE_GALLERYCORE
 
 #endif

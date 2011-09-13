@@ -67,6 +67,14 @@ Ut_SoundSettingsAppletTests::soundsettingsappletconstructWidget ()
     newWidget = ssa.constructStylableWidget (65536);
     QVERIFY ( typeid (AlertToneBrowserStylable) == typeid( * newWidget) );
 
+    AlertToneBrowserStylable *aWidget =
+        qobject_cast<AlertToneBrowserStylable *> (newWidget);
+    QVERIFY (aWidget);
+
+    // for more coverage
+    QCOMPARE (aWidget->pagePans (), true);
+    QVERIFY (! aWidget->title ().isNull ());
+
     QCOMPARE( ssa.m_stack.size() , 2 );
 }
 
