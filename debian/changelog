@@ -1,10 +1,13 @@
-meegotouch-controlpanelapplets (0.20.71~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.71-1) meegotouch; urgency=low
 
-  * [ Laszlo Pere ]
-  * Fixes: NB#255436 - When charging is complete and charger still connected, 
+  [ Laszlo Pere ]
+  * Fixes When charging is complete and charger still connected, 
     activating power save mode should not change state
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 05 Sep 2011 09:43:36 +0200
+  [ David Kedves ]
+  * Fixes: NB#249881 - Add profile selector slider to Sound settings
+
+ -- David Kedves <dkedves@blumsoft.eu>  Tue, 13 Sep 2011 11:07:49 +0200
 
 meegotouch-controlpanelapplets (0.20.70-1) meegotouch; urgency=low
 
