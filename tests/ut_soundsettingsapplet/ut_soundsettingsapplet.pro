@@ -51,6 +51,7 @@ HEADERS +=                                  \
     $$SRC_PREFIX/alerttoneappletmaps.h      \
     $$SRC_PREFIX/alerttoneappletwidget.h    \
     $$SRC_PREFIX/alerttonebrowser.h         \
+    $$SRC_PREFIX/alerttonebrowsersheet.h    \
     $$SRC_PREFIX/alerttonedefaults.h        \
     $$SRC_PREFIX/alerttonedefaultsmodel.h   \
     $$SRC_PREFIX/qtrackedvariant.h          \
@@ -77,6 +78,7 @@ SOURCES +=                                  \
     $$SRC_PREFIX/alerttoneappletmaps.cpp    \
     $$SRC_PREFIX/alerttoneappletwidget.cpp  \
     $$SRC_PREFIX/alerttonebrowser.cpp       \
+    $$SRC_PREFIX/alerttonebrowsersheet.cpp  \
     $$SRC_PREFIX/alerttonedefaults.cpp      \
     $$SRC_PREFIX/alerttonedefaultsmodel.cpp \
     $$SRC_PREFIX/qtrackedvariant.cpp        \
