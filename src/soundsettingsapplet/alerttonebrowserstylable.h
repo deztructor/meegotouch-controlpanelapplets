@@ -26,16 +26,19 @@ class AlertToneBrowser;
 
 class AlertToneBrowserStylable : public DcpStylableWidget
 {
-Q_OBJECT
-public:
-    AlertToneBrowserStylable (AlertTone *tone, QGraphicsWidget *parent = 0);
-    ~AlertToneBrowserStylable ();
+    Q_OBJECT
 
-    virtual bool pagePans () const;
-    virtual QString title () const;
+    public:
+        AlertToneBrowserStylable (AlertTone *tone, QGraphicsWidget *parent = 0);
+        ~AlertToneBrowserStylable ();
 
-private:
-    AlertToneBrowser    *m_browser;
+        virtual bool pagePans () const;
+        virtual QString title () const;
+        void accept ();
+        void cancel ();
+
+    private:
+        AlertToneBrowser    *m_browser;
 };
 
 #endif

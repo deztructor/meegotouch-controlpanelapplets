@@ -29,6 +29,7 @@
 #include "alerttonepreview.h"
 #include "trackerconnection.h"
 #include "profilebackend.h"
+#include "alerttonebrowsersheet.h"
 
 //#define DEBUG
 #define WARNING
@@ -108,8 +109,11 @@ SoundSettingsApplet::constructStylableWidget (int widgetId)
          * Do not re-create the main view if it is on top already
          */
         if (m_stack.isEmpty () ||
-            qobject_cast<AlertToneAppletWidget*>(m_stack.top ()) == 0)
+            qobject_cast<AlertToneAppletWidget*>(m_stack.top ()) == 0) {
             newWidget = new AlertToneAppletWidget (m_alertTones);
+            connect (newWidget, SIGNAL(showWidget(int)),
+                    this, SLOT(showWidget(int)));
+        }
     }
     else if (realWidgetId == AlertToneBrowser_id)
     {
@@ -170,3 +174,14 @@ SoundSettingsApplet::constructBrief (int partId)
     return 0;
 }
 
+void
+SoundSettingsApplet::showWidget (
+        int widgetId)
+{
+    int realWidgetId = widgetId / 65536;
+    int alertToneIdx = widgetId - realWidgetId * 65536;
+    AlertToneBrowserSheet *sheet;
+
+    sheet = new AlertToneBrowserSheet(m_alertTones[alertToneIdx]);
+    sheet->appear(m_stack.top()->scene(), MSceneWindow::DestroyWhenDone);
+}

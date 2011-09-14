@@ -57,6 +57,9 @@ public:
     void set (
         const QVariant &filename);
 
+    void cancel();
+    void accept();
+
 private slots:
     void defaultItemClicked (const QString &filename);
     void defaultsDisplayEntered();
@@ -67,8 +70,6 @@ private slots:
     void launchMusicBrowser();
     void launchOviStore();
     void selectingMusicItem(const QString &item);
-    void cancel();
-    void accept();
     void textChanged ();
     void browserBackButtonClicked ();
     void stopPlayingSound ();

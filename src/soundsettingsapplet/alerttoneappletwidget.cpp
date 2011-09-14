@@ -361,9 +361,12 @@ AlertToneAppletWidget::createAlertTonesList (QGraphicsWidget *parent)
         alertToneWidget->setObjectName (
                 "AlertToneWidget_" + m_alertTones[i]->key());
 
-        // connect the widgets changeWidget signal
-        connect (alertToneWidget, SIGNAL (changeWidget (int)),
-                 this, SIGNAL (changeWidget (int)));
+        // connect the widgets showWidget signal
+        // If we send the changeWidget() signal, DCP will show the widget in an
+        // MApplicationPage, if we send the showWidget, SoundSettingsApplet will
+        // show the widget in a sheet.
+        connect (alertToneWidget, SIGNAL (showWidget (int)),
+                 this, SIGNAL (showWidget (int)));
 
         layout->addItem (alertToneWidget);
     }

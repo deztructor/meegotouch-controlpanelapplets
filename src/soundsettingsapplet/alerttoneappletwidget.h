@@ -33,15 +33,18 @@ class AlertToneAppletWidget : public DcpStylableWidget
 {
 Q_OBJECT
 
-public:
-    AlertToneAppletWidget (
-            QList<AlertTone *>  alertTones,
-            QGraphicsWidget    *parent = 0);
-    ~AlertToneAppletWidget ();
+    public:
+        AlertToneAppletWidget (
+                QList<AlertTone *>  alertTones,
+                QGraphicsWidget    *parent = 0);
+        ~AlertToneAppletWidget ();
 
-protected:
-    virtual void polishEvent ();
-    virtual void createContents ();
+    protected:
+        virtual void polishEvent ();
+        virtual void createContents ();
+
+    signals:
+        void showWidget (int widgetId); 
 
 private slots:
     void vibrationChanged (bool enabled);

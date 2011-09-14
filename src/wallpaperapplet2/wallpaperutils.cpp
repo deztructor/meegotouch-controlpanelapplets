@@ -139,6 +139,10 @@ Wallpaper::setFileVariant (
     }
 
     retval = retval + variant + extension;
+    SYS_WARNING ("*** filePath = %s", SYS_STR(filePath));
+    SYS_WARNING ("*** variant  = %s", SYS_STR(variant));
+    SYS_WARNING ("*** retval   = %s", SYS_STR(retval));
+
     return retval;
 }
 

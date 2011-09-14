@@ -58,6 +58,7 @@ HEADERS =                      \
     profilecontainer.h         \
     alerttoneappletwidget.h    \
     alerttonebrowser.h         \
+    alerttonebrowsersheet.h    \
     alerttonedefaults.h        \
     alerttonedefaultsmodel.h   \
     alerttonepreview.h         \
@@ -84,6 +85,7 @@ SOURCES =                      \
     profilecontainer.cpp       \
     alerttoneappletwidget.cpp  \
     alerttonebrowser.cpp       \
+    alerttonebrowsersheet.cpp  \
     alerttonedefaults.cpp      \
     alerttonedefaultsmodel.cpp \
     alerttonepreview.cpp       \

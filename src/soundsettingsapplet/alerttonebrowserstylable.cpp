@@ -45,7 +45,6 @@ AlertToneBrowserStylable::AlertToneBrowserStylable (
 
 AlertToneBrowserStylable::~AlertToneBrowserStylable ()
 {
-
 }
 
 bool
@@ -64,5 +63,17 @@ AlertToneBrowserStylable::title () const
         return m_browser->title ();
 
     return QString ();
+}
+
+void
+AlertToneBrowserStylable::accept ()
+{
+    m_browser->accept ();
+}
+
+void
+AlertToneBrowserStylable::cancel ()
+{
+    m_browser->cancel ();
 }
 

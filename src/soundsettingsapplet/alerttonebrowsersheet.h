@@ -4,7 +4,7 @@
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
 **
-** This file is part of meegotouch-controlpanelsoundsettingsapplet.
+** This file is part of meegotouch-controlpanelapplets.
 **
 ** If you have questions regarding the use of this file, please contact
 ** Nokia at directui@nokia.com.
@@ -15,41 +15,36 @@
 ** and appearing in the file LICENSE.LGPL included in the packaging
 ** of this file.
 **
+** Contact: Karoliina T. Salminen <karoliina.t.salminen@nokia.com>
+** Authors: David Kedves <dkedves@blumsoft.eu>
+**          Laszlo Pere <lpere@blumsoft.eu>
+**
 ****************************************************************************/
-#ifndef _ALERT_TONE_WIDGET_H_
-#define _ALERT_TONE_WIDGET_H_
+#ifndef ALERTTONEBROWSERSHEET_H
+#define ALERTTONEBROWSERSHEET_H
 
+#include <MSheet>
 #include "alerttone.h"
-#include "drilldownitem.h"
 
-class AlertToneWidget : public RightArrowItem
+class AlertToneBrowserStylable;
+
+class AlertToneBrowserSheet : public MSheet
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
-	AlertToneWidget (
-            AlertTone             *tone,
-            int                    idx,
-            QGraphicsItem         *parent = 0);
+    public:
+        AlertToneBrowserSheet (AlertTone *alertTone);
 
-private slots:
-    void alertToneChanged ();
-    void clicked ();
+    public Q_SLOTS:
+        void doneActivated ();
+        void cancelActivated ();
 
-signals:
-    void showWidget (int widgetId);
+    private:
+        void createHeaderWidget ();
+        void createCentralWidget (AlertTone *alertTone);
 
-protected:
-    void retranslateUi ();
-
-private:
-	AlertTone   *m_tone;
-	int          m_idx;
-
-#ifdef UNIT_TEST
-    friend class Ut_AlertToneWidgetTests;
-#endif
+    private:
+        AlertToneBrowserStylable   *m_Widget;
 };
 
 #endif
-

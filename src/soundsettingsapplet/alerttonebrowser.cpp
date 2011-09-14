@@ -248,7 +248,7 @@ AlertToneBrowser::cancel()
     stopPlayingSound ();
 
     m_defaults->toneChanged ();
-    emit closePage();
+    //emit closePage();
 }
 
 void
@@ -268,7 +268,7 @@ AlertToneBrowser::accept()
         m_tone->set(currSelectedFile);
     }
 
-    emit closePage();
+    //emit closePage();
 }
 
 void
@@ -584,7 +584,10 @@ AlertToneBrowser::polishEvent ()
 
     /**************************************************************************
      * Hiding the home button and the escape button from the page.
+     *
+     * Well, actually we are using a sheet now.
      */
+    #if 0
     page->setComponentsDisplayMode (
             MApplicationPage::EscapeButton,
             MApplicationPageModel::Hide);
@@ -603,5 +606,6 @@ AlertToneBrowser::polishEvent ()
     m_CancelAction->setLocation(MAction::ToolBarLocation);
     page->addAction(m_CancelAction);
     connect(m_CancelAction, SIGNAL(triggered()), SLOT(cancel()));
+    #endif
 }
 
