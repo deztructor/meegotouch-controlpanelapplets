@@ -21,6 +21,7 @@
 #include <QGraphicsLinearLayout>
 #include <MImageWidget>
 #include <MLabel>
+#include <MLocale>
 #include <MSeparator>
 #include <MStylableWidget>
 #include <MLocale>
