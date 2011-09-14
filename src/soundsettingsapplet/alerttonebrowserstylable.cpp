@@ -68,12 +68,12 @@ AlertToneBrowserStylable::title () const
 void
 AlertToneBrowserStylable::accept ()
 {
-    m_browser->accept ();
+    m_browser->performAccept ();
 }
 
 void
 AlertToneBrowserStylable::cancel ()
 {
-    m_browser->cancel ();
+    m_browser->performCancel ();
 }
 

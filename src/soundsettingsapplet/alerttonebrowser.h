@@ -57,10 +57,12 @@ public:
     void set (
         const QVariant &filename);
 
+    void performCancel ();
+    void performAccept ();
+    
+private slots:
     void cancel();
     void accept();
-
-private slots:
     void defaultItemClicked (const QString &filename);
     void defaultsDisplayEntered();
     void setAlertTone (
