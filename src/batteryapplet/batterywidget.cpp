@@ -234,9 +234,12 @@ BatteryWidget::addRemainingCapacityWidget ()
     m_BatteryImage = new BatteryImage ();
     m_BatteryImage->setStyleName ("CommonMainIcon");
 
+    /*
+     * Here we will show qtTrId ("qtn_ener_battery_level"), later when the value
+     * is available.
+     */
     //% "Battery level \%L1\%"
-    m_RemainingContainer = new PercentageContainer (
-            qtTrId ("qtn_ener_battery_level"), m_BatteryImage);
+    m_RemainingContainer = new PercentageContainer ("", m_BatteryImage);
 
     m_MainLayout->addItem (m_RemainingContainer);
     m_MainLayout->setStretchFactor (m_RemainingContainer, 0);

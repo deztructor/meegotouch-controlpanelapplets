@@ -23,6 +23,7 @@
 #include <MLabel>
 #include <MSeparator>
 #include <MStylableWidget>
+#include <MLocale>
 
 #define DEBUG
 #define WARNING
@@ -63,9 +64,10 @@ PercentageContainer::updateCapacity (
         const int value)
 {
     QString text;
-    
+    MLocale locale;
+
     //% "Battery level \%L1\%"
-    text = qtTrId ("qtn_ener_battery_level").arg (value);
+    text = qtTrId ("qtn_ener_battery_level").arg (locale.formatPercent(value));
     SYS_DEBUG ("*** text = %s", SYS_STR(text));
     
     m_TextLabel->setText(text);
