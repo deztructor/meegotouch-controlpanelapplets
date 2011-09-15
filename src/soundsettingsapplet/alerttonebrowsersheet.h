@@ -23,12 +23,13 @@
 #ifndef ALERTTONEBROWSERSHEET_H
 #define ALERTTONEBROWSERSHEET_H
 
+#include <meegocontrolexport.h>
 #include <MSheet>
 #include "alerttone.h"
 
 class AlertToneBrowserStylable;
 
-class AlertToneBrowserSheet : public MSheet
+class MC_EXPORT AlertToneBrowserSheet : public MSheet
 {
     Q_OBJECT
 
