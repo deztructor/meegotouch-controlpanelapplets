@@ -25,6 +25,8 @@
 #include <MSeparator>
 #include <MApplicationPage>
 #include <QSystemDeviceInfo>
+#include <QTimer>
+
 using namespace QtMobility;
 
 #include "soundsettingsutils.h"
@@ -42,6 +44,8 @@ M_REGISTER_WIDGET_NO_CREATE(AlertToneAppletWidget)
 //#define DEBUG
 #define WARNING
 #include "../debug.h"
+
+#include <time.h>
 
 /******************************************************************************
  * Helper functions.
@@ -162,8 +166,17 @@ AlertToneAppletWidget::~AlertToneAppletWidget ()
 }
 
 void
+AlertToneAppletWidget::delayedInit ()
+{
+    DEBUG_CLOCK_START;
+    m_volumeExtension->init ();
+    DEBUG_CLOCK_END("Initializing slider.");
+}
+
+void
 AlertToneAppletWidget::createContents ()
 {
+    DEBUG_CLOCK_START;
     QGraphicsLinearLayout   *layout;
     MLabel                  *label;
 
@@ -185,6 +198,7 @@ AlertToneAppletWidget::createContents ()
     label->setText(qtTrId("qtn_sond_sounds"));
 #endif
 
+    DEBUG_CLOCK_END("First widgets.");
     SYS_DEBUG ("%s: constructing volumeExtension", SYS_TIME_STR);
     /*
      * Try to add the Status-Menus volume/profile chooser widget here
@@ -194,10 +208,13 @@ AlertToneAppletWidget::createContents ()
     m_volumeExtension->setOutOfProcessFilter (QRegExp("$^"));
     m_volumeExtension->setObjectName ("VolumeExtensionArea");
     m_volumeExtension->setStyleName ("VolumeExtensionArea");
-    m_volumeExtension->init ();
+    // Moved to delayedInit for testing.
+    //m_volumeExtension->init ();
+    //QTimer::singleShot(500, this, SLOT(delayedInit()));
 
     layout->addItem (m_volumeExtension);
     SYS_DEBUG ("%s DONE: constructing volumeExtension", SYS_TIME_STR);
+    DEBUG_CLOCK_END("volume extension");
 
     /*
      * A subtitle that shows 'Profile vibration'
@@ -229,8 +246,6 @@ AlertToneAppletWidget::createContents ()
     /*
      * An other secondary title, that says 'Feedback'.
      */
-    SYS_WARNING ("*** qtn_sond_feedback = %s",
-            SYS_STR(qtTrId("qtn_sond_feedback")));
     addSubTitle (
             this, layout,
             //% "Feedback"
@@ -243,6 +258,7 @@ AlertToneAppletWidget::createContents ()
     layout->addItem (m_feedback);
 
     retranslateUi ();
+    DEBUG_CLOCK_END("Whole content");
 }
 
 void
@@ -384,9 +400,13 @@ AlertToneAppletWidget::createAlertTonesList (QGraphicsWidget *parent)
 void
 AlertToneAppletWidget::polishEvent ()
 {
+    DEBUG_CLOCK_START;
+
     QGraphicsWidget  *parent;
     MApplicationPage *page = 0;
 
+    // testing 
+    //m_volumeExtension->init ();
     /*
      * We need to find the MApplicationPage among our parents.
      */
@@ -398,14 +418,12 @@ AlertToneAppletWidget::polishEvent ()
         parent = parent->parentWidget();
     }
 
-    if (!page)
-        return;
-
-    /*
-     * Hiding the home button.
-     */
-    page->setComponentsDisplayMode (
-            MApplicationPage::HomeButton,
-            MApplicationPageModel::Hide);
+    if (page)
+        page->setComponentsDisplayMode (
+                MApplicationPage::HomeButton,
+                MApplicationPageModel::Hide);
+    
+    QTimer::singleShot(2000, this, SLOT(delayedInit()));
+    DEBUG_CLOCK_END("polish event");
 }
 

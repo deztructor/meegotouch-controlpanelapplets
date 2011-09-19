@@ -47,7 +47,6 @@ char** gst_argv = NULL;
 
 SoundSettingsApplet::SoundSettingsApplet ()
 {
-    SYS_WARNING ("****************");
 }
 
 SoundSettingsApplet::~SoundSettingsApplet ()
@@ -98,6 +97,7 @@ SoundSettingsApplet::init ()
 DcpStylableWidget *
 SoundSettingsApplet::constructStylableWidget (int widgetId)
 {
+    DEBUG_CLOCK_START;
     SYS_DEBUG ("%s: widgetId = %d", SYS_TIME_STR, widgetId);
 
     DcpStylableWidget *newWidget = 0;
@@ -113,6 +113,8 @@ SoundSettingsApplet::constructStylableWidget (int widgetId)
             newWidget = new AlertToneAppletWidget (m_alertTones);
             connect (newWidget, SIGNAL(showWidget(int)),
                     this, SLOT(showWidget(int)));
+        } else {
+            return m_stack.top ();
         }
     }
     else if (realWidgetId == AlertToneBrowser_id)
@@ -134,6 +136,7 @@ SoundSettingsApplet::constructStylableWidget (int widgetId)
     }
 
     SYS_DEBUG ("%s [DONE]: widgetId = %d", SYS_TIME_STR, widgetId);
+    DEBUG_CLOCK_END("widget creation");
     return newWidget;
 }
 

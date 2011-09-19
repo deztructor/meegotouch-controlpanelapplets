@@ -46,8 +46,9 @@ Q_OBJECT
     signals:
         void showWidget (int widgetId); 
 
-private slots:
-    void vibrationChanged (bool enabled);
+    private slots:
+        void vibrationChanged (bool enabled);
+        void delayedInit ();
 
 private:
     MWidgetController *createAlertTonesList (QGraphicsWidget *parent);

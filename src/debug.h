@@ -28,6 +28,8 @@
  * filenames printed in the functional tests. Could not find one though, so I
  * disabled the messages here.
  */
+#include <time.h>
+
 //#ifdef UNIT_TEST
 //#  undef DEBUG
 //#endif
@@ -100,6 +102,29 @@
         __VA_ARGS__)
 #else
 #  define SYS_CRITICAL(...) { /* Nothing... */ }
+#endif
+
+#ifdef DEBUG_CLOCK_START
+#  undef DEBUG_CLOCK_START
+#endif
+#ifdef DEBUG_CLOCK_END
+#  undef DEBUG_CLOCK_END
+#endif
+
+#ifdef DEBUG 
+#define DEBUG_CLOCK_START \
+    clock_t debugTimerStart; \
+    clock_t debugTimerEnd; \
+    debugTimerStart = clock ();
+
+#define DEBUG_CLOCK_END(text) \
+    debugTimerEnd = clock (); \
+    SYS_DEBUG ("Ellapsed time for %s: %g", \
+            (text), \
+            1000 * ((double) debugTimerEnd - debugTimerStart) / (double)CLOCKS_PER_SEC);
+#else
+#define DEBUG_CLOCK_START     {}
+#define DEBUG_CLOCK_END(text) {}
 #endif
 
 /******************************************************************************
