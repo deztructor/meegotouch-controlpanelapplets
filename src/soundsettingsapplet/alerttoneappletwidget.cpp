@@ -19,6 +19,8 @@
 #include "alerttoneappletwidget.h"
 
 #include <QSet>
+#include <QVariant>
+#include <MGConfItem>
 #include <MApplicationExtensionArea>
 #include <MLabel>
 #include <QGraphicsLinearLayout>
@@ -35,6 +37,8 @@ using namespace QtMobility;
 #include "profileintcombo.h"
 #include "profiledatainterface.h"
 #include "profilecontainer.h"
+
+static const QString keyboardGConfKey ("/meegotouch/settings/has_keyboard");
 
 #include <MWidgetCreator>
 M_REGISTER_WIDGET_NO_CREATE(AlertToneAppletWidget)
@@ -311,16 +315,32 @@ AlertToneAppletWidget::createFeedbackList(
 
     ProfileIntCombo *picombo = 0;
 
-    QSystemDeviceInfo devInfo;
-    QSystemDeviceInfo::KeyboardTypeFlags keybFlags = devInfo.keyboardTypes ();
+    MGConfItem hkbItem (keyboardGConfKey);
+
+    if (hkbItem.value ().isNull ())
+    {
+        /*
+         * Lets cache this value in GConf, as it is faster than querying it
+         * XXX: This doesn't help on the first opening time
+         */
+        QSystemDeviceInfo devInfo;
+        QSystemDeviceInfo::KeyboardTypeFlags keybFlags = devInfo.keyboardTypes ();
+
+        hkbItem.set (false);
+        if ((keybFlags & QSystemDeviceInfo::FlipKeyboard) ||
+            (keybFlags & QSystemDeviceInfo::FullQwertyKeyboard) ||
+            (keybFlags & QSystemDeviceInfo::HalfQwertyKeyboard) ||
+            (keybFlags & QSystemDeviceInfo::ITUKeypad))
+        {
+            /* has hardware keyboard */
+            hkbItem.set (true);
+        }
+    }
 
     /*
      * Show the keyboard tones only if the device have hardware keyboard
      */
-    if ((keybFlags & QSystemDeviceInfo::FlipKeyboard) ||
-        (keybFlags & QSystemDeviceInfo::FullQwertyKeyboard) ||
-        (keybFlags & QSystemDeviceInfo::HalfQwertyKeyboard) ||
-        (keybFlags & QSystemDeviceInfo::ITUKeypad))
+    if (hkbItem.value ().toBool ())
     {
         picombo = new ProfileIntCombo (
             "keypad.sound.level", true,
