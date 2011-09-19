@@ -24,13 +24,13 @@
 #undef WARNING
 #include "../debug.h"
 
-QString
+const char *
 AlertToneAppletMaps::map (const int &i)
 {
     return AlertToneAppletMaps::map (QString::number (i));
 }
 
-QString
+const char *
 AlertToneAppletMaps::map (const QString &str)
 {
     static QHash<QString, const char *> hashTable;
@@ -79,8 +79,7 @@ QVariant
 AlertToneAppletMaps::mapToUiString (
     const QString &str)
 {
-    const QString mapped = AlertToneAppletMaps::map (str);
-    const QString translated = qtTrId (mapped.toAscii ().constData ());
+    const QString translated = qtTrId (AlertToneAppletMaps::map(str));
 
     SYS_DEBUG ("%s -> %s", SYS_STR(str), SYS_STR(translated));
     return QVariant (translated);
@@ -93,8 +92,7 @@ QVariant
 AlertToneAppletMaps::mapToUiString (
         int integer)
 {
-    const QString mapped = AlertToneAppletMaps::map (integer);
-    const QString translated = qtTrId (mapped.toAscii ().constData ());
+    const QString translated = qtTrId (AlertToneAppletMaps::map (integer));
 
     SYS_DEBUG ("%d -> %s", SYS_STR (integer), SYS_STR (translated));
     return QVariant (translated);
