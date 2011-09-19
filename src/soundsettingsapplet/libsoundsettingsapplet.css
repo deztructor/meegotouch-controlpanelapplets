@@ -10,6 +10,21 @@ AlertToneAppletWidget MApplicationExtensionAreaStyle#VolumeExtensionArea
     layout-orientation: vertical;
 }
 
+AlertToneAppletWidget MApplicationExtensionAreaStyle#VolumeExtensionAreaB
+{
+    background-image: ;
+    background-color: $COLOR_INVERTED_BACKGROUND;
+    /* align it to center */
+    margin-left: 16px;
+    margin-right: 16px;
+
+    /* 480 = 448 + 16 + 16 */
+    minimum-size: 448px 150px;
+
+    container-mode: false;
+    layout-orientation: vertical;
+}
+
 AlertToneAppletWidget VolumeBarStyle
 {
     /* media volume */

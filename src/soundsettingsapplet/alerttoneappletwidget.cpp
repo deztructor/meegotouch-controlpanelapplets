@@ -210,8 +210,14 @@ AlertToneAppletWidget::createContents ()
     m_volumeExtension = new MApplicationExtensionArea ("com.meego.core.MStatusIndicatorMenuExtensionInterface/1.0");
     m_volumeExtension->setInProcessFilter (QRegExp("/statusindicatormenu-volume.desktop$"));
     m_volumeExtension->setOutOfProcessFilter (QRegExp("$^"));
+#ifdef MEEGO
+    /* MeeGo.com doesn't have the Profile Slider widget */
     m_volumeExtension->setObjectName ("VolumeExtensionArea");
     m_volumeExtension->setStyleName ("VolumeExtensionArea");
+#else
+    m_volumeExtension->setObjectName ("VolumeExtensionAreaB");
+    m_volumeExtension->setStyleName ("VolumeExtensionAreaB");
+#endif
     // Moved to delayedInit for testing.
     //m_volumeExtension->init ();
     //QTimer::singleShot(500, this, SLOT(delayedInit()));
@@ -443,7 +449,7 @@ AlertToneAppletWidget::polishEvent ()
                 MApplicationPage::HomeButton,
                 MApplicationPageModel::Hide);
     
-    QTimer::singleShot(2000, this, SLOT(delayedInit()));
+    QTimer::singleShot (1000, this, SLOT (delayedInit ()));
     DEBUG_CLOCK_END("polish event");
 }
 
