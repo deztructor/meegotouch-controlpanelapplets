@@ -19,9 +19,19 @@
 #include "alerttone.h"
 #include "trackerconnection.h"
 
+#include <QList>
+#include <QVector>
+#include <QString>
+
 #ifdef HAVE_LIBPROFILE
 #include <profiled/libprofile.h>
 #endif
+
+/*
+ * This causes small slow-down, but ensures whether all the
+ * profile keys are exists (lets disable it for now...)
+ */
+#undef WANT_PROFILED_CHECKS
 
 #undef DEBUG
 #define WARNING
@@ -56,6 +66,7 @@ AlertTone::alertTones ()
     QList<AlertTone *> v;
 
 #ifdef HAVE_LIBPROFILE
+#ifdef WANT_PROFILED_CHECKS
     QList<QString> keys;
 
     profileval_t *vals = profile_get_values(NULL);
@@ -77,26 +88,37 @@ AlertTone::alertTones ()
         profile_free_values (vals);
     }
 
-    QList<QString> list;
-    list << "ringing.alert.tone"
-          << "voip.alert.tone"
-          << "email.alert.tone"
-          << "sms.alert.tone"
-          << "im.alert.tone"
-          << "calendar.alert.tone";
+    QVector<QString> toneKeys (0);
+    toneKeys << "ringing.alert.tone"
+             << "voip.alert.tone"
+             << "email.alert.tone"
+             << "sms.alert.tone"
+             << "im.alert.tone"
+             << "calendar.alert.tone";
 
-    for (int i = 0 ; i < list.size() ; i++)
+    for (int i = 0 ; i < toneKeys.size() ; i++)
     {
-        if  (keys.contains(list.at(i)))
+        if (keys.contains (toneKeys.at (i)))
         {
-            keys.removeOne(list.at(i));
-            v << new AlertTone(QString(list.at(i)) + "@general");
+            keys.removeOne (toneKeys.at (i));
+            v << new AlertTone (QString (toneKeys.at (i)) + "@general");
         }
     }
+#else // do not WANT_PROFILED_CHECKS
+    QVector<QString> toneKeys (0);
+    toneKeys << "ringing.alert.tone@general"
+             << "voip.alert.tone@general"
+             << "email.alert.tone@general"
+             << "sms.alert.tone@general"
+             << "im.alert.tone@general"
+             << "calendar.alert.tone@general";
 
-    for (int i = 0 ; i < keys.size() ; i++ )
-        v << new AlertTone(QString(keys.at(i)));
+    for (int i = 0; i < toneKeys.size (); i++)
+    {
+        v << new AlertTone (toneKeys.at (i));
+    }
 #endif
+#endif // HAVE_LIBPROFILE
 
     return v;
 }
@@ -168,12 +190,13 @@ AlertTone::fetchFromBackend()
 QString
 AlertTone::fileName()
 {
-    QProfileValue::fetchFromBackend();
+    if (m_val.isNull ())
+        QProfileValue::fetchFromBackend ();
 
-    if (!m_val.isNull())
-        return m_val.toString();
+    if (!m_val.isNull ())
+        return m_val.toString ();
 
-    return QString("");
+    return QString ("");
 }
 
 void
