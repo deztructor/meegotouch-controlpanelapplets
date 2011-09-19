@@ -57,7 +57,11 @@ GConfStringCombo::retranslateUi ()
     QAbstractItemModel *model = itemModel ();
     int                 i;
     int                 idx = -1;
-    SYS_DEBUG ("");
+    int                 size;
+    QString             possibleValue;
+
+    SYS_DEBUG ("********************************************");
+    SYS_DEBUG ("this = %p", this);
 
     /*
      * Removing every row from the list.
@@ -80,20 +84,22 @@ GConfStringCombo::retranslateUi ()
      * Adding a row for every possible value with the UI string and the possible
      * value code name.
      */
-    for (i = 0; i < m_possibleValues.size(); i++)
-    {
+    size = m_possibleValues.size();
+    for (i = 0; i < size; i++) {
+        possibleValue = m_possibleValues[i];
+
         model->insertRow (model->rowCount ());
         model->setData (
                 model->index (i, ColumnUiString),
-                AlertToneAppletMaps::mapToUiString (m_possibleValues[i]));
+                AlertToneAppletMaps::mapToUiString (possibleValue));
         model->setData(
                 model->index (i, ColumnGConfString),
-                QVariant (m_possibleValues[i]));
+                QVariant (possibleValue));
 
         /*
          * This will show us the current index.
          */
-        if (gconfVal == m_possibleValues[i])
+        if (gconfVal == possibleValue)
             idx = i;
     }
 

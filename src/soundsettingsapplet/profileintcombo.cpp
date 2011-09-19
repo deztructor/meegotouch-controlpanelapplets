@@ -47,7 +47,7 @@ ProfileIntCombo::retranslateUi()
 	QAbstractItemModel *model = itemModel();
 	QProfileValue::RangeType rangeType;
 	QList<QVariant> possibleValues = m_val.possibleValues(&rangeType);
-
+    int                 from, to;
     /*
      * The title of combobox.
      */
@@ -58,8 +58,11 @@ ProfileIntCombo::retranslateUi()
      */
 	model->removeRows(0, model->rowCount());
 
-	if (QProfileValue::Interval == rangeType)
-		for (int Nix = possibleValues[0].toInt() ; Nix <= possibleValues[1].toInt() ; Nix++) {
+	if (QProfileValue::Interval == rangeType) {
+        from = possibleValues[0].toInt();
+        to   = possibleValues[1].toInt();
+
+		for (int Nix = from; Nix <= to; Nix++) {
 			model->insertRow(model->rowCount());
 			model->setData (
                     model->index(Nix, ColumnUiString),
@@ -68,7 +71,7 @@ ProfileIntCombo::retranslateUi()
                     model->index(Nix, ColumnProfileInt), 
                     QVariant(Nix));
 		}
-	else
+    } else {
 		for (int Nix = 0 ; Nix < possibleValues.size() ; Nix++) {
 			model->insertRow(model->rowCount());
 			model->setData (
@@ -78,6 +81,7 @@ ProfileIntCombo::retranslateUi()
                     model->index(Nix, ColumnProfileInt), 
                     QVariant(possibleValues[Nix]));
 		}
+    }
 
 	changedInProfile();
 }
