@@ -173,11 +173,9 @@ AlertToneAppletWidget::~AlertToneAppletWidget ()
 void
 AlertToneAppletWidget::delayedInit ()
 {
-#if 0
     DEBUG_CLOCK_START;
     m_volumeExtension->init ();
     DEBUG_CLOCK_END("Initializing slider.");
-#endif
 }
 
 void
@@ -205,7 +203,6 @@ AlertToneAppletWidget::createContents ()
     label->setText(qtTrId("qtn_sond_sounds"));
 #endif
 
-#if 0
     DEBUG_CLOCK_END("First widgets.");
     SYS_DEBUG ("%s: constructing volumeExtension", SYS_TIME_STR);
     /*
@@ -226,7 +223,6 @@ AlertToneAppletWidget::createContents ()
     layout->addItem (m_volumeExtension);
     SYS_DEBUG ("%s DONE: constructing volumeExtension", SYS_TIME_STR);
     DEBUG_CLOCK_END("volume extension");
-#endif
 
     /*
      * A subtitle that shows 'Profile vibration'
