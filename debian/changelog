@@ -1,3 +1,9 @@
+meegotouch-controlpanelapplets (0.20.74~1) meegotouch; urgency=low
+
+  * [NEW VERSION]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 21 Sep 2011 10:32:00 +0200
+
 meegotouch-controlpanelapplets (0.20.73-1) meegotouch; urgency=low
 
   * Fixes: NB#282073 - Soundsettings applet optimalization (oprofile report)
