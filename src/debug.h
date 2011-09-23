@@ -119,9 +119,10 @@
 
 #define DEBUG_CLOCK_END(text) \
     debugTimerEnd = clock (); \
+    SYS_DEBUG ("++++++++++++++++++++++++++++++++"); \
     SYS_DEBUG ("Ellapsed time for %s: %g", \
             (text), \
-            1000 * ((double) debugTimerEnd - debugTimerStart) / (double)CLOCKS_PER_SEC);
+            10000 * ((double) debugTimerEnd - debugTimerStart) / (double)CLOCKS_PER_SEC);
 #else
 #define DEBUG_CLOCK_START     {}
 #define DEBUG_CLOCK_END(text) {}

@@ -50,10 +50,12 @@ BatteryBusinessLogic::BatteryBusinessLogic (
     m_Charging (false),
     m_PowerSaveMode (false)
 {
+    DEBUG_CLOCK_START;
 #ifdef HAVE_QMSYSTEM
     m_battery    = new MeeGo::QmBattery (this);
     m_devicemode = new MeeGo::QmDeviceMode (this);
 #endif
+    DEBUG_CLOCK_END("Battery businesslogic creation");
 }
 
 BatteryBusinessLogic::~BatteryBusinessLogic ()
@@ -69,6 +71,7 @@ BatteryBusinessLogic::~BatteryBusinessLogic ()
 void
 BatteryBusinessLogic::requestValues ()
 {
+    DEBUG_CLOCK_START;
     if (m_initialized)
         return;
 
@@ -113,6 +116,7 @@ BatteryBusinessLogic::requestValues ()
     #endif
 
     recalculateChargingInfo ();
+    DEBUG_CLOCK_END("Data request");
 }
 
 void

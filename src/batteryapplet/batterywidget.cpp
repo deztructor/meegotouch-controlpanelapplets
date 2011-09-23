@@ -67,6 +67,7 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
         m_TitleLabel (0),
         m_UILocked (false)
 {
+    DEBUG_CLOCK_START;
     SYS_DEBUG ("Starting in %p", this);
 
     setContentsMargins (0., 0., 0., 0.);
@@ -74,6 +75,7 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
     // instantiate the batterybusinesslogic
     m_logic = new BatteryBusinessLogic;
     initWidget ();
+    DEBUG_CLOCK_END("Battery widget init");
 }
 
 BatteryWidget::~BatteryWidget ()
