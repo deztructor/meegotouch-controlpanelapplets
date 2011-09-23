@@ -66,8 +66,10 @@ PercentageContainer::updateCapacity (
     QString text;
     MLocale locale;
 
+    float percentage = ((float) value) / 100.0f;
+
     //% "Battery level \%L1\%"
-    text = qtTrId ("qtn_ener_battery_level").arg (locale.formatPercent(value));
+    text = qtTrId ("qtn_ener_battery_level").arg (locale.formatPercent (percentage));
     SYS_DEBUG ("*** text = %s", SYS_STR(text));
     
     m_TextLabel->setText(text);
