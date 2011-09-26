@@ -13,6 +13,8 @@ DEFINES += UNIT_TEST
 TARGET = ut_soundsettingsapplet
 target.path = /usr/lib/$$TEST_PKG_NAME
 
+DEFINES += M_APPLICATION_EXTENSION_DIR=""
+
 CONFIG += \
     plugin          \
     gui             \
@@ -60,7 +62,8 @@ HEADERS +=                                  \
     $$SRC_PREFIX/profileintcombo.h          \
     $$SRC_PREFIX/static.h                   \
     $$SRC_PREFIX/soundsettingsapplet.h      \
-    $$SRC_PREFIX/alerttonebrowserstylable.h
+    $$SRC_PREFIX/alerttonebrowserstylable.h \
+    $$SRC_PREFIX/profilewidgetcontainer.h
 
 SOURCES +=                                  \
     ut_soundsettingsapplet.cpp              \
@@ -87,7 +90,7 @@ SOURCES +=                                  \
     $$SRC_PREFIX/profileintcombo.cpp        \
     $$SRC_PREFIX/soundsettingsapplet.cpp    \
     $$SRC_PREFIX/alerttonebrowserstylable.cpp \
-    $$STUB_PREFIX/mapplicationextensionarea_stub.cpp
+    $$SRC_PREFIX/profilewidgetcontainer.cpp
 
 INSTALLS += target
 
