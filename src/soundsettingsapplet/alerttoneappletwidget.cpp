@@ -45,7 +45,7 @@ M_REGISTER_WIDGET_NO_CREATE(AlertToneAppletWidget)
 
 #include "../styles.h"
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -432,7 +432,10 @@ AlertToneAppletWidget::polishEvent ()
                 MApplicationPage::HomeButton,
                 MApplicationPageModel::Hide);
     
-    QTimer::singleShot (1000, this, SLOT (delayedInit ()));
+    /*
+     * XXX: FIXME: TODO: adjust this delay to make it best
+     */
+    QTimer::singleShot (500, this, SLOT (delayedInit ()));
     DEBUG_CLOCK_END("polish event");
 }
 
