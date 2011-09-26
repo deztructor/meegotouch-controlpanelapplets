@@ -35,6 +35,7 @@ private slots:
       void cleanupTestCase ();
       void soundsettingsappletConstructor ();
       void soundsettingsappletconstructWidget ();
+      void soundsettingsappletBrief ();
       void soundsettingsappletinit ();
       void soundsettingsapplettitle ();
       void soundsettingsappletviewMenuItems ();

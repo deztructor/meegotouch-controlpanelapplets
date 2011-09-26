@@ -79,6 +79,16 @@ Ut_SoundSettingsAppletTests::soundsettingsappletconstructWidget ()
 }
 
 void
+Ut_SoundSettingsAppletTests::soundsettingsappletBrief ()
+{
+    SoundSettingsApplet applet;
+
+    applet.init ();
+
+    QCOMPARE ((int) applet.constructBrief (0), 0);
+}
+
+void
 Ut_SoundSettingsAppletTests::soundsettingsappletinit()
 {
     MApplicationWindow aw;
