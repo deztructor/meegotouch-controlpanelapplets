@@ -17,11 +17,11 @@
 **
 ****************************************************************************/
 #include "alerttoneappletwidget.h"
+#include "profilewidgetcontainer.h"
 
 #include <QSet>
 #include <QVariant>
 #include <MGConfItem>
-#include <MApplicationExtensionArea>
 #include <MLabel>
 #include <QGraphicsLinearLayout>
 #include <MSeparator>
@@ -45,7 +45,7 @@ M_REGISTER_WIDGET_NO_CREATE(AlertToneAppletWidget)
 
 #include "../styles.h"
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -140,7 +140,7 @@ AlertToneAppletWidget::AlertToneAppletWidget (
     m_ProfileIf (new ProfileDataInterface),
     m_tones (0),
     m_feedback (0),
-    m_volumeExtension (0)
+    m_profileWidget (0)
 {
     setContentsMargins (0., 0., 0., 0.);
 
@@ -165,16 +165,13 @@ AlertToneAppletWidget::~AlertToneAppletWidget ()
 
     delete m_ProfileIf;
     m_ProfileIf = 0;
-
-    delete m_volumeExtension;
-    m_volumeExtension = 0;
 }
 
 void
 AlertToneAppletWidget::delayedInit ()
 {
     DEBUG_CLOCK_START;
-    m_volumeExtension->init ();
+    m_profileWidget->init ();
     DEBUG_CLOCK_END("Initializing slider.");
 }
 
@@ -205,22 +202,10 @@ AlertToneAppletWidget::createContents ()
 
     DEBUG_CLOCK_END("First widgets.");
     SYS_DEBUG ("%s: constructing volumeExtension", SYS_TIME_STR);
-    /*
-     * Try to add the Status-Menus volume/profile chooser widget here
-     */
-    m_volumeExtension = new MApplicationExtensionArea ("com.meego.core.MStatusIndicatorMenuExtensionInterface/1.0");
-    m_volumeExtension->setInProcessFilter (QRegExp("/statusindicatormenu-volume.desktop$"));
-    m_volumeExtension->setOutOfProcessFilter (QRegExp("$^"));
-#ifdef MEEGO
-    /* MeeGo.com doesn't have the Profile Slider widget */
-    m_volumeExtension->setObjectName ("VolumeExtensionArea");
-    m_volumeExtension->setStyleName ("VolumeExtensionArea");
-#else
-    m_volumeExtension->setObjectName ("VolumeExtensionAreaB");
-    m_volumeExtension->setStyleName ("VolumeExtensionAreaB");
-#endif
 
-    layout->addItem (m_volumeExtension);
+    m_profileWidget = new ProfileWidgetContainer (this);
+    layout->addItem (m_profileWidget);
+
     SYS_DEBUG ("%s DONE: constructing volumeExtension", SYS_TIME_STR);
     DEBUG_CLOCK_END("volume extension");
 
@@ -447,7 +432,10 @@ AlertToneAppletWidget::polishEvent ()
                 MApplicationPage::HomeButton,
                 MApplicationPageModel::Hide);
     
-    QTimer::singleShot (1000, this, SLOT (delayedInit ()));
+    /*
+     * XXX: FIXME: TODO: adjust this delay to make it best
+     */
+    QTimer::singleShot (500, this, SLOT (delayedInit ()));
     DEBUG_CLOCK_END("polish event");
 }
 

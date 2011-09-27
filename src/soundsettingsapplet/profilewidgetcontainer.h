@@ -3,6 +3,7 @@
 ** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
+** Author: David Kedves <dkedves@blumsoft.eu>
 **
 ** This file is part of meegotouch-controlpanelapplets.
 **
@@ -16,33 +17,31 @@
 ** of this file.
 **
 ****************************************************************************/
+#ifndef PROFILEWIDGETCONTAINER_H
+#define PROFILEWIDGETCONTAINER_H
 
-#ifndef UT_SOUNDSETTINGSAPPLET_H
-#define UT_SOUNDSETTINGSAPPLET_H
+#include <MWidgetController>
 
-#include <QtTest/QtTest>
-#include <QObject>
-#include <MApplication>
+class QPluginLoader;
+class QGraphicsWidget;
 
-class Ut_SoundSettingsAppletTests : public QObject
+class ProfileWidgetContainer : public MWidgetController
 {
 Q_OBJECT
+public:
+    ProfileWidgetContainer (QGraphicsWidget *parent = 0);
+    ~ProfileWidgetContainer ();
 
-private slots:
-      void init (){};
-      void cleanup (){};
-      void initTestCase ();
-      void cleanupTestCase ();
-      void soundsettingsappletConstructor ();
-      void soundsettingsappletconstructWidget ();
-      void soundsettingsappletBrief ();
-      void soundsettingsappletinit ();
-      void soundsettingsapplettitle ();
-      void soundsettingsappletviewMenuItems ();
-      void soundsettingsappletToplevelDestroyed ();
+public slots:
+    void init ();
 
 private:
-      MApplication      *m_App;
+    void pluginLoadSuccess (QGraphicsWidget *pluginWidget);
+    void pluginLoadFailed ();
+
+private:
+    QPluginLoader   *m_loader;
+    bool             m_initialized;
 };
 
 #endif

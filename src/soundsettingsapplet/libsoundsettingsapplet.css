@@ -1,28 +1,22 @@
-AlertToneAppletWidget MApplicationExtensionAreaStyle#VolumeExtensionArea
+MWidgetStyle#ProfileWidgetContainerNoPlugin
 {
-    background-image: ;
-    background-color: $COLOR_INVERTED_BACKGROUND;
+    minimum-size: 0px 0px;
+    maximum-size: 0px 0px;
+    preferred-size: 0px 0px;
+
     /* align it to center */
     margin-left: 16px;
     margin-right: 16px;
-
-    container-mode: false;
-    layout-orientation: vertical;
 }
 
-AlertToneAppletWidget MApplicationExtensionAreaStyle#VolumeExtensionAreaB
+MWidgetStyle#ProfileWidgetContainer
 {
-    background-image: ;
-    background-color: $COLOR_INVERTED_BACKGROUND;
     /* align it to center */
     margin-left: 16px;
     margin-right: 16px;
 
     /* 480 = 448 + 16 + 16 */
     minimum-size: 448px 150px;
-
-    container-mode: false;
-    layout-orientation: vertical;
 }
 
 AlertToneAppletWidget VolumeBarStyle

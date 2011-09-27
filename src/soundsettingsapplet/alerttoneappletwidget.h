@@ -27,7 +27,7 @@
 #include "alerttone.h"
 
 class QGraphicsLinearLayout;
-class MApplicationExtensionArea;
+class ProfileWidgetContainer;
 
 class AlertToneAppletWidget : public DcpStylableWidget
 {
@@ -62,7 +62,7 @@ private:
     QPointer<ProfileDataInterface>   m_ProfileIf;
     MWidgetController               *m_tones;
     MWidgetController               *m_feedback;
-    MApplicationExtensionArea       *m_volumeExtension;
+    ProfileWidgetContainer          *m_profileWidget;
 
 #ifdef UNIT_TEST
     friend class Ut_AlertToneAppletWidgetTests;
