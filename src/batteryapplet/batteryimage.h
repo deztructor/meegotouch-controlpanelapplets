@@ -82,7 +82,7 @@ private slots:
     void chargeComplete ();
 
 private:
-    void  setIconSet ();
+    void  setIconSet (bool forceReload = false);
 
     void  stopTimer();
     bool  maybeStartTimer();

@@ -50,7 +50,7 @@ BatteryImage::loadImages (
         // Release the pixmaps
         foreach (const QPixmap *icon, m_Images)
             MTheme::instance ()->releasePixmap (icon);
-        
+
         m_Images.clear ();
     }
 
@@ -72,20 +72,28 @@ BatteryImage::loadImages (
    * The second one was -low , but to be sync with the status-menu it should
    * be verylow too... (See NB#284459 for details)
    */
+  if (charging ())
+  {
+      /*
+       * In case of charging, do not scare the user with the 'verylow' icon
+       * XXX: https://projects.maemo.org/bugzilla/show_bug.cgi?id=284459#c5
+       */
+      m_Images <<
+          getPixmap (QString ("icon-m-energy-management-%1-low").arg (ID));
+  }
+  else
+  {
+      m_Images <<
+          getPixmap (QString ("icon-m-energy-management-%1-verylow").arg (ID));
+  }
 
-  m_Images <<
-      getPixmap (QString ("icon-m-energy-management-%1-verylow").arg (ID)) <<
-      getPixmap (QString ("icon-m-energy-management-%1-verylow").arg (ID)) <<
-      getPixmap (QString ("icon-m-energy-management-%1").arg (ID) + "1") <<
-      getPixmap (QString ("icon-m-energy-management-%1").arg (ID) + "2") <<
-      getPixmap (QString ("icon-m-energy-management-%1").arg (ID) + "3") <<
-      getPixmap (QString ("icon-m-energy-management-%1").arg (ID) + "4") <<
-      getPixmap (QString ("icon-m-energy-management-%1").arg (ID) + "5") <<
-      getPixmap (QString ("icon-m-energy-management-%1").arg (ID) + "6") <<
-      getPixmap (QString ("icon-m-energy-management-%1").arg (ID) + "7") <<
-      getPixmap (QString ("icon-m-energy-management-%1").arg (ID) + "8");
-    
-    m_iconCurrentSet = type;
+  for (int i = 1; i <=8; i++)
+  {
+      m_Images <<
+          getPixmap (QString ("icon-m-energy-management-%1").arg (ID) + QString::number (i));
+  }
+
+  m_iconCurrentSet = type;
 }
 
 BatteryImage::~BatteryImage ()
@@ -118,7 +126,7 @@ BatteryImage::updateBatteryLevel (
 }
 
 void
-BatteryImage::setIconSet ()
+BatteryImage::setIconSet (bool forceReload)
 {
     BatteryImage::BatteryIconType type;
 
@@ -131,7 +139,13 @@ BatteryImage::setIconSet ()
     }
 
     stopTimer ();
-    if (m_iconCurrentSet != type) {
+    /*
+     * In case of charging begin/end we should
+     * re load the icon set, as 'low' icon should
+     * be used instead of 'verylow' in case of charging
+     * and vice versa
+     */
+    if (forceReload || (m_iconCurrentSet != type)) {
         SYS_DEBUG ("*** new type = %d", type);
         loadImages (type);
     }
@@ -175,7 +189,7 @@ BatteryImage::updateImage ()
     if (charging() && 
             m_ImageIndex + 1 == m_Images.size () && 
             m_batteryLevel + 1 == m_Images.size ())
-        m_ImageIndex = 7;
+        m_ImageIndex = 6;
 }
 
 /*!
@@ -193,7 +207,7 @@ BatteryImage::startCharging (
 {
     SYS_DEBUG ("*** rate = %d", rate);
     m_ChargingSpeed = rate;
-    setIconSet ();
+    setIconSet (true);
     maybeStartTimer ();
 }
 
@@ -201,7 +215,7 @@ void
 BatteryImage::stopCharging ()
 {
     m_ChargingSpeed = 0;
-    setIconSet ();
+    setIconSet (true);
 }
 
 void

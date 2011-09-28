@@ -413,24 +413,22 @@ BatteryBusinessLogic::batteryBarValue (
         percentage = 10;
 
     if (percentage >= 84)
-        index = 9;
-    else if (percentage < 84 && percentage >= 73)
         index = 8;
-    else if (percentage < 73 && percentage >= 62)
+    else if (percentage < 84 && percentage >= 73)
         index = 7;
-    else if (percentage < 62 && percentage >= 51)
+    else if (percentage < 73 && percentage >= 62)
         index = 6;
-    else if (percentage < 51 && percentage >= 39)
+    else if (percentage < 62 && percentage >= 51)
         index = 5;
-    else if (percentage < 39 && percentage >= 28)
+    else if (percentage < 51 && percentage >= 39)
         index = 4;
-    else if (percentage < 28 && percentage >= 17)
+    else if (percentage < 39 && percentage >= 28)
         index = 3;
-    else if (percentage < 17 && percentage >= 5)
+    else if (percentage < 28 && percentage >= 17)
         index = 2;
-    else if (percentage < 5 && percentage > 1)
+    else if (percentage < 17 && percentage >= 5)
         index = 1;
-    else // if (percentage == 0)
+    else // if (percentage < 0)
         index = 0;
 
     return index;

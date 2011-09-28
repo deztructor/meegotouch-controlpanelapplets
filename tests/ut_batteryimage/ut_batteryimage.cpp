@@ -66,49 +66,13 @@ Ut_BatteryImage::testLoadImages ()
     BatteryImage *image = new BatteryImage;
 
     image->loadImages (BatteryImage::ICON_NORMAL);
-    QVERIFY (image->m_Images.size() == 10);
-#if 0
-    // We need to wait until the theme daemon loads the icon.
-    QTest::qWait (1000);
-    for (int n = 0; n < 10; ++n) {
-        const QPixmap  *pixmap;
-        pixmap = image->m_Images[n];
-        SYS_DEBUG ("image[%d] size is %d, %d", n, 
-                pixmap->width(), pixmap->height());
-        QVERIFY (pixmap->width () >= 48);
-        QVERIFY (pixmap->height () >= 48);
-    }
-#endif
+    QVERIFY (image->m_Images.size() == 9);
     
     image->loadImages (BatteryImage::ICON_POWERSAVE);
-    QVERIFY (image->m_Images.size() == 10);
-#if 0
-    // We need to wait until the theme daemon loads the icon.
-    QTest::qWait (1000);
-    for (int n = 0; n < 10; ++n) {
-        const QPixmap  *pixmap;
-        pixmap = image->m_Images[n];
-        SYS_DEBUG ("image[%d] size is %d, %d", n, 
-                pixmap->width(), pixmap->height());
-        QVERIFY (pixmap->width () >= 48);
-        QVERIFY (pixmap->height () >= 48);
-    }
-#endif
+    QVERIFY (image->m_Images.size() == 9);
     
     image->loadImages (BatteryImage::ICON_CHARGING);
-    QVERIFY (image->m_Images.size() == 10);
-#if 0
-    // We need to wait until the theme daemon loads the icon.
-    QTest::qWait (1000);
-    for (int n = 0; n < 10; ++n) {
-        const QPixmap  *pixmap;
-        pixmap = image->m_Images[n];
-        SYS_DEBUG ("image[%d] size is %d, %d", n, 
-                pixmap->width(), pixmap->height());
-        QVERIFY (pixmap->width () >= 48);
-        QVERIFY (pixmap->height () >= 48);
-    }
-#endif
+    QVERIFY (image->m_Images.size() == 9);
 
     delete image;
 }
@@ -117,7 +81,7 @@ void
 Ut_BatteryImage::testAnimation ()
 {
     BatteryImage *image = new BatteryImage;
-    bool          indexUsed[10];
+    bool          indexUsed[9];
     int           level;
 
     /*
@@ -140,13 +104,13 @@ Ut_BatteryImage::testAnimation ()
      * Checking the battery animation from level 0 to level 9
      */
     image->updateBatteryLevel (0);
-    image->startCharging(10);
-    QVERIFY (image->m_ChargingSpeed == 10);
+    image->startCharging(9);
+    QVERIFY (image->m_ChargingSpeed == 9);
     QVERIFY (animationIsOngoing(image));
     QVERIFY (image->m_iconCurrentSet == BatteryImage::ICON_CHARGING);
 
     // rsetting array
-    for (int n = 0; n < 10; ++n)
+    for (int n = 0; n < 9; ++n)
         indexUsed[n] = false;
     // Gathering data
     for (int w = 0; w < 30; ++w) {
@@ -154,7 +118,7 @@ Ut_BatteryImage::testAnimation ()
         QTest::qWait (9);
     }
     // Checking the values.
-    for (int n = 0; n < 10; ++n) {
+    for (int n = 0; n < 9; ++n) {
         QVERIFY (indexUsed[n]);
     }
     
@@ -164,7 +128,7 @@ Ut_BatteryImage::testAnimation ()
     for (level = 1; level < 5; ++level) {
         image->updateBatteryLevel (level);
         // Resetting the array
-        for (int n = 0; n < 10; ++n)
+        for (int n = 0; n < 9; ++n)
             indexUsed[n] = false;
         // Gathering data
         for (int w = 0; w < 30; ++w) {
@@ -173,7 +137,7 @@ Ut_BatteryImage::testAnimation ()
         }
 
         // checking the values.
-        for (int n = 0; n < 10; ++n) {
+        for (int n = 0; n < 9; ++n) {
             int shouldBeTrue;
 
             shouldBeTrue = n >= level;
