@@ -68,9 +68,14 @@ BatteryImage::loadImages (
             break;
     }
 
+  /*
+   * The second one was -low , but to be sync with the status-menu it should
+   * be verylow too... (See NB#284459 for details)
+   */
+
   m_Images <<
       getPixmap (QString ("icon-m-energy-management-%1-verylow").arg (ID)) <<
-      getPixmap (QString ("icon-m-energy-management-%1-low").arg (ID)) <<
+      getPixmap (QString ("icon-m-energy-management-%1-verylow").arg (ID)) <<
       getPixmap (QString ("icon-m-energy-management-%1").arg (ID) + "1") <<
       getPixmap (QString ("icon-m-energy-management-%1").arg (ID) + "2") <<
       getPixmap (QString ("icon-m-energy-management-%1").arg (ID) + "3") <<
