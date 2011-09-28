@@ -93,7 +93,7 @@ Ut_BatteryImage::testAnimation ()
     QVERIFY (!animationIsOngoing(image));
     QVERIFY (image->m_iconCurrentSet == BatteryImage::ICON_NORMAL);
 
-    for (int n = 9; n >= 0; --n) {
+    for (int n = 8; n >= 0; --n) {
         image->updateBatteryLevel (n);
         QVERIFY (image->m_batteryLevel == n);
         QVERIFY (image->m_ImageIndex == n);
@@ -101,16 +101,16 @@ Ut_BatteryImage::testAnimation ()
     }
 
     /*
-     * Checking the battery animation from level 0 to level 9
+     * Checking the battery animation from level 0 to level 8
      */
     image->updateBatteryLevel (0);
-    image->startCharging(9);
-    QVERIFY (image->m_ChargingSpeed == 9);
+    image->startCharging(8);
+    QVERIFY (image->m_ChargingSpeed == 8);
     QVERIFY (animationIsOngoing(image));
     QVERIFY (image->m_iconCurrentSet == BatteryImage::ICON_CHARGING);
 
     // rsetting array
-    for (int n = 0; n < 9; ++n)
+    for (int n = 0; n < 8; ++n)
         indexUsed[n] = false;
     // Gathering data
     for (int w = 0; w < 30; ++w) {
@@ -118,7 +118,7 @@ Ut_BatteryImage::testAnimation ()
         QTest::qWait (9);
     }
     // Checking the values.
-    for (int n = 0; n < 9; ++n) {
+    for (int n = 0; n < 8; ++n) {
         QVERIFY (indexUsed[n]);
     }
     
@@ -128,7 +128,7 @@ Ut_BatteryImage::testAnimation ()
     for (level = 1; level < 5; ++level) {
         image->updateBatteryLevel (level);
         // Resetting the array
-        for (int n = 0; n < 9; ++n)
+        for (int n = 0; n < 8; ++n)
             indexUsed[n] = false;
         // Gathering data
         for (int w = 0; w < 30; ++w) {
@@ -137,7 +137,7 @@ Ut_BatteryImage::testAnimation ()
         }
 
         // checking the values.
-        for (int n = 0; n < 9; ++n) {
+        for (int n = 0; n < 8; ++n) {
             int shouldBeTrue;
 
             shouldBeTrue = n >= level;
