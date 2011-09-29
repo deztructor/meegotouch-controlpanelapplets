@@ -1,9 +1,10 @@
-meegotouch-controlpanelapplets (0.20.74~2) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.20.74-1) meegotouch; urgency=low
 
   * Fixes: NB#284459 - Red battery (very)low icon shown on Battery settings
     view way too late
+  * Fixes: NB#284656 - Battery level is shown as for ex: 7,600%%
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 28 Sep 2011 13:57:39 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 29 Sep 2011 13:12:45 +0200
 
 meegotouch-controlpanelapplets (0.20.73-1) meegotouch; urgency=low
 
