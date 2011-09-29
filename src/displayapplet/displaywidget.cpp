@@ -21,7 +21,9 @@
 #include "dcpdisplay.h"
 #include "../styles.h"
 
-#undef DEBUG
+//#undef DEBUG
+//#define WARNING
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -53,7 +55,8 @@ DisplayWidget::DisplayWidget (QGraphicsWidget *parent) :
         m_screenTimeout (0),
         m_screenlightLabel (0),
         m_lowPowerSwitch (0),
-        m_DoubleTapSwitch (0)
+        m_DoubleTapSwitch (0),
+        m_colorProfilesCBox (0)
 {
     setReferer (DcpDisplay::None);
     setContentsMargins (0, 0, 0, 0);
@@ -120,6 +123,8 @@ void DisplayWidget::initWidget ()
         addLowPowerContainer ();
     }
     addDoubleTapContainer ();
+    
+    addColorProfilesCBox ();
 
 #ifndef MEEGO
     if (m_topCloseChangeable)
@@ -267,6 +272,37 @@ DisplayWidget::addScreenTimeoutContainer ()
      */
     m_MainLayout->addItem (m_screenTimeout);
     m_MainLayout->setStretchFactor (m_screenTimeout, 0);
+}
+
+/* 
+ * Construct and init color profiles selector
+ */
+void
+DisplayWidget::addColorProfilesCBox ()
+{
+    /*
+     * Get the values from the business-logic
+     */
+    m_colorProfilesCBox = new MComboBox;
+
+    m_colorProfilesCBox->setTitle (qtTrId ("qtn_disp_profile"));
+    m_colorProfilesCBox->setStyleName ("CommonComboBoxInverted");
+    m_colorProfilesCBox->setLayoutPosition (M::VerticalCenterPosition);
+
+    updateColorProfilesCBox ();
+
+    connect (m_logic, SIGNAL (availableColorProfilesReceived()),
+             this, SLOT (updateColorProfilesCBox ()));
+    connect (m_logic, SIGNAL (currentColorProfileReceived()),
+             this, SLOT (currentColorProfileReceivedSlot ()));
+    connect (m_colorProfilesCBox, SIGNAL (currentIndexChanged (int)),
+             this, SLOT (colorProfilesCBoxCurrentIndexChanged (int)));
+
+    /*
+     * Adding the whole row to the main container.
+     */
+    m_MainLayout->addItem (m_colorProfilesCBox);
+    m_MainLayout->setStretchFactor (m_colorProfilesCBox, 0);
 }
 
 void
@@ -462,6 +498,39 @@ DisplayWidget::updateScreenTimeoutCombo ()
 }
 
 void
+DisplayWidget::updateColorProfilesCBox ()
+{
+    SYS_DEBUG("update color profiles");
+    bool fillNeeded = (m_colorProfilesCBox->count () == 0);
+    
+    const QStringList& colorProf = m_logic->colorProfileValues ();
+    const QMap<QString, QString>& colorProfMap = m_logic->colorProfileMap ();
+
+    for (int i = 0; i < colorProf.size (); i++)
+    {
+        QString textId = colorProfMap.value(colorProf.at (i));
+        QString itemText = qtTrId (textId.toLatin1().constData());
+
+        if (fillNeeded)
+            m_colorProfilesCBox->insertItem (i, itemText);
+        else
+            m_colorProfilesCBox->setItemText (i, itemText);
+    }
+
+    /* set the currently selected index */
+    if (fillNeeded)
+        m_colorProfilesCBox->setProperty ("currentIndex",
+                                      m_logic->selectedColorProfileValue ());
+}
+
+void
+DisplayWidget::currentColorProfileReceivedSlot ()
+{
+        m_colorProfilesCBox->setProperty ("currentIndex",
+                                      m_logic->selectedColorProfileValue ());
+}
+
+void
 DisplayWidget::addStretcher (
         const QString &styleName)
 {
@@ -488,6 +557,14 @@ DisplayWidget::screenTimeoutChanged (int index)
 }
 
 void
+DisplayWidget::colorProfilesCBoxCurrentIndexChanged (int index)
+{
+    SYS_DEBUG ("selected = %d (%s)", index, SYS_STR (m_colorProfilesCBox->currentText ()));
+
+    m_logic->setColorProfile (index);
+}
+
+void
 DisplayWidget::retranslateUi ()
 {
     if (m_TitleLabel)
@@ -500,6 +577,12 @@ DisplayWidget::retranslateUi ()
     {
         updateScreenTimeoutCombo ();
         m_screenTimeout->setTitle (qtTrId ("qtn_disp_screenoff"));
+    }
+
+    if (m_colorProfilesCBox)
+    {
+//        updateScreenTimeoutCombo ();
+        m_colorProfilesCBox->setTitle (qtTrId ("qtn_disp_profile"));
     }
 }
 

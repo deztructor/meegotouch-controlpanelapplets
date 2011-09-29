@@ -24,9 +24,15 @@
 #include <QVariant>
 #include <QString>
 #include <stdlib.h>
+#include <QDBusInterface>
+#include <QDBusObjectPath>
 
-#undef DEBUG
-#undef WARNING
+#include <mce/dbus-names.h>
+
+//#undef DEBUG
+//#undef WARNING
+#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 static const QString GConfDir ("/system/osso/dsm/display");
@@ -66,7 +72,8 @@ DisplayBusinessLogic::DisplayBusinessLogic (
     QObject (parent),
     m_Display (new MeeGo::QmDisplayState),
     m_compositorConf (0),
-    m_psmValue (false)
+    m_psmValue (false),
+    m_MceDBusIf(0)
 {
     m_possibleDimValues = new MGConfItem (DimTimeoutsKey);
     m_lowPower = new MGConfItem (LowPowerKey);
@@ -88,13 +95,16 @@ DisplayBusinessLogic::DisplayBusinessLogic (
 
     m_psmValue =
         (m_devicemode->getPSMState () == MeeGo::QmDeviceMode::PSMStateOn);
+    
+    initiateMceQueries ();
 }
 #else // Don't have QmSystem...
 DisplayBusinessLogic::DisplayBusinessLogic (
         QObject* parent) :
     QObject (parent),
     m_compositorConf (0),
-    m_psmValue (false)
+    m_psmValue (false),
+    m_MceDBusIf(0)
 {
     m_MaxDisplayBrightness = new MGConfItem (MaxBrightnessKey);
     m_CurrentBrightness = new MGConfItem (CurrentBrightnessKey);
@@ -111,6 +121,8 @@ DisplayBusinessLogic::DisplayBusinessLogic (
              SLOT (lpmValueChanged ()));
     connect (m_DoubleTap, SIGNAL (valueChanged ()),
              SLOT (doubleTapValueChanged ()));
+    
+    initiateMceQueries ();
 }
 #endif
 
@@ -140,6 +152,9 @@ DisplayBusinessLogic::~DisplayBusinessLogic ()
 
     delete m_DoubleTap;
     m_DoubleTap = 0;
+
+    if(m_MceDBusIf)
+    delete m_MceDBusIf;
 }
 
 /*!
@@ -271,6 +286,42 @@ DisplayBusinessLogic::selectedScreenLightsValue ()
 }
 
 /*!
+ * Returns reference to inner list that contains the available color profiles.
+ * The elements currently are translation ids.
+ */
+const QStringList&
+DisplayBusinessLogic::colorProfileValues ()
+{
+    return m_AvailColorProfiles;
+}
+
+/*!
+ * Returns reference to a map from color profile ids to translation ids.
+ */
+const QMap<QString, QString>&
+DisplayBusinessLogic::colorProfileMap ()
+{
+    if(m_ColorProfileTextIds.empty()) {
+        /* FIXME Find better way of mapping Profile values with translation ids. */
+        m_ColorProfileTextIds.insert("Neutral", "qtn_disp_profile_normal");
+        m_ColorProfileTextIds.insert("Vivid", "qtn_disp_profile_vivid");
+        m_ColorProfileTextIds.insert("Muted", "qtn_disp_profile_muted");
+    }
+    return m_ColorProfileTextIds;
+}
+
+/*!
+ * FIXME: The name of the method should be modified: this method actually
+ * returns the index of the currently set color profile value.
+ */
+int
+DisplayBusinessLogic::selectedColorProfileValue ()
+{
+    int index = m_AvailColorProfiles.indexOf(m_CurrentColorProfile);
+    return index;
+}
+
+/*!
  * \param value The slider value, that starts from 0, the qmsystem value starts
  *   from 1, so we add +1 to this parameter.
  */
@@ -296,7 +347,7 @@ DisplayBusinessLogic::setBrightnessValue (
  */
 void
 DisplayBusinessLogic::setScreenLightTimeouts (
-		int     index)
+        int     index)
 {
     /*
      * We got the index, not the value.
@@ -319,6 +370,36 @@ DisplayBusinessLogic::setScreenLightTimeouts (
      */
     SYS_WARNING ("Not implemented!");
     #endif
+}
+
+/*!
+ * This function will take an index of the 'color profiles' list that stores
+ * the color profile values and sets the color profile accordingly.
+ */
+void
+DisplayBusinessLogic::setColorProfile (
+        int     index)
+{
+    QString profile = m_AvailColorProfiles.at(index);
+
+    if(profile == m_CurrentColorProfile)
+        return; // Nothing to do
+    
+    if(index < 0 || m_AvailColorProfiles.size() <= index){
+        SYS_WARNING ("Index (%d) for selecting available color profile is out of range. Available range is: 0-%d",
+                index, m_AvailColorProfiles.size() - 1 );
+    }
+
+    setupMceDBusIf ();
+
+    QList<QVariant> params;
+    params.append(QVariant(QString(m_AvailColorProfiles.at(index))));
+
+    m_MceDBusIf->callWithCallback (
+            QString (MCE_COLOR_PROFILE_CHANGE_REQ),
+            params, this,
+            SLOT (currentColorProfileChanged(QDBusMessage)),
+            SLOT (DBusMessagingFailure (QDBusError)));
 }
 
 void
@@ -390,7 +471,7 @@ DisplayBusinessLogic::PSMStateChanged (
     m_psmValue = (state == MeeGo::QmDeviceMode::PSMStateOn);
 
     SYS_DEBUG ("*** state = %d", (int)state);
-    SYS_DEBUG ("Emitting PSMValueReceived (%s)", SYS_BOOL(enabled));
+    SYS_DEBUG ("Emitting PSMValueReceived (%s)", SYS_BOOL(m_psmValue));
     emit PSMValueReceived (m_psmValue);
 }
 #endif
@@ -444,5 +525,103 @@ DisplayBusinessLogic::getCloseFromTopValue ()
 
     SYS_DEBUG ("returning %s", SYS_BOOL (retval));
     return retval;
+}
+
+/*!
+ * Initilize MCE DBus interface.
+ */
+void
+DisplayBusinessLogic::setupMceDBusIf ()
+{
+    if (!m_MceDBusIf){
+        m_MceDBusIf = new QDBusInterface (
+                MCE_SERVICE,
+                MCE_REQUEST_PATH,
+                MCE_REQUEST_IF,
+                QDBusConnection::systemBus ());
+    }
+}
+
+/*!
+ * Initiates a query to receive the list of available color profiles.
+ */
+void
+DisplayBusinessLogic::initiateMceQueries ()
+{
+    setupMceDBusIf ();
+
+    m_MceDBusIf->callWithCallback (
+            QString (MCE_COLOR_PROFILE_IDS_GET),
+            QList<QVariant> (), this,
+            SLOT (availableColorProfilesReceivedSlot(QStringList)),
+            SLOT (DBusMessagingFailure (QDBusError)));
+
+    m_MceDBusIf->callWithCallback (
+            QString (MCE_COLOR_PROFILE_GET),
+            QList<QVariant> (), this,
+            SLOT (currentColorProfileReceived(QString)),
+            SLOT (DBusMessagingFailure (QDBusError)));
+}
+
+/*!
+ * This slot is called when the current color profile is received
+ * through the dbus.
+ */
+void
+DisplayBusinessLogic::currentColorProfileReceived (
+        QString profile)
+{
+    m_CurrentColorProfile = profile;
+
+    SYS_DEBUG("Received current color profile: %s", SYS_STR (m_CurrentColorProfile));
+    
+    emit currentColorProfileReceived ();
+}
+
+/*!
+ * This slot is called when the list of available color profiles received
+ * through the dbus.
+ */
+void
+DisplayBusinessLogic::availableColorProfilesReceivedSlot (
+        QStringList list)
+{
+    m_AvailColorProfiles.clear();
+    
+    int i;
+    for(i = 0; i < list.size(); i++)
+        m_AvailColorProfiles.append(list.at(i));
+
+    SYS_DEBUG("Received available color profiles: %s",
+            SYS_STR (m_AvailColorProfiles.join(", ")));
+
+    emit availableColorProfilesReceived ();
+}
+
+/*!
+ * This slot is called when the current color profile is set
+ * through the dbus.
+ */
+void
+DisplayBusinessLogic::currentColorProfileChanged (QDBusMessage msg)
+{
+    if(msg.type() == QDBusMessage::ReplyMessage){
+        SYS_DEBUG("Current color profile changed.");
+    } else {
+        SYS_DEBUG("Could not set color profile.");
+    }
+}
+
+/*!
+ * This slot is called when an error is occured during the dbus communication.
+ * The error message is printed as a warning message.
+ */
+void
+DisplayBusinessLogic::DBusMessagingFailure (
+        QDBusError error)
+{
+    Q_UNUSED (error);
+    SYS_WARNING ("%s: %s", SYS_STR (error.name()),
+            SYS_STR (error.message()));
 }
 

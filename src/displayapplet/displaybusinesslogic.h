@@ -26,7 +26,11 @@
 #endif
 
 #include <QObject>
+#include <QDBusError>
+#include <QDBusInterface>
+#include <QStringList>
 
+class QDBusObjectPath;
 class QSettings;
 class MGConfItem;
 
@@ -52,6 +56,9 @@ public:
     int selectedBrightnessValue ();
     QList<int> screenLightsValues ();
     int selectedScreenLightsValue ();
+    const QStringList& colorProfileValues ();
+    const QMap<QString, QString>& colorProfileMap ();
+    int selectedColorProfileValue ();
     bool PSMValue ();
     bool getLowPowerMode ();
     bool getDoubleTapWakes ();
@@ -60,6 +67,7 @@ public:
 public slots:
     void setBrightnessValue (int value);
     void setScreenLightTimeouts (int index);
+    void setColorProfile (int index);
     void setLowPowerMode (bool enable);
     void setDoubleTapWakes (bool enable);
     void setCloseFromTop (bool enable);
@@ -70,11 +78,21 @@ public slots:
 private slots:
     void lpmValueChanged ();
     void doubleTapValueChanged ();
+    void availableColorProfilesReceivedSlot (QStringList list);
+    void currentColorProfileReceived (QString);
+    void currentColorProfileChanged (QDBusMessage);
+    void DBusMessagingFailure (QDBusError error);
+
+private:
+    void setupMceDBusIf ();
+    void initiateMceQueries ();
 
 signals:
     void lowPowerModeChanged (bool lpm);
     void doubleTapModeChanged (bool lpm);
     void PSMValueReceived (bool enabled);
+    void currentColorProfileReceived ();
+    void availableColorProfilesReceived();
 
 private:
 #ifdef HAVE_QMSYSTEM
@@ -89,6 +107,11 @@ private:
     MGConfItem              *m_DoubleTap;
     QSettings               *m_compositorConf;
     bool                     m_psmValue;
+    QDBusInterface          *m_MceDBusIf;
+
+    QStringList              m_AvailColorProfiles;
+    QMap<QString, QString>   m_ColorProfileTextIds;
+    QString                  m_CurrentColorProfile;
 
 #ifdef UNIT_TEST
     friend class Ut_DisplayBusinessLogic;
