@@ -20,10 +20,9 @@
 #ifndef DISPLAYBUSINESSLOGIC_H
 #define DISPLAYBUSINESSLOGIC_H
 
-#ifdef HAVE_QMSYSTEM
-#  include <qmdisplaystate.h>
-#  include <qmdevicemode.h>
-#endif
+// QmSystem is mandatory
+#include <qmdisplaystate.h>
+#include <qmdevicemode.h>
 
 #include <QObject>
 
@@ -63,9 +62,7 @@ public slots:
     void setLowPowerMode (bool enable);
     void setDoubleTapWakes (bool enable);
     void setCloseFromTop (bool enable);
-#ifdef HAVE_QMSYSTEM
     void PSMStateChanged (MeeGo::QmDeviceMode::PSMState state);
-#endif
 
 private slots:
     void lpmValueChanged ();
@@ -77,13 +74,9 @@ signals:
     void PSMValueReceived (bool enabled);
 
 private:
-#ifdef HAVE_QMSYSTEM
     MeeGo::QmDisplayState   *m_Display;
     MeeGo::QmDeviceMode     *m_devicemode;
-#else
-    MGConfItem              *m_MaxDisplayBrightness;
-    MGConfItem              *m_CurrentBrightness;
-#endif
+
     MGConfItem              *m_possibleDimValues;
     MGConfItem              *m_lowPower;
     MGConfItem              *m_DoubleTap;

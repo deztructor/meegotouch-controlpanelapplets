@@ -1,4 +1,5 @@
 include(../common_top.pri)
+include(../../localconfig.pri)
 
 SRC_PREFIX = ../../src/displayapplet
 STUB_PREFIX = ../stubs
