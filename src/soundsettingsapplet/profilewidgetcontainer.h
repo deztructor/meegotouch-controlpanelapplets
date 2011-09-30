@@ -3,8 +3,9 @@
 ** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (directui@nokia.com)
+** Author: David Kedves <dkedves@blumsoft.eu>
 **
-** This file is part of meegotouch-controlpanelsoundsettingsapplet.
+** This file is part of meegotouch-controlpanelapplets.
 **
 ** If you have questions regarding the use of this file, please contact
 ** Nokia at directui@nokia.com.
@@ -16,40 +17,31 @@
 ** of this file.
 **
 ****************************************************************************/
-#ifndef _ALERT_TONE_WIDGET_H_
-#define _ALERT_TONE_WIDGET_H_
+#ifndef PROFILEWIDGETCONTAINER_H
+#define PROFILEWIDGETCONTAINER_H
 
-#include "alerttone.h"
-#include "drilldownitem.h"
+#include <MWidgetController>
 
-class AlertToneWidget : public RightArrowItem
+class QPluginLoader;
+class QGraphicsWidget;
+
+class ProfileWidgetContainer : public MWidgetController
 {
 Q_OBJECT
-
 public:
-	AlertToneWidget (
-            AlertTone             *tone,
-            int                    idx,
-            QGraphicsItem         *parent = 0);
+    ProfileWidgetContainer (QGraphicsWidget *parent = 0);
+    ~ProfileWidgetContainer ();
 
-private slots:
-    void alertToneChanged ();
-    void clicked ();
-
-signals:
-    void showWidget (int widgetId);
-
-protected:
-    void retranslateUi ();
+public slots:
+    void init ();
 
 private:
-	AlertTone   *m_tone;
-	int          m_idx;
+    void pluginLoadSuccess (QGraphicsWidget *pluginWidget);
+    void pluginLoadFailed ();
 
-#ifdef UNIT_TEST
-    friend class Ut_AlertToneWidgetTests;
-#endif
+private:
+    QPluginLoader   *m_loader;
+    bool             m_initialized;
 };
 
 #endif
-

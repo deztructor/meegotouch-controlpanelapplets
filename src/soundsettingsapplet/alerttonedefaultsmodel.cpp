@@ -19,6 +19,7 @@
 
 #include <QTimer>
 #include <QFile>
+#include <QFileInfo>
 
 #include "trackerconnection.h"
 #include "alerttonedefaultsmodel.h"
@@ -137,10 +138,15 @@ AlertToneDefaultsModel::addSingleItem()
     {
         QString fullPath = m_dirStack.top().absolutePath() + 
                 QDir::separator() + baseName;
+        QFileInfo fileInfo (fullPath);
 
-        QDir subdir(fullPath);
+        SYS_WARNING ("directory: %s path: %s", 
+                SYS_BOOL(fileInfo.isDir()),
+                SYS_STR(fullPath));
 
-        if (subdir.exists() && subdir.count() > 0) {
+        if (fileInfo.isDir()) {
+            SYS_WARNING ("directory: %s", SYS_STR(fullPath));
+            QDir subdir(fullPath);
             m_dirStack.push(subdir);
             m_dirIdx.push(0);
         } else {

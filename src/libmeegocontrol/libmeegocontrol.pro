@@ -81,6 +81,7 @@ PUBLIC_HEADERS = \
     $$SOUNDSETTINGS_PATH/alerttone.h               \
     $$SOUNDSETTINGS_PATH/alerttonetoplevel.h       \
     $$SOUNDSETTINGS_PATH/alerttonebrowser.h        \
+    $$SOUNDSETTINGS_PATH/alerttonebrowsersheet.h   \
     $$SOUNDSETTINGS_PATH/qprofilevalue.h           \
     $$SOUNDSETTINGS_PATH/qtrackedvariant.h         \
     WallpaperBusinessLogic                         \
@@ -102,6 +103,7 @@ HEADERS =                                          \
     $$SOUNDSETTINGS_PATH/alerttonedefaultsmodel.h  \
     $$SOUNDSETTINGS_PATH/soundsettingsutils.h      \
     $$SOUNDSETTINGS_PATH/alerttonedefaults.h       \
+    $$SOUNDSETTINGS_PATH/alerttonebrowserstylable.h \
     $$WALLPAPER_PATH/wallpaperthumb.h              \
     $$PUBLIC_HEADERS
 
@@ -120,6 +122,8 @@ SOURCES =                                          \
     $$SOUNDSETTINGS_PATH/alerttonedefaults.cpp     \
     $$SOUNDSETTINGS_PATH/alerttonetoplevel.cpp     \
     $$SOUNDSETTINGS_PATH/alerttonebrowser.cpp      \
+    $$SOUNDSETTINGS_PATH/alerttonebrowsersheet.cpp \
+    $$SOUNDSETTINGS_PATH/alerttonebrowserstylable.cpp \
     $$SOUNDSETTINGS_PATH/alerttoneappletmaps.cpp   \
     $$SOUNDSETTINGS_PATH/trackerconnection.cpp     \
     $$SOUNDSETTINGS_PATH/qprofilevalue.cpp         \

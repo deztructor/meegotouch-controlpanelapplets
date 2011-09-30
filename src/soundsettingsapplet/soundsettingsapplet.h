@@ -50,9 +50,12 @@ public:
 public slots:
     void toplevelDestroyed (QObject *goner);
 
-private:
-    QStack<DcpStylableWidget *>     m_stack;
-    QList<AlertTone *>              m_alertTones;
+    private slots:
+        void showWidget (int widgetId);
+
+    private:
+        QStack<DcpStylableWidget *>     m_stack;
+        QList<AlertTone *>              m_alertTones;
 
 #ifdef UNIT_TEST
     friend class Ut_SoundSettingsAppletTests;

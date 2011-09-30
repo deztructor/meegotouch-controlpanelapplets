@@ -273,6 +273,10 @@ Ut_AboutBusinessLogic::testHwAddresses ()
 void
 Ut_AboutBusinessLogic::testLicenseText ()
 {
+    /*
+     * FIXME: the test app may not have access to do this
+     */
+    system ("mkdir -p /usr/share/about-contents");
     system ("echo 'testtext' > /usr/share/about-contents/testlicensefile");
     m_Api->m_licenseFile = QString ("testlicensefile");
     
@@ -281,10 +285,7 @@ Ut_AboutBusinessLogic::testLicenseText ()
 
     //check what if the file  doesn't exist
     QCOMPARE (m_Api->licenseText (), QString ("qtn_prod_legal"));
-    
 }
-
-
 
 /**
  * Check that all mandatory informations are passed

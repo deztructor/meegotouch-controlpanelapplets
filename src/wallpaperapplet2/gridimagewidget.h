@@ -86,7 +86,6 @@ class GridImageWidget : public MListItem
         MProgressIndicator     *m_ProgressIndicator;
         QPixmap                 m_Pixmap;
         bool                    m_Current;
-        const MButtonIconStyle *m_HighlightStyle;
         QString                 m_ID;
         QPropertyAnimation     *m_OpacityAnimation;
 

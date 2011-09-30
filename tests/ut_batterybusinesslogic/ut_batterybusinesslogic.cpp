@@ -405,7 +405,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargerEvent ()
 
     m_SignalSink.print();
     QVERIFY (m_SignalSink.chargingWithAnimation(500));
-    QVERIFY (m_SignalSink.hasBarValue(5));
+    QVERIFY (m_SignalSink.hasBarValue(4));
     QVERIFY (m_SignalSink.hasRemainingCapacity(true));
     
 
@@ -428,7 +428,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargerEvent ()
 
     m_SignalSink.print();
     QVERIFY (m_SignalSink.chargingWithAnimation(250));
-    QVERIFY (m_SignalSink.hasBarValue(5));
+    QVERIFY (m_SignalSink.hasBarValue(4));
     QVERIFY (m_SignalSink.hasRemainingCapacity(true));
     
     
@@ -474,7 +474,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargingComplete ()
     m_SignalSink.print();
     QVERIFY (m_SignalSink.notCharging());
     QVERIFY (m_SignalSink.hasRemainingCapacity(true));
-    QVERIFY (m_SignalSink.hasBarValue(9));
+    QVERIFY (m_SignalSink.hasBarValue(8));
 
     SYS_DEBUG ("**********************************************************");
     SYS_DEBUG ("*** The battery is loosing charge.                     ***");
@@ -484,7 +484,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargingComplete ()
     
     m_SignalSink.print();
     QVERIFY (m_SignalSink.chargingWithAnimation(250));
-    QVERIFY (m_SignalSink.hasBarValue(1));
+    QVERIFY (m_SignalSink.hasBarValue(0));
     QVERIFY (m_SignalSink.hasRemainingCapacity(true));
     
     SYS_DEBUG ("**********************************************************");
@@ -497,7 +497,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargingComplete ()
     
     m_SignalSink.print();
     QVERIFY (m_SignalSink.notCharging());
-    QVERIFY (m_SignalSink.hasBarValue(9));
+    QVERIFY (m_SignalSink.hasBarValue(8));
     QVERIFY (m_SignalSink.hasRemainingCapacity(false));
     #endif
 }

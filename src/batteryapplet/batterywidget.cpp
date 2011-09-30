@@ -67,6 +67,7 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
         m_TitleLabel (0),
         m_UILocked (false)
 {
+    DEBUG_CLOCK_START;
     SYS_DEBUG ("Starting in %p", this);
 
     setContentsMargins (0., 0., 0., 0.);
@@ -74,6 +75,7 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
     // instantiate the batterybusinesslogic
     m_logic = new BatteryBusinessLogic;
     initWidget ();
+    DEBUG_CLOCK_END("Battery widget init");
 }
 
 BatteryWidget::~BatteryWidget ()
@@ -234,9 +236,11 @@ BatteryWidget::addRemainingCapacityWidget ()
     m_BatteryImage = new BatteryImage ();
     m_BatteryImage->setStyleName ("CommonMainIcon");
 
-    //% "Battery level \%L1\%"
-    m_RemainingContainer = new PercentageContainer (
-            qtTrId ("qtn_ener_battery_level"), m_BatteryImage);
+    /*
+     * Here we will show qtTrId ("qtn_ener_battery_level"), later when the value
+     * is available.
+     */
+    m_RemainingContainer = new PercentageContainer ("", m_BatteryImage);
 
     m_MainLayout->addItem (m_RemainingContainer);
     m_MainLayout->setStretchFactor (m_RemainingContainer, 0);

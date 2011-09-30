@@ -193,16 +193,11 @@ GridImageWidget::GridImageWidget () :
     m_OpacityAnimation->setEndValue(1.0);
     m_OpacityAnimation->setDuration(250); 
 
-    //setObjectName ("GridImageWidget");
-    m_HighlightStyle = static_cast<const MButtonIconStyle *>(
-            MTheme::style("MButtonIconStyle", "HighlightStyle"));
     createLayout ();
 }
 
 GridImageWidget::~GridImageWidget ()
 {
-    MTheme::releaseStyle (m_HighlightStyle);
-
 }
 
 void 
@@ -237,18 +232,17 @@ GridImageWidget::paint (
         /*
          * FIXME: Somehow this theming does not work. This is the default color,
          * but we should use theming here.
+         * MButtonIconStyle *m_HighlightStyle ->glowColor()
          */
-        pen.setColor (
-                QColor("#4292ff")
-                //m_HighlightStyle->glowColor()
-                );
+        pen.setColor (QColor("#4292ff"));
         painter->setPen(pen);
 
         const int mod    = pen.width() % 2;
         const int adjust = pen.width() / 2;
         QRect rect (0, 0, 
                 (int) geom.width(), (int) geom.height());
-        const QRect selection = rect.adjusted(adjust,adjust,-(adjust+mod),-(adjust+mod));
+        const QRect selection = rect.adjusted (
+                adjust, adjust, -(adjust + mod), -(adjust + mod));
         painter->drawRect(selection);
     }
 }

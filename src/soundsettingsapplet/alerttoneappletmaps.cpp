@@ -24,50 +24,50 @@
 #undef WARNING
 #include "../debug.h"
 
-QString
+const char *
 AlertToneAppletMaps::map (const int &i)
 {
     return AlertToneAppletMaps::map (QString::number (i));
 }
 
-QString
+const char *
 AlertToneAppletMaps::map (const QString &str)
 {
-    static QMap<QString, const char *> m_map;
+    static QHash<QString, const char *> hashTable;
 
-    if (m_map.isEmpty ())
+    if (hashTable.isEmpty ())
     {
         // fill the map at first time
         /* Alert tone MContentItem widget titles */
-        m_map["ringing.alert.tone@general"]         = "qtn_sond_ring_tone";
-        m_map["voip.alert.tone@general"]            = "qtn_sond_internet_tone";
-        m_map["email.alert.tone@general"]           = "qtn_sond_email_tone";
-        m_map["sms.alert.tone@general"]             = "qtn_sond_message_tone";
-        m_map["im.alert.tone@general"]              = "qtn_sond_ins_messaging";
-        m_map["calendar.alert.tone@general"]        = "qtn_sond_org_reminders";
+        hashTable["ringing.alert.tone@general"]         = "qtn_sond_ring_tone";
+        hashTable["voip.alert.tone@general"]            = "qtn_sond_internet_tone";
+        hashTable["email.alert.tone@general"]           = "qtn_sond_email_tone";
+        hashTable["sms.alert.tone@general"]             = "qtn_sond_message_tone";
+        hashTable["im.alert.tone@general"]              = "qtn_sond_ins_messaging";
+        hashTable["calendar.alert.tone@general"]        = "qtn_sond_org_reminders";
 
         /* Combo box widget titles */
-        m_map["keypad.sound.level"]                 = "qtn_sond_keyboard";
-        m_map["system.sound.level"]                 = "qtn_sond_system";
-        m_map["/meegotouch/input_feedback/volume/priority2/pulse"]
+        hashTable["keypad.sound.level"]                 = "qtn_sond_keyboard";
+        hashTable["system.sound.level"]                 = "qtn_sond_system";
+        hashTable["/meegotouch/input_feedback/volume/priority2/pulse"]
                                                     ="qtn_sond_touch_screen";
-        m_map["/meegotouch/input_feedback/volume/priority2/vibra"]
+        hashTable["/meegotouch/input_feedback/volume/priority2/vibra"]
                                                     = "qtn_sond_touch_vibra";
 
         /* GConf combo box values */
-        m_map["off"]                                = "qtn_comm_settings_off";
-        m_map["low"]                                = "qtn_sond_level_1";
-        m_map["medium"]                             = "qtn_sond_level_2";
-        m_map["high"]                               = "qtn_sond_level_3";
+        hashTable["off"]                                = "qtn_comm_settings_off";
+        hashTable["low"]                                = "qtn_sond_level_1";
+        hashTable["medium"]                             = "qtn_sond_level_2";
+        hashTable["high"]                               = "qtn_sond_level_3";
 
         /* Profile combo box values */
-        m_map["0"]                                  = "qtn_comm_settings_off";
-        m_map["1"]                                  = "qtn_sond_level_1";
-        m_map["2"]                                  = "qtn_sond_level_2";
-        m_map["3"]                                  = "qtn_sond_level_3";
+        hashTable["0"]                                  = "qtn_comm_settings_off";
+        hashTable["1"]                                  = "qtn_sond_level_1";
+        hashTable["2"]                                  = "qtn_sond_level_2";
+        hashTable["3"]                                  = "qtn_sond_level_3";
     }
 
-    return (m_map.contains (str)) ? m_map[str] : str;
+    return hashTable.value (str, "");
 }
 
 /*!
@@ -79,8 +79,7 @@ QVariant
 AlertToneAppletMaps::mapToUiString (
     const QString &str)
 {
-    const QString mapped = AlertToneAppletMaps::map (str);
-    const QString translated = qtTrId (mapped.toAscii ().constData ());
+    const QString translated = qtTrId (AlertToneAppletMaps::map(str));
 
     SYS_DEBUG ("%s -> %s", SYS_STR(str), SYS_STR(translated));
     return QVariant (translated);
@@ -93,8 +92,7 @@ QVariant
 AlertToneAppletMaps::mapToUiString (
         int integer)
 {
-    const QString mapped = AlertToneAppletMaps::map (integer);
-    const QString translated = qtTrId (mapped.toAscii ().constData ());
+    const QString translated = qtTrId (AlertToneAppletMaps::map (integer));
 
     SYS_DEBUG ("%d -> %s", SYS_STR (integer), SYS_STR (translated));
     return QVariant (translated);

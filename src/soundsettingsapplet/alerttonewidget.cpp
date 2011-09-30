@@ -56,7 +56,7 @@ AlertToneWidget::clicked ()
     int dcpWidgetId = 
         (SoundSettingsApplet::AlertToneBrowser_id * 65536) + m_idx;
 
-    emit changeWidget (dcpWidgetId);
+    emit showWidget (dcpWidgetId);
 }
 
 void

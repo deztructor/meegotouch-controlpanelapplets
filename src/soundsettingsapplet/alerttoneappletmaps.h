@@ -27,8 +27,8 @@ namespace AlertToneAppletMaps
     QVariant mapToUiString (const QString &str);
     QVariant mapToUiString (int integer);
 // these are only giving logical ids:
-    QString map (const QString &str);
-    QString map (const int &i);
+    const char *map (const QString &str);
+    const char *map (const int &i);
 };
 
 #endif

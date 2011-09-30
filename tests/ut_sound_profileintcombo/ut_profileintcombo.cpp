@@ -240,6 +240,7 @@ Ut_ProfileintComboTests::profileintcomboRetranslateUi_data ()
         "qtn_sond_level_2" + translatedSuffix <<
         "qtn_sond_level_3" + translatedSuffix;
 
+#if 0
     /*
      * This is actually not translated in AlertToneAppletMaps.
      */
@@ -251,6 +252,7 @@ Ut_ProfileintComboTests::profileintcomboRetranslateUi_data ()
         "qtn_sond_level_1" + translatedSuffix <<
         "" <<
         "";
+#endif
 }
 
 /*!

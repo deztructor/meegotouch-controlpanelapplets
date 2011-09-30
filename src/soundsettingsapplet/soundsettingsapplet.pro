@@ -4,6 +4,10 @@ include(../../shared.pri)
 
 TEMPLATE = lib
 
+load(meegotouch_defines)
+
+DEFINES += M_APPLICATION_EXTENSION_DIR=\\\"\"$$M_APPLICATION_EXTENSION_DIR\\\"\"
+
 include($$[QT_INSTALL_DATA]/mkspecs/dcpconfig.pri)
 
 CONFIG +=           \
@@ -58,6 +62,7 @@ HEADERS =                      \
     profilecontainer.h         \
     alerttoneappletwidget.h    \
     alerttonebrowser.h         \
+    alerttonebrowsersheet.h    \
     alerttonedefaults.h        \
     alerttonedefaultsmodel.h   \
     alerttonepreview.h         \
@@ -71,6 +76,7 @@ HEADERS =                      \
     soundsettingsutils.h       \
     static.h                   \
     alerttonebrowserstylable.h \
+    profilewidgetcontainer.h   \
     $$(NULL)
 
 SOURCES =                      \
@@ -84,6 +90,7 @@ SOURCES =                      \
     profilecontainer.cpp       \
     alerttoneappletwidget.cpp  \
     alerttonebrowser.cpp       \
+    alerttonebrowsersheet.cpp  \
     alerttonedefaults.cpp      \
     alerttonedefaultsmodel.cpp \
     alerttonepreview.cpp       \
@@ -96,6 +103,7 @@ SOURCES =                      \
     soundsettingsutils.cpp     \
     soundsettingsapplet.cpp    \
     alerttonebrowserstylable.cpp \
+    profilewidgetcontainer.cpp \
     $$(NULL)
 
 DESTDIR = lib

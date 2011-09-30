@@ -27,24 +27,28 @@
 #include "alerttone.h"
 
 class QGraphicsLinearLayout;
-class MApplicationExtensionArea;
+class ProfileWidgetContainer;
 
 class AlertToneAppletWidget : public DcpStylableWidget
 {
 Q_OBJECT
 
-public:
-    AlertToneAppletWidget (
-            QList<AlertTone *>  alertTones,
-            QGraphicsWidget    *parent = 0);
-    ~AlertToneAppletWidget ();
+    public:
+        AlertToneAppletWidget (
+                QList<AlertTone *>  alertTones,
+                QGraphicsWidget    *parent = 0);
+        ~AlertToneAppletWidget ();
 
-protected:
-    virtual void polishEvent ();
-    virtual void createContents ();
+    protected:
+        virtual void polishEvent ();
+        virtual void createContents ();
 
-private slots:
-    void vibrationChanged (bool enabled);
+    signals:
+        void showWidget (int widgetId); 
+
+    private slots:
+        void vibrationChanged (bool enabled);
+        void delayedInit ();
 
 private:
     MWidgetController *createAlertTonesList (QGraphicsWidget *parent);
@@ -58,7 +62,7 @@ private:
     QPointer<ProfileDataInterface>   m_ProfileIf;
     MWidgetController               *m_tones;
     MWidgetController               *m_feedback;
-    MApplicationExtensionArea       *m_volumeExtension;
+    ProfileWidgetContainer          *m_profileWidget;
 
 #ifdef UNIT_TEST
     friend class Ut_AlertToneAppletWidgetTests;

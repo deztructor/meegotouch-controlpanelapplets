@@ -57,7 +57,12 @@ public:
     void set (
         const QVariant &filename);
 
+    void performCancel ();
+    void performAccept ();
+    
 private slots:
+    void cancel();
+    void accept();
     void defaultItemClicked (const QString &filename);
     void defaultsDisplayEntered();
     void setAlertTone (
@@ -67,8 +72,6 @@ private slots:
     void launchMusicBrowser();
     void launchOviStore();
     void selectingMusicItem(const QString &item);
-    void cancel();
-    void accept();
     void textChanged ();
     void browserBackButtonClicked ();
     void stopPlayingSound ();

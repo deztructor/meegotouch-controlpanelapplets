@@ -13,6 +13,8 @@ DEFINES += UNIT_TEST
 TARGET = ut_soundsettingsapplet
 target.path = /usr/lib/$$TEST_PKG_NAME
 
+DEFINES += M_APPLICATION_EXTENSION_DIR=""
+
 CONFIG += \
     plugin          \
     gui             \
@@ -51,6 +53,7 @@ HEADERS +=                                  \
     $$SRC_PREFIX/alerttoneappletmaps.h      \
     $$SRC_PREFIX/alerttoneappletwidget.h    \
     $$SRC_PREFIX/alerttonebrowser.h         \
+    $$SRC_PREFIX/alerttonebrowsersheet.h    \
     $$SRC_PREFIX/alerttonedefaults.h        \
     $$SRC_PREFIX/alerttonedefaultsmodel.h   \
     $$SRC_PREFIX/qtrackedvariant.h          \
@@ -59,7 +62,8 @@ HEADERS +=                                  \
     $$SRC_PREFIX/profileintcombo.h          \
     $$SRC_PREFIX/static.h                   \
     $$SRC_PREFIX/soundsettingsapplet.h      \
-    $$SRC_PREFIX/alerttonebrowserstylable.h
+    $$SRC_PREFIX/alerttonebrowserstylable.h \
+    $$SRC_PREFIX/profilewidgetcontainer.h
 
 SOURCES +=                                  \
     ut_soundsettingsapplet.cpp              \
@@ -77,6 +81,7 @@ SOURCES +=                                  \
     $$SRC_PREFIX/alerttoneappletmaps.cpp    \
     $$SRC_PREFIX/alerttoneappletwidget.cpp  \
     $$SRC_PREFIX/alerttonebrowser.cpp       \
+    $$SRC_PREFIX/alerttonebrowsersheet.cpp  \
     $$SRC_PREFIX/alerttonedefaults.cpp      \
     $$SRC_PREFIX/alerttonedefaultsmodel.cpp \
     $$SRC_PREFIX/qtrackedvariant.cpp        \
@@ -85,7 +90,7 @@ SOURCES +=                                  \
     $$SRC_PREFIX/profileintcombo.cpp        \
     $$SRC_PREFIX/soundsettingsapplet.cpp    \
     $$SRC_PREFIX/alerttonebrowserstylable.cpp \
-    $$STUB_PREFIX/mapplicationextensionarea_stub.cpp
+    $$SRC_PREFIX/profilewidgetcontainer.cpp
 
 INSTALLS += target
 

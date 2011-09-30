@@ -17,14 +17,18 @@
 **
 ****************************************************************************/
 #include "alerttoneappletwidget.h"
+#include "profilewidgetcontainer.h"
 
 #include <QSet>
-#include <MApplicationExtensionArea>
+#include <QVariant>
+#include <MGConfItem>
 #include <MLabel>
 #include <QGraphicsLinearLayout>
 #include <MSeparator>
 #include <MApplicationPage>
 #include <QSystemDeviceInfo>
+#include <QTimer>
+
 using namespace QtMobility;
 
 #include "soundsettingsutils.h"
@@ -34,14 +38,18 @@ using namespace QtMobility;
 #include "profiledatainterface.h"
 #include "profilecontainer.h"
 
+static const QString keyboardGConfKey ("/meegotouch/settings/has_keyboard");
+
 #include <MWidgetCreator>
 M_REGISTER_WIDGET_NO_CREATE(AlertToneAppletWidget)
 
 #include "../styles.h"
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
+
+#include <time.h>
 
 /******************************************************************************
  * Helper functions.
@@ -131,7 +139,8 @@ AlertToneAppletWidget::AlertToneAppletWidget (
     m_alertTones(alertTones),
     m_ProfileIf (new ProfileDataInterface),
     m_tones (0),
-    m_feedback (0)
+    m_feedback (0),
+    m_profileWidget (0)
 {
     setContentsMargins (0., 0., 0., 0.);
 
@@ -156,14 +165,20 @@ AlertToneAppletWidget::~AlertToneAppletWidget ()
 
     delete m_ProfileIf;
     m_ProfileIf = 0;
+}
 
-    delete m_volumeExtension;
-    m_volumeExtension = 0;
+void
+AlertToneAppletWidget::delayedInit ()
+{
+    DEBUG_CLOCK_START;
+    m_profileWidget->init ();
+    DEBUG_CLOCK_END("Initializing slider.");
 }
 
 void
 AlertToneAppletWidget::createContents ()
 {
+    DEBUG_CLOCK_START;
     QGraphicsLinearLayout   *layout;
     MLabel                  *label;
 
@@ -185,19 +200,14 @@ AlertToneAppletWidget::createContents ()
     label->setText(qtTrId("qtn_sond_sounds"));
 #endif
 
+    DEBUG_CLOCK_END("First widgets.");
     SYS_DEBUG ("%s: constructing volumeExtension", SYS_TIME_STR);
-    /*
-     * Try to add the Status-Menus volume/profile chooser widget here
-     */
-    m_volumeExtension = new MApplicationExtensionArea ("com.meego.core.MStatusIndicatorMenuExtensionInterface/1.0");
-    m_volumeExtension->setInProcessFilter (QRegExp("/statusindicatormenu-volume.desktop$"));
-    m_volumeExtension->setOutOfProcessFilter (QRegExp("$^"));
-    m_volumeExtension->setObjectName ("VolumeExtensionArea");
-    m_volumeExtension->setStyleName ("VolumeExtensionArea");
-    m_volumeExtension->init ();
 
-    layout->addItem (m_volumeExtension);
+    m_profileWidget = new ProfileWidgetContainer (this);
+    layout->addItem (m_profileWidget);
+
     SYS_DEBUG ("%s DONE: constructing volumeExtension", SYS_TIME_STR);
+    DEBUG_CLOCK_END("volume extension");
 
     /*
      * A subtitle that shows 'Profile vibration'
@@ -229,8 +239,6 @@ AlertToneAppletWidget::createContents ()
     /*
      * An other secondary title, that says 'Feedback'.
      */
-    SYS_WARNING ("*** qtn_sond_feedback = %s",
-            SYS_STR(qtTrId("qtn_sond_feedback")));
     addSubTitle (
             this, layout,
             //% "Feedback"
@@ -243,6 +251,7 @@ AlertToneAppletWidget::createContents ()
     layout->addItem (m_feedback);
 
     retranslateUi ();
+    DEBUG_CLOCK_END("Whole content");
 }
 
 void
@@ -295,16 +304,32 @@ AlertToneAppletWidget::createFeedbackList(
 
     ProfileIntCombo *picombo = 0;
 
-    QSystemDeviceInfo devInfo;
-    QSystemDeviceInfo::KeyboardTypeFlags keybFlags = devInfo.keyboardTypes ();
+    MGConfItem hkbItem (keyboardGConfKey);
+
+    if (hkbItem.value ().isNull ())
+    {
+        /*
+         * Lets cache this value in GConf, as it is faster than querying it
+         * XXX: This doesn't help on the first opening time
+         */
+        QSystemDeviceInfo devInfo;
+        QSystemDeviceInfo::KeyboardTypeFlags keybFlags = devInfo.keyboardTypes ();
+
+        hkbItem.set (false);
+        if ((keybFlags & QSystemDeviceInfo::FlipKeyboard) ||
+            (keybFlags & QSystemDeviceInfo::FullQwertyKeyboard) ||
+            (keybFlags & QSystemDeviceInfo::HalfQwertyKeyboard) ||
+            (keybFlags & QSystemDeviceInfo::ITUKeypad))
+        {
+            /* has hardware keyboard */
+            hkbItem.set (true);
+        }
+    }
 
     /*
      * Show the keyboard tones only if the device have hardware keyboard
      */
-    if ((keybFlags & QSystemDeviceInfo::FlipKeyboard) ||
-        (keybFlags & QSystemDeviceInfo::FullQwertyKeyboard) ||
-        (keybFlags & QSystemDeviceInfo::HalfQwertyKeyboard) ||
-        (keybFlags & QSystemDeviceInfo::ITUKeypad))
+    if (hkbItem.value ().toBool ())
     {
         picombo = new ProfileIntCombo (
             "keypad.sound.level", true,
@@ -361,9 +386,12 @@ AlertToneAppletWidget::createAlertTonesList (QGraphicsWidget *parent)
         alertToneWidget->setObjectName (
                 "AlertToneWidget_" + m_alertTones[i]->key());
 
-        // connect the widgets changeWidget signal
-        connect (alertToneWidget, SIGNAL (changeWidget (int)),
-                 this, SIGNAL (changeWidget (int)));
+        // connect the widgets showWidget signal
+        // If we send the changeWidget() signal, DCP will show the widget in an
+        // MApplicationPage, if we send the showWidget, SoundSettingsApplet will
+        // show the widget in a sheet.
+        connect (alertToneWidget, SIGNAL (showWidget (int)),
+                 this, SIGNAL (showWidget (int)));
 
         layout->addItem (alertToneWidget);
     }
@@ -381,9 +409,13 @@ AlertToneAppletWidget::createAlertTonesList (QGraphicsWidget *parent)
 void
 AlertToneAppletWidget::polishEvent ()
 {
+    DEBUG_CLOCK_START;
+
     QGraphicsWidget  *parent;
     MApplicationPage *page = 0;
 
+    // testing 
+    //m_volumeExtension->init ();
     /*
      * We need to find the MApplicationPage among our parents.
      */
@@ -395,14 +427,15 @@ AlertToneAppletWidget::polishEvent ()
         parent = parent->parentWidget();
     }
 
-    if (!page)
-        return;
-
+    if (page)
+        page->setComponentsDisplayMode (
+                MApplicationPage::HomeButton,
+                MApplicationPageModel::Hide);
+    
     /*
-     * Hiding the home button.
+     * XXX: FIXME: TODO: adjust this delay to make it best
      */
-    page->setComponentsDisplayMode (
-            MApplicationPage::HomeButton,
-            MApplicationPageModel::Hide);
+    QTimer::singleShot (500, this, SLOT (delayedInit ()));
+    DEBUG_CLOCK_END("polish event");
 }
 

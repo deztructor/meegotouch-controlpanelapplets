@@ -7,12 +7,10 @@ include(../localconfig.pri)
 ###### otherwise we just add the selected applets subdirs
 
 isEmpty(BUILD_APPLET) {
-message ("*********No BUILD_APPLET given, build all of the applets*************")
+message ("*********No BUILD_APPLET given, build only the Harmattan applets*************")
 
 addSubDirs(aboutapplet)
 addSubDirs(aboutapplet/translations)
-addSubDirs(themeapplet)
-addSubDirs(themeapplet/translations)
 addSubDirs(libmeegocontrol)
 addSubDirs(batteryapplet)
 addSubDirs(batteryapplet/translations)
@@ -28,19 +26,9 @@ addSubDirs(testapplet)
 addSubDirs(testapplet/translations)
 addSubDirs(usbapplet)
 addSubDirs(usbapplet/translations)
-addSubDirs(wallpaperapplet)
-addSubDirs(wallpaperapplet/translations)
 addSubDirs(wallpaperapplet2)
 addSubDirs(wallpaperapplet2/translations)
 addSubDirs(warrantyapplet)
-
-### Build only GPRS applet only if Ofono Qt is available
-### (XXX: It is not exists in Harmattan yet)
-contains(DEFINES, HAVE_OFONO_QT) {
-addSubDirs(gprsapplet)
-addSubDirs(gprsapplet/translations)
-}
-
 }
 
 if (BUILD_APPLET)

@@ -15,34 +15,37 @@
 ** and appearing in the file LICENSE.LGPL included in the packaging
 ** of this file.
 **
+** Contact: Karoliina T. Salminen <karoliina.t.salminen@nokia.com>
+** Authors: David Kedves <dkedves@blumsoft.eu>
+**          Laszlo Pere <lpere@blumsoft.eu>
+**
 ****************************************************************************/
+#ifndef ALERTTONEBROWSERSHEET_H
+#define ALERTTONEBROWSERSHEET_H
 
-#ifndef UT_SOUNDSETTINGSAPPLET_H
-#define UT_SOUNDSETTINGSAPPLET_H
+#include <meegocontrolexport.h>
+#include <MSheet>
+#include "alerttone.h"
 
-#include <QtTest/QtTest>
-#include <QObject>
-#include <MApplication>
+class AlertToneBrowserStylable;
 
-class Ut_SoundSettingsAppletTests : public QObject
+class MC_EXPORT AlertToneBrowserSheet : public MSheet
 {
-Q_OBJECT
+    Q_OBJECT
 
-private slots:
-      void init (){};
-      void cleanup (){};
-      void initTestCase ();
-      void cleanupTestCase ();
-      void soundsettingsappletConstructor ();
-      void soundsettingsappletconstructWidget ();
-      void soundsettingsappletBrief ();
-      void soundsettingsappletinit ();
-      void soundsettingsapplettitle ();
-      void soundsettingsappletviewMenuItems ();
-      void soundsettingsappletToplevelDestroyed ();
+    public:
+        AlertToneBrowserSheet (AlertTone *alertTone);
 
-private:
-      MApplication      *m_App;
+    public Q_SLOTS:
+        void doneActivated ();
+        void cancelActivated ();
+
+    private:
+        void createHeaderWidget ();
+        void createCentralWidget (AlertTone *alertTone);
+
+    private:
+        AlertToneBrowserStylable   *m_Widget;
 };
 
 #endif

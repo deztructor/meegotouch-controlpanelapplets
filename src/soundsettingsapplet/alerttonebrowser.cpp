@@ -240,19 +240,16 @@ AlertToneBrowser::retranslateUi()
         //% "Cancel"
         m_CancelAction->setText (qtTrId("qtn_comm_cancel"));
 }
-
 void
-AlertToneBrowser::cancel()
+AlertToneBrowser::performCancel ()
 {
     SYS_DEBUG ("");
     stopPlayingSound ();
-
     m_defaults->toneChanged ();
-    emit closePage();
 }
 
 void
-AlertToneBrowser::accept()
+AlertToneBrowser::performAccept ()
 {
     SYS_DEBUG ("");
     stopPlayingSound ();
@@ -267,7 +264,19 @@ AlertToneBrowser::accept()
 
         m_tone->set(currSelectedFile);
     }
+}
 
+void
+AlertToneBrowser::cancel()
+{
+    performCancel ();
+    emit closePage();
+}
+
+void
+AlertToneBrowser::accept()
+{
+    performAccept ();
     emit closePage();
 }
 
@@ -584,6 +593,8 @@ AlertToneBrowser::polishEvent ()
 
     /**************************************************************************
      * Hiding the home button and the escape button from the page.
+     *
+     * Well, we are using a sheet now, but the clock isn't.
      */
     page->setComponentsDisplayMode (
             MApplicationPage::EscapeButton,

@@ -13,6 +13,8 @@ DEFINES += UNIT_TEST
 TARGET = ut_sound_alerttoneappletwidget
 target.path = /usr/lib/$$TEST_PKG_NAME
 
+DEFINES += M_APPLICATION_EXTENSION_DIR=""
+
 CONFIG += \
     plugin          \
     gui             \
@@ -54,7 +56,8 @@ HEADERS +=                                    \
     $$SRC_PREFIX/profileintcombo.h \
     $$SRC_PREFIX/qprofilevalue.h \
     $$SRC_PREFIX/static.h \
-    $$SRC_PREFIX/qtrackedvariant.h
+    $$SRC_PREFIX/qtrackedvariant.h \
+    $$SRC_PREFIX/profilewidgetcontainer.h
 
 SOURCES +=                                    \
     ut_alerttoneappletwidget.cpp              \
@@ -75,7 +78,7 @@ SOURCES +=                                    \
     $$SRC_PREFIX/profileintcombo.cpp \
     $$SRC_PREFIX/qprofilevalue.cpp \
     $$SRC_PREFIX/qtrackedvariant.cpp \
-    $$STUB_PREFIX/mapplicationextensionarea_stub.cpp
+    $$SRC_PREFIX/profilewidgetcontainer.cpp
 
 INSTALLS += target
 
