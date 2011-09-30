@@ -21,9 +21,7 @@
 #include "dcpdisplay.h"
 #include "../styles.h"
 
-//#undef DEBUG
-//#define WARNING
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -581,7 +579,7 @@ DisplayWidget::retranslateUi ()
 
     if (m_colorProfilesCBox)
     {
-//        updateScreenTimeoutCombo ();
+	updateColorProfilesCBox ();
         m_colorProfilesCBox->setTitle (qtTrId ("qtn_disp_profile"));
     }
 }
