@@ -157,6 +157,7 @@ PercentageContainer::updateRemainingTime (
 
     if (batteryPercent > -1) {
         //% "Battery level \%L1\%"
+        MLocale locale;
         float percentage = ((float) batteryPercent) / 100.0f;
         labelText = qtTrId ("qtn_ener_battery_level").arg (
                         locale.formatPercent (percentage));
