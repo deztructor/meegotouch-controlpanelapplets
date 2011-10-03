@@ -76,6 +76,14 @@ BatteryWidget::BatteryWidget (QGraphicsWidget *parent) :
     m_logic = new BatteryBusinessLogic;
     initWidget ();
     DEBUG_CLOCK_END("Battery widget init");
+
+    /*
+     * We need these to stop/restart the animation.
+     */
+    connect (this, SIGNAL(displayEntered()),
+            this, SLOT(displayEnteredSlot()));
+    connect (this, SIGNAL(displayExited()),
+            this, SLOT(displayExitedSlot()));
 }
 
 BatteryWidget::~BatteryWidget ()
@@ -550,6 +558,22 @@ void BatteryWidget::updateUIonPowerSaveModeChange (PowerSaveOpt powerSaveopt)
     } else {
         showSlider (false);
     }
+}
+
+void
+BatteryWidget::displayEnteredSlot ()
+{
+    SYS_DEBUG ("---------------------------->");
+    if (m_BatteryImage)
+        m_BatteryImage->setOnScreen (true);
+}
+
+void
+BatteryWidget::displayExitedSlot ()
+{
+    SYS_DEBUG ("---------------------------->");
+    if (m_BatteryImage)
+        m_BatteryImage->setOnScreen (false);
 }
 
 void

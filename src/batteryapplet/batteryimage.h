@@ -69,6 +69,7 @@ public:
     BatteryImage (QGraphicsItem *parent = 0);
     ~BatteryImage ();
     bool charging () const;
+    void setOnScreen (bool onscreen);
 
 public slots:
     void updateBatteryLevel (int level);
@@ -98,6 +99,7 @@ private:
     QList<const QPixmap *>  m_Images;
     BatteryIconType         m_iconCurrentSet;
     int                     m_ImageIndex;
+    bool                    m_Onscreen;
     #ifdef UNIT_TEST
     friend class Ut_BatteryImage;
     #endif

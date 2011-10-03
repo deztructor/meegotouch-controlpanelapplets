@@ -59,7 +59,9 @@ private slots:
     void charging(int animation_rate);
     void chargeComplete ();
     void updateUIonPowerSaveModeChange (PowerSaveOpt powerSaveopt);
-
+    void displayEnteredSlot ();
+    void displayExitedSlot ();
+    
 private:
     void addHeaderContainer ();
     void addRemainingCapacityWidget ();
