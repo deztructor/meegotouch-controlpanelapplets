@@ -2,11 +2,13 @@ meegotouch-controlpanelapplets (0.21.1~1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#284481 - [TASK] Drop WallpaperEditorWidget from libmeegocontrol
+  * Fixes: NB#284478 - Battery applet should stop the charging animation when
+    it is not visible
 
   [ David Kedves ]
   * Fixes: NB#284843 - PR1.2 builds reported as PR1.1 in About product
 
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 03 Oct 2011 12:17:36 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 03 Oct 2011 15:19:57 +0200
 
 meegotouch-controlpanelapplets (0.20.74-5) meegotouch; urgency=low
 
