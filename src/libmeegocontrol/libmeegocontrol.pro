@@ -72,12 +72,6 @@ WALLPAPER_PATH = ../wallpaperapplet
 SOUNDSETTINGS_PATH = ../soundsettingsapplet
 
 PUBLIC_HEADERS = \
-    $$WALLPAPER_PATH/wallpaperbusinesslogic.h      \
-    $$WALLPAPER_PATH/wallpaperdescriptor.h         \
-    $$WALLPAPER_PATH/wallpapercurrentdescriptor.h  \
-    $$WALLPAPER_PATH/wallpaperitrans.h             \
-    $$WALLPAPER_PATH/wallpapereditorwidget.h       \
-    $$WALLPAPER_PATH/wallpaperinfoheader.h         \
     $$SOUNDSETTINGS_PATH/alerttone.h               \
     $$SOUNDSETTINGS_PATH/alerttonetoplevel.h       \
     $$SOUNDSETTINGS_PATH/alerttonebrowser.h        \
@@ -110,13 +104,6 @@ HEADERS =                                          \
 SOURCES =                                          \
     ../debug.cpp                                   \
     init.c                                         \
-    $$WALLPAPER_PATH/wallpaperitrans.cpp           \
-    $$WALLPAPER_PATH/wallpaperdescriptor.cpp       \
-    $$WALLPAPER_PATH/wallpapercurrentdescriptor.cpp \
-    $$WALLPAPER_PATH/wallpaperbusinesslogic.cpp    \
-    $$WALLPAPER_PATH/wallpapereditorwidget.cpp     \
-    $$WALLPAPER_PATH/wallpaperinfoheader.cpp       \
-    $$WALLPAPER_PATH/wallpaperthumb.cpp            \
     $$SOUNDSETTINGS_PATH/alerttone.cpp             \
     $$SOUNDSETTINGS_PATH/drilldownitem.cpp         \
     $$SOUNDSETTINGS_PATH/alerttonedefaults.cpp     \

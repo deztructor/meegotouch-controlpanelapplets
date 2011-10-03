@@ -4,6 +4,7 @@ meegotouch-controlpanelapplets (0.20.74-5) meegotouch; urgency=low
     view way too late
   * Fixes: NB#284656 - Battery level is shown as currupted
   * Fixes: NB#253772 - Percentage symbol is missing in power-save mode
+  * Fixes: NB#284481 - [TASK] Drop WallpaperEditorWidget from libmeegocontrol 
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 30 Sep 2011 16:05:32 +0200
 
