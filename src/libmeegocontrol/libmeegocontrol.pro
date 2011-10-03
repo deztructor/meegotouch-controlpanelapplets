@@ -3,7 +3,7 @@ include(../coverage.pri)
 include(../../shared.pri)
 
 TEMPLATE = lib
-VERSION = 0.1.0
+VERSION = 0.1.1
 MOC_DIR = .moc
 TARGET = meegocontrol
 OBJECTS_DIR = .objects
@@ -14,7 +14,6 @@ QT += dbus
 CONFIG +=          \
     dll            \
     gui            \
-    quill          \
     meegotouchcore \
     link_pkgconfig \
     duicontrolpanel
@@ -29,24 +28,13 @@ QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden -fPIC
 #
 PKGCONFIG += dbus-1 profile gstreamer-0.10
 
-#########################################
-# wallpaper setting extra dependencies  #
-#########################################
+###########################################
+# soundsetting applet extra dependencies  #
+###########################################
 contains(DEFINES, HAVE_CONTENT_MANAGER) {
     CONFIG += contentmanager
 }
 
-contains(DEFINES, HAVE_QUILL_FILTER) {
-    CONFIG += quillimagefilter
-}
-
-contains(DEFINES, HAVE_QUILL_METADATA) {
-    CONFIG += quillmetadata
-}
-
-###########################################
-# soundsetting applet extra dependencies  #
-###########################################
 contains(DEFINES, HAVE_LIBRESOURCEQT) {
     PKGCONFIG += libresourceqt1
 }
@@ -61,14 +49,6 @@ contains(DEFINES, HAVE_QTSPARQL) {
 DEFINES += \
     LIBMEEGOCONTROL
 
-LIBS += \
-    -lthumbnailer
-
-INCLUDEPATH += \
-    /usr/include/thumbnailer \
-    ../wallpaperapplet
-
-WALLPAPER_PATH = ../wallpaperapplet
 SOUNDSETTINGS_PATH = ../soundsettingsapplet
 
 PUBLIC_HEADERS = \
@@ -78,11 +58,6 @@ PUBLIC_HEADERS = \
     $$SOUNDSETTINGS_PATH/alerttonebrowsersheet.h   \
     $$SOUNDSETTINGS_PATH/qprofilevalue.h           \
     $$SOUNDSETTINGS_PATH/qtrackedvariant.h         \
-    WallpaperBusinessLogic                         \
-    WallpaperDescriptor                            \
-    WallpaperCurrentDescriptor                     \
-    WallpaperITrans                                \
-    WallpaperEditorWidget                          \
     init.h                                         \
     meegocontrolexport.h                           \
     meegocontrol.h
@@ -98,7 +73,6 @@ HEADERS =                                          \
     $$SOUNDSETTINGS_PATH/soundsettingsutils.h      \
     $$SOUNDSETTINGS_PATH/alerttonedefaults.h       \
     $$SOUNDSETTINGS_PATH/alerttonebrowserstylable.h \
-    $$WALLPAPER_PATH/wallpaperthumb.h              \
     $$PUBLIC_HEADERS
 
 SOURCES =                                          \
@@ -129,9 +103,6 @@ qtfeature.path = $$[QT_INSTALL_DATA]/mkspecs/features
 qtfeature.files = \
     meegocontrol.prf \
     meegocontrol_sound.prf
-
-# css.files = wallpaper.css
-# css.path =  ??
 
 INSTALLS += \
     qtfeature \
