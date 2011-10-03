@@ -1,10 +1,16 @@
+meegotouch-controlpanelapplets (0.21.1~1) meegotouch; urgency=low
+
+  [ Laszlo Pere ]
+  * Fixes: NB#284481 - [TASK] Drop WallpaperEditorWidget from libmeegocontrol
+
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 03 Oct 2011 12:16:34 +0200
+
 meegotouch-controlpanelapplets (0.20.74-5) meegotouch; urgency=low
 
   * Fix NB#284459 - Red battery (very)low icon shown on Battery settings
     view way too late
   * Fixes: NB#284656 - Battery level is shown as currupted
   * Fixes: NB#253772 - Percentage symbol is missing in power-save mode
-  * Fixes: NB#284481 - [TASK] Drop WallpaperEditorWidget from libmeegocontrol 
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 30 Sep 2011 16:05:32 +0200
 
