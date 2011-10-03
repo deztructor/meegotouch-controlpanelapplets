@@ -32,7 +32,7 @@ static const QString psm_values_key =
 
 #define SAVE_BATTERY
 
-#ifdef SAVE_BATTERY
+#ifndef SAVE_BATTERY
 static const int animation_rate_charging_usb  = 500;
 static const int animation_rate_charging_wall = 250;
 #else
