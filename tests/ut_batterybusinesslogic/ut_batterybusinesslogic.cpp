@@ -35,6 +35,18 @@
 #  error "QmBattery is not stubbed, can't continue."
 #endif
 
+// XXX: This must be the same as in batterybusinesslogi.cpp
+#define SAVE_BATTERY
+
+#ifndef SAVE_BATTERY
+static const int animation_rate_charging_usb  = 500;
+static const int animation_rate_charging_wall = 250;
+#else
+static const int animation_rate_charging_usb  = 1000;
+static const int animation_rate_charging_wall = 1000;
+#endif
+
+
 using namespace MeeGo;
 
 /******************************************************************************
@@ -404,7 +416,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargerEvent ()
     m_Logic->m_battery->connectCharger (QmBattery::USB_500mA);
 
     m_SignalSink.print();
-    QVERIFY (m_SignalSink.chargingWithAnimation(500));
+    QVERIFY (m_SignalSink.chargingWithAnimation(animation_rate_charging_usb));
     QVERIFY (m_SignalSink.hasBarValue(4));
     QVERIFY (m_SignalSink.hasRemainingCapacity(true));
     
@@ -427,7 +439,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargerEvent ()
     m_Logic->m_battery->connectCharger (QmBattery::Wall);
 
     m_SignalSink.print();
-    QVERIFY (m_SignalSink.chargingWithAnimation(250));
+    QVERIFY (m_SignalSink.chargingWithAnimation(animation_rate_charging_wall));
     QVERIFY (m_SignalSink.hasBarValue(4));
     QVERIFY (m_SignalSink.hasRemainingCapacity(true));
     
@@ -483,7 +495,7 @@ Ut_BatteryBusinessLogic::testSpontaneousChargingComplete ()
     m_Logic->m_battery->modifyBatteryState (QmBattery::StateOK, 4);
     
     m_SignalSink.print();
-    QVERIFY (m_SignalSink.chargingWithAnimation(250));
+    QVERIFY (m_SignalSink.chargingWithAnimation(animation_rate_charging_wall));
     QVERIFY (m_SignalSink.hasBarValue(0));
     QVERIFY (m_SignalSink.hasRemainingCapacity(true));
     

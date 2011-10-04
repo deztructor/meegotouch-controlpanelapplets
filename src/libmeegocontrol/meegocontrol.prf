@@ -7,21 +7,13 @@ DEPENDPATH += /usr/include/libmeegocontrol
 LIBS += -lmeegocontrol
 
 CONFIG += \
-    meegotouchcore \
-    contentmanager \
-    link_pkgconfig
+    meegotouchcore
 
-# gst / glib headers (only needed for compilation)
+# Clock and duicontrolpanel headers...
 INCLUDEPATH += \
+    /usr/include/duicontrolpanel \
     /usr/include/gstreamer-0.10 \
     /usr/include/glib-2.0 \
     /usr/lib/glib-2.0/include \
     /usr/include/libxml2
-
-LIBS += \
-    -lthumbnailer
-
-INCLUDEPATH += \
-    /usr/include/thumbnailer \
-    /usr/include/duicontrolpanel
 
