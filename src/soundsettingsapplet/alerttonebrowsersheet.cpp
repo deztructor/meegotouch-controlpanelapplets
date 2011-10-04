@@ -22,11 +22,15 @@
 ****************************************************************************/
 
 #include "alerttonebrowsersheet.h"
-#include "alerttonebrowserstylable.h"
+#include "alerttonebrowser.h"
 
 #include <QAction>
 #include <MBasicSheetHeader>
 #include <MPannableViewport>
+
+#define DEBUG
+#define WARNING
+#include "../debug.h"
 
 AlertToneBrowserSheet::AlertToneBrowserSheet (
         AlertTone *alertTone) :
@@ -49,6 +53,7 @@ AlertToneBrowserSheet::createHeaderWidget ()
     basicHeader->setStyleName ("Inverted");
     //basicHeader->setProperty ("opacity", 0.2);
     doneAction = new QAction(qtTrId("qtn_comm_command_done"), basicHeader);
+    doneAction->setEnabled (false);
     cancelAction = new QAction(qtTrId("qtn_comm_cancel"), basicHeader);
     
     connect(doneAction, SIGNAL(triggered()), SLOT(doneActivated()));
@@ -68,8 +73,11 @@ AlertToneBrowserSheet::createCentralWidget (
     pannableViewport->setObjectName("pannableViewport");
 
     Q_ASSERT (!m_Widget);
-    m_Widget = new AlertToneBrowserStylable (alertTone);
+    m_Widget = new AlertToneBrowser (alertTone);
     pannableViewport->setWidget(m_Widget);
+
+    connect (m_Widget, SIGNAL(itemSelected()),
+            this, SLOT(soundFileSelected()));
 
     setCentralWidget (pannableViewport);
 }
@@ -77,15 +85,21 @@ AlertToneBrowserSheet::createCentralWidget (
 void
 AlertToneBrowserSheet::doneActivated ()
 {
-    m_Widget->accept ();
+    m_Widget->performAccept ();
     dismiss ();
 }
 
 void
 AlertToneBrowserSheet::cancelActivated ()
 {
-    m_Widget->cancel ();
+    m_Widget->performCancel ();
     dismiss ();
 }
 
-
+void
+AlertToneBrowserSheet::soundFileSelected ()
+{
+    SYS_DEBUG ("");
+    MBasicSheetHeader *header = (MBasicSheetHeader *) headerWidget();
+    header->positiveAction()->setEnabled (true);
+}

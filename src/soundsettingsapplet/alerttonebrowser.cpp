@@ -50,7 +50,7 @@
 #include "../styles.h"
 
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -495,6 +495,12 @@ AlertToneBrowser::defaultItemClicked (
         const QString &filename)
 {
     SYS_DEBUG ("*** filename = %s", SYS_STR(filename));
+    /*
+     * The sheet needs to know we have a valid file, the 'done' button should be
+     * enabled.
+     */
+    emit itemSelected ();
+    
     // We don't need to set the UI, this signal came from the UI already.
     setAlertTone (filename, false);
     startPlayingSound (filename);
@@ -542,6 +548,12 @@ AlertToneBrowser::selectingMusicItem (
 
     SYS_DEBUG ("*** trackerID = %s", SYS_STR(item));
     SYS_DEBUG ("*** fname     = %s", SYS_STR(fname));
+    
+    /*
+     * The sheet needs to know we have a valid file, the 'done' button should be
+     * enabled.
+     */
+    emit itemSelected ();
 
     #ifndef USE_CONTENT_ITEM_SHEET
     if (m_MusicBrowser) {

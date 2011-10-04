@@ -2,6 +2,8 @@ meegotouch-controlpanelapplets (0.21.1~1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#284481 - [TASK] Drop WallpaperEditorWidget from libmeegocontrol
+  * Fixes: NB#284996 - Done button is always active in Ringtone selection page
+    of Sound settings.
 
   [ David Kedves ]
   * Fixes: NB#284843 - PR1.2 builds reported as PR1.1 in About product
