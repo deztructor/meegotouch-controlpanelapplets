@@ -283,6 +283,7 @@ DisplayWidget::addColorProfilesCBox ()
      */
     m_colorProfilesCBox = new MComboBox;
 
+    //% "Color profile"
     m_colorProfilesCBox->setTitle (qtTrId ("qtn_disp_profile"));
     m_colorProfilesCBox->setStyleName ("CommonComboBoxInverted");
     m_colorProfilesCBox->setLayoutPosition (M::VerticalCenterPosition);

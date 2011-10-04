@@ -299,11 +299,17 @@ DisplayBusinessLogic::colorProfileValues ()
 const QMap<QString, QString>&
 DisplayBusinessLogic::colorProfileMap ()
 {
+    //% "Normal"
+    static const char* QtnDispProfileNormal = QT_TRID_NOOP("qtn_disp_profile_normal");
+    //% "Vivid"
+    static const char* QtnDispProfileVivid = QT_TRID_NOOP("qtn_disp_profile_vivid");
+    //% "Muted"
+    static const char* QtnDispProfileMuted = QT_TRID_NOOP("qtn_disp_profile_muted");
+
     if(m_ColorProfileTextIds.empty()) {
-        /* FIXME Find better way of mapping Profile values with translation ids. */
-        m_ColorProfileTextIds.insert("Neutral", "qtn_disp_profile_normal");
-        m_ColorProfileTextIds.insert("Vivid", "qtn_disp_profile_vivid");
-        m_ColorProfileTextIds.insert("Muted", "qtn_disp_profile_muted");
+        m_ColorProfileTextIds.insert("Neutral", QtnDispProfileNormal);
+        m_ColorProfileTextIds.insert("Vivid", QtnDispProfileVivid);
+        m_ColorProfileTextIds.insert("Muted", QtnDispProfileMuted);
     }
     return m_ColorProfileTextIds;
 }
