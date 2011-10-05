@@ -7,10 +7,7 @@ CONFIG += plugin \
           gui \
           meegotouchcore \
           duicontrolpanel \
-
-contains(DEFINES, HAVE_QMSYSTEM) {
-    CONFIG += qmsystem2
-}
+          qmsystem2
 
 QMAKE_LFLAGS_RPATH = -Wl
 QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden -fPIC

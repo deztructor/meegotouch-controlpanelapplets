@@ -11,9 +11,6 @@ LIBS += -lmeegocontrol
 CONFIG += \
     meegotouchcore
 
-PKGCONFIG_CFLAGS += \
-    gstreamer-0.10
-
 # Clock and duicontrolpanel headers...
 INCLUDEPATH += \
     /usr/include/duicontrolpanel \
@@ -21,12 +18,4 @@ INCLUDEPATH += \
     /usr/include/glib-2.0 \
     /usr/lib/glib-2.0/include \
     /usr/include/libxml2
-
-# Include pkg-config CFLAGS, but not pkg-config LIBS
-# isEmpty(PKG_CONFIG):PKG_CONFIG=pkg-config
-# XXX: There is no 'for' in prf files!!!
-# for (PKGCONFIG_CFLAGS_ENTRY, $$list($$unique(PKGCONFIG_CFLAGS))) {
-#    QMAKE_CXXFLAGS += $$system($$PKG_CONFIG --cflags $$PKGCONFIG_CFLAGS_ENTRY)
-#    QMAKE_CFLAGS += $$system($$PKG_CONFIG --cflags $$PKGCONFIG_CFLAGS_ENTRY)
-# }
 

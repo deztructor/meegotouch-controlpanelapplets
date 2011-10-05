@@ -60,6 +60,9 @@ public:
     void performCancel ();
     void performAccept ();
     
+    signals:
+        void itemSelected ();
+
 private slots:
     void cancel();
     void accept();

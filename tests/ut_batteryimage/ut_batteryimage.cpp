@@ -85,6 +85,11 @@ Ut_BatteryImage::testAnimation ()
     int           level;
 
     /*
+     * We're not animation if image is not in screen
+     */
+    image->setOnScreen (true);
+
+    /*
      * Creating the image that shows the non-charging non-psm state and testing
      * if it follows the battery level.
      */

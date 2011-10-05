@@ -35,14 +35,8 @@
 
 static const QString GConfDir ("/system/osso/dsm/display");
 
-#ifdef HAVE_QMSYSTEM
+
 using namespace MeeGo;
-#else
-static const QString MaxBrightnessKey =
-    GConfDir + "/max_display_brightness_levels";
-static const QString CurrentBrightnessKey =
-    GConfDir + "/display_brightness";
-#endif
 
 /*
  * gconftool --recursive-list /system/osso/dsm/display
@@ -64,7 +58,6 @@ static const QString closeFromTopDisabled ("away");
 
 static int TIMEGAP = 5; // time gap between blanking and dimming
 
-#ifdef HAVE_QMSYSTEM
 DisplayBusinessLogic::DisplayBusinessLogic (
         QObject* parent) :
     QObject (parent),
@@ -96,46 +89,11 @@ DisplayBusinessLogic::DisplayBusinessLogic (
     
     initiateMceQueries ();
 }
-#else // Don't have QmSystem...
-DisplayBusinessLogic::DisplayBusinessLogic (
-        QObject* parent) :
-    QObject (parent),
-    m_compositorConf (0),
-    m_psmValue (false),
-    m_MceDBusIf(0)
-{
-    m_MaxDisplayBrightness = new MGConfItem (MaxBrightnessKey);
-    m_CurrentBrightness = new MGConfItem (CurrentBrightnessKey);
-    m_possibleDimValues = new MGConfItem (POSSIBLE_DIM_TIMEOUTS);
-    m_lowPower = new MGConfItem (LowPowerKey);
-    m_DoubleTap = new MGConfItem (DoubleTapKey);
-
-#ifndef MEEGO
-    m_compositorConf = new QSettings (
-        mcompositorConfName, mcompositorConfName);
-#endif
-
-    connect (m_lowPower, SIGNAL (valueChanged ()),
-             SLOT (lpmValueChanged ()));
-    connect (m_DoubleTap, SIGNAL (valueChanged ()),
-             SLOT (doubleTapValueChanged ()));
-    
-    initiateMceQueries ();
-}
-#endif
 
 DisplayBusinessLogic::~DisplayBusinessLogic ()
 {
-#ifdef HAVE_QMSYSTEM
     delete m_Display;
     m_Display = 0;
-#else
-    delete m_MaxDisplayBrightness;
-    m_MaxDisplayBrightness = 0;
-
-    delete m_CurrentBrightness;
-    m_CurrentBrightness = 0;
-#endif
 
 #ifndef MEEGO
     delete m_compositorConf;
@@ -168,11 +126,7 @@ DisplayBusinessLogic::brightnessValues ()
      * If the QmSystem is available we use it to get the maximum brightness
      * value, if not we read this value from the GConf database.
      */
-    #ifdef HAVE_QMSYSTEM
     max = m_Display->getMaxDisplayBrightnessValue();
-    #else
-    max = m_MaxDisplayBrightness->value().toInt();
-    #endif
 
     // Well, this must be some kind of last minute check...
     max = (max > 0 ? max : 5);
@@ -217,11 +171,7 @@ DisplayBusinessLogic::selectedBrightnessValue ()
      * When we have the QmSystem we use that, otherwise we read the data from
      * the GConf database.
      */
-    #ifdef HAVE_QMSYSTEM
     return m_Display->getDisplayBrightnessValue();
-    #else
-    return m_CurrentBrightness->value().toInt();
-    #endif
 }
 
 /*!
@@ -264,7 +214,6 @@ DisplayBusinessLogic::selectedScreenLightsValue ()
 {
     int index;
 
-    #ifdef HAVE_QMSYSTEM
     QList<int> values = screenLightsValues ();
     index = values.indexOf (m_Display->getDisplayDimTimeout ());
 
@@ -272,14 +221,7 @@ DisplayBusinessLogic::selectedScreenLightsValue ()
         index = 1;
         setScreenLightTimeouts (index);
     }
-    #else
-    /*
-     * FIXME: To add the code that returns the selected screen lights value when
-     * QmSystem is not available.
-     */
-    SYS_WARNING ("Not implemented!");
-    index = 0;
-    #endif
+
     return index;
 }
 
@@ -334,14 +276,8 @@ DisplayBusinessLogic::setBrightnessValue (
         int value)
 {
     SYS_DEBUG ("*** value + 1 = %d", value + 1);
-    #ifdef HAVE_QMSYSTEM
+
     m_Display->setDisplayBrightnessValue (value + 1);
-    #else
-    /*
-     * FIXME: To add the code that is used when QmSystem is not available.
-     */
-    SYS_WARNING ("Not implemented!");
-    #endif
 }
 
 /*!
@@ -361,19 +297,12 @@ DisplayBusinessLogic::setScreenLightTimeouts (
 
     SYS_DEBUG ("*** index   = %d", index);
     SYS_DEBUG ("*** seconds = %d", seconds);
-    #ifdef HAVE_QMSYSTEM
     m_Display->setDisplayDimTimeout (seconds);
     /*
      * Originally it was seconds + TIMEGAP here, but as I see the blank timeout
      * is relative to the dim timeout value.
      */
     m_Display->setDisplayBlankTimeout (TIMEGAP);
-    #else
-    /*
-     * FIXME: To add the code that is used when there is no QmSystem.
-     */
-    SYS_WARNING ("Not implemented!");
-    #endif
 }
 
 /*!
@@ -452,18 +381,6 @@ DisplayBusinessLogic::doubleTapValueChanged ()
     emit doubleTapModeChanged (value != 0);
 }
 
-#if 0
-void
-DisplayBusinessLogic::toTest ()
-{
-    m_psmValue = !m_psmValue;
-    emit PSMValueReceived (m_psmValue);
-
-    QTimer::singleShot (1500, this, SLOT (toTest ()));
-}
-#endif
-
-#ifdef HAVE_QMSYSTEM
 /*!
  * This slot will be called when the device power save mode is changed. The
  * method will send the PSMValueReceived() signal.
@@ -478,7 +395,6 @@ DisplayBusinessLogic::PSMStateChanged (
     SYS_DEBUG ("Emitting PSMValueReceived (%s)", SYS_BOOL(m_psmValue));
     emit PSMValueReceived (m_psmValue);
 }
-#endif
 
 bool
 DisplayBusinessLogic::PSMValue ()

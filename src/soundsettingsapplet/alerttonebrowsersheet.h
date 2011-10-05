@@ -27,7 +27,7 @@
 #include <MSheet>
 #include "alerttone.h"
 
-class AlertToneBrowserStylable;
+class AlertToneBrowser;
 
 class MC_EXPORT AlertToneBrowserSheet : public MSheet
 {
@@ -39,13 +39,14 @@ class MC_EXPORT AlertToneBrowserSheet : public MSheet
     public Q_SLOTS:
         void doneActivated ();
         void cancelActivated ();
+        void soundFileSelected ();
 
     private:
         void createHeaderWidget ();
         void createCentralWidget (AlertTone *alertTone);
 
     private:
-        AlertToneBrowserStylable   *m_Widget;
+        AlertToneBrowser   *m_Widget;
 };
 
 #endif

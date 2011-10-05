@@ -33,7 +33,8 @@ BatteryImage::BatteryImage (QGraphicsItem *parent) :
         m_timer (NULL),
         m_batteryLevel (0),
         m_iconCurrentSet (IconTypeUnset),
-        m_ImageIndex (-1)
+        m_ImageIndex (-1),
+        m_Onscreen (false)
 {
     setZoomFactor (1.0);
     setIconSet ();
@@ -247,7 +248,7 @@ BatteryImage::stopTimer ()
 bool
 BatteryImage::maybeStartTimer ()
 {
-    if (!charging()) {
+    if (!charging() || !m_Onscreen) {
         updateImage ();
         return false;
     }
@@ -284,3 +285,15 @@ BatteryImage::chargeComplete ()
     setPixmap( *(getPixmap(QString ("icon-m-energy-management-remove-charger"))) );
 }
 
+void
+BatteryImage::setOnScreen (
+        bool onscreen)
+{
+    m_Onscreen = onscreen;
+
+    if (m_Onscreen) {
+        maybeStartTimer ();
+    } else {
+        stopTimer ();
+    }
+}
