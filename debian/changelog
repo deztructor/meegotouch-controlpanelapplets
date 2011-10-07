@@ -1,11 +1,11 @@
-meegotouch-controlpanelapplets (0.21.1~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.21.1-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
-  * Fixes: NB#284481 - [TASK] Drop WallpaperEditorWidget from libmeegocontrol
-  * Fixes: NB#284996 - Done button is always active in Ringtone selection page
-    of Sound settings.
-  * Fixes: NB#284478 - Battery applet should stop the charging animation when
+  * Fixed 284481 - [TASK] Drop WallpaperEditorWidget from libmeegocontrol
+  * Fixed 284478 - Battery applet should stop the charging animation when
     it is not visible
+  * Fixed 284996 - Done button is always active in Ringtone selection page
+    of Sound settings.
 
   [ Peter Csaszar ]
   * Fixes: NB#281303 - [TASK] Support for multiple color profiles
