@@ -26,3 +26,4 @@ htmldocs.path = $$(DEBIAN_DESTDIR)/usr/share/libmeegocontrol-doc
 htmldocs.CONFIG += no_link no_check_exist
 INSTALLS += htmldocs
 
+QMAKE_EXTRA_TARGETS += htmldocs
