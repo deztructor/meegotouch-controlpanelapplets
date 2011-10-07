@@ -35,18 +35,20 @@ contains(DEFINES, HAVE_CONTENT_ACTION) {
 
 MOBILITY += systeminfo
 
-HEADERS += \
-    ../../src/debug.h \
-    ut_aboutapplet.h \
-    $$SRC_PREFIX/aboutapplet.h \
-    $$SRC_PREFIX/aboutbusinesslogic.h \
+HEADERS +=                               \
+    ../../src/debug.h                    \
+    ut_aboutapplet.h                     \
+    $$SRC_PREFIX/logowidget.h            \
+    $$SRC_PREFIX/aboutapplet.h           \
+    $$SRC_PREFIX/aboutbusinesslogic.h    \
     $$SRC_PREFIX/aboutwidget.h
 
-SOURCES += \
-    ../../src/debug.cpp \
-    ut_aboutapplet.cpp \
-    $$SRC_PREFIX/aboutapplet.cpp \
-    $$SRC_PREFIX/aboutbusinesslogic.cpp \
+SOURCES +=                               \
+    ../../src/debug.cpp                  \
+    ut_aboutapplet.cpp                   \
+    $$SRC_PREFIX/logowidget.cpp          \
+    $$SRC_PREFIX/aboutapplet.cpp         \
+    $$SRC_PREFIX/aboutbusinesslogic.cpp  \
     $$SRC_PREFIX/aboutwidget.cpp
 
 INSTALLS += target
