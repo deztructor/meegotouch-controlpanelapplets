@@ -91,6 +91,27 @@ DisplayBusinessLogic::selectedScreenLightsValue ()
     return 0;
 }
 
+const QStringList&
+DisplayBusinessLogic::colorProfileValues ()
+{
+    static QStringList values;
+
+    return values;
+}
+
+const QMap<QString, QString>&
+DisplayBusinessLogic::colorProfileMap ()
+{
+	static QMap<QString, QString> map;
+	return map;
+}
+
+int
+DisplayBusinessLogic::selectedColorProfileValue ()
+{
+	return 0;
+}
+
 /*!
  * \param value The slider value, that starts from 0, the qmsystem value starts
  *   from 1, so we add +1 to this parameter.
@@ -112,6 +133,13 @@ DisplayBusinessLogic::setScreenLightTimeouts (
         int     index)
 {
     Q_UNUSED (index);
+}
+
+void
+DisplayBusinessLogic::setColorProfile (
+		int     index)
+{
+    Q_UNUSED(index);
 }
 
 void
@@ -183,4 +211,42 @@ DisplayBusinessLogic::getCloseFromTopValue ()
     bool retval = false;
     return retval;
 }
+
+void
+DisplayBusinessLogic::setupMceDBusIf ()
+{
+}
+
+void
+DisplayBusinessLogic::initiateMceQueries ()
+{
+}
+
+void
+DisplayBusinessLogic::availableColorProfilesReceivedSlot (
+        QStringList list)
+{
+	Q_UNUSED(list);
+}
+
+void
+DisplayBusinessLogic::currentColorProfileReceived (
+        QString profile)
+{
+    Q_UNUSED(profile);
+}
+
+void
+DisplayBusinessLogic::currentColorProfileChanged (QDBusMessage msg)
+{
+	Q_UNUSED(msg);
+}
+
+void
+DisplayBusinessLogic::DBusMessagingFailure (
+		QDBusError error)
+{
+	Q_UNUSED (error);
+}
+
 

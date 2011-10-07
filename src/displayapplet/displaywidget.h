@@ -43,9 +43,12 @@ protected:
 
 private slots:
     void screenTimeoutChanged (int index);
+    void colorProfilesCBoxCurrentIndexChanged (int index);
     void sliderUpdated (int val);
     void lowPowerModeChanged (bool lpm);
     void doubleTapModeChanged (bool dt);
+    void updateColorProfilesCBox ();
+    void currentColorProfileReceivedSlot ();
 
 private:
     void addHeaderContainer ();
@@ -54,6 +57,7 @@ private:
     void addSliderContainer ();
 #endif
     void addScreenTimeoutContainer ();
+    void addColorProfilesCBox ();
     void addLowPowerContainer ();
     void addDoubleTapContainer ();
     void addFromTopCloseContainer ();
@@ -76,6 +80,8 @@ private:
     MButton                *m_lowPowerSwitch;
     MButton                *m_DoubleTapSwitch;
     MButton                *m_CloseSwitch;
+    
+    MComboBox              *m_colorProfilesCBox;
 
     bool                    m_lowPowerChangeable;
     bool                    m_topCloseChangeable;
