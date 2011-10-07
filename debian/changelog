@@ -1,10 +1,4 @@
-meegotouch-controlpanelapplets (0.21.2~1) meegotouch; urgency=low
-
-  * [NEW VERSION]
-
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 07 Oct 2011 11:24:12 +0200
-
-meegotouch-controlpanelapplets (0.21.1-1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.21.1-2) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixed 284481 - [TASK] Drop WallpaperEditorWidget from libmeegocontrol
@@ -15,6 +9,10 @@ meegotouch-controlpanelapplets (0.21.1-1) meegotouch; urgency=low
 
   [ Peter Csaszar ]
   * Fixes: NB#281303 - [TASK] Support for multiple color profiles
+
+  [ David Kedves ]
+  * Fixes: NB#284065 - Profile and volume indicators are not displayed for a
+    while
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 07 Oct 2011 10:18:39 +0200
 
