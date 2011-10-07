@@ -34,6 +34,7 @@
 #include <MLinearLayoutPolicy>
 #include <MLayout>
 
+#include "logowidget.h"
 #include "../styles.h"
 
 #ifdef HAVE_CONTENT_ACTION
@@ -147,6 +148,9 @@ private:
     QGraphicsLinearLayout *certsLayout;
 };
 
+/******************************************************************************
+ * The actual widget.
+ */
 AboutWidget::AboutWidget (QGraphicsWidget *parent) :
     DcpStylableWidget (parent),
     m_layout (0),
@@ -338,15 +342,8 @@ AboutWidget::addLogoContainer ()
      * The logo
      */
     MImageWidget *logo;
-    logo = new MImageWidget;
-//on meego we set the logo with diffrent ID:
-#ifndef MEEGO
-    logo->setImage ("icon-l-about-nokia-logo");
-#else
-    logo->setImage ("icon-l-about-meego-logo");
-#endif
-
-    logo->setObjectName ("AboutAppletLogoImage");
+    logo = new LogoWidget;
+    //logo = new MImageWidget;
 
     layout->addItem (logo);
     layout->addStretch ();

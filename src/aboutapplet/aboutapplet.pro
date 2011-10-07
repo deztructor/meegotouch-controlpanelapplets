@@ -27,12 +27,14 @@ QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden -fPIC
 
 HEADERS =                   \
     ../debug.h              \
+    logowidget.h            \
     aboutbusinesslogic.h    \
     aboutapplet.h           \
     aboutwidget.h
 
 SOURCES =                   \
     ../debug.cpp            \
+    logowidget.cpp          \
     aboutbusinesslogic.cpp  \
     aboutapplet.cpp         \
     aboutwidget.cpp
