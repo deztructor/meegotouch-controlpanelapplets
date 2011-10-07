@@ -41,6 +41,7 @@ WallpaperEditorSheet::WallpaperEditorSheet (
     m_EditorWidget (0),
     m_Saving (false)
 {
+    MSheet::setHeaderFloating(true);
     setStyleName ("Inverted");
     createCentralWidget (wallpaperBusinessLogic);
     createHeaderWidget ();
@@ -79,6 +80,7 @@ WallpaperEditorSheet::createHeaderWidget()
     QAction           *cancelAction;
 
     basicHeader->setStyleName ("Inverted");
+    //basicHeader->setStyleName ("CommonOverlaySheetHeaderPanelInverted");
     //basicHeader->setProperty ("opacity", 0.2);
     doneAction = new QAction(qtTrId("qtn_comm_command_done"), basicHeader);
     cancelAction = new QAction(qtTrId("qtn_comm_cancel"), basicHeader);
