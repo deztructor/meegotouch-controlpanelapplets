@@ -79,8 +79,11 @@ WallpaperEditorSheet::createHeaderWidget()
     QAction           *doneAction;
     QAction           *cancelAction;
 
+    /*
+     * None of these seems to have transparency.
+     */
     basicHeader->setStyleName ("Inverted");
-    //basicHeader->setStyleName ("CommonOverlaySheetHeaderPanelInverted");
+    //basicHeader->setStyleName ("CommonOverlaySheetHeaderPanel");
     //basicHeader->setProperty ("opacity", 0.2);
     doneAction = new QAction(qtTrId("qtn_comm_command_done"), basicHeader);
     cancelAction = new QAction(qtTrId("qtn_comm_cancel"), basicHeader);
