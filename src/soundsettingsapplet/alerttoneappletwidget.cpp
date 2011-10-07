@@ -209,6 +209,9 @@ AlertToneAppletWidget::createContents ()
     SYS_DEBUG ("%s DONE: constructing volumeExtension", SYS_TIME_STR);
     DEBUG_CLOCK_END("volume extension");
 
+    m_profileWidget->init ();
+    DEBUG_CLOCK_END("Initializing slider.");
+
     /*
      * A subtitle that shows 'Profile vibration'
      */
@@ -414,8 +417,6 @@ AlertToneAppletWidget::polishEvent ()
     QGraphicsWidget  *parent;
     MApplicationPage *page = 0;
 
-    // testing 
-    //m_volumeExtension->init ();
     /*
      * We need to find the MApplicationPage among our parents.
      */
@@ -431,11 +432,13 @@ AlertToneAppletWidget::polishEvent ()
         page->setComponentsDisplayMode (
                 MApplicationPage::HomeButton,
                 MApplicationPageModel::Hide);
-    
+
+#if 0
     /*
      * XXX: FIXME: TODO: adjust this delay to make it best
      */
     QTimer::singleShot (500, this, SLOT (delayedInit ()));
+#endif
     DEBUG_CLOCK_END("polish event");
 }
 
