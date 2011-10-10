@@ -29,7 +29,7 @@ class LogoWidget : public MImageWidget
         LogoWidget (QGraphicsWidget *parent = 0);
 
     signals:
-        void eggs ();
+        void eggs (bool on);
         
     protected:
         bool event (QEvent* event);

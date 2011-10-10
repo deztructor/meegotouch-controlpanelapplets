@@ -62,7 +62,7 @@ private slots:
     void gotInfo (AboutBusinessLogic::requestType type,
                   QVariant value);
     void linkActivated (const QString &link);
-    void eggs ();
+    void eggs (bool on);
 
 private:
     QGraphicsGridLayout            *m_layout;

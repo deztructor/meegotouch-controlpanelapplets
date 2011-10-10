@@ -89,8 +89,10 @@ LogoWidget::event (
     ++m_StateCounter;
     m_LastTime = t;
 
-    if (m_StateCounter == 4)
+    if (m_StateCounter == 4) {
         turnedOn ();
+        m_StateCounter = 0;
+    }
 
 finalize:
     SYS_DEBUG ("succ event type = %d time = %d counter = %d", 
@@ -136,9 +138,10 @@ LogoWidget::turnedOn ()
     if (currentState) {
         gconfItem.set (false);
         showInfoBanner ("Easter eggs turned off...");
+        emit eggs (false);
     } else {
         gconfItem.set (true);
-        emit eggs ();
+        emit eggs (true);
         showInfoBanner ("Easter eggs turned on...");
     }
 }

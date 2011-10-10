@@ -239,13 +239,15 @@ AboutWidget::createContent ()
     // Row 5: WiFi
     addWiFiMACContainer ();
     
-    if (eggsGconfItem.value().toBool())
-        addIpContainer ();
-
     // Row 6: KekFog
     addBtMACContainer ();
+
     // Row 7: IMEI
     addIMEIContainer ();
+
+    // Row 8: The IP address
+    if (eggsGconfItem.value().toBool())
+        addIpContainer ();
 
 #if 0
     // Row 8: Certs container...
@@ -361,8 +363,8 @@ AboutWidget::addLogoContainer ()
     m_layout->addItem (layout, m_logoRow, 0, 1, 1);
     m_layout->setAlignment (layout, Qt::AlignLeft);
 
-    connect (logo, SIGNAL(eggs()),
-            this, SLOT(eggs()));
+    connect (logo, SIGNAL(eggs(bool)),
+            this, SLOT(eggs(bool)));
 }
 
 void
@@ -585,9 +587,14 @@ AboutWidget::linkActivated (const QString &link)
 }
 
 void
-AboutWidget::eggs ()
+AboutWidget::eggs (
+        bool on)
 {
     SYS_DEBUG ("");
-    if (!m_Ip)
+    if (on && !m_Ip) {
         addIpContainer (8);
+    } else if (!on && m_Ip) {
+        m_Ip->deleteLater ();
+        m_Ip = 0;
+    }
 }
