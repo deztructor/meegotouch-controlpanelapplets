@@ -19,6 +19,8 @@
 
 #include "logowidget.h"
 
+#include <MGConfItem>
+
 #define DEBUG
 #define WARNING
 #include "../debug.h"
@@ -30,7 +32,8 @@ LogoWidget::LogoWidget (
         QGraphicsWidget *parent) :
     MImageWidget (parent),
     m_LastTime (0),
-    m_StateCounter (0)
+    m_StateCounter (0),
+    m_InfoBanner (0)
 {
     #ifndef MEEGO
     setImage ("icon-l-about-nokia-logo");
@@ -106,8 +109,36 @@ finalize_fail:
     return retval;
 }
 
+void 
+LogoWidget::showInfoBanner (
+        const QString &text)
+{
+    if (!m_InfoBanner) {
+        m_InfoBanner = new MBanner;
+        m_InfoBanner->setStyleName ("InformationBanner");
+        m_InfoBanner->setObjectName ("InfoBanner");
+    }
+
+    m_InfoBanner->setTitle (text);
+    m_InfoBanner->appear (scene());
+}
+
+
+
 void
 LogoWidget::turnedOn ()
 {
+    MGConfItem gconfItem (EGGS_GCONF_KEY);
+    bool       currentState;
+
     SYS_WARNING ("Eastern eggs turned on.");
+    currentState = gconfItem.value().toBool();
+    if (currentState) {
+        gconfItem.set (false);
+        showInfoBanner ("Easter eggs turned off...");
+    } else {
+        gconfItem.set (true);
+        emit eggs ();
+        showInfoBanner ("Easter eggs turned on...");
+    }
 }

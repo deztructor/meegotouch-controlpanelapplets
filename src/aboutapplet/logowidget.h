@@ -20,6 +20,7 @@
 #define LOGOWIDGET_H
 
 #include <MImageWidget>
+#include <MBanner>
 
 class LogoWidget : public MImageWidget 
 {
@@ -27,13 +28,18 @@ class LogoWidget : public MImageWidget
     public:
         LogoWidget (QGraphicsWidget *parent = 0);
 
+    signals:
+        void eggs ();
+        
     protected:
         bool event (QEvent* event);
         void turnedOn ();
+        void showInfoBanner (const QString &text);
         
     private:
-        time_t    m_LastTime;
-        int       m_StateCounter;
+        time_t     m_LastTime;
+        int        m_StateCounter;
+        MBanner   *m_InfoBanner;
 };
 
 #endif

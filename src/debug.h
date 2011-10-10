@@ -171,4 +171,7 @@ namespace SysDebug
 
 #define SYS_TIME_STR SYS_STR(QTime::currentTime ().toString ("hh:mm:ss.zzz"))
 
+#define IMPLEMENT_EGGS
+#define EGGS_GCONF_KEY "/apps/mcpeggs"
+
 #endif

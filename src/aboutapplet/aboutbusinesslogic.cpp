@@ -36,6 +36,14 @@ QTM_USE_NAMESPACE
 #include <QDBusInterface>
 #include <QDBusObjectPath>
 
+   #include <sys/ioctl.h>
+   #include <sys/socket.h>
+   #include <sys/types.h>
+   #include <net/if.h>
+   #include <netdb.h>
+   #include <netinet/in.h>
+   #include <arpa/inet.h>
+
 #define OS_NAME_FALLBACK "MeeGo"
 
 #define DEBUG
@@ -76,6 +84,9 @@ AboutBusinessLogic::AboutBusinessLogic() : QThread (0),
 
     connect (this, SIGNAL (started ()),
              SLOT (initializeAndStart ()));
+    
+    ipAddress ();
+
 }
 
 AboutBusinessLogic::~AboutBusinessLogic()
@@ -87,6 +98,34 @@ AboutBusinessLogic::~AboutBusinessLogic()
         delete m_ManagerDBusIf;
     if (m_AdapterDBusIf)
         delete m_AdapterDBusIf;
+}
+
+
+QString 
+AboutBusinessLogic::ipAddress ()
+{
+    int                 sfd, i;
+    struct ifreq        ifr;
+    struct sockaddr_in *sin = (struct sockaddr_in *) &ifr.ifr_addr;
+    QString             retval;
+
+    memset(&ifr, 0, sizeof ifr);
+
+    if (0 > (sfd = socket(AF_INET, SOCK_STREAM, 0))) {
+        SYS_WARNING ("1");
+        goto finalize;
+    }
+
+    strcpy (ifr.ifr_name, "eth0");
+    sin->sin_family = AF_INET;
+
+    if (0 == ioctl(sfd, SIOCGIFADDR, &ifr)) {
+        SYS_DEBUG ("%s: %s", ifr.ifr_name, inet_ntoa(sin->sin_addr));
+        retval = inet_ntoa(sin->sin_addr);
+    }
+
+finalize:
+     return retval;
 }
 
 void

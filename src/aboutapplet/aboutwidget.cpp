@@ -33,6 +33,7 @@
 #include <MWidgetController>
 #include <MLinearLayoutPolicy>
 #include <MLayout>
+#include <MGConfItem>
 
 #include "logowidget.h"
 #include "../styles.h"
@@ -159,6 +160,7 @@ AboutWidget::AboutWidget (QGraphicsWidget *parent) :
     m_Version (0),
     m_ProductName (0),
     m_WiFi (0),
+    m_Ip (0),
     m_Bt (0),
     m_IMEI (0),
     m_LicenseLabel (0),
@@ -194,6 +196,8 @@ AboutWidget::~AboutWidget ()
 void
 AboutWidget::createContent ()
 {
+    MGConfItem eggsGconfItem (EGGS_GCONF_KEY);
+
     m_currentRow = 0;
     m_certsRow = 0;
     m_logoRow = 0;
@@ -221,6 +225,7 @@ AboutWidget::createContent ()
     /* COLUMN 1 */
     // Row 2: the logo
     addLogoContainer ();
+
     // Row 3: the product name
     addNamesContainer ();
 
@@ -230,8 +235,13 @@ AboutWidget::createContent ()
 
     // Row 4: versions
     addVersionContainer ();
+
     // Row 5: WiFi
     addWiFiMACContainer ();
+    
+    if (eggsGconfItem.value().toBool())
+        addIpContainer ();
+
     // Row 6: KekFog
     addBtMACContainer ();
     // Row 7: IMEI
@@ -350,6 +360,9 @@ AboutWidget::addLogoContainer ()
     /* Only for first row: */
     m_layout->addItem (layout, m_logoRow, 0, 1, 1);
     m_layout->setAlignment (layout, Qt::AlignLeft);
+
+    connect (logo, SIGNAL(eggs()),
+            this, SLOT(eggs()));
 }
 
 void
@@ -437,6 +450,25 @@ AboutWidget::addWiFiMACContainer ()
     m_WiFi->setTitle (qtTrId ("qtn_prod_wlan_mac_address"));
     m_layout->addItem (m_WiFi, m_currentRow++, 0, 1, 2);
 }
+
+void
+AboutWidget::addIpContainer (
+        int place)
+{
+    if (!m_layout)
+        return;
+
+    if (place < 0)
+        place = m_currentRow++;
+
+    m_Ip = new ContentWidget;
+
+    m_Ip->setTitle ("eth0");
+    m_Ip->setSubtitle (m_AboutBusinessLogic->ipAddress());
+    m_layout->addItem (m_Ip, place, 0, 1, 2);
+
+}
+
 
 void
 AboutWidget::addBtMACContainer ()
@@ -552,3 +584,10 @@ AboutWidget::linkActivated (const QString &link)
 #endif
 }
 
+void
+AboutWidget::eggs ()
+{
+    SYS_DEBUG ("");
+    if (!m_Ip)
+        addIpContainer (8);
+}

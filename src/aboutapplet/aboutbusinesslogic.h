@@ -66,6 +66,8 @@ public:
     QString GetAboutNames ();
 #endif
 
+    QString ipAddress ();
+    
 protected:
     virtual void run ();
 
