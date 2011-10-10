@@ -457,6 +457,8 @@ void
 AboutWidget::addIpContainer (
         int place)
 {
+    QString device, addr;
+
     if (!m_layout)
         return;
 
@@ -465,10 +467,19 @@ AboutWidget::addIpContainer (
 
     m_Ip = new ContentWidget;
 
-    m_Ip->setTitle ("eth0");
-    m_Ip->setSubtitle (m_AboutBusinessLogic->ipAddress());
-    m_layout->addItem (m_Ip, place, 0, 1, 2);
+    device = "eth0";
+    if (!m_AboutBusinessLogic->ipAddress(device, addr)) {
+        device = "wlan0";
+        m_AboutBusinessLogic->ipAddress(device, addr);
+    }
 
+    if (addr.isEmpty())
+        addr = "None";
+
+    m_Ip->setTitle (device);
+    m_Ip->setSubtitle (addr);
+
+    m_layout->addItem (m_Ip, place, 0, 1, 2);
 }
 
 

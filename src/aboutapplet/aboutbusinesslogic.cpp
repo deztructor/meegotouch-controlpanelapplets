@@ -84,9 +84,6 @@ AboutBusinessLogic::AboutBusinessLogic() : QThread (0),
 
     connect (this, SIGNAL (started ()),
              SLOT (initializeAndStart ()));
-    
-    ipAddress ();
-
 }
 
 AboutBusinessLogic::~AboutBusinessLogic()
@@ -101,27 +98,30 @@ AboutBusinessLogic::~AboutBusinessLogic()
 }
 
 
-QString 
-AboutBusinessLogic::ipAddress ()
+bool
+AboutBusinessLogic::ipAddress (
+            const QString   &device,
+            QString         &addrString)
 {
     int                 sfd, i;
     struct ifreq        ifr;
     struct sockaddr_in *sin = (struct sockaddr_in *) &ifr.ifr_addr;
-    QString             retval;
+    bool                retval = false;
 
     memset(&ifr, 0, sizeof ifr);
 
     if (0 > (sfd = socket(AF_INET, SOCK_STREAM, 0))) {
-        SYS_WARNING ("1");
+        SYS_WARNING ("Socket creation error");
         goto finalize;
     }
 
-    strcpy (ifr.ifr_name, "eth0");
+    strcpy (ifr.ifr_name, device.toAscii().constData());
     sin->sin_family = AF_INET;
 
     if (0 == ioctl(sfd, SIOCGIFADDR, &ifr)) {
         SYS_DEBUG ("%s: %s", ifr.ifr_name, inet_ntoa(sin->sin_addr));
-        retval = inet_ntoa(sin->sin_addr);
+        addrString = inet_ntoa(sin->sin_addr);
+        retval = true;
     }
 
 finalize:
