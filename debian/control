@@ -3,7 +3,7 @@ Section: devel
 Priority: optional
 Maintainer: David Kedves <dkedves@blumsoft.eu>
 Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.11.8),
-               libmeegotouch-dev (>= 0.20.60), libqmsystem2-dev (>= 1.2),
+               libmeegotouch-dev (>= 0.24.3), libqmsystem2-dev (>= 1.2),
                libprofile-dev, libthumbnailer-dev, libcontentmanager-dev,
                doxygen, clean-device-dev (>= 0.0.3), libgstreamer0.10-dev,
                libqtm-dev, libqtm-systeminfo-dev, libresourceqt-dev,
