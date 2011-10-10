@@ -77,7 +77,7 @@ private slots:
     void doubleTapValueChanged ();
     void availableColorProfilesReceivedSlot (QStringList list);
     void currentColorProfileReceived (QString);
-    void currentColorProfileChanged (QDBusMessage);
+    void colorProfileIsSet (QDBusMessage);
     void DBusMessagingFailure (QDBusError error);
 
 private:
@@ -105,6 +105,7 @@ private:
     QStringList              m_AvailColorProfiles;
     QMap<QString, QString>   m_ColorProfileTextIds;
     QString                  m_CurrentColorProfile;
+    QString                  m_ColorProfileToSet;
 
 #ifdef UNIT_TEST
     friend class Ut_DisplayBusinessLogic;

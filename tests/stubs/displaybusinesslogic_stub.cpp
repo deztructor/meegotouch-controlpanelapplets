@@ -143,6 +143,12 @@ DisplayBusinessLogic::setColorProfile (
 }
 
 void
+DisplayBusinessLogic::colorProfileIsSet (QDBusMessage msg)
+{
+	Q_UNUSED(msg);
+}
+
+void
 DisplayBusinessLogic::setLowPowerMode (
         bool enable)
 {
@@ -234,12 +240,6 @@ DisplayBusinessLogic::currentColorProfileReceived (
         QString profile)
 {
     Q_UNUSED(profile);
-}
-
-void
-DisplayBusinessLogic::currentColorProfileChanged (QDBusMessage msg)
-{
-	Q_UNUSED(msg);
 }
 
 void
