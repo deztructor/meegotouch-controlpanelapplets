@@ -36,6 +36,14 @@ QTM_USE_NAMESPACE
 #include <QDBusInterface>
 #include <QDBusObjectPath>
 
+   #include <sys/ioctl.h>
+   #include <sys/socket.h>
+   #include <sys/types.h>
+   #include <net/if.h>
+   #include <netdb.h>
+   #include <netinet/in.h>
+   #include <arpa/inet.h>
+
 #define OS_NAME_FALLBACK "MeeGo"
 
 #define DEBUG
@@ -87,6 +95,37 @@ AboutBusinessLogic::~AboutBusinessLogic()
         delete m_ManagerDBusIf;
     if (m_AdapterDBusIf)
         delete m_AdapterDBusIf;
+}
+
+
+bool
+AboutBusinessLogic::ipAddress (
+            const QString   &device,
+            QString         &addrString)
+{
+    int                 sfd, i;
+    struct ifreq        ifr;
+    struct sockaddr_in *sin = (struct sockaddr_in *) &ifr.ifr_addr;
+    bool                retval = false;
+
+    memset(&ifr, 0, sizeof ifr);
+
+    if (0 > (sfd = socket(AF_INET, SOCK_STREAM, 0))) {
+        SYS_WARNING ("Socket creation error");
+        goto finalize;
+    }
+
+    strcpy (ifr.ifr_name, device.toAscii().constData());
+    sin->sin_family = AF_INET;
+
+    if (0 == ioctl(sfd, SIOCGIFADDR, &ifr)) {
+        SYS_DEBUG ("%s: %s", ifr.ifr_name, inet_ntoa(sin->sin_addr));
+        addrString = inet_ntoa(sin->sin_addr);
+        retval = true;
+    }
+
+finalize:
+     return retval;
 }
 
 void

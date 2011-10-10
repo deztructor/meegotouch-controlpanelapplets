@@ -14,4 +14,5 @@ rm -rf $HOME/.wallpapers
 gconftool-2 --recursive-unset /meegotouch/input_feedback
 # Theme applet
 gconftool-2 --recursive-unset /meegotouch/theme
-
+# Easter eggs.
+gconftool-2 --recursive-unset /apps/mcpeggs

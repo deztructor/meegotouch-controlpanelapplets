@@ -63,11 +63,18 @@ DisplayWidget::DisplayWidget (QGraphicsWidget *parent) :
     /*
      * Lets have these configurable via gconf keys
      */
-    MGConfItem lps ("/meegotouch/settings/low_power_switchable");
-    m_lowPowerChangeable = lps.value (true).toBool ();
+    MGConfItem eggs(EGGS_GCONF_KEY);
 
-    MGConfItem tcs ("/meegotouch/settings/top_swipe_switchable");
-    m_topCloseChangeable = tcs.value (false).toBool ();
+    if (eggs.value().toBool()) {
+        m_lowPowerChangeable = true; 
+        m_topCloseChangeable = true; 
+    } else {
+        MGConfItem lps ("/meegotouch/settings/low_power_switchable");
+        m_lowPowerChangeable = lps.value (true).toBool ();
+
+        MGConfItem tcs ("/meegotouch/settings/top_swipe_switchable");
+        m_topCloseChangeable = tcs.value (false).toBool ();
+    }
 
     connect (m_logic, SIGNAL(lowPowerModeChanged(bool)),
             this, SLOT(lowPowerModeChanged(bool)));

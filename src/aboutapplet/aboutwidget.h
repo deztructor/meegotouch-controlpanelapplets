@@ -47,6 +47,7 @@ private:
     void addNamesContainer ();
     void addVersionContainer ();
     void addWiFiMACContainer ();
+    void addIpContainer (int place = -1);
     void addBtMACContainer ();
     void addIMEIContainer ();
     void addCertsContainer ();
@@ -61,6 +62,7 @@ private slots:
     void gotInfo (AboutBusinessLogic::requestType type,
                   QVariant value);
     void linkActivated (const QString &link);
+    void eggs (bool on);
 
 private:
     QGraphicsGridLayout            *m_layout;
@@ -69,6 +71,7 @@ private:
     ContentWidget                  *m_Version;
     ContentWidget                  *m_ProductName;
     ContentWidget                  *m_WiFi;
+    ContentWidget                  *m_Ip;
     ContentWidget                  *m_Bt;
     ContentWidget                  *m_IMEI;
     MLabel                         *m_LicenseLabel;

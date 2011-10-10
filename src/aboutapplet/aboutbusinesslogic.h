@@ -66,6 +66,10 @@ public:
     QString GetAboutNames ();
 #endif
 
+    bool ipAddress (
+            const QString   &device,
+            QString         &addrString);
+    
 protected:
     virtual void run ();
 

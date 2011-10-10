@@ -33,6 +33,7 @@
 #include <MWidgetController>
 #include <MLinearLayoutPolicy>
 #include <MLayout>
+#include <MGConfItem>
 
 #include "logowidget.h"
 #include "../styles.h"
@@ -159,6 +160,7 @@ AboutWidget::AboutWidget (QGraphicsWidget *parent) :
     m_Version (0),
     m_ProductName (0),
     m_WiFi (0),
+    m_Ip (0),
     m_Bt (0),
     m_IMEI (0),
     m_LicenseLabel (0),
@@ -194,6 +196,8 @@ AboutWidget::~AboutWidget ()
 void
 AboutWidget::createContent ()
 {
+    MGConfItem eggsGconfItem (EGGS_GCONF_KEY);
+
     m_currentRow = 0;
     m_certsRow = 0;
     m_logoRow = 0;
@@ -221,6 +225,7 @@ AboutWidget::createContent ()
     /* COLUMN 1 */
     // Row 2: the logo
     addLogoContainer ();
+
     // Row 3: the product name
     addNamesContainer ();
 
@@ -230,12 +235,19 @@ AboutWidget::createContent ()
 
     // Row 4: versions
     addVersionContainer ();
+
     // Row 5: WiFi
     addWiFiMACContainer ();
+    
     // Row 6: KekFog
     addBtMACContainer ();
+
     // Row 7: IMEI
     addIMEIContainer ();
+
+    // Row 8: The IP address
+    if (eggsGconfItem.value().toBool())
+        addIpContainer ();
 
 #if 0
     // Row 8: Certs container...
@@ -350,6 +362,9 @@ AboutWidget::addLogoContainer ()
     /* Only for first row: */
     m_layout->addItem (layout, m_logoRow, 0, 1, 1);
     m_layout->setAlignment (layout, Qt::AlignLeft);
+
+    connect (logo, SIGNAL(eggs(bool)),
+            this, SLOT(eggs(bool)));
 }
 
 void
@@ -437,6 +452,36 @@ AboutWidget::addWiFiMACContainer ()
     m_WiFi->setTitle (qtTrId ("qtn_prod_wlan_mac_address"));
     m_layout->addItem (m_WiFi, m_currentRow++, 0, 1, 2);
 }
+
+void
+AboutWidget::addIpContainer (
+        int place)
+{
+    QString device, addr;
+
+    if (!m_layout)
+        return;
+
+    if (place < 0)
+        place = m_currentRow++;
+
+    m_Ip = new ContentWidget;
+
+    device = "eth0";
+    if (!m_AboutBusinessLogic->ipAddress(device, addr)) {
+        device = "wlan0";
+        m_AboutBusinessLogic->ipAddress(device, addr);
+    }
+
+    if (addr.isEmpty())
+        addr = "None";
+
+    m_Ip->setTitle (device);
+    m_Ip->setSubtitle (addr);
+
+    m_layout->addItem (m_Ip, place, 0, 1, 2);
+}
+
 
 void
 AboutWidget::addBtMACContainer ()
@@ -552,3 +597,15 @@ AboutWidget::linkActivated (const QString &link)
 #endif
 }
 
+void
+AboutWidget::eggs (
+        bool on)
+{
+    SYS_DEBUG ("");
+    if (on && !m_Ip) {
+        addIpContainer (8);
+    } else if (!on && m_Ip) {
+        m_Ip->deleteLater ();
+        m_Ip = 0;
+    }
+}

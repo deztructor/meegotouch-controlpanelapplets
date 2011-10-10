@@ -30,6 +30,7 @@
 #include <MPannableViewport>
 #include <MPositionIndicator>
 #include <MWidgetStyle>
+#include <MGConfItem>
 
 //#define DEBUG
 #define WARNING
@@ -115,6 +116,8 @@ WallpaperViewWidget::~WallpaperViewWidget ()
 void 
 WallpaperViewWidget::applyStyle()
 {
+    MGConfItem eggsGconfItem (EGGS_GCONF_KEY);
+
     DcpStylableWidget::applyStyle ();
 
     if (m_Physics) {
@@ -138,8 +141,15 @@ WallpaperViewWidget::applyStyle()
     SYS_DEBUG ("*** BorderFriction  = %g", style()->borderFriction());
     SYS_DEBUG ("*** maximumvelocity = %g", style()->maximumVelocity());
 #endif
-    m_SupportPanEdit = style()->supportPanEdit();
-    m_SupportPinchEdit = style()->supportPinchEdit();
+
+    if (eggsGconfItem.value().toBool()) {
+        m_SupportPanEdit   = true;
+        m_SupportPinchEdit = true;
+    } else {
+        m_SupportPanEdit   = style()->supportPanEdit();
+        m_SupportPinchEdit = style()->supportPinchEdit();
+    }
+
     m_Physics->setPointerSpringK  (style()->pointerSpringK());
     m_Physics->setFriction        (style()->friction());
     m_Physics->setSlidingFriction (style()->slidingFriction());
