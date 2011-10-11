@@ -29,8 +29,8 @@
 
 #include <mce/dbus-names.h>
 
-#undef DEBUG
-#undef WARNING
+#define DEBUG
+#define WARNING
 #include "../debug.h"
 
 static const QString GConfDir ("/system/osso/dsm/display");
