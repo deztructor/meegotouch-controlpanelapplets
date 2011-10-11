@@ -1,10 +1,4 @@
-meegotouch-controlpanelapplets (0.21.2~1) meegotouch; urgency=low
-
-  * [NEW VERSION]
-
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 11 Oct 2011 12:00:19 +0200
-
-meegotouch-controlpanelapplets (0.21.1-5) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.21.1-6) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#284478 - Battery applet should stop the charging animation when
@@ -19,6 +13,7 @@ meegotouch-controlpanelapplets (0.21.1-5) meegotouch; urgency=low
   [ David Kedves ]
   * Fixes: NB#284065 - Profile and volume indicators are not displayed for a
     while
+  * Package build fixes
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 11 Oct 2011 12:00:01 +0200
 
