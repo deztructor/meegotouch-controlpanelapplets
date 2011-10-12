@@ -20,4 +20,9 @@ WallpaperViewWidgetStyle {
     support-punch-edit: false;
 }
 
-
+MSheetStyle#Overlay {
+    header-slot-style-name: "CommonOverlaySheetHeaderPanel";
+    central-slot-style-name: "SheetCentralSlotIverted";
+    central-slot-position-indicator-style-name: "CommonPositionIndicatorInverted";
+    background-color: $COLOR_INVERTED_BACKGROUND;
+}

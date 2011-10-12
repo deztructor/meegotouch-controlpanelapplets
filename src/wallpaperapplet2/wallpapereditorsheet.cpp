@@ -43,6 +43,7 @@ WallpaperEditorSheet::WallpaperEditorSheet (
 {
     MSheet::setHeaderFloating(true);
     setStyleName ("Inverted");
+    //setStyleName ("Overlay");
     createCentralWidget (wallpaperBusinessLogic);
     createHeaderWidget ();
         

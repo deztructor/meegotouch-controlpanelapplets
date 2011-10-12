@@ -30,7 +30,7 @@
 #include <mce/dbus-names.h>
 
 #undef DEBUG
-#undef WARNING
+#define WARNING
 #include "../debug.h"
 
 static const QString GConfDir ("/system/osso/dsm/display");
@@ -328,6 +328,8 @@ DisplayBusinessLogic::setColorProfile (
     QList<QVariant> params;
     params.append(QVariant(QString(m_AvailColorProfiles.at(index))));
 
+    SYS_WARNING ("callWithCallback ( %s)", 
+            SYS_STR(m_AvailColorProfiles.at(index)));
     m_MceDBusIf->callWithCallback (
             QString (MCE_COLOR_PROFILE_CHANGE_REQ),
             params, this,
