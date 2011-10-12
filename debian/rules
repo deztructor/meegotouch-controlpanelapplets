@@ -125,8 +125,6 @@ binary-aegisgen:
 	              .. debian/duicontrolpanel-soundsettingsapplet.aegis=_aegis
 	aegis-deb-add -control debian/duicontrolpanel-batteryapplet/DEBIAN/control \
 	              .. debian/duicontrolpanel-batteryapplet.aegis=_aegis
-	aegis-deb-add -control debian/duicontrolpanel-displayapplet/DEBIAN/control \
-	              .. debian/duicontrolpanel-displayapplet.aegis=_aegis
 ifneq (,$(findstring old,$(DEB_BUILD_OPTIONS)))
 	aegis-deb-add -control debian/duicontrolpanel-wallpaperapplet/DEBIAN/control \
 	              .. debian/duicontrolpanel-wallpaperapplet.aegis=_aegis

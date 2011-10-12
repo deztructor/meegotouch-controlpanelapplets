@@ -29,7 +29,7 @@
 
 #include <mce/dbus-names.h>
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -64,7 +64,9 @@ DisplayBusinessLogic::DisplayBusinessLogic (
     m_Display (new MeeGo::QmDisplayState),
     m_compositorConf (0),
     m_psmValue (false),
-    m_MceDBusIf(0)
+    m_MceDBusIf(0),
+    m_CurrentColorProfile(""),
+    m_ColorProfileToSet("")
 {
     m_possibleDimValues = new MGConfItem (DimTimeoutsKey);
     m_lowPower = new MGConfItem (LowPowerKey);
@@ -313,15 +315,19 @@ void
 DisplayBusinessLogic::setColorProfile (
         int     index)
 {
+    if(index < 0 || m_AvailColorProfiles.size() <= index){
+        SYS_WARNING ("Index (%d) for selecting available color profile is out of range. Available range is: 0-%d",
+                index, m_AvailColorProfiles.size() - 1 );
+	return;
+    }
+    
     QString profile = m_AvailColorProfiles.at(index);
 
     if(profile == m_CurrentColorProfile)
         return; // Nothing to do
-    
-    if(index < 0 || m_AvailColorProfiles.size() <= index){
-        SYS_WARNING ("Index (%d) for selecting available color profile is out of range. Available range is: 0-%d",
-                index, m_AvailColorProfiles.size() - 1 );
-    }
+
+    SYS_DEBUG("%s is setting to: %s", __PRETTY_FUNCTION__, SYS_STR(profile));
+    m_ColorProfileToSet = profile;
 
     setupMceDBusIf ();
 
@@ -333,8 +339,25 @@ DisplayBusinessLogic::setColorProfile (
     m_MceDBusIf->callWithCallback (
             QString (MCE_COLOR_PROFILE_CHANGE_REQ),
             params, this,
-            SLOT (currentColorProfileChanged(QDBusMessage)),
+            SLOT (colorProfileIsSet(QDBusMessage)),
             SLOT (DBusMessagingFailure (QDBusError)));
+}
+
+/*!
+ * This slot is called when the current color profile is set
+ * through the dbus.
+ */
+void
+DisplayBusinessLogic::colorProfileIsSet (QDBusMessage msg)
+{
+    if(msg.type() == QDBusMessage::ReplyMessage){
+        SYS_DEBUG("Current color profile changed.");
+        if(!m_ColorProfileToSet.isEmpty())
+	        m_CurrentColorProfile = m_ColorProfileToSet;
+    } else {
+        SYS_DEBUG("Could not set color profile.");
+        m_ColorProfileToSet.clear();
+    }
 }
 
 void
@@ -518,20 +541,6 @@ DisplayBusinessLogic::availableColorProfilesReceivedSlot (
             SYS_STR (m_AvailColorProfiles.join(", ")));
 
     emit availableColorProfilesReceived ();
-}
-
-/*!
- * This slot is called when the current color profile is set
- * through the dbus.
- */
-void
-DisplayBusinessLogic::currentColorProfileChanged (QDBusMessage msg)
-{
-    if(msg.type() == QDBusMessage::ReplyMessage){
-        SYS_DEBUG("Current color profile changed.");
-    } else {
-        SYS_DEBUG("Could not set color profile.");
-    }
 }
 
 /*!
