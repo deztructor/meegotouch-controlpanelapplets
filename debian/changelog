@@ -1,6 +1,7 @@
 meegotouch-controlpanelapplets (0.21.2~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  [ Laszlo Pere ]
+  * Fixes: NB#281864 - Wallpaper preview shows the wallpaper incorrectly 
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 11 Oct 2011 13:36:24 +0200
 

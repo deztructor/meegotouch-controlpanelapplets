@@ -29,8 +29,8 @@
 
 #include <mce/dbus-names.h>
 
-#define DEBUG
-#define WARNING
+//#define DEBUG
+//#define WARNING
 #include "../debug.h"
 
 static const QString GConfDir ("/system/osso/dsm/display");
@@ -326,7 +326,8 @@ DisplayBusinessLogic::setColorProfile (
     if(profile == m_CurrentColorProfile)
         return; // Nothing to do
 
-    SYS_DEBUG("%s is setting to: %s", __PRETTY_FUNCTION__, SYS_STR(profile));
+    SYS_WARNING ("callWithCallback ( %s)", 
+            SYS_STR(m_AvailColorProfiles.at(index)));
     m_ColorProfileToSet = profile;
 
     setupMceDBusIf ();
@@ -334,8 +335,6 @@ DisplayBusinessLogic::setColorProfile (
     QList<QVariant> params;
     params.append(QVariant(QString(m_AvailColorProfiles.at(index))));
 
-    SYS_WARNING ("callWithCallback ( %s)", 
-            SYS_STR(m_AvailColorProfiles.at(index)));
     m_MceDBusIf->callWithCallback (
             QString (MCE_COLOR_PROFILE_CHANGE_REQ),
             params, this,
