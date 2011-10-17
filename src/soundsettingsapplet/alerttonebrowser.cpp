@@ -46,6 +46,7 @@
 #include <MImageWidget>
 #include <MContentItem>
 #include <MSeparator>
+#include <QDBusPendingCall>
 
 #include "../styles.h"
 
@@ -365,7 +366,7 @@ AlertToneBrowser::launchOviStore()
     stopPlayingSound ();
 
     QDBusInterface OviStore (OviIf, "/", OviIf);
-    OviStore.call ("LaunchWithKeyword", QString ("ringtones"));
+    OviStore.asyncCall ("LaunchWithKeyword", QString ("ringtones"));
 }
 
 /*
