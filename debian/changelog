@@ -1,11 +1,17 @@
-meegotouch-controlpanelapplets (0.21.2~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.21.3~1) meegotouch; urgency=low
+
+  * [NEW VERSION]
+
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 14 Oct 2011 14:22:39 +0200
+
+meegotouch-controlpanelapplets (0.21.2-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#281864 - Wallpaper preview shows the wallpaper incorrectly 
   * Fixes: NB#286583 - Contacts not responding error message is displayed when
     selecting 'Get more from nokia store' option from ringtone picker.
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 11 Oct 2011 13:36:24 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 14 Oct 2011 14:22:10 +0200
 
 meegotouch-controlpanelapplets (0.21.1-6) meegotouch; urgency=low
 
