@@ -176,8 +176,9 @@ Ut_AlertToneBrowserTests::alerttonebrowserConstructor ()
     QCOMPARE (atbt.m_my_music->objectName (),
               QString ("MContentItem_pickFromMyMusic"));
 #endif
-    QCOMPARE (atbt.m_ovi_store->objectName (),
-              QString ("MContentItem_getMoreFromOviStore"));
+    if (m_ovi_store)
+        QCOMPARE (atbt.m_ovi_store->objectName (),
+                  QString ("MContentItem_getMoreFromOviStore"));
 
     // this will fails to find the MApplicationPage
     atbt.polishEvent ();
@@ -195,8 +196,9 @@ Ut_AlertToneBrowserTests::alerttonebrowserRetranslateUi()
     QCOMPARE (atbt.m_my_music->property ("title").toString (),
               qtTrId ("qtn_sond_pick_music"));
 #endif
-    QCOMPARE (atbt.m_ovi_store->property ("title").toString(),
-              qtTrId ("qtn_sond_store"));
+    if (m_ovi_store)
+        QCOMPARE (atbt.m_ovi_store->property ("title").toString(),
+                  qtTrId ("qtn_sond_store"));
 }
 
 void
