@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.21.3~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.21.3-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#286583 - Contacts not responding error message is displayed when
