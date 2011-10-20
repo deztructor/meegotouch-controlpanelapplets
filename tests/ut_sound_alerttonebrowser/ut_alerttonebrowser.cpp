@@ -176,7 +176,7 @@ Ut_AlertToneBrowserTests::alerttonebrowserConstructor ()
     QCOMPARE (atbt.m_my_music->objectName (),
               QString ("MContentItem_pickFromMyMusic"));
 #endif
-    if (m_ovi_store)
+    if (atbt.m_ovi_store)
         QCOMPARE (atbt.m_ovi_store->objectName (),
                   QString ("MContentItem_getMoreFromOviStore"));
 
@@ -196,7 +196,7 @@ Ut_AlertToneBrowserTests::alerttonebrowserRetranslateUi()
     QCOMPARE (atbt.m_my_music->property ("title").toString (),
               qtTrId ("qtn_sond_pick_music"));
 #endif
-    if (m_ovi_store)
+    if (atbt.m_ovi_store)
         QCOMPARE (atbt.m_ovi_store->property ("title").toString(),
                   qtTrId ("qtn_sond_store"));
 }
