@@ -90,6 +90,7 @@ public:
 AlertToneBrowser::AlertToneBrowser(AlertTone *tone, QGraphicsWidget *parent):
     AlertToneToplevel (parent),
     m_tone (tone),
+    m_ovi_store (0),
     m_defaults (0),
     m_preview (0),
     #ifndef USE_CONTENT_ITEM_SHEET
@@ -124,8 +125,11 @@ AlertToneBrowser::~AlertToneBrowser()
 void
 AlertToneBrowser::createContent()
 {
+    bool        needOvi = m_tone->key().startsWith ("ringing");
     MSeparator *spacer;
 
+    SYS_DEBUG ("****************************************");
+    SYS_DEBUG ("*** key = %s", SYS_STR(m_tone->key()));
     m_MainLayout = new QGraphicsLinearLayout (Qt::Vertical);
     m_MainLayout->setContentsMargins (0., 0., 0., 0.);
     m_MainLayout->setSpacing (0.);
@@ -157,15 +161,18 @@ AlertToneBrowser::createContent()
 #endif
 
 #ifndef MEEGO
-    // "Get more from Ovi store"
-    m_ovi_store = new RightArrowItem;
-    m_ovi_store->setTitleStyleName ("CommonSingleTitleInverted");
-    m_ovi_store->setLayoutPosition (M::VerticalBottomPosition);
-    m_ovi_store->imageWidget()->setImage("icon-m-content-ovi-store-inverse");
-    m_ovi_store->imageWidget()->setStyleName ("CommonMainIcon");
-    m_ovi_store->setObjectName("MContentItem_getMoreFromOviStore");
-    m_MainLayout->addItem (m_ovi_store);
-    connect (m_ovi_store, SIGNAL (clicked ()), SLOT (launchOviStore ()));
+    if (needOvi) {
+        // "Get more from Ovi store"
+        m_ovi_store = new RightArrowItem;
+        m_ovi_store->setTitleStyleName ("CommonSingleTitleInverted");
+        m_ovi_store->setLayoutPosition (M::VerticalBottomPosition);
+        m_ovi_store->imageWidget()->setImage (
+                "icon-m-content-ovi-store-inverse");
+        m_ovi_store->imageWidget()->setStyleName ("CommonMainIcon");
+        m_ovi_store->setObjectName("MContentItem_getMoreFromOviStore");
+        m_MainLayout->addItem (m_ovi_store);
+        connect (m_ovi_store, SIGNAL (clicked ()), SLOT (launchOviStore ()));
+    }
 #endif
 
     spacer = new MSeparator;
@@ -226,7 +233,8 @@ AlertToneBrowser::retranslateUi()
 #endif
 
 #ifndef MEEGO
-    m_ovi_store->setProperty("title", qtTrId("qtn_sond_store"));
+    if (m_ovi_store)
+        m_ovi_store->setProperty("title", qtTrId("qtn_sond_store"));
 #endif
 
     //% "Ringtones"

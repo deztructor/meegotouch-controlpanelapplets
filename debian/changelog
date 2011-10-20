@@ -4,6 +4,8 @@ meegotouch-controlpanelapplets (0.21.3~1) meegotouch; urgency=low
   * Fixes: NB#286583 - Contacts not responding error message is displayed when
     selecting 'Get more from nokia store' option from ringtone picker.
   * Fixes: NB#286907 - libmeegocontrol-dev package is incomplete
+  * Fixes: NB#271442 - Ovi store link does not makes sense on all alert tone
+    views....
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 14 Oct 2011 14:22:39 +0200
 
