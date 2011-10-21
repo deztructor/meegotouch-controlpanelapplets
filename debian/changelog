@@ -1,6 +1,7 @@
 meegotouch-controlpanelapplets (0.21.4~1) meegotouch; urgency=low
 
-  *[NEW VERSION] 
+  [ Laszlo Pere ]
+  * Fixes: NB#284470 - Reset: §qtn_rset_clear_query§ contain error.
 
  -- Zoltan Nyul <zoltan.nyul@blumsoft.eu>  Thu, 20 Oct 2011 13:37:46 +0300
 

@@ -31,7 +31,7 @@
 #include <MStylableWidget>
 #include <MLocale>
 
-#define DEBUG
+//#define DEBUG
 #include "../debug.h"
 
 #define qtTrIdShort(id) qtTrId(id).split(QChar(0x9c)).last()
@@ -235,6 +235,7 @@ ResetWidget::clearActivated ()
 {
     MDialog   *dialog;
     MLocale    locale;
+    QString    question;
 
     if (m_ResetBusinessLogic->isUsbConnected ()) {
         showMassStorageWarning ();
@@ -242,12 +243,7 @@ ResetWidget::clearActivated ()
     }
 
     //% "Clear all user data and restore original settings?"
-    QString    question = qtTrId("qtn_rset_clear_query").
-        arg(locale.formatNumber(15));
-    SYS_WARNING ("orig  : '%s'", 
-            qtTrId("qtn_rset_clear_query").toUtf8().constData());
-    SYS_WARNING ("number: '%s'", 
-            locale.formatNumber(15).toUtf8().constData());
+    question = qtTrId("qtn_rset_clear_query").arg(locale.formatNumber(15));
     question.replace ("\\n", "<br>");
     question.replace ("\n", "<br>");
 
