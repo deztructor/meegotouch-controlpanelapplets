@@ -29,8 +29,9 @@
 #include <MMessageBox>
 #include <MSeparator>
 #include <MStylableWidget>
+#include <MLocale>
 
-#undef DEBUG
+#define DEBUG
 #include "../debug.h"
 
 #define qtTrIdShort(id) qtTrId(id).split(QChar(0x9c)).last()
@@ -233,15 +234,20 @@ void
 ResetWidget::clearActivated ()
 {
     MDialog   *dialog;
+    MLocale    locale;
 
-    if (m_ResetBusinessLogic->isUsbConnected ())
-    {
+    if (m_ResetBusinessLogic->isUsbConnected ()) {
         showMassStorageWarning ();
         return;
     }
 
     //% "Clear all user data and restore original settings?"
-    QString    question = qtTrId("qtn_rset_clear_query");
+    QString    question = qtTrId("qtn_rset_clear_query").
+        arg(locale.formatNumber(15));
+    SYS_WARNING ("orig  : '%s'", 
+            qtTrId("qtn_rset_clear_query").toUtf8().constData());
+    SYS_WARNING ("number: '%s'", 
+            locale.formatNumber(15).toUtf8().constData());
     question.replace ("\\n", "<br>");
     question.replace ("\n", "<br>");
 
