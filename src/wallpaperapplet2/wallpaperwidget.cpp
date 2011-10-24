@@ -74,6 +74,8 @@ WallpaperWidget::WallpaperWidget (
      */
     connect (m_BusinessLogic, SIGNAL(editWallpaper(WallpaperDescriptor)),
             this, SLOT(slotEditWallpaper(WallpaperDescriptor)));
+    connect (m_BusinessLogic, SIGNAL(wallpaperLoaded (QuillImage, QSize)),
+            this, SLOT(slotWallpaperLoaded(QuillImage, QSize)));
 }
 
 WallpaperWidget::~WallpaperWidget ()
@@ -185,19 +187,28 @@ WallpaperWidget::slotEditWallpaper (
     SYS_DEBUG ("scene() = %p", scene());
 
     if (Wallpaper::useSheets) {
-        WallpaperEditorSheet  *sheet;
-        sheet = new WallpaperEditorSheet (m_BusinessLogic);
-        if (Wallpaper::useFullScreen) {
-            sheet->appearSystemwide(MSceneWindow::DestroyWhenDone);
-        } else {
-            sheet->appear(scene(), MSceneWindow::DestroyWhenDone);
-        }
+        m_EditorSheet = new WallpaperEditorSheet (m_BusinessLogic);
     } else {
         SYS_DEBUG ("emit changeWidget (1);");
         emit changeWidget (1);
     }
     
     SYS_DEBUG ("----------------------------------- End -------------");
+}
+        
+void 
+WallpaperWidget::slotWallpaperLoaded (
+        QuillImage  image, 
+        QSize       size)
+{
+    SYS_WARNING ("has m_EditorSheet %s", SYS_BOOL(m_EditorSheet));
+    if (m_EditorSheet) {
+        if (Wallpaper::useFullScreen) {
+            m_EditorSheet->appearSystemwide(MSceneWindow::DestroyWhenDone);
+        } else {
+            m_EditorSheet->appear(scene(), MSceneWindow::DestroyWhenDone);
+        }
+    }
 }
 
 void 

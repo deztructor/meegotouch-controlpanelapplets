@@ -30,7 +30,7 @@ namespace Wallpaper
     const bool useGallery (true);
     const bool useSheets (true);
     const bool useSheetForMainView (false);
-    const bool useFullScreen (false);
+    const bool useFullScreen (true);
     const bool currentWallpaperAtTop (true);
     const bool disableBiggerThanScreen (true);
 
