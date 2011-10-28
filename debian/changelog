@@ -1,6 +1,8 @@
 meegotouch-controlpanelapplets (0.21.5~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  [ Laszlo Pere ]
+  * Fixes: NB#288423 - User should NOT be able to set different system sound
+    levels for different profiles
 
  -- David Kedves <dkedves@blumsoft.eu>  Tue, 25 Oct 2011 09:19:29 +0200
 

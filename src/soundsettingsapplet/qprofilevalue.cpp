@@ -26,7 +26,7 @@
 
 #include "qprofilevalue.h"
 
-#undef DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -142,6 +142,9 @@ QProfileValue::delNotify ()
 void
 QProfileValue::realSetValue (const QVariant &newValue)
 {
+    SYS_DEBUG ("****************************************");
+    SYS_DEBUG ("*** m_setAllProfiles = %s", SYS_BOOL(m_setAllProfiles));
+    SYS_DEBUG ("*** key()            = %s", SYS_STR(key()));
     /*
      * Not doing anything if the value is the same.
      */
@@ -242,19 +245,27 @@ QProfileValue::realSetValue (const QVariant &newValue)
         }
     }
 
-    if (m_setAllProfiles)
-    {
+    if (m_setAllProfiles) {
+        SYS_DEBUG ("SETTING ALL THE PROFILES");
         /*
          * Alert Tone should be the same for all profiles...
          * Fixes: NB#258344
+         *
+         * Will remove the shole exception stuff because of this bug:
+         * NB#288423
          */
-        bool isAlertTone = theKey.contains ("alert.tone");
+        //bool isAlertTone = theKey.contains ("alert.tone");
 
         char **profiles = profile_get_profiles ();
         if (profiles)
         {
             for (int i = 0 ; profiles[i] != NULL ; i++)
             {
+                SYS_DEBUG ("------------------------------------------");
+                SYS_DEBUG ("theProfile     = %s", SYS_STR(theProfile));
+                SYS_DEBUG ("profiles[%03d] = %s", i, profiles[i]);
+                SYS_DEBUG ("theKey         = %s", SYS_STR(theKey));
+                //SYS_DEBUG ("isAlertTone    = %s", SYS_BOOL(isAlertTone));
                 if (theProfile == QString (profiles[i]))
                     continue; // the current one already set...
 
@@ -262,12 +273,19 @@ QProfileValue::realSetValue (const QVariant &newValue)
                  * Do not set meeting and silent values if it is
                  * not about the alert tone...
                  */
-                if ((! isAlertTone) &&
-                    (theProfile == QString ("meeting") ||
-                     theProfile == QString ("silent")))
-                     continue;
+                #if 0
+                if ((!isAlertTone) &&
+                    (profiles[i] == QString ("meeting") ||
+                     profiles[i] == QString ("silent"))) {
+                    SYS_WARNING ("Except this.");
+                    continue;
+                }
+                #endif
 
-                QProfileValue other (theKey + "@" + QString (profiles[i]), false);
+                SYS_DEBUG ("Setting '%s'",
+                        SYS_STR((theKey + "@" + QString (profiles[i]))));
+                QProfileValue other (
+                        theKey + "@" + QString (profiles[i]), false);
                 other.set (newValue);
             }
             profile_free_profiles (profiles);

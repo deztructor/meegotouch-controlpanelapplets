@@ -25,7 +25,10 @@
 #define WARNING
 #include "../debug.h"
 
-ProfileIntCombo::ProfileIntCombo(const QString &key, bool setAllProfiles, QGraphicsItem *parent):
+ProfileIntCombo::ProfileIntCombo(
+        const QString    &key, 
+        bool              setAllProfiles, 
+        QGraphicsItem    *parent):
 	MComboBox(parent),
 	m_val(key, setAllProfiles)
 {
