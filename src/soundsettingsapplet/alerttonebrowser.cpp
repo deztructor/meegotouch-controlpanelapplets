@@ -324,25 +324,27 @@ AlertToneBrowser::launchMusicBrowser()
 
     m_MusicBrowser->appear (MSceneWindow::DestroyWhenDismissed);
     #else
-    ContentItemsSheet *musicBrowser;
     QStringList        contentTypes;
 
     contentTypes << "http://www.tracker-project.org/temp/nmm#MusicPiece";
     m_selectedItems.clear();
 
-    musicBrowser = new ContentItemsSheet ();
-    musicBrowser->initialize (m_selectedItems, true);
-    musicBrowser->setInvertedLayout (true);
-    musicBrowser->setContentTypes (contentTypes);
+    m_MusicBrowser = new ContentItemsSheet ();
+    m_MusicBrowser->initialize (m_selectedItems, true);
+    m_MusicBrowser->setInvertedLayout (true);
+    m_MusicBrowser->setContentTypes (contentTypes);
 
     // It seems that this signal is never received... somehow.
-    //connect (musicBrowser, SIGNAL (itemClicked (const QString&)),
+    //connect (m_MusicBrowser, SIGNAL (itemClicked (const QString&)),
     //        SLOT (selectingMusicItem (const QString&)));
-    
-    connect (musicBrowser, SIGNAL (doneClicked()),
+
+    connect (m_MusicBrowser, SIGNAL (doneClicked()),
             SLOT (contentItemsSheetDoneClicked ()));
 
-    musicBrowser->appear(
+    connect (m_MusicBrowser, SIGNAL (cancelClicked()),
+            SLOT (deleteMusicBrowser()));
+
+    m_MusicBrowser->appear(
             MApplication::activeApplicationWindow(), 
             MSceneWindow::DestroyWhenDismissed);
     #endif
@@ -360,6 +362,22 @@ AlertToneBrowser::contentItemsSheetDoneClicked ()
     }
 
     selectingMusicItem (m_selectedItems[0]);
+
+    /*
+     * #288696: content picker should be deleted,
+     * DestroyWhenDismissed is not enough.
+     */
+    deleteMusicBrowser();
+}
+
+void
+AlertToneBrowser::deleteMusicBrowser()
+{
+    if(m_MusicBrowser)
+    {
+        delete m_MusicBrowser;
+        m_MusicBrowser = 0;
+    }
 }
 #endif
 
