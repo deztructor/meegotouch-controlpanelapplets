@@ -22,8 +22,10 @@
 
 #include <DcpStylableWidget>
 #include <QPointer>
+#include <MSheet>
 
 #include "wallpaperbusinesslogic.h"
+
 
 class MLinearLayoutPolicy;
 class MLabel;
@@ -48,6 +50,7 @@ protected:
     private slots:
         void slotImageActivated (WallpaperDescriptor desc);
         void slotEditWallpaper (WallpaperDescriptor desc);
+        void slotWallpaperLoaded (QuillImage image, QSize size);
 
     virtual void createContent ();
 
@@ -65,6 +68,7 @@ private:
 
     MContentItem                          *m_OviItem;
     qreal                                  m_NavigationBarTransparency;
+    QPointer<MSheet>                       m_EditorSheet;
     #ifdef UNIT_TEST
     friend class Ut_WallpaperWidget;
     #endif

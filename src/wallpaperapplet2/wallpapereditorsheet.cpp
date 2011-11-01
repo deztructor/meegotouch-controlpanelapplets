@@ -27,6 +27,7 @@
 
 #include <MBasicSheetHeader>
 #include <QAction>
+#include <MComponentData>
 
 #include <mwidgetcreator.h>
 M_REGISTER_WIDGET_NO_CREATE(WallpaperEditorSheet)
@@ -41,9 +42,20 @@ WallpaperEditorSheet::WallpaperEditorSheet (
     m_EditorWidget (0),
     m_Saving (false)
 {
+    MWindow *win = MApplication::activeWindow ();
+
     MSheet::setHeaderFloating(true);
     setStyleName ("Inverted");
-    //setStyleName ("Overlay");
+
+    setStatusBarVisibleInSystemwide (false);
+    setSystemwideModeOrientation (MSheet::FollowsCurrentAppWindowOrientation);
+
+    if (win) {
+        MComponentData::ChainData chainData (
+                win->effectiveWinId(), "taskTitle");
+        MComponentData::pushChainData (chainData);
+    }
+
     createCentralWidget (wallpaperBusinessLogic);
     createHeaderWidget ();
         

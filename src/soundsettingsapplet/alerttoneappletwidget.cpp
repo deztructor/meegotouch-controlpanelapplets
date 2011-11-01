@@ -170,15 +170,12 @@ AlertToneAppletWidget::~AlertToneAppletWidget ()
 void
 AlertToneAppletWidget::delayedInit ()
 {
-    DEBUG_CLOCK_START;
     m_profileWidget->init ();
-    DEBUG_CLOCK_END("Initializing slider.");
 }
 
 void
 AlertToneAppletWidget::createContents ()
 {
-    DEBUG_CLOCK_START;
     QGraphicsLinearLayout   *layout;
     MLabel                  *label;
 
@@ -200,17 +197,14 @@ AlertToneAppletWidget::createContents ()
     label->setText(qtTrId("qtn_sond_sounds"));
 #endif
 
-    DEBUG_CLOCK_END("First widgets.");
     SYS_DEBUG ("%s: constructing volumeExtension", SYS_TIME_STR);
 
     m_profileWidget = new ProfileWidgetContainer (this);
     layout->addItem (m_profileWidget);
 
     SYS_DEBUG ("%s DONE: constructing volumeExtension", SYS_TIME_STR);
-    DEBUG_CLOCK_END("volume extension");
 
     m_profileWidget->init ();
-    DEBUG_CLOCK_END("Initializing slider.");
 
     /*
      * A subtitle that shows 'Profile vibration'
@@ -254,7 +248,6 @@ AlertToneAppletWidget::createContents ()
     layout->addItem (m_feedback);
 
     retranslateUi ();
-    DEBUG_CLOCK_END("Whole content");
 }
 
 void
@@ -412,8 +405,6 @@ AlertToneAppletWidget::createAlertTonesList (QGraphicsWidget *parent)
 void
 AlertToneAppletWidget::polishEvent ()
 {
-    DEBUG_CLOCK_START;
-
     QGraphicsWidget  *parent;
     MApplicationPage *page = 0;
 
@@ -439,6 +430,5 @@ AlertToneAppletWidget::polishEvent ()
      */
     QTimer::singleShot (500, this, SLOT (delayedInit ()));
 #endif
-    DEBUG_CLOCK_END("polish event");
 }
 

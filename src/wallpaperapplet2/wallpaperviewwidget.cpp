@@ -133,7 +133,7 @@ WallpaperViewWidget::applyStyle()
     m_Physics->setPanDirection (Qt::Vertical | Qt::Horizontal);
     m_Physics->setEnabled(true);
   
-#if 1
+#if 0
     SYS_DEBUG ("*** PointerSpringK  = %g", style()->pointerSpringK());
     SYS_DEBUG ("*** Friction        = %g", style()->friction());
     SYS_DEBUG ("*** SlidingFriction = %g", style()->slidingFriction());
@@ -172,7 +172,6 @@ void
 WallpaperViewWidget::panningPhysicsPositionChanged(
         const QPointF    &position)
 {
-    SYS_DEBUG ("panning -----------> %s", SYS_POINTF(position));
     m_UserOffset = position;
     redrawImage ();
 }
@@ -180,7 +179,6 @@ WallpaperViewWidget::panningPhysicsPositionChanged(
 void 
 WallpaperViewWidget::panningPhysicsPanningStopped ()
 {
-    SYS_DEBUG ("");
     redrawImage ();
 
     if (m_HasPendingSave)
@@ -210,11 +208,7 @@ WallpaperViewWidget::pinchStopped ()
         }
     }
     
-    SYS_DEBUG ("*** we are at  : %g", rotation);
-    SYS_DEBUG ("*** rounded to : %g", rRotation);
-
     if (rotation != rRotation) {
-        SYS_DEBUG ("NEED TO ANIMATE");
         m_RotateAnimation.setTargetObject (m_ImageWidget);
         m_RotateAnimation.setPropertyName ("rotation");
         m_RotateAnimation.setEasingCurve(QEasingCurve::InOutCubic);
@@ -235,7 +229,6 @@ WallpaperViewWidget::pinchStopped ()
 void
 WallpaperViewWidget::rotateAnimationFinished ()
 {
-    SYS_DEBUG ("");
     qreal rotation = m_ImageWidget->rotation();
 
     if (qAbs (qAbs (rotation) - 360.0) < 0.1) {
@@ -341,13 +334,9 @@ WallpaperViewWidget::initialize (
     m_Trans.setOffset (QPointF(xMarg, yMarg));
     this->setMinimumSize (m_Trans.expectedSize());
     
-    SYS_DEBUG ("sceneSize = %dx%d", sceneSize.width(), sceneSize.height());
-    SYS_DEBUG ("imageSize = %dx%d", m_Image.width(), m_Image.height());
-    SYS_DEBUG ("offset    = %d, %d", xMarg, yMarg);
-
     m_ImageWidget = new MImageWidget(&m_Image, this);
+    
     setupPanningPhysics (true);
-
     m_Initialized = true;
 }
 
@@ -497,8 +486,6 @@ WallpaperViewWidget::generatePixmap (
 void 
 WallpaperViewWidget::slotDoneActivated ()
 {
-    SYS_DEBUG ("");
-
     if (m_Saving) {
         SYS_DEBUG ("Saving is being performed.");
         return;
@@ -516,8 +503,6 @@ WallpaperViewWidget::slotDoneActivated ()
 void 
 WallpaperViewWidget::slotCancelActivated ()
 {
-    SYS_DEBUG ("");
-
     if (m_Saving) {
         SYS_DEBUG ("Saving is being performed.");
         return;
@@ -543,8 +528,6 @@ WallpaperViewWidget::slotCancelActivated ()
 void 
 WallpaperViewWidget::wallpaperSaved ()
 {
-    SYS_DEBUG ("");
-
     if (!m_Saving) {
         SYS_WARNING ("We didn't request any saving.");
         return;
@@ -578,8 +561,6 @@ WallpaperViewWidget::wallpaperLoaded (
         QuillImage    image, 
         QSize         originalSize)
 {
-    SYS_DEBUG ("");
-
     if (!m_Initialized) {
         initialize (image, originalSize);
     } else {
@@ -594,7 +575,6 @@ void
 WallpaperViewWidget::queueRedrawImage ()
 {
     if (m_HasPendingRedraw) {
-        //SYS_DEBUG ("Dropping...");
         return;
     }
 
@@ -605,6 +585,14 @@ WallpaperViewWidget::queueRedrawImage ()
 void 
 WallpaperViewWidget::redrawImage ()
 {
+    /*
+     * There was some strange transient since we use full screen sheets, this is
+     * how we fixed it.
+     */
+    if (m_ImageWidget->size().width() == 0 ||
+            m_ImageWidget->size().height() == 0)
+        return;
+
     QSize   imageSize = imageVisualSize ();
     QPointF offset (
             imageX() - m_ImageWidget->size().width() / 2.0, 
@@ -616,8 +604,6 @@ WallpaperViewWidget::redrawImage ()
 
     m_ImageWidget->setScale (m_Trans.scale());
     
-    //SYS_DEBUG ("*** myxy   (%d, %d)", imageX(), imageY()); 
-    //SYS_DEBUG ("*** setPos (%s)", SYS_POINTF(offset)); 
     m_ImageWidget->setPos (offset);
     m_ImageWidget->setRotation (m_Trans.rotation());
     m_HasPendingRedraw = false;
@@ -629,11 +615,6 @@ WallpaperViewWidget::imageVisualSize (qreal scale)
     qreal realdx, realdy;
     QSize  retval;
 
-    #if 0
-    SYS_DEBUG ("*** rotation    = %g", m_Trans.rotation());
-    SYS_DEBUG ("*** scale       = %g", m_Trans.scale());
-    SYS_DEBUG ("*** initialized = %s", SYS_BOOL(m_Initialized));
-    #endif
     if (m_Trans.rotation() == 90.0 || m_Trans.rotation() == -90.0) {
         realdx = m_Image.height(); 
         realdy = m_Image.width(); 
@@ -845,7 +826,6 @@ WallpaperViewWidget::pinchGestureStarted (
         QGestureEvent *event, 
         QPinchGesture *pinchGesture)
 {
-    SYS_DEBUG ("");
     Q_UNUSED (event);
     Q_UNUSED (pinchGesture);
     /*
@@ -869,7 +849,6 @@ WallpaperViewWidget::pinchGestureUpdate (
     /*
      * 
      */
-    //SYS_DEBUG ("-> %g", pinchGesture->rotationAngle ());
     Q_UNUSED (event);
 
     if (!m_Scaling && !m_Rotating) {
@@ -944,42 +923,35 @@ WallpaperViewWidget::setupPanningPhysics (
     
     if (geom.height() >= imagedy) {
         top    = imageSize.height() / 2.0;
-        //top    -= m_Trans.offset().y();
-
         height = geom.height() - imageSize.height();
     } else {
         top     = geom.height() - imageSize.height() / 2.0;
-        //top    -= m_Trans.offset().y();
-
         height  =  imageSize.height() - geom.height();
     }
 
     if (geom.width() >= imagedx) {
         left    = imageSize.width() / 2.0;
-        //left   -= m_Trans.offset().x();
-
         width = geom.width() - imageSize.width();
     } else {
         left    = geom.width() - imageSize.width() / 2.0;
-        //left   -= m_Trans.offset().x();
-
         width   =  imageSize.width() - geom.width();
     }
    
     #if 0
-    SYS_DEBUG ("*** imageSize = %s", SYS_SIZE(imageSize));
-    SYS_DEBUG ("*** offset  = %g, %g",
+    SYS_WARNING ("*** imageSize = %s", SYS_SIZE(imageSize));
+    SYS_WARNING ("*** offset  = %g, %g",
             m_Trans.offset().x(), m_Trans.offset().y());
-    SYS_DEBUG ("*** imaged. = %dx%d", imagedx, imagedy);
-    SYS_DEBUG ("*** range   = %g, %g (%gx%g)", left, top, width, height);
+    SYS_WARNING ("*** imaged. = %dx%d", imagedx, imagedy);
+    SYS_WARNING ("*** range   = %g, %g (%gx%g)", left, top, width, height);
     #endif
 
-    m_Physics->setRange (QRectF(left, top, width, height));
+    if (m_Physics)
+        m_Physics->setRange (QRectF(left, top, width, height));
    
     /*
      *
      */
-    if (movePh) {
+    if (m_Physics && movePh) {
         qreal hMargin;
         qreal vMargin;
 
@@ -995,7 +967,6 @@ WallpaperViewWidget::setupPanningPhysics (
             vMargin = top + (height - top) / 2.0;
         }
 
-        SYS_DEBUG ("-> %g, %g", hMargin, vMargin);
         m_Physics->setPosition (QPointF(hMargin, vMargin));
     }
 }
