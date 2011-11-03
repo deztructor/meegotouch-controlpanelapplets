@@ -30,7 +30,7 @@ namespace MeeGo
     class QmUSBMode : public QObject
     {
         Q_OBJECT;
-	public:
+    public:
 
         enum Mode {
             Connected = 0,

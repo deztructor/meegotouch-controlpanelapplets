@@ -201,6 +201,9 @@ WallpaperWidget::slotWallpaperLoaded (
         QuillImage  image, 
         QSize       size)
 {
+    Q_UNUSED (image);
+    Q_UNUSED (size);
+
     SYS_WARNING ("has m_EditorSheet %s", SYS_BOOL(m_EditorSheet));
     if (m_EditorSheet) {
         if (Wallpaper::useFullScreen) {

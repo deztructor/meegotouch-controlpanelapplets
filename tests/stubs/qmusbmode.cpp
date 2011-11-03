@@ -22,11 +22,12 @@
 #define DEBUG
 #include "../../src/debug.h"
 
-using namespace MeeGo;
+namespace MeeGo
+{
 
 QmUSBMode::QmUSBMode (
-		QObject *parent) :
-	QObject (parent), 
+        QObject *parent) :
+    QObject (parent),
     m_Mode (Connected),
     m_DefaultMode (Connected)
 {
@@ -38,13 +39,13 @@ QmUSBMode::~QmUSBMode ()
     SYS_DEBUG ("Destructing %p", this);
 }
 
-QmUSBMode::Mode 
+QmUSBMode::Mode
 QmUSBMode::getMode()
 {
     return m_Mode;
 }
 
-QmUSBMode::Mode 
+QmUSBMode::Mode
 QmUSBMode::getDefaultMode ()
 {
     return m_DefaultMode;
@@ -66,4 +67,6 @@ QmUSBMode::setDefaultMode (
     m_DefaultMode = mode;
     return true;
 }
+
+}; // namespace MeeGo
 

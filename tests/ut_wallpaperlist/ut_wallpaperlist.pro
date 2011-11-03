@@ -48,6 +48,7 @@ HEADERS += \
     $$STUB_PREFIX/thumbnailerstub.h \
     $$STUB_PREFIX/mdesktopentry.h \
     $$STUB_PREFIX/filesystemstub.h \
+    $$STUB_PREFIX/qmusbmode.h \
     ../../src/debug.h \
     ut_wallpaperlist.h \
     $$SRC_PREFIX/wallpaperlist.h \
@@ -66,6 +67,7 @@ SOURCES += \
     $$STUB_PREFIX/thumbnailerstub.cpp \
     $$STUB_PREFIX/mdesktopentry.cpp \
     $$STUB_PREFIX/filesystemstub.cpp \
+    $$STUB_PREFIX/qmusbmode.cpp \
     ../../src/debug.cpp \
     ut_wallpaperlist.cpp \
     $$SRC_PREFIX/wallpaperlist.cpp \
