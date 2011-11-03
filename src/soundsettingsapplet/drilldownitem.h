@@ -37,8 +37,9 @@ public:
 
      void setTitleStyleName (const QString &styleName);
 
-protected:
-    virtual QGraphicsLayout *createLayout ();
+    protected:
+        virtual QGraphicsLayout *createLayout ();
+        Qt::Alignment getTextAlignment () const;
 
 private:
     QString m_TitleStyleName;

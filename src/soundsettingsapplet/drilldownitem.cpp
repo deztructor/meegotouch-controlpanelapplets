@@ -23,13 +23,17 @@
 #include <MImageWidget>
 #include <QGraphicsGridLayout>
 #include <QGraphicsLinearLayout>
+#include <MLocale>
 
 #include "../styles.h"
 
-#undef DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
+/******************************************************************************
+ *
+ */
 RightArrowItem::RightArrowItem (
         MBasicListItem::ItemStyle  style, 
         QGraphicsItem             *parent) : 
@@ -47,6 +51,7 @@ RightArrowItem::createLayout()
     MLabel              *subTitleLabel = 0;
     MImageWidget        *iconWidget    = 0;
     MImageWidget        *drillIconWidget;
+    Qt::Alignment        textAlignment = getTextAlignment ();
     
     layout = new QGraphicsGridLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -67,14 +72,16 @@ RightArrowItem::createLayout()
              * The title label.
              */
             layout->addItem (titleLabel, 0, 0);
-            layout->setAlignment(titleLabel, Qt::AlignLeft | Qt::AlignVCenter);
+            layout->setAlignment(titleLabel, 
+                    Qt::AlignLeft | Qt::AlignVCenter);
             /*
              * The sub-title label.
              */
             subTitleLabel = subtitleLabelWidget ();
             subTitleLabel->setStyleName("CommonSubTitleInverted");
             layout->addItem (subTitleLabel, 1, 0);
-            layout->setAlignment (subTitleLabel, Qt::AlignLeft | Qt::AlignVCenter);
+            layout->setAlignment (subTitleLabel, 
+                    Qt::AlignLeft | Qt::AlignVCenter);
 
             spacer = new MWidget;
             layout->addItem (spacer, 2, 0);
@@ -98,33 +105,40 @@ RightArrowItem::createLayout()
              * The title label.
              */
             layout->addItem (titleLabel, 0, 1);
-            layout->setAlignment (titleLabel, Qt::AlignLeft | Qt::AlignVCenter);
+            layout->setAlignment (titleLabel, 
+                    Qt::AlignLeft | Qt::AlignVCenter);
             /*
              * The sub-title label.
              */
             subTitleLabel = subtitleLabelWidget ();
             subTitleLabel->setStyleName("CommonSubTitleInverted");
-            layout->addItem (subTitleLabel, 1, 1, Qt::AlignLeft | Qt::AlignVCenter);
+            layout->addItem (subTitleLabel, 1, 1, 
+                    Qt::AlignLeft | Qt::AlignVCenter);
             /*
              * The drill down icon.
              */
             layout->addItem(drillIconWidget, 0, 2, 2, 1);
-            layout->setAlignment (drillIconWidget, Qt::AlignVCenter | Qt::AlignRight);
+            layout->setAlignment (drillIconWidget, 
+                    Qt::AlignVCenter | Qt::AlignRight);
             break;
 
         case IconWithTitle:
             SYS_DEBUG ("IconWithTitle");
+
             /*
              * The left side icon.
              */
             iconWidget = imageWidget();
             layout->addItem (iconWidget, 0, 0);
-            layout->setAlignment (iconWidget, Qt::AlignVCenter | Qt::AlignRight);
+            layout->setAlignment (iconWidget, 
+                    Qt::AlignVCenter | Qt::AlignRight);
             /*
              * The title label.
              */
+            titleLabel->setAlignment (textAlignment | Qt::AlignVCenter);
             layout->addItem (titleLabel, 0, 1);
-            layout->setAlignment (titleLabel, Qt::AlignLeft | Qt::AlignVCenter);
+            layout->setAlignment (titleLabel, 
+                    Qt::AlignLeft | Qt::AlignVCenter);
             /*
              * The drill down icon.
              */
@@ -147,3 +161,20 @@ RightArrowItem::setTitleStyleName (
     m_TitleStyleName = styleName;
 }
 
+Qt::Alignment
+RightArrowItem::getTextAlignment () const
+{
+    Qt::LayoutDirection textDir;
+
+    /*
+     * We use this label text as an example to decide what should be the text
+     * alignment.
+     */
+    textDir = MLocale::directionForText (qtTrId ("qtn_sond_pick_music"));
+
+    if (textDir == Qt::RightToLeft) {
+        return (Qt::AlignAbsolute | Qt::AlignRight);
+    }
+
+    return Qt::AlignLeft;
+}
