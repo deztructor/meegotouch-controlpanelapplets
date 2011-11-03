@@ -666,7 +666,11 @@ void
 WallpaperViewWidget::wheelEvent (
         QGraphicsSceneWheelEvent *event)
 {
+    Q_UNUSED (event);
+
     bool     ctrl = QApplication::keyboardModifiers() & Qt::ControlModifier;
+
+    Q_UNUSED (ctrl);
    
     if (!m_SupportPinchEdit)
         return;

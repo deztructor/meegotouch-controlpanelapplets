@@ -80,6 +80,7 @@ private slots:
     void stopPlayingSound ();
     #ifdef USE_CONTENT_ITEM_SHEET
     void contentItemsSheetDoneClicked ();
+    void deleteMusicBrowser();
     #endif
 
 protected:
@@ -104,6 +105,7 @@ private:
     MApplicationPage                *m_MusicBrowser;
     #else
     QStringList                      m_selectedItems;
+    ContentItemsSheet               *m_MusicBrowser;
     #endif
 
     MAction                         *m_DoneAction;

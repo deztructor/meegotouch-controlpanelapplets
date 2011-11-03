@@ -103,7 +103,7 @@ AboutBusinessLogic::ipAddress (
             const QString   &device,
             QString         &addrString)
 {
-    int                 sfd, i;
+    int                 sfd;
     struct ifreq        ifr;
     struct sockaddr_in *sin = (struct sockaddr_in *) &ifr.ifr_addr;
     bool                retval = false;
