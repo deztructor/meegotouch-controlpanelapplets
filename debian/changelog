@@ -3,6 +3,8 @@ meegotouch-controlpanelapplets (0.21.6~1) meegotouch; urgency=low
   [ Laszlo Pere ]
   * Fixes: NB#287094 - Setting > Sounds and vibration> Ringtone : 
     §qtn_sond_pick_music§ is not right aligned in Farsi
+  * Fixed: NB#289944 - Wrong alignment of the text in Settings > device > 
+    display
 
  -- David Kedves <dkedves@blumsoft.eu>  Fri, 28 Oct 2011 14:37:48 +0200
 
