@@ -390,7 +390,11 @@ DisplayWidget::addDoubleTapContainer ()
     //% "Double tap wake-up"
     lowPowerLabel->setText (qtTrId ("qtn_disp_doubletap"));
     layout->addItem (lowPowerLabel);
-    layout->setAlignment (lowPowerLabel, Qt::AlignVCenter);
+    // See bug NB#289944
+    layout->setAlignment (lowPowerLabel, 
+            Qt::AlignAbsolute | Qt::AlignLeft | Qt::AlignVCenter);
+    lowPowerLabel->setAlignment (
+            Qt::AlignAbsolute | Qt::AlignLeft | Qt::AlignVCenter);
 
     m_DoubleTapSwitch = new MButton;
     m_DoubleTapSwitch->setCheckable (true);
