@@ -341,12 +341,12 @@ AlertToneBrowser::launchMusicBrowser()
     connect (m_MusicBrowser, SIGNAL (doneClicked()),
             SLOT (contentItemsSheetDoneClicked ()));
 
-    connect (m_MusicBrowser, SIGNAL (cancelClicked()),
-            SLOT (deleteMusicBrowser()));
+    connect (m_MusicBrowser, SIGNAL (disappeared()),
+            SLOT (deleteMusicBrowser()), Qt::QueuedConnection);
 
     m_MusicBrowser->appear(
             MApplication::activeApplicationWindow(), 
-            MSceneWindow::DestroyWhenDismissed);
+            MSceneWindow::KeepWhenDone);
     #endif
 #endif
 }
@@ -362,12 +362,6 @@ AlertToneBrowser::contentItemsSheetDoneClicked ()
     }
 
     selectingMusicItem (m_selectedItems[0]);
-
-    /*
-     * #288696: content picker should be deleted,
-     * DestroyWhenDismissed is not enough.
-     */
-    deleteMusicBrowser();
 }
 
 void
