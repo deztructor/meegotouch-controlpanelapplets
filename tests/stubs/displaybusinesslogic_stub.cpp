@@ -236,10 +236,8 @@ DisplayBusinessLogic::availableColorProfilesReceivedSlot (
 }
 
 void
-DisplayBusinessLogic::currentColorProfileReceived (
-        QString profile)
+DisplayBusinessLogic::currentColorProfileChanged ()
 {
-    Q_UNUSED(profile);
 }
 
 void

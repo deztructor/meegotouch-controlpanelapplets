@@ -30,7 +30,7 @@
 #include <mce/dbus-names.h>
 
 //#define DEBUG
-//#define WARNING
+#define WARNING
 #include "../debug.h"
 
 static const QString GConfDir ("/system/osso/dsm/display");
@@ -50,6 +50,8 @@ static const QString DimTimeoutsKey (
         "/system/osso/dsm/display/possible_display_dim_timeouts");
 static const QString DoubleTapKey (
         "/system/osso/dsm/locks/tklock_double_tap_gesture");
+static const QString colorProfileKey (
+        "/system/osso/dsm/display/color_profile");
 
 static const QString mcompositorConfName ("mcompositor");
 static const QString closeFromTopKey ("swipe-action-down");
@@ -72,6 +74,15 @@ DisplayBusinessLogic::DisplayBusinessLogic (
     m_lowPower = new MGConfItem (LowPowerKey);
     m_DoubleTap = new MGConfItem (DoubleTapKey);
     m_devicemode = new MeeGo::QmDeviceMode (this);
+
+    /*
+     * DBus is slow....
+     */
+    m_CurrentColorProfileItem = new MGConfItem (colorProfileKey);
+    connect (m_CurrentColorProfileItem, SIGNAL (valueChanged ()),
+             SLOT (currentColorProfileChanged ()));
+    m_CurrentColorProfile = m_CurrentColorProfileItem->value().toString();
+    m_AvailColorProfiles << "Neutral" << "Vivid" << "Muted";
 
 #ifndef MEEGO
     m_compositorConf = new QSettings (
@@ -315,10 +326,12 @@ void
 DisplayBusinessLogic::setColorProfile (
         int     index)
 {
-    if(index < 0 || m_AvailColorProfiles.size() <= index){
-        SYS_WARNING ("Index (%d) for selecting available color profile is out of range. Available range is: 0-%d",
+    if (index < 0 || m_AvailColorProfiles.size() <= index){
+        SYS_WARNING (
+                "Index (%d) for selecting available color profile is "
+                "out of range. Available range is: 0-%d",
                 index, m_AvailColorProfiles.size() - 1 );
-	return;
+    	return;
     }
     
     QString profile = m_AvailColorProfiles.at(index);
@@ -326,8 +339,6 @@ DisplayBusinessLogic::setColorProfile (
     if(profile == m_CurrentColorProfile)
         return; // Nothing to do
 
-    SYS_WARNING ("callWithCallback ( %s)", 
-            SYS_STR(m_AvailColorProfiles.at(index)));
     m_ColorProfileToSet = profile;
 
     setupMceDBusIf ();
@@ -499,12 +510,6 @@ DisplayBusinessLogic::initiateMceQueries ()
             QList<QVariant> (), this,
             SLOT (availableColorProfilesReceivedSlot(QStringList)),
             SLOT (DBusMessagingFailure (QDBusError)));
-
-    m_MceDBusIf->callWithCallback (
-            QString (MCE_COLOR_PROFILE_GET),
-            QList<QVariant> (), this,
-            SLOT (currentColorProfileReceived(QString)),
-            SLOT (DBusMessagingFailure (QDBusError)));
 }
 
 /*!
@@ -512,14 +517,18 @@ DisplayBusinessLogic::initiateMceQueries ()
  * through the dbus.
  */
 void
-DisplayBusinessLogic::currentColorProfileReceived (
-        QString profile)
+DisplayBusinessLogic::currentColorProfileChanged ()
 {
-    m_CurrentColorProfile = profile;
+    QString profile = m_CurrentColorProfileItem->value().toString();
 
-    SYS_DEBUG("Received current color profile: %s", SYS_STR (m_CurrentColorProfile));
+    if (profile != m_CurrentColorProfile) {
+        m_CurrentColorProfile = profile;
+
+        SYS_DEBUG("Received current color profile: %s", 
+            SYS_STR (profile));
     
-    emit currentColorProfileReceived ();
+        emit currentColorProfileReceived ();
+    }
 }
 
 /*!
@@ -530,15 +539,14 @@ void
 DisplayBusinessLogic::availableColorProfilesReceivedSlot (
         QStringList list)
 {
-    m_AvailColorProfiles.clear();
-    
-    int i;
-    for(i = 0; i < list.size(); i++)
-        m_AvailColorProfiles.append(list.at(i));
+    if (m_AvailColorProfiles == list) 
+        return;
+
 
     SYS_DEBUG("Received available color profiles: %s",
-            SYS_STR (m_AvailColorProfiles.join(", ")));
+            SYS_STR (list.join(", ")));
 
+    m_AvailColorProfiles = list;
     emit availableColorProfilesReceived ();
 }
 

@@ -76,7 +76,7 @@ private slots:
     void lpmValueChanged ();
     void doubleTapValueChanged ();
     void availableColorProfilesReceivedSlot (QStringList list);
-    void currentColorProfileReceived (QString);
+    void currentColorProfileChanged ();
     void colorProfileIsSet (QDBusMessage);
     void DBusMessagingFailure (QDBusError error);
 
@@ -102,6 +102,7 @@ private:
     bool                     m_psmValue;
     QDBusInterface          *m_MceDBusIf;
 
+    MGConfItem              *m_CurrentColorProfileItem;
     QStringList              m_AvailColorProfiles;
     QMap<QString, QString>   m_ColorProfileTextIds;
     QString                  m_CurrentColorProfile;

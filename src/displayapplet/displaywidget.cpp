@@ -528,16 +528,20 @@ DisplayWidget::updateColorProfilesCBox ()
     }
 
     /* set the currently selected index */
-    if (fillNeeded)
-        m_colorProfilesCBox->setProperty ("currentIndex",
-                                      m_logic->selectedColorProfileValue ());
+    if (fillNeeded) {
+        int idx = m_logic->selectedColorProfileValue ();
+
+        if (idx >= 0) 
+            m_colorProfilesCBox->setProperty ("currentIndex", idx);
+    }
 }
 
 void
 DisplayWidget::currentColorProfileReceivedSlot ()
 {
-        m_colorProfilesCBox->setProperty ("currentIndex",
-                                      m_logic->selectedColorProfileValue ());
+    m_colorProfilesCBox->setProperty (
+            "currentIndex",
+            m_logic->selectedColorProfileValue ());
 }
 
 void
