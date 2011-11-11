@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.21.6~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.21.6-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#287094 - Setting > Sounds and vibration> Ringtone : 
@@ -8,7 +8,7 @@ meegotouch-controlpanelapplets (0.21.6~1) meegotouch; urgency=low
   * Fixed: NB#290271 - 'Tap to select' is shown for a while when the display
     applet is opened
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 28 Oct 2011 14:37:48 +0200
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 11 Nov 2011 10:42:38 +0100
 
 meegotouch-controlpanelapplets (0.21.5-1) meegotouch; urgency=low
 
