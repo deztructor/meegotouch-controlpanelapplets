@@ -118,7 +118,7 @@ Ut_BatteryImage::testAnimation ()
     for (int n = 0; n < 8; ++n)
         indexUsed[n] = false;
     // Gathering data
-    for (int w = 0; w < 30; ++w) {
+    for (int w = 0; w < 33; ++w) {
         indexUsed[image->m_ImageIndex] = true;
         QTest::qWait (9);
     }
@@ -138,7 +138,7 @@ Ut_BatteryImage::testAnimation ()
         // Gathering data
         for (int w = 0; w < 30; ++w) {
             indexUsed[image->m_ImageIndex] = true;
-            QTest::qWait (9);
+            QTest::qWait (4);
         }
 
         // checking the values.
@@ -146,7 +146,7 @@ Ut_BatteryImage::testAnimation ()
             int shouldBeTrue;
 
             shouldBeTrue = n >= level;
-            QVERIFY (indexUsed[n] == shouldBeTrue);
+            QCOMPARE (indexUsed[n], shouldBeTrue);
         }
     }
 
