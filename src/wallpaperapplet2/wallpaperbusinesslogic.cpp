@@ -43,6 +43,7 @@
 #include <MApplicationWindow>
 #include <MBasicSheetHeader>
 #include <QAction>
+//#include <quill.h>
 
 #define DEBUG
 #define WARNING
@@ -226,7 +227,8 @@ WallpaperBusinessLogic::loadImage (
         goto finalize;
     }
 
-    prepareGalleryWidgets ();
+    //Quill::previewLevelCount();
+    //prepareGalleryWidgets ();
 
     /*
      * The worker thread might want to open the original file so we don't get
@@ -293,6 +295,7 @@ WallpaperBusinessLogic::hasEditedImage () const
 void
 WallpaperBusinessLogic::prepareGalleryWidgets ()
 {
+    SYS_DEBUG ("Creating gallery pages.");
 #ifdef HAVE_GALLERYCORE
     if (m_GalleryModel)
         return;

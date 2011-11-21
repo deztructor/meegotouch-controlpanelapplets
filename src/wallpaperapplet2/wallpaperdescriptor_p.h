@@ -27,6 +27,8 @@
 #include <QuillImageFilterFactory>
 #include <QDateTime>
 
+#include <quill.h>
+
 class QSize;
 
 class WallpaperDescriptorPrivate
