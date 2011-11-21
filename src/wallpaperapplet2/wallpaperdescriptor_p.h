@@ -22,12 +22,9 @@
 #include <QPixmap>
 #include <QString>
 #include <QImage>
-#include <QuillFile>
 #include <QuillImage>
 #include <QuillImageFilterFactory>
 #include <QDateTime>
-
-#include <quill.h>
 
 class QSize;
 
