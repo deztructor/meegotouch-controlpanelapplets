@@ -104,10 +104,11 @@ ResetBusinessLogic::getAccess ()
 
 #if defined(HAVE_DEVICELOCK) && defined (WANT_LOCK_CODE)
     QDBusMessage message;
-    message = m_devlock->call (QDBus::Block, 
-                               QString ("setState"),
-                               DeviceLock::DeviceLockEnums::Device,
-                               DeviceLock::DeviceLockEnums::PasswordPrompt);
+    message = m_devlock->call (
+            QDBus::Block, 
+            QString ("setState"),
+            DeviceLock::DeviceLockEnums::Device,
+            DeviceLock::DeviceLockEnums::PasswordPromptIfEnabled);
 
     QString errorString = message.errorMessage();
     QString errorName = message.errorName ();
