@@ -36,18 +36,10 @@
 static const int ThumbnailWidth  = 170;
 static const int ThumbnailHeight = 171;
 static const QString fileToLoad ("a file to load.png");
+
 /******************************************************************************
- * QuillFile stub.
+ * QuillImageFilter stub.
  */
-#include <QuillFile>
-
-QSize 
-QuillFile::fullImageSize () const
-{
-    SYS_DEBUG ("*** fileName = %s", SYS_STR(fileName()));
-    return QSize(1024, 1025);
-}
-
 #include <QuillImageFilter>
 QuillImage 
 QuillImageFilter::apply (
@@ -58,6 +50,12 @@ QuillImageFilter::apply (
     return image;
 }
 
+QSize 
+QuillImageFilter::newFullImageSize (
+        const QSize &fullImageSize) const
+{
+    return QSize(1024, 1025);
+}
 
 /******************************************************************************
  * Ut_WallpaperDescriptor implementation. 
@@ -254,6 +252,7 @@ Ut_WallpaperDescriptor::testLoad ()
     QuillImage          image;
 
     image = desc1.load (expectedSize, originalSize);
+    
     QVERIFY (originalSize == QSize(1024, 1025));
     QVERIFY (image.width() == 170 && image.height() == 171);
 }

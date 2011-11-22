@@ -32,7 +32,6 @@ WallpaperDescriptorPrivate::WallpaperDescriptorPrivate () :
     m_HasThumbnail (false),
     m_HistoryIndex (-1)
 {
-    //Quill::previewLevelCount();
 }
 
 WallpaperDescriptorPrivate::WallpaperDescriptorPrivate (
@@ -45,7 +44,6 @@ WallpaperDescriptorPrivate::WallpaperDescriptorPrivate (
     m_HasThumbnail (false),
     m_HistoryIndex (-1)
 {
-    //Quill::previewLevelCount();
     m_TimeStamp = Wallpaper::fileTimeStamp (filePath);
 }
 
@@ -187,7 +185,6 @@ WallpaperDescriptorPrivate::load (
         const QSize    &expectedSize,
         QSize          &originalSize)
 {
-#if 0
     QuillImage        retval;
     QSize             mySize;
     QuillImageFilter *loadFilter;
@@ -198,51 +195,14 @@ WallpaperDescriptorPrivate::load (
         fileName = m_OriginalFilePath;
     else
         fileName = m_FilePath;
-
-    QuillFile quillFile  (fileName);
-    mySize = quillFile.fullImageSize ();
-    originalSize = mySize;
-   
-    SYS_DEBUG ("*** expectedSize = %s", SYS_SIZE(expectedSize));
-    SYS_DEBUG ("*** mySize       = %s", SYS_SIZE(mySize));
-
-    if (Wallpaper::disableBiggerThanScreen || 
-            Wallpaper::smallerSize(mySize, expectedSize)) {
-        mySize.scale (expectedSize, Qt::KeepAspectRatio);
-        SYS_DEBUG ("*** chosen small = %s", SYS_SIZE(mySize));
-    } else {
-        mySize.scale (expectedSize, Qt::KeepAspectRatioByExpanding);
-        SYS_DEBUG ("*** chosen big   = %s", SYS_SIZE(mySize));
-    }
 
     loadFilter = QuillImageFilterFactory::createImageFilter(
             QuillImageFilter::Role_Load);
     loadFilter->setOption(
             QuillImageFilter::FileName,
             QVariant(fileName));
-    retval = loadFilter->apply (QImage(mySize, QImage::Format_RGB16));
-    delete loadFilter;
 
-    return retval;
-#else
-    QuillImage        retval;
-    QSize             mySize;
-    QuillImageFilter *loadFilter;
-    QString           fileName;
-
-    if (!m_OriginalFilePath.isEmpty() &&
-            Wallpaper::imageFile(m_OriginalFilePath))
-        fileName = m_OriginalFilePath;
-    else
-        fileName = m_FilePath;
-
-     loadFilter = QuillImageFilterFactory::createImageFilter(
-            QuillImageFilter::Role_Load);
-     loadFilter->setOption(
-            QuillImageFilter::FileName,
-            QVariant(fileName));
-
-     mySize = loadFilter->newFullImageSize(QSize());
+    mySize = loadFilter->newFullImageSize(QSize());
     
     originalSize = mySize;
    
@@ -262,6 +222,5 @@ WallpaperDescriptorPrivate::load (
     delete loadFilter;
 
     return retval;
-#endif
 }
 

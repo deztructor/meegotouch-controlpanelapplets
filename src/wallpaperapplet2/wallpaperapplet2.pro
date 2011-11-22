@@ -35,10 +35,6 @@ contains(DEFINES, HAVE_QUILL_FILTER) {
     CONFIG += quillimagefilter
 }
 
-#contains(DEFINES, HAVE_QUILL_METADATA) {
-#    CONFIG += quillmetadata
-#}
-
 contains(DEFINES, HAVE_QTSPARQL) {
     CONFIG += qtsparql
     CONFIG += qtsparql-tracker-live

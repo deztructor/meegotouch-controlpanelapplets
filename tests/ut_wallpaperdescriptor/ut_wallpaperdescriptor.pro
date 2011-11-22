@@ -25,7 +25,6 @@ target.path = /usr/lib/$$TEST_PKG_NAME
 CONFIG +=             \
 	plugin            \
 	gui               \
-    quill             \
 	meegotouchcore    \
 	duicontrolpanel
 
@@ -35,10 +34,6 @@ CONFIG +=             \
 
 contains(DEFINES, HAVE_QUILL_FILTER) {
     CONFIG += quillimagefilter
-}
-
-contains(DEFINES, HAVE_QUILL_METADATA) {
-    CONFIG += quillmetadata
 }
 
 HEADERS +=                                  \

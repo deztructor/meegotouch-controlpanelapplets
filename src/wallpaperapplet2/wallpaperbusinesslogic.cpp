@@ -43,7 +43,6 @@
 #include <MApplicationWindow>
 #include <MBasicSheetHeader>
 #include <QAction>
-//#include <quill.h>
 
 #define DEBUG
 #define WARNING
@@ -226,9 +225,6 @@ WallpaperBusinessLogic::loadImage (
         SYS_WARNING ("Worker thread is already there, giving up.");
         goto finalize;
     }
-
-    //Quill::previewLevelCount();
-    //prepareGalleryWidgets ();
 
     /*
      * The worker thread might want to open the original file so we don't get
