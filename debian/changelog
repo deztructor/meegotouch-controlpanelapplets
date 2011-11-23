@@ -7,7 +7,7 @@ meegotouch-controlpanelapplets (0.21.7~1) meegotouch; urgency=low
   * Fixes: NB#292137 - Security code need to be entered before clearing, 
     although Device lock's autolock value is "Off"
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 11 Nov 2011 10:43:00 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 23 Nov 2011 12:50:28 +0100
 
 meegotouch-controlpanelapplets (0.21.6-1) meegotouch; urgency=low
 
