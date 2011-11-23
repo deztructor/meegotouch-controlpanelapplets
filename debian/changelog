@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.21.7~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.21.7~2) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#290413 - COREWEB: /usr/bin/duicontrolpanel.launch 
@@ -7,7 +7,7 @@ meegotouch-controlpanelapplets (0.21.7~1) meegotouch; urgency=low
   * Fixes: NB#292137 - Security code need to be entered before clearing, 
     although Device lock's autolock value is "Off"
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 23 Nov 2011 12:50:28 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 23 Nov 2011 12:59:38 +0100
 
 meegotouch-controlpanelapplets (0.21.6-1) meegotouch; urgency=low
 
