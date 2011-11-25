@@ -10,7 +10,7 @@ Build-Depends: debhelper (>= 5), libduicontrolpanel-dev (>= 0.11.8),
                libquillimagefilter-dev, libquillmetadata-dev, libquill-dev,
                libqtsparql-dev, libqtsparql-tracker-live-dev, 
                libcontentaction-dev, aegis-builder, devicelock-dev,
-               libgallerycore-dev, mce-dev (>=1.11.0)
+               libgallerycore-dev, mce-dev (>=1.11.0), libtimed-dev
 Standards-Version: 3.9.1
 
 Package: meegotouch-controlpanelapplets-tests
@@ -211,7 +211,8 @@ Description: test-applet debug symbols
 Package: duicontrolpanel-soundsettingsapplet
 Section: sound
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libresourceqt1, applauncherd-launcher, grep
+Depends: ${shlibs:Depends}, ${misc:Depends}, libresourceqt1,
+    applauncherd-launcher, grep, libtimed0
 Description: Sound Settings Applet
 
 Package: duicontrolpanel-soundsettingsapplet-dbg

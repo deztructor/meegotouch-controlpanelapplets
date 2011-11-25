@@ -22,6 +22,7 @@ CONFIG += \
     debug           \
     link_pkgconfig  \
     mobility        \
+    timed           \
     duicontrolpanel
 
 contains(DEFINES, HAVE_QTSPARQL) {

@@ -167,6 +167,7 @@ AlertToneAppletWidget::~AlertToneAppletWidget ()
     }
 
     tracker->customRingToneFiles (files);
+    SoundSettings::customAlarmSoundFiles (files);
 
     SoundSettings::removeUnusedFiles (files);
 

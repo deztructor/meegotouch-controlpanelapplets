@@ -19,6 +19,7 @@ CONFIG += \
     meegotouchcore  \
     debug           \
     link_pkgconfig  \
+    timed           \
     duicontrolpanel
 
 PKGCONFIG += gstreamer-0.10 profile

@@ -16,6 +16,7 @@ CONFIG +=           \
     meegotouchcore  \
     link_pkgconfig  \
     duicontrolpanel \
+    timed           \
     mobility
 
 MOBILITY +=         \

@@ -16,6 +16,7 @@ target.path = /usr/lib/$$TEST_PKG_NAME
 
 CONFIG += \
     meegotouchcore  \
+    timed           \
     debug
 
 contains(DEFINES, HAVE_QTSPARQL) {

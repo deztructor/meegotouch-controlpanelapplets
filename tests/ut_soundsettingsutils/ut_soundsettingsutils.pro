@@ -44,7 +44,8 @@ CONFIG += \
     meegotouchcore  \
     debug           \
     link_pkgconfig  \
-    duicontrolpanel  \
+    duicontrolpanel \
+    timed           \
     qtsparql
 
 

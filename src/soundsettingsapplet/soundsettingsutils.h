@@ -59,5 +59,8 @@ namespace SoundSettings
 
     void removeUnusedFiles (
         QSet<QString>   &usedFiles);
+
+    void customAlarmSoundFiles (QSet<QString> &files);
+
 };
 #endif

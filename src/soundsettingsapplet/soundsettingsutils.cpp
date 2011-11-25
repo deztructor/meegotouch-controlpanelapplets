@@ -24,10 +24,12 @@
 #include <QCryptographicHash>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
+#include <timed/interface>
+#include <QDBusReply>
 
 #include "trackerconnection.h"
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -358,3 +360,65 @@ SoundSettings::removeUnusedFiles (
         QDir::root().rmdir(dirName);
     }
 }
+
+/******************************************************************************
+ * Timed related methods.
+ */
+typedef long qmAlarmCookie;  // Cookie ID type definition
+
+static QList<qmAlarmCookie> 
+queryAlarmCookies (
+        bool &error)
+{
+    Maemo::Timed::Interface  interface_;    
+    QList<qmAlarmCookie>     cookieList;
+    QMap<QString, QVariant>  attribute;
+
+    attribute.insert("APPLICATION", "soundsettingsapplet");
+
+    QDBusReply< QList<QVariant> > response = interface_.query_async(attribute);
+
+    if(response.isValid()) {
+    	QList<QVariant> responseValue = response.value();
+	    for(QList<QVariant>::const_iterator it = responseValue.begin(); it != responseValue.end(); it++)
+    	    cookieList.append((*it).toUInt());
+	        error =false;
+    } else {
+    	SYS_WARNING ("Failed to query: %s",
+                SYS_STR(response.error().message()));
+    	error = true;
+    }
+
+    return cookieList;
+}
+
+void
+SoundSettings::customAlarmSoundFiles (
+        QSet<QString>   &files)
+{
+    bool                    error;
+    QList<qmAlarmCookie>    cookies = queryAlarmCookies (error);
+    Maemo::Timed::Interface timed;
+    QString                 sound;
+
+    SYS_DEBUG ("error = %s", SYS_BOOL(error));
+    if (error)
+        return;
+
+    SYS_DEBUG ("We have %d alarms.", cookies.size());
+    for (int n = 0; n < cookies.size(); ++n) {
+        QDBusReply< QMap < QString,QVariant > > reply = 
+            timed.query_attributes_async(cookies[n]);
+        
+        if (reply.isValid()) {
+            QMap<QString, QVariant> attributes = reply.value();
+
+            sound = attributes["sound"].toString ();
+            SYS_DEBUG ("*** sound = %s", SYS_STR(sound));
+            files.insert (sound);
+        } else {
+            SYS_WARNING ("Invalid reply.");
+        }
+    }
+}
+
