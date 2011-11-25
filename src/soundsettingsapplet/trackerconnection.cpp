@@ -30,7 +30,7 @@
 #endif
 #include <QTimer>
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -207,6 +207,39 @@ TrackerConnection::processPendingRequests()
     if (m_PendingRequests.size() > 0)
         QTimer::singleShot (
                 delayBetweenRequests, this, SLOT(processPendingRequests()));
+}
+
+void
+TrackerConnection::customRingToneFiles (
+        QSet<QString>   &files)
+{
+#ifdef HAVE_QTSPARQL
+    static QSparqlQuery theQuery (
+        "select ?r {?c maemo:contactAudioRingtone [ nie:url ?r ]}");
+    QSparqlResult       *result = 0;
+    
+    //theQuery.bindValue ("fileUrl", QUrl::fromLocalFile(fileName));
+    result = m_sparqlconn->syncExec (theQuery);
+    result->waitForFinished ();
+    
+    if (result->hasError()) {
+        SYS_WARNING ("ERROR: %s", SYS_STR (result->lastError().message()));
+        return;
+    } 
+    
+    if (! result->first()) {
+        SYS_DEBUG ("No items.");
+        return;
+    }
+
+    do {
+        QSparqlResultRow row = result->current();
+        QVariant         col0 = row.value(0);
+
+        SYS_DEBUG ("*** col0 = '%s'", SYS_STR(col0.toString()));
+        files.insert (col0.toString());
+    } while (result->next());
+#endif
 }
 
 /*!

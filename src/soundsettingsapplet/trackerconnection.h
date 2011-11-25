@@ -21,6 +21,8 @@
 
 #include <QObject>
 #include <QHash>
+#include <QSet>
+#include <QString>
 #include <QStringList>
 
 class QSparqlConnection;
@@ -52,6 +54,8 @@ public:
 
     QString getFileCopyOriginal (
             const QString     &copyFilePath);
+
+    void customRingToneFiles (QSet<QString> &files);
 
 protected:
     TrackerConnection ();

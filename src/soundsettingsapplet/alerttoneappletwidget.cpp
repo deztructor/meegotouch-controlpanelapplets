@@ -37,6 +37,7 @@ using namespace QtMobility;
 #include "profileintcombo.h"
 #include "profiledatainterface.h"
 #include "profilecontainer.h"
+#include "trackerconnection.h"
 
 static const QString keyboardGConfKey ("/meegotouch/settings/has_keyboard");
 
@@ -152,14 +153,20 @@ AlertToneAppletWidget::AlertToneAppletWidget (
 
 AlertToneAppletWidget::~AlertToneAppletWidget ()
 {
+    TrackerConnection *tracker;
+
+    tracker = TrackerConnection::instance ();
     /*
      * Removing the unused files. This is not the best place, but we have no
      * business-logic, so we do it here.
      */
     QSet<QString> files;
+
     for (int n = 0; n < m_alertTones.size(); ++n) {
         files += m_alertTones[n]->fileName();
     }
+
+    tracker->customRingToneFiles (files);
 
     SoundSettings::removeUnusedFiles (files);
 
