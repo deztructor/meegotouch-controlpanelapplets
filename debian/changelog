@@ -7,6 +7,8 @@ meegotouch-controlpanelapplets (0.21.7~2) meegotouch; urgency=low
   * Fixes: NB#292137 - Security code need to be entered before clearing, 
     although Device lock's autolock value is "Off"
   * Handling custom ringtones in soundsettingsapplet: NB#292017 partial fix.
+  * Fixes: NB#292017 - Custom ringtone assigned for contact is reset to global
+    ringtone
 
  -- David Kedves <dkedves@blumsoft.eu>  Wed, 23 Nov 2011 12:59:38 +0100
 

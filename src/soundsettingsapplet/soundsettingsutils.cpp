@@ -374,15 +374,18 @@ queryAlarmCookies (
     QList<qmAlarmCookie>     cookieList;
     QMap<QString, QVariant>  attribute;
 
-    attribute.insert("APPLICATION", "soundsettingsapplet");
+    attribute.insert("APPLICATION", "clock");
 
     QDBusReply< QList<QVariant> > response = interface_.query_async(attribute);
 
     if(response.isValid()) {
     	QList<QVariant> responseValue = response.value();
-	    for(QList<QVariant>::const_iterator it = responseValue.begin(); it != responseValue.end(); it++)
-    	    cookieList.append((*it).toUInt());
-	        error =false;
+
+        SYS_DEBUG ("We have %d alarms.", responseValue.size());
+	    for (int n = 0; n < responseValue.size(); ++n)
+    	    cookieList.append(responseValue[n].toUInt());
+
+        error = false;
     } else {
     	SYS_WARNING ("Failed to query: %s",
                 SYS_STR(response.error().message()));
