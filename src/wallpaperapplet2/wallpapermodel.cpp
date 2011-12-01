@@ -342,7 +342,7 @@ WallpaperModel::loadFromDirectory ()
         foreach (QString filePath, toAdd)
         {
             if (!Wallpaper::imageFile (filePath))
-                toAdd.remove (toAdd);
+                toAdd.removeOne (filePath);
         }
 
         QModelIndex  parent;
