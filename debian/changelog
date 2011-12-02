@@ -1,8 +1,9 @@
 meegotouch-controlpanelapplets (0.21.8~1) meegotouch; urgency=low
 
-  * [NEW VERSION]
+  [ David Kedves ]
+  * Fixes: NB#292500 - Black thumbnail is displaying in wallpaper applet.
 
- -- David Kedves <dkedves@blumsoft.eu>  Tue, 29 Nov 2011 10:39:41 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 02 Dec 2011 10:32:24 +0100
 
 meegotouch-controlpanelapplets (0.21.7-1) meegotouch; urgency=low
 
