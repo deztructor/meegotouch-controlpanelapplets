@@ -68,7 +68,7 @@ Ut_WallpaperModel::init()
 
     /* SBOX maybe does not have some default value */
     if (gconf_portrait.value ().toString ().isEmpty ())
-        gconf_portrait.value ().setValue (QString ("not-exists.png"));
+        gconf_portrait.value ().setValue (testFile1);
 }
 
 void 
