@@ -70,10 +70,6 @@ dummy_file.target = dummy_file
 dummy_file.files += $$OUT_PWD/keep_this_dir
 dummy_file.path = /usr/lib/$$TEST_PKG_NAME
 
-# DEPRECATED
-# testscript.files = cylontest.sh
-# testscript.path = /bin
-
 INSTALLS += \
     support_files \
     dummy_file
