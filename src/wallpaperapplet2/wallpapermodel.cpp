@@ -865,7 +865,9 @@ WallpaperModel::fileChanged (
 void
 WallpaperModel::startWatchFiles ()
 {
-    QString mountDir;
+    QString     mountDir;
+    QStringList alreadyAdded;
+    QStringList tmp;
 
     /*
      * Early creation of the images directory so we can watch it.
@@ -887,23 +889,38 @@ WallpaperModel::startWatchFiles ()
         m_FileWatcher->addPath (Wallpaper::OptDir);
     }
 
+    alreadyAdded << m_FileWatcher->directories ();
+    alreadyAdded << m_FileWatcher->files ();
+
     /* 
      * No need to listen on SysImagesDir as it is on the rootfs. 
      */
     SYS_DEBUG ("Watching directory %s", SYS_STR(m_ImagesDir));
-    if (!m_ImagesDir.isEmpty())
+    if (!m_ImagesDir.isEmpty() && !alreadyAdded.contains(m_ImagesDir)) {
         m_FileWatcher->addPath (m_ImagesDir);
+        alreadyAdded << m_ImagesDir;
+    }
 
     /*
      * Adding the existing package directory paths.
      */
-    m_FileWatcher->addPaths (Wallpaper::customWallpaperDirs ());
+    tmp = Wallpaper::customWallpaperDirs ();
+    foreach (QString toAdd, tmp) {
+        if (!alreadyAdded.contains(toAdd)) {
+            m_FileWatcher->addPath (toAdd);
+            alreadyAdded << toAdd;
+        }
+    }
 
     /*
      * Adding individual files.
      */
-    if (!m_FilePathList.isEmpty())
-        m_FileWatcher->addPaths (m_FilePathList);
+    foreach (QString toAdd, m_FilePathList) {
+        if (!alreadyAdded.contains(toAdd)) {
+            m_FileWatcher->addPath (toAdd);
+            alreadyAdded << toAdd;
+        }
+    }
 }
 
 /******************************************************************************
