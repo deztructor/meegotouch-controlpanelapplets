@@ -224,12 +224,8 @@ Wallpaper::imageFile (
 {
     bool retval = false;
 
-    if (filePath.startsWith(QDir::separator())) {
-        QFile   thisFile(filePath);
-
-        if (thisFile.exists())
-            retval = true;
-    }
+    if (filePath.startsWith (QDir::separator ()))
+        retval = QFile::exists (filePath);
 
     return retval;
 }

@@ -59,7 +59,7 @@ namespace Wallpaper
      * Stuff for the default wallpaper image, the image file that is stored in
      * the theme directory.
      */
-    const bool showThemeDefault (true);
+    const bool showThemeDefault (false);
     const QString CurrentPortraitDefault ("meegotouch-wallpaper-portrait");
 
     const QString themeNameKey ("/meegotouch/theme/name");

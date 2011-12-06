@@ -75,11 +75,11 @@ SOURCES += \
     $$SRC_PREFIX/wallpapercellcreator.cpp \
     $$SRC_PREFIX/gridimagewidget.cpp \
     $$STUB_PREFIX/wallpaperbusinesslogic_stub.cpp \
+    $$STUB_PREFIX/wallpapermodel_stub.cpp \
     $$SRC_PREFIX/wallpaperdescriptor.cpp \
     $$SRC_PREFIX/wallpaperdescriptor_p.cpp \
     $$SRC_PREFIX/wallpaperitrans.cpp \
-    $$SRC_PREFIX/wallpaperutils.cpp \
-    $$SRC_PREFIX/wallpapermodel.cpp
+    $$SRC_PREFIX/wallpaperutils.cpp
 
 INSTALLS += target
 

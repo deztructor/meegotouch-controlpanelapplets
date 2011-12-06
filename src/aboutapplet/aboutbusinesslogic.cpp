@@ -36,13 +36,13 @@ QTM_USE_NAMESPACE
 #include <QDBusInterface>
 #include <QDBusObjectPath>
 
-   #include <sys/ioctl.h>
-   #include <sys/socket.h>
-   #include <sys/types.h>
-   #include <net/if.h>
-   #include <netdb.h>
-   #include <netinet/in.h>
-   #include <arpa/inet.h>
+#include <sys/ioctl.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <net/if.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 #define OS_NAME_FALLBACK "MeeGo"
 
@@ -153,7 +153,7 @@ AboutBusinessLogic::osVersion (QString lsbFilePath )
           int pos = distrib_name.indexIn (contents);  
           if (pos > -1)  
               retval = distrib_name.cap (1);  
-	      
+
               return retval;
       } 
 

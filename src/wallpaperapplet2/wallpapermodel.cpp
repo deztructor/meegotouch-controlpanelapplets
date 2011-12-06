@@ -216,7 +216,6 @@ WallpaperModel::loadFromDirectory ()
 {
     QHash<QString, qint64>  entries;
     QStringList             toAdd;
-    QStringList             removedFilePaths;
     QStringList             itemsToRemove;
     QStringList             directories;
 
@@ -339,6 +338,12 @@ WallpaperModel::loadFromDirectory ()
      * Adding the files that are not changing any more.
      */
     if (!toAdd.empty()) {
+        foreach (QString filePath, toAdd)
+        {
+            if (!Wallpaper::imageFile (filePath))
+                toAdd.removeOne (filePath);
+        }
+
         QModelIndex  parent;
         /*
          * Inserting the new items.
@@ -361,7 +366,6 @@ WallpaperModel::loadFromDirectory ()
         endInsertRows ();
         startWatchFiles ();
     }
-
 
     if (!m_PendingFiles.isEmpty()) {
         SYS_DEBUG ("We have m_PendingFiles, starting timer.");

@@ -22,6 +22,7 @@
 #include "wallpaperdescriptor.h"
 #include "wallpapermodel.h"
 
+#include <QMetaType>
 #include <QSignalSpy>
 #include <QList>
 #include <QVariant>
@@ -40,6 +41,8 @@ static char *app_name = (char*) "./ut_wallpaperlist";
 void
 Ut_WallpaperList::initTestCase ()
 {
+    qRegisterMetaType<WallpaperDescriptor>("WallpaperDescriptor");
+
     m_App = new MApplication (argc, &app_name);
     m_BusinessLogic = new WallpaperBusinessLogic;
 }
