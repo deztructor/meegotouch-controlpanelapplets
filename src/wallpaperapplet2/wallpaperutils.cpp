@@ -192,10 +192,11 @@ Wallpaper::readDir (
 {
     QHash<QString, qint64> retval;
 
-    return readDir (directoryPath, nameFilters, retval);
+    readDir (directoryPath, nameFilters, retval);
+    return retval;
 }
 
-QHash<QString, qint64> 
+void
 Wallpaper::readDir (
         const QString           &directoryPath,
         const QStringList       &nameFilters,
@@ -205,7 +206,7 @@ Wallpaper::readDir (
     QFileInfoList          entryList;
 
     if (!directory.exists(directoryPath))
-        goto finalize;
+        return;
 
     entryList = directory.entryInfoList (
             nameFilters, QDir::Files | QDir::NoSymLinks | QDir::Readable);
@@ -215,9 +216,6 @@ Wallpaper::readDir (
                 SYS_STR(entryList[iList].filePath()));
         hashTable[entryList[iList].filePath()] = entryList[iList].size();
     }
-    
-finalize:
-    return hashTable;
 }
 
 bool

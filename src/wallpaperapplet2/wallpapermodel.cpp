@@ -31,7 +31,7 @@
 #include "wallpaperdescriptor.h"
 #include "gridimagewidget.h"
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include <../debug.h>
 
@@ -141,7 +141,6 @@ WallpaperModel::data (
             /*
              * We use this role to sort the wallpapers in the list widget.
              */
-            SYS_DEBUG ("Qt::DisplayRole");
             if (!m_FilePathHash.contains(m_FilePathList[index.row()])) {
                 SYS_WARNING ("MISSING DESCRIPTOR AT %d: %s", index.row(),
                         SYS_STR(m_FilePathList[index.row()]));
@@ -151,7 +150,6 @@ WallpaperModel::data (
             break;
 
         case WallpaperModel::WallpaperDescriptorRole:
-            SYS_DEBUG ("WallpaperModel::WallpaperDescriptorRole");
             if (!m_FilePathHash.contains(m_FilePathList[index.row()])) {
                 SYS_WARNING ("MISSING DESCRIPTOR AT %d: %s", index.row(),
                         SYS_STR(m_FilePathList[index.row()]));
@@ -164,7 +162,6 @@ WallpaperModel::data (
             retval.setValue (QString("Unsupported role"));
     }
 
-    SYS_DEBUG ("Returning %s", retval.typeName());
     return retval;
 }
 
@@ -249,8 +246,7 @@ WallpaperModel::loadFromDirectory ()
          * Getting the full list of the given directory. 
          */
         SYS_DEBUG ("Reading %s", SYS_STR(directory));
-        entries = Wallpaper::readDir (
-            directory, Wallpaper::imageNameFilter(), entries);
+        Wallpaper::readDir (directory, Wallpaper::imageNameFilter(), entries);
         SYS_DEBUG ("*** %d entries", entries.size());
         /*
          * Comparing the data we have with the file list we got. Removing from
@@ -311,12 +307,15 @@ WallpaperModel::loadFromDirectory ()
              * Finished copying, we are going to add these right now.
              */
              toAdd << newPath;
-             m_PendingFiles.remove (newPath);
         } else {
              /*
               * Otherwise we remember to add these later.
               */
-             m_PendingFiles[newPath] = entries[newPath];
+            SYS_WARNING ("Adding %llu != %llu -> %s", 
+                    m_PendingFiles[newPath],
+                    entries[newPath],
+                    SYS_STR(newPath));
+            m_PendingFiles[newPath] = entries[newPath];
         }
     }
    
@@ -350,6 +349,9 @@ WallpaperModel::loadFromDirectory ()
         foreach (QString newPath, toAdd) {
             WallpaperDescriptor desc (newPath);
 
+            SYS_WARNING ("Removing '%s'", SYS_STR(newPath));
+            m_PendingFiles.remove (newPath);
+
             //SYS_DEBUG ("Adding '%s'", SYS_STR(newPath));
             m_FilePathList << newPath;
             m_OrderDirty = true;
@@ -362,6 +364,10 @@ WallpaperModel::loadFromDirectory ()
 
 
     if (!m_PendingFiles.isEmpty()) {
+        SYS_DEBUG ("We have m_PendingFiles, starting timer.");
+        foreach (QString fn, m_PendingFiles.keys()) {
+            SYS_DEBUG ("*** %s size = %llu", SYS_STR(fn), m_PendingFiles[fn]);
+        }
         m_FileSystemTimer.start ();
     }
 }
@@ -385,7 +391,7 @@ WallpaperModel::thumbnailReady (
     Q_UNUSED (fileUri);
     Q_UNUSED (thumbnailUri);
 
-    SYS_DEBUG ("Arrived t. for %s", SYS_STR(fileUri.toString()));
+    //SYS_DEBUG ("Arrived t. for %s", SYS_STR(fileUri.toString()));
     if (pixmap.isNull()) {
         SYS_WARNING ("ERROR: thumbnail is null for %s",
                 SYS_STR(fileUri.toString()));
@@ -406,7 +412,6 @@ WallpaperModel::thumbnailReady (
         int                 idx = m_FilePathList.indexOf(path);
 
         desc.setThumbnail (pixmap);
-        SYS_DEBUG ("emitChangedSignal (%d);", idx);
         emitChangedSignal (idx);
     } else {
         SYS_WARNING ("Descriptor path not found: %s", SYS_STR(path));
@@ -866,7 +871,7 @@ WallpaperModel::startWatchFiles ()
     }
 
     /* 
-     * No need to listen on SysImagesDir as it is on the rootfs 
+     * No need to listen on SysImagesDir as it is on the rootfs. 
      */
     SYS_DEBUG ("Watching directory %s", SYS_STR(m_ImagesDir));
     if (!m_ImagesDir.isEmpty())

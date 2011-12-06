@@ -458,6 +458,7 @@ WallpaperBusinessLogic::currentWallpaper (
         originalFilePath = QString();
     }
 
+    SYS_DEBUG ("*** origList         = %s", SYS_STR(origList.join(";")));
     SYS_DEBUG ("*** currentFilePath  = %s", SYS_STR(currentFilePath));
     SYS_DEBUG ("*** originalFilePath = %s", SYS_STR(originalFilePath));
 }

@@ -77,7 +77,7 @@ namespace Wallpaper
     /*
      * @hashTable: the data will be appended here
      */
-    QHash<QString, qint64> readDir (
+    void readDir (
             const QString           &directoryPath,
             const QStringList       &nameFilters,
             QHash<QString, qint64>  &hashTable);
