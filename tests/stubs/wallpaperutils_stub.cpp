@@ -202,6 +202,12 @@ Wallpaper::readDir (
     return retval;
 }
 
+QStringList
+Wallpaper::customWallpaperDirs ()
+{
+    return QStringList ();
+}
+
 void 
 Wallpaper::readDir (
         const QString           &directoryPath,

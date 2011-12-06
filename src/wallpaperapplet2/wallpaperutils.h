@@ -82,6 +82,8 @@ namespace Wallpaper
             const QStringList       &nameFilters,
             QHash<QString, qint64>  &hashTable);
 
+    QStringList customWallpaperDirs ();
+
     bool imageFile (
             const QString     &filePath);
 

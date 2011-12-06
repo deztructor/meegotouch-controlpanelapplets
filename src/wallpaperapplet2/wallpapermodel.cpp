@@ -238,12 +238,14 @@ WallpaperModel::loadFromDirectory ()
      */
     directories <<
         m_SysImagesDir <<
-        m_ImagesDir;
+        m_ImagesDir <<
+        Wallpaper::customWallpaperDirs ();
 
     foreach (QString directory, directories) {
         /*
          * Getting the full list of the given directory. 
          */
+        SYS_DEBUG ("**********************************************");
         SYS_DEBUG ("Reading %s", SYS_STR(directory));
         Wallpaper::readDir (directory, Wallpaper::imageNameFilter(), entries);
         SYS_DEBUG ("*** %d entries", entries.size());
@@ -806,15 +808,8 @@ WallpaperModel::directoryChanged (
 {
     SYS_DEBUG ("*** path = %s", SYS_STR(path));
 
-    if (path != m_ImagesDir) {
-        SYS_WARNING ("This is not our images directory?!");
-    }
-
     if (!m_FileSystemTimer.isActive())
         m_FileSystemTimer.start ();
-    //loadFromDirectory ();
-
-    // FIXME: ensureSelection() ?
 }
 
 void
@@ -872,6 +867,8 @@ WallpaperModel::startWatchFiles ()
                 this, SLOT(directoryChanged(const QString &)));
         connect (m_FileWatcher, SIGNAL(fileChanged(const QString &)),
                 this, SLOT(fileChanged(const QString &)));
+
+        m_FileWatcher->addPath (Wallpaper::OptDir);
     }
 
     /* 
@@ -882,7 +879,12 @@ WallpaperModel::startWatchFiles ()
         m_FileWatcher->addPath (m_ImagesDir);
 
     /*
-     *
+     * Adding the existing package directory paths.
+     */
+    m_FileWatcher->addPaths (Wallpaper::customWallpaperDirs ());
+
+    /*
+     * Adding individual files.
      */
     if (!m_FilePathList.isEmpty())
         m_FileWatcher->addPaths (m_FilePathList);

@@ -38,7 +38,7 @@ using namespace Wallpaper;
 #include <QFileInfoList>
 #include <MGConfItem>
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include <../debug.h>
 
@@ -216,6 +216,38 @@ Wallpaper::readDir (
                 SYS_STR(entryList[iList].filePath()));
         hashTable[entryList[iList].filePath()] = entryList[iList].size();
     }
+}
+
+QStringList
+Wallpaper::customWallpaperDirs ()
+{
+    QDir                   directory (Wallpaper::OptDir);
+    QStringList            dirNameList;
+    QStringList            retval;
+
+    if (!directory.exists(Wallpaper::OptDir))
+        return retval;
+
+    dirNameList = directory.entryList (QDir::Dirs | QDir::NoDotAndDotDot);
+    SYS_WARNING ("*** dirNameList = %s", SYS_STR(dirNameList.join(";")));
+
+    foreach (QString base, dirNameList) {
+        QString path = 
+            Wallpaper::OptDir +
+            QDir::separator () + 
+            base +
+            Wallpaper::SysImagesDir;
+        QDir    dir (path);
+
+        if (dir.exists()) {
+            SYS_DEBUG ("exists     : %s", SYS_STR(path));
+            retval << path;
+        } else {
+            SYS_DEBUG ("not exists : %s", SYS_STR(path));
+        }
+    }
+
+    return retval;
 }
 
 bool
