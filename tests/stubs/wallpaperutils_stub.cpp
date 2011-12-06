@@ -38,7 +38,7 @@ using namespace Wallpaper;
 #include <QFileInfoList>
 #include <MGConfItem>
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include <../debug.h>
 
