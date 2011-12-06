@@ -1,7 +1,7 @@
 Source: testpackage
 Section: devel
 Priority: extra
-Maintainer: David Kedves <dkedves@gmail.com>
+Maintainer: David Kedves <kedazo@gmail.com>
 Build-Depends: debhelper (>= 5)
 Standards-Version: 3.9.1
 
