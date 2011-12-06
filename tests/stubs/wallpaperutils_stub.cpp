@@ -198,10 +198,11 @@ Wallpaper::readDir (
 {
     QHash<QString, qint64> retval;
 
-    return readDir (directoryPath, nameFilters, retval);
+    readDir (directoryPath, nameFilters, retval);
+    return retval;
 }
 
-QHash<QString, qint64> 
+void 
 Wallpaper::readDir (
         const QString           &directoryPath,
         const QStringList       &nameFilters,
@@ -217,7 +218,7 @@ Wallpaper::readDir (
     SYS_DEBUG ("**********************************************");
 
 //finalize:
-    return fileSystem;
+    hashTable = fileSystem;
 }
 
 bool
