@@ -252,7 +252,8 @@ WallpaperModel::loadFromDirectory ()
         /*
          * Comparing the data we have with the file list we got. Removing from
          * the new list data all the files that are already stored in the model.
-         * We also maintain a list of files that are 
+         *
+         * We also maintain a list of files that are removed.
          */
         foreach (QString oldPath, m_FilePathList) {
             if (!Wallpaper::isInDir (directory, oldPath))
@@ -272,7 +273,22 @@ WallpaperModel::loadFromDirectory ()
                  itemsToRemove << oldPath;
             }
         }
-    } // foreach in directories
+    }
+
+    /*
+     * This is not very elegant: we check every single files so that we detect
+     * the removed files when the package manager simply removes the parent
+     * directory to remove the files (we get no notification about the file
+     * change).
+     */
+    foreach (QString eFileName, m_FilePathList) {
+        if (!itemsToRemove.contains(eFileName) 
+                && !Wallpaper::imageFile(eFileName)) {
+            //SYS_WARNING ("----> %s", SYS_STR(eFileName));
+            itemsToRemove << eFileName;
+        }
+    }
+
     
     /*
      * Immediately removing all the disappeared files.
@@ -831,7 +847,7 @@ void
 WallpaperModel::fileChanged (
         const QString  &path)
 {
-    //SYS_DEBUG ("*** path = %s", SYS_STR(path));
+    SYS_DEBUG ("*** path = %s", SYS_STR(path));
 
     if (m_FilePathHash.contains(path) && Wallpaper::imageFile(path)) {
         if (!m_ChangedFiles.contains(path))
