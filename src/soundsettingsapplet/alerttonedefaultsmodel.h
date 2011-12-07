@@ -24,6 +24,7 @@
 #include <QStandardItemModel>
 #include <QPointer>
 #include <QFileSystemWatcher>
+#include <QTimer>
 
 class AlertToneDefaultsModel : public QStandardItemModel
 {
@@ -62,18 +63,19 @@ public:
     
     static QString oviRingTonesPath ();
     
-Q_SIGNALS:
-    void finished ();
-    void loading ();
+    Q_SIGNALS:
+        void finished ();
+        void loading ();
     
-private slots:
-    void fileChanged (const QString &filename);
-    void directoryChanged (const QString &directory);
-    void addSingleItem ();
-    void dataReceived (
-            const QString   &filename, 
-            const QString   &title,
-            const QString   &trackerId);
+    private slots:
+        void fileChanged (const QString &filename);
+        void directoryChanged (const QString &directory);
+        void addSingleItem ();
+        void dataReceived (
+                const QString   &filename, 
+                const QString   &title,
+                const QString   &trackerId);
+        void loadFromDirectory ();
 
     private:
         bool ensureHasDirectory (const QString &directoryPath);
@@ -84,6 +86,7 @@ private slots:
         QPointer<QFileSystemWatcher> m_FileWatcher;
 	    bool                         m_isFinished;
         QHash<QString, int>          m_FileNameCache;
+        QTimer                       m_FileSystemTimer;
 
 #ifdef UNIT_TEST
     friend class Ut_AlertToneDefaultsModelTests;

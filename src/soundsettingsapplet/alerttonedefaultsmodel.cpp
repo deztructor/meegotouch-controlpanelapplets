@@ -21,6 +21,7 @@
 #include <QFile>
 #include <QFileInfo>
 
+#include "soundsettingsutils.h"
 #include "trackerconnection.h"
 #include "alerttonedefaultsmodel.h"
 #include "alerttone.h"
@@ -31,9 +32,11 @@
  */
 #undef USE_ASYNC_LOADING
 
-//#define DEBUG
-//#define WARNING
+#define DEBUG
+#define WARNING
 #include "../debug.h"
+
+static const int fileSystemReCheckDelay = 500;
 
 /******************************************************************************
  * AlertToneDefaultsModel implementation.
@@ -74,10 +77,21 @@ AlertToneDefaultsModel::AlertToneDefaultsModel() : QStandardItemModel(),
      */
     m_FileWatcher = new QFileSystemWatcher (this);
     m_FileWatcher->addPath (oviDirPath);
+    m_FileWatcher->addPath (SoundSettings::OptDir);
+
     connect (m_FileWatcher, SIGNAL(fileChanged(const QString &)),
             this, SLOT(fileChanged(const QString &)));
     connect (m_FileWatcher, SIGNAL(directoryChanged(const QString &)),
             this, SLOT(directoryChanged(const QString &)));
+
+    /*
+     * A timer that handles installation of new alert-tone package
+     * installations.
+     */
+    m_FileSystemTimer.setInterval (fileSystemReCheckDelay);
+    m_FileSystemTimer.setSingleShot (true);
+    connect (&m_FileSystemTimer, SIGNAL(timeout()),
+            this, SLOT(loadFromDirectory()));
 
     /*
      * TrackerConnection might send a signal about the tracker answer.
@@ -429,6 +443,12 @@ AlertToneDefaultsModel::fileChanged (
          */
         m_FileWatcher->removePath (filename);
     }
+}
+ 
+void 
+AlertToneDefaultsModel::loadFromDirectory ()
+{
+    SYS_DEBUG ("");
 }
 
 void

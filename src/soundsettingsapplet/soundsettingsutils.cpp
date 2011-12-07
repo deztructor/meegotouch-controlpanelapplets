@@ -28,6 +28,7 @@
 #include <QDBusReply>
 
 #include "trackerconnection.h"
+#include "static.h"
 
 #define DEBUG
 #define WARNING
@@ -279,6 +280,39 @@ finalize:
 
     return retval;
 }
+
+QStringList
+SoundSettings::customAlertToneDirs ()
+{
+    QDir                   directory (SoundSettings::OptDir);
+    QStringList            dirNameList;
+    QStringList            retval;
+
+    if (!directory.exists(SoundSettings::OptDir))
+        return retval;
+
+    dirNameList = directory.entryList (QDir::Dirs | QDir::NoDotAndDotDot);
+    SYS_WARNING ("*** dirNameList = %s", SYS_STR(dirNameList.join(";")));
+
+    foreach (QString base, dirNameList) {
+        QString path = 
+            SoundSettings::OptDir +
+            QDir::separator () + 
+            base +
+            DEFAULT_RINGTONE_PATH1;
+        QDir    dir (path);
+
+        if (dir.exists()) {
+            SYS_DEBUG ("exists     : %s", SYS_STR(path));
+            retval << path;
+        } else {
+            SYS_DEBUG ("not exists : %s", SYS_STR(path));
+        }
+    }
+
+    return retval;
+}
+
 
 /*!
  * \param usedFiles The sound files that are used so shouldn't be removed.

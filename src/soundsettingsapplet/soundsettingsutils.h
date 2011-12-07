@@ -26,6 +26,8 @@
 
 namespace SoundSettings 
 {
+    const QString OptDir ("/opt");
+    
     QString mountPoint ();
     QString userSaveDir ();
 
@@ -41,6 +43,8 @@ namespace SoundSettings
             QString       &baseDir,
             QString       &fileName,
             QString       &xmlFileName);
+
+    QStringList customAlertToneDirs ();
 
     QString saveFile (
             const QString &filePath);
