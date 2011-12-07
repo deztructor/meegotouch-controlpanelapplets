@@ -44,7 +44,8 @@ static const int fileSystemReCheckDelay = 500;
 AlertToneDefaultsModel::AlertToneDefaultsModel() : QStandardItemModel(),
     m_isFinished(false)
 {
-    QString oviDirPath = oviRingTonesPath ();
+    QString     oviDirPath = oviRingTonesPath ();
+    QStringList customDirs = SoundSettings::customAlertToneDirs ();
 
     insertColumn (NiceNameColumn);
     insertColumn (FullPathColumn);
@@ -59,6 +60,11 @@ AlertToneDefaultsModel::AlertToneDefaultsModel() : QStandardItemModel(),
     m_dirIdx.push(0);
     m_dirStack.push(QDir(oviDirPath));
     m_dirIdx.push(0);
+    
+    foreach (QString customDir, customDirs) {
+        m_dirStack.push(QDir(customDir));
+        m_dirIdx.push(0);
+    }
 
 //for meego.com, we have to add sounds from
 //  "/usr/share/sounds/meego/stereo/"
@@ -251,6 +257,11 @@ AlertToneDefaultsModel::addSingleItem (
     setData (index(row, FullPathColumn), QVariant(fileName));
     setData (index(row, ForcedColumn), QVariant(forced));
 
+    SYS_DEBUG ("Added at %d", row);
+    foreach (QString fn, m_FileNameCache.keys()) {
+        SYS_DEBUG ("  %3d -> '%s'", m_FileNameCache[fn], SYS_STR(fn));
+    }
+
     return row;
 }
 
@@ -309,7 +320,20 @@ AlertToneDefaultsModel::findItemByFileName (
 #endif
 
 finalize:
-    SYS_WARNING ("Returning %d", retval);
+    SYS_WARNING ("Returning %d for %s", retval, SYS_STR(FileName));
+#if 1
+    if (retval == -1) {
+        SYS_WARNING ("NOT FOUND %s", SYS_STR(FileName));
+        foreach (QString fn, m_FileNameCache.keys()) {
+            int     idx = m_FileNameCache[fn];
+            QString d = data (index(idx, FullPathColumn)).toString();
+
+            SYS_DEBUG ("  %3d -> '%s'", idx, SYS_STR(fn));
+            SYS_DEBUG ("      -> '%s'", SYS_STR(d));
+        }
+    }
+#endif
+
     return retval;
 }
 
@@ -436,8 +460,13 @@ AlertToneDefaultsModel::fileChanged (
         /*
          * Removing the referencing row from the model.
          */
-        if (idx >= 0)
+        if (idx >= 0) {
+            SYS_DEBUG ("removing %d for %s", idx, SYS_STR(filename));
             removeRows (idx, 1);
+            m_FileNameCache.remove (filename);
+        } else {
+            SYS_WARNING ("NOT FOUND");
+        }
         /*
          * We are not watching the file any more.
          */
@@ -448,7 +477,17 @@ AlertToneDefaultsModel::fileChanged (
 void 
 AlertToneDefaultsModel::loadFromDirectory ()
 {
-    SYS_DEBUG ("");
+    QStringList customDirs = SoundSettings::customAlertToneDirs ();
+
+    SYS_DEBUG ("*** customDirs = %s", SYS_STR(customDirs.join(";")));
+    foreach (QString customDir, customDirs) {
+        m_dirStack.push(QDir(customDir));
+        m_dirIdx.push(0);
+    }
+    
+    m_isFinished = false;
+    while (!m_isFinished)
+        addSingleItem();
 }
 
 void
@@ -456,6 +495,10 @@ AlertToneDefaultsModel::directoryChanged (
         const QString &directory)
 {
     SYS_DEBUG ("*** directory = %s", SYS_STR(directory));
+    if (directory == SoundSettings::OptDir) {
+        m_FileSystemTimer.start ();
+        return;
+    }
     
     m_dirStack.push(QDir(directory));
     m_dirIdx.push(0);
@@ -507,9 +550,13 @@ AlertToneDefaultsModel::moveItem(int from, int destination)
     removeRow(from);
     insertRow(destination);
 
-    m_FileNameCache.remove (destFileName);
-    m_FileNameCache[fileName.toString()] = destination;
     setData (index(destination, NiceNameColumn), QVariant(niceName));
     setData (index(destination, FullPathColumn), QVariant(fileName));
     setData (index(destination, ForcedColumn),   QVariant(forced));
+
+    m_FileNameCache.clear();
+    for (int n = 0; n < rowCount(); ++n) {
+        QString fn = data (index(n, FullPathColumn)).toString(); 
+        m_FileNameCache[fn] = n;
+    }
 }

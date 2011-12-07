@@ -70,9 +70,6 @@ SoundSettings::isFileCopy (
 {
     bool     retval = filePath.startsWith(userSaveDir());
 
-    SYS_DEBUG ("*** filePath = %s", SYS_STR(filePath));
-    SYS_DEBUG ("*** dir      = %s", SYS_STR(userSaveDir()));
-    SYS_DEBUG ("returning %s", SYS_BOOL(retval));
     return retval;
 }
 
