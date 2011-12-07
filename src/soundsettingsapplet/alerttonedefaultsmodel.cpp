@@ -32,11 +32,11 @@
  */
 #undef USE_ASYNC_LOADING
 
-#define DEBUG
+//#define DEBUG
 #define WARNING
 #include "../debug.h"
 
-static const int fileSystemReCheckDelay = 500;
+static const int fileSystemReCheckDelay = 1500;
 
 /******************************************************************************
  * AlertToneDefaultsModel implementation.
@@ -257,11 +257,6 @@ AlertToneDefaultsModel::addSingleItem (
     setData (index(row, FullPathColumn), QVariant(fileName));
     setData (index(row, ForcedColumn), QVariant(forced));
 
-    SYS_DEBUG ("Added at %d", row);
-    foreach (QString fn, m_FileNameCache.keys()) {
-        SYS_DEBUG ("  %3d -> '%s'", m_FileNameCache[fn], SYS_STR(fn));
-    }
-
     return row;
 }
 
@@ -304,36 +299,9 @@ AlertToneDefaultsModel::findItemByFileName (
                 m_FileNameCache.contains(originalFile))
             retval = m_FileNameCache[originalFile];
     }
-#if 0
-    for (int n = 0; n < rowCount(); ++n) {
-        #if 0
-        SYS_WARNING ("[%03d] %s ? %s => %s",
-                n, SYS_STR(fileName(n)), SYS_STR(FileName),
-                SYS_BOOL(fileName(n) == FileName));
-        #endif
-        if (fileName(n) == FileName || 
-                originalFileName(n) == FileName) {
-            retval = n;
-            break;
-        }
-    }
-#endif
 
 finalize:
     SYS_WARNING ("Returning %d for %s", retval, SYS_STR(FileName));
-#if 1
-    if (retval == -1) {
-        SYS_WARNING ("NOT FOUND %s", SYS_STR(FileName));
-        foreach (QString fn, m_FileNameCache.keys()) {
-            int     idx = m_FileNameCache[fn];
-            QString d = data (index(idx, FullPathColumn)).toString();
-
-            SYS_DEBUG ("  %3d -> '%s'", idx, SYS_STR(fn));
-            SYS_DEBUG ("      -> '%s'", SYS_STR(d));
-        }
-    }
-#endif
-
     return retval;
 }
 
