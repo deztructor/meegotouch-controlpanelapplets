@@ -36,7 +36,7 @@
 #define WARNING
 #include "../debug.h"
 
-static const int fileSystemReCheckDelay = 1500;
+static const int fileSystemReCheckDelay = 2500;
 
 /******************************************************************************
  * AlertToneDefaultsModel implementation.
