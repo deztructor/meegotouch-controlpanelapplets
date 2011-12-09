@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.21.9~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.21.9-1) meegotouch; urgency=low
 
   [ Laszlo Pere ]
   * Fixes: NB#293824 - Sound settings applet does not search for ring tones
@@ -10,7 +10,7 @@ meegotouch-controlpanelapplets (0.21.9~1) meegotouch; urgency=low
   * Added demo ringtones and wallpapers source packages (debianized) for
     testing NB#293823 and NB#293824
 
- -- David Kedves <dkedves@blumsoft.eu>  Fri, 09 Dec 2011 09:57:08 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 09 Dec 2011 13:01:02 +0100
 
 meegotouch-controlpanelapplets (0.21.8-1) meegotouch; urgency=low
 
