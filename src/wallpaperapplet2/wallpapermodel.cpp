@@ -41,6 +41,7 @@
  */
 static const int loadPictureDelay = 0;
 static const int fileSystemReCheckDelay = 500;
+static const int minFileSize = 512;
 
 /******************************************************************************
  * WallpaperModel implementation.
@@ -319,7 +320,9 @@ WallpaperModel::loadFromDirectory ()
 #endif
 
         if (m_PendingFiles.contains(newPath) &&
-                m_PendingFiles[newPath] == entries[newPath]) {
+                m_PendingFiles[newPath] == entries[newPath] &&
+                // The OVI store likes to pause immediately after started.
+                entries[newPath] > minFileSize) {
             /*
              * Finished copying, we are going to add these right now.
              */

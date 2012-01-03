@@ -3,6 +3,10 @@ meegotouch-controlpanelapplets (0.21.10~1) meegotouch; urgency=low
   [ Marko Saukko ]
   * Fix build when building without Qtsparql.
 
+  [ Laszlo Pere ]
+  * Fixes: NB#296097 - A blank thumbnail is displaying in wallpaper applet
+    after downloading a wallpaper from ovi store for the first time.
+
  -- David Kedves <dkedves@blumsoft.eu>  Mon, 02 Jan 2012 14:19:33 +0100
 
 meegotouch-controlpanelapplets (0.21.9-1) meegotouch; urgency=low
