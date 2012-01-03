@@ -29,6 +29,7 @@
 #include <QSet>
 #include <MGConfItem>
 #include <MApplication>
+#include <QFileInfo>
 
 #define DEBUG
 #include "../../src/debug.h"
@@ -41,6 +42,15 @@ static const QString LandscapeKey =
 static const QString testFile1 ("/testFile1.png");
 static const QString testFile2 ("/testFile2.png");
 static const QString testFile3 ("/testFile3.png");
+
+/******************************************************************************
+ * Stub for QFileInfo.size () needed as empty files are skipped 
+ */
+qint64
+QFileInfo::size () const
+{
+    return 5120;
+}
 
 /******************************************************************************
  * WallpaperModelSignals implementation. 
