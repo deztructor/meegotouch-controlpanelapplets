@@ -95,8 +95,8 @@ Ut_WallpaperModel::initTestCase()
 {
     bool signalSuccess;
 
-    stubAddFileToFilesystem (testFile1, 100);
-    stubAddFileToFilesystem (testFile2, 100);
+    stubAddFileToFilesystem (testFile1, 5120);
+    stubAddFileToFilesystem (testFile2, 5120);
 
     m_App = new MApplication (argc, &app_name);
     m_BusinessLogic = new WallpaperBusinessLogic;
@@ -124,6 +124,7 @@ Ut_WallpaperModel::initTestCase()
      * now.
      */
     m_Model->loadFromDirectory ();
+
     SYS_DEBUG ("*** rowCount() = %d", m_Model->rowCount());
     for (int n = 0; n < m_Model->m_FilePathList.size(); ++n) {
         SYS_DEBUG ("[%03d] %s", n, SYS_STR(m_Model->m_FilePathList[n]));

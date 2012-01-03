@@ -103,3 +103,4 @@ AlertToneBrowserSheet::soundFileSelected ()
     MBasicSheetHeader *header = (MBasicSheetHeader *) headerWidget();
     header->positiveAction()->setEnabled (true);
 }
+
