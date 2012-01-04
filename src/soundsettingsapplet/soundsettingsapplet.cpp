@@ -53,10 +53,14 @@ SoundSettingsApplet::~SoundSettingsApplet ()
 {
     gst_deinit ();
 
-    if ((gst_argv != NULL) && (gst_argv[0] != NULL))
+    if (gst_argv)
     {
-        delete[] gst_argv[0];
+        if (gst_argv[0])
+        {
+            delete[] gst_argv[0];
+        }
         delete[] gst_argv;
+        gst_argv = NULL;
     }
 
     // free up the m_alertTones member

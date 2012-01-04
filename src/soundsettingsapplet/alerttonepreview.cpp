@@ -26,7 +26,7 @@ ResourcePolicy::ResourceSet   *resources = 0;
 ResourcePolicy::AudioResource *audioResource = 0;
 #endif
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -57,8 +57,18 @@ AlertTonePreview::AlertTonePreview (const QString &fname) :
 AlertTonePreview::~AlertTonePreview ()
 {
     SYS_DEBUG ("Stopping the playback.");
+
+    if (m_gstVolume)
+    {
+        gst_object_unref (m_gstVolume);
+        m_gstVolume = NULL;
+    }
+
+    GstBus *bus = gst_element_get_bus (m_gstPipeline);
+    gst_bus_remove_signal_watch (bus);
+    gst_object_unref (bus);
+
     gst_element_set_state (m_gstPipeline, GST_STATE_NULL);
-    gst_bus_remove_signal_watch (gst_element_get_bus (m_gstPipeline));
     gst_object_unref (m_gstPipeline);
     m_gstPipeline = NULL;
 
@@ -80,6 +90,7 @@ void
 AlertTonePreview::gstInit ()
 {
     GError *err = NULL;
+    GstBus *bus = NULL;
     SYS_DEBUG ("*** fname = %s", SYS_STR (m_Filename));
     SYS_DEBUG ("Starting the playback.");
 
@@ -92,23 +103,34 @@ AlertTonePreview::gstInit ()
         goto finalize;
     }
 
-    m_gstVolume = gst_bin_get_by_name(
-        GST_BIN(m_gstPipeline), "alerttonepreviewvolume");
-    m_gstFilesrc = gst_bin_get_by_name(
-        GST_BIN(m_gstPipeline), "alerttonepreviewfilesrc");
-
-    if (m_gstVolume && m_gstFilesrc) {
-        g_object_set (G_OBJECT(m_gstVolume),
-                "volume", profileToGstVolume(),
-                NULL);
-        g_object_set (G_OBJECT(m_gstFilesrc),
-                "location", m_Filename.toUtf8().constData(),
-                NULL);
+    if (m_gstVolume)
+    {
+        // Unref the previous one if any
+        gst_object_unref (m_gstVolume);
+        m_gstVolume = NULL;
     }
 
-    gst_bus_add_signal_watch (gst_element_get_bus (m_gstPipeline));
-    g_signal_connect (G_OBJECT (gst_element_get_bus (m_gstPipeline)),
+    m_gstVolume = gst_bin_get_by_name (GST_BIN (m_gstPipeline), "alerttonepreviewvolume");
+    m_gstFilesrc = gst_bin_get_by_name (GST_BIN (m_gstPipeline), "alerttonepreviewfilesrc");
+
+    g_object_set (G_OBJECT (m_gstVolume),
+                  "volume", profileToGstVolume(),
+                   NULL);
+
+    if (m_gstFilesrc)
+    {
+        g_object_set (G_OBJECT (m_gstFilesrc),
+                      "location", m_Filename.toUtf8().constData(),
+                      NULL);
+        gst_object_unref (m_gstFilesrc);
+        m_gstFilesrc = NULL;
+    }
+
+    bus = gst_element_get_bus (m_gstPipeline);
+    gst_bus_add_signal_watch (bus);
+    g_signal_connect (G_OBJECT (bus),
                       "message", (GCallback) gstSignalHandler, this);
+    gst_object_unref (bus);
 
 finalize:
     connect (&m_profileVolume, SIGNAL (changed ()),
