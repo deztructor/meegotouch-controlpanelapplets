@@ -10,8 +10,9 @@ meegotouch-controlpanelapplets (0.21.10~1) meegotouch; urgency=low
   [ David Kedves ]
   * Fixes: NB#295285 - Clock leaks memory in the heap while repeatedly
     flipping between alarm tones
+  * Fixes: NB#295241 - Normal Option in Display is invisible (N950)
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 04 Jan 2012 11:41:06 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Wed, 04 Jan 2012 13:32:20 +0100
 
 meegotouch-controlpanelapplets (0.21.9-1) meegotouch; urgency=low
 

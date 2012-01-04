@@ -66,8 +66,8 @@ DisplayWidget::DisplayWidget (QGraphicsWidget *parent) :
     MGConfItem eggs(EGGS_GCONF_KEY);
 
     if (eggs.value().toBool()) {
-        m_lowPowerChangeable = true; 
-        m_topCloseChangeable = true; 
+        m_lowPowerChangeable = true;
+        m_topCloseChangeable = true;
     } else {
         MGConfItem lps ("/meegotouch/settings/low_power_switchable");
         m_lowPowerChangeable = lps.value (true).toBool ();
@@ -128,7 +128,7 @@ void DisplayWidget::initWidget ()
         addLowPowerContainer ();
     }
     addDoubleTapContainer ();
-    
+
     addColorProfilesCBox ();
 
 #ifndef MEEGO
@@ -279,7 +279,7 @@ DisplayWidget::addScreenTimeoutContainer ()
     m_MainLayout->setStretchFactor (m_screenTimeout, 0);
 }
 
-/* 
+/*
  * Construct and init color profiles selector
  */
 void
@@ -391,7 +391,7 @@ DisplayWidget::addDoubleTapContainer ()
     lowPowerLabel->setText (qtTrId ("qtn_disp_doubletap"));
     layout->addItem (lowPowerLabel);
     // See bug NB#289944
-    layout->setAlignment (lowPowerLabel, 
+    layout->setAlignment (lowPowerLabel,
             Qt::AlignAbsolute | Qt::AlignLeft | Qt::AlignVCenter);
     lowPowerLabel->setAlignment (
             Qt::AlignAbsolute | Qt::AlignLeft | Qt::AlignVCenter);
@@ -511,10 +511,17 @@ void
 DisplayWidget::updateColorProfilesCBox ()
 {
     SYS_DEBUG("update color profiles");
+
     bool fillNeeded = (m_colorProfilesCBox->count () == 0);
-    
+
     const QStringList& colorProf = m_logic->colorProfileValues ();
     const QMap<QString, QString>& colorProfMap = m_logic->colorProfileMap ();
+
+    if (m_colorProfilesCBox->count () != colorProf.count ())
+    {
+        m_colorProfilesCBox->clear ();
+        fillNeeded = true;
+    }
 
     for (int i = 0; i < colorProf.size (); i++)
     {
@@ -531,7 +538,7 @@ DisplayWidget::updateColorProfilesCBox ()
     if (fillNeeded) {
         int idx = m_logic->selectedColorProfileValue ();
 
-        if (idx >= 0) 
+        if (idx >= 0)
             m_colorProfilesCBox->setProperty ("currentIndex", idx);
     }
 }
@@ -595,7 +602,7 @@ DisplayWidget::retranslateUi ()
 
     if (m_colorProfilesCBox)
     {
-	updateColorProfilesCBox ();
+        updateColorProfilesCBox ();
         m_colorProfilesCBox->setTitle (qtTrId ("qtn_disp_profile"));
     }
 }

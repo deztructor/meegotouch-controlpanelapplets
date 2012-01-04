@@ -29,7 +29,7 @@
 
 #include <mce/dbus-names.h>
 
-//#define DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -84,6 +84,12 @@ DisplayBusinessLogic::DisplayBusinessLogic (
     m_CurrentColorProfile = m_CurrentColorProfileItem->value().toString();
     m_AvailColorProfiles << "Neutral" << "Vivid" << "Muted";
 
+    // Fall back to the default one if we got some extra
+    if (! m_AvailColorProfiles.contains (m_CurrentColorProfile))
+    {
+        m_CurrentColorProfile = m_AvailColorProfiles.first ();
+    }
+
 #ifndef MEEGO
     m_compositorConf = new QSettings (
         mcompositorConfName, mcompositorConfName);
@@ -99,7 +105,7 @@ DisplayBusinessLogic::DisplayBusinessLogic (
 
     m_psmValue =
         (m_devicemode->getPSMState () == MeeGo::QmDeviceMode::PSMStateOn);
-    
+
     initiateMceQueries ();
 }
 
@@ -261,11 +267,15 @@ DisplayBusinessLogic::colorProfileMap ()
     //% "Muted"
     static const char* QtnDispProfileMuted = QT_TRID_NOOP("qtn_disp_profile_muted");
 
-    if(m_ColorProfileTextIds.empty()) {
+    if (m_ColorProfileTextIds.empty ()) {
         m_ColorProfileTextIds.insert("Neutral", QtnDispProfileNormal);
         m_ColorProfileTextIds.insert("Vivid", QtnDispProfileVivid);
         m_ColorProfileTextIds.insert("Muted", QtnDispProfileMuted);
+        // Fall backs
+        m_ColorProfileTextIds.insert("Builtin", QtnDispProfileNormal);
+        m_ColorProfileTextIds.insert("hardcoded", QtnDispProfileNormal);
     }
+
     return m_ColorProfileTextIds;
 }
 
@@ -331,9 +341,9 @@ DisplayBusinessLogic::setColorProfile (
                 "Index (%d) for selecting available color profile is "
                 "out of range. Available range is: 0-%d",
                 index, m_AvailColorProfiles.size() - 1 );
-    	return;
+        return;
     }
-    
+
     QString profile = m_AvailColorProfiles.at(index);
 
     if(profile == m_CurrentColorProfile)
@@ -363,7 +373,7 @@ DisplayBusinessLogic::colorProfileIsSet (QDBusMessage msg)
     if(msg.type() == QDBusMessage::ReplyMessage){
         SYS_DEBUG("Current color profile changed.");
         if(!m_ColorProfileToSet.isEmpty())
-	        m_CurrentColorProfile = m_ColorProfileToSet;
+            m_CurrentColorProfile = m_ColorProfileToSet;
     } else {
         SYS_DEBUG("Could not set color profile.");
         m_ColorProfileToSet.clear();
@@ -465,12 +475,6 @@ DisplayBusinessLogic::getCloseFromTopValue ()
 {
     bool retval = false;
 
-    /*
-     * TODO: FIXME:
-     * Implement a tracker for this key to listen for
-     * value-changes... (but most probably no-one will
-     * modify this key...)
-     */
 #ifndef MEEGO
     QString setting = m_compositorConf->value (
         closeFromTopKey, QVariant (closeFromTopDisabled)).toString ();
@@ -521,12 +525,16 @@ DisplayBusinessLogic::currentColorProfileChanged ()
 {
     QString profile = m_CurrentColorProfileItem->value().toString();
 
+    // Fall back to the default one if we got some extra
+    if (! m_AvailColorProfiles.contains (profile))
+        profile = m_AvailColorProfiles.first ();
+
     if (profile != m_CurrentColorProfile) {
         m_CurrentColorProfile = profile;
 
-        SYS_DEBUG("Received current color profile: %s", 
+        SYS_DEBUG("Received current color profile: %s",
             SYS_STR (profile));
-    
+
         emit currentColorProfileReceived ();
     }
 }
@@ -539,15 +547,17 @@ void
 DisplayBusinessLogic::availableColorProfilesReceivedSlot (
         QStringList list)
 {
-    if (m_AvailColorProfiles == list) 
+    if (m_AvailColorProfiles == list)
         return;
-
 
     SYS_DEBUG("Received available color profiles: %s",
             SYS_STR (list.join(", ")));
 
     m_AvailColorProfiles = list;
     emit availableColorProfilesReceived ();
+
+    // Lets re-check also the color profile
+    currentColorProfileChanged ();
 }
 
 /*!

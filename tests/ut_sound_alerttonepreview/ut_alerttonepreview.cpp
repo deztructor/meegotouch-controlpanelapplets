@@ -126,9 +126,8 @@ Ut_AlertTonePreviewTests::alerttonepreviewConstructor ()
       AlertTonePreview  atp("/usr/share/sounds/ring-tones/Lucid dreaming.aac");
       atp.gstInit();
 
-      QVERIFY(atp.m_gstPipeline != 0 );
-      QVERIFY(atp.m_gstFilesrc != 0 );
-      QVERIFY(atp.m_gstVolume != 0 );
+      QVERIFY (atp.m_gstPipeline != 0 );
+      QVERIFY (atp.m_gstVolume != 0 );
       QCOMPARE(atp.m_profileVolume.key(), QString( "ringing.alert.volume@general" ));
 }
 
@@ -175,3 +174,4 @@ Ut_AlertTonePreviewTests::alerttonepreviewProfileVolumeChanged()
 }
 
 QTEST_APPLESS_MAIN(Ut_AlertTonePreviewTests)
+
