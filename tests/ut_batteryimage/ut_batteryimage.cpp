@@ -138,7 +138,7 @@ Ut_BatteryImage::testAnimation ()
         // Gathering data
         for (int w = 0; w < 30; ++w) {
             indexUsed[image->m_ImageIndex] = true;
-            QTest::qWait (4);
+            QTest::qWait (10);
         }
 
         // checking the values.
