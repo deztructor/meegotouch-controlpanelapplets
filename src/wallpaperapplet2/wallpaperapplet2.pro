@@ -105,9 +105,13 @@ css.path += \
     $$(DEBIAN_DESTDIR)/usr/share/themes/base/meegotouch/libwallpaperapplet2/style
 css.files = libwallpaperapplet2.css
 
+dupfinder.path += $$(DEBIAN_DESTDIR)/usr/bin
+dupfinder.files += wallpaper_duplicate_finder.sh
+
 INSTALLS +=     \
     target      \
     desktop     \
     backup      \
+    dupfinder   \
     css
 

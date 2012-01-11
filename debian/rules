@@ -15,11 +15,6 @@ QMAKE_PARAMS = $(empty)
 # Define PUBLIC_RELEASE if changelog is not contains ~ in version number
 CXXFLAGS += `head -n 1 debian/changelog | grep '~' > /dev/null || echo -DPUBLIC_RELEASE`
 
-WALLPAPER = improved
-ifneq (,$(findstring wallpaper1,$(DEB_BUILD_OPTIONS)))
-	WALLPAPER = old
-endif
-
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 	CXXFLAGS += -O0
 else
@@ -73,7 +68,6 @@ clean:
 	dh_clean $(EXCLUSIONS)
 
 install: build
-	./gen_wallpaper_install.sh $(WALLPAPER)
 	dh_testdir $(EXCLUSIONS)
 	dh_testroot $(EXCLUSIONS)
 	dh_clean -k $(EXCLUSIONS)

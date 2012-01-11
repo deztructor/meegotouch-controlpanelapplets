@@ -22,6 +22,7 @@
 #include "wallpaperviewwidget.h"
 #include "wallpaperconfiguration.h"
 #include "wallpaperlistsheet.h"
+#include <stdlib.h>
 
 #include <MAction>
 
@@ -32,7 +33,7 @@ Q_EXPORT_PLUGIN2(wallpaperapplet2, WallpaperApplet)
 M_LIBRARY
 #endif
 
-#undef DEBUG
+#define DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -50,6 +51,11 @@ WallpaperApplet::~WallpaperApplet()
 void 
 WallpaperApplet::init()
 {
+    /*
+     * TODO: FIXME: this has to be done only once!
+     */
+    SYS_DEBUG ("Calling duplicate finder...");
+    system ("/usr/bin/wallpaper_duplicate_finder.sh");
 }
 
 DcpStylableWidget *
