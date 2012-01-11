@@ -12,6 +12,12 @@
 
 NEWDIR=/usr/share/backgrounds
 OLDDIR=/home/user/MyDocs/.wallpapers
+FLAGFILE=/var/clean-device/wallpaper_dups_removed
+
+# We must run only once
+if [ -f ${FLAGFILE} ]; then
+    exit
+fi
 
 # For Mass-Storage mode
 if [ ! -d ${OLDDIR} ]; then
@@ -42,8 +48,9 @@ for img in `ls -1 ${NEWDIR}`; do
     ORIGSIZE=`file_size ${NEWIMAGE}`
     SIZE=`file_size ${OLDIMAGE}`
     if [ ${ORIGSIZE} -eq ${SIZE} ]; then
-#        echo "Removing duplicate: ${OLDIMAGE}" >> /tmp/duplicate_finder.log
         rm -f "${OLDIMAGE}"
     fi
 done
+
+touch ${FLAGFILE}
 
