@@ -56,6 +56,7 @@ public:
 
 signals:
     void gotAccess ();
+    void accessDenied ();
 
 public slots:
     void performRestoreSettings ();

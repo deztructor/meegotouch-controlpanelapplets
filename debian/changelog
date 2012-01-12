@@ -15,8 +15,9 @@ meegotouch-controlpanelapplets (0.21.10~1) meegotouch; urgency=low
     devicelock::State_Unlocked credential
   * Fixes: NB#296601 - Pre-loaded wallpapers are displayed twice after SSU
     from PR1.1 to PR1.2
+  * Fixes: NB#296758 - Device clearing started when opening device lock.
 
- -- David Kedves <dkedves@blumsoft.eu>  Wed, 11 Jan 2012 14:23:12 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Thu, 12 Jan 2012 14:40:28 +0100
 
 meegotouch-controlpanelapplets (0.21.9-1) meegotouch; urgency=low
 

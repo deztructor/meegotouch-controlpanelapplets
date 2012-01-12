@@ -98,7 +98,10 @@ ResetBusinessLogic::getAccess ()
 {
 
     if (isUsbConnected ())
+    {
+        emit accessDenied ();
         return;
+    }
 
     bool success = false;
 
@@ -133,6 +136,8 @@ ResetBusinessLogic::getAccess ()
      */
     if (success == false)
         emit gotAccess ();
+    else
+        emit accessDenied ();
 }
 
 void
@@ -141,6 +146,8 @@ ResetBusinessLogic::passwordResult (bool result)
     SYS_DEBUG ("*** result = %s", SYS_BOOL (result));
     if (result == true)
         emit gotAccess ();
+    else
+        emit accessDenied ();
 }
 
 bool

@@ -31,7 +31,7 @@
 #include <MStylableWidget>
 #include <MLocale>
 
-//#define DEBUG
+#define DEBUG
 #include "../debug.h"
 
 #define qtTrIdShort(id) qtTrId(id).split(QChar(0x9c)).last()
@@ -47,6 +47,8 @@ ResetWidget::ResetWidget (
 
     connect (resetBusinessLogic, SIGNAL (gotAccess ()),
              this, SLOT (doTheWork ()));
+    connect (resetBusinessLogic, SIGNAL (accessDenied ()),
+             this, SLOT (operationCancelled ()));
 }
 
 ResetWidget::~ResetWidget ()
@@ -217,6 +219,7 @@ ResetWidget::restoreActivated ()
     dialog = new MMessageBox (qtTrId ("qtn_rset_restore_query_title"),
                               question, M::YesButton | M::NoButton);
     connect (dialog, SIGNAL (accepted ()), SLOT (restoreConfirmed ()));
+    connect (dialog, SIGNAL (rejected ()), SLOT (operationCancelled ()));
 
     dialog->appear (MApplication::instance ()->activeWindow (),
                     MSceneWindow::DestroyWhenDone);
@@ -251,6 +254,7 @@ ResetWidget::clearActivated ()
     dialog = new MMessageBox (qtTrId ("qtn_rset_clear_query_title"),
                               question, M::YesButton | M::NoButton);
     connect (dialog, SIGNAL (accepted ()), SLOT (clearConfirmed ()));
+    connect (dialog, SIGNAL (rejected ()), SLOT (operationCancelled ()));
 
     dialog->appear (MApplication::instance ()->activeWindow (),
                     MSceneWindow::DestroyWhenDone);
@@ -262,6 +266,13 @@ ResetWidget::clearConfirmed ()
     SYS_DEBUG ("user choosen yes");
     m_currentPlan = ClearData;
     m_ResetBusinessLogic->getAccess ();
+}
+
+void
+ResetWidget::operationCancelled ()
+{
+    SYS_DEBUG ("");
+    m_currentPlan = None;
 }
 
 void

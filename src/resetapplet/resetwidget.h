@@ -55,6 +55,7 @@ private slots:
     void restoreConfirmed ();
     void clearActivated ();
     void clearConfirmed ();
+    void operationCancelled ();
     void showMassStorageWarning ();
     void doTheWork ();
 
