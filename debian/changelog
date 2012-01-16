@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.21.11~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.21.12~1) meegotouch; urgency=low
 
   [ Marko Saukko ]
   * Fix build when building without Qtsparql.
@@ -17,7 +17,7 @@ meegotouch-controlpanelapplets (0.21.11~1) meegotouch; urgency=low
     from PR1.1 to PR1.2
   * Fixes: NB#296758 - Device clearing started when opening device lock.
 
- -- David Kedves <dkedves@blumsoft.eu>  Thu, 12 Jan 2012 14:40:28 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Mon, 16 Jan 2012 15:11:37 +0100
 
 meegotouch-controlpanelapplets (0.21.10-1) meegotouch; urgency=low
 
