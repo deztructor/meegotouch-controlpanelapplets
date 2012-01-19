@@ -59,12 +59,10 @@ ImageContentProvider::ImageContentProvider (
     GalleryContentProvider (parent),
     d_ptr (new ImageContentProviderPrivate(galleryModel))
 {
-    SYS_WARNING ("");
 }
 
 ImageContentProvider::~ImageContentProvider()
 {
-    SYS_WARNING ("");
     delete d_ptr;
     d_ptr = 0;
 }

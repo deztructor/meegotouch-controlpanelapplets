@@ -193,7 +193,7 @@ finalize:
     if (retval.isEmpty()) {
         retval = "-";
     } else {
-        retval = "<b>PR1.2</b><br>(" + retval + ")";
+        retval = "<b>PR1.3</b><br>(" + retval + ")";
     }
 
     return retval;

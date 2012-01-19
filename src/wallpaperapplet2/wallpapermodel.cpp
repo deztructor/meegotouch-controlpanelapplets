@@ -31,7 +31,7 @@
 #include "wallpaperdescriptor.h"
 #include "gridimagewidget.h"
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include <../debug.h>
 
@@ -105,7 +105,6 @@ WallpaperModel::WallpaperModel (
 WallpaperModel::~WallpaperModel ()
 {
     if (m_Thumbnailer) {
-        SYS_WARNING ("Destroying thumbler.");
         m_Thumbnailer->deleteLater ();
     }
 }
@@ -285,7 +284,6 @@ WallpaperModel::loadFromDirectory ()
     foreach (QString eFileName, m_FilePathList) {
         if (!itemsToRemove.contains(eFileName) 
                 && !Wallpaper::imageFile(eFileName)) {
-            //SYS_WARNING ("----> %s", SYS_STR(eFileName));
             itemsToRemove << eFileName;
         }
     }
@@ -312,6 +310,7 @@ WallpaperModel::loadFromDirectory ()
         //SYS_WARNING ("%s", SYS_STR(newPath));
         //SYS_WARNING ("%lld ? %lld", m_PendingFiles[newPath], entries[newPath]);
 #if 0
+        // Why is this commented out?!
         if (!Wallpaper::isInDir (m_ImagesDir, newPath)) {
             toAdd << newPath;
             m_PendingFiles.remove (newPath);
@@ -331,10 +330,6 @@ WallpaperModel::loadFromDirectory ()
              /*
               * Otherwise we remember to add these later.
               */
-            SYS_WARNING ("Adding %llu != %llu -> %s", 
-                    m_PendingFiles[newPath],
-                    entries[newPath],
-                    SYS_STR(newPath));
             m_PendingFiles[newPath] = entries[newPath];
         }
     }
@@ -375,7 +370,6 @@ WallpaperModel::loadFromDirectory ()
         foreach (QString newPath, toAdd) {
             WallpaperDescriptor desc (newPath);
 
-            SYS_WARNING ("Removing '%s'", SYS_STR(newPath));
             m_PendingFiles.remove (newPath);
 
             //SYS_DEBUG ("Adding '%s'", SYS_STR(newPath));
@@ -600,7 +594,7 @@ void
 WallpaperModel::stopLoadingThumbnails ()
 {
     if (m_Thumbnailer) {
-        SYS_WARNING ("Canceling thumbnails.");
+        SYS_DEBUG ("Canceling thumbnails.");
         m_Thumbnailer->cancel (false);
     }
     
@@ -687,15 +681,11 @@ WallpaperModel::tryAddAndSelect (
         if (m_PendingFiles.contains(filePath))
             m_PendingFiles.remove (filePath);
 
-        SYS_WARNING ("beginInsertRows (..., %d, %d)", 
-                m_FilePathList.size(),
-                m_FilePathList.size());
         beginInsertRows (parent, m_FilePathList.size(), m_FilePathList.size());
 
         m_FilePathList << filePath;
         m_OrderDirty = true;
         m_FilePathHash[filePath] = desc;
-        SYS_WARNING ("endInsertRows()");
         endInsertRows ();
 
         retval = true;
@@ -945,8 +935,6 @@ WallpaperModel::emitCurrentChanged ()
 {
     QModelIndex index;
 
-    SYS_WARNING ("Emitting currentChanged()");
-
     index = currentIndex();
     emit dataChanged (index, index);
     emit currentChanged (index);
@@ -1032,7 +1020,6 @@ WallpaperModel::nThumbnails () const
             ++retval;
     }
 
-    SYS_WARNING ("Returning %d", retval);
     return retval;
 }
 
@@ -1065,7 +1052,6 @@ WallpaperModel::appendThumbnailRequest (
         mimeTypes << mimeType;
         desc.setThumbnailPending ();
     } else {
-        SYS_WARNING ("Dropping, not found?");
         retval = false;
     }
 
@@ -1077,8 +1063,6 @@ void
 WallpaperModel::sneakyFileChange (
         const QString &filePath)
 {
-    SYS_WARNING ("*** filePath = %s", SYS_STR(filePath));
-
     if (m_FilePathHash.contains(filePath)) {
         QList<QUrl>         uris;
         QStringList         requestedFiles;
@@ -1093,9 +1077,6 @@ WallpaperModel::sneakyFileChange (
         //        SYS_STR(requestedFiles.join(";")));
         success = m_Thumbnailer->request (
                 uris, mimeTypes, true, Wallpaper::DefaultThumbnailFlavor);
-        //if (!success) {
-        //    SYS_WARNING ("FAILED!!!");
-        //}
     } else {
         SYS_WARNING ("Not found: %s", SYS_STR(filePath));
     }

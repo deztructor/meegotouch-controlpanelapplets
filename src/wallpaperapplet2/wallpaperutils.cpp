@@ -38,7 +38,7 @@ using namespace Wallpaper;
 #include <QFileInfoList>
 #include <MGConfItem>
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include <../debug.h>
 
@@ -139,9 +139,6 @@ Wallpaper::setFileVariant (
     }
 
     retval = retval + variant + extension;
-    SYS_WARNING ("*** filePath = %s", SYS_STR(filePath));
-    SYS_WARNING ("*** variant  = %s", SYS_STR(variant));
-    SYS_WARNING ("*** retval   = %s", SYS_STR(retval));
 
     return retval;
 }
@@ -229,7 +226,7 @@ Wallpaper::customWallpaperDirs ()
         return retval;
 
     dirNameList = directory.entryList (QDir::Dirs | QDir::NoDotAndDotDot);
-    SYS_WARNING ("*** dirNameList = %s", SYS_STR(dirNameList.join(";")));
+    SYS_DEBUG ("*** dirNameList = %s", SYS_STR(dirNameList.join(";")));
 
     foreach (QString base, dirNameList) {
         QString path = 

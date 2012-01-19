@@ -235,6 +235,7 @@ WallpaperWidget::polishEvent ()
      */
     parent = parentWidget();
     while (parent) {
+        SYS_DEBUG ("parent = %p", parent);
         page = qobject_cast <MApplicationPage *>(parent);
         if (page)
             break;
@@ -253,6 +254,7 @@ WallpaperWidget::polishEvent ()
 
 #ifdef HAVE_GALLERYCORE
     if (Wallpaper::useGallery) {
+        SYS_DEBUG ("Creating gallery action");
         action = new MAction("icon-m-toolbar-gallery-white", "", this);
         action->setLocation(MAction::ToolBarLocation);
         page->addAction(action);
@@ -264,6 +266,7 @@ WallpaperWidget::polishEvent ()
     /*
      * Adding the ovi action.
      */
+    SYS_DEBUG ("Creating ovi action");
     action = new MAction("icon-m-toolbar-content-ovi-music-white", "", this);
     action->setLocation(MAction::ToolBarLocation);
     page->addAction(action);

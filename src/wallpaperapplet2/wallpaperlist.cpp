@@ -32,7 +32,7 @@
 #include "wallpapercellcreator.h"
 
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -143,7 +143,6 @@ void
 WallpaperList::currentChanged (
         const QModelIndex &current)
 {
-    SYS_WARNING ("-------------------------------------------------------");
     if (Wallpaper::currentWallpaperAtTop) {
         QModelIndex first = filtering()->proxy()->index (0, 0);
 

@@ -44,7 +44,7 @@
 #include <MBasicSheetHeader>
 #include <QAction>
 
-#define DEBUG
+#undef DEBUG
 #define WARNING
 #include "../debug.h"
 
@@ -57,7 +57,7 @@ WallpaperBusinessLogic::WallpaperBusinessLogic (
     m_EditRequested (false),
     m_WorkerThread (0)
 {
-    SYS_WARNING ("");
+    SYS_DEBUG ("");
     m_PPItem = new MGConfItem (Wallpaper::CurrentPortraitKey, this);
     m_POItem = new MGConfItem (Wallpaper::OriginalPortraitKey, this);
     m_PHItem = new MGConfItem (Wallpaper::PortraitHistoryKey, this);
