@@ -1,24 +1,8 @@
-meegotouch-controlpanelapplets (0.21.12~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.21.13~1) meegotouch; urgency=low
 
-  [ Marko Saukko ]
-  * Fix build when building without Qtsparql.
-
-  [ Laszlo Pere ]
-  * Fixes: NB#296097 - A blank thumbnail is displaying in wallpaper applet
-    after downloading a wallpaper from ovi store for the first time.
   * Fixes: NB#297094 - About Product not updated PR 1.3 builds
 
-  [ David Kedves ]
-  * Fixes: NB#295285 - Clock leaks memory in the heap while repeatedly
-    flipping between alarm tones
-  * Fixes: NB#295241 - Normal Option in Display is invisible (N950)
-  * Fixes: NB#296570 - duicontrolpanel-resetapplet requires
-    devicelock::State_Unlocked credential
-  * Fixes: NB#296601 - Pre-loaded wallpapers are displayed twice after SSU
-    from PR1.1 to PR1.2
-  * Fixes: NB#296758 - Device clearing started when opening device lock.
-
- -- David Kedves <dkedves@blumsoft.eu>  Mon, 16 Jan 2012 15:11:37 +0100
+ -- David Kedves <dkedves@blumsoft.eu>  Fri, 27 Jan 2012 09:25:54 +0100
 
 meegotouch-controlpanelapplets (0.21.10-1) meegotouch; urgency=low
 
