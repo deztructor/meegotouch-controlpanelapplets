@@ -1,4 +1,4 @@
-meegotouch-controlpanelapplets (0.21.13~1) meegotouch; urgency=low
+meegotouch-controlpanelapplets (0.21.13-1) meegotouch; urgency=low
 
   * Fixes: NB#297094 - About Product not updated PR 1.3 builds
 
