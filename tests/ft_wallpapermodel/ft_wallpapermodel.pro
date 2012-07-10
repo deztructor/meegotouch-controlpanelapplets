@@ -46,8 +46,9 @@ contains(DEFINES, HAVE_QTSPARQL) {
     CONFIG += qtsparql
 }
 
-PKGCONFIG += ContentManager
-
+contains(DEFINES, HAVE_CONTENT_MANAGER) {
+    PKGCONFIG += ContentManager
+}
 
 HEADERS += \
     ../../src/debug.h \

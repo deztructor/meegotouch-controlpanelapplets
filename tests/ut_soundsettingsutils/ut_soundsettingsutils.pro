@@ -35,8 +35,14 @@ QT += testlib \
       xml \
       dbus 
 
+CONFIG += \
+    timed
 
-PKGCONFIG += dbus-1 profile ContentManager gstreamer-0.10 libresourceqt1
+PKGCONFIG += dbus-1 profile gstreamer-0.10 libresourceqt1
+
+contains(DEFINES, HAVE_CONTENT_MANAGER) {
+    PKGCONFIG += ContentManager
+}
 
 CONFIG += \
     gui             \

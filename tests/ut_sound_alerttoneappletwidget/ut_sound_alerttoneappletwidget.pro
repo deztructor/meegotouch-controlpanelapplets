@@ -32,7 +32,11 @@ contains(DEFINES, HAVE_QTSPARQL) {
 MOBILITY += \
     systeminfo
 
-PKGCONFIG += dbus-1 profile ContentManager gstreamer-0.10
+PKGCONFIG += dbus-1 profile gstreamer-0.10
+
+contains(DEFINES, HAVE_CONTENT_MANAGER) {
+    PKGCONFIG += ContentManager
+}
 
 contains(DEFINES, HAVE_LIBRESOURCEQT) {
     PKGCONFIG += libresourceqt1

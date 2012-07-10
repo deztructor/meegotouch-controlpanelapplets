@@ -49,7 +49,9 @@ contains(DEFINES, HAVE_QUILL_METADATA) {
     CONFIG += quillmetadata
 }
 
-PKGCONFIG += ContentManager
+contains(DEFINES, HAVE_CONTENT_MANAGER) {
+    PKGCONFIG += ContentManager
+}
 
 HEADERS += \
     ../../src/debug.h \
