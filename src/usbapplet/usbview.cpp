@@ -336,6 +336,10 @@ UsbView::addButtons ()
             SYS_STR(usbModeName(m_logic->getDefaultMode ())));
     #endif
 
+    MLayout* layout = new MLayout();
+    MLinearLayoutPolicy* landscapePolicy = new MLinearLayoutPolicy (layout, Qt::Horizontal);
+    MLinearLayoutPolicy* portraitPolicy = new MLinearLayoutPolicy (layout, Qt::Vertical);
+
     for (int n = 0; n < UsbModeLastMode; ++n) {
         MButton *button;
 
@@ -349,8 +353,8 @@ UsbView::addButtons ()
         button->setStyleName (usbModeButtonStyle(UsbModeType(n)));
         button->setViewType (MButton::groupType);
         button->setCheckable (true);
-        m_policy->addItem (button);
-        m_policy->setAlignment (button, Qt::AlignCenter);
+        landscapePolicy->addItem (button);
+        portraitPolicy->addItem (button);
 
         m_Buttons.append (button);
 
@@ -361,6 +365,11 @@ UsbView::addButtons ()
         connect (button, SIGNAL (toggled(bool)),
                     this, SLOT(buttonToggled (bool)));
     }
+
+    layout->setLandscapePolicy (landscapePolicy);
+    layout->setPortraitPolicy (portraitPolicy);
+    m_policy->addItem (layout);
+    m_policy->setAlignment (layout, Qt::AlignCenter);
 }
 
 QString
