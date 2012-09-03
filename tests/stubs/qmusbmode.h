@@ -42,7 +42,9 @@ namespace MeeGo
             ModeRequest,
             Ask,
             Undefined,
-            SDK
+            SDK,
+	     MTP,
+            Developer
         };
 
         QmUSBMode (QObject *parent = 0);

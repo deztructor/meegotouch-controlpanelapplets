@@ -45,18 +45,11 @@ using namespace MeeGo;
 
 #define qtTrIdShort(id) qtTrId(id).split(QChar(0x9c)).last()
 
-#ifndef MEEGO
 #define VALID_USB_MODE(modeType) \
     ((modeType == UsbModeAsk || \
       modeType == UsbModeMassStorage || \
-      modeType == UsbModeOviSuite || \
-      modeType == UsbModeSDK))
-#else
-#define VALID_USB_MODE(modeType) \
-    ((modeType == UsbModeAsk || \
-      modeType == UsbModeMassStorage || \
-      modeType == UsbModeOviSuite))
-#endif
+      modeType == UsbModeMTP || \
+      modeType == UsbModeDeveloper ))
 
 static const QString developerModeKey ("/Meego/System/DeveloperMode");
 static const QString usbModeKey ("/MeeGo/System/UsbMode");
@@ -65,10 +58,8 @@ static const QString developerModeName ("windows_network");
 static QmUSBMode::Mode usbModes[] = {
     QmUSBMode::Ask,
     QmUSBMode::MassStorage,
-    QmUSBMode::OviSuite,
-#ifndef MEEGO
-    QmUSBMode::SDK,
-#endif
+    QmUSBMode::MTP,
+    QmUSBMode::Developer,
 };
 
 inline int
@@ -104,18 +95,18 @@ usbModeName (QmUSBMode::Mode mode)
         case QmUSBMode::ChargingOnly:
             return "QmUSBMode::ChargingOnly";
 
-        case QmUSBMode::OviSuite:
-            return "QmUSBMode::OviSuite";
+        case QmUSBMode::Developer:
+            return "QmUSBMode::Developer";
 
         case QmUSBMode::ModeRequest:
             return "QmUSBMode::ModeRequest";
 
         case QmUSBMode::Ask:
             return "QmUSBMode::Ask";
-#ifndef MEEGO
-        case QmUSBMode::SDK:
-            return "QmUSBMode::SDK";
-#endif
+
+        case QmUSBMode::MTP:
+            return "QmUSBMode::MTP";
+
         case QmUSBMode::Undefined:
             return "QmUSBMode::Undefined";
 
@@ -343,9 +334,6 @@ UsbView::addButtons ()
     for (int n = 0; n < UsbModeLastMode; ++n) {
         MButton *button;
 
-        if (n == UsbModeSDK && !m_DeveloperMode)
-            continue;
-
         SYS_DEBUG ("*** n = %d", n);
         button = new MButton (usbModeUIString(UsbModeType(n)));
 
@@ -387,15 +375,13 @@ UsbView::currentText () const
             return qtTrId ("qtn_usb_storage_active");
             break;
 
-        case QmUSBMode::OviSuite:
-            //% "Sync and connect in use"
-            return qtTrId ("qtn_usb_sync_active");
+        case QmUSBMode::Developer:
+            //% "Developer mode in use"
+            return qtTrId ("Developer mode active");
             break;
-#ifndef MEEGO
-        case QmUSBMode::SDK:
-            return "SDK";
+        case QmUSBMode::MTP:
+            return "MTP";
             break;
-#endif
         case QmUSBMode::ModeRequest:
             // Seems that the ChargingOnly comes late (30 sec or so), and we can
             // show the chargingonly early.
@@ -532,12 +518,12 @@ UsbView::usbModeUIString (
             //% "Mass storage"
             return qtTrId("qtn_usb_mass_storage");
 
-        case UsbModeOviSuite:
-            //% "Sync and connect"
-            return qtTrId("qtn_usb_ovi_suite");
+        case UsbModeDeveloper:
+            //% "Developer"
+            return qtTrId("Developer");
 
-        case UsbModeSDK:
-            return "SDK";
+        case UsbModeMTP:
+            return "MTP";
 
         default:
             SYS_WARNING ("Invalid USB mode: %d", type);
@@ -557,13 +543,10 @@ UsbView::usbModeButtonStyle (
         case UsbModeMassStorage:
             return "CommonVerticalCenterSplitButtonInverted";
 
-        case UsbModeOviSuite:
-            if (m_DeveloperMode)
-                return "CommonVerticalCenterSplitButtonInverted";
+        case UsbModeMTP:
+            return "CommonVerticalCenterSplitButtonInverted";
 
-            return "CommonBottomSplitButtonInverted";
-
-        case UsbModeSDK:
+        case UsbModeDeveloper:
             return "CommonBottomSplitButtonInverted";
 
         default:

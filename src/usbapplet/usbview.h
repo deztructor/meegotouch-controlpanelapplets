@@ -52,8 +52,8 @@ private:
     typedef enum {
         UsbModeAsk           = 0,
         UsbModeMassStorage   = 1,
-        UsbModeOviSuite      = 2,
-        UsbModeSDK           = 3,
+        UsbModeDeveloper     = 2,
+        UsbModeMTP           = 3,
         UsbModeLastMode      = 4,
     } UsbModeType;
 
