@@ -54,7 +54,8 @@ private:
         UsbModeMassStorage   = 1,
         UsbModeDeveloper     = 2,
         UsbModeMTP           = 3,
-        UsbModeLastMode      = 4,
+	 UsbModeCharging      = 4,
+        UsbModeLastMode      = 5,
     } UsbModeType;
 
     void initWidget ();

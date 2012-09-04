@@ -48,25 +48,25 @@ using namespace MeeGo;
 #define VALID_USB_MODE(modeType) \
     ((modeType == UsbModeAsk || \
       modeType == UsbModeMassStorage || \
+      modeType == UsbModeDeveloper || \
       modeType == UsbModeMTP || \
-      modeType == UsbModeDeveloper ))
+      modeType == UsbModeCharging ))
 
-static const QString developerModeKey ("/Meego/System/DeveloperMode");
 static const QString usbModeKey ("/MeeGo/System/UsbMode");
-static const QString developerModeName ("windows_network");
 
 static QmUSBMode::Mode usbModes[] = {
     QmUSBMode::Ask,
     QmUSBMode::MassStorage,
-    QmUSBMode::MTP,
     QmUSBMode::Developer,
+    QmUSBMode::MTP,
+    QmUSBMode::ChargingOnly,
 };
 
 inline int
 usbModeIndex (QmUSBMode::Mode mode)
 {
     int ret = 0;
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 5; i++)
         if (usbModes[i] == mode)
         {
             ret = i;
@@ -122,14 +122,8 @@ UsbView::UsbView (MeeGo::QmUSBMode *logic) :
     DcpStylableWidget (0),
     m_logic (logic),
     m_policy (0),
-    m_infoLabel (0),
-    m_DeveloperMode (false)
+    m_infoLabel (0)
 {
-    MGConfItem  developerModeItem (developerModeKey);
-
-#ifndef MEEGO
-    m_DeveloperMode = developerModeItem.value().toBool();
-#endif
     setObjectName ("UsbView");
     initWidget ();
     connect (m_logic, SIGNAL (modeChanged (MeeGo::QmUSBMode::Mode)),
@@ -144,12 +138,7 @@ UsbView::UsbView (void *logic) :
     DcpStylableWidget (0),
     m_policy (0),
     m_infoLabel (0),
-    m_DeveloperMode (false)
 {
-    MGConfItem  developerModeItem (developerModeKey);
-#ifndef MEEGO
-    m_DeveloperMode = developerModeItem.value().toBool();
-#endif
     setObjectName ("UsbView");
     initWidget ();
 }
@@ -217,10 +206,11 @@ UsbView::usbModeActivated (int idx)
     /*
      * Do nothing if we just tapped on the
      * currently selected one...
-     */
     if (m_logic->getDefaultMode() == usbModes[idx])
         return;
+     */
 
+#ifdef NOCHANGE_WHEN_CONNECTED
     QmUSBMode::Mode active = m_logic->getMode ();
 
     /*
@@ -246,13 +236,16 @@ UsbView::usbModeActivated (int idx)
                             MSceneWindow::DestroyWhenDone);
         return;
     }
+#endif /* NOCHANGE_WHEN_CONNECTED */
 
     QmUSBMode::Mode newmode = usbModes[idx];
 
     SYS_DEBUG ("Setting USB mode/default mode to %s",
             SYS_STR(usbModeName(newmode)));
+
     m_logic->setDefaultMode (newmode);
-    m_logic->setMode (newmode);
+    /* if we want to switch mode immediately we can use this */
+    //    m_logic->setMode (newmode);
 #endif
 }
 
@@ -525,6 +518,9 @@ UsbView::usbModeUIString (
         case UsbModeMTP:
             return "MTP";
 
+	case UsbModeCharging:
+	    return ("Charging only");
+
         default:
             SYS_WARNING ("Invalid USB mode: %d", type);
     }
@@ -543,10 +539,13 @@ UsbView::usbModeButtonStyle (
         case UsbModeMassStorage:
             return "CommonVerticalCenterSplitButtonInverted";
 
+        case UsbModeDeveloper:
+            return "CommonVerticalCenterSplitButtonInverted";
+
         case UsbModeMTP:
             return "CommonVerticalCenterSplitButtonInverted";
 
-        case UsbModeDeveloper:
+        case UsbModeCharging:
             return "CommonBottomSplitButtonInverted";
 
         default:
