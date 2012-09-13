@@ -244,8 +244,10 @@ UsbView::usbModeActivated (int idx)
             SYS_STR(usbModeName(newmode)));
 
     m_logic->setDefaultMode (newmode);
-    /* if we want to switch mode immediately we can use this */
-    //    m_logic->setMode (newmode);
+    /* if connected we want to switch mode immediately */
+    QmUSBMode::Mode active = m_logic->getMode ();
+    if (active != QmUSBMode::Disconnected && active != QmUSBMode::Undefined)
+        m_logic->setMode (newmode);
 #endif
 }
 
@@ -492,6 +494,7 @@ UsbView::buttonToggled (
 
     index = selectedButtonIndex ();
     if (VALID_USB_MODE(index)) {
+        setSelectedButtonIndex (index);
         usbModeActivated (index);
     } else {
         SYS_WARNING ("Unhandled mode.");
