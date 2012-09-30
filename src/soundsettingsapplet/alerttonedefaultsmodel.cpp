@@ -58,6 +58,8 @@ AlertToneDefaultsModel::AlertToneDefaultsModel() : QStandardItemModel(),
     m_dirIdx.push(0);
     m_dirStack.push(QDir(DEFAULT_RINGTONE_PATH2));
     m_dirIdx.push(0);
+    m_dirStack.push(QDir(DEFAULT_RINGTONE_PATH_CE));
+    m_dirIdx.push(0);
     m_dirStack.push(QDir(oviDirPath));
     m_dirIdx.push(0);
     
