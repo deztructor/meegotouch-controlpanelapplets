@@ -14,6 +14,6 @@ X-Maemo-Fixed-Args=Wallpaper2
 X-DUIApplet-Applet=libwallpaperapplet2.so
 
 [DCP]
-Category=qtn_sett_main_wallpaper
+Category=qtn_sett_main_personalize
 Order=1
 WidgetType=Label
